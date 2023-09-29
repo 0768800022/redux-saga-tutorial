@@ -1,4 +1,4 @@
-REACT_APP_API = https://store-auth.developteam.net/
+REACT_APP_API = https://elms-auth.developteam.net/
 REACT_APP_API_MEDIA = https://org-media-template.developteam.net/
 REACT_APP_ENV = dev
 GENERATE_SOURCEMAP = true
