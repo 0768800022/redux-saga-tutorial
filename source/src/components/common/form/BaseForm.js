@@ -1,13 +1,19 @@
 import React from 'react';
 import { Form } from 'antd';
+import { formSize } from '@constants/index';
 
-const formSize = {
-    small: '700px',
-    normal: '800px',
-    big: '900px',
-};
+export const BaseForm = ({ 
+    formId, 
+    onFinish, 
+    onChange, 
+    form, 
+    onValuesChange, 
+    children, 
+    size = 'normal', 
 
-export const BaseForm = ({ formId, onFinish, onChange, form, onValuesChange, children, size = 'small' }) => {
+    
+    ...props 
+}) => {
     return (
         <Form
             style={{ width: formSize[size] }} 
@@ -16,6 +22,7 @@ export const BaseForm = ({ formId, onFinish, onChange, form, onValuesChange, chi
             onChange={onChange}
             form={form}
             onValuesChange={onValuesChange}
+            {...props}
         >
             {children}
         </Form>
