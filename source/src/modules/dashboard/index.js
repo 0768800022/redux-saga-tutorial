@@ -13,7 +13,6 @@ import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
     const userKind = getData(storageKeys.USER_KIND);
-    const restaurant = useSelector(selectRestaurantList);
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const notification = useNotification();
@@ -24,18 +23,9 @@ const Dashboard = () => {
             dispatch(accountActions.logout());
             notification({ type: 'error', message: 'Loại tài khoản không phù hợp để đăng nhập vô trang này !!!' });
         } else {
-            if (restaurant.length > 0) {
-                fetchCurrency({ pathParams: { id: restaurant[0].id } });
-                dispatch(
-                    appActions.setRestaurantTenantId({
-                        tenantId: `tenant_id_${restaurant[0].id}`,
-                        apiUrl: restaurant[0].tenantApiUrl,
-                    }),
-                );
-                navigate(createPathWithData(routes.reportListPage.path, { restaurantId: restaurant[0].id }));
-            }
+            navigate(routes.categoryListPage.path);
         }
-    }, [restaurant]);
+    }, []);
 
     return null;
 };

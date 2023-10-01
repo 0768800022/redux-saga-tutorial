@@ -19,8 +19,6 @@ const routesArray = Object.values(routes);
 
 const AppRoutes = () => {
     const { isAuthenticated, loading: loadingProfile, profile } = useAuth();
-    const dispatch = useDispatch();
-    const { execute: executeGetListRestaurant } = useFetch(apiConfig.restaurant.getListByClient);
     const renderRoute = (route) => (
         <Route
             key={route.path || 'not-found'}
@@ -45,15 +43,6 @@ const AppRoutes = () => {
         />
     );
 
-    useEffect(() => {
-        // fetchCurrency();
-        if (!isAuthenticated) return;
-        if (profile.kind !== UserTypes.ADMIN)
-            executeGetListRestaurant({
-                params: { accountId: profile.id },
-                onCompleted: (res) => dispatch(appActions.getRestaurantListByCustomer(res)),
-            });
-    }, [isAuthenticated]);
 
     return (
         <BrowserRouter>

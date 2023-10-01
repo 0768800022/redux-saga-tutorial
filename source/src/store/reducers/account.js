@@ -1,5 +1,7 @@
 import { createFailureActionType, createReducer } from '@store/utils';
 import { accountActions } from '@store/actions';
+import { setData } from '@utils/localStorage';
+import { storageKeys } from '@constants';
 
 const {
     logout,
@@ -20,6 +22,8 @@ const accountReducer = createReducer(
     },
     {
         [getProfileSuccess.type]: (state, { payload }) => {
+            state.profile = payload?.data || null;
+            setData(storageKeys.TENANT_API_URL, payload?.data?.serverProviderDto?.url);
             state.profile = payload?.data || null;
         },
         [createFailureActionType(getProfile.type)]: (state, { payload }) => {
