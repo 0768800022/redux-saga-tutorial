@@ -1,5 +1,6 @@
 import PageNotFound from '@components/common/page/PageNotFound';
 import categoryRoutes from '@modules/category/routes';
+import studentRoutes from '@modules/student/routes';
 import Dashboard from '@modules/dashboard';
 import LoginPage from '@modules/login/index';
 import ProfilePage from '@modules/profile/index';
@@ -42,6 +43,7 @@ const routes = {
         title: 'Profile page',
     },
     ...categoryRoutes,
+    ...studentRoutes,
     // keep this at last
     //
     notFound: {
