@@ -20,6 +20,21 @@ const navMenuConfig = [
             },
         ],
     },
+
+    {
+        label: 'Student Management',
+        key: 'student-management',
+        icon: <IconCategory2 size={16} />,
+        children: [
+            {
+                label: 'Student',
+                key: 'department-student',
+                path: routes.studentListPage.path,
+                // permission: apiConfig.student.getList.baseURL,
+
+            },
+        ],
+    },
 ];
 
 export default navMenuConfig;
