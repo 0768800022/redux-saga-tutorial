@@ -109,7 +109,7 @@ export const CATEGORY_KIND_DEVICE = 9;
 export const CATEGORY_KIND_PROVIDER_PRODUCT = 10;
 export const categoryKind = {
     service: {
-        title: ' Services Category',
+        title: 'Category',
         path: 'service',
         value: CATEGORY_KIND_SERVICE,
     },

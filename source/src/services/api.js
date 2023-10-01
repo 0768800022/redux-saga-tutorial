@@ -83,7 +83,9 @@ const sendRequest = (options, payload, cancelToken) => {
     const tenantId = getData(storageKeys.TENANT_ID);
     if (options && options.isRequiredTenantId && !options.isUpload) {
         headers[storageKeys.TENANT_HEADER] = tenantId;
-        baseURL = baseURL.replace(apiTenantUrl, getData(storageKeys.TENANT_API_URL));
+   
+        baseURL = baseURL.replace(apiTenantUrl, `${getData(storageKeys.TENANT_API_URL)}/`);
+        console.log(baseURL);
     }
     if (!ignoreAuth && userAccessToken) {
         headers.Authorization = `Bearer ${userAccessToken}`;

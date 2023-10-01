@@ -48,9 +48,9 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                             <Space>
                                 <Avatar
                                     icon={<UserOutlined />}
-                                    src={profile.avatarPath && `${AppConstants.contentRootUrl}${profile.avatarPath}`}
+                                    src={profile.logoPath && `${AppConstants.contentRootUrl}${profile.logoPath}`}
                                 />
-                                {profile?.fullName}
+                                {profile?.careerName}
                                 <DownOutlined />
                             </Space>
                         ),
