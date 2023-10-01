@@ -4,14 +4,14 @@ import CategorySavePage from "./CategorySavePage";
 
 export default {
     categoryListPage: {
-        path: '/:restaurantId/menu/category-service',
+        path: '/category',
         title: 'Category',
         auth: true,
         component: CategoryListPage,
-        permissions: apiConfig.category.getList.baseURL,
+        // permissions: apiConfig.category.getById.baseURL,
     },
     categorySavePage: {
-        path: '/:restaurantId/menu/category-service/:id',
+        path: '/category/:id',
         title: 'Category Save Page',
         auth: true,
         component: CategorySavePage,

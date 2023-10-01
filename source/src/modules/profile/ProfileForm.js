@@ -13,8 +13,9 @@ import useTranslate from '@hooks/useTranslate';
 const messages = defineMessages({
     avatar: 'Avatar',
     username: 'Username',
-    fullName: 'Full name',
-    email: 'Email',
+    career: 'Career Name',
+    fullName: 'Leader',
+    email: 'Hot line',
     phoneNumber: 'Phone Number',
     taxNumber: 'Tax Number',
     zipCode: 'Zip Code',
@@ -111,34 +112,34 @@ const ProfileForm = (props) => {
                 onValuesChange={onValuesChange}
             >
                 <CropImageField
+                    label={translate.formatMessage(messages.logo)}
+                    name="logo"
+                    imageUrl={logoUrl && `${AppConstants.contentRootUrl}${logoUrl}`}
+                    aspect={1 / 1}
+                    required
+                    uploadFile={uploadLogoFile}
+                />
+                {/* <CropImageField
                     label={translate.formatMessage(messages.avatar)}
                     name="avatar"
                     imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                     aspect={1 / 1}
                     uploadFile={uploadFile}
+                /> */}
+                <TextField
+                    readOnly
+                    label={translate.formatMessage(messages.username)}
+                    name={['accountDto', 'username']}
                 />
-                <TextField readOnly label={translate.formatMessage(messages.username)} name="username" />
-                <TextField label={translate.formatMessage(messages.fullName)} name="fullName" />
-                <TextField label={translate.formatMessage(messages.email)} name="email" />
+                <TextField label={translate.formatMessage(messages.career)} name={['careerName']} />
+                <TextField label={translate.formatMessage(messages.fullName)} name={['accountDto', 'fullName']} />
+                <TextField label={translate.formatMessage(messages.email)} name="hotline" />
                 {!isAdmin && (
                     <Fragment>
-                        <TextField name="phone" label={translate.formatMessage(messages.phoneNumber)} required />
-                        <TextField name="taxNumber" label={translate.formatMessage(messages.taxNumber)} required />
-                        <TextField name="zipCode" label={translate.formatMessage(messages.zipCode)} required />
-                        <TextField name="city" label={translate.formatMessage(messages.city)} required />
                         <TextField
-                            name="address"
-                            label={translate.formatMessage(messages.address)}
-                            type="textarea"
+                            name={['accountDto', 'phone']}
+                            label={translate.formatMessage(messages.phoneNumber)}
                             required
-                        />
-                        <CropImageField
-                            label={translate.formatMessage(messages.logo)}
-                            name="logo"
-                            imageUrl={logoUrl && `${AppConstants.contentRootUrl}${logoUrl}`}
-                            aspect={1 / 1}
-                            required
-                            uploadFile={uploadLogoFile}
                         />
                     </Fragment>
                 )}
