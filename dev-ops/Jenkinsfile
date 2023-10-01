@@ -5,10 +5,10 @@ TIMEZONE = "GMT+7"
 APP_BOOT_TIME_SECOND = 5
 SLACK_CHANNEL_NAME = "GMQ6JQ1FT"
 
-TARGET_FOLDER="/opt/deploy/store"
-APP_NAME = "store-portal"
+TARGET_FOLDER="/data/deploy/ilearning"
+APP_NAME = "elms-portal"
 
-APP_DEV_PORT=6308
+APP_DEV_PORT=6108
 
 node {
     try {
@@ -25,7 +25,7 @@ node {
             BUILD_COMMAND = """
                                 cd ./source
                                 npm install
-                                npm run build:beta
+                                npm run build:dev
                                 ls ./build
                                 tar -zcvf build.tar.gz ./build
                             """
