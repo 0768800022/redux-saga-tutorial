@@ -31,33 +31,39 @@ export function useCurrency(isPoint = false) {
         [currency],
     );
 
-    const { execute } = useFetch(apiConfig.restaurant.getById);
-    const fetchCurrency = useCallback(
-        ({ pathParams }) => {
-            execute({
-                // params,
-                pathParams,
-                onCompleted: ({ data }) => {
-                    const content = JSON.parse(data?.settings || {});
-                    if (!content) return {};
-                    let symbol = content.currentcy,
-                        decimal = content.decimal_separator,
-                        separator = content.group_separator,
-                        position = content.currentcy_position,
-                        currencyRatio = content.currency_ratio,
-                        dateFormat = content.date_time_format,
-                        decimalRound = content.decimal_round;
+    // const { execute } = useFetch(apiConfig.restaurant.getById);
+    // const fetchCurrency = useCallback(
+    //     ({ pathParams }) => {
+    //         execute({
+    //             // params,
+    //             pathParams,
+    //             onCompleted: ({ data }) => {
+    //                 const content = JSON.parse(data?.settings || {});
+    //                 if (!content) return {};
+    //                 let symbol = content.currentcy,
+    //                     decimal = content.decimal_separator,
+    //                     separator = content.group_separator,
+    //                     position = content.currentcy_position,
+    //                     currencyRatio = content.currency_ratio,
+    //                     dateFormat = content.date_time_format,
+    //                     decimalRound = content.decimal_round;
 
-                    dispatch(
-                        setCurrency({ symbol, decimal, separator, position, dateFormat, decimalRound, currencyRatio }),
-                    );
-                },
-            });
-        },
-        [currency],
-    );
+    //                 dispatch(
+    //                     setCurrency({ symbol, decimal, separator, position, dateFormat, decimalRound, currencyRatio }),
+    //                 );
+    //             },
+    //         });
+    //     },
+    //     [currency],
+    // );
 
-    return { fetchCurrency, format, symbol: currency.symbol, decimal: currency.decimal, separator: currency.separator };
+    return {
+        // fetchCurrency,
+        format,
+        symbol: currency.symbol,
+        decimal: currency.decimal,
+        separator: currency.separator,
+    };
 }
 
 export function formatCurrency(
