@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import React from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import { TeamOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { generatePath, useNavigate } from 'react-router-dom';
+import { convertDateTimeToString } from '@utils/dayHelper';
 
 const message = defineMessages({
     name: 'Tên môn học',
@@ -73,7 +74,7 @@ const SubjectListPage = () => {
             dataIndex: 'createdDate',
             render: (createdDate) => {
                 const modifiedDate = dayjs(createdDate, 'DD/MM/YYYY HH:mm:ss').add(7, 'hour');
-                const modifiedDateTimeString = modifiedDate.format('DD/MM/YYYY HH:mm:ss');
+                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
 
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
