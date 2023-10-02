@@ -9,19 +9,39 @@ import routes from './routes';
 import { generatePath, useParams } from 'react-router-dom';
 
 const messages = defineMessages({
-    home: 'Home',
-    objectName: 'course',
-    course: 'Course',
+    home: 'Trang chủ',
+    objectName: 'khoá học',
+    course: 'Khoá học',
 });
 
 const CourseSavePage = () => {
     const courseId = useParams();
     const translate = useTranslate();
     const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
-        apiConfig: {},
+        apiConfig: {
+            getById: apiConfig.course.getById,
+            create: apiConfig.course.create,
+            update: apiConfig.course.update,
+        },
         options: {
             getListUrl: generatePath(routes.courseListPage.path, { courseId }),
             objectName: translate.formatMessage(messages.objectName),
+        },
+        override: (funcs) => {
+            funcs.prepareUpdateData = (data) => {
+                return {
+                    ...data,
+                    id: detail.id,
+                    status: 1,
+                };
+            };
+            funcs.prepareCreateData = (data) => {
+                return {
+                    ...data,
+                    subjectId: data.subject,
+                    status: 1,
+                };
+            };
         },
     });
 

@@ -17,7 +17,6 @@ const useFetch = (apiConfig, { immediate = false, mappingData, params = {}, path
             }
             try {
                 const { data } = await sendRequest(apiConfig, { params, pathParams, ...payload }, cancelType);
-
                 if (!data.result && data.statusCode !== 200 && apiConfig.baseURL != apiUrl.account.loginBasic.baseURL) {
                     throw data;
                 }
@@ -40,7 +39,6 @@ const useFetch = (apiConfig, { immediate = false, mappingData, params = {}, path
         },
         [apiConfig],
     );
-
     useEffect(() => {
         if (immediate) {
             execute();
