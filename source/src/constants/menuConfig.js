@@ -11,11 +11,9 @@ const navMenuConfig = [
         icon: <IconUserBolt size={16} />,
         children: [
             {
-                label: 'Danh mục',
-                key: 'danh-muc',
-                path: generatePath(routes.categoryListPage.path, {
-                    kind: categoryKind.service.value,
-                }),
+                label: 'Quản lý sinh viên',
+                key: 'student-management',
+                path: routes.studentListPage.path,
             },
         ],
     },
