@@ -66,11 +66,11 @@ function ActionBar({
             </Col>
             <Col>
                 <Link to={createLink} state={{ action: 'create', prevPath: location.pathname }}>
-                    <HasPermission requiredPermissions={createPermission}>
-                        <Button type="primary" style={style}>
-                            <PlusOutlined /> {intl.formatMessage(message.create, { objectName })}
-                        </Button>
-                    </HasPermission>
+                    {/* <HasPermission requiredPermissions={createPermission}> */}
+                    <Button type="primary" style={style}>
+                        <PlusOutlined /> {intl.formatMessage(message.create, { objectName })}
+                    </Button>
+                    {/* </HasPermission> */}
                 </Link>
             </Col>
         </Row>

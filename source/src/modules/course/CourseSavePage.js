@@ -1,48 +1,27 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import apiConfig from '@constants/apiConfig';
-import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
-import { generatePath, useParams } from 'react-router-dom';
-import routes from './routes';
-import CategoryForm from './CategoryForm';
-import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
+import useTranslate from '@hooks/useTranslate';
+import CourseForm from './CourseForm';
+import routes from './routes';
+import { generatePath, useParams } from 'react-router-dom';
 
 const messages = defineMessages({
-    objectName: 'category',
     home: 'Home',
-    category: 'Service Category',
+    objectName: 'course',
+    course: 'Course',
 });
 
-function CategorySavePage() {
-    const { restaurantId } = useParams();
+const CourseSavePage = () => {
+    const courseId = useParams();
     const translate = useTranslate();
-
     const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
-        apiConfig: {
-            getById: apiConfig.category.getById,
-            create: apiConfig.category.create,
-            update: apiConfig.category.update,
-        },
+        apiConfig: {},
         options: {
-            getListUrl: generatePath(routes.categoryListPage.path),
+            getListUrl: generatePath(routes.courseListPage.path, { courseId }),
             objectName: translate.formatMessage(messages.objectName),
-        },
-        override: (funcs) => {
-            funcs.prepareUpdateData = (data) => {
-                return {
-                    ...data,
-                    id: detail.id,
-     
-                };
-            };
-            funcs.prepareCreateData = (data) => {
-                return {
-                    ...data,
-                    categoryKind: 1,
-                };
-            };
         },
     });
 
@@ -52,13 +31,14 @@ function CategorySavePage() {
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: translate.formatMessage(messages.category),
+                    breadcrumbName: translate.formatMessage(messages.course),
+                    path: generatePath(routes.courseListPage.path, { courseId }),
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <CategoryForm
+            <CourseForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -68,6 +48,6 @@ function CategorySavePage() {
             />
         </PageWrapper>
     );
-}
+};
 
-export default CategorySavePage;
+export default CourseSavePage;

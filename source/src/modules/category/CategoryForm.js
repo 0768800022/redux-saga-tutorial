@@ -70,16 +70,16 @@ function CategoryForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormV
             initialValues={{ status: STATUS_ACTIVE }}
         >
             <Card className="card-form" bordered={false}>
-                <CropImageField
+                {/* <CropImageField
                     label={translate.formatMessage(messages.image)}
                     name="imagePath"
                     imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                     aspect={1 / 1}
                     uploadFile={uploadFile}
-                />
+                /> */}
                 <Row gutter={10}>
                     <Col span={12}>
-                        <TextField required label={translate.formatMessage(messages.name)} name="name" />
+                        <TextField required label={translate.formatMessage(messages.name)} name="categoryName" />
                     </Col>
                     <Col span={12}>
                         <SelectField
@@ -90,7 +90,7 @@ function CategoryForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormV
                         />
                     </Col>
                 </Row>
-                <Row gutter={10}>
+                {/* <Row gutter={10}>
                     <Col span={24}>
                         <TextField
                             required
@@ -99,7 +99,7 @@ function CategoryForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormV
                             type="textarea"
                         />
                     </Col>
-                </Row>
+                </Row> */}
 
                 <div className="footer-card-form">{actions}</div>
             </Card>

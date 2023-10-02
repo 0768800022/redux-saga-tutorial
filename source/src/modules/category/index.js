@@ -99,14 +99,7 @@ function CategoryListPage() {
         },
         {
             title: translate.formatMessage(message.name),
-            dataIndex: 'name',
-            render: (data, dataRow) => (
-                <Link
-                    to={generatePath(routes.groupFoodListPage.path, { restaurantId, serviceCategoryId: dataRow._id })}
-                >
-                    {data}
-                </Link>
-            ),
+            dataIndex: 'categoryName',
         },
         {
             title: translate.formatMessage(message.status),
