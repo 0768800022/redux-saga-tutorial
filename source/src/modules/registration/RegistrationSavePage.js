@@ -3,22 +3,47 @@ import apiConfig from '@constants/apiConfig';
 import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
-import { generatePath } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 import routes from './routes';
 import RegistrationForm from './RegistrationForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    objectName: 'registration',
-    home: 'Home',
-    registration: 'Service Registration',
+    objectName: 'Danh sách khóa học',
+    home: 'Trang chủ',
+    registration: 'Danh sách sinh viên đăng kí khóa học',
 });
 
 function RegistrationSavePage() {
     const translate = useTranslate();
-
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({});
+    const queryParameters = new URLSearchParams(window.location.search);
+    const courseId = queryParameters.get('courseId');
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
+        apiConfig: {
+            getById: apiConfig.registration.getById,
+            create: apiConfig.registration.create,
+            update: apiConfig.registration.update,
+        },
+        options: {
+            getListUrl: routes.registrationSavePage.path,
+            objectName: translate.formatMessage(messages.objectName),
+        },
+        override: (funcs) => {
+            funcs.prepareUpdateData = (data) => {
+                return {
+                    ...data,
+                    id: detail.id,
+                };
+            };
+            funcs.prepareCreateData = (data) => {
+                return {
+                    ...data,
+                    courseId: courseId,
+                };
+            };
+        },
+    });
 
     return (
         <PageWrapper

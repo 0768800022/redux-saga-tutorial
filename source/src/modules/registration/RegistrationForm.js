@@ -13,11 +13,8 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    student: 'Student',
-    course: 'Course',
-    dateRegister: 'Date Register',
-    dateEnd: 'Date End',
-    isItern: 'In Istern',
+    student: 'Mã sinh viên',
+    isItern: 'Đăng kí thực tập',
 });
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) {
@@ -43,12 +40,12 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField required label={translate.formatMessage(messages.student)} name="Student" />
+                        <TextField required label={translate.formatMessage(messages.student)} name="studentID" />
                     </Col>
                 </Row>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField required label={translate.formatMessage(messages.isItern)} name="Is Intern" />
+                        <TextField required label={translate.formatMessage(messages.isItern)} name="isIntern" />
                     </Col>
                 </Row>
 

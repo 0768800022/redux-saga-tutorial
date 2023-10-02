@@ -1,15 +1,14 @@
 import routes from '@routes';
-import { IconCategory2, IconRegistered } from '@tabler/icons-react';
+import { IconCategory2, IconRegistered, IconUserBolt, IconSchool } from '@tabler/icons-react';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
 
 const navMenuConfig = [
     {
-        label: 'Quản lý hệ thống',
-        key: 'quan-ly-he-thong',
-        icon: <IconCategory2 size={16} />,
-        // permission: apiConfig.category.getList.baseURL,
+        label: 'Quản lý tài khoản',
+        key: 'account-management',
+        icon: <IconUserBolt size={16} />,
         children: [
             {
                 label: 'Danh mục',
@@ -23,7 +22,7 @@ const navMenuConfig = [
     {
         label: 'Quản lý môn học',
         key: 'quan-ly-mon-hoc',
-        icon: <IconCategory2 size={16} />,
+        icon: <IconSchool size={16} />,
         // permission: apiConfig.category.getList.baseURL,
         children: [
             {
@@ -39,14 +38,17 @@ const navMenuConfig = [
         ],
     },
     {
-        label: 'Quản lý tài khoản',
-        key: 'account-management',
+        label: 'Quản lý hệ thống',
+        key: 'quan-ly-he-thong',
         icon: <IconCategory2 size={16} />,
+        // permission: apiConfig.category.getList.baseURL,
         children: [
             {
-                label: 'Quản lý sinh viên',
-                key: 'student-management',
-                // path: routes.studentListPage.path,
+                label: 'Danh mục',
+                key: 'danh-muc',
+                path: generatePath(routes.categoryListPage.path, {
+                    kind: categoryKind.service.value,
+                }),
             },
         ],
     },

@@ -80,19 +80,6 @@ const SubjectListPage = () => {
             width: 200,
             align: 'center',
         },
-        {
-            title: translate.formatMessage(message.student),
-            dataIndex: 'id',
-            render: (id) => {
-                return (
-                    <Button>
-                        <TeamOutlined />
-                    </Button>
-                );
-            },
-            width: 200,
-            align: 'center',
-        },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (

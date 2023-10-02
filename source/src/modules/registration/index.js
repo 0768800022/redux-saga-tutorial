@@ -12,25 +12,27 @@ import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Avatar, Button, Tag } from 'antd';
 import React from 'react';
-import { Link, generatePath, useParams } from 'react-router-dom';
+import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
 import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
+import BaseTable from '@components/common/table/BaseTable';
 
 const message = defineMessages({
-    objectName: 'registration',
-    student: 'Student',
-    home: 'Home',
-    course: 'Course',
-    dateRegister: 'Date Register',
-    dateEnd: 'Date End',
-    isIntern: 'Is Intern',
-    registration: 'Service Registration',
+    objectName: 'Danh sách khóa học',
+    studentId: 'Mã sinh viên',
+    home: 'Trang chủ',
+    courseid: 'courseId',
+    createDate: 'Ngày tạo',
+    isIntern: 'Đăng kí thực tập',
+    registration: 'Danh sách sinh viên đăng kí khóa học',
 });
 
 function RegistrationListPage() {
     const translate = useTranslate();
-
+    const { pathname: pagePath } = useLocation();
+    const queryParameters = new URLSearchParams(window.location.search);
+    const courseId = queryParameters.get('courseId');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
         options: {},
@@ -47,49 +49,29 @@ function RegistrationListPage() {
                     return [];
                 }
             };
+            funcs.getCreateLink = () => {
+                return `${pagePath}/create?courseId=${courseId}`;
+            };
         },
-    });
-
-    const { sortedData, onDragEnd, sortColumn } = useDrapDropTableItem({
-        data,
-        apiConfig: apiConfig.category.update,
-        setTableLoading: () => {},
-        indexField: 'rank',
-        idField: 'serviceCategoryId',
     });
 
     const columns = [
-        sortColumn,
         {
-            title: translate.formatMessage(message.student),
-            dataIndex: 'Student',
+            title: translate.formatMessage(message.studentId),
+            dataIndex: 'studentID',
             align: 'center',
-        },
-        {
-            title: translate.formatMessage(message.dateRegister),
-            dataIndex: 'Date Register',
-            align: 'center',
-            render: (dateRegister) => (
-                <Tag color="#108ee9">
-                    <div style={{ padding: '5px', fontSize: '16px' }}>{dateRegister}</div>
-                </Tag>
-            ),
-        },
-        {
-            title: translate.formatMessage(message.dateEnd),
-            dataIndex: 'Date End',
-            align: 'center',
-            render: (dateEnd) => (
-                <Tag color="#108ee9">
-                    <div style={{ padding: '5px', fontSize: '16px' }}>{dateEnd}</div>
-                </Tag>
-            ),
         },
         {
             title: translate.formatMessage(message.isIntern),
-            dataIndex: 'Is Intern',
+            dataIndex: 'isIntern',
             align: 'center',
         },
+        {
+            title: translate.formatMessage(message.createDate),
+            dataIndex: 'createdDate',
+            align: 'center',
+        },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
@@ -110,14 +92,12 @@ function RegistrationListPage() {
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
-                    <DragDropTableV2
-                        onDragEnd={onDragEnd}
+                    <BaseTable
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={sortedData}
+                        dataSource={data}
                         columns={columns}
-                        // rowKey={(record) => record._id}
                     />
                 }
             />

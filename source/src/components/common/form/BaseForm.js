@@ -21,6 +21,7 @@ export const BaseForm = ({
             onChange={onChange}
             form={form}
             onValuesChange={onValuesChange}
+            layout="vertical"
             {...props}
         >
             {children}
