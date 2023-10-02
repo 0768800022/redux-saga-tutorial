@@ -1,7 +1,7 @@
 import DatePickerField from '@components/common/form/DatePickerField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { DATE_FORMAT_VALUE } from '@constants';
+import { DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
@@ -18,6 +18,7 @@ const CourseForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
+        console.log(values);
         values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values });
@@ -36,8 +37,9 @@ const CourseForm = (props) => {
         });
     }, []);
     useEffect(() => {
-        dataDetail.dateRegister = dataDetail.dateRegister && moment(dataDetail.dateRegister, DATE_FORMAT_VALUE);
-        dataDetail.dateEnd = dataDetail.dateEnd && moment(dataDetail.dateEnd, DATE_FORMAT_VALUE);
+        dataDetail.dateRegister = moment(dataDetail.dateRegister, DATE_FORMAT_VALUE);
+        dataDetail.dateEnd =  moment(dataDetail.dateEnd, DATE_FORMAT_VALUE);
+   
         form.setFieldsValue({
             ...dataDetail,
             subject: dataDetail?.subject?.name,
