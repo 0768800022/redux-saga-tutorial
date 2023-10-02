@@ -39,7 +39,7 @@ const CourseForm = (props) => {
     useEffect(() => {
         dataDetail.dateRegister = dataDetail.dateRegister && moment(dataDetail.dateRegister, DATE_FORMAT_VALUE);
         dataDetail.dateEnd = dataDetail.dateEnd && moment(dataDetail.dateEnd, DATE_FORMAT_VALUE);
-   
+
         form.setFieldsValue({
             ...dataDetail,
             subject: dataDetail?.subject?.name,
@@ -68,17 +68,20 @@ const CourseForm = (props) => {
                             options={subjects}
                         />
                     </Col>
-                    <Row gutter={66}>
-                        <Col span={12}>
-                            <DatePickerField
-                                label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
-                                name="dateRegister"
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <DatePickerField label={<FormattedMessage defaultMessage="Ngày kết thúc" />} name="dateEnd" />
-                        </Col>
-                    </Row>
+                    <Col span={12}>
+                        <DatePickerField
+                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                            name="dateRegister"
+                            style={{ width: '100%' }}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <DatePickerField
+                            label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                            name="dateEnd"
+                            style={{ width: '100%' }}
+                        />
+                    </Col>
                     <Col span={12}>
                         <TextField
                             required
