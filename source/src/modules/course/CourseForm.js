@@ -1,7 +1,7 @@
 import DatePickerField from '@components/common/form/DatePickerField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
@@ -73,6 +73,7 @@ const CourseForm = (props) => {
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="dateRegister"
                             style={{ width: '100%' }}
+                            format={DATE_FORMAT_DISPLAY}
                         />
                     </Col>
                     <Col span={12}>
@@ -80,6 +81,7 @@ const CourseForm = (props) => {
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="dateEnd"
                             style={{ width: '100%' }}
+                            format={DATE_FORMAT_DISPLAY}
                         />
                     </Col>
                     <Col span={12}>
