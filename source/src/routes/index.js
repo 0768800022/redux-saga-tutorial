@@ -5,6 +5,8 @@ import Dashboard from '@modules/dashboard';
 import LoginPage from '@modules/login/index';
 import ProfilePage from '@modules/profile/index';
 import PageNotAllowed from '@components/common/page/PageNotAllowed';
+import subjectRoutes from '@modules/subject/routes';
+import courseRoutes from '@modules/course/routes';
 /*
 	auth
 		+ null: access login and not login
@@ -43,7 +45,8 @@ const routes = {
         title: 'Profile page',
     },
     ...categoryRoutes,
-    ...studentRoutes,
+    ...subjectRoutes,
+    ...courseRoutes,
     // keep this at last
     //
     notFound: {
