@@ -6,7 +6,8 @@ import apiConfig from '@constants/apiConfig';
 import React from 'react';
 import { defineMessages,FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-
+import { DATE_FORMAT_VALUE,DEFAULT_FORMAT } from '@constants/index';
+import moment from 'moment';
 const message = defineMessages({
     objectName: 'Student',
     fullName: 'Họ Và Tên',
@@ -41,6 +42,10 @@ const StudentListPage = () => {
         {
             title: <FormattedMessage defaultMessage='Ngày Sinh'/>,
             dataIndex: 'birthday',
+            render: (birthday) => {
+                const result = moment(birthday, DEFAULT_FORMAT).format(DATE_FORMAT_VALUE);
+                return <div>{result}</div>;
+            },
         },
         {
             title: <FormattedMessage defaultMessage='MSSV'/>,
