@@ -47,6 +47,7 @@ const routes = {
     ...categoryRoutes,
     ...subjectRoutes,
     ...courseRoutes,
+    ...studentRoutes,
     // keep this at last
     //
     notFound: {

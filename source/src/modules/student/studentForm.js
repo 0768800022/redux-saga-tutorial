@@ -1,17 +1,22 @@
-import { Card, Col, Row, DatePicker } from 'antd';
+import { Card, Col, Row } from 'antd';
 import React, { useEffect } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
 import TextField from '@components/common/form/TextField';
 import { defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
+import DatePickerField from '@components/common/form/DatePickerField';
+import { DATE_FORMAT_VALUE } from '@constants/index';
+import { formatDateString } from '@utils/index';
 
+import moment from 'moment';
 const message = defineMessages({
-    fullname: 'Full Name',
-    birthday: 'Birth Day',
+    fullName: 'Họ Và Tên',
+    birthday: 'Ngày Sinh',
     mssv: 'MSSV',
-    phone: 'Phone',
+    phone: 'Số Điện Thoại',
     email: 'Email',
+    password: 'Mật Khẩu',
 });
 
 const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
@@ -22,10 +27,16 @@ const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormVa
     });
 
     const handleSubmit = (values) => {
+        values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values });
     };
+   
+
+    console.log(dataDetail);
+
 
     useEffect(() => {
+        dataDetail.birthday = dataDetail?.birthday && moment(dataDetail.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
         });
@@ -43,18 +54,32 @@ const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormVa
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(message.fullname)}
-                            name="fullname"
+                            label={translate.formatMessage(message.fullName)}
+                            name="fullName"
                         />
                     </Col>
-                    <Col span={4}>
-                        <DatePicker placeholder='Birth Day' name="birthday" />
+                    <Col span={12}>
+                        <DatePickerField 
+                            name = 'birthday'
+                            label="Ngày Sinh"  
+                            placeholder="Ngày sinh" 
+                            style={{ width: '100%' }}/>
                     </Col>
-                    <Col span={8}>
+                </Row>
+                <Row gutter={16}>
+                    
+                    <Col span={12}>
                         <TextField
                             label={translate.formatMessage(message.mssv)}
-                            type='number'
                             name="mssv"
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <TextField
+                            label={translate.formatMessage(message.phone)}
+                            type='number'
+                            name="phone"
+                            required
                         />
                     </Col>
                 </Row>
@@ -62,10 +87,8 @@ const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormVa
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(message.phone)}
-                            type='number'
-                            name="phone"
-                            required
+                            label={translate.formatMessage(message.password)}
+                            name="password"
                         />
                     </Col>
                     <Col span={12}>
