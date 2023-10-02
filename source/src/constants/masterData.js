@@ -36,23 +36,6 @@ export const commonStatus = [
     { value: STATUS_INACTIVE.toString(), label: 'Inactive', color: 'red' },
 ];
 
-export const orderStateOptions = [
-    {
-        value: STATE_ORDER_PENDING,
-        label: orderStateMessage.pending,
-        color: '#FFBF00',
-    },
-    {
-        value: STATE_ORDER_DONE,
-        label: orderStateMessage.done,
-        color: '#00A648',
-    },
-    {
-        value: STATE_ORDER_CANCEL,
-        label: orderStateMessage.cancel,
-        color: '#CC0000',
-    },
-];
 export const statusOptions = [
     {
         value: STATUS_ACTIVE,
@@ -124,35 +107,6 @@ export const categoryKind = {
     },
 };
 
-export const employeePermissions = [
-    { value: 1, label: 'Quản lý của nhà hàng' },
-    { value: 2, label: 'Xoá món ăn đã đặt và in vào bếp' },
-    { value: 3, label: 'Xoá món ăn đặt sai' },
-    { value: 4, label: 'Xem báo cáo bán hàng' },
-];
-
-export const GoodsKinds = {
-    COMMON: 1,
-    CHOOSE: 5,
-    // MERGE: 3,
-    // CHOOSE: 4
-};
-
-export const goodsKinds = [
-    { value: GoodsKinds.COMMON, label: 'Món ăn thông thường' },
-    { value: GoodsKinds.CHOOSE, label: 'Món ăn chọn' },
-];
-
-const GoodsTypes = {
-    DRINK: 1,
-    FOOD: 2,
-};
-
-export const goodsTypes = [
-    { value: GoodsTypes.DRINK, label: 'Drink' },
-    { value: GoodsTypes.FOOD, label: 'Food' },
-];
-
 export const datetimeFormats = [
     { value: 'DD.MM.YYYY HH:mm', label: 'dd.MM.yyyy' },
     { value: 'YYYY.MM.DD HH:mm', label: 'yyyy.MM.dd' },
@@ -177,14 +131,6 @@ export const daysOfWeekTimeWork = [
     { value: 'friday', label: dayOfWeek.friday },
     { value: 'saturday', label: dayOfWeek.saturday },
     { value: 'sunday', label: dayOfWeek.sunday },
-];
-
-export const KIND_SERVICE_NORMAL = 1;
-export const KIND_SERVICE_COMBO = 2;
-
-export const serviceKinds = [
-    { value: KIND_SERVICE_NORMAL, label: 'Thường' },
-    { value: KIND_SERVICE_COMBO, label: 'Combo' },
 ];
 
 export const FREE_STATE = 0;

@@ -6,22 +6,28 @@ import useTranslate from '@hooks/useTranslate';
 import SubjectForm from './SubjectForm';
 import { generatePath, useParams } from 'react-router-dom';
 import routes from './routes';
+import apiConfig from '@constants/apiConfig';
 
 const messages = defineMessages({
-    home: 'Home',
-    subject: 'Subject',
-    objectName: 'subject',
+    home: 'Trang chủ',
+    subject: 'Môn học',
+    objectName: 'môn học',
 });
 
 const SubjectSavePage = () => {
     const subjectId = useParams();
     const translate = useTranslate();
     const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
-        apiConfig: {},
+        apiConfig: {
+            getById: apiConfig.subject.getById,
+            create: apiConfig.subject.create,
+            update: apiConfig.subject.update,
+        },
         options: {
             getListUrl: generatePath(routes.subjectListPage.path, { subjectId }),
             objectName: translate.formatMessage(messages.objectName),
         },
+        
     });
 
     return (

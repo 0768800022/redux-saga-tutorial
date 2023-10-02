@@ -1,30 +1,32 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import apiConfig from '@constants/apiConfig';
+import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
-import { defineMessages } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
-import CourseForm from './CourseForm';
-import routes from './routes';
 import { generatePath, useParams } from 'react-router-dom';
+import routes from './routes';
+import RegistrationForm from './RegistrationForm';
+import useTranslate from '@hooks/useTranslate';
+import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
+    objectName: 'Danh sách khóa học',
     home: 'Trang chủ',
-    objectName: 'khoá học',
-    course: 'Khoá học',
+    registration: 'Danh sách sinh viên đăng kí khóa học',
 });
 
-const CourseSavePage = () => {
-    const courseId = useParams();
+function RegistrationSavePage() {
     const translate = useTranslate();
-    const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
+    const queryParameters = new URLSearchParams(window.location.search);
+    const courseId = queryParameters.get('courseId');
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.course.getById,
-            create: apiConfig.course.create,
-            update: apiConfig.course.update,
+            getById: apiConfig.registration.getById,
+            create: apiConfig.registration.create,
+            update: apiConfig.registration.update,
         },
         options: {
-            getListUrl: generatePath(routes.courseListPage.path, { courseId }),
+            getListUrl: routes.registrationSavePage.path,
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -32,14 +34,12 @@ const CourseSavePage = () => {
                 return {
                     ...data,
                     id: detail.id,
-                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    subjectId: data.subject,
-                    status: 1,
+                    courseId: courseId,
                 };
             };
         },
@@ -51,23 +51,24 @@ const CourseSavePage = () => {
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: translate.formatMessage(messages.course),
-                    path: generatePath(routes.courseListPage.path, { courseId }),
+                    breadcrumbName: translate.formatMessage(messages.registration),
+                    path: routes.registrationListPage.path,
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <CourseForm
+            <RegistrationForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
-                onSubmit={mixinFuncs.onSave}
+                onSubmit={onSave}
+                isError={errors}
             />
         </PageWrapper>
     );
-};
+}
 
-export default CourseSavePage;
+export default RegistrationSavePage;
