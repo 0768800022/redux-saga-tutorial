@@ -23,7 +23,7 @@ const Dashboard = () => {
             dispatch(accountActions.logout());
             notification({ type: 'error', message: 'Loại tài khoản không phù hợp để đăng nhập vô trang này !!!' });
         } else {
-            navigate(routes.categoryListPage.path);
+            navigate(routes.studentListPage.path);
         }
     }, []);
 
