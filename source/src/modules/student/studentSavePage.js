@@ -8,9 +8,9 @@ import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 const message = defineMessages({
-    objectName:'Sinh Viên',
-    home:'Trang Chủ',
-    student: 'Sinh Viên',
+    objectName:'Sinh viên',
+    home:'Trang chủ',
+    student: 'Sinh viên',
 });
 
 const StudentSavePage = () => {

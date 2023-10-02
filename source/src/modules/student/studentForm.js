@@ -1,4 +1,4 @@
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row,DatePicker } from 'antd';
 import React, { useEffect } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
@@ -8,7 +8,7 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
 import { DATE_FORMAT_VALUE } from '@constants/index';
 import { formatDateString } from '@utils/index';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const message = defineMessages({
     fullName: 'Họ Và Tên',
@@ -32,12 +32,8 @@ const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsCha
         return mixinFuncs.handleSubmit({ ...values });
     };
    
-
-    console.log(dataDetail);
-
-
     useEffect(() => {
-        dataDetail.birthday = dataDetail?.birthday && moment(dataDetail?.birthday, DATE_FORMAT_VALUE);
+        dataDetail.birthday = dataDetail?.birthday && dayjs(dataDetail?.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
         });
@@ -49,7 +45,6 @@ const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsCha
             onFinish={handleSubmit}
             form={form}
             onValuesChange={onValuesChange}
-            size="big"
         >
             <Card>
                 <Row gutter={16}>
@@ -57,24 +52,22 @@ const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsCha
                         <TextField
                             label={translate.formatMessage(message.fullName)}
                             name="fullName"
-                            disabled = {isEditing}
                         />
                     </Col>
                     <Col span={12}>
                         <DatePickerField 
                             name = 'birthday'
-                            label="Ngày Sinh"  
+                            label="Ngày sinh"  
                             placeholder="Ngày sinh" 
                             format={DATE_FORMAT_VALUE}
                             style={{ width: '100%' }}/>
                     </Col>
                 </Row>
+
                 <Row gutter={16}>
-                    
                     <Col span={12}>
                         <TextField
                             label={translate.formatMessage(message.mssv)}
-                            disabled = {isEditing}
                             name="mssv"
                         />
                     </Col>

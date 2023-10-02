@@ -6,13 +6,15 @@ import apiConfig from '@constants/apiConfig';
 import React from 'react';
 import { defineMessages,FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-import { DATE_FORMAT_VALUE,DEFAULT_FORMAT } from '@constants/index';
-import moment from 'moment';
+import { DATE_FORMAT_VALUE,DEFAULT_FORMAT,DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
+import { convertUtcToLocalTime } from '@utils/index';
+
 const message = defineMessages({
     objectName: 'Student',
-    fullName: 'Họ Và Tên',
-    home:'Trang Chủ',
-    student:'Sinh Viên',
+    fullName: 'Họ và tên',
+    home:'Trang chủ',
+    student:'Sinh viên',
+    mssv:'Mã số sinh viên',
 });
 
 const StudentListPage = () => {
@@ -20,7 +22,10 @@ const StudentListPage = () => {
 
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.student,
-        // options:{},
+        options: {
+            pageSize: DEFAULT_TABLE_ITEM_SIZE,
+            objectName: translate.formatMessage(message.objectName),
+        },
         override: (funcs) => {
             funcs.mappingData = (response) => {
                 console.log('response',response);
@@ -36,30 +41,31 @@ const StudentListPage = () => {
 
     const columns = [
         {
-            title: <FormattedMessage defaultMessage='Họ Và Tên'/>,
+            title: <FormattedMessage defaultMessage='Họ và tên'/>,
             dataIndex: 'fullName',
         },
         {
-            title: <FormattedMessage defaultMessage='Ngày Sinh'/>,
+            title: <FormattedMessage defaultMessage='Ngày sinh'/>,
             dataIndex: 'birthday',
             render: (birthday) => {
-                const result = moment(birthday, DEFAULT_FORMAT).format(DATE_FORMAT_VALUE);
+                
+                const result = convertUtcToLocalTime(birthday, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
                 return <div>{result}</div>;
             },
         },
         {
-            title: <FormattedMessage defaultMessage='MSSV'/>,
+            title: <FormattedMessage defaultMessage='Mã số sinh viên'/>,
             dataIndex: 'mssv',
         },
         {
-            title: <FormattedMessage defaultMessage='Số Điện Thoại'/>,
+            title: <FormattedMessage defaultMessage='Số điện thoại'/>,
             dataIndex: 'phone',
         },
         {
             title: <FormattedMessage defaultMessage='Email'/>,
             dataIndex: 'email',
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '90px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
