@@ -10,6 +10,8 @@ import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import routes from '@modules/registration/routes';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -24,6 +26,7 @@ const message = defineMessages({
 
 const CourseListPage = () => {
     const translate = useTranslate();
+    const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.course,
         options: {
@@ -38,6 +41,7 @@ const CourseListPage = () => {
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
+                            navigate(routes.registrationListPage.path + `?courseId=${id}`);
                         }}
                     >
                         <TeamOutlined />
