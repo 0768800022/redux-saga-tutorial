@@ -6,17 +6,51 @@ import { categoryKind } from './masterData';
 
 const navMenuConfig = [
     {
-        label: 'Category Management',
-        key: 'category-management',
+        label: 'Quản lý hệ thống',
+        key: 'quan-ly-he-thong',
         icon: <IconCategory2 size={16} />,
         // permission: apiConfig.category.getList.baseURL,
         children: [
             {
-                label: categoryKind.service.title,
-                key: 'department-category',
+                label: "Danh mục",
+                key: 'danh-muc',
                 path: generatePath(routes.categoryListPage.path, {
                     kind: categoryKind.service.value,
                 }),
+            },
+        ],
+    },
+    {
+        label: 'Quản lý môn học',
+        key: 'quan-ly-mon-hoc',
+        icon: <IconCategory2 size={16} />,
+        // permission: apiConfig.category.getList.baseURL,
+        children: [
+            {
+                label: 'Môn học',
+                key: 'mon-hoc',
+                path: generatePath(routes.subjectListPage.path, {
+
+                }),
+            },
+            {
+                label: 'Khoá học',
+                key: 'khoa-hoc',
+                path: generatePath(routes.courseListPage.path, {
+     
+                }),
+            },
+        ],
+    },
+    {
+        label: 'Quản lý tài khoản',
+        key: 'account-management',
+        icon: <IconCategory2 size={16} />,
+        children: [
+            {
+                label: 'Quản lý sinh viên',
+                key: 'student-management',
+                // path: routes.studentListPage.path,
             },
         ],
     },

@@ -348,3 +348,8 @@ export const chart31DaysData = [
         pending: 0,
     },
 ];
+export const formSize = {
+    small: '700px',
+    normal: '800px',
+    big: '900px',
+};
