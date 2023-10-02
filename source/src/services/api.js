@@ -80,7 +80,7 @@ const sendRequest = (options, payload, cancelToken) => {
 
     const userAccessToken = getCacheAccessToken();
     delete options.headers[storageKeys.TENANT_HEADER];
-    const tenantId = getData(storageKeys.TENANT_ID);
+    const tenantId = getData(storageKeys.TENANT_HEADER);
     if (options && options.isRequiredTenantId && !options.isUpload) {
         headers[storageKeys.TENANT_HEADER] = tenantId;
    

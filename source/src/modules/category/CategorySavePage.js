@@ -26,19 +26,21 @@ function CategorySavePage() {
             update: apiConfig.category.update,
         },
         options: {
-            getListUrl: generatePath(routes.categoryListPage.path, { restaurantId }),
+            getListUrl: generatePath(routes.categoryListPage.path),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
-                    serviceCategoryId: detail.id,
+                    id: detail.id,
+     
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
+                    categoryKind: 1,
                 };
             };
         },
@@ -51,7 +53,6 @@ function CategorySavePage() {
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
                     breadcrumbName: translate.formatMessage(messages.category),
-                    path: generatePath(routes.categoryListPage.path, { restaurantId }),
                 },
                 { breadcrumbName: title },
             ]}

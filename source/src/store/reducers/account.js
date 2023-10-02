@@ -24,6 +24,8 @@ const accountReducer = createReducer(
         [getProfileSuccess.type]: (state, { payload }) => {
             state.profile = payload?.data || null;
             setData(storageKeys.TENANT_API_URL, payload?.data?.serverProviderDto?.url);
+            setData(storageKeys.TENANT_HEADER, payload?.data?.tenantId);
+            setData(storageKeys.TENANT_ID, payload?.data?.id);
             state.profile = payload?.data || null;
         },
         [createFailureActionType(getProfile.type)]: (state, { payload }) => {
