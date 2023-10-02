@@ -32,12 +32,12 @@ const SubjectForm = (props) => {
             <Card className="card-form" bordered={false}>
                 <Row gutter={10}>
                     <Col span={12}>
-                        <TextField label={<FormattedMessage defaultMessage="Name" />} name="subjectName" />
+                        <TextField label={<FormattedMessage defaultMessage="Tên môn học" />} name="subjectName" />
                     </Col>
                     <Col span={12}>
                         <TextField
                             required
-                            label={<FormattedMessage defaultMessage="Code" />}
+                            label={<FormattedMessage defaultMessage="Mã môn học" />}
                             name="subjectCode"
                         />
                     </Col>

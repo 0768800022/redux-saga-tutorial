@@ -1,7 +1,13 @@
+import DatePickerField from '@components/common/form/DatePickerField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
+import { DATE_FORMAT_VALUE } from '@constants';
+import apiConfig from '@constants/apiConfig';
 import useBasicForm from '@hooks/useBasicForm';
+import useFetch from '@hooks/useFetch';
+import { formatDateString } from '@utils';
 import { Card, Col, Form, Row } from 'antd';
+import moment from 'moment';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -12,15 +18,31 @@ const CourseForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
+        values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
+        values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values });
     };
-
+    const {
+        data: subjects,
+        loading: getSubjectsLoading,
+        execute: executeGetSubjects,
+    } = useFetch(apiConfig.subject.autocomplete, {
+        immediate: false,
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.subjectName })),
+    });
     useEffect(() => {
+        executeGetSubjects({
+            params: {},
+        });
+    }, []);
+    useEffect(() => {
+        dataDetail.dateRegister = dataDetail.dateRegister && moment(dataDetail.dateRegister, DATE_FORMAT_VALUE);
+        dataDetail.dateEnd = dataDetail.dateEnd && moment(dataDetail.dateEnd, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
+            subject: dataDetail?.subject?.name,
         });
     }, [dataDetail]);
-
     return (
         <Form
             style={{ width: '70%' }}
@@ -33,12 +55,12 @@ const CourseForm = (props) => {
             <Card className="card-form" bordered={false}>
                 <Row gutter={10}>
                     <Col span={12}>
-                        <TextField label={<FormattedMessage defaultMessage="Name" />} name="courseName" />
+                        <TextField label={<FormattedMessage defaultMessage="Tên khoá học" />} name="name" />
                     </Col>
                     <Col span={12}>
                         <TextField
                             required
-                            label={<FormattedMessage defaultMessage="description" />}
+                            label={<FormattedMessage defaultMessage="Mô tả" />}
                             name="description"
                             type="text-area"
                         />
@@ -46,9 +68,21 @@ const CourseForm = (props) => {
                     <Col span={12}>
                         <SelectField
                             required
-                            label={<FormattedMessage defaultMessage="Subject" />}
-                            name="subjectId"
+                            label={<FormattedMessage defaultMessage="Môn học" />}
+                            name="subject"
+                            options={subjects}
                         />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <DatePickerField
+                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                            name="dateRegister"
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <DatePickerField label={<FormattedMessage defaultMessage="Ngày kết thúc" />} name="dateEnd" />
                     </Col>
                 </Row>
 

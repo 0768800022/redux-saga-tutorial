@@ -7,21 +7,23 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
+import dayjs from 'dayjs';
 
 const message = defineMessages({
-    name: 'Name',
-    home: 'Home',
-    subject: 'Subject',
+    name: 'Tên khoá học',
+    home: 'Trang chủ',
+    subject: 'Môn học',
     objectName: 'course',
-    course: 'Course',
-    description: 'Description',
-    id: 'Id',
+    course: 'Khoá học',
+    description: 'Mô tả',
+    dateRegister: 'Ngày bắt đầu',
+    dateEnd: 'Ngày kết thúc',
 });
 
 const CourseListPage = () => {
     const translate = useTranslate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.category,
+        apiConfig: apiConfig.course,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -39,23 +41,41 @@ const CourseListPage = () => {
     ];
     const columns = [
         {
-            title: translate.formatMessage(message.id),
-            dataIndex: 'id',
-            width: 200,
-        },
-        {
             title: translate.formatMessage(message.name),
             dataIndex: 'name',
             width: 200,
         },
         {
             title: translate.formatMessage(message.subject),
-            dataIndex: 'subject',
+            dataIndex: ['subject', 'name'],
             width: 200,
+        },
+        {
+            title: translate.formatMessage(message.dateRegister),
+            dataIndex: 'dateRegister',
+            render: (dateRegister) => {
+                const modifiedDate = dayjs(dateRegister, 'DD/MM/YYYY');
+                const modifiedDateTimeString = modifiedDate.format('DD/MM/YYYY');
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
+            },
+            width: 200,
+            align: 'center',
+        },
+        {
+            title: translate.formatMessage(message.dateEnd),
+            dataIndex: 'dateEnd',
+            render: (dateEnd) => {
+                const modifiedDate = dayjs(dateEnd, 'DD/MM/YYYY');
+                const modifiedDateTimeString = modifiedDate.format('DD/MM/YYYY');
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
+            },
+            width: 200,
+            align: 'center',
         },
 
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
+    console.log(data);
     return (
         <PageWrapper routes={breadRoutes}>
             <ListPage
