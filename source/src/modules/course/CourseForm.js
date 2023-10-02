@@ -1,7 +1,7 @@
 import DatePickerField from '@components/common/form/DatePickerField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
@@ -39,7 +39,7 @@ const CourseForm = (props) => {
     useEffect(() => {
         dataDetail.dateRegister = dataDetail.dateRegister && moment(dataDetail.dateRegister, DATE_FORMAT_VALUE);
         dataDetail.dateEnd = dataDetail.dateEnd && moment(dataDetail.dateEnd, DATE_FORMAT_VALUE);
-   
+
         form.setFieldsValue({
             ...dataDetail,
             subject: dataDetail?.subject?.name,
@@ -68,17 +68,22 @@ const CourseForm = (props) => {
                             options={subjects}
                         />
                     </Col>
-                    <Row gutter={66}>
-                        <Col span={12}>
-                            <DatePickerField
-                                label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
-                                name="dateRegister"
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <DatePickerField label={<FormattedMessage defaultMessage="Ngày kết thúc" />} name="dateEnd" />
-                        </Col>
-                    </Row>
+                    <Col span={12}>
+                        <DatePickerField
+                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                            name="dateRegister"
+                            style={{ width: '100%' }}
+                            format={DATE_FORMAT_DISPLAY}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <DatePickerField
+                            label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                            name="dateEnd"
+                            style={{ width: '100%' }}
+                            format={DATE_FORMAT_DISPLAY}
+                        />
+                    </Col>
                     <Col span={12}>
                         <TextField
                             required
