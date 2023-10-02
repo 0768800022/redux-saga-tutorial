@@ -11,8 +11,8 @@ import { categoryKinds } from '@constants';
 
 const messages = defineMessages({
     objectName: 'loại',
-    home: 'Home',
-    category: 'School Directory',
+    home: 'Trang chủ',
+    category: 'Danh mục trường',
 });
 
 const CategorySavePage = () => {
@@ -35,8 +35,7 @@ const CategorySavePage = () => {
             update: apiConfig.category.update,
         },
         options: {
-            getListUrl: generatePath(routes.categoryListPageEdu.path, { categoryId }),
-            // getListUrl: routes.categoryListPageEdu.path,
+            getListUrl: generatePath(routes.categoryListPageEdu.path),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -64,7 +63,6 @@ const CategorySavePage = () => {
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
                     breadcrumbName: translate.formatMessage(messages.category),
-                    path: generatePath(routes.categoryListPageEdu.path, { categoryId }),
                 },
                 { breadcrumbName: title },
             ]}

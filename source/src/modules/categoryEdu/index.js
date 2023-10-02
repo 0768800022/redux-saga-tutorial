@@ -17,21 +17,21 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 import BaseTable from '@components/common/table/BaseTable';
-
+import { categoryKinds } from '@constants';
 
 const message = defineMessages({
     objectName: 'Loại',
     name: 'Tên',
     status: 'Trạng thái',
     createDate: 'Ngày tạo',
-    home: 'Home',
-    category: 'School Directory',
+    home: 'Trang chủ',
+    category: 'Danh mục trường',
 });
 
-function CategoryListPage() {
-    const { categoryId } = useParams();
+const CategoryListPage  = () => {
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const kindOfEdu = categoryKinds.CATEGORY_KIND_EDUCATION;
 
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.category,
@@ -59,34 +59,19 @@ function CategoryListPage() {
                     },
                 };
             };
+            const prepareGetListParams = funcs.prepareGetListParams;
+            funcs.prepareGetListParams = (params) => {
+                return {
+                    ...prepareGetListParams(params),
+                    kind: kindOfEdu,
+                };
+            };
         },
     });
 
-    // const { sortedData, onDragEnd, sortColumn } = useDrapDropTableItem({
-    //     data,
-    //     apiConfig: apiConfig.category.update,
-    //     setTableLoading: () => {},
-    //     indexField: 'rank',
-    //     idField: 'CategoryId',
-    // });
-
-    const columns = [
-        {
-            title: translate.formatMessage(message.name),
-            dataIndex: 'categoryName',
-        },
-        {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 100,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-
-                return <Tag color={status.color}>{status.label}</Tag>;
-            },
-        },
-        mixinFuncs.renderActionColumn({ edit: true, deleteItem: true }, { width: '90px' }),
+    const breadRoutes = [
+        { breadcrumbName: translate.formatMessage(message.home) },
+        { breadcrumbName: translate.formatMessage(message.category) },
     ];
 
     const searchFields = [
@@ -101,14 +86,27 @@ function CategoryListPage() {
             options: statusValues,
         },
     ];
+    const columns = [
+        {
+            title: translate.formatMessage(message.name),
+            dataIndex: 'categoryName',
+        },
+        { title: translate.formatMessage(message.createDate), dataIndex: 'createdDate', align: 'center' },
+        {
+            title: translate.formatMessage(message.status),
+            dataIndex: 'status',
+            align: 'center',
+            width: 250,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
 
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
+        },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '250px' }),
+    ];
     return (
-        <PageWrapper
-            routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.category) },
-            ]}
-        >
+        <PageWrapper routes={breadRoutes}>
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
@@ -124,6 +122,5 @@ function CategoryListPage() {
             />
         </PageWrapper>
     );
-}
-
+};
 export default CategoryListPage;
