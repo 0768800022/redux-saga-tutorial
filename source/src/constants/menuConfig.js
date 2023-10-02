@@ -1,5 +1,5 @@
 import routes from '@routes';
-import { IconCategory2 } from '@tabler/icons-react';
+import { IconCategory2, IconRegistered } from '@tabler/icons-react';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
@@ -12,7 +12,7 @@ const navMenuConfig = [
         // permission: apiConfig.category.getList.baseURL,
         children: [
             {
-                label: "Danh mục",
+                label: 'Danh mục',
                 key: 'danh-muc',
                 path: generatePath(routes.categoryListPage.path, {
                     kind: categoryKind.service.value,
@@ -29,16 +29,12 @@ const navMenuConfig = [
             {
                 label: 'Môn học',
                 key: 'mon-hoc',
-                path: generatePath(routes.subjectListPage.path, {
-
-                }),
+                path: generatePath(routes.subjectListPage.path, {}),
             },
             {
                 label: 'Khoá học',
                 key: 'khoa-hoc',
-                path: generatePath(routes.courseListPage.path, {
-     
-                }),
+                path: generatePath(routes.courseListPage.path, {}),
             },
         ],
     },

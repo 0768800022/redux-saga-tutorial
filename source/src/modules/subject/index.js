@@ -36,7 +36,6 @@ const SubjectListPage = () => {
             funcs.mappingData = (response) => {
                 try {
                     if (response.result === true) {
-
                         return {
                             data: response.data.content,
                             total: response.data.totalElements,
