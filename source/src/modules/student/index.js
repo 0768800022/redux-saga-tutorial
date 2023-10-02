@@ -9,22 +9,23 @@ import useTranslate from '@hooks/useTranslate';
 
 const message = defineMessages({
     objectName: 'Student',
-    fullname: 'Full Name',
-    home:'Home',
-    student:'Student',
+    fullName: 'Họ Và Tên',
+    home:'Trang Chủ',
+    student:'Sinh Viên',
 });
 
 const StudentListPage = () => {
     const translate = useTranslate();
 
-    const { data, mixinFuncs, loading, pagination, queryFiter } =useListBase({
-        apiConfig: apiConfig.category,
-        options:{},
+    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+        apiConfig: apiConfig.student,
+        // options:{},
         override: (funcs) => {
             funcs.mappingData = (response) => {
+                console.log('response',response);
                 if(response.result === true) {
                     return {
-                        data: response.data.data,
+                        data: response.data.content,
                         total: response.data.totalElements,
                     };
                 }
@@ -34,11 +35,11 @@ const StudentListPage = () => {
 
     const columns = [
         {
-            title: <FormattedMessage defaultMessage='Full Name'/>,
-            dataIndex: 'fullname',
+            title: <FormattedMessage defaultMessage='Họ Và Tên'/>,
+            dataIndex: 'fullName',
         },
         {
-            title: <FormattedMessage defaultMessage='Birth Day'/>,
+            title: <FormattedMessage defaultMessage='Ngày Sinh'/>,
             dataIndex: 'birthday',
         },
         {
@@ -46,19 +47,20 @@ const StudentListPage = () => {
             dataIndex: 'mssv',
         },
         {
-            title: <FormattedMessage defaultMessage='Phone'/>,
+            title: <FormattedMessage defaultMessage='Số Điện Thoại'/>,
             dataIndex: 'phone',
         },
         {
             title: <FormattedMessage defaultMessage='Email'/>,
             dataIndex: 'email',
         },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '90px' }),
     ];
 
     const searchFields = [
         {
-            key: 'fullname',
-            placeholder: translate.formatMessage(message.fullname),
+            key: 'fullName',
+            placeholder: translate.formatMessage(message.fullName),
         },
     ];
     return (

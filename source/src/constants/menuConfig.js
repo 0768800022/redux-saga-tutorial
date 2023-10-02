@@ -50,7 +50,7 @@ const navMenuConfig = [
             {
                 label: 'Quản lý sinh viên',
                 key: 'student-management',
-                // path: routes.studentListPage.path,
+                path: routes.studentListPage.path,
             },
         ],
     },
