@@ -41,6 +41,10 @@ const StudentListPage = () => {
         {
             title: <FormattedMessage defaultMessage='Ngày Sinh'/>,
             dataIndex: 'birthday',
+            render: (birthday) => {
+                const result = birthday.split(" ").shift();
+                return <div>{result}</div>;
+            },
         },
         {
             title: <FormattedMessage defaultMessage='MSSV'/>,

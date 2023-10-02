@@ -8,8 +8,8 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
 import { DATE_FORMAT_VALUE } from '@constants/index';
 import { formatDateString } from '@utils/index';
-
 import moment from 'moment';
+
 const message = defineMessages({
     fullName: 'Họ Và Tên',
     birthday: 'Ngày Sinh',
@@ -19,7 +19,8 @@ const message = defineMessages({
     password: 'Mật Khẩu',
 });
 
-const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
+const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
+
     const translate = useTranslate();
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
@@ -36,7 +37,7 @@ const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormVa
 
 
     useEffect(() => {
-        dataDetail.birthday = dataDetail?.birthday && moment(dataDetail.birthday, DATE_FORMAT_VALUE);
+        dataDetail.birthday = dataDetail?.birthday && moment(dataDetail?.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
         });
@@ -56,6 +57,7 @@ const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormVa
                         <TextField
                             label={translate.formatMessage(message.fullName)}
                             name="fullName"
+                            disabled = {isEditing}
                         />
                     </Col>
                     <Col span={12}>
@@ -63,6 +65,7 @@ const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormVa
                             name = 'birthday'
                             label="Ngày Sinh"  
                             placeholder="Ngày sinh" 
+                            format={DATE_FORMAT_VALUE}
                             style={{ width: '100%' }}/>
                     </Col>
                 </Row>
@@ -71,6 +74,7 @@ const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormVa
                     <Col span={12}>
                         <TextField
                             label={translate.formatMessage(message.mssv)}
+                            disabled = {isEditing}
                             name="mssv"
                         />
                     </Col>
@@ -79,6 +83,7 @@ const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormVa
                             label={translate.formatMessage(message.phone)}
                             type='number'
                             name="phone"
+                            disabled = {isEditing}
                             required
                         />
                     </Col>
@@ -96,6 +101,7 @@ const StudentForm = ({ formId, actions, dataDetail, onSubmit, setIsChangedFormVa
                             label={translate.formatMessage(message.email)}
                             type='email'
                             name="email"
+                            disabled = {isEditing}
                             required
                         />
                     </Col>
