@@ -37,8 +37,8 @@ const CourseForm = (props) => {
         });
     }, []);
     useEffect(() => {
-        dataDetail.dateRegister = moment(dataDetail.dateRegister, DATE_FORMAT_VALUE);
-        dataDetail.dateEnd =  moment(dataDetail.dateEnd, DATE_FORMAT_VALUE);
+        dataDetail.dateRegister = dataDetail.dateRegister && moment(dataDetail.dateRegister, DATE_FORMAT_VALUE);
+        dataDetail.dateEnd = dataDetail.dateEnd && moment(dataDetail.dateEnd, DATE_FORMAT_VALUE);
    
         form.setFieldsValue({
             ...dataDetail,
