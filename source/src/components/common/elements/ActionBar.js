@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
 import styles from './ActionBar.module.scss';
-import HasPermission from './HasPermission';
+//import HasPermission from './HasPermission';
 
 const message = defineMessages({
     create: {
@@ -57,11 +57,11 @@ function ActionBar({
         <Row wrap justify="space-between" className={styles.actionBar}>
             <Col>
                 {selectedRows.length > 0 && (
-                    <HasPermission>
-                        <Button icon={<DeleteOutlined />} onClick={onBulkDeleteButtonClick}>
-                            Delete selected ({selectedRows.length})
-                        </Button>
-                    </HasPermission>
+                    // <HasPermission>
+                    <Button icon={<DeleteOutlined />} onClick={onBulkDeleteButtonClick}>
+                        Delete selected ({selectedRows.length})
+                    </Button>
+                    //</HasPermission>
                 )}
             </Col>
             <Col>

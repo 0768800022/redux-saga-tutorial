@@ -8,7 +8,7 @@ export default {
         title: 'Student',
         auth: true,
         component: StudentListPage,
-        // permissions: apiConfig.student.getById.baseURL,
+        permissions: apiConfig.student.getList.baseURL,
     },
     studentSavePage: {
         path: '/student/:id',
