@@ -36,7 +36,6 @@ const SubjectListPage = () => {
             funcs.mappingData = (response) => {
                 try {
                     if (response.result === true) {
-
                         return {
                             data: response.data.content,
                             total: response.data.totalElements,
@@ -77,19 +76,6 @@ const SubjectListPage = () => {
                 const modifiedDateTimeString = modifiedDate.format('DD/MM/YYYY HH:mm:ss');
 
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
-            },
-            width: 200,
-            align: 'center',
-        },
-        {
-            title: translate.formatMessage(message.student),
-            dataIndex: 'id',
-            render: (id) => {
-                return (
-                    <Button>
-                        <TeamOutlined />
-                    </Button>
-                );
             },
             width: 200,
             align: 'center',

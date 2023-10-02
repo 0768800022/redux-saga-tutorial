@@ -8,6 +8,8 @@ import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
+import { TeamOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -27,6 +29,21 @@ const CourseListPage = () => {
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
+        },
+        override: (funcs) => {
+            funcs.additionalActionColumnButtons = () => ({
+                student: ({ id }) => (
+                    <Button
+                        type="link"
+                        style={{ padding: 0 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
+                    >
+                        <TeamOutlined />
+                    </Button>
+                ),
+            });
         },
     });
     const breadRoutes = [
@@ -73,7 +90,7 @@ const CourseListPage = () => {
             align: 'center',
         },
 
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ student: true, edit: true, delete: true }, { width: '120px' }),
     ];
     console.log(data);
     return (

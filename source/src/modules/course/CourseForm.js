@@ -53,18 +53,11 @@ const CourseForm = (props) => {
             onValuesChange={onValuesChange}
         >
             <Card className="card-form" bordered={false}>
-                <Row gutter={10}>
+                <Row gutter={12}>
                     <Col span={12}>
                         <TextField label={<FormattedMessage defaultMessage="Tên khoá học" />} name="name" />
                     </Col>
-                    <Col span={12}>
-                        <TextField
-                            required
-                            label={<FormattedMessage defaultMessage="Mô tả" />}
-                            name="description"
-                            type="text-area"
-                        />
-                    </Col>
+
                     <Col span={12}>
                         <SelectField
                             required
@@ -73,16 +66,24 @@ const CourseForm = (props) => {
                             options={subjects}
                         />
                     </Col>
-                </Row>
-                <Row>
+                    <Row gutter={66}>
+                        <Col span={12}>
+                            <DatePickerField
+                                label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                                name="dateRegister"
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <DatePickerField label={<FormattedMessage defaultMessage="Ngày kết thúc" />} name="dateEnd" />
+                        </Col>
+                    </Row>
                     <Col span={12}>
-                        <DatePickerField
-                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
-                            name="dateRegister"
+                        <TextField
+                            required
+                            label={<FormattedMessage defaultMessage="Mô tả" />}
+                            name="description"
+                            type="textarea"
                         />
-                    </Col>
-                    <Col span={12}>
-                        <DatePickerField label={<FormattedMessage defaultMessage="Ngày kết thúc" />} name="dateEnd" />
                     </Col>
                 </Row>
 
