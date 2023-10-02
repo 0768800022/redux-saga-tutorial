@@ -12,10 +12,17 @@ const navMenuConfig = [
         // permission: apiConfig.category.getList.baseURL,
         children: [
             {
-                label: "Danh mục",
-                key: 'danh-muc',
-                path: generatePath(routes.categoryListPage.path, {
-                    kind: categoryKind.service.value,
+                label: categoryKind.education.title,
+                key: 'education-category',
+                path: generatePath(routes.categoryListPageEdu.path, {
+                    kind: categoryKind.education.value,
+                }),
+            },
+            {
+                label: categoryKind.generation.title,
+                key: 'generation-category',
+                path: generatePath(routes.categoryListPageGen.path, {
+                    kind: categoryKind.generation.value,
                 }),
             },
         ],
@@ -37,7 +44,7 @@ const navMenuConfig = [
                 label: 'Khoá học',
                 key: 'khoa-hoc',
                 path: generatePath(routes.courseListPage.path, {
-     
+
                 }),
             },
         ],

@@ -14,7 +14,7 @@ const message = defineMessages({
     subject: 'Subject',
     objectName: 'course',
     course: 'Course',
-    description: 'Description',
+    // description: 'Description',
     id: 'Id',
 });
 

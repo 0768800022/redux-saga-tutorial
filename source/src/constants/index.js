@@ -121,10 +121,11 @@ export const appAccount = {
 
 export const COMMON_PROTOCOL = 'jdbc:mysql://'; // using for connection string
 
-const CATEGORY_KIND_NEWS = 1;
+export const CATEGORY_KIND_GENERATION = 2;
+const CATEGORY_KIND_EDUCATION = 1;
 const CATEGORY_KIND_JOBS = 2;
 const CATEGORY_KIND_DEPARTMENTS = 3;
-const CATEGORY_KIND_EDUCATION = 4;
+const CATEGORY_KIND_NEWS = 4;
 const CATEGORY_KIND_SERVICE = 5;
 const CATEGORY_KIND_KNOWLEDGE = 8;
 export const categoryKinds = {
@@ -134,6 +135,7 @@ export const categoryKinds = {
     CATEGORY_KIND_EDUCATION,
     CATEGORY_KIND_SERVICE,
     CATEGORY_KIND_KNOWLEDGE,
+    CATEGORY_KIND_GENERATION,
 };
 
 const GROUP_KIND_ADMIN = 1;

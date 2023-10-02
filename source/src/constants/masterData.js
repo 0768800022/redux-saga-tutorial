@@ -96,11 +96,10 @@ export const commonLanguages = [
     { value: 'en', label: 'English' },
     { value: 'de', label: 'German' },
 ];
-
-export const CATEGORY_KIND_NEWS = 1;
-export const CATEGORY_KIND_DEPARTMENT = 2;
-export const CATEGORY_KIND_JOB_TITLE = 3;
-export const CATEGORY_KIND_EDUCATION = 4;
+export const CATEGORY_KIND_GENERATION = 2;
+export const CATEGORY_KIND_EDUCATION = 1;
+export const CATEGORY_KIND_DEPARTMENT = 3;
+export const CATEGORY_KIND_NEW = 4;
 export const CATEGORY_KIND_SERVICE = 5;
 export const CATEGORY_KIND_INVOICE_IN = 6;
 export const CATEGORY_KIND_INVOICE_OUT = 7;
@@ -112,6 +111,16 @@ export const categoryKind = {
         title: 'Category',
         path: 'service',
         value: CATEGORY_KIND_SERVICE,
+    },
+    education: {
+        title: 'Danh mục trường',
+        path: 'education',
+        value: CATEGORY_KIND_EDUCATION,
+    },
+    generation: {
+        title: 'Danh mục hệ',
+        path: 'generation',
+        value: CATEGORY_KIND_GENERATION,
     },
 };
 

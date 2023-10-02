@@ -15,13 +15,17 @@ import React from 'react';
 import { Link, generatePath, useParams } from 'react-router-dom';
 import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
+import { useLocation } from 'react-router-dom';
+import BaseTable from '@components/common/table/BaseTable';
+
 
 const message = defineMessages({
-    objectName: 'category',
-    name: 'Name',
-    status: 'Status',
+    objectName: 'Loại',
+    name: 'Tên',
+    status: 'Trạng thái',
+    createDate: 'Ngày tạo',
     home: 'Home',
-    category: 'Service Category',
+    category: 'School Directory',
 });
 
 function CategoryListPage() {
@@ -36,21 +40,6 @@ function CategoryListPage() {
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content.map((item) => ({ ...item, id: item.rank, _id: item.id })),
-                            total: response.data.totalElements,
-                        };
-                    }
-                } catch (error) {
-                    return [];
-                }
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                return generatePath(routes.categorySavePage.path, { categoryId, id: dataRow._id });
-            };
             funcs.additionalActionColumnButtons = () => {
                 return {
                     deleteItem: ({ buttonProps, ...dataRow }) => {
@@ -73,30 +62,15 @@ function CategoryListPage() {
         },
     });
 
-    const { sortedData, onDragEnd, sortColumn } = useDrapDropTableItem({
-        data,
-        apiConfig: apiConfig.category.update,
-        setTableLoading: () => {},
-        indexField: 'rank',
-        idField: 'CategoryId',
-    });
+    // const { sortedData, onDragEnd, sortColumn } = useDrapDropTableItem({
+    //     data,
+    //     apiConfig: apiConfig.category.update,
+    //     setTableLoading: () => {},
+    //     indexField: 'rank',
+    //     idField: 'CategoryId',
+    // });
 
     const columns = [
-        sortColumn,
-        {
-            title: '#',
-            dataIndex: 'imagePath',
-            align: 'center',
-            width: 100,
-            render: (avatar) => (
-                <Avatar
-                    size="large"
-                    shape="square"
-                    icon={<UserOutlined />}
-                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                />
-            ),
-        },
         {
             title: translate.formatMessage(message.name),
             dataIndex: 'categoryName',
@@ -139,14 +113,12 @@ function CategoryListPage() {
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
-                    <DragDropTableV2
-                        onDragEnd={onDragEnd}
+                    <BaseTable
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={sortedData}
+                        dataSource={data}
                         columns={columns}
-                        // rowKey={(record) => record._id}
                     />
                 }
             />

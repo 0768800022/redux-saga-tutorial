@@ -1,5 +1,7 @@
 import PageNotFound from '@components/common/page/PageNotFound';
 import categoryRoutes from '@modules/category/routes';
+import categoryRoutesEdu from '@modules/categoryEdu/routes';
+import categoryRoutesGen from '@modules/categoryGen/routes';
 import studentRoutes from '@modules/student/routes';
 import Dashboard from '@modules/dashboard';
 import LoginPage from '@modules/login/index';
@@ -47,6 +49,8 @@ const routes = {
     ...categoryRoutes,
     ...subjectRoutes,
     ...courseRoutes,
+    ...categoryRoutesEdu,
+    ...categoryRoutesGen,
     // keep this at last
     //
     notFound: {
