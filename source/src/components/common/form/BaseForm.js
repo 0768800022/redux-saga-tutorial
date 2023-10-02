@@ -2,26 +2,26 @@ import React from 'react';
 import { Form } from 'antd';
 import { formSize } from '@constants/index';
 
-export const BaseForm = ({ 
-    formId, 
-    onFinish, 
-    onChange, 
-    form, 
-    onValuesChange, 
-    children, 
-    size = 'normal', 
+export const BaseForm = ({
+    formId,
+    onFinish,
+    onChange,
+    form,
+    onValuesChange,
+    children,
+    size = 'normal',
 
-    
-    ...props 
+    ...props
 }) => {
     return (
         <Form
-            style={{ width: formSize[size] }} 
+            style={{ width: formSize[size] }}
             id={formId}
             onFinish={onFinish}
             onChange={onChange}
             form={form}
             onValuesChange={onValuesChange}
+            layout="vertical"
             {...props}
         >
             {children}

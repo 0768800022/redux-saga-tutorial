@@ -1,10 +1,15 @@
 import PageNotFound from '@components/common/page/PageNotFound';
 import categoryRoutes from '@modules/category/routes';
+import categoryRoutesEdu from '@modules/categoryEdu/routes';
+import categoryRoutesGen from '@modules/categoryGen/routes';
 import studentRoutes from '@modules/student/routes';
 import Dashboard from '@modules/dashboard';
 import LoginPage from '@modules/login/index';
 import ProfilePage from '@modules/profile/index';
 import PageNotAllowed from '@components/common/page/PageNotAllowed';
+import subjectRoutes from '@modules/subject/routes';
+import courseRoutes from '@modules/course/routes';
+import RegistrationRoutes from '@modules/registration/routes';
 /*
 	auth
 		+ null: access login and not login
@@ -43,6 +48,11 @@ const routes = {
         title: 'Profile page',
     },
     ...categoryRoutes,
+    ...subjectRoutes,
+    ...courseRoutes,
+    ...categoryRoutesEdu,
+    ...categoryRoutesGen,
+    ...RegistrationRoutes,
     ...studentRoutes,
     // keep this at last
     //
