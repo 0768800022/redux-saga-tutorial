@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import React from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -12,6 +12,7 @@ import { TeamOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import routes from '@modules/registration/routes';
+import { convertDateTimeToString } from '@utils/dayHelper';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -76,7 +77,7 @@ const CourseListPage = () => {
             dataIndex: 'dateRegister',
             render: (dateRegister) => {
                 const modifiedDate = dayjs(dateRegister, 'DD/MM/YYYY');
-                const modifiedDateTimeString = modifiedDate.format('DD/MM/YYYY');
+                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
             width: 200,
@@ -87,7 +88,7 @@ const CourseListPage = () => {
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
                 const modifiedDate = dayjs(dateEnd, 'DD/MM/YYYY');
-                const modifiedDateTimeString = modifiedDate.format('DD/MM/YYYY');
+                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
             width: 200,
