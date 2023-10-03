@@ -351,7 +351,7 @@ export const chart31DaysData = [
     },
 ];
 export const formSize = {
-    small: '500px',
-    normal: '600px',
-    big: '800px',
+    small: '600px',
+    normal: '700px',
+    big: '900px',
 };
