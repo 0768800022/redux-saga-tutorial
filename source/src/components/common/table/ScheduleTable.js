@@ -1,5 +1,5 @@
 import { Col, Row, Table, Tag } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './ScheduleTable.module.scss';
 import TimePickerField from '../form/TimePickerField';
 import { TIME_FORMAT_DISPLAY } from '@constants';
@@ -56,47 +56,54 @@ const columns = [
     },
 ];
 const ScheduleTable = ({ data }) => {
-    console.log(data);
-    const dataSource = [
-        {
-            key: '1',
-            date: 'Thứ 2',
-            time: '12:06-12:30|15:20-17:30',
-        },
-        {
-            key: '2',
-            date: 'Thứ 3',
-            time: '12:06-12:30|15:20-17:30',
-        },
-        {
-            key: '3',
-            date: 'Thứ 4',
-            time: '12:06-12:30|15:20-17:30',
-        },
-        {
-            key: '4',
-            date: 'Thứ 5',
-            time: '12:06-12:30|15:20-17:30',
-        },
-        {
-            key: '5',
-            date: 'Thứ 6',
-            time: '12:06-12:30|15:20-17:30',
-        },
-        {
-            key: '6',
-            date: 'Thứ 7',
-            time: '12:06-12:30|15:20-17:30',
-        },
-        {
-            key: '7',
-            date: 'Chủ nhật',
-            time: '12:06-12:30|15:20-17:30',
-        },
-    ];
+    const convertDataSource = (data) => {
+        let dataSource;
+        if (data) {
+            dataSource = [
+                {
+                    key: '1',
+                    date: 'Thứ 2',
+                    time: data?.t2,
+                },
+                {
+                    key: '2',
+                    date: 'Thứ 3',
+                    time: data?.t3,
+                },
+                {
+                    key: '3',
+                    date: 'Thứ 4',
+                    time: data?.t4,
+                },
+                {
+                    key: '4',
+                    date: 'Thứ 5',
+                    time: data?.t5,
+                },
+                {
+                    key: '5',
+                    date: 'Thứ 6',
+                    time: data?.t6,
+                },
+                {
+                    key: '6',
+                    date: 'Thứ 7',
+                    time: data?.t7,
+                },
+                {
+                    key: '7',
+                    date: 'Chủ nhật',
+                    time: data?.cn,
+                },
+            ];
+        }
+
+        return dataSource;
+    };
+
     return (
         <BaseTable
-            dataSource={dataSource}
+            dataSource={convertDataSource(data)}
             columns={columns}
             bordered
             pagination={false}
