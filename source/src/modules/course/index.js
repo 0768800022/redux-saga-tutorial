@@ -69,7 +69,7 @@ const CourseListPage = () => {
         },
         {
             title: translate.formatMessage(message.subject),
-            dataIndex: ['subject', 'name'],
+            dataIndex: ['subject', 'subjectName'],
             width: 250,
         },
         {
