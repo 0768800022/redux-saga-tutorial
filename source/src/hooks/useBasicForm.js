@@ -12,7 +12,6 @@ const useBasicForm = ({ onSubmit, setIsChangedFormValues, onResetForm, override,
     };
 
     const handleSubmit = (formValues) => {
-        console.log(formValues);
         onSubmit({
             ...formValues,
             ...otherData,

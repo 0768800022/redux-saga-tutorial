@@ -1,20 +1,15 @@
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import { BaseForm } from '@components/common/form/BaseForm';
 import CheckboxField from '@components/common/form/CheckboxField';
-import CropImageField from '@components/common/form/CropImageField';
-import DropdownField from '@components/common/form/DropdownField';
 import SelectField from '@components/common/form/SelectField';
-import TextField from '@components/common/form/TextField';
 import TimePickerField from '@components/common/form/TimePickerField';
-import ScheduleTable from '@components/common/table/ScheduleTable';
-import { AppConstants, STATUS_ACTIVE, TIME_FORMAT_DISPLAY } from '@constants';
+import { TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { daysOfWeekTimeWork as daysOfWeekTimeWorkOptions, formSize, statusOptions } from '@constants/masterData';
+import { daysOfWeekTimeWork as daysOfWeekTimeWorkOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
-import { Button, Card, Col, DatePicker, Form, Row, Space } from 'antd';
-import dayjs from 'dayjs';
+import { Button, Card, Col, Form, Row, Space } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -57,7 +52,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             params: {},
         });
     }, []);
-    console.log(students);
     const handleSubmit = (values) => {
         values.isIntern = isChecked ? 1 : 0;
         values.schedule = values.schedule && JSON.stringify(values.schedule);
@@ -72,78 +66,22 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     useEffect(() => {
         dataDetail?.isIntern && setIsChecked(dataDetail?.isIntern == 1 && true);
         const data = dataDetail?.schedule && JSON.parse(dataDetail?.schedule);
-        const dataDefault = {
-            monday: [
-                {
-                    from: '2023-10-03T00:00:00.000Z',
-                    to: '2023-10-03T00:00:00.000Z',
-                },
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-            ],
-            tuesday: [
-                {
-                    from: '2023-10-03T00:00:00.000Z',
-                    to: '2023-10-03T00:00:00.000Z',
-                },
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-            ],
-            wednesday: [
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-03T00:00:00.000Z',
-                },
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-            ],
-            thursday: [
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-            ],
-            friday: [
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-            ],
-            saturday: [
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-            ],
-            sunday: [
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-                {
-                    from: '2023-10-02T00:00:00.000Z',
-                    to: '2023-10-02T00:00:00.000Z',
-                },
-            ],
-        };
+        let dataDefault = {};
+        daysOfWeekTimeWork.map((day) => {
+            dataDefault = {
+                [day.value]: [
+                    {
+                        from: '2023-10-03T00:00:00.000Z',
+                        to: '2023-10-03T00:00:00.000Z',
+                    },
+                    {
+                        from: '2023-10-02T00:00:00.000Z',
+                        to: '2023-10-02T00:00:00.000Z',
+                    },
+                ],
+                ...dataDefault,
+            };
+        });
 
         for (const day in data) {
             for (const timeRange of data[day]) {
@@ -172,8 +110,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     }, [dataDetail]);
 
     const onSelectTimeWorkTabletRandom = (fieldName, value) => {
-        console.log(fieldName);
-        console.log(value);
         try {
             const schedule = getFieldValue('schedule');
             const [dayKey, dayIndexKey, frameKey] = fieldName;
@@ -215,7 +151,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         const { monday = [] } = schedule;
         for (let { value } of daysOfWeekTimeWork) {
             schedule[value] = monday.map((frame) => {
-                console.log(frame);
                 return {
                     from: frame.from,
                     to: frame.to,
@@ -238,7 +173,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     ];
 
     return (
-      
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="big">
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
