@@ -77,7 +77,7 @@ const CategoryListPage  = () => {
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.objectName),
+            placeholder: translate.formatMessage(message.name),
         },
         {
             key: 'status',

@@ -16,8 +16,7 @@ const messages = defineMessages({
 });
 
 const CategorySavePage = () => {
-    // const { categoryId } = useParams();
-    const { categoryId } = 0;
+    const  categoryId = useParams();
     const translate = useTranslate();
 
     const queryParameters = new URLSearchParams(window.location.search);
@@ -35,7 +34,7 @@ const CategorySavePage = () => {
             update: apiConfig.category.update,
         },
         options: {
-            getListUrl: generatePath(routes.categoryListPageEdu.path),
+            getListUrl: generatePath(routes.categoryListPageEdu.path, { categoryId }),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -63,6 +62,7 @@ const CategorySavePage = () => {
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
                     breadcrumbName: translate.formatMessage(messages.category),
+                    path: generatePath(routes.categoryListPageEdu.path, { categoryId }),
                 },
                 { breadcrumbName: title },
             ]}
