@@ -15,6 +15,8 @@ const message = defineMessages({
     home:'Trang chủ',
     student:'Sinh viên',
     mssv:'Mã số sinh viên',
+    stuClas:'Hệ',
+    university:'Trường học',
 });
 
 const StudentListPage = () => {
@@ -64,6 +66,14 @@ const StudentListPage = () => {
         {
             title: <FormattedMessage defaultMessage='Email'/>,
             dataIndex: 'email',
+        },
+        {
+            title: <FormattedMessage defaultMessage='Trường'/>,
+            dataIndex: ['university','categoryName'],
+        },
+        {
+            title: <FormattedMessage defaultMessage='Hệ'/>,
+            dataIndex: ['studyClass','categoryName'],
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
