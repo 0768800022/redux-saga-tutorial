@@ -16,7 +16,7 @@ import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
     student: 'Tên sinh viên',
-    isItern: 'Đăng kí thực tập',
+    isIntern: 'Đăng kí thực tập',
 });
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) {
@@ -26,6 +26,11 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         onSubmit,
         setIsChangedFormValues,
     });
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleOnChangeCheckBox = () => {
+        setIsChecked(!isChecked);
+    };
 
     const {
         data: students,
@@ -42,12 +47,17 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     }, []);
 
     const handleSubmit = (values) => {
+        values.isIntern = isChecked ? 1 : 0;
+        console.log(students);
+        console.log(values);
         return mixinFuncs.handleSubmit({ ...values });
     };
 
     useEffect(() => {
+        dataDetail?.isIntern && setIsChecked(dataDetail?.isIntern == 1 && true);
         form.setFieldsValue({
             ...dataDetail,
+            studentId: dataDetail?.studentInfo?.fullName,
         });
     }, [dataDetail]);
 
@@ -64,7 +74,13 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                         />
                     </Col>
                     <Col span={12}>
-                        <CheckboxField required label={translate.formatMessage(messages.isItern)} name="isIntern" />
+                        <CheckboxField
+                            required
+                            label={translate.formatMessage(messages.isIntern)}
+                            name="isIntern"
+                            checked={isChecked}
+                            onChange={handleOnChangeCheckBox}
+                        />
                     </Col>
                 </Row>
                 <Row gutter={16}></Row>

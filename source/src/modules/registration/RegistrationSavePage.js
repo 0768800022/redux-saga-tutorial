@@ -35,12 +35,15 @@ function RegistrationSavePage() {
                 return {
                     ...data,
                     id: detail.id,
+                    state: 1,
+                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
                     courseId: courseId,
+                    state: 1,
                 };
             };
         },

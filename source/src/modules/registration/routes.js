@@ -3,13 +3,13 @@ import RegistrationSavePage from './RegistrationSavePage';
 
 export default {
     registrationListPage: {
-        path: '/registration',
+        path: '/course/registration',
         title: 'Registration',
         auth: true,
         component: RegistrationListPage,
     },
     registrationSavePage: {
-        path: '/registration/:id',
+        path: '/course/registration/:id',
         title: 'Registration Save Page',
         auth: true,
         component: RegistrationSavePage,
