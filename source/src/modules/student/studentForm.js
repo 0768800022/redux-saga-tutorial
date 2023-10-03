@@ -31,14 +31,14 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     const kindOfEdu = categoryKinds.CATEGORY_KIND_EDUCATION;
     const kindOfGen = categoryKinds.CATEGORY_KIND_GENERATION;
     const [currentKindOfEdu, setCurrentKindOfEdu] = useState(kindOfEdu);
-    console.log("dataDetail "+JSON.stringify(dataDetail));
+    console.log("dataDetail " + JSON.stringify(dataDetail));
 
 
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
-    
+
     const {
         data: categorys,
         loading: getCategorysLoading,
@@ -58,11 +58,11 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         form.setFieldsValue({
             ...dataDetail,
             // university: dataDetail?.category?.categoryName,
-            universityId:  dataDetail?.university?.categoryName,
+            universityId: dataDetail?.university?.categoryName,
             studyClass: dataDetail?.studyClass?.categoryName,
         });
     }, [dataDetail]);
-    
+
     const handleSubmit = (values) => {
         values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values });
