@@ -1,3 +1,4 @@
+import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
 import SelectField from '@components/common/form/SelectField';
@@ -55,11 +56,14 @@ const CourseForm = (props) => {
                     </Col>
 
                     <Col span={12}>
-                        <SelectField
+                        <AutoCompleteField
                             required
                             label={<FormattedMessage defaultMessage="Môn học" />}
                             name="subject"
-                            options={subjects}
+                            apiConfig={apiConfig.subject.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item.subjectName })}
+                            initialSearchParams={{}}
+                            searchParams={(text) => ({ name: text })}
                         />
                     </Col>
                     <Col span={12}>
