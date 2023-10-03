@@ -1,4 +1,4 @@
-import { Card, Col, Row,DatePicker } from 'antd';
+import { Card, Col, Row, DatePicker } from 'antd';
 import React, { useEffect } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
@@ -19,8 +19,7 @@ const message = defineMessages({
     password: 'Mật Khẩu',
 });
 
-const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
-
+const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
@@ -31,7 +30,7 @@ const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsCha
         values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values });
     };
-   
+
     useEffect(() => {
         dataDetail.birthday = dataDetail?.birthday && dayjs(dataDetail?.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
@@ -40,43 +39,33 @@ const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsCha
     }, [dataDetail]);
 
     return (
-        <BaseForm
-            formId={formId}
-            onFinish={handleSubmit}
-            form={form}
-            onValuesChange={onValuesChange}
-        >
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField
-                            label={translate.formatMessage(message.fullName)}
-                            name="fullName"
-                        />
+                        <TextField label={translate.formatMessage(message.fullName)} name="fullName" />
                     </Col>
                     <Col span={12}>
-                        <DatePickerField 
-                            name = 'birthday'
-                            label="Ngày sinh"  
-                            placeholder="Ngày sinh" 
+                        <DatePickerField
+                            name="birthday"
+                            label="Ngày sinh"
+                            placeholder="Ngày sinh"
                             format={DATE_FORMAT_VALUE}
-                            style={{ width: '100%' }}/>
+                            style={{ width: '100%' }}
+                        />
                     </Col>
                 </Row>
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField
-                            label={translate.formatMessage(message.mssv)}
-                            name="mssv"
-                        />
+                        <TextField label={translate.formatMessage(message.mssv)} name="mssv" />
                     </Col>
                     <Col span={12}>
                         <TextField
                             label={translate.formatMessage(message.phone)}
-                            type='number'
+                            type="number"
                             name="phone"
-                            disabled = {isEditing}
+                            disabled={isEditing}
                             required
                         />
                     </Col>
@@ -84,17 +73,14 @@ const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsCha
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField
-                            label={translate.formatMessage(message.password)}
-                            name="password"
-                        />
+                        <TextField label={translate.formatMessage(message.password)} name="password" />
                     </Col>
                     <Col span={12}>
                         <TextField
                             label={translate.formatMessage(message.email)}
-                            type='email'
+                            type="email"
                             name="email"
-                            disabled = {isEditing}
+                            disabled={isEditing}
                             required
                         />
                     </Col>

@@ -1,5 +1,7 @@
 import { BaseForm } from '@components/common/form/BaseForm';
+import CheckboxField from '@components/common/form/CheckboxField';
 import CropImageField from '@components/common/form/CropImageField';
+import DropdownField from '@components/common/form/DropdownField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { AppConstants, STATUS_ACTIVE } from '@constants';
@@ -13,7 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    student: 'Mã sinh viên',
+    student: 'Tên sinh viên',
     isItern: 'Đăng kí thực tập',
 });
 
@@ -24,6 +26,20 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         onSubmit,
         setIsChangedFormValues,
     });
+
+    const {
+        data: students,
+        loading: getstudentsLoading,
+        execute: executestudents,
+    } = useFetch(apiConfig.student.autocomplete, {
+        immediate: false,
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.fullName })),
+    });
+    useEffect(() => {
+        executestudents({
+            params: {},
+        });
+    }, []);
 
     const handleSubmit = (values) => {
         return mixinFuncs.handleSubmit({ ...values });
@@ -36,18 +52,22 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     }, [dataDetail]);
 
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="big">
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="small">
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField required label={translate.formatMessage(messages.student)} name="studentID" />
+                        <SelectField
+                            required
+                            label={translate.formatMessage(messages.student)}
+                            name="studentId"
+                            options={students}
+                        />
                     </Col>
-                </Row>
-                <Row gutter={16}>
                     <Col span={12}>
-                        <TextField required label={translate.formatMessage(messages.isItern)} name="isIntern" />
+                        <CheckboxField required label={translate.formatMessage(messages.isItern)} name="isIntern" />
                     </Col>
                 </Row>
+                <Row gutter={16}></Row>
 
                 <div className="footer-card-form">{actions}</div>
             </Card>

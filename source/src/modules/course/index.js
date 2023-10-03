@@ -36,13 +36,13 @@ const CourseListPage = () => {
         },
         override: (funcs) => {
             funcs.additionalActionColumnButtons = () => ({
-                student: ({ id }) => (
+                student: ({ id, name }) => (
                     <Button
                         type="link"
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigate(routes.registrationListPage.path + `?courseId=${id}`);
+                            navigate(routes.registrationListPage.path + `?courseId=${id}&courseName=${name}`);
                         }}
                     >
                         <TeamOutlined />

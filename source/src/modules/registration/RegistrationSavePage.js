@@ -19,6 +19,7 @@ function RegistrationSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
+    const courseName = queryParameters.get('courseName');
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.registration.getById,
@@ -26,7 +27,7 @@ function RegistrationSavePage() {
             update: apiConfig.registration.update,
         },
         options: {
-            getListUrl: routes.registrationSavePage.path,
+            getListUrl: routes.registrationListPage.path,
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -44,14 +45,13 @@ function RegistrationSavePage() {
             };
         },
     });
-
     return (
         <PageWrapper
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: translate.formatMessage(messages.registration),
+                    breadcrumbName: courseName,
                     path: routes.registrationListPage.path,
                 },
                 { breadcrumbName: title },

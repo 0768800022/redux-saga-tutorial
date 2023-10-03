@@ -358,7 +358,6 @@ const useListBase = ({
                     }
                 });
 
-
                 return (
                     <span>
                         {buttons.map((ActionItem, index) => (
