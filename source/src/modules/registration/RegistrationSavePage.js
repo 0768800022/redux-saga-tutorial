@@ -48,6 +48,7 @@ function RegistrationSavePage() {
             };
         },
     });
+    console.log(detail);
     return (
         <PageWrapper
             loading={loading}

@@ -49,8 +49,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
 
     const handleSubmit = (values) => {
         values.isIntern = isChecked ? 1 : 0;
-        console.log(students);
-        console.log(values);
         return mixinFuncs.handleSubmit({ ...values });
     };
 
@@ -61,7 +59,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             studentId: dataDetail?.studentInfo?.fullName,
         });
     }, [dataDetail]);
-
+    console.log(dataDetail);
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="big">
             <Card className="card-form" bordered={false}>
@@ -85,7 +83,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     </Col>
                 </Row>
 
-                <ScheduleTable />
+                <ScheduleTable data={dataDetail.schedule && JSON.parse(dataDetail.schedule)} />
 
                 <div className="footer-card-form">{actions}</div>
             </Card>
