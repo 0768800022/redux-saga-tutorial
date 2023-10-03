@@ -11,12 +11,12 @@ import { categoryKinds } from '@constants';
 
 const messages = defineMessages({
     objectName: 'loại',
-    home: 'Home',
-    category: 'School Directory',
+    home: 'Trang chủ',
+    category: 'Danh mục hệ',
 });
 
 const CategorySavePage = () => {
-    const { categoryId } = useParams();
+    const categoryId = useParams();
     const translate = useTranslate();
 
     const queryParameters = new URLSearchParams(window.location.search);

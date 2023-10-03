@@ -266,7 +266,7 @@ const apiConfig = {
             headers: baseHeader,
         },
         updateProfile: {
-            baseURL: `${apiUrl}v1/career/update`,
+            baseURL: `${apiUrl}v1/career/update_profile`,
             method: 'PUT',
             headers: baseHeader,
         },

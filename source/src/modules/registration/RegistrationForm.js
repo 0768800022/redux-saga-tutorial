@@ -1,5 +1,7 @@
 import { BaseForm } from '@components/common/form/BaseForm';
+import CheckboxField from '@components/common/form/CheckboxField';
 import CropImageField from '@components/common/form/CropImageField';
+import DropdownField from '@components/common/form/DropdownField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { AppConstants, STATUS_ACTIVE } from '@constants';
@@ -13,8 +15,8 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-    student: 'Mã sinh viên',
-    isItern: 'Đăng kí thực tập',
+    student: 'Tên sinh viên',
+    isIntern: 'Đăng kí thực tập',
 });
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) {
@@ -24,30 +26,64 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         onSubmit,
         setIsChangedFormValues,
     });
+    const [isChecked, setIsChecked] = useState(false);
+
+    const handleOnChangeCheckBox = () => {
+        setIsChecked(!isChecked);
+    };
+
+    const {
+        data: students,
+        loading: getstudentsLoading,
+        execute: executestudents,
+    } = useFetch(apiConfig.student.autocomplete, {
+        immediate: false,
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.fullName })),
+    });
+    useEffect(() => {
+        executestudents({
+            params: {},
+        });
+    }, []);
 
     const handleSubmit = (values) => {
+        values.isIntern = isChecked ? 1 : 0;
+        console.log(students);
+        console.log(values);
         return mixinFuncs.handleSubmit({ ...values });
     };
 
     useEffect(() => {
+        dataDetail?.isIntern && setIsChecked(dataDetail?.isIntern == 1 && true);
         form.setFieldsValue({
             ...dataDetail,
+            studentId: dataDetail?.studentInfo?.fullName,
         });
     }, [dataDetail]);
 
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="big">
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="small">
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField required label={translate.formatMessage(messages.student)} name="studentID" />
+                        <SelectField
+                            required
+                            label={translate.formatMessage(messages.student)}
+                            name="studentId"
+                            options={students}
+                        />
                     </Col>
-                </Row>
-                <Row gutter={16}>
                     <Col span={12}>
-                        <TextField required label={translate.formatMessage(messages.isItern)} name="isIntern" />
+                        <CheckboxField
+                            required
+                            label={translate.formatMessage(messages.isIntern)}
+                            name="isIntern"
+                            checked={isChecked}
+                            onChange={handleOnChangeCheckBox}
+                        />
                     </Col>
                 </Row>
+                <Row gutter={16}></Row>
 
                 <div className="footer-card-form">{actions}</div>
             </Card>

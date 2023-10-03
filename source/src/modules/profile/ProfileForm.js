@@ -11,11 +11,13 @@ import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 
 const messages = defineMessages({
-    avatar: 'Avatar',
+    banner: 'Banner',
+    avatarPath:'Avatar',
     username: 'Username',
     career: 'Career Name',
     fullName: 'Leader',
-    email: 'Hot line',
+    email:'Email',
+    hotline: 'Hot line',
     phoneNumber: 'Phone Number',
     taxNumber: 'Tax Number',
     zipCode: 'Zip Code',
@@ -33,6 +35,8 @@ const ProfileForm = (props) => {
     const { formId, dataDetail, onSubmit, setIsChangedFormValues, actions, isAdmin } = props;
     const [imageUrl, setImageUrl] = useState(null);
     const [logoUrl, setLogoUrl] = useState(null);
+    const [bannerUrl, setBannerUrl] = useState(null);
+
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const translate = useTranslate();
 
@@ -51,6 +55,25 @@ const ProfileForm = (props) => {
                 if (response.result === true) {
                     onSuccess();
                     setImageUrl(response.data.filePath);
+                    setIsChangedFormValues(true);
+                }
+            },
+            onError: (error) => {
+                onError();
+            },
+        });
+    };
+
+    const uploadBannerFile = (file, onSuccess, onError) => {
+        executeUpFile({
+            data: {
+                type: 'AVATAR',
+                file: file,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    onSuccess();
+                    setBannerUrl(response.data.filePath);
                     setIsChangedFormValues(true);
                 }
             },
@@ -82,21 +105,24 @@ const ProfileForm = (props) => {
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
-            avatar: dataDetail.avatarPath,
-            logo: dataDetail.logoPath,
         });
-        setImageUrl(dataDetail.avatarPath);
+        setImageUrl(dataDetail.accountDto?.avatar);
         setLogoUrl(dataDetail.logoPath);
+        setBannerUrl(dataDetail.bannerPath);
     }, [dataDetail]);
 
     const handleFinish = (values) => {
+        values.accountDto.avatar = imageUrl,
         mixinFuncs.handleSubmit({
             ...values,
-            fullName: values.fullName,
+            fullName: values.accountDto.fullName,
             oldPassword: values.oldPassword,
             password: values.password,
-            avatar: imageUrl,
             logo: logoUrl,
+            avatarPath:values.accountDto.avatar,
+            bannerPath: bannerUrl,
+            phone: values.accountDto.phone,
+            email: values.accountDto.email,
         });
     };
 
@@ -113,27 +139,37 @@ const ProfileForm = (props) => {
             >
                 <CropImageField
                     label={translate.formatMessage(messages.logo)}
-                    name="logo"
+                    name="logoPath"
                     imageUrl={logoUrl && `${AppConstants.contentRootUrl}${logoUrl}`}
                     aspect={1 / 1}
                     required
                     uploadFile={uploadLogoFile}
                 />
-                {/* <CropImageField
-                    label={translate.formatMessage(messages.avatar)}
-                    name="avatar"
+
+                <CropImageField
+                    label={translate.formatMessage(messages.avatarPath)}
+                    name="avatarPath"
                     imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                     aspect={1 / 1}
+                    required
                     uploadFile={uploadFile}
-                /> */}
+                />
+                <CropImageField
+                    label={translate.formatMessage(messages.banner)}
+                    name="bannerPath"
+                    imageUrl={bannerUrl && `${AppConstants.contentRootUrl}${bannerUrl}`}
+                    aspect={1 / 1}    
+                    uploadFile={uploadBannerFile}
+                />
                 <TextField
                     readOnly
                     label={translate.formatMessage(messages.username)}
                     name={['accountDto', 'username']}
                 />
                 <TextField label={translate.formatMessage(messages.career)} name={['careerName']} />
+                <TextField label={translate.formatMessage(messages.email)} name={['accountDto', 'email']} />
                 <TextField label={translate.formatMessage(messages.fullName)} name={['accountDto', 'fullName']} />
-                <TextField label={translate.formatMessage(messages.email)} name="hotline" />
+                <TextField label={translate.formatMessage(messages.hotline)} name="hotline" />
                 {!isAdmin && (
                     <Fragment>
                         <TextField

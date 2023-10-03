@@ -10,7 +10,7 @@ export default {
         component: CategoryListPage,
         // permissions: apiConfig.category.getById.baseURL,
     },
-    categorySavePage: {
+    categorySavePageGen: {
         path: '/category-generation/:id',
         title: 'Category Save Page',
         auth: true,

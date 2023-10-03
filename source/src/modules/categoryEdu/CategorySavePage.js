@@ -11,13 +11,12 @@ import { categoryKinds } from '@constants';
 
 const messages = defineMessages({
     objectName: 'loại',
-    home: 'Home',
-    category: 'School Directory',
+    home: 'Trang chủ',
+    category: 'Danh mục trường',
 });
 
 const CategorySavePage = () => {
-    // const { categoryId } = useParams();
-    const { categoryId } = 0;
+    const  categoryId = useParams();
     const translate = useTranslate();
 
     const queryParameters = new URLSearchParams(window.location.search);
@@ -36,7 +35,6 @@ const CategorySavePage = () => {
         },
         options: {
             getListUrl: generatePath(routes.categoryListPageEdu.path, { categoryId }),
-            // getListUrl: routes.categoryListPageEdu.path,
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {

@@ -15,6 +15,6 @@ export default {
         title: 'Student Save Page',
         auth: true,
         component: StudentSavePage,
-        // permissions: [ apiConfig.category.getById.baseURL ],
+        permission: [apiConfig.student.create.baseURL, apiConfig.student.update.baseURL],
     },
 };

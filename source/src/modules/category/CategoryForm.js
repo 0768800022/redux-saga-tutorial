@@ -90,16 +90,6 @@ function CategoryForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormV
                         />
                     </Col>
                 </Row>
-                {/* <Row gutter={10}>
-                    <Col span={24}>
-                        <TextField
-                            required
-                            label={translate.formatMessage(messages.description)}
-                            name="description"
-                            type="textarea"
-                        />
-                    </Col>
-                </Row> */}
 
                 <div className="footer-card-form">{actions}</div>
             </Card>

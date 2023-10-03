@@ -1,4 +1,4 @@
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row, DatePicker } from 'antd';
 import React, { useEffect } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
@@ -8,7 +8,7 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
 import { DATE_FORMAT_VALUE } from '@constants/index';
 import { formatDateString } from '@utils/index';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const message = defineMessages({
     fullName: 'Họ Và Tên',
@@ -19,8 +19,7 @@ const message = defineMessages({
     password: 'Mật Khẩu',
 });
 
-const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
-
+const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
@@ -31,59 +30,42 @@ const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsCha
         values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values });
     };
-   
-
-    console.log(dataDetail);
-
 
     useEffect(() => {
-        dataDetail.birthday = dataDetail?.birthday && moment(dataDetail?.birthday, DATE_FORMAT_VALUE);
+        dataDetail.birthday = dataDetail?.birthday && dayjs(dataDetail?.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
         });
     }, [dataDetail]);
 
     return (
-        <BaseForm
-            formId={formId}
-            onFinish={handleSubmit}
-            form={form}
-            onValuesChange={onValuesChange}
-            size="big"
-        >
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField
-                            label={translate.formatMessage(message.fullName)}
-                            name="fullName"
-                            disabled = {isEditing}
-                        />
+                        <TextField label={translate.formatMessage(message.fullName)} name="fullName" />
                     </Col>
                     <Col span={12}>
-                        <DatePickerField 
-                            name = 'birthday'
-                            label="Ngày Sinh"  
-                            placeholder="Ngày sinh" 
+                        <DatePickerField
+                            name="birthday"
+                            label="Ngày sinh"
+                            placeholder="Ngày sinh"
                             format={DATE_FORMAT_VALUE}
-                            style={{ width: '100%' }}/>
+                            style={{ width: '100%' }}
+                        />
                     </Col>
                 </Row>
+
                 <Row gutter={16}>
-                    
                     <Col span={12}>
-                        <TextField
-                            label={translate.formatMessage(message.mssv)}
-                            disabled = {isEditing}
-                            name="mssv"
-                        />
+                        <TextField label={translate.formatMessage(message.mssv)} name="mssv" />
                     </Col>
                     <Col span={12}>
                         <TextField
                             label={translate.formatMessage(message.phone)}
-                            type='number'
+                            type="number"
                             name="phone"
-                            disabled = {isEditing}
+                            disabled={isEditing}
                             required
                         />
                     </Col>
@@ -91,17 +73,14 @@ const StudentForm = ({ isEditing,formId, actions, dataDetail, onSubmit, setIsCha
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField
-                            label={translate.formatMessage(message.password)}
-                            name="password"
-                        />
+                        <TextField label={translate.formatMessage(message.password)} name="password" />
                     </Col>
                     <Col span={12}>
                         <TextField
                             label={translate.formatMessage(message.email)}
-                            type='email'
+                            type="email"
                             name="email"
-                            disabled = {isEditing}
+                            disabled={isEditing}
                             required
                         />
                     </Col>

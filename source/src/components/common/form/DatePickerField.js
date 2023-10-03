@@ -33,7 +33,6 @@ function DatePickerField({
                 format={format}
                 onChange={onChange}
                 placeholder={placeholder}
-                
             />
         </Form.Item>
     );
