@@ -8,17 +8,17 @@ import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { useParams } from 'react-router-dom';
-
+import { lectureKindOptions } from '@constants/masterData';
+import { Tag } from 'antd';
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
     student: 'Học viên',
     subject: 'Môn học',
     description: 'Mô tả chi tiết',
-    lectureKind: 'Lecture Kind',
+    lectureKind: 'Loại bài giảng',
     shortDescription: 'Mô tả Ngắn',
     lectureName: 'Tên bài giảng',
-    ordering: 'Ordering',
     status: 'Trạng thái',
 });
 
@@ -26,6 +26,7 @@ const LectureListPage = () => {
 
     const translate = useTranslate();
     const paramid = useParams();
+    const lectureKindValues = translate.formatKeys(lectureKindOptions, ['label']);
 
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
@@ -72,6 +73,17 @@ const LectureListPage = () => {
         {
             title: translate.formatMessage(message.shortDescription),
             dataIndex: 'shortDescription',
+        },
+        {
+            title: translate.formatMessage(message.lectureKind),
+            dataIndex: 'lectureKind',
+            align: 'center',
+            width: 250,
+            render(dataRow) {
+                const lectureKind = lectureKindValues.find((item) => item.value == dataRow);
+
+                return <Tag color={lectureKind.color}>{lectureKind.label}</Tag>;
+            },
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];

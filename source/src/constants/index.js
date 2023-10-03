@@ -355,3 +355,7 @@ export const formSize = {
     normal: '700px',
     big: '900px',
 };
+
+
+export const LECTURE_SECTION = 1;
+export const LECTURE_LESSION = 2;
