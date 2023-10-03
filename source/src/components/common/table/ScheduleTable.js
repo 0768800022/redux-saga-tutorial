@@ -6,56 +6,59 @@ import { TIME_FORMAT_DISPLAY } from '@constants';
 import dayjs from 'dayjs';
 import BaseTable from './BaseTable';
 
-const columns = [
-    {
-        title: 'Thứ',
-        dataIndex: 'date',
-        key: 'date',
-        align: 'center',
-        width: '10%',
-        className: styles.customColumn,
-    },
-    {
-        title: 'Khung giờ',
-        dataIndex: 'time',
-        key: 'date',
-        align: 'center',
-        width: '90%',
-        className: styles.customColumn,
-        render: (time) => {
-            const timeRanges = time.split('|');
-            return (
-                <Row gutter={12} style={{ marginTop: 10 }}>
-                    {timeRanges.map((item, index) => {
-                        const timeSingle = item.split('-');
-                        return (
-                            <div key={item}>
-                                <div style={{ textAlign: 'left', paddingLeft: '22px' }}>Frame {index + 1}</div>
-                                <Row>
-                                    <Col span={12}>
-                                        <TimePickerField
-                                            value={dayjs(timeSingle[0], TIME_FORMAT_DISPLAY)}
-                                            width={'60%'}
-                                            style={{ width: '90px', marginLeft: '10px' }}
-                                        />
-                                    </Col>
-                                    <Col span={12}>
-                                        <TimePickerField
-                                            value={dayjs(timeSingle[1], TIME_FORMAT_DISPLAY)}
-                                            width={'60%'}
-                                            style={{ width: '90px', marginLeft: '10px' }}
-                                        />
-                                    </Col>
-                                </Row>
-                            </div>
-                        );
-                    })}
-                </Row>
-            );
-        },
-    },
-];
 const ScheduleTable = ({ data }) => {
+    const [dataSubmit, setDataSubmit] = useState([]);
+
+    const handleOnChange = () => {};
+    const columns = [
+        {
+            title: 'Thứ',
+            dataIndex: 'date',
+            key: 'date',
+            align: 'center',
+            width: '10%',
+            className: styles.customColumn,
+        },
+        {
+            title: 'Khung giờ',
+            dataIndex: 'time',
+            key: 'date',
+            align: 'center',
+            width: '90%',
+            className: styles.customColumn,
+            render: (time) => {
+                const timeRanges = time.split('|');
+                return (
+                    <Row gutter={12} style={{ marginTop: 10 }}>
+                        {timeRanges.map((item, index) => {
+                            const timeSingle = item.split('-');
+                            return (
+                                <div key={item}>
+                                    <div style={{ textAlign: 'left', paddingLeft: '22px' }}>Frame {index + 1}</div>
+                                    <Row>
+                                        <Col span={12}>
+                                            <TimePickerField
+                                                defaultValue={dayjs(timeSingle[0], TIME_FORMAT_DISPLAY)}
+                                                width={'60%'}
+                                                style={{ width: '90px', marginLeft: '10px' }}
+                                            />
+                                        </Col>
+                                        <Col span={12}>
+                                            <TimePickerField
+                                                defaultValue={dayjs(timeSingle[1], TIME_FORMAT_DISPLAY)}
+                                                width={'60%'}
+                                                style={{ width: '90px', marginLeft: '10px' }}
+                                            />
+                                        </Col>
+                                    </Row>
+                                </div>
+                            );
+                        })}
+                    </Row>
+                );
+            },
+        },
+    ];
     const convertDataSource = (data) => {
         let dataSource;
         if (data) {
@@ -63,7 +66,10 @@ const ScheduleTable = ({ data }) => {
                 {
                     key: '1',
                     date: 'Thứ 2',
-                    time: data?.t2,
+                    timeTotal: {
+                        key: 't2',
+                        time: data?.t2,
+                    },
                 },
                 {
                     key: '2',

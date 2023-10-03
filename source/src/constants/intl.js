@@ -51,6 +51,16 @@ export const dayOfWeek = defineMessages({
     sunday: 'Chủ nhật',
 });
 
+export const daysOfWeekTimeWork = [
+    { value: 'monday', label: dayOfWeek.monday },
+    { value: 'tuesday', label: dayOfWeek.tuesday },
+    { value: 'wednesday', label: dayOfWeek.wednesday },
+    { value: 'thursday', label: dayOfWeek.thursday },
+    { value: 'friday', label: dayOfWeek.friday },
+    { value: 'saturday', label: dayOfWeek.saturday },
+    { value: 'sunday', label: dayOfWeek.sunday },
+];
+
 export const promotionKindOptionIntl = defineMessages({
     one: 'Nhiều mã',
     multiple: 'Một mã',
