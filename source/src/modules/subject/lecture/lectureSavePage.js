@@ -47,8 +47,8 @@ const LectureSavePage = () => {
             loading = {loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.lecture) },
-                { breadcrumbName: translate.formatMessage(message.subject),
+                { breadcrumbName: translate.formatMessage(message.subject) },
+                { breadcrumbName: translate.formatMessage(message.lecture),
                     path: routes.subjectListPage.path +`/lecture/${lectureId.subjectId}`,
                 },
                 { breadcrumbName: title },
