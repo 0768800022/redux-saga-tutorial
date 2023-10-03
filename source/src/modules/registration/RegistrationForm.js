@@ -4,6 +4,7 @@ import CropImageField from '@components/common/form/CropImageField';
 import DropdownField from '@components/common/form/DropdownField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
+import ScheduleTable from '@components/common/table/ScheduleTable';
 import { AppConstants, STATUS_ACTIVE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { formSize, statusOptions } from '@constants/masterData';
@@ -62,7 +63,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     }, [dataDetail]);
 
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="small">
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="big">
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
                     <Col span={12}>
@@ -83,7 +84,8 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                         />
                     </Col>
                 </Row>
-                <Row gutter={16}></Row>
+
+                <ScheduleTable />
 
                 <div className="footer-card-form">{actions}</div>
             </Card>
