@@ -314,6 +314,50 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+    lecture: {
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/lecture/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/lecture/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/lecture/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getBySubject: {
+            baseURL: `${apiTenantUrl}v1/lecture/get-by-subject/:subjectId`,
+            method: 'GET',
+            headers: baseHeader,            
+            isRequiredTenantId: true,
+        },
+        getList: {
+            baseURL: `${apiTenantUrl}v1/lecture/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/lecture/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/lecture/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
 };
 
 export default apiConfig;
