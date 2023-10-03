@@ -61,7 +61,7 @@ const SubjectListPage = () => {
     ];
     const handleOnClick = (event, record) => {
         event.preventDefault();
-        navigate(`./lecture/get-by-subject/${record.id}`);
+        navigate(`./lecture/${record.id}`);
     };
 
     console.log(routes);
@@ -71,7 +71,7 @@ const SubjectListPage = () => {
             dataIndex: 'subjectName',
             render: (subjectName, record) => (
                 !record.parentId ? 
-                    <div onClick={(event) => handleOnClick(event, record)} style={{ fontSize: '18px', color:'blue',cursor:'pointer' }}> {subjectName}</div>
+                    <div onClick={(event) => handleOnClick(event, record)} style={{ cursor:'pointer' }}> {subjectName}</div>
                     :
                     <div>{subjectName}</div>
             ),
