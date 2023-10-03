@@ -58,7 +58,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         form.setFieldsValue({
             ...dataDetail,
             // university: dataDetail?.category?.categoryName,
-            university:  dataDetail?.university?.categoryName,
+            universityId:  dataDetail?.university?.categoryName,
             studyClass: dataDetail?.studyClass?.categoryName,
         });
     }, [dataDetail]);
@@ -96,7 +96,6 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             type="number"
                             name="phone"
                             disabled={isEditing}
-                            required
                         />
                     </Col>
                 </Row>
@@ -111,7 +110,6 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             type="email"
                             name="email"
                             disabled={isEditing}
-                            required
                         />
                     </Col>
                 </Row>
@@ -126,6 +124,8 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                                 kind: kindOfEdu,
                             }}
                             searchParams={(text) => ({ name: text })}
+                            disabled={isEditing}
+                            required
                         />
                     </Col>
                     <Col span={12}>
@@ -138,6 +138,8 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                                 kind: kindOfGen,
                             }}
                             searchParams={(text) => ({ name: text })}
+                            disabled={isEditing}
+                            required
                         />
                     </Col>
                 </Row>
