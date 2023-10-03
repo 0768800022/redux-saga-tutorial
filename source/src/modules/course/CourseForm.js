@@ -48,7 +48,7 @@ const CourseForm = (props) => {
         });
     }, [dataDetail]);
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="small">
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
                 <Row gutter={12}>
                     <Col span={12}>

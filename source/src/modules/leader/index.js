@@ -4,24 +4,27 @@ import BaseTable from '@components/common/table/BaseTable';
 import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
 import React from 'react';
+import { Avatar } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-import { DATE_FORMAT_VALUE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
-import { convertUtcToLocalTime } from '@utils/index';
+import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { FieldTypes } from '@constants/formConfig';
+import { statusOptions } from '@constants/masterData';
 
 const message = defineMessages({
-    objectName: 'Student',
-    fullName: 'Họ và tên',
+    objectName: 'Leader',
+    name: 'Họ và tên',
     home: 'Trang chủ',
-    student: 'Sinh viên',
-    mssv: 'Mã số sinh viên',
+    leader: 'Leader',
+    status: 'Trạng thái',
 });
 
-const StudentListPage = () => {
+const LeaderListPage = () => {
     const translate = useTranslate();
-
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
-        apiConfig: apiConfig.student,
+        apiConfig: apiConfig.leader,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -41,51 +44,53 @@ const StudentListPage = () => {
 
     const columns = [
         {
+            title: '#',
+            dataIndex: 'avatar',
+            align: 'center',
+            width: 100,
+            render: (avatar) => (
+                <Avatar
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                />
+            ),
+        },
+        {
             title: <FormattedMessage defaultMessage="Họ và tên" />,
-            dataIndex: 'fullName',
+            dataIndex: 'leaderName',
         },
-        {
-            title: <FormattedMessage defaultMessage="Ngày sinh" />,
-            dataIndex: 'birthday',
-            render: (birthday) => {
-                const result = convertUtcToLocalTime(birthday, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
-                return <div>{result}</div>;
-            },
-        },
-        {
-            title: <FormattedMessage defaultMessage="Mã số sinh viên" />,
-            dataIndex: 'mssv',
-        },
-        {
-            title: <FormattedMessage defaultMessage="Số điện thoại" />,
-            dataIndex: 'phone',
-        },
+
         {
             title: <FormattedMessage defaultMessage="Email" />,
             dataIndex: 'email',
         },
         {
-            title: <FormattedMessage defaultMessage='Trường'/>,
-            dataIndex: ['university','categoryName'],
+            title: <FormattedMessage defaultMessage="Số điện thoại" />,
+            dataIndex: 'phone',
+            width: '200px',
         },
-        {
-            title: <FormattedMessage defaultMessage='Hệ'/>,
-            dataIndex: ['studyClass','categoryName'],
-        },
+        mixinFuncs.renderStatusColumn({ width: '150px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
         {
-            key: 'fullName',
-            placeholder: translate.formatMessage(message.fullName),
+            key: 'name',
+            placeholder: translate.formatMessage(message.name),
+        },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
         },
     ];
     return (
         <PageWrapper
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.student) },
+                { breadcrumbName: translate.formatMessage(message.leader) },
             ]}
         >
             <ListPage
@@ -104,4 +109,4 @@ const StudentListPage = () => {
         </PageWrapper>
     );
 };
-export default StudentListPage;
+export default LeaderListPage;

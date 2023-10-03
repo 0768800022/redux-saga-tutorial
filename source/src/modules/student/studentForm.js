@@ -9,6 +9,12 @@ import DatePickerField from '@components/common/form/DatePickerField';
 import { DATE_FORMAT_VALUE } from '@constants/index';
 import { formatDateString } from '@utils/index';
 import dayjs from 'dayjs';
+import AutoCompleteField from '@components/common/form/AutoCompleteField';
+import useFetch from '@hooks/useFetch';
+import { FormattedMessage } from 'react-intl';
+import apiConfig from '@constants/apiConfig';
+import { categoryKinds } from '@constants';
+import { useState } from 'react';
 
 const message = defineMessages({
     fullName: 'Họ Và Tên',
@@ -17,26 +23,50 @@ const message = defineMessages({
     phone: 'Số Điện Thoại',
     email: 'Email',
     password: 'Mật Khẩu',
+    // university: 'university',
 });
 
 const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
+    const kindOfEdu = categoryKinds.CATEGORY_KIND_EDUCATION;
+    const kindOfGen = categoryKinds.CATEGORY_KIND_GENERATION;
+    const [currentKindOfEdu, setCurrentKindOfEdu] = useState(kindOfEdu);
+    console.log("dataDetail "+JSON.stringify(dataDetail));
+
+
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
-
-    const handleSubmit = (values) => {
-        values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
-        return mixinFuncs.handleSubmit({ ...values });
-    };
+    
+    const {
+        data: categorys,
+        loading: getCategorysLoading,
+        execute: executeGetCategorys,
+    } = useFetch(apiConfig.category.autocomplete, {
+        immediate: false,
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.categoryName })),
+    });
+    useEffect(() => {
+        executeGetCategorys({
+            params: {},
+        });
+    }, []);
 
     useEffect(() => {
         dataDetail.birthday = dataDetail?.birthday && dayjs(dataDetail?.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
+            // university: dataDetail?.category?.categoryName,
+            university:  dataDetail?.university?.categoryName,
+            studyClass: dataDetail?.studyClass?.categoryName,
         });
     }, [dataDetail]);
+    
+    const handleSubmit = (values) => {
+        values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
+        return mixinFuncs.handleSubmit({ ...values });
+    };
 
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
@@ -82,6 +112,32 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             name="email"
                             disabled={isEditing}
                             required
+                        />
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <AutoCompleteField
+                            label={<FormattedMessage defaultMessage="Trường" />}
+                            name="universityId"
+                            apiConfig={apiConfig.category.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                            initialSearchParams={{
+                                kind: kindOfEdu,
+                            }}
+                            searchParams={(text) => ({ name: text })}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <AutoCompleteField
+                            label={<FormattedMessage defaultMessage="Hệ" />}
+                            name="studyClass"
+                            apiConfig={apiConfig.category.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                            initialSearchParams={{
+                                kind: kindOfGen,
+                            }}
+                            searchParams={(text) => ({ name: text })}
                         />
                     </Col>
                 </Row>
