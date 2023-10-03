@@ -15,6 +15,11 @@ const navMenuConfig = [
                 key: 'student-management',
                 path: routes.studentListPage.path,
             },
+            {
+                label: 'Quản lý leader',
+                key: 'leader-management',
+                path: generatePath(routes.leaderListPage.path, {}),
+            },
         ],
     },
     {

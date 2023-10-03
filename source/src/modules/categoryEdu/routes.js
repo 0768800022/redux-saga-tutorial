@@ -8,13 +8,13 @@ export default {
         title: 'Category education',
         auth: true,
         component: CategoryListPage,
-        // permissions: apiConfig.category.getById.baseURL,
+        permissions: apiConfig.category.getById.baseURL,
     },
     categorySavePageEdu: {
         path: '/category-education/:id',
         title: 'Category Save Page',
         auth: true,
         component: CategorySavePage,
-        // permissions: [ apiConfig.category.getById.baseURL ],
+        permissions: [ apiConfig.category.getById.baseURL ],
     },
 };
