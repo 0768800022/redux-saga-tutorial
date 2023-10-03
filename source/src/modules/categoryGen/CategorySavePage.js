@@ -16,7 +16,7 @@ const messages = defineMessages({
 });
 
 const CategorySavePage = () => {
-    const { categoryId } = useParams();
+    const categoryId = useParams();
     const translate = useTranslate();
 
     const queryParameters = new URLSearchParams(window.location.search);
