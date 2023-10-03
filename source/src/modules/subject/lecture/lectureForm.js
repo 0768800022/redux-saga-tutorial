@@ -45,10 +45,11 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.lectureName)} name="lectureName" />
+                        <TextField label={translate.formatMessage(message.lectureName)} required  name="lectureName" />
                     </Col>
                     <Col span={12}>
                         <SelectField
+                            required
                             name="lectureKind"
                             label={translate.formatMessage(message.lectureKind)}
                             allowClear={false}
@@ -70,7 +71,6 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={24}>
                         <TextField
-                            required
                             label={translate.formatMessage(message.description)}
                             name="description"
                             type="textarea"
@@ -80,7 +80,6 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={24}>
                         <TextField
-                            required
                             label={translate.formatMessage(message.shortDescription)}
                             name="shortDescription"
                             type="textarea"
