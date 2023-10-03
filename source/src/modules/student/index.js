@@ -64,6 +64,14 @@ const StudentListPage = () => {
             title: <FormattedMessage defaultMessage="Email" />,
             dataIndex: 'email',
         },
+        {
+            title: <FormattedMessage defaultMessage='Trường'/>,
+            dataIndex: ['university','categoryName'],
+        },
+        {
+            title: <FormattedMessage defaultMessage='Hệ'/>,
+            dataIndex: ['studyClass','categoryName'],
+        },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
