@@ -5,28 +5,27 @@ import useTranslate from '@hooks/useTranslate';
 import TextField from '@components/common/form/TextField';
 import { defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
-import {  statusOptions } from '@constants/masterData';
-import { useParams } from 'react-router-dom';
+import SelectField from '@components/common/form/SelectField';
+import { lectureKindOptions } from '@constants/masterData';
 
 const message = defineMessages({
     description: 'Mô tả chi tiết',
-    lectureKind: 'Lecture Kind',
+    lectureKind: 'Loại bài giảng',
     shortDescription: 'Mô tả Ngắn',
     lectureName: 'Tên bài giảng',
-    ordering: 'Ordering',
     status: 'Trạng thái',
-    urlDocument: 'Url Document', 
+    urlDocument: 'Đường dẫn tài liệu', 
     subjectId: 'Mã Môn học',
 });
 
+
 const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues,subjectId }) => {
-    
     const translate = useTranslate();
+    const lectureKindValues = translate.formatKeys(lectureKindOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
-    const lectureKindValue = translate.formatKeys(['lession,section']);
     const handleSubmit = (values) => {
         values.subjectId = subjectId;
         values.status = 1;
@@ -49,26 +48,19 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         <TextField label={translate.formatMessage(message.lectureName)} name="lectureName" />
                     </Col>
                     <Col span={12}>
-                        <TextField
+                        <SelectField
                             name="lectureKind"
                             label={translate.formatMessage(message.lectureKind)}
                             allowClear={false}
-                            options={lectureKindValue}
+                            options={lectureKindValues}
                         />
+        
                     </Col>
                 </Row>
 
                 
                 <Row gutter={16}>
-                   
-                    <Col span={12}>
-                        <TextField
-                            name="ordering"
-                            label={translate.formatMessage(message.ordering)}
-                            type="number"
-                        />
-                    </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <TextField
                             name="urlDocument"
                             label={translate.formatMessage(message.urlDocument)}

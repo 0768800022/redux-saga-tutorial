@@ -6,6 +6,8 @@ import {
     STATUS_ACTIVE,
     STATUS_INACTIVE,
     STATUS_PENDING,
+    LECTURE_LESSION,
+    LECTURE_SECTION,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -16,6 +18,7 @@ import {
     promotionKindOptionIntl,
     statePromotion,
     statusMessage,
+    lectureKindMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -36,6 +39,7 @@ export const commonStatus = [
     { value: STATUS_INACTIVE.toString(), label: 'Inactive', color: 'red' },
 ];
 
+
 export const statusOptions = [
     {
         value: STATUS_ACTIVE,
@@ -52,6 +56,20 @@ export const statusOptions = [
         label: statusMessage.inactive,
         color: '#CC0000',
     },
+];
+
+export const lectureKindOptions = [
+    {
+        value: LECTURE_LESSION,
+        label: lectureKindMessage.lesson,
+        color: '#00A648',
+    },
+    {
+        value: LECTURE_SECTION,
+        label: lectureKindMessage.section,
+        color: '#FFBF00',
+    },
+
 ];
 
 export const commonStatusOptions = [

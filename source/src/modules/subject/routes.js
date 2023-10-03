@@ -20,14 +20,14 @@ export default {
         permissions: [apiConfig.subject.update.baseURL, apiConfig.subject.create.baseURL],
     },
     lectureListPage:{
-        path: '/subject/lecture/get-by-subject/:subjectId',
+        path: '/subject/lecture/:subjectId',
         title: 'lecture List Page',
         auth: true,
         component: LectureListPage,
     },
 
     lectureSavePage: {
-        path: '/subject/lecture/get-by-subject/:subjectId/:id',
+        path: '/subject/lecture/:subjectId/:id',
         title: 'Lecture Save Page',
         auth: true,
         component: LectureSavePage,

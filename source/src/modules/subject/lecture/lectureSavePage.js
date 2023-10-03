@@ -49,7 +49,7 @@ const LectureSavePage = () => {
                 { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.lecture) },
                 { breadcrumbName: translate.formatMessage(message.subject),
-                    path: routes.subjectListPage.path +`/lecture/get-by-subject/${lectureId.subjectId}`,
+                    path: routes.subjectListPage.path +`/lecture/${lectureId.subjectId}`,
                 },
                 { breadcrumbName: title },
             ]}
