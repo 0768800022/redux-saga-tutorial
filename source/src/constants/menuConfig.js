@@ -1,5 +1,5 @@
 import routes from '@routes';
-import { IconCategory2, IconRegistered, IconUserBolt, IconSchool } from '@tabler/icons-react';
+import { IconCategory2, IconUserBolt, IconSchool } from '@tabler/icons-react';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';

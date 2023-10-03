@@ -138,7 +138,7 @@ function SearchForm({
         });
         form.setFieldsValue(normalizeValues);
     }, [initialValues]);
-
+    console.log(fields);
     return (
         <Form form={form} layout="horizontal" className={className || styles.searchForm} onFinish={handleSearchSubmit}>
             <Row align={alignSearchField} gutter={10} style={{ maxWidth: width }}>
