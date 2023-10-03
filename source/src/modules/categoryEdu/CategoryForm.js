@@ -11,7 +11,7 @@ import { Card, Col, Form, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useParams } from 'react-router-dom';
-
+import { BaseForm } from '@components/common/form/BaseForm';
 
 const messages = defineMessages({
     id: 'Id',
@@ -43,14 +43,13 @@ const CategoryForm = (props) => {
     }, [dataDetail]);
 
     return (
-        <Form
-            style={{ width: '70%' }}
+        <BaseForm
             id={formId}
             onFinish={handleSubmit}
             form={form}
             layout="vertical"
             onValuesChange={onValuesChange}
-            initialValues={{ status: STATUS_ACTIVE }}
+            size='small'
         >
             <Card className="card-form" bordered={false}>
                 <Row gutter={10}>
@@ -66,20 +65,10 @@ const CategoryForm = (props) => {
                         />
                     </Col>
                 </Row>
-                <Row gutter={10}>
-                    <Col span={24}>
-                        <TextField
-                            required
-                            label={translate.formatMessage(messages.description)}
-                            name="categoryKind"
-                            type="textarea"
-                        />
-                    </Col>
-                </Row>
 
                 <div className="footer-card-form">{actions}</div>
             </Card>
-        </Form>
+        </BaseForm>
     );
 };
 export default CategoryForm;

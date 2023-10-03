@@ -20,7 +20,7 @@ import BaseTable from '@components/common/table/BaseTable';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
-    studentId: 'Mã sinh viên',
+    studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     courseid: 'courseId',
     createDate: 'Ngày tạo',
@@ -33,9 +33,13 @@ function RegistrationListPage() {
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
+    const courseName = queryParameters.get('courseName');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
-        options: {},
+        options: {
+            pageSize: DEFAULT_TABLE_ITEM_SIZE,
+            objectName: translate.formatMessage(message.objectName),
+        },
         override: (funcs) => {
             funcs.mappingData = (response) => {
                 try {
@@ -50,7 +54,10 @@ function RegistrationListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?courseId=${courseId}`;
+                return `${pagePath}/create?courseId=${courseId}&courseName=${courseName}`;
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}`;
             };
         },
     });
@@ -58,13 +65,21 @@ function RegistrationListPage() {
     const columns = [
         {
             title: translate.formatMessage(message.studentId),
-            dataIndex: 'studentID',
-            align: 'center',
+            dataIndex: ['studentInfo', 'fullName'],
         },
         {
             title: translate.formatMessage(message.isIntern),
             dataIndex: 'isIntern',
             align: 'center',
+            render: (item) => {
+                let text;
+                if (item == 1) {
+                    text = 'Có';
+                } else {
+                    text = 'Không';
+                }
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{text}</div>;
+            },
         },
         {
             title: translate.formatMessage(message.createDate),
@@ -76,17 +91,14 @@ function RegistrationListPage() {
 
     const searchFields = [
         {
-            key: 'serviceRegistration',
-            placeholder: translate.formatMessage(message.objectName),
+            key: 'id',
+            placeholder: translate.formatMessage(message.studentId),
         },
     ];
 
     return (
         <PageWrapper
-            routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.registration) },
-            ]}
+            routes={[{ breadcrumbName: translate.formatMessage(message.home) }, { breadcrumbName: courseName }]}
         >
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}

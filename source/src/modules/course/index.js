@@ -36,13 +36,13 @@ const CourseListPage = () => {
         },
         override: (funcs) => {
             funcs.additionalActionColumnButtons = () => ({
-                student: ({ id }) => (
+                student: ({ id, name }) => (
                     <Button
                         type="link"
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigate(routes.registrationListPage.path + `?courseId=${id}`);
+                            navigate(routes.registrationListPage.path + `?courseId=${id}&courseName=${name}`);
                         }}
                     >
                         <TeamOutlined />
@@ -65,33 +65,29 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(message.name),
             dataIndex: 'name',
-            width: 200,
+            width: 250,
         },
         {
             title: translate.formatMessage(message.subject),
-            dataIndex: ['subject', 'name'],
-            width: 200,
+            dataIndex: ['subject', 'subjectName'],
+            width: 250,
         },
         {
             title: translate.formatMessage(message.dateRegister),
             dataIndex: 'dateRegister',
             render: (dateRegister) => {
-                const modifiedDate = dayjs(dateRegister, 'DD/MM/YYYY');
-                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dateRegister}</div>;
             },
-            width: 200,
+            width: 130,
             align: 'center',
         },
         {
             title: translate.formatMessage(message.dateEnd),
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
-                const modifiedDate = dayjs(dateEnd, 'DD/MM/YYYY');
-                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dateEnd}</div>;
             },
-            width: 200,
+            width: 130,
             align: 'center',
         },
 
