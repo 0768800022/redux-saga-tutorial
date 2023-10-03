@@ -44,11 +44,11 @@ const CourseForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
-            subject: dataDetail?.subject?.name,
+            subject: dataDetail?.subject?.subjectName,
         });
     }, [dataDetail]);
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="small">
             <Card className="card-form" bordered={false}>
                 <Row gutter={12}>
                     <Col span={12}>
@@ -82,13 +82,16 @@ const CourseForm = (props) => {
                             format={DATE_FORMAT_DISPLAY}
                         />
                     </Col>
+                    <Col span={12}>
+                        <TextField
+                            required
+                            label={<FormattedMessage defaultMessage="Mô tả" />}
+                            name="description"
+                            type="textarea"
+                        />
+                    </Col>
                 </Row>
-                <TextField
-                    required
-                    label={<FormattedMessage defaultMessage="Mô tả" />}
-                    name="description"
-                    type="textarea"
-                />
+
                 <div className="footer-card-form">{actions}</div>
             </Card>
         </BaseForm>
