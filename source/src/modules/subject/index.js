@@ -11,7 +11,8 @@ import dayjs from 'dayjs';
 import { TeamOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { generatePath, useNavigate } from 'react-router-dom';
-import { convertDateTimeToString } from '@utils/dayHelper';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import { convertUtcToLocalTime } from '@utils';
 
 const message = defineMessages({
     name: 'Tên môn học',
@@ -73,9 +74,11 @@ const SubjectListPage = () => {
             title: translate.formatMessage(message.createdDate),
             dataIndex: 'createdDate',
             render: (createdDate) => {
-                const modifiedDate = dayjs(createdDate, 'DD/MM/YYYY HH:mm:ss').add(7, 'hour');
+                const modifiedDate = convertStringToDateTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT).add(
+                    7,
+                    'hour',
+                );
                 const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
-
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
             width: 200,
