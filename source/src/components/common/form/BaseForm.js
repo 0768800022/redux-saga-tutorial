@@ -9,13 +9,14 @@ export const BaseForm = ({
     form,
     onValuesChange,
     children,
-    size = 'normal',
+    size = "normal",
+
 
     ...props
 }) => {
     return (
         <Form
-            style={{ width: formSize[size] }}
+            style={formSize[size] ? { width: formSize[size] } :  { width: size }}
             id={formId}
             onFinish={onFinish}
             onChange={onChange}

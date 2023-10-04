@@ -35,7 +35,6 @@ function RegistrationSavePage() {
                 return {
                     ...data,
                     id: detail.id,
-                    state: 1,
                     status: 1,
                 };
             };
@@ -43,7 +42,6 @@ function RegistrationSavePage() {
                 return {
                     ...data,
                     courseId: courseId,
-                    state: 1,
                 };
             };
         },
