@@ -35,6 +35,8 @@ function AutoCompleteField({
     const { execute } = useFetch(apiConfig);
     const form = useFormInstance();
     const haveInitialValue = useRef(false);
+    const [initialOpts, setInitialOpts] = useState();
+    const [shouldFetchOnFocus, setShouldFetchOnFocus] = useState(false);
 
     const handleFetchOptions = useCallback(
         ({ searchText, onCompleted, onError }) => {
@@ -86,22 +88,45 @@ function AutoCompleteField({
             },
             onCompleted: (res) => {
                 setOptions(res.data?.content?.map(mappingOptions) || []);
+                setInitialOpts(res.data?.content?.map(mappingOptions) || []);
             },
         });
     }, [form?.getFieldValue(name)]);
 
-    // form?.getFieldValue(name) don't get value immediately, we don't know when to get all or get one option
-    // so first we get all options, if field have a value we get one option
-    useEffect(() => {
-        if (!form?.getFieldValue(name) || haveInitialValue.current) return;
-        haveInitialValue.current = true;
+    // const handleFocus = useCallback(() => {
+    //     if (_options?.length === 0) {
+    //         setOptions(initialOpts);
+    //     }
+    // }, [_options]);
 
-        getInitialOptions();
-    }, [form?.getFieldValue(name)]);
+    // // form?.getFieldValue(name) don't get value immediately, we don't know when to get all or get one option
+    // // so first we get all options, if field have a value we get one option
+    // useEffect(() => {
+    //     if (!form?.getFieldValue(name) || haveInitialValue.current) return;
+    //     haveInitialValue.current = true;
 
+    //     getInitialOptions();
+    // }, [form?.getFieldValue(name)]);
+
+    // useEffect(() => {
+    //     getInitialOptions();
+    // }, []);
+    const handleFocus = useCallback(() => {
+        if (!form?.getFieldValue(name) && !haveInitialValue.current) {
+            // Nếu giá trị trong cột là rỗng và chưa có giá trị ban đầu,
+            // thì set biến shouldFetchOnFocus thành true để gọi apiConfig.
+            setShouldFetchOnFocus(true);
+        }
+    }, [form?.getFieldValue(name), haveInitialValue]);
+
+    // Sử dụng biến shouldFetchOnFocus trong trường hợp cần gọi apiConfig.
     useEffect(() => {
-        getInitialOptions();
-    }, []);
+        if (shouldFetchOnFocus) {
+            getInitialOptions();
+            setShouldFetchOnFocus(false); // Đặt lại biến sau khi đã gọi apiConfig.
+        }
+    }, [shouldFetchOnFocus]);
+
 
     return (
         <SelectField
@@ -119,6 +144,7 @@ function AutoCompleteField({
             onSearch={handleOnSearch}
             placeholder={_placeholder}
             onChange={onChange}
+            onFocus={handleFocus}
             onClear={() => handleOnSearch('')}
         />
     );

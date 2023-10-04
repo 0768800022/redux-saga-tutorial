@@ -45,7 +45,6 @@ const LectureListPage = () => {
                 };
             };
             funcs.mappingData = (response) => {
-                console.log(response);
                 try {
                     if (response.result === true) {
                         return {

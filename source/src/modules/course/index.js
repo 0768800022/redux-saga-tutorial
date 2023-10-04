@@ -93,7 +93,7 @@ const CourseListPage = () => {
 
         mixinFuncs.renderActionColumn({ student: true, edit: true, delete: true }, { width: '120px' }),
     ];
-    console.log(data);
+
     return (
         <PageWrapper routes={breadRoutes}>
             <ListPage
