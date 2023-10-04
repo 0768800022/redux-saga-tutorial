@@ -70,7 +70,7 @@ const SubjectListPage = () => {
             dataIndex: 'subjectName',
             render: (subjectName, record) =>
                 !record.parentId ? (
-                    <div onClick={(event) => handleOnClick(event, record)} style={{ cursor: 'pointer', color: 'blue' }}>
+                    <div onClick={(event) => handleOnClick(event, record)} style={{ cursor: 'pointer',    textDecoration:'underline' }}>
                         {' '}
                         {subjectName}
                     </div>
