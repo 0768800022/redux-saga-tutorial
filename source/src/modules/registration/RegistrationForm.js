@@ -62,7 +62,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     }, [dataDetail]);
 
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="small">
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
                     <Col span={12}>

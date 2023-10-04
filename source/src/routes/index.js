@@ -9,7 +9,8 @@ import ProfilePage from '@modules/profile/index';
 import PageNotAllowed from '@components/common/page/PageNotAllowed';
 import subjectRoutes from '@modules/subject/routes';
 import courseRoutes from '@modules/course/routes';
-import RegistrationRoutes from '@modules/registration/routes';
+import registrationRoutes from '@modules/registration/routes';
+import leaderRoutes from '@modules/leader/routes';
 /*
 	auth
 		+ null: access login and not login
@@ -52,8 +53,9 @@ const routes = {
     ...courseRoutes,
     ...categoryRoutesEdu,
     ...categoryRoutesGen,
-    ...RegistrationRoutes,
+    ...registrationRoutes,
     ...studentRoutes,
+    ...leaderRoutes,
     // keep this at last
     //
     notFound: {

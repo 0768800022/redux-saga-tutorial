@@ -351,7 +351,11 @@ export const chart31DaysData = [
     },
 ];
 export const formSize = {
-    small: '500px',
-    normal: '600px',
-    big: '800px',
+    small: '600px',
+    normal: '700px',
+    big: '900px',
 };
+
+
+export const LECTURE_SECTION = 1;
+export const LECTURE_LESSION = 2;

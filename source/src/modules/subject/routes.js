@@ -1,6 +1,8 @@
 import apiConfig from '@constants/apiConfig';
 import SubjectListPage from '.';
 import SubjectSavePage from './SubjectSavePage';
+import LectureListPage from './lecture/index';
+import LectureSavePage from './lecture/lectureSavePage';
 
 export default {
     subjectListPage: {
@@ -16,5 +18,18 @@ export default {
         auth: true,
         component: SubjectSavePage,
         permissions: [apiConfig.subject.update.baseURL, apiConfig.subject.create.baseURL],
+    },
+    lectureListPage:{
+        path: '/subject/lecture/:subjectId',
+        title: 'lecture List Page',
+        auth: true,
+        component: LectureListPage,
+    },
+
+    lectureSavePage: {
+        path: '/subject/lecture/:subjectId/:id',
+        title: 'Lecture Save Page',
+        auth: true,
+        component: LectureSavePage,
     },
 };

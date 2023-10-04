@@ -13,7 +13,7 @@ import { Button } from 'antd';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { convertUtcToLocalTime } from '@utils';
-
+import routes from './routes';
 const message = defineMessages({
     name: 'Tên môn học',
     home: 'Trang chủ',
@@ -59,10 +59,22 @@ const SubjectListPage = () => {
             placeholder: translate.formatMessage(message.name),
         },
     ];
+    const handleOnClick = (event, record) => {
+        event.preventDefault();
+        navigate(`./lecture/${record.id}`);
+    };
+
+    console.log(routes);
     const columns = [
         {
             title: translate.formatMessage(message.name),
             dataIndex: 'subjectName',
+            render: (subjectName, record) => (
+                !record.parentId ? 
+                    <div onClick={(event) => handleOnClick(event, record)} style={{ cursor:'pointer',color:'blue' }}> {subjectName}</div>
+                    :
+                    <div>{subjectName}</div>
+            ),
         },
         {
             title: translate.formatMessage(message.code),

@@ -19,6 +19,7 @@ export const statusMessage = defineMessages({
     pending: 'Pending',
     inactive: 'Inactive',
 });
+
 export const dateFilterMessage = defineMessages({
     today: 'Today',
     thisMonth: 'This Month',
@@ -66,4 +67,9 @@ export const statePromotion = defineMessages({
     end: 'Kết thúc',
     running: 'Đang chạy',
     created: 'Mới tạo',
+});
+
+export const lectureKindMessage = defineMessages({
+    section: 'Chương',
+    lesson: 'Bài học',
 });

@@ -50,7 +50,6 @@ const CategoryForm = (props) => {
             form={form}
             layout="vertical"
             onValuesChange={onValuesChange}
-            size='small'
         >
             <Card className="card-form" bordered={false}>
                 <Row gutter={10}>
