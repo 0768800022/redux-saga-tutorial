@@ -106,7 +106,7 @@ const CourseListPage = () => {
 
         mixinFuncs.renderActionColumn({ task: true, student: true, edit: true, delete: true }, { width: '120px' }),
     ];
-    console.log(data);
+
     return (
         <PageWrapper routes={breadRoutes}>
             <ListPage

@@ -26,13 +26,11 @@ const message = defineMessages({
     // university: 'university',
 });
 
-const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
+const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
     const translate = useTranslate();
     const kindOfEdu = categoryKinds.CATEGORY_KIND_EDUCATION;
     const kindOfGen = categoryKinds.CATEGORY_KIND_GENERATION;
     const [currentKindOfEdu, setCurrentKindOfEdu] = useState(kindOfEdu);
-    console.log("dataDetail " + JSON.stringify(dataDetail));
-
 
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
@@ -69,7 +67,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     };
 
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} >
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
@@ -125,6 +123,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             }}
                             searchParams={(text) => ({ name: text })}
                             disabled={isEditing}
+                            onFocus={handleFocus}
                             required
                         />
                     </Col>

@@ -64,17 +64,19 @@ const SubjectListPage = () => {
         navigate(`./lecture/${record.id}`);
     };
 
-    console.log(routes);
     const columns = [
         {
             title: translate.formatMessage(message.name),
             dataIndex: 'subjectName',
-            render: (subjectName, record) => (
-                !record.parentId ? 
-                    <div onClick={(event) => handleOnClick(event, record)} style={{ cursor:'pointer',color:'blue' }}> {subjectName}</div>
-                    :
+            render: (subjectName, record) =>
+                !record.parentId ? (
+                    <div onClick={(event) => handleOnClick(event, record)} style={{ cursor: 'pointer', color: 'blue' }}>
+                        {' '}
+                        {subjectName}
+                    </div>
+                ) : (
                     <div>{subjectName}</div>
-            ),
+                ),
         },
         {
             title: translate.formatMessage(message.code),
