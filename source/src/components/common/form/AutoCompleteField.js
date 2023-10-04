@@ -93,14 +93,14 @@ function AutoCompleteField({
         });
     }, [form?.getFieldValue(name)]);
 
-    // const handleFocus = useCallback(() => {
-    //     if (_options?.length === 0) {
-    //         setOptions(initialOpts);
-    //     }
-    // }, [_options]);
+    const handleFocus = useCallback(() => {
+        if (_options?.length === 0) {
+            setOptions(initialOpts);
+        }
+    }, [_options]);
 
-    // // form?.getFieldValue(name) don't get value immediately, we don't know when to get all or get one option
-    // // so first we get all options, if field have a value we get one option
+    // form?.getFieldValue(name) don't get value immediately, we don't know when to get all or get one option
+    // so first we get all options, if field have a value we get one option
     // useEffect(() => {
     //     if (!form?.getFieldValue(name) || haveInitialValue.current) return;
     //     haveInitialValue.current = true;
@@ -108,25 +108,25 @@ function AutoCompleteField({
     //     getInitialOptions();
     // }, [form?.getFieldValue(name)]);
 
-    // useEffect(() => {
-    //     getInitialOptions();
-    // }, []);
-    const handleFocus = useCallback(() => {
-        if (!form?.getFieldValue(name) && !haveInitialValue.current) {
-            // Nếu giá trị trong cột là rỗng và chưa có giá trị ban đầu,
-            // thì set biến shouldFetchOnFocus thành true để gọi apiConfig.
-            setShouldFetchOnFocus(true);
-        }
-    }, [form?.getFieldValue(name), haveInitialValue]);
-
-    // Sử dụng biến shouldFetchOnFocus trong trường hợp cần gọi apiConfig.
     useEffect(() => {
-        if (shouldFetchOnFocus) {
-            getInitialOptions();
-            setShouldFetchOnFocus(false); // Đặt lại biến sau khi đã gọi apiConfig.
-        }
-    }, [shouldFetchOnFocus]);
+        getInitialOptions();
+    }, []);
 
+    // const handleFocus = useCallback(() => {
+    //     if (!form?.getFieldValue(name) && !haveInitialValue.current) {
+    //         // Nếu giá trị trong cột là rỗng và chưa có giá trị ban đầu,
+    //         // thì set biến shouldFetchOnFocus thành true để gọi apiConfig.
+    //         setShouldFetchOnFocus(true);
+    //     }
+    // }, [form?.getFieldValue(name), haveInitialValue]);
+
+    // // Sử dụng biến shouldFetchOnFocus trong trường hợp cần gọi apiConfig.
+    // useEffect(() => {
+    //     if (shouldFetchOnFocus) {
+    //         getInitialOptions();
+    //         setShouldFetchOnFocus(false); // Đặt lại biến sau khi đã gọi apiConfig.
+    //     }
+    // }, [shouldFetchOnFocus]);
 
     return (
         <SelectField

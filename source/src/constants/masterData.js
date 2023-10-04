@@ -8,6 +8,10 @@ import {
     STATUS_PENDING,
     LECTURE_LESSION,
     LECTURE_SECTION,
+    STATE_COURSE_PREPARED,
+    STATE_COURSE_STARTED,
+    STATE_COURSE_FINISHED,
+    STATE_COURSE_CANCELED,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -19,6 +23,7 @@ import {
     statePromotion,
     statusMessage,
     lectureKindMessage,
+    lectureStateMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -39,6 +44,12 @@ export const commonStatus = [
     { value: STATUS_INACTIVE.toString(), label: 'Inactive', color: 'red' },
 ];
 
+export const lectureState = [
+    { value: STATE_COURSE_PREPARED.toString(), label: lectureStateMessage.prepared, color: 'green' },
+    { value: STATE_COURSE_STARTED.toString(), label: lectureStateMessage.started, color: 'yellow' },
+    { value: STATE_COURSE_FINISHED.toString(), label: lectureStateMessage.finished, color: 'warning' },
+    { value: STATE_COURSE_CANCELED.toString(), label: lectureStateMessage.canceled, color: 'red' },
+];
 
 export const statusOptions = [
     {

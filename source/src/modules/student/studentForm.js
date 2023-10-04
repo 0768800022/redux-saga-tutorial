@@ -122,8 +122,8 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                                 kind: kindOfEdu,
                             }}
                             searchParams={(text) => ({ name: text })}
-                            disabled={isEditing}
                             onFocus={handleFocus}
+                            // disabled={isEditing}
                             required
                         />
                     </Col>
@@ -137,7 +137,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                                 kind: kindOfGen,
                             }}
                             searchParams={(text) => ({ name: text })}
-                            disabled={isEditing}
+                            // disabled={isEditing}
                             required
                         />
                     </Col>
