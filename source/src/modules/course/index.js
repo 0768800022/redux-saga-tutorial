@@ -55,7 +55,7 @@ const CourseListPage = () => {
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigate(route.taskListPage.path);
+                            navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
                         }}
                     >
                         <BookOutlined />

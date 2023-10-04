@@ -5,7 +5,7 @@ import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { statusOptions } from '@constants/masterData';
+import { taskState } from '@constants/masterData';
 import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -23,7 +23,7 @@ const message = defineMessages({
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     lecture: 'Bài giảng',
-    subject: 'Môn học',
+    state: 'Trạng thái',
     task: 'Task',
     course: 'Khóa học',
 });
@@ -31,6 +31,10 @@ const message = defineMessages({
 function TaskListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
+    const queryParameters = new URLSearchParams(window.location.search);
+    const courseId = queryParameters.get('courseId');
+    const courseName = queryParameters.get('courseName');
+    const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.task,
         options: {
@@ -51,25 +55,31 @@ function TaskListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/lecture`;
+                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}`;
             };
         },
     });
     const columns = [
         {
+            title: translate.formatMessage(message.lecture),
+            dataIndex: ['lecture', 'lectureName'],
+        },
+        {
             title: translate.formatMessage(message.studentId),
             dataIndex: ['student', 'fullName'],
         },
         {
-            title: translate.formatMessage(message.subject),
-            dataIndex: ['lecture', 'subject', 'subjectName'],
+            title: translate.formatMessage(message.state),
+            dataIndex: 'state',
             align: 'center',
+            width: 250,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
+
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
         },
-        {
-            title: translate.formatMessage(message.lecture),
-            dataIndex: ['lecture', 'lectureName'],
-            align: 'center',
-        },
+
         mixinFuncs.renderActionColumn({ edit: false, delete: true }, { width: '120px' }),
     ];
 
