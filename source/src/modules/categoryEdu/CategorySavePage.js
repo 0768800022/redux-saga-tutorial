@@ -16,16 +16,12 @@ const messages = defineMessages({
 });
 
 const CategorySavePage = () => {
-    const  categoryId = useParams();
+    const categoryId = useParams();
     const translate = useTranslate();
 
     const queryParameters = new URLSearchParams(window.location.search);
     // const parentId = queryParameters.get("parentId");
-    // console.log("parentid +savepage",parentId);
     const kindOfEdu = categoryKinds.CATEGORY_KIND_EDUCATION;
-    console.log("Edu + categoryId: "+categoryId);
-
-
 
     const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
         apiConfig: {
@@ -42,7 +38,6 @@ const CategorySavePage = () => {
                 return {
                     ...data,
                     id: detail.id,
-
                 };
             };
             funcs.prepareCreateData = (data) => {

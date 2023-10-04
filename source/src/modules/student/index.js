@@ -28,7 +28,6 @@ const StudentListPage = () => {
         },
         override: (funcs) => {
             funcs.mappingData = (response) => {
-                console.log('response', response);
                 if (response.result === true) {
                     return {
                         data: response.data.content,
@@ -65,12 +64,12 @@ const StudentListPage = () => {
             dataIndex: 'email',
         },
         {
-            title: <FormattedMessage defaultMessage='Trường'/>,
-            dataIndex: ['university','categoryName'],
+            title: <FormattedMessage defaultMessage="Trường" />,
+            dataIndex: ['university', 'categoryName'],
         },
         {
-            title: <FormattedMessage defaultMessage='Hệ'/>,
-            dataIndex: ['studyClass','categoryName'],
+            title: <FormattedMessage defaultMessage="Hệ" />,
+            dataIndex: ['studyClass', 'categoryName'],
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];

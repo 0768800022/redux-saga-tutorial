@@ -21,11 +21,8 @@ const CategorySavePage = () => {
 
     const queryParameters = new URLSearchParams(window.location.search);
     // const parentId = queryParameters.get("parentId");
-    // console.log("parentid +savepage",parentId);
+
     const kindOfGen = categoryKinds.CATEGORY_KIND_GENERATION;
-    console.log("GEN + categoryId: "+categoryId);
-
-
 
     const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
         apiConfig: {
@@ -43,7 +40,6 @@ const CategorySavePage = () => {
                 return {
                     ...data,
                     id: detail.id,
-
                 };
             };
             funcs.prepareCreateData = (data) => {
