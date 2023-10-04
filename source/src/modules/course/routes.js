@@ -17,7 +17,7 @@ export default {
         component: CourseSavePage,
         permissions: [apiConfig.course.update.baseURL, apiConfig.course.create.baseURL],
     },
-    lectureListPage: {
+    lectureTaskListPage: {
         path: '/course/task/lecture',
         title: 'Lecture List Page',
         auth: true,

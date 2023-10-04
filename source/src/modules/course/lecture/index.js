@@ -7,8 +7,8 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
-import { useParams,useNavigate,useSearchParams } from 'react-router-dom';
-import {  useLocation } from 'react-router-dom';
+import { PlusOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import useFetch from '@hooks/useFetch';
 import routes from '../routes';
 import { Button }  from 'antd';
@@ -21,10 +21,7 @@ const message = defineMessages({
     asignAll: 'Áp dụng tất cả',
     task:'Task',
 });
-
-
 const LectureListPage = () => {
-
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get("courseId");
@@ -59,6 +56,15 @@ const LectureListPage = () => {
         {
             title: translate.formatMessage(message.lectureName),
             dataIndex: 'lectureName',
+            render: (lectureName, record) => {
+                let styles;
+                if (record?.lectureKind === 1) {
+                    styles = {
+                        paddingLeft: '30px',
+                    };
+                }
+                return <div style={styles}>{lectureName}</div>;
+            },
         },
     ];
 
@@ -102,7 +108,11 @@ const LectureListPage = () => {
             <ListPage
                 actionBar={
                     <div style={{ float: 'right', margin: '32px 0' }}>
-                        <Button type="primary" onClick= {asignALl} >{translate.formatMessage(message.asignAll)}</Button>
+                        
+                        <Button type="primary" onClick= {asignALl} >
+                            <PlusOutlined /> 
+                            {translate.formatMessage(message.asignAll)}
+                        </Button>
                     </div>
                 }
                 baseTable={
