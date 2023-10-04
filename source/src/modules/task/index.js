@@ -22,7 +22,6 @@ const message = defineMessages({
     objectName: 'Danh sách khóa học',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
-    lecture: 'Bài giảng',
     state: 'Trạng thái',
     task: 'Task',
     course: 'Khóa học',
@@ -61,7 +60,7 @@ function TaskListPage() {
     });
     const columns = [
         {
-            title: translate.formatMessage(message.lecture),
+            title: translate.formatMessage(message.task),
             dataIndex: ['lecture', 'lectureName'],
         },
         {
