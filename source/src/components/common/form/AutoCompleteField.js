@@ -35,6 +35,7 @@ function AutoCompleteField({
     const { execute } = useFetch(apiConfig);
     const form = useFormInstance();
     const haveInitialValue = useRef(false);
+    const [initialOpts, setInitialOpts] = useState();
 
     const handleFetchOptions = useCallback(
         ({ searchText, onCompleted, onError }) => {
@@ -86,9 +87,16 @@ function AutoCompleteField({
             },
             onCompleted: (res) => {
                 setOptions(res.data?.content?.map(mappingOptions) || []);
+                setInitialOpts(res.data?.content?.map(mappingOptions) || []);
             },
         });
     }, [form?.getFieldValue(name)]);
+
+    const handleFocus = useCallback(() => {
+        if (_options?.length === 0) {
+            setOptions(initialOpts);
+        }
+    }, [_options]);
 
     // form?.getFieldValue(name) don't get value immediately, we don't know when to get all or get one option
     // so first we get all options, if field have a value we get one option
@@ -119,6 +127,7 @@ function AutoCompleteField({
             onSearch={handleOnSearch}
             placeholder={_placeholder}
             onChange={onChange}
+            onFocus={handleFocus}
             onClear={() => handleOnSearch('')}
         />
     );
