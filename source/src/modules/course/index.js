@@ -8,10 +8,11 @@ import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { TeamOutlined } from '@ant-design/icons';
+import { TeamOutlined, BookOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import routes from '@modules/registration/routes';
+import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
 
 const message = defineMessages({
@@ -46,6 +47,18 @@ const CourseListPage = () => {
                         }}
                     >
                         <TeamOutlined />
+                    </Button>
+                ),
+                task: ({ id, name }) => (
+                    <Button
+                        type="link"
+                        style={{ padding: 0 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(route.taskListPage.path);
+                        }}
+                    >
+                        <BookOutlined />
                     </Button>
                 ),
             });
@@ -91,7 +104,7 @@ const CourseListPage = () => {
             align: 'center',
         },
 
-        mixinFuncs.renderActionColumn({ student: true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ task: true, student: true, edit: true, delete: true }, { width: '120px' }),
     ];
 
     return (
