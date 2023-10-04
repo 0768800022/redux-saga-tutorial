@@ -15,6 +15,7 @@ const TimePickerField = (props) => {
         onSelect,
         onChange,
         validateTrigger,
+        style,
     } = props;
 
     const timeFormat = format || TIME_FORMAT_DISPLAY;
@@ -22,7 +23,7 @@ const TimePickerField = (props) => {
     const { rules, placeholder } = useFormField(props);
 
     return (
-        <Form.Item shouldUpdate label={label} name={name} rules={rules} validateTrigger={validateTrigger}>
+        <Form.Item style={style} shouldUpdate label={label} name={name} rules={rules} validateTrigger={validateTrigger}>
             <TimePicker
                 placeholder={placeholder}
                 onSelect={onSelect}
@@ -33,6 +34,7 @@ const TimePickerField = (props) => {
                 format={timeFormat}
                 disabled={disabled}
                 onChange={onChange}
+                {...props}
                 // hideDisabledOptions={true}
             />
         </Form.Item>
