@@ -67,7 +67,7 @@ const LectureListPage = () => {
             setLectureId(selectedRowKeys);
         },
         getCheckboxProps: (record) => ({
-            disabled: record.lectureKind === 2,
+            disabled: record.lectureKind === 1,
         }),
     };
 
