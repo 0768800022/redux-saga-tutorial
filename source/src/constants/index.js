@@ -94,6 +94,9 @@ export const STATE_COURSE_STARTED = 2;
 export const STATE_COURSE_FINISHED = 3;
 export const STATE_COURSE_CANCELED = 4;
 
+export const STATE_TASK_ASIGN = 1;
+export const STATE_TASK_DONE = 2;
+
 export const DEFAULT_TABLE_ITEM_SIZE = 20;
 export const DEFAULT_TABLE_PAGE_START = 0;
 export const DEFAULT_GET_ALL_LIST = 1000;
@@ -359,7 +362,6 @@ export const formSize = {
     normal: '700px',
     big: '900px',
 };
-
 
 export const LECTURE_SECTION = 1;
 export const LECTURE_LESSION = 2;

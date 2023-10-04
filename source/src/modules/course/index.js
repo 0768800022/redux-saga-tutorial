@@ -9,11 +9,13 @@ import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Tag } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import routes from '@modules/registration/routes';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
+import { formSize, lectureState } from '@constants/masterData';
+import { FieldTypes } from '@constants/formConfig';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -24,10 +26,13 @@ const message = defineMessages({
     description: 'Mô tả',
     dateRegister: 'Ngày bắt đầu',
     dateEnd: 'Ngày kết thúc',
+    status: 'Tình trạng',
+    leader: 'Người hướng dẫn',
 });
 
 const CourseListPage = () => {
     const translate = useTranslate();
+    const statusValues = translate.formatKeys(lectureState, ['label']);
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.course,
@@ -55,7 +60,7 @@ const CourseListPage = () => {
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigate(route.taskListPage.path);
+                            navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
                         }}
                     >
                         <BookOutlined />
@@ -83,7 +88,13 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(message.subject),
             dataIndex: ['subject', 'subjectName'],
-            width: 250,
+            width: 200,
+        },
+        {
+            title: translate.formatMessage(message.leader),
+            dataIndex: ['leader', 'leaderName'],
+            width: 150,
+            align: 'center',
         },
         {
             title: translate.formatMessage(message.dateRegister),
@@ -103,8 +114,18 @@ const CourseListPage = () => {
             width: 130,
             align: 'center',
         },
+        {
+            title: translate.formatMessage(message.status),
+            dataIndex: 'state',
+            align: 'center',
+            width: 250,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
 
-        mixinFuncs.renderActionColumn({ task: true, student: true, edit: true, delete: true }, { width: '120px' }),
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
+        },
+        mixinFuncs.renderActionColumn({ task: true, student: true, edit: true, delete: true }, { width: '250px' }),
     ];
 
     return (
