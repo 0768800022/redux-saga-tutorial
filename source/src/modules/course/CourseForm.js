@@ -13,13 +13,14 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { formSize, lectureState } from '@constants/masterData';
+import { formSize, lectureState,statusOptions } from '@constants/masterData';
 import useTranslate from '@hooks/useTranslate';
 
 const CourseForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
     const translate = useTranslate();
     const statusValues = translate.formatKeys(lectureState, ['label']);
+    const statusValues1 = translate.formatKeys(statusOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -134,13 +135,6 @@ const CourseForm = (props) => {
                         />
                     </Col>
                 </Row>
-                <TextField
-                    width={'100%'}
-                    required
-                    label={<FormattedMessage defaultMessage="Mô tả" />}
-                    name="description"
-                    type="textarea"
-                />
 
                 <div className="footer-card-form">{actions}</div>
             </Card>

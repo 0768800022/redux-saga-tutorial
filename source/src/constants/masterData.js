@@ -45,10 +45,10 @@ export const commonStatus = [
 ];
 
 export const lectureState = [
-    { value: STATE_COURSE_PREPARED.toString(), label: lectureStateMessage.prepared, color: 'green' },
-    { value: STATE_COURSE_STARTED.toString(), label: lectureStateMessage.started, color: 'yellow' },
-    { value: STATE_COURSE_FINISHED.toString(), label: lectureStateMessage.finished, color: 'warning' },
-    { value: STATE_COURSE_CANCELED.toString(), label: lectureStateMessage.canceled, color: 'red' },
+    { value: STATE_COURSE_PREPARED, label: lectureStateMessage.prepared, color: 'green' },
+    { value: STATE_COURSE_STARTED, label: lectureStateMessage.started, color: 'yellow' },
+    { value: STATE_COURSE_FINISHED, label: lectureStateMessage.finished, color: 'warning' },
+    { value: STATE_COURSE_CANCELED, label: lectureStateMessage.canceled, color: 'red' },
 ];
 
 export const statusOptions = [
