@@ -89,6 +89,10 @@ export const ORDER_TYPE_DELIVER = 2;
 export const PAYMENT_TYPE_CASH = 'OFFLINE_CASH';
 export const PAYMENT_TYPE_CARD = 'OFFLINE_CARD';
 export const PAYMENT_TYPE_ONLINE_PAYPAL = 'ONLINE_PAYPAL';
+export const STATE_COURSE_PREPARED = 1;
+export const STATE_COURSE_STARTED = 2;
+export const STATE_COURSE_FINISHED = 3;
+export const STATE_COURSE_CANCELED = 4;
 
 export const DEFAULT_TABLE_ITEM_SIZE = 20;
 export const DEFAULT_TABLE_PAGE_START = 0;
