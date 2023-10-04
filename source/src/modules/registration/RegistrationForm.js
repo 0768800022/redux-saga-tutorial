@@ -25,6 +25,15 @@ const messages = defineMessages({
     applyAll: 'Áp dụng cho tất cả',
     frame: 'Khung',
 });
+const statesOptionSelect = [
+    {
+        value: '1',
+        label: 'Trung cấp',
+    },
+    { value: '2', label: 'Đã đăng ký' },
+    { value: '3', label: 'Đang thực tập' },
+    { value: '4', label: 'Đã huỷ' },
+];
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) {
     const translate = useTranslate();
@@ -162,15 +171,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         checkCanApplyAll();
         onValuesChange();
     };
-    const statesOptionSelect = [
-        {
-            value: '1',
-            label: 'Trung cấp',
-        },
-        { value: '2', label: 'Đã đăng ký' },
-        { value: '3', label: 'Đang thực tập' },
-        { value: '4', label: 'Đã huỷ' },
-    ];
+    
 
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="big">
