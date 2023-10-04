@@ -26,7 +26,7 @@ const message = defineMessages({
     // university: 'university',
 });
 
-const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
+const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
     const translate = useTranslate();
     const kindOfEdu = categoryKinds.CATEGORY_KIND_EDUCATION;
     const kindOfGen = categoryKinds.CATEGORY_KIND_GENERATION;
@@ -122,7 +122,8 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                                 kind: kindOfEdu,
                             }}
                             searchParams={(text) => ({ name: text })}
-                            disabled={isEditing}
+                            onFocus={handleFocus}
+                            // disabled={isEditing}
                             required
                         />
                     </Col>
@@ -136,7 +137,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                                 kind: kindOfGen,
                             }}
                             searchParams={(text) => ({ name: text })}
-                            disabled={isEditing}
+                            // disabled={isEditing}
                             required
                         />
                     </Col>

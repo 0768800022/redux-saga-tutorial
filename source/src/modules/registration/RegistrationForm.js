@@ -10,6 +10,7 @@ import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
 import { Button, Card, Col, Form, Row, Space } from 'antd';
+import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -87,6 +88,10 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                         from: '2023-10-02T00:00:00.000Z',
                         to: '2023-10-02T00:00:00.000Z',
                     },
+                    {
+                        from: '2023-10-02T00:00:00.000Z',
+                        to: '2023-10-02T00:00:00.000Z',
+                    },
                 ],
                 ...dataDefault,
             };
@@ -94,14 +99,14 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
 
         for (const day in data) {
             for (const timeRange of data[day]) {
-                timeRange.from = moment(timeRange.from);
-                timeRange.to = moment(timeRange.to);
+                timeRange.from = dayjs(timeRange.from);
+                timeRange.to = dayjs(timeRange.to);
             }
         }
         for (const day in dataDefault) {
             for (const timeRange of dataDefault[day]) {
-                timeRange.from = moment(timeRange.from).subtract(7, 'hours');
-                timeRange.to = moment(timeRange.to).subtract(7, 'hours');
+                timeRange.from = dayjs(timeRange.from).subtract(7, 'hours');
+                timeRange.to = dayjs(timeRange.to).subtract(7, 'hours');
             }
         }
 
@@ -111,10 +116,10 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     dataDetail.state = state.label;
                 }
             });
+        dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
             studentId: dataDetail?.studentInfo?.fullName,
-            schedule: data || dataDefault,
         });
     }, [dataDetail]);
 
@@ -183,7 +188,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                             name="studentId"
                             apiConfig={apiConfig.student.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
-                            initialSearchParams={{}}
+                            initialSearchParams={{ pageNumber: 0 }}
                             searchParams={(text) => ({ fullName: text })}
                         />
                     </Col>
@@ -298,7 +303,7 @@ function TimeWork({ onSelectTimeWorkTabletRandom, checkCanApplyAll, handleApplyA
                                                         </Space>
                                                     </div>
                                                 ))}
-                                                {!dayIndex && (
+                                                {/* {!dayIndex && (
                                                     <div className="wrap-btn-apply-all">
                                                         <Button
                                                             disabled={!checkCanApplyAll()}
@@ -309,7 +314,7 @@ function TimeWork({ onSelectTimeWorkTabletRandom, checkCanApplyAll, handleApplyA
                                                             {translate.formatMessage(messages.applyAll)}
                                                         </Button>
                                                     </div>
-                                                )}
+                                                )} */}
                                             </Space>
 
                                             {/* <Form.Item style={{ width: '170px', textAlign: 'left' }}>

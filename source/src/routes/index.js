@@ -11,6 +11,8 @@ import subjectRoutes from '@modules/subject/routes';
 import courseRoutes from '@modules/course/routes';
 import registrationRoutes from '@modules/registration/routes';
 import leaderRoutes from '@modules/leader/routes';
+import taskRoutes from '@modules/task/routes';
+
 /*
 	auth
 		+ null: access login and not login
@@ -56,6 +58,7 @@ const routes = {
     ...registrationRoutes,
     ...studentRoutes,
     ...leaderRoutes,
+    ...taskRoutes,
     // keep this at last
     //
     notFound: {

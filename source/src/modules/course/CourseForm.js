@@ -13,9 +13,14 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { formSize, lectureState,statusOptions } from '@constants/masterData';
+import useTranslate from '@hooks/useTranslate';
 
 const CourseForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
+    const translate = useTranslate();
+    const statusValues = translate.formatKeys(lectureState, ['label']);
+    const statusValues1 = translate.formatKeys(statusOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -45,6 +50,25 @@ const CourseForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
             subject: dataDetail?.subject?.subjectName,
+        });
+    }, [dataDetail]);
+    const {
+        data: leaders,
+        loading: getLeadersLoading,
+        execute: executeGetLeaders,
+    } = useFetch(apiConfig.leader.autocomplete, {
+        immediate: false,
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.leaderName })),
+    });
+    useEffect(() => {
+        executeGetLeaders({
+            params: {},
+        });
+    }, []);
+    useEffect(() => {
+        form.setFieldsValue({
+            ...dataDetail,
+            leaderId: dataDetail?.leader?.leaderName,
         });
     }, [dataDetail]);
     return (
@@ -82,12 +106,32 @@ const CourseForm = (props) => {
                             format={DATE_FORMAT_DISPLAY}
                         />
                     </Col>
+                </Row>
+                <TextField
+                    width={'100%'}
+                    required
+                    label={<FormattedMessage defaultMessage="Mô tả" />}
+                    name="description"
+                    type="textarea"
+                />
+                <Row gutter={10}>
                     <Col span={12}>
-                        <TextField
+                        <AutoCompleteField
                             required
-                            label={<FormattedMessage defaultMessage="Mô tả" />}
-                            name="description"
-                            type="textarea"
+                            label={<FormattedMessage defaultMessage="Người hướng dẫn" />}
+                            name="leaderId"
+                            apiConfig={apiConfig.leader.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
+                            initialSearchParams={{}}
+                            searchParams={(text) => ({ name: text })}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            name="state"
+                            label={<FormattedMessage defaultMessage="Tình trạng" />}
+                            allowClear={false}
+                            options={statusValues}
                         />
                     </Col>
                 </Row>

@@ -8,6 +8,12 @@ import {
     STATUS_PENDING,
     LECTURE_LESSION,
     LECTURE_SECTION,
+    STATE_COURSE_PREPARED,
+    STATE_COURSE_STARTED,
+    STATE_COURSE_FINISHED,
+    STATE_COURSE_CANCELED,
+    STATE_TASK_ASIGN,
+    STATE_TASK_DONE,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -19,6 +25,8 @@ import {
     statePromotion,
     statusMessage,
     lectureKindMessage,
+    lectureStateMessage,
+    taskStateMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -39,6 +47,17 @@ export const commonStatus = [
     { value: STATUS_INACTIVE.toString(), label: 'Inactive', color: 'red' },
 ];
 
+export const lectureState = [
+    { value: STATE_COURSE_PREPARED, label: lectureStateMessage.prepared, color: 'green' },
+    { value: STATE_COURSE_STARTED, label: lectureStateMessage.started, color: 'yellow' },
+    { value: STATE_COURSE_FINISHED, label: lectureStateMessage.finished, color: 'warning' },
+    { value: STATE_COURSE_CANCELED, label: lectureStateMessage.canceled, color: 'red' },
+];
+
+export const taskState = [
+    { value: STATE_TASK_DONE.toString(), label: taskStateMessage.done, color: 'green' },
+    { value: STATE_TASK_ASIGN.toString(), label: taskStateMessage.asign, color: 'orange' },
+];
 
 export const statusOptions = [
     {
@@ -69,7 +88,6 @@ export const lectureKindOptions = [
         label: lectureKindMessage.section,
         color: '#FFBF00',
     },
-
 ];
 
 export const commonStatusOptions = [

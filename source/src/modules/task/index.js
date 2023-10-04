@@ -5,7 +5,7 @@ import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { statusOptions } from '@constants/masterData';
+import { taskState } from '@constants/masterData';
 import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -22,21 +22,20 @@ const message = defineMessages({
     objectName: 'Danh sách khóa học',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
-    courseid: 'courseId',
-    createDate: 'Ngày tạo',
-    isIntern: 'Đăng kí thực tập',
+    state: 'Trạng thái',
+    task: 'Task',
     course: 'Khóa học',
-    registration: 'Danh sách sinh viên đăng kí khóa học',
 });
 
-function RegistrationListPage() {
+function TaskListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.registration,
+        apiConfig: apiConfig.task,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -55,46 +54,32 @@ function RegistrationListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?courseId=${courseId}&courseName=${courseName}`;
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}`;
+                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}`;
             };
         },
     });
-
     const columns = [
         {
-            title: translate.formatMessage(message.studentId),
-            dataIndex: ['studentInfo', 'fullName'],
+            title: translate.formatMessage(message.task),
+            dataIndex: ['lecture', 'lectureName'],
         },
         {
-            title: translate.formatMessage(message.isIntern),
-            dataIndex: 'isIntern',
+            title: translate.formatMessage(message.studentId),
+            dataIndex: ['student', 'fullName'],
+        },
+        {
+            title: translate.formatMessage(message.state),
+            dataIndex: 'state',
             align: 'center',
-            render: (item) => {
-                let text;
-                if (item == 1) {
-                    text = 'Có';
-                } else {
-                    text = 'Không';
-                }
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{text}</div>;
+            width: 250,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
+
+                return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
-        {
-            title: translate.formatMessage(message.createDate),
-            dataIndex: 'createdDate',
-            align: 'center',
-        },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
-    ];
 
-    const searchFields = [
-        {
-            key: 'id',
-            placeholder: translate.formatMessage(message.studentId),
-        },
+        mixinFuncs.renderActionColumn({ edit: false, delete: true }, { width: '120px' }),
     ];
 
     return (
@@ -105,7 +90,7 @@ function RegistrationListPage() {
                     breadcrumbName: translate.formatMessage(message.course),
                     path: generatePath(routes.courseListPage.path),
                 },
-                { breadcrumbName: courseName },
+                { breadcrumbName: translate.formatMessage(message.task) },
             ]}
         >
             <ListPage
@@ -125,4 +110,4 @@ function RegistrationListPage() {
     );
 }
 
-export default RegistrationListPage;
+export default TaskListPage;
