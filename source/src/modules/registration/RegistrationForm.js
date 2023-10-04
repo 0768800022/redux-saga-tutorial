@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import styles from './Registration.module.scss';
 
 const messages = defineMessages({
     student: 'Tên sinh viên',
@@ -202,6 +203,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     </Col>
                     <Col span={12}>
                         <CheckboxField
+                            className={styles.customCheckbox}
                             required
                             label={translate.formatMessage(messages.isIntern)}
                             name="isIntern"
