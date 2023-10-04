@@ -25,6 +25,7 @@ const message = defineMessages({
     courseid: 'courseId',
     createDate: 'Ngày tạo',
     isIntern: 'Đăng kí thực tập',
+    course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
 });
 
@@ -98,10 +99,17 @@ function RegistrationListPage() {
 
     return (
         <PageWrapper
-            routes={[{ breadcrumbName: translate.formatMessage(message.home) }, { breadcrumbName: courseName }]}
+            routes={[
+                { breadcrumbName: translate.formatMessage(message.home) },
+                {
+                    breadcrumbName: translate.formatMessage(message.course),
+                    path: generatePath(routes.courseListPage.path),
+                },
+                { breadcrumbName: courseName },
+            ]}
         >
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
