@@ -10,6 +10,8 @@ import BaseTable from '@components/common/table/BaseTable';
 import { useParams } from 'react-router-dom';
 import { lectureKindOptions } from '@constants/masterData';
 import { Tag } from 'antd';
+import DragDropTableV2 from '@components/common/table/DragDropTableV2';
+import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
@@ -58,11 +60,29 @@ const LectureListPage = () => {
             };
         },
     });
+    const { sortedData, onDragEnd, sortColumn } = useDrapDropTableItem({
+        data,
+        apiConfig: apiConfig.lecture.update,
+        setTableLoading: () => {},
+        indexField: 'ordering',
+        idField: 'lectureId',
+        getList: mixinFuncs.getList,
+    });
 
     const columns = [
+        sortColumn,
         {
             title: translate.formatMessage(message.lectureName),
             dataIndex: 'lectureName',
+            render: (lectureName, record) => {
+                let styles;
+                if (record?.lectureKind === 1) {
+                    styles = {
+                        paddingLeft: '30px',
+                    };
+                }
+                return <div style={styles}>{lectureName}</div>;
+            },
         },
         // {
         //     title: translate.formatMessage(message.description),
@@ -97,11 +117,12 @@ const LectureListPage = () => {
                 style={{ width: '600px' }}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
-                    <BaseTable
+                    <DragDropTableV2
+                        onDragEnd={onDragEnd}
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={data}
+                        dataSource={sortedData}
                         columns={columns}
                     />
                 }
