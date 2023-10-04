@@ -1,121 +1,125 @@
-import { Col, Row, Table, Tag } from 'antd';
-import React, { useEffect, useState } from 'react';
-import styles from './ScheduleTable.module.scss';
+import { Form, Space } from 'antd';
+import React from 'react';
 import TimePickerField from '../form/TimePickerField';
-import { TIME_FORMAT_DISPLAY } from '@constants';
-import dayjs from 'dayjs';
-import BaseTable from './BaseTable';
-
-const ScheduleTable = ({ data }) => {
-    const [dataSubmit, setDataSubmit] = useState([]);
-
-    const handleOnChange = () => {};
-    const columns = [
-        {
-            title: 'Thứ',
-            dataIndex: 'date',
-            key: 'date',
-            align: 'center',
-            width: '10%',
-            className: styles.customColumn,
-        },
-        {
-            title: 'Khung giờ',
-            dataIndex: 'time',
-            key: 'date',
-            align: 'center',
-            width: '90%',
-            className: styles.customColumn,
-            render: (time) => {
-                const timeRanges = time.split('|');
-                return (
-                    <Row gutter={12} style={{ marginTop: 10 }}>
-                        {timeRanges.map((item, index) => {
-                            const timeSingle = item.split('-');
-                            return (
-                                <div key={item}>
-                                    <div style={{ textAlign: 'left', paddingLeft: '22px' }}>Frame {index + 1}</div>
-                                    <Row>
-                                        <Col span={12}>
-                                            <TimePickerField
-                                                defaultValue={dayjs(timeSingle[0], TIME_FORMAT_DISPLAY)}
-                                                width={'60%'}
-                                                style={{ width: '90px', marginLeft: '10px' }}
-                                            />
-                                        </Col>
-                                        <Col span={12}>
-                                            <TimePickerField
-                                                defaultValue={dayjs(timeSingle[1], TIME_FORMAT_DISPLAY)}
-                                                width={'60%'}
-                                                style={{ width: '90px', marginLeft: '10px' }}
-                                            />
-                                        </Col>
-                                    </Row>
-                                </div>
-                            );
-                        })}
-                    </Row>
-                );
-            },
-        },
-    ];
-    const convertDataSource = (data) => {
-        let dataSource;
-        if (data) {
-            dataSource = [
-                {
-                    key: '1',
-                    date: 'Thứ 2',
-                    timeTotal: {
-                        key: 't2',
-                        time: data?.t2,
-                    },
-                },
-                {
-                    key: '2',
-                    date: 'Thứ 3',
-                    time: data?.t3,
-                },
-                {
-                    key: '3',
-                    date: 'Thứ 4',
-                    time: data?.t4,
-                },
-                {
-                    key: '4',
-                    date: 'Thứ 5',
-                    time: data?.t5,
-                },
-                {
-                    key: '5',
-                    date: 'Thứ 6',
-                    time: data?.t6,
-                },
-                {
-                    key: '6',
-                    date: 'Thứ 7',
-                    time: data?.t7,
-                },
-                {
-                    key: '7',
-                    date: 'Chủ nhật',
-                    time: data?.cn,
-                },
-            ];
-        }
-
-        return dataSource;
-    };
-
+import { defineMessages } from 'react-intl';
+const messages = defineMessages({
+    dayOfWeek: 'Thứ',
+    timeFrame: 'Khung giờ',
+    applyAll: 'Áp dụng cho tất cả',
+    frame: 'Khung',
+});
+function ScheduleTable({
+    onSelectScheduleTabletRandom,
+    checkCanApplyAll,
+    handleApplyAll,
+    translate,
+    daysOfWeekSchedule,
+}) {
     return (
-        <BaseTable
-            dataSource={convertDataSource(data)}
-            columns={columns}
-            bordered
-            pagination={false}
-            className={styles.customColumn}
-        />
-    );
-};
+        <table className="happy-hours-table">
+            <thead>
+                <tr>
+                    <th width="14%">{translate.formatMessage(messages.dayOfWeek)}</th>
+                    <th>{translate.formatMessage(messages.timeFrame)}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {daysOfWeekSchedule.map((day, dayIndex) => (
+                    <tr key={day.value}>
+                        <td>{day.label}</td>
+                        <td style={{ padding: '10px' }}>
+                            <Form.List name={['schedule', day.value]}>
+                                {(fields, { add, remove }) => {
+                                    return (
+                                        <div className="no-margin-form-item">
+                                            <Space className="box-flex" size={24}>
+                                                {fields.map((field, index) => (
+                                                    <div key={field.key}>
+                                                        <div className="frame-label">
+                                                            {translate.formatMessage(messages.frame)} {index + 1}
+                                                        </div>
+                                                        <Space className="box-flex">
+                                                            <TimePickerField
+                                                                size="small"
+                                                                name={[field.name, 'from']}
+                                                                onSelect={(value) =>
+                                                                    onSelectScheduleTabletRandom(
+                                                                        [day.value, field.name, 'from'],
+                                                                        value,
+                                                                    )
+                                                                }
+                                                                width="100%"
+                                                                required
+                                                                placeholder="From"
+                                                                requiredMsg="Enter from"
+                                                                validateTrigger={['onChange', 'onBlur']}
+                                                                // disabledHours={() => {
+                                                                //     const tabletRandom = getFieldValue('tablet_random');
+                                                                //     let to = null;
+                                                                //     if(index > 0) {
+                                                                //         to = tabletRandom.schedule[day.value][index - 1].to;
+                                                                //     }
+                                                                //     return getDisabledHours(to);
+                                                                // }}
+                                                            />
+                                                            <TimePickerField
+                                                                size="small"
+                                                                name={[field.name, 'to']}
+                                                                onSelect={(value) =>
+                                                                    onSelectScheduleTabletRandom(
+                                                                        [day.value, field.name, 'to'],
+                                                                        value,
+                                                                    )
+                                                                }
+                                                                width="100%"
+                                                                required
+                                                                placeholder="to"
+                                                                requiredMsg="Enter to"
+                                                                validateTrigger={['onChange', 'onBlur']}
+                                                                // disabledHours={() => {
+                                                                //     const timeWork = getFieldValue('time_work');
+                                                                //     const from =
+                                                                //         timeWork[day.value][field.name].from;
+                                                                //     return getDisabledHours(from);
+                                                                // }}
+                                                                // disabledMinutes={(hour) => {
+                                                                //     const timeWork = getFieldValue('time_work');
+                                                                //     const from =
+                                                                //         timeWork[day.value][field.name].from;
+                                                                //     return getDisabledMinutes(hour, from);
+                                                                // }}
+                                                            />
+                                                        </Space>
+                                                    </div>
+                                                ))}
+                                                {/* {!dayIndex && (
+                                                    <div className="wrap-btn-apply-all">
+                                                        <Button
+                                                            disabled={!checkCanApplyAll()}
+                                                            type="primary"
+                                                            size="middle"
+                                                            onClick={handleApplyAll}
+                                                        >
+                                                            {translate.formatMessage(messages.applyAll)}
+                                                        </Button>
+                                                    </div>
+                                                )} */}
+                                            </Space>
 
+                                            {/* <Form.Item style={{ width: '170px', textAlign: 'left' }}>
+                                            <Button type="dashed" onClick={add}>
+                                            <PlusOutlined />Add Frame
+                                    </Button>
+                                        </Form.Item> */}
+                                        </div>
+                                    );
+                                }}
+                            </Form.List>
+                        </td>
+                    </tr>
+                ))}
+            </tbody>
+        </table>
+    );
+}
 export default ScheduleTable;
