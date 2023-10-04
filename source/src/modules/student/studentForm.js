@@ -31,8 +31,6 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     const kindOfEdu = categoryKinds.CATEGORY_KIND_EDUCATION;
     const kindOfGen = categoryKinds.CATEGORY_KIND_GENERATION;
     const [currentKindOfEdu, setCurrentKindOfEdu] = useState(kindOfEdu);
-    console.log("dataDetail " + JSON.stringify(dataDetail));
-
 
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,

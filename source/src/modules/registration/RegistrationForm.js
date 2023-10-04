@@ -171,7 +171,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         checkCanApplyAll();
         onValuesChange();
     };
-    
 
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="big">
