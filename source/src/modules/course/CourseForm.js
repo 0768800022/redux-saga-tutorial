@@ -49,7 +49,7 @@ const CourseForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
-            subject: dataDetail?.subject?.subjectName,
+            subjectId: dataDetail?.subject?.subjectName,
         });
     }, [dataDetail]);
     const {
@@ -83,7 +83,7 @@ const CourseForm = (props) => {
                         <AutoCompleteField
                             required
                             label={<FormattedMessage defaultMessage="Môn học" />}
-                            name="subject"
+                            name="subjectId"
                             apiConfig={apiConfig.subject.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.subjectName })}
                             initialSearchParams={{}}
