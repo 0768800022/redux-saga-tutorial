@@ -42,7 +42,6 @@ function RegistrationSavePage() {
                 return {
                     ...data,
                     courseId: courseId,
-                    state: 1,
                 };
             };
         },
