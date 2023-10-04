@@ -403,8 +403,8 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        asignall: {
-            baseURL: `${apiTenantUrl}v1/task/asign-all`,
+        asignALl: {
+            baseURL:`${apiTenantUrl}v1/task/asign-all`,
             method: 'POST',
             headers: baseHeader,
             isRequiredTenantId: true,
@@ -416,7 +416,7 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
         create: {
-            baseURL: `${apiTenantUrl}v1/task/create`,
+            baseURL:`${apiTenantUrl}v1/task/create`,
             method: 'POST',
             headers: baseHeader,
             isRequiredTenantId: true,

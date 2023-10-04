@@ -1,7 +1,7 @@
 import apiConfig from '@constants/apiConfig';
 import CourseListPage from '.';
 import CourseSavePage from './CourseSavePage';
-
+import LectureListPage from './lecture';
 export default {
     courseListPage: {
         path: '/course',
@@ -16,5 +16,12 @@ export default {
         auth: true,
         component: CourseSavePage,
         permissions: [apiConfig.course.update.baseURL, apiConfig.course.create.baseURL],
+    },
+    lectureListPage: {
+        path: '/course/task/lecture',
+        title: 'Lecture List Page',
+        auth: true,
+        component: LectureListPage,
+        permissions: apiConfig.lecture.getList.baseURL,
     },
 };
