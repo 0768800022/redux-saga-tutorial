@@ -88,6 +88,10 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                         from: '2023-10-02T00:00:00.000Z',
                         to: '2023-10-02T00:00:00.000Z',
                     },
+                    {
+                        from: '2023-10-02T00:00:00.000Z',
+                        to: '2023-10-02T00:00:00.000Z',
+                    },
                 ],
                 ...dataDefault,
             };
@@ -103,7 +107,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             for (const timeRange of dataDefault[day]) {
                 timeRange.from = dayjs(timeRange.from).subtract(7, 'hours');
                 timeRange.to = dayjs(timeRange.to).subtract(7, 'hours');
-                console.log(timeRange);
             }
         }
 
