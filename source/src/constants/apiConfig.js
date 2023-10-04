@@ -374,7 +374,7 @@ const apiConfig = {
         getBySubject: {
             baseURL: `${apiTenantUrl}v1/lecture/get-by-subject/:subjectId`,
             method: 'GET',
-            headers: baseHeader,            
+            headers: baseHeader,
             isRequiredTenantId: true,
         },
         getList: {
@@ -391,6 +391,51 @@ const apiConfig = {
         },
         update: {
             baseURL: `${apiTenantUrl}v1/lecture/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    task: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/task/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        asignall: {
+            baseURL: `${apiTenantUrl}v1/task/asign-all`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/task/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/task/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/task/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+
+        getById: {
+            baseURL: `${apiTenantUrl}v1/task/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/task/update`,
             method: 'PUT',
             headers: baseHeader,
             isRequiredTenantId: true,

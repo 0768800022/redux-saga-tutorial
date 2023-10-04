@@ -134,6 +134,13 @@ const CourseForm = (props) => {
                         />
                     </Col>
                 </Row>
+                <TextField
+                    width={'100%'}
+                    required
+                    label={<FormattedMessage defaultMessage="Mô tả" />}
+                    name="description"
+                    type="textarea"
+                />
 
                 <div className="footer-card-form">{actions}</div>
             </Card>

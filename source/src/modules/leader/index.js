@@ -31,7 +31,6 @@ const LeaderListPage = () => {
         },
         override: (funcs) => {
             funcs.mappingData = (response) => {
-                console.log('response', response);
                 if (response.result === true) {
                     return {
                         data: response.data.content,
