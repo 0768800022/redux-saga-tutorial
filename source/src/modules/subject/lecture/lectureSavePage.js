@@ -31,7 +31,6 @@ const LectureSavePage = () => {
         },
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
-                console.log(data);
                 return {
                     ...data,
                     id: detail.id,
