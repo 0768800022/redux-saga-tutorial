@@ -64,25 +64,25 @@ const LectureListPage = () => {
             title: translate.formatMessage(message.lectureName),
             dataIndex: 'lectureName',
         },
-        {
-            title: translate.formatMessage(message.description),
-            dataIndex: 'description',
-        },
-        {
-            title: translate.formatMessage(message.shortDescription),
-            dataIndex: 'shortDescription',
-        },
-        {
-            title: translate.formatMessage(message.lectureKind),
-            dataIndex: 'lectureKind',
-            align: 'center',
-            width: 250,
-            render(dataRow) {
-                const lectureKind = lectureKindValues.find((item) => item.value == dataRow);
+        // {
+        //     title: translate.formatMessage(message.description),
+        //     dataIndex: 'description',
+        // },
+        // {
+        //     title: translate.formatMessage(message.shortDescription),
+        //     dataIndex: 'shortDescription',
+        // },
+        // {
+        //     title: translate.formatMessage(message.lectureKind),
+        //     dataIndex: 'lectureKind',
+        //     align: 'center',
+        //     width: 250,
+        //     render(dataRow) {
+        //         const lectureKind = lectureKindValues.find((item) => item.value == dataRow);
 
-                return <Tag color={lectureKind.color}>{lectureKind.label}</Tag>;
-            },
-        },
+        //         return <Tag color={lectureKind.color}>{lectureKind.label}</Tag>;
+        //     },
+        // },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (
@@ -94,6 +94,7 @@ const LectureListPage = () => {
             ]}
         >
             <ListPage
+                style={{ width: '600px' }}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
