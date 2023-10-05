@@ -395,6 +395,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        updateSort: {
+            baseURL: `${apiTenantUrl}v1/lecture/update-sort`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     task: {
         getList: {
