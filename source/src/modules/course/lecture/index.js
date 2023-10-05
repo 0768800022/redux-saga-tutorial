@@ -1,18 +1,16 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import {  DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined ,MenuOutlined } from '@ant-design/icons';
 import routes from '../routes';
 import { Button,Modal }  from 'antd';
-import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import AsignAllForm from './asignAllForm';
-
+import BaseTable from '@components/common/table/BaseTable';
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
@@ -62,17 +60,16 @@ const LectureListPage = () => {
         },
     });
 
-    const { sortedData, onDragEnd, sortColumn } = useDrapDropTableItem({
-        data,
-        apiConfig: apiConfig.lecture.update,
-        setTableLoading: () => {},
-        indexField: 'ordering',
-        idField: 'lectureId',
-        getList: mixinFuncs.getList,
-    });
 
     const columns = [
-        sortColumn,
+        {
+            title: '',
+            key: 'menu',
+            width: 30,
+            render: (text, record) => (
+                <MenuOutlined />
+            ),
+        },
         {
             title: translate.formatMessage(message.lectureName),
             dataIndex: 'lectureName',
@@ -131,18 +128,19 @@ const LectureListPage = () => {
                     </div>
                 }
                 baseTable={
-                    <DragDropTableV2
-                        rowSelection={{
-                            type: "radio",
-                            ...rowSelection,
-                        }}
-                        onDragEnd={onDragEnd}
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={sortedData}
-                        columns={columns}
-                    />
+                    <>
+                        <BaseTable
+                            rowSelection={{
+                                type: "radio",
+                                ...rowSelection,
+                            }}
+                            onChange={changePagination}
+                            pagination={pagination}
+                            loading={loading}
+                            dataSource={data}
+                            columns={columns}
+                        />
+                    </>
                 }
             />
             <Modal
