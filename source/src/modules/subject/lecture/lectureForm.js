@@ -72,13 +72,12 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 data: dataUpdate,
             });
         }
-        values.subjectId = subjectId;
-        values.status = 1;
         if (values.ordering === undefined) {
-            console.log(data[data.length - 1]);
             const dataSort = data.sort((a, b) => a.ordering - b.ordering);
             values.ordering = dataDetail?.ordering || dataSort[dataSort.length - 1].ordering + 1;
         }
+        values.subjectId = subjectId;
+        values.status = 1;
         return mixinFuncs.handleSubmit({ ...values });
     };
 
