@@ -34,12 +34,22 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         setIsChangedFormValues,
     });
     const location = useLocation();
-
-    const pathnameSegments = location.pathname.split('/');
-    const { data } = useFetch(apiConfig.lecture.getBySubject, {
-        immediate: false,
-        mappingData: ({ data }) => ({ id: data.id }),
+    const { data } = useListBase({
+        apiConfig: {
+            getList: apiConfig.lecture.getBySubject,
+            delete: apiConfig.lecture.delete,
+            update: apiConfig.lecture.update,
+            getById: apiConfig.lecture.getById,
+        },
+        override: (funcs) => {
+            funcs.prepareGetListPathParams = () => {
+                return {
+                    subjectId: subjectId,
+                };
+            };
+        },
     });
+
     const handleSubmit = (values) => {
         let isSelectedRowKey = false;
         data.map((item) => {
@@ -47,14 +57,28 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 isSelectedRowKey = true;
             } else if (isSelectedRowKey == true) {
                 if (item.lectureKind == 1) {
-                    values.ordering = item.ordering - 1;
+                    values.ordering = item.ordering;
                     isSelectedRowKey = false;
                 }
             }
         });
+        let dataUpdate = [];
+        if (values.ordering) {
+            const indexLecture = data.findIndex((item) => item.ordering == values.ordering);
+            for (let i = indexLecture; i < data.length; i++) {
+                dataUpdate.push({ id: data[i].id, ordering: data[i].ordering + 1 });
+            }
+            executeOrdering({
+                data: dataUpdate,
+            });
+        }
         values.subjectId = subjectId;
         values.status = 1;
-        values.ordering = dataDetail?.ordering;
+        if (values.ordering === undefined) {
+            console.log(data[data.length - 1]);
+            const dataSort = data.sort((a, b) => a.ordering - b.ordering);
+            values.ordering = dataDetail?.ordering || dataSort[dataSort.length - 1].ordering + 1;
+        }
         return mixinFuncs.handleSubmit({ ...values });
     };
 
