@@ -528,6 +528,7 @@ const useListBase = ({
         mixinFuncs,
         getList,
         setLoading,
+        pagePath,
     };
 };
 

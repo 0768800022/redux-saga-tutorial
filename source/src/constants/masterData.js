@@ -159,7 +159,7 @@ export const currentcyPositions = [
     { value: CurrentcyPositions.BACK, label: '1234,56 $' },
 ];
 
-export const daysOfWeekTimeWork = [
+export const daysOfWeekSchedule = [
     { value: 'monday', label: dayOfWeek.monday },
     { value: 'tuesday', label: dayOfWeek.tuesday },
     { value: 'wednesday', label: dayOfWeek.wednesday },

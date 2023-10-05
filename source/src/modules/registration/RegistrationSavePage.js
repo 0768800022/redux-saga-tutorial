@@ -36,12 +36,14 @@ function RegistrationSavePage() {
                     ...data,
                     id: detail.id,
                     status: 1,
+                    isIssuedCertify: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
                     courseId: courseId,
+                    isIssuedCertify: 1,
                 };
             };
         },

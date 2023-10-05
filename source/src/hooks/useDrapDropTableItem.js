@@ -23,7 +23,6 @@ function useDrapDropTableItem({ data = [], apiConfig, setTableLoading, indexFiel
         const movedData = moveArrayElement(sortedData, dragIndex, hoverIndex);
         const before = movedData[hoverIndex + 1]?.[indexField];
         const after = movedData[hoverIndex - 1]?.[indexField];
-
         setSortedData(movedData);
 
         executeOrdering({
