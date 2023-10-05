@@ -96,6 +96,7 @@ const CourseForm = (props) => {
                             name="dateRegister"
                             style={{ width: '100%' }}
                             format={DATE_FORMAT_DISPLAY}
+                            required
                         />
                     </Col>
                     <Col span={12}>
@@ -104,6 +105,7 @@ const CourseForm = (props) => {
                             name="dateEnd"
                             style={{ width: '100%' }}
                             format={DATE_FORMAT_DISPLAY}
+                            required
                         />
                     </Col>
                 </Row>

@@ -38,7 +38,6 @@ const CourseSavePage = () => {
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    subjectId: data.subject,
                     status: 1,
                 };
             };

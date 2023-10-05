@@ -28,6 +28,7 @@ const LectureListPage = () => {
     const translate = useTranslate();
     const paramid = useParams();
     const lectureKindValues = translate.formatKeys(lectureKindOptions, ['label']);
+    console.log("paramid = "+paramid.subjectId);
 
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {

@@ -5,17 +5,18 @@ import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages,FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,generatePath ,useParams,useLocation } from 'react-router-dom';
 import routes from '@modules/registration/routes';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
 import { formSize, lectureState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
+import route1 from '@modules/student/routes';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -26,91 +27,77 @@ const message = defineMessages({
     description: 'Mô tả',
     dateRegister: 'Ngày bắt đầu',
     dateEnd: 'Ngày kết thúc',
+    dateCreated: 'Ngày khởi tạo',
     status: 'Tình trạng',
     leader: 'Người hướng dẫn',
 });
 
 const CourseListPage = () => {
     const translate = useTranslate();
+    const { pathname: pagePath } = useLocation();
     const statusValues = translate.formatKeys(lectureState, ['label']);
+    const paramid = useParams();
     const navigate = useNavigate();
+    const queryParameters = new URLSearchParams(window.location.search);
+    const stuId = queryParameters.get('studentId');
+    console.log(paramid);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.course,
+        apiConfig:
+        {
+            // getList : apiConfig.student.getAllCourse,
+            getList : apiConfig.registration.getList,
+            delete : apiConfig.registration.delete,
+            update : apiConfig.course.update,
+            getById: apiConfig.course.getById,
+        },
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
-            funcs.additionalActionColumnButtons = () => ({
-                student: ({ id, name }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0 }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(routes.registrationListPage.path + `?courseId=${id}&courseName=${name}`);
-                        }}
-                    >
-                        <TeamOutlined />
-                    </Button>
-                ),
-                task: ({ id, name }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0 }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
-                        }}
-                    >
-                        <BookOutlined />
-                    </Button>
-                ),
-            });
+            // funcs.prepareGetListPathParams = () => {
+            //     return {
+            //         // id: stuId,
+            //         id : paramid.id,
+            //     };
+            // };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?studentId=${stuId}`;
+            };
         },
     });
     const breadRoutes = [
         { breadcrumbName: translate.formatMessage(message.home) },
+        {
+            breadcrumbName: <FormattedMessage defaultMessage="Sinh viên" />,
+            path: generatePath(route1.studentListPage.path),
+        },
         { breadcrumbName: translate.formatMessage(message.course) },
     ];
     const searchFields = [
         {
-            key: 'name',
+            key: 'courseName',
             placeholder: translate.formatMessage(message.name),
         },
     ];
     const columns = [
         {
             title: translate.formatMessage(message.name),
-            dataIndex: 'name',
-            width: 180,
+            dataIndex: ['courseInfo', 'name'],
+            width: 250,
         },
         {
             title: translate.formatMessage(message.subject),
-            dataIndex: ['subject', 'subjectName'],
-            width: 180,
+            dataIndex: ['courseInfo','subject', 'subjectName'],
+            width: 250,
         },
         {
-            title: translate.formatMessage(message.leader),
-            dataIndex: ['leader', 'leaderName'],
-            width: 180,
-        },
-        {
-            title: translate.formatMessage(message.dateRegister),
-            dataIndex: 'dateRegister',
-            render: (dateRegister) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateRegister,'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}</div>;
+            title: translate.formatMessage(message.dateCreated),
+            dataIndex: 'createdDate',
+            width: 150,
+            render: (createdDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(createdDate,'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}</div>;
             },
-            width: 130,
-            align: 'center',
-        },
-        {
-            title: translate.formatMessage(message.dateEnd),
-            dataIndex: 'dateEnd',
-            render: (dateEnd) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateEnd,'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}</div>;
-            },
-            width: 130,
             align: 'center',
         },
         {
@@ -124,14 +111,14 @@ const CourseListPage = () => {
                 return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
-        mixinFuncs.renderActionColumn({ task: true, student: true, edit: true, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ delete: true }, { width: '150px' }),
     ];
 
     return (
         <PageWrapper routes={breadRoutes}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={mixinFuncs.renderActionBar()}
+                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
