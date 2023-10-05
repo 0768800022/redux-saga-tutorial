@@ -54,23 +54,16 @@ const CourseListPage = () => {
                         <TeamOutlined />
                     </Button>
                 ),
-<<<<<<< HEAD
-                task: ({ id, name,subject }) => (
-=======
+
                 task: ({ id, name, subject }) => (
->>>>>>> son_dev
                     <Button
                         type="link"
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-<<<<<<< HEAD
-                            navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}&subjectId=${subject.id}`);
-=======
                             navigate(
                                 route.taskListPage.path + `?courseId=${id}&courseName=${name}&subjectId=${subject.id}`,
                             );
->>>>>>> son_dev
                         }}
                     >
                         <BookOutlined />
