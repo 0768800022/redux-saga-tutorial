@@ -14,6 +14,8 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { convertUtcToLocalTime } from '@utils';
 import routes from './routes';
+import classNames from 'classnames';
+import styles from './subject.module.scss';
 const message = defineMessages({
     name: 'Tên môn học',
     home: 'Trang chủ',
@@ -70,8 +72,10 @@ const SubjectListPage = () => {
             dataIndex: 'subjectName',
             render: (subjectName, record) =>
                 !record.parentId ? (
-                    <div onClick={(event) => handleOnClick(event, record)} style={{ cursor: 'pointer',    textDecoration:'underline' }}>
-                        {' '}
+                    <div 
+                        onClick={(event) => handleOnClick(event, record)}
+                        className={styles.customDiv}
+                    >
                         {subjectName}
                     </div>
                 ) : (
