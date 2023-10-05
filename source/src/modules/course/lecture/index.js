@@ -78,9 +78,15 @@ const LectureListPage = () => {
             dataIndex: 'lectureName',
             render: (lectureName, record) => {
                 let styles;
-                if (record?.lectureKind === 1) {
+                if (record?.lectureKind === 2) {
                     styles = {
                         paddingLeft: '30px',
+                    };
+                }
+                else {
+                    styles = {
+                        textTransform: 'uppercase',
+                        fontWeight: 700,
                     };
                 }
                 return <div style={styles}>{lectureName}</div>;
