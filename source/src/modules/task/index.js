@@ -33,6 +33,7 @@ function TaskListPage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const subjectId = queryParameters.get('subjectId');
     const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.task,
@@ -54,7 +55,7 @@ function TaskListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}`;
+                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
             };
         },
     });
