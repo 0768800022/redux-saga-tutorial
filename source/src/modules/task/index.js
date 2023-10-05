@@ -73,20 +73,18 @@ function TaskListPage() {
         },
         {
             title: 'Ngày bắt đầu',
-            dataIndex: 'dateRegister',
-            render: (dateRegister) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dateRegister}</div>;
+            dataIndex: 'startDate',
+            render: (startDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{startDate}</div>;
             },
-            width: 130,
             align: 'center',
         },
         {
             title: 'Ngày kết thúc',
-            dataIndex: 'dateEnd',
-            render: (dateEnd) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dateEnd}</div>;
+            dataIndex: 'dueDate',
+            render: (dueDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dueDate}</div>;
             },
-            width: 130,
             align: 'center',
         },
         {
