@@ -54,6 +54,7 @@ const CourseListPage = () => {
                         <TeamOutlined />
                     </Button>
                 ),
+
                 task: ({ id, name, subject }) => (
                     <Button
                         type="link"
