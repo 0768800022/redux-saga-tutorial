@@ -52,7 +52,7 @@ export const dayOfWeek = defineMessages({
     sunday: 'Chủ nhật',
 });
 
-export const daysOfWeekTimeWork = [
+export const daysOfWeekSchedule = [
     { value: 'monday', label: dayOfWeek.monday },
     { value: 'tuesday', label: dayOfWeek.tuesday },
     { value: 'wednesday', label: dayOfWeek.wednesday },
@@ -92,6 +92,6 @@ export const lectureStateMessage = defineMessages({
 });
 
 export const taskStateMessage = defineMessages({
-    asign: 'Đang',
-    done: 'Xong',
+    asign: 'Đang làm',
+    done: 'Hoàn thành',
 });

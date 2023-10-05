@@ -57,6 +57,9 @@ function TaskListPage() {
             funcs.getCreateLink = () => {
                 return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
             };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+            };
         },
     });
     const columns = [
@@ -67,6 +70,24 @@ function TaskListPage() {
         {
             title: translate.formatMessage(message.studentId),
             dataIndex: ['student', 'fullName'],
+        },
+        {
+            title: 'Ngày bắt đầu',
+            dataIndex: 'dateRegister',
+            render: (dateRegister) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dateRegister}</div>;
+            },
+            width: 130,
+            align: 'center',
+        },
+        {
+            title: 'Ngày kết thúc',
+            dataIndex: 'dateEnd',
+            render: (dateEnd) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dateEnd}</div>;
+            },
+            width: 130,
+            align: 'center',
         },
         {
             title: translate.formatMessage(message.state),
@@ -80,7 +101,7 @@ function TaskListPage() {
             },
         },
 
-        mixinFuncs.renderActionColumn({ edit: false, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }),
     ];
 
     return (

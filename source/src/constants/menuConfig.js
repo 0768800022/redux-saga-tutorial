@@ -60,6 +60,13 @@ const navMenuConfig = [
                     kind: categoryKind.generation.value,
                 }),
             },
+            {
+                label: categoryKind.major.title,
+                key: 'major-category',
+                path: generatePath(routes.categoryListPageMajor.path, {
+                    kind: categoryKind.major.value,
+                }),
+            },
         ],
     },
 ];

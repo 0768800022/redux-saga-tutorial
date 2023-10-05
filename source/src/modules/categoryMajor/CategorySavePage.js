@@ -1,33 +1,37 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import apiConfig from '@constants/apiConfig';
-import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 import routes from './routes';
-import RegistrationForm from './RegistrationForm';
+import CategoryForm from './CategoryForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
+import { categoryKinds } from '@constants';
 
 const messages = defineMessages({
-    objectName: 'Danh sách khóa học',
+    objectName: 'chuyên ngành',
     home: 'Trang chủ',
-    registration: 'Danh sách sinh viên đăng kí khóa học',
+    category: 'Danh mục chuyên ngành',
 });
 
-function RegistrationSavePage() {
+const CategorySavePage = () => {
+    const categoryId = useParams();
     const translate = useTranslate();
+
     const queryParameters = new URLSearchParams(window.location.search);
-    const courseId = queryParameters.get('courseId');
-    const courseName = queryParameters.get('courseName');
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
+    // const parentId = queryParameters.get("parentId");
+
+    const kindOfMajor = categoryKinds.CATEGORY_KIND_MAJOR;
+
+    const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.registration.getById,
-            create: apiConfig.registration.create,
-            update: apiConfig.registration.update,
+            getById: apiConfig.category.getById,
+            create: apiConfig.category.create,
+            update: apiConfig.category.update,
         },
         options: {
-            getListUrl: routes.registrationListPage.path,
+            getListUrl: generatePath(routes.categoryListPageMajor.path, { categoryId }),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -35,43 +39,40 @@ function RegistrationSavePage() {
                 return {
                     ...data,
                     id: detail.id,
-                    status: 1,
-                    isIssuedCertify: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    courseId: courseId,
-                    isIssuedCertify: 1,
+                    categoryKind: kindOfMajor,
+                    categoryOrdering: 0,
                 };
             };
         },
     });
+
     return (
         <PageWrapper
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: courseName,
-                    path: routes.registrationListPage.path,
+                    breadcrumbName: translate.formatMessage(messages.category),
+                    path: generatePath(routes.categoryListPageMajor.path, { categoryId }),
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <RegistrationForm
+            <CategoryForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
-                onSubmit={onSave}
-                isError={errors}
+                onSubmit={mixinFuncs.onSave}
             />
         </PageWrapper>
     );
-}
-
-export default RegistrationSavePage;
+};
+export default CategorySavePage;
