@@ -1,17 +1,19 @@
+import { SaveOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
-import React from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
+import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
+import { lectureKindOptions } from '@constants/masterData';
+import useDragDrop from '@hooks/useDragDrop';
+import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
+import { Button } from 'antd';
+import React, { useState } from 'react';
 import { defineMessages } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import { useParams } from 'react-router-dom';
-import { lectureKindOptions } from '@constants/masterData';
-import { Tag } from 'antd';
-import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
+import { useLocation, useParams } from 'react-router-dom';
+import styles from './lecture.module.scss';
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
@@ -28,7 +30,9 @@ const LectureListPage = () => {
     const translate = useTranslate();
     const paramid = useParams();
     const lectureKindValues = translate.formatKeys(lectureKindOptions, ['label']);
-
+    const { state: stateLocation } = useLocation();
+    console.log(stateLocation?.selectedRowKey);
+    const [selectedRowKey, setSelectedRowKey] = useState(stateLocation?.selectedRowKey || null);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, pagePath } = useListBase({
         apiConfig: {
             getList: apiConfig.lecture.getBySubject,
@@ -42,7 +46,7 @@ const LectureListPage = () => {
         },
         override: (funcs) => {
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?totalLecture=${data?.length || 0}`;
+                return `${pagePath}/create?totalLecture=${data?.length || 0}?selectedRowKey=${selectedRowKey}`;
             };
             funcs.prepareGetListPathParams = () => {
                 return {
@@ -63,19 +67,45 @@ const LectureListPage = () => {
             };
         },
     });
-    const { sortedData, sortColumn } = useDrapDropTableItem({
+    const rowClassNameDefault = (record) => {
+        let className = '';
+        let lastItem;
+        if (record.lectureKind == 1) {
+            className += ` ${styles.cursorPoint}`;
+        }
+        data.map((item) => {
+            if (item.lectureKind === 1) {
+                lastItem = item;
+            }
+        });
+        if (lastItem?.id === record.id) {
+            className += ` ${styles.highlightRowStyle}`;
+        }
+        return className;
+    };
+    const rowClassName = (record) => {
+        let className = '';
+        if (record.lectureKind == 1) {
+            className += ` ${styles.cursorPoint}`;
+        }
+        if (record?.id == selectedRowKey && record.lectureKind == 1) {
+            className += ` ${styles.highlightRowStyle}`;
+            return className;
+        }
+        return className;
+    };
+    const { sortedData, sortColumn, onDragEnd, handleUpdate } = useDragDrop({
         data,
+        apiConfig: apiConfig.lecture.updateSort,
         setTableLoading: () => {},
         indexField: 'ordering',
-        idField: 'lectureId',
-        getList: mixinFuncs.getList,
     });
-
     const columns = [
         sortColumn,
         {
             title: translate.formatMessage(message.lectureName),
             dataIndex: 'lectureName',
+
             render: (lectureName, record) => {
                 let styles;
                 if (record?.lectureKind === 2) {
@@ -88,28 +118,10 @@ const LectureListPage = () => {
                         fontWeight: 700,
                     };
                 }
+
                 return <div style={styles}>{lectureName}</div>;
             },
         },
-        // {
-        //     title: translate.formatMessage(message.description),
-        //     dataIndex: 'description',
-        // },
-        // {
-        //     title: translate.formatMessage(message.shortDescription),
-        //     dataIndex: 'shortDescription',
-        // },
-        // {
-        //     title: translate.formatMessage(message.lectureKind),
-        //     dataIndex: 'lectureKind',
-        //     align: 'center',
-        //     width: 250,
-        //     render(dataRow) {
-        //         const lectureKind = lectureKindValues.find((item) => item.value == dataRow);
-
-        //         return <Tag color={lectureKind.color}>{lectureKind.label}</Tag>;
-        //     },
-        // },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (
@@ -121,16 +133,37 @@ const LectureListPage = () => {
             ]}
         >
             <ListPage
-                style={{ width: '600px' }}
+                style={{ width: '700px' }}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
-                    <DragDropTableV2
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={sortedData}
-                        columns={columns}
-                    />
+                    <>
+                        <DragDropTableV2
+                            onDragEnd={onDragEnd}
+                            onChange={changePagination}
+                            pagination={pagination}
+                            loading={loading}
+                            dataSource={sortedData}
+                            columns={columns}
+                            rowClassName={selectedRowKey !== null ? rowClassName : rowClassNameDefault}
+                            onRow={(record) => {
+                                if (record.lectureKind === 1) {
+                                    return {
+                                        onClick: () => setSelectedRowKey(record.id),
+                                    };
+                                }
+                            }}
+                        />
+                        <Button
+                            style={{ marginTop: '20px', marginLeft: '520px' }}
+                            key="submit"
+                            htmlType="submit"
+                            type="primary"
+                            onClick={handleUpdate}
+                            icon={<SaveOutlined />}
+                        >
+                            Update
+                        </Button>
+                    </>
                 }
             />
         </PageWrapper>

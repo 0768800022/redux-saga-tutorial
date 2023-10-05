@@ -55,8 +55,8 @@ export const lectureState = [
 ];
 
 export const taskState = [
-    { value: STATE_TASK_DONE.toString(), label: taskStateMessage.done, color: 'green' },
-    { value: STATE_TASK_ASIGN.toString(), label: taskStateMessage.asign, color: 'orange' },
+    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: 'green' },
+    { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: 'orange' },
 ];
 
 export const statusOptions = [
@@ -117,7 +117,7 @@ export const commonLanguages = [
 ];
 export const CATEGORY_KIND_GENERATION = 2;
 export const CATEGORY_KIND_EDUCATION = 1;
-export const CATEGORY_KIND_DEPARTMENT = 3;
+export const CATEGORY_KIND_MAJOR = 3;
 export const CATEGORY_KIND_NEW = 4;
 export const CATEGORY_KIND_SERVICE = 5;
 export const CATEGORY_KIND_INVOICE_IN = 6;
@@ -140,6 +140,11 @@ export const categoryKind = {
         title: 'Danh mục hệ',
         path: 'generation',
         value: CATEGORY_KIND_GENERATION,
+    },
+    major: {
+        title: 'Danh mục chuyên ngành',
+        path: 'major',
+        value: CATEGORY_KIND_MAJOR,
     },
 };
 

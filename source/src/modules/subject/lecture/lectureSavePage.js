@@ -5,7 +5,7 @@ import PageWrapper from '@components/common/layout/PageWrapper';
 import LectureForm from './lectureForm';
 import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 const message = defineMessages({
     objectName: 'Bài giảng',
@@ -18,7 +18,10 @@ const LectureSavePage = () => {
     const translate = useTranslate();
     const lectureId = useParams();
     const queryParameters = new URLSearchParams(window.location.search);
+    const navigate = useNavigate();
+    const { state: stateLocation } = useLocation();
     const totalLecture = queryParameters.get('totalLecture');
+    const selectedRowKey = queryParameters.get('selectedRowKey');
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.lecture.getById,
@@ -41,6 +44,21 @@ const LectureSavePage = () => {
                     ...data,
                     ordering: totalLecture,
                 };
+            };
+            funcs.onBack = () => {
+                if (stateLocation.listData) {
+                    if (stateLocation?.prevPath === routes.lectureListPage.path) {
+                        navigate(stateLocation?.prevPath + stateLocation?.searchPath, {
+                            state: {
+                                selectedRowKey: selectedRowKey,
+                            },
+                        });
+                    } else {
+                        navigate(routes.lectureListPage.path);
+                    }
+                } else {
+                    navigate(-1);
+                }
             };
         },
     });

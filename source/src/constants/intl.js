@@ -92,6 +92,6 @@ export const lectureStateMessage = defineMessages({
 });
 
 export const taskStateMessage = defineMessages({
-    asign: 'Đang',
-    done: 'Xong',
+    asign: 'Đang làm',
+    done: 'Hoàn thành',
 });
