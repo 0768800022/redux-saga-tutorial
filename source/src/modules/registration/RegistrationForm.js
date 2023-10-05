@@ -5,7 +5,7 @@ import SelectField from '@components/common/form/SelectField';
 import TimePickerField from '@components/common/form/TimePickerField';
 import { TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { daysOfWeekTimeWork as daysOfWeekTimeWorkOptions } from '@constants/masterData';
+import { daysOfWeekSchedule as daysOfWeekScheduleOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -14,17 +14,12 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import styles from './Registration.module.scss';
+import ScheduleTable from '@components/common/table/ScheduleTable';
 
 const messages = defineMessages({
     student: 'Tên sinh viên',
     isIntern: 'Đăng kí thực tập',
-    payment: 'Phương thức thanh toán',
-    paymentDeliver: 'Phương thức thanh toán giao hàng',
-    timeWork: 'Thời gian làm việc',
-    dayOfWeek: 'Thứ',
-    timeFrame: 'Khung giờ',
-    applyAll: 'Áp dụng cho tất cả',
-    frame: 'Khung',
 });
 const statesOptionSelect = [
     {
@@ -38,7 +33,7 @@ const statesOptionSelect = [
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) {
     const translate = useTranslate();
-    const daysOfWeekTimeWork = translate.formatKeys(daysOfWeekTimeWorkOptions, ['label']);
+    const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -77,7 +72,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         dataDetail?.isIntern && setIsChecked(dataDetail?.isIntern == 1 && true);
         const data = dataDetail?.schedule && JSON.parse(dataDetail?.schedule);
         let dataDefault = {};
-        daysOfWeekTimeWork.map((day) => {
+        daysOfWeekSchedule.map((day) => {
             dataDefault = {
                 [day.value]: [
                     {
@@ -123,7 +118,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         });
     }, [dataDetail]);
 
-    const onSelectTimeWorkTabletRandom = (fieldName, value) => {
+    const onSelectScheduleTabletRandom = (fieldName, value) => {
         try {
             const schedule = getFieldValue('schedule');
             const [dayKey, dayIndexKey, frameKey] = fieldName;
@@ -163,7 +158,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         const schedule = getFieldValue('schedule');
 
         const { monday = [] } = schedule;
-        for (let { value } of daysOfWeekTimeWork) {
+        for (let { value } of daysOfWeekSchedule) {
             schedule[value] = monday.map((frame) => {
                 return {
                     from: frame.from,
@@ -202,6 +197,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     </Col>
                     <Col span={12}>
                         <CheckboxField
+                            className={styles.customCheckbox}
                             required
                             label={translate.formatMessage(messages.isIntern)}
                             name="isIntern"
@@ -211,126 +207,17 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     </Col>
                 </Row>
 
-                <TimeWork
-                    onSelectTimeWorkTabletRandom={onSelectTimeWorkTabletRandom}
+                <ScheduleTable
+                    onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
                     checkCanApplyAll={checkCanApplyAll}
                     handleApplyAll={handleApplyAll}
                     translate={translate}
-                    daysOfWeekTimeWork={daysOfWeekTimeWork}
+                    daysOfWeekSchedule={daysOfWeekSchedule}
                 />
 
                 <div className="footer-card-form">{actions}</div>
             </Card>
         </BaseForm>
-    );
-}
-
-function TimeWork({ onSelectTimeWorkTabletRandom, checkCanApplyAll, handleApplyAll, translate, daysOfWeekTimeWork }) {
-    return (
-        <table className="happy-hours-table">
-            <thead>
-                <tr>
-                    <th width="14%">{translate.formatMessage(messages.dayOfWeek)}</th>
-                    <th>{translate.formatMessage(messages.timeFrame)}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {daysOfWeekTimeWork.map((day, dayIndex) => (
-                    <tr key={day.value}>
-                        <td>{day.label}</td>
-                        <td style={{ padding: '10px' }}>
-                            <Form.List name={['schedule', day.value]}>
-                                {(fields, { add, remove }) => {
-                                    return (
-                                        <div className="no-margin-form-item">
-                                            <Space className="box-flex" size={24}>
-                                                {fields.map((field, index) => (
-                                                    <div key={field.key}>
-                                                        <div className="frame-label">
-                                                            {translate.formatMessage(messages.frame)} {index + 1}
-                                                        </div>
-                                                        <Space className="box-flex">
-                                                            <TimePickerField
-                                                                size="small"
-                                                                name={[field.name, 'from']}
-                                                                onSelect={(value) =>
-                                                                    onSelectTimeWorkTabletRandom(
-                                                                        [day.value, field.name, 'from'],
-                                                                        value,
-                                                                    )
-                                                                }
-                                                                width="100%"
-                                                                required
-                                                                placeholder="From"
-                                                                requiredMsg="Enter from"
-                                                                validateTrigger={['onChange', 'onBlur']}
-                                                                // disabledHours={() => {
-                                                                //     const tabletRandom = getFieldValue('tablet_random');
-                                                                //     let to = null;
-                                                                //     if(index > 0) {
-                                                                //         to = tabletRandom.schedule[day.value][index - 1].to;
-                                                                //     }
-                                                                //     return getDisabledHours(to);
-                                                                // }}
-                                                            />
-                                                            <TimePickerField
-                                                                size="small"
-                                                                name={[field.name, 'to']}
-                                                                onSelect={(value) =>
-                                                                    onSelectTimeWorkTabletRandom(
-                                                                        [day.value, field.name, 'to'],
-                                                                        value,
-                                                                    )
-                                                                }
-                                                                width="100%"
-                                                                required
-                                                                placeholder="to"
-                                                                requiredMsg="Enter to"
-                                                                validateTrigger={['onChange', 'onBlur']}
-                                                                // disabledHours={() => {
-                                                                //     const timeWork = getFieldValue('time_work');
-                                                                //     const from =
-                                                                //         timeWork[day.value][field.name].from;
-                                                                //     return getDisabledHours(from);
-                                                                // }}
-                                                                // disabledMinutes={(hour) => {
-                                                                //     const timeWork = getFieldValue('time_work');
-                                                                //     const from =
-                                                                //         timeWork[day.value][field.name].from;
-                                                                //     return getDisabledMinutes(hour, from);
-                                                                // }}
-                                                            />
-                                                        </Space>
-                                                    </div>
-                                                ))}
-                                                {/* {!dayIndex && (
-                                                    <div className="wrap-btn-apply-all">
-                                                        <Button
-                                                            disabled={!checkCanApplyAll()}
-                                                            type="primary"
-                                                            size="middle"
-                                                            onClick={handleApplyAll}
-                                                        >
-                                                            {translate.formatMessage(messages.applyAll)}
-                                                        </Button>
-                                                    </div>
-                                                )} */}
-                                            </Space>
-
-                                            {/* <Form.Item style={{ width: '170px', textAlign: 'left' }}>
-                                            <Button type="dashed" onClick={add}>
-                                            <PlusOutlined />Add Frame
-                                    </Button>
-                                        </Form.Item> */}
-                                        </div>
-                                    );
-                                }}
-                            </Form.List>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
     );
 }
 

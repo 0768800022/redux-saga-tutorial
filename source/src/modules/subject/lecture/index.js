@@ -29,7 +29,7 @@ const LectureListPage = () => {
     const paramid = useParams();
     const lectureKindValues = translate.formatKeys(lectureKindOptions, ['label']);
 
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, pagePath } = useListBase({
         apiConfig: {
             getList: apiConfig.lecture.getBySubject,
             delete: apiConfig.lecture.delete,
@@ -41,6 +41,9 @@ const LectureListPage = () => {
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
+            funcs.getCreateLink = () => {
+                return `${pagePath}/create?totalLecture=${data?.length || 0}`;
+            };
             funcs.prepareGetListPathParams = () => {
                 return {
                     subjectId: paramid.subjectId,
@@ -60,9 +63,8 @@ const LectureListPage = () => {
             };
         },
     });
-    const { sortedData, onDragEnd, sortColumn } = useDrapDropTableItem({
+    const { sortedData, sortColumn } = useDrapDropTableItem({
         data,
-        apiConfig: apiConfig.lecture.update,
         setTableLoading: () => {},
         indexField: 'ordering',
         idField: 'lectureId',
@@ -76,9 +78,14 @@ const LectureListPage = () => {
             dataIndex: 'lectureName',
             render: (lectureName, record) => {
                 let styles;
-                if (record?.lectureKind === 1) {
+                if (record?.lectureKind === 2) {
                     styles = {
                         paddingLeft: '30px',
+                    };
+                } else {
+                    styles = {
+                        textTransform: 'uppercase',
+                        fontWeight: 700,
                     };
                 }
                 return <div style={styles}>{lectureName}</div>;
@@ -118,7 +125,6 @@ const LectureListPage = () => {
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <DragDropTableV2
-                        onDragEnd={onDragEnd}
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
