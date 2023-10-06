@@ -13,7 +13,7 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { formSize, lectureState,statusOptions } from '@constants/masterData';
+import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import useTranslate from '@hooks/useTranslate';
 
 const CourseForm = (props) => {

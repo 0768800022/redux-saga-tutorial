@@ -33,6 +33,7 @@ function TaskListPage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const subjectId = queryParameters.get('subjectId');
     const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.task,
@@ -54,7 +55,10 @@ function TaskListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}`;
+                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
             };
         },
     });
@@ -68,6 +72,22 @@ function TaskListPage() {
             dataIndex: ['student', 'fullName'],
         },
         {
+            title: 'Ngày bắt đầu',
+            dataIndex: 'startDate',
+            render: (startDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{startDate}</div>;
+            },
+            align: 'center',
+        },
+        {
+            title: 'Ngày kết thúc',
+            dataIndex: 'dueDate',
+            render: (dueDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dueDate}</div>;
+            },
+            align: 'center',
+        },
+        {
             title: translate.formatMessage(message.state),
             dataIndex: 'state',
             align: 'center',
@@ -79,7 +99,7 @@ function TaskListPage() {
             },
         },
 
-        mixinFuncs.renderActionColumn({ edit: false, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }),
     ];
 
     return (

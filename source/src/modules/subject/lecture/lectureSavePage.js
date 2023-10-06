@@ -5,26 +5,31 @@ import PageWrapper from '@components/common/layout/PageWrapper';
 import LectureForm from './lectureForm';
 import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 const message = defineMessages({
-    objectName:'Bài giảng',
+    objectName: 'Bài giảng',
     subject: 'Môn học',
     lecture: 'Bài giảng',
-    home:'Trang chủ',
+    home: 'Trang chủ',
 });
 
 const LectureSavePage = () => {
     const translate = useTranslate();
     const lectureId = useParams();
-    const { detail, onSave, mixinFuncs,setIsChangedFormValues,isEditing,errors, loading, title } = useSaveBase({
+    const queryParameters = new URLSearchParams(window.location.search);
+    const navigate = useNavigate();
+    const { state: stateLocation } = useLocation();
+    const totalLecture = queryParameters.get('totalLecture');
+    const selectedRowKey = queryParameters.get('selectedRowKey');
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.lecture.getById,
             create: apiConfig.lecture.create,
             update: apiConfig.lecture.update,
         },
-        options:{
-            getListUrl: generatePath(routes.lectureListPage.path, { subjectId : lectureId.subjectId }),
+        options: {
+            getListUrl: generatePath(routes.lectureListPage.path, { subjectId: lectureId.subjectId }),
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
@@ -37,33 +42,49 @@ const LectureSavePage = () => {
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
+                    ordering: totalLecture,
                 };
             };
+            funcs.onBack = () => {
+                if (stateLocation.listData) {
+                    if (stateLocation?.prevPath === routes.lectureListPage.path) {
+                        navigate(stateLocation?.prevPath + stateLocation?.searchPath, {
+                            state: {
+                                selectedRowKey: selectedRowKey,
+                            },
+                        });
+                    } else {
+                        navigate(routes.lectureListPage.path);
+                    }
+                } else {
+                    navigate(-1);
+                }
+            };
         },
-
     });
-    return(
+    return (
         <PageWrapper
-            loading = {loading}
+            loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.subject) },
-                { breadcrumbName: translate.formatMessage(message.lecture),
-                    path: routes.subjectListPage.path +`/lecture/${lectureId.subjectId}`,
+                {
+                    breadcrumbName: translate.formatMessage(message.lecture),
+                    path: routes.subjectListPage.path + `/lecture/${lectureId.subjectId}`,
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
             <LectureForm
-                subjectId = {lectureId.subjectId}
+                subjectId={lectureId.subjectId}
                 formId={mixinFuncs.getFormId()}
-                actions = {mixinFuncs.renderActions()}
-                dataDetail = {detail ? detail : {}}
-                onSubmit = {onSave}
-                setIsChangedFormValues = {setIsChangedFormValues}
-                isError = {errors}
-                isEditing = {isEditing}
+                actions={mixinFuncs.renderActions()}
+                dataDetail={detail ? detail : {}}
+                onSubmit={onSave}
+                setIsChangedFormValues={setIsChangedFormValues}
+                isError={errors}
+                isEditing={isEditing}
             />
         </PageWrapper>
     );

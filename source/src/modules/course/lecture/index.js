@@ -6,12 +6,13 @@ import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
 import { PlusOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import useFetch from '@hooks/useFetch';
 import routes from '../routes';
-import { Button }  from 'antd';
+import { Button,Modal }  from 'antd';
+import DragDropTableV2 from '@components/common/table/DragDropTableV2';
+import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
+import AsignAllForm from './asignAllForm';
+
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
@@ -20,23 +21,32 @@ const message = defineMessages({
     lectureName: 'Tên bài giảng',
     asignAll: 'Áp dụng tất cả',
     task:'Task',
+    asignAllModal: 'Tạo task',
 });
 const LectureListPage = () => {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get("courseId");
     const courseName = queryParameters.get("courseName");
-    const { execute: executeAsign } = useFetch(apiConfig.task.asignALl,{ immediate: false });
-    const navigate = useNavigate();
-    const [lectureid, setLectureId] = useState();
+    const subjectId = queryParameters.get("subjectId");
+    const [ showPreviewModal, setShowPreviewModal ] = useState(false);
+
+    const [lectureid, setLectureId] = useState(null);
 
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.lecture,
+        apiConfig: {
+            getList: apiConfig.lecture.getBySubject,
+        },
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
+            funcs.prepareGetListPathParams = () => {
+                return {
+                    subjectId: subjectId,
+                };
+            };
             funcs.mappingData = (response) => {                
                 try {
                     if (response.result === true) {
@@ -52,15 +62,31 @@ const LectureListPage = () => {
         },
     });
 
+    const { sortedData, onDragEnd, sortColumn } = useDrapDropTableItem({
+        data,
+        apiConfig: apiConfig.lecture.update,
+        setTableLoading: () => {},
+        indexField: 'ordering',
+        idField: 'lectureId',
+        getList: mixinFuncs.getList,
+    });
+
     const columns = [
+        sortColumn,
         {
             title: translate.formatMessage(message.lectureName),
             dataIndex: 'lectureName',
             render: (lectureName, record) => {
                 let styles;
-                if (record?.lectureKind === 1) {
+                if (record?.lectureKind === 2) {
                     styles = {
                         paddingLeft: '30px',
+                    };
+                }
+                else {
+                    styles = {
+                        textTransform: 'uppercase',
+                        fontWeight: 700,
                     };
                 }
                 return <div style={styles}>{lectureName}</div>;
@@ -70,29 +96,16 @@ const LectureListPage = () => {
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            setLectureId(selectedRowKeys);
+            setLectureId(selectedRowKeys[0]);
         },
         getCheckboxProps: (record) => ({
             disabled: record.lectureKind === 1,
         }),
     };
 
-    const asignALl = () => {
-        executeAsign({
-            data:{
-                courseId: courseId,
-                lectureId: lectureid[0],
-            },
-            onCompleted: (response) => {
-                if (response.result === true) {
-                    return navigate(-1);
-                }
-            },
-            onError: (err) => {
-                console.log(err);
-            },
-        });
-    };
+    const disabledSubmit = lectureid === null;
+
+
     return (
         
         <PageWrapper 
@@ -100,7 +113,7 @@ const LectureListPage = () => {
                 { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.course) },
                 { breadcrumbName: translate.formatMessage(message.task),
-                    path: routes.courseListPage.path + `/task?courseId=${courseId}&courseName=${courseName}`,
+                    path: routes.courseListPage.path + `/task?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`,
                 },
                 { breadcrumbName: translate.formatMessage(message.objectName) },
             ]}
@@ -108,27 +121,44 @@ const LectureListPage = () => {
             <ListPage
                 actionBar={
                     <div style={{ float: 'right', margin: '32px 0' }}>
-                        
-                        <Button type="primary" onClick= {asignALl} >
-                            <PlusOutlined /> 
+                        <Button 
+                            type="primary" 
+                            disabled={disabledSubmit}   
+                            onClick={() => setShowPreviewModal(true)} >
+                            <PlusOutlined />
                             {translate.formatMessage(message.asignAll)}
                         </Button>
                     </div>
                 }
                 baseTable={
-                    <BaseTable
+                    <DragDropTableV2
                         rowSelection={{
                             type: "radio",
                             ...rowSelection,
                         }}
+                        onDragEnd={onDragEnd}
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={data}
+                        dataSource={sortedData}
                         columns={columns}
                     />
                 }
             />
+            <Modal
+                title={translate.formatMessage(message.asignAllModal)}
+                width={600}
+                open={showPreviewModal}
+                footer={null}
+                centered
+                lectureId = {lectureid}
+                onCancel={() => setShowPreviewModal(false)}
+            >
+                <AsignAllForm
+                    courseId = {courseId}
+                    lectureId = {lectureid}
+                />
+            </Modal>
         </PageWrapper>
     );
 };

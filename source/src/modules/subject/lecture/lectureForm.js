@@ -7,6 +7,11 @@ import { defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
 import SelectField from '@components/common/form/SelectField';
 import { lectureKindOptions } from '@constants/masterData';
+import useFetch from '@hooks/useFetch';
+import apiConfig from '@constants/apiConfig';
+import useListBase from '@hooks/useListBase';
+import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { useLocation } from 'react-router-dom';
 
 const message = defineMessages({
     description: 'Mô tả chi tiết',
@@ -14,21 +19,42 @@ const message = defineMessages({
     shortDescription: 'Mô tả Ngắn',
     lectureName: 'Tên bài giảng',
     status: 'Trạng thái',
-    urlDocument: 'Đường dẫn tài liệu', 
+    urlDocument: 'Đường dẫn tài liệu',
     subjectId: 'Mã Môn học',
 });
 
-
-const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues,subjectId }) => {
+const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, subjectId }) => {
     const translate = useTranslate();
     const lectureKindValues = translate.formatKeys(lectureKindOptions, ['label']);
+    const queryParameters = new URLSearchParams(window.location.search);
+    const selectedRowKey = queryParameters.get('selectedRowKey');
+    const { execute: executeOrdering } = useFetch(apiConfig.lecture.updateSort);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
+    const location = useLocation();
+
+    const pathnameSegments = location.pathname.split('/');
+    const { data } = useFetch(apiConfig.lecture.getBySubject, {
+        immediate: false,
+        mappingData: ({ data }) => ({ id: data.id }),
+    });
     const handleSubmit = (values) => {
+        let isSelectedRowKey = false;
+        data.map((item) => {
+            if (item.id == selectedRowKey) {
+                isSelectedRowKey = true;
+            } else if (isSelectedRowKey == true) {
+                if (item.lectureKind == 1) {
+                    values.ordering = item.ordering - 1;
+                    isSelectedRowKey = false;
+                }
+            }
+        });
         values.subjectId = subjectId;
         values.status = 1;
+        values.ordering = dataDetail?.ordering;
         return mixinFuncs.handleSubmit({ ...values });
     };
 
@@ -45,7 +71,7 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.lectureName)} required  name="lectureName" />
+                        <TextField label={translate.formatMessage(message.lectureName)} required name="lectureName" />
                     </Col>
                     <Col span={12}>
                         <SelectField
@@ -55,17 +81,12 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             allowClear={false}
                             options={lectureKindValues}
                         />
-        
                     </Col>
                 </Row>
 
-                
                 <Row gutter={16}>
                     <Col span={24}>
-                        <TextField
-                            name="urlDocument"
-                            label={translate.formatMessage(message.urlDocument)}
-                        />
+                        <TextField name="urlDocument" label={translate.formatMessage(message.urlDocument)} />
                     </Col>
                 </Row>
                 <Row gutter={16}>
