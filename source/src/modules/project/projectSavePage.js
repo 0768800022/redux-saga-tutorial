@@ -3,7 +3,7 @@ import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-import ProjectForm from './ProjectForm';
+import ProjectForm from './projectForm';
 import { generatePath, useParams } from 'react-router-dom';
 import routes from './routes';
 import apiConfig from '@constants/apiConfig';
