@@ -49,7 +49,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         loading: getstudentsLoading,
         execute: executestudents,
     } = useFetch(apiConfig.student.autocomplete, {
-        immediate: false,
+        immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.fullName })),
     });
     useEffect(() => {
