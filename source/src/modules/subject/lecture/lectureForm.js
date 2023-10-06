@@ -34,25 +34,16 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         onSubmit,
         setIsChangedFormValues,
     });
-    const { data } = useListBase({
-        apiConfig: {
-            getList: apiConfig.lecture.getBySubject,
-            delete: apiConfig.lecture.delete,
-            update: apiConfig.lecture.update,
-            getById: apiConfig.lecture.getById,
-        },
-        override: (funcs) => {
-            funcs.prepareGetListPathParams = () => {
-                return {
-                    subjectId: subjectId,
-                };
-            };
-        },
+    const { data } = useFetch(apiConfig.lecture.getBySubject, {
+        immediate: true,
+        pathParams: { subjectId: subjectId },
     });
+
+    const dataLectureBySubject = data?.data?.content;
 
     const handleSubmit = (values) => {
         let isSelectedRowKey = false;
-        data.map((item) => {
+        dataLectureBySubject.map((item) => {
             if (item.id == selectedRowKey) {
                 isSelectedRowKey = true;
             } else if (isSelectedRowKey == true) {
@@ -64,16 +55,16 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         });
         let dataUpdate = [];
         if (values.ordering) {
-            const indexLecture = data.findIndex((item) => item.ordering == values.ordering);
-            for (let i = indexLecture; i < data.length; i++) {
-                dataUpdate.push({ id: data[i].id, ordering: data[i].ordering + 1 });
+            const indexLecture = dataLectureBySubject.findIndex((item) => item.ordering == values.ordering);
+            for (let i = indexLecture; i < dataLectureBySubject.length; i++) {
+                dataUpdate.push({ id: dataLectureBySubject[i].id, ordering: dataLectureBySubject[i].ordering + 1 });
             }
             executeOrdering({
                 data: dataUpdate,
             });
         }
         if (values.ordering === undefined) {
-            const dataSort = data.sort((a, b) => a.ordering - b.ordering);
+            const dataSort = dataLectureBySubject.sort((a, b) => a.ordering - b.ordering);
             values.ordering = dataDetail?.ordering || dataSort[dataSort.length - 1].ordering + 1;
         }
         values.subjectId = subjectId;

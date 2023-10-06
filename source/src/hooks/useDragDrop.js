@@ -36,7 +36,7 @@ function useDragDrop({ data = [], apiConfig, setTableLoading, indexField }) {
                 });
             }
         } else if (dragIndex < hoverIndex) {
-            for (let i = dragIndex; i < hoverIndex; i++) {
+            for (let i = dragIndex; i <= hoverIndex; i++) {
                 dataPrepare.push({
                     id: sortedData[i].id,
                     ordering: sortedData[i].ordering - 1,
