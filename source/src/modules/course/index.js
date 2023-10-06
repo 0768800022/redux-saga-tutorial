@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import React from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -102,7 +102,7 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.dateRegister),
             dataIndex: 'dateRegister',
             render: (dateRegister) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateRegister,'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}</div>;
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateRegister,DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
             },
             width: 130,
             align: 'center',

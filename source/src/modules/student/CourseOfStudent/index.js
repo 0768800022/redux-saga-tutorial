@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import React from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DATE_DISPLAY_FORMAT, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -17,6 +17,7 @@ import { convertDateTimeToString } from '@utils/dayHelper';
 import { formSize, lectureState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import route1 from '@modules/student/routes';
+import { DATE_FORMAT_DISPLAY } from '@constants';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -96,7 +97,7 @@ const CourseListPage = () => {
             dataIndex: 'createdDate',
             width: 150,
             render: (createdDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(createdDate,'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}</div>;
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(createdDate,DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
             },
             align: 'center',
         },
