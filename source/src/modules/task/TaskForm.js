@@ -34,14 +34,14 @@ const TaskForm = (props) => {
         loading: getstudentsLoading,
         execute: executestudents,
     } = useFetch(apiConfig.student.autocomplete, {
-        immediate: false,
+        immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.fullName })),
     });
-    useEffect(() => {
-        executestudents({
-            params: {},
-        });
-    }, []);
+    // useEffect(() => {
+    //     executestudents({
+    //         params: {},
+    //     });
+    // }, []);
     useEffect(() => {
         dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DATE_FORMAT_VALUE);
         dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DATE_FORMAT_VALUE);

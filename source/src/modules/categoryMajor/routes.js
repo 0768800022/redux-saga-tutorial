@@ -8,7 +8,7 @@ export default {
         title: 'Category major',
         auth: true,
         component: CategoryListPage,
-        permissions: apiConfig.category.getById.baseURL,
+        permissions: [apiConfig.category.getById.baseURL],
     },
     categorySavePageMajor: {
         path: '/category-major/:id',

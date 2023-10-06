@@ -17,11 +17,6 @@ const message = defineMessages({
 const LectureSavePage = () => {
     const translate = useTranslate();
     const lectureId = useParams();
-    const queryParameters = new URLSearchParams(window.location.search);
-    const navigate = useNavigate();
-    const { state: stateLocation } = useLocation();
-    const totalLecture = queryParameters.get('totalLecture');
-    const selectedRowKey = queryParameters.get('selectedRowKey');
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.lecture.getById,
@@ -42,23 +37,7 @@ const LectureSavePage = () => {
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    ordering: totalLecture,
                 };
-            };
-            funcs.onBack = () => {
-                if (stateLocation.listData) {
-                    if (stateLocation?.prevPath === routes.lectureListPage.path) {
-                        navigate(stateLocation?.prevPath + stateLocation?.searchPath, {
-                            state: {
-                                selectedRowKey: selectedRowKey,
-                            },
-                        });
-                    } else {
-                        navigate(routes.lectureListPage.path);
-                    }
-                } else {
-                    navigate(-1);
-                }
             };
         },
     });
