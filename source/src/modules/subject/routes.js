@@ -2,7 +2,7 @@ import apiConfig from '@constants/apiConfig';
 import SubjectListPage from '.';
 import SubjectSavePage from './SubjectSavePage';
 import LectureListPage from './lecture/index';
-import LectureSavePage from './lecture/LectureSavePage';
+import LectureSavePage from './lecture/lectureSavePage';
 
 export default {
     subjectListPage: {
