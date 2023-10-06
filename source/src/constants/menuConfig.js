@@ -69,6 +69,23 @@ const navMenuConfig = [
             },
         ],
     },
+    {
+        label: 'Quản lý dự án',
+        key: 'quan-ly-du-an',
+        icon: <IconUserBolt size={16} />,
+        children: [
+            {
+                label: 'Quản lý dự án',
+                key: 'project-management',
+                path: generatePath(routes.projectListPage.path, {}),
+            },
+            {
+                label: 'Quản lý quyền dự án',
+                key: 'project-role-management',
+                path: generatePath(routes.projectRoleListPage.path, {}),
+            },
+        ],
+    },
 ];
 
 export default navMenuConfig;
