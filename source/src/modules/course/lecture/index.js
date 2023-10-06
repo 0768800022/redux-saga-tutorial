@@ -9,7 +9,7 @@ import { defineMessages } from 'react-intl';
 import { PlusOutlined } from '@ant-design/icons';
 import routes from '../routes';
 import { Button,Modal,Radio }  from 'antd';
-import AsignAllForm from './asignAllForm';
+import AsignAllForm from './AsignAllForm';
 import useFetch from '@hooks/useFetch';
 import BaseTable from '@components/common/table/BaseTable';
 const message = defineMessages({

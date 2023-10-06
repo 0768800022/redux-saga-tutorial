@@ -2,7 +2,7 @@ import React from 'react';
 import apiConfig from '@constants/apiConfig';
 import routes from '../routes';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import LectureForm from './lectureForm';
+import LectureForm from './LectureForm';
 import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useLocation, useNavigate, useParams } from 'react-router-dom';

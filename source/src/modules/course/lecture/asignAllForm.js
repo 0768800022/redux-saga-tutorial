@@ -23,7 +23,7 @@ const message = defineMessages({
     asignAllSuccess:'Áp dụng {objectName} thành công',
 });
 
-const AsignALlForm = ({ courseId, lectureId }) => {
+const AsignAllForm = ({ courseId, lectureId }) => {
 
     const translate = useTranslate();
     const [form] = Form.useForm();
@@ -134,4 +134,4 @@ const AsignALlForm = ({ courseId, lectureId }) => {
     );
 };
 
-export default AsignALlForm;
+export default AsignAllForm;
