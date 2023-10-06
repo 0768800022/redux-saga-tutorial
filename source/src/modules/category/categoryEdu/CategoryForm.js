@@ -1,16 +1,11 @@
-import CropImageField from '@components/common/form/CropImageField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { AppConstants, STATUS_ACTIVE } from '@constants';
-import apiConfig from '@constants/apiConfig';
-import { formSize, statusOptions } from '@constants/masterData';
+import { statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
-import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
-import { Card, Col, Form, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Card, Col, Row } from 'antd';
+import React, { useEffect } from 'react';
 import { defineMessages } from 'react-intl';
-import { useParams } from 'react-router-dom';
 import { BaseForm } from '@components/common/form/BaseForm';
 
 const messages = defineMessages({
