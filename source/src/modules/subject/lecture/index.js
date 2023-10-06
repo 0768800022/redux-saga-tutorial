@@ -33,6 +33,7 @@ const LectureListPage = () => {
     const translate = useTranslate();
     const paramid = useParams();
     const dispatch = useDispatch();
+    console.log(paramid);
     const selectedRowKey = useSelector(selectedRowKeySelector);
     const { data, mixinFuncs, loading, pagination, changePagination, pagePath } = useListBase({
         apiConfig: {

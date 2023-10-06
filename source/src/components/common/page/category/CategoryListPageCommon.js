@@ -84,12 +84,17 @@ const CategoryListPageCommon = ({ routes, kind }) => {
             title: translate.formatMessage(message.name),
             dataIndex: 'categoryName',
         },
-        { title: translate.formatMessage(message.createDate), dataIndex: 'createdDate', align: 'center' },
+        { 
+            title: translate.formatMessage(message.createDate), 
+            dataIndex: 'createdDate', 
+            align: 'center',
+            width: 150,
+        },
         {
             title: translate.formatMessage(message.status),
             dataIndex: 'status',
             align: 'center',
-            width: 250,
+            width: 120,
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
 
@@ -97,7 +102,7 @@ const CategoryListPageCommon = ({ routes, kind }) => {
             },
         },
 
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '250px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
