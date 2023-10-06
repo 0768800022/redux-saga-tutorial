@@ -8,10 +8,12 @@ import routes from './routes';
 import RegistrationForm from './RegistrationForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
+// import routes from '@modules/course/routes';
 
 const messages = defineMessages({
-    objectName: 'Danh sách khóa học',
+    objectName: 'Danh sách đăng kí khóa học',
     home: 'Trang chủ',
+    course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
 });
 
@@ -53,9 +55,10 @@ function RegistrationSavePage() {
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
+                { breadcrumbName: translate.formatMessage(messages.course) },
                 {
-                    breadcrumbName: courseName,
-                    path: routes.registrationListPage.path,
+                    breadcrumbName: translate.formatMessage(messages.registration),
+                    path: routes.registrationListPage.path + `?courseId=${courseId}&courseName=${courseName}`,
                 },
                 { breadcrumbName: title },
             ]}

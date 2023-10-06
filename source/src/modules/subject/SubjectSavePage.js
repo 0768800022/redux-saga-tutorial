@@ -27,7 +27,6 @@ const SubjectSavePage = () => {
             getListUrl: generatePath(routes.subjectListPage.path, { subjectId }),
             objectName: translate.formatMessage(messages.objectName),
         },
-        
     });
 
     return (
