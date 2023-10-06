@@ -12,6 +12,8 @@ import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectedRowKeySelector } from '@selectors/app';
 
 const message = defineMessages({
     description: 'Mô tả chi tiết',
@@ -26,14 +28,12 @@ const message = defineMessages({
 const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, subjectId }) => {
     const translate = useTranslate();
     const lectureKindValues = translate.formatKeys(lectureKindOptions, ['label']);
-    const queryParameters = new URLSearchParams(window.location.search);
-    const selectedRowKey = queryParameters.get('selectedRowKey');
+    const selectedRowKey = useSelector(selectedRowKeySelector);
     const { execute: executeOrdering } = useFetch(apiConfig.lecture.updateSort);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
-    const location = useLocation();
     const { data } = useListBase({
         apiConfig: {
             getList: apiConfig.lecture.getBySubject,

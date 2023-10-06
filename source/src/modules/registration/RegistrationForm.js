@@ -119,13 +119,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         }
         return result;
     };
-    const now = dayjs();
-
-    // Đặt thành phần giờ và phút của đối tượng moment thành 0
-    const startOfDay = now.set({ hour: 0, minute: 0 });
-
-    // Tạo chuỗi định dạng "00H00" từ đối tượng moment
-    const formattedTime = startOfDay.format('HH[H]mm');
 
     useEffect(() => {
         dataDetail?.isIntern && setIsChecked(dataDetail?.isIntern == 1 && true);

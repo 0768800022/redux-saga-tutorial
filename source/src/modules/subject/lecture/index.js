@@ -47,7 +47,7 @@ const LectureListPage = () => {
         },
         override: (funcs) => {
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?totalLecture=${data?.length || 0}&selectedRowKey=${selectedRowKey}`;
+                return `${pagePath}/create?totalLecture=${data?.length || 0}`;
             };
             funcs.prepareGetListPathParams = () => {
                 return {
