@@ -3,17 +3,18 @@ import CategoryListPage from '.';
 import CategorySavePage from './CategorySavePage';
 
 export default {
-    categoryListPage: {
-        path: '/category',
-        title: 'Category',
+    categoryListPageMajor: {
+        path: '/category-major',
+        title: 'Category major',
         auth: true,
         component: CategoryListPage,
-        // permissions: apiConfig.category.getById.baseURL,
+        permissions: [apiConfig.category.getById.baseURL],
     },
-    categorySavePage: {
-        path: '/category/:id',
+    categorySavePageMajor: {
+        path: '/category-major/:id',
         title: 'Category Save Page',
         auth: true,
         component: CategorySavePage,
+        permissions: [apiConfig.category.getById.baseURL],
     },
 };

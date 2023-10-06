@@ -1,8 +1,7 @@
 import PageNotFound from '@components/common/page/PageNotFound';
-import categoryRoutes from '@modules/category/routes';
-import categoryRoutesEdu from '@modules/categoryEdu/routes';
-import categoryRoutesGen from '@modules/categoryGen/routes';
-import categoryRoutesMajor from '@modules/categoryMajor/routes';
+import categoryRoutesEdu from '@modules/category/categoryEdu/routes';
+import categoryRoutesGen from '@modules/category/categoryGen/routes';
+import categoryRoutesMajor from '@modules/category/categoryMajor/routes';
 import studentRoutes from '@modules/student/routes';
 import Dashboard from '@modules/dashboard';
 import LoginPage from '@modules/login/index';
@@ -13,6 +12,8 @@ import courseRoutes from '@modules/course/routes';
 import registrationRoutes from '@modules/registration/routes';
 import leaderRoutes from '@modules/leader/routes';
 import taskRoutes from '@modules/task/routes';
+import projectRoutes from '@modules/project/routes';
+import projectRoleRoutes from '@modules/projectRole/routes';
 
 /*
 	auth
@@ -51,7 +52,7 @@ const routes = {
         auth: true,
         title: 'Profile page',
     },
-    ...categoryRoutes,
+
     ...subjectRoutes,
     ...courseRoutes,
     ...categoryRoutesEdu,
@@ -61,6 +62,8 @@ const routes = {
     ...studentRoutes,
     ...leaderRoutes,
     ...taskRoutes,
+    ...projectRoutes,
+    ...projectRoleRoutes,
 
     // keep this at last
     //

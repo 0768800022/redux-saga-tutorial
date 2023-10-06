@@ -19,7 +19,7 @@ import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 
 const message = defineMessages({
-    objectName: 'Danh sách khóa học',
+    objectName: 'Danh sách đăng kí khóa học',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     courseid: 'courseId',
@@ -69,6 +69,30 @@ function RegistrationListPage() {
             dataIndex: ['studentInfo', 'fullName'],
         },
         {
+            title: 'Lịch trình',
+            dataIndex: 'schedule',
+            render: (schedule) => {
+                let check = JSON.parse(schedule);
+                const newCheck = [
+                    { key: 'Monday', value: check.t2 },
+                    { key: 'Tuesday', value: check.t3 },
+                    { key: 'Wednesday', value: check.t4 },
+                    { key: 'Thursday', value: check.t5 },
+                    { key: 'Friday', value: check.t6 },
+                    { key: 'Saturday', value: check.t7 },
+                    { key: 'Sunday', value: check.cn },
+                ];
+
+                let dateString = '';
+                newCheck.map((item) => {
+                    if (item.value !== '00H00-00H00|00H00-00H00|00H00-00H00') {
+                        dateString += item.key + ' ';
+                    }
+                });
+                return <div>{dateString}</div>;
+            },
+        },
+        {
             title: translate.formatMessage(message.isIntern),
             dataIndex: 'isIntern',
             align: 'center',
@@ -103,9 +127,9 @@ function RegistrationListPage() {
                 { breadcrumbName: translate.formatMessage(message.home) },
                 {
                     breadcrumbName: translate.formatMessage(message.course),
-                    path: generatePath(routes.courseListPage.path),
+                    path: '/course',
                 },
-                { breadcrumbName: courseName },
+                { breadcrumbName: translate.formatMessage(message.registration) },
             ]}
         >
             <ListPage

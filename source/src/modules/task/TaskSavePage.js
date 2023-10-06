@@ -13,10 +13,14 @@ const messages = defineMessages({
     objectName: 'Task',
     home: 'Trang chủ',
     task: 'Task',
+    course: 'Khóa học',
 });
 
 function TaskSavePage() {
     const translate = useTranslate();
+    const queryParameters = new URLSearchParams(window.location.search);
+    const courseId = queryParameters.get('courseId');
+    const courseName = queryParameters.get('courseName');
     const taskId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -25,7 +29,7 @@ function TaskSavePage() {
             update: apiConfig.task.update,
         },
         options: {
-            getListUrl: routes.taskListPage.path,
+            getListUrl: generatePath(routes.taskListPage.path, { taskId }),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -48,9 +52,10 @@ function TaskSavePage() {
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
+                { breadcrumbName: translate.formatMessage(messages.course) },
                 {
                     breadcrumbName: translate.formatMessage(messages.task),
-                    path: routes.taskListPage.path,
+                    path: routes.taskListPage.path + `?courseId=${courseId}&courseName=${courseName}`,
                 },
                 { breadcrumbName: title },
             ]}
@@ -62,8 +67,7 @@ function TaskSavePage() {
                 formId={mixinFuncs.getFormId()}
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
-                onSubmit={onSave}
-                isError={errors}
+                onSubmit={mixinFuncs.onSave}
             />
         </PageWrapper>
     );

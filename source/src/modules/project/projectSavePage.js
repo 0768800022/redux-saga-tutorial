@@ -1,32 +1,30 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
-import apiConfig from '@constants/apiConfig';
-import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
+import { defineMessages } from 'react-intl';
+import useTranslate from '@hooks/useTranslate';
+import ProjectForm from './ProjectForm';
 import { generatePath, useParams } from 'react-router-dom';
 import routes from './routes';
-import CategoryForm from './CategoryForm';
-import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
+import apiConfig from '@constants/apiConfig';
 
 const messages = defineMessages({
-    objectName: 'category',
-    home: 'Home',
-    category: 'Service Category',
+    home: 'Trang chủ',
+    project: 'Dự án',
+    objectName: 'Dự án',
 });
 
-function CategorySavePage() {
-    const { restaurantId } = useParams();
+const ProjectSavePage = () => {
+    const projectId = useParams();
     const translate = useTranslate();
-
     const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.category.getById,
-            create: apiConfig.category.create,
-            update: apiConfig.category.update,
+            getById: apiConfig.project.getById,
+            create: apiConfig.project.create,
+            update: apiConfig.project.update,
         },
         options: {
-            getListUrl: generatePath(routes.categoryListPage.path),
+            getListUrl: generatePath(routes.projectListPage.path, { projectId }),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -34,13 +32,13 @@ function CategorySavePage() {
                 return {
                     ...data,
                     id: detail.id,
-     
+                    state : 1,
+                    status : 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    categoryKind: 1,
                 };
             };
         },
@@ -52,13 +50,14 @@ function CategorySavePage() {
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: translate.formatMessage(messages.category),
+                    breadcrumbName: translate.formatMessage(messages.project),
+                    path: generatePath(routes.projectListPage.path, { projectId }),
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <CategoryForm
+            <ProjectForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -68,6 +67,6 @@ function CategorySavePage() {
             />
         </PageWrapper>
     );
-}
+};
 
-export default CategorySavePage;
+export default ProjectSavePage;

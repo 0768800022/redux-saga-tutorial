@@ -10,6 +10,7 @@ const {
     changeLanguage,
     setRestaurantTenantId,
     getRestaurantListByCustomer,
+    setSelectedRowKey,
 } = appActions;
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
     tenantId: null,
     restaurantList: [],
     apiUrl: null,
+    selectedRowKey: null,
 };
 
 const appReducer = createReducer(
@@ -54,6 +56,9 @@ const appReducer = createReducer(
         },
         [getRestaurantListByCustomer.type]: (state, { payload }) => {
             state.restaurantList = payload.data?.content || [];
+        },
+        [setSelectedRowKey.type]: (state, { payload }) => {
+            state.selectedRowKey = payload;
         },
     },
 );

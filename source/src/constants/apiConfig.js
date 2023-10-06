@@ -313,6 +313,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getAllCourse:{
+            baseURL: `${apiTenantUrl}v1/student/my-course/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     leader: {
         getList: {
@@ -446,7 +452,53 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        checkAsign: {
+            baseURL: `${apiTenantUrl}v1/task/check-asign`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
+    project: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/project/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/project/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL:`${apiTenantUrl}v1/project/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/project/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+
+        getById: {
+            baseURL: `${apiTenantUrl}v1/project/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/project/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+
 };
 
 export default apiConfig;

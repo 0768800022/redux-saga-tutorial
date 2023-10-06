@@ -25,3 +25,7 @@ export const selectRestaurantList = createSelector(
     (state) => state.app.restaurantList,
     (restaurantList) => restaurantList,
 );
+export const selectedRowKeySelector = createSelector(
+    (state) => state.app.selectedRowKey,
+    (selectedRowKey) => selectedRowKey,
+);

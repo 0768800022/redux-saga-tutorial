@@ -8,7 +8,6 @@ const useFetch = (apiConfig, { immediate = false, mappingData, params = {}, path
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const isMounted = useIsMounted();
-
     const execute = useCallback(
         async ({ onCompleted, onError, ...payload } = {}, cancelType) => {
             if (isMounted()) {

@@ -224,7 +224,6 @@ const useSaveBase = ({
             </Row>
         );
     };
-
     const overrideHandler = () => {
         const centralizedHandler = {
             getDetail,
