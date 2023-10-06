@@ -1,34 +1,73 @@
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import useListBase from '@hooks/useListBase';
-import { Avatar, Tag } from 'antd';
 import React from 'react';
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined ,DeleteOutlined } from '@ant-design/icons';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import ListPage from '@components/common/layout/ListPage';
 import BaseTable from '@components/common/table/BaseTable';
 import { statusOptions } from '@constants/masterData';
 import useTranslate from '@hooks/useTranslate';
 import { FieldTypes } from '@constants/formConfig';
+import apiConfig from '@constants/apiConfig';
+import { defineMessages } from 'react-intl';
+import { Button, Tag } from 'antd';
 
-function CategoryListPageCommon({
-    breadcrumb,
-    kind,
-    apiConfig,
-    dataIndexes = {
-        image: 'categoryImage',
-        name: 'categoryName',
-    },
-}) {
+const message = defineMessages({
+    objectName: 'Loại',
+    name: 'Tên',
+    status: 'Trạng thái',
+    createDate: 'Ngày tạo',
+    home: 'Trang chủ',
+    category: 'Danh mục hệ',
+});
+
+// function CategoryListPageCommon({
+//     routes,
+//     kind,
+//     dataIndexes = {
+//         image: 'categoryImage',
+//         name: 'categoryName',
+//     },
+//     message = {
+//         objectName: 'Loại',
+//         name: 'Tên',
+//         status: 'Trạng thái',
+//         createDate: 'Ngày tạo',
+//         home: 'Trang chủ',
+//         category: 'Danh mục hệ',
+//     },
+// }) {
+const CategoryListPageCommon = ({ routes, kind }) => {
+
     const translate = useTranslate();
-    const statusValues = translate.formatKeys(statusOptions, [ 'label' ]);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
 
-    const { data, mixinFuncs, queryFilter, loading, pagination } = useListBase({
-        apiConfig,
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
+        apiConfig: apiConfig.category,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: 'category',
+            objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
+            funcs.additionalActionColumnButtons = () => {
+                return {
+                    deleteItem: ({ buttonProps, ...dataRow }) => {
+                        return (
+                            <Button
+                                {...buttonProps}
+                                type="link"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    mixinFuncs.showDeleteItemConfirm(dataRow._id);
+                                }}
+                                style={{ padding: 0 }}
+                            >
+                                <DeleteOutlined />
+                            </Button>
+                        );
+                    },
+                };
+            };
             const prepareGetListParams = funcs.prepareGetListParams;
             funcs.prepareGetListParams = (params) => {
                 return {
@@ -36,69 +75,61 @@ function CategoryListPageCommon({
                     kind,
                 };
             };
+
         },
     });
 
     const columns = [
         {
-            title: '#',
-            dataIndex: dataIndexes.image,
-            align: 'center',
-            width: 100,
-            render: (avatar) => (
-                <Avatar
-                    size="large"
-                    shape="square"
-                    icon={<UserOutlined />}
-                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                />
-            ),
+            title: translate.formatMessage(message.name),
+            dataIndex: 'categoryName',
         },
-        { title: 'Name', dataIndex: dataIndexes.name },
+        { title: translate.formatMessage(message.createDate), dataIndex: 'createdDate', align: 'center' },
         {
-            title: 'Status',
+            title: translate.formatMessage(message.status),
             dataIndex: 'status',
             align: 'center',
-            width: 100,
+            width: 250,
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
 
-                return <Tag color={status?.color}>{status.label}</Tag>;
+                return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '150px' }),
+
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '250px' }),
     ];
 
     const searchFields = [
         {
             key: 'name',
-            placeholder: 'Name',
+            placeholder: translate.formatMessage(message.name),
         },
         {
             key: 'status',
-            placeholder: 'Status',
+            placeholder: translate.formatMessage(message.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
     ];
 
     return (
-        <PageWrapper routes={[ { breadcrumbName: 'Home' }, ...breadcrumb ]}>
+        <PageWrapper routes={routes}>
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
-                        onChange={mixinFuncs.changePagination}
-                        columns={columns}
-                        dataSource={data}
-                        loading={loading}
+                        onChange={changePagination}
                         pagination={pagination}
+                        loading={loading}
+                        dataSource={data}
+                        columns={columns}
                     />
                 }
             />
         </PageWrapper>
     );
-}
+};
 
 export default CategoryListPageCommon;

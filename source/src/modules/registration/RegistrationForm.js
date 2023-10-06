@@ -49,14 +49,14 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         loading: getstudentsLoading,
         execute: executestudents,
     } = useFetch(apiConfig.student.autocomplete, {
-        immediate: false,
+        immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.fullName })),
     });
-    useEffect(() => {
-        executestudents({
-            params: {},
-        });
-    }, []);
+    // useEffect(() => {
+    //     executestudents({
+    //         params: {},
+    //     });
+    // }, []);
     const handleSubmit = (values) => {
         values.isIntern = isChecked ? 1 : 0;
         values.schedule = values.schedule && JSON.stringify(values.schedule);
