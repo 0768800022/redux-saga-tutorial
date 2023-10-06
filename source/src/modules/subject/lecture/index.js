@@ -14,6 +14,9 @@ import React, { useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useLocation, useParams } from 'react-router-dom';
 import styles from './lecture.module.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions } from '@store/actions/app';
+import { selectedRowKeySelector } from '@selectors/app';
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
@@ -29,11 +32,9 @@ const message = defineMessages({
 const LectureListPage = () => {
     const translate = useTranslate();
     const paramid = useParams();
-    const lectureKindValues = translate.formatKeys(lectureKindOptions, ['label']);
-    const { state: stateLocation } = useLocation();
-    console.log(stateLocation?.selectedRowKey);
-    const [selectedRowKey, setSelectedRowKey] = useState(stateLocation?.selectedRowKey || null);
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, pagePath } = useListBase({
+    const dispatch = useDispatch();
+    const selectedRowKey = useSelector(selectedRowKeySelector);
+    const { data, mixinFuncs, loading, pagination, changePagination, pagePath } = useListBase({
         apiConfig: {
             getList: apiConfig.lecture.getBySubject,
             delete: apiConfig.lecture.delete,
@@ -46,7 +47,7 @@ const LectureListPage = () => {
         },
         override: (funcs) => {
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?totalLecture=${data?.length || 0}?selectedRowKey=${selectedRowKey}`;
+                return `${pagePath}/create?totalLecture=${data?.length || 0}`;
             };
             funcs.prepareGetListPathParams = () => {
                 return {
@@ -73,13 +74,18 @@ const LectureListPage = () => {
         if (record.lectureKind == 1) {
             className += ` ${styles.cursorPoint}`;
         }
-        data.map((item) => {
-            if (item.lectureKind === 1) {
-                lastItem = item;
-            }
-        });
-        if (lastItem?.id === record.id) {
+        if (record.id === selectedRowKey) {
             className += ` ${styles.highlightRowStyle}`;
+            return className;
+        } else if (!selectedRowKey) {
+            data.map((item) => {
+                if (item.lectureKind === 1) {
+                    lastItem = item;
+                }
+            });
+            if (lastItem?.id === record.id) {
+                className += ` ${styles.highlightRowStyle}`;
+            }
         }
         return className;
     };
@@ -148,7 +154,9 @@ const LectureListPage = () => {
                             onRow={(record) => {
                                 if (record.lectureKind === 1) {
                                     return {
-                                        onClick: () => setSelectedRowKey(record.id),
+                                        onClick: () => {
+                                            dispatch(actions.setSelectedRowKey(record.id));
+                                        },
                                     };
                                 }
                             }}
@@ -161,7 +169,7 @@ const LectureListPage = () => {
                             onClick={handleUpdate}
                             icon={<SaveOutlined />}
                         >
-                            Update
+                            Cập nhật vị trí
                         </Button>
                     </>
                 }

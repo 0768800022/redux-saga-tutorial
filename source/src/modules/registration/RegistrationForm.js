@@ -24,7 +24,7 @@ const messages = defineMessages({
 const statesOptionSelect = [
     {
         value: '1',
-        label: 'Trung cấp',
+        label: 'Chưa bắt đầu',
     },
     { value: '2', label: 'Đã đăng ký' },
     { value: '3', label: 'Đang thực tập' },
@@ -52,59 +52,113 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.fullName })),
     });
-    // useEffect(() => {
-    //     executestudents({
-    //         params: {},
-    //     });
-    // }, []);
+    useEffect(() => {
+        executestudents({
+            params: {},
+        });
+    }, []);
+    function formatTimeRange(timeArray) {
+        return timeArray.map((time) => `${time.from}-${time.to}`).join('|');
+    }
     const handleSubmit = (values) => {
         values.isIntern = isChecked ? 1 : 0;
-        values.schedule = values.schedule && JSON.stringify(values.schedule);
+        for (const day in values.schedule) {
+            for (const timeRange of values.schedule[day]) {
+                timeRange.from = timeRange.from.set({ hour: 0, minute: 0 }).format('HH[H]mm');
+                timeRange.to = timeRange.to.set({ hour: 0, minute: 0 }).format('HH[H]mm');
+            }
+        }
+        const newSchedule = {
+            t2: formatTimeRange(values.schedule.monday),
+            t3: formatTimeRange(values.schedule.tuesday),
+            t4: formatTimeRange(values.schedule.wednesday),
+            t5: formatTimeRange(values.schedule.thursday),
+            t6: formatTimeRange(values.schedule.friday),
+            t7: formatTimeRange(values.schedule.saturday),
+            cn: formatTimeRange(values.schedule.sunday),
+        };
+        values.schedule = values.schedule && JSON.stringify(newSchedule);
         statesOptionSelect.map((state) => {
             if (state.label == values.state) {
                 values.state = state.value;
             }
         });
+        if(!values?.state){
+            values.state = statesOptionSelect[0].value;
+        }
         return mixinFuncs.handleSubmit({ ...values });
+    };
+
+    const splitTime = (data) => {
+        const result = {};
+        const dataNew = {
+            monday: data.t2,
+            tuesday: data.t3,
+            wednesday: data.t4,
+            thursday: data.t5,
+            friday: data.t6,
+            saturday: data.t7,
+            sunday: data.cn,
+        };
+        for (const key in dataNew) {
+            if (Object.hasOwn(dataNew, key)) {
+                const value = dataNew[key];
+                if (value && value.length > 0) {
+                    const timeRanges = value.split('|');
+                    const fromTo = timeRanges.map((timeRange) => {
+                        const [from, to] = timeRange.split('-');
+
+                        return {
+                            from,
+                            to,
+                        };
+                    });
+                    result[key] = fromTo;
+                }
+            }
+        }
+        return result;
     };
 
     useEffect(() => {
         dataDetail?.isIntern && setIsChecked(dataDetail?.isIntern == 1 && true);
-        const data = dataDetail?.schedule && JSON.parse(dataDetail?.schedule);
+        let data = dataDetail?.schedule && JSON.parse(dataDetail?.schedule);
+        if (data) {
+            data = splitTime(data);
+        }
+
         let dataDefault = {};
         daysOfWeekSchedule.map((day) => {
             dataDefault = {
                 [day.value]: [
                     {
-                        from: '2023-10-03T00:00:00.000Z',
-                        to: '2023-10-03T00:00:00.000Z',
+                        from: '00H00',
+                        to: '00H00',
                     },
                     {
-                        from: '2023-10-02T00:00:00.000Z',
-                        to: '2023-10-02T00:00:00.000Z',
+                        from: '00H00',
+                        to: '00H00',
                     },
                     {
-                        from: '2023-10-02T00:00:00.000Z',
-                        to: '2023-10-02T00:00:00.000Z',
+                        from: '00H00',
+                        to: '00H00',
                     },
                 ],
                 ...dataDefault,
             };
         });
-
         for (const day in data) {
             for (const timeRange of data[day]) {
-                timeRange.from = dayjs(timeRange.from);
-                timeRange.to = dayjs(timeRange.to);
+                timeRange.from = dayjs(timeRange.from, 'HH:mm');
+                timeRange.to = dayjs(timeRange.to, 'HH:mm');
             }
         }
         for (const day in dataDefault) {
             for (const timeRange of dataDefault[day]) {
-                timeRange.from = dayjs(timeRange.from).subtract(7, 'hours');
-                timeRange.to = dayjs(timeRange.to).subtract(7, 'hours');
+                timeRange.from = dayjs(timeRange.from, 'HH:mm');
+                timeRange.to = dayjs(timeRange.to, 'HH:mm');
             }
         }
-
         dataDetail &&
             statesOptionSelect.map((state) => {
                 if (state.value == dataDetail.state) {
@@ -141,81 +195,51 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             console.log(error);
         }
     };
-    const checkCanApplyAll = () => {
-        const schedule = getFieldValue('schedule');
-        if (schedule) {
-            const { monday } = schedule;
-            if (!monday) {
-                return false;
-            }
-            return monday.every((frame) => !!frame.from && !!frame.to);
-        }
-        return false;
-    };
-
-    const handleApplyAll = (e) => {
-        e.preventDefault();
-        const schedule = getFieldValue('schedule');
-
-        const { monday = [] } = schedule;
-        for (let { value } of daysOfWeekSchedule) {
-            schedule[value] = monday.map((frame) => {
-                return {
-                    from: frame.from,
-                    to: frame.to,
-                };
-            });
-        }
-        // form.resetFields();
-        setFieldValue('schedule', schedule);
-        checkCanApplyAll();
-        onValuesChange();
-    };
-
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="big">
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             <Card className="card-form" bordered={false}>
-                <Row gutter={16}>
-                    <Col span={12}>
-                        <AutoCompleteField
-                            required
-                            label={translate.formatMessage(messages.student)}
-                            name="studentId"
-                            apiConfig={apiConfig.student.autocomplete}
-                            mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
-                            initialSearchParams={{ pageNumber: 0 }}
-                            searchParams={(text) => ({ fullName: text })}
-                        />
-                    </Col>
-                    <Col span={12}>
-                        <SelectField
-                            required
-                            label={<FormattedMessage defaultMessage="Trạng thái" />}
-                            name="state"
-                            options={statesOptionSelect}
-                        />
-                    </Col>
-                    <Col span={12}>
-                        <CheckboxField
-                            className={styles.customCheckbox}
-                            required
-                            label={translate.formatMessage(messages.isIntern)}
-                            name="isIntern"
-                            checked={isChecked}
-                            onChange={handleOnChangeCheckBox}
-                        />
-                    </Col>
-                </Row>
+                <div style={{ width: '980px' }}>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <AutoCompleteField
+                                required
+                                label={translate.formatMessage(messages.student)}
+                                name="studentId"
+                                apiConfig={apiConfig.student.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
+                                initialSearchParams={{ pageNumber: 0 }}
+                                searchParams={(text) => ({ fullName: text })}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <SelectField
+                                defaultValue={statesOptionSelect[0]}
+                                label={<FormattedMessage defaultMessage="Trạng thái" />}
+                                name="state"
+                                options={statesOptionSelect}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <CheckboxField
+                                className={styles.customCheckbox}
+                                required
+                                label={translate.formatMessage(messages.isIntern)}
+                                name="isIntern"
+                                checked={isChecked}
+                                onChange={handleOnChangeCheckBox}
+                            />
+                        </Col>
+                    </Row>
+                </div>
 
                 <ScheduleTable
                     onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
-                    checkCanApplyAll={checkCanApplyAll}
-                    handleApplyAll={handleApplyAll}
                     translate={translate}
                     daysOfWeekSchedule={daysOfWeekSchedule}
                 />
-
-                <div className="footer-card-form">{actions}</div>
+                <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
+                    {actions}
+                </div>
             </Card>
         </BaseForm>
     );

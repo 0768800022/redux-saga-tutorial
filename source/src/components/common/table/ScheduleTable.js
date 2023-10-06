@@ -10,13 +10,11 @@ const messages = defineMessages({
 });
 function ScheduleTable({
     onSelectScheduleTabletRandom,
-    checkCanApplyAll,
-    handleApplyAll,
     translate,
     daysOfWeekSchedule,
 }) {
     return (
-        <table className="happy-hours-table">
+        <table className="happy-hours-table" style={{ width: '100%' }}>
             <thead>
                 <tr>
                     <th width="14%">{translate.formatMessage(messages.dayOfWeek)}</th>
@@ -40,6 +38,7 @@ function ScheduleTable({
                                                         </div>
                                                         <Space className="box-flex">
                                                             <TimePickerField
+                                                                style={{ width: '100px' }}
                                                                 size="small"
                                                                 name={[field.name, 'from']}
                                                                 onSelect={(value) =>
@@ -63,6 +62,7 @@ function ScheduleTable({
                                                                 // }}
                                                             />
                                                             <TimePickerField
+                                                                style={{ width: '100px' }}
                                                                 size="small"
                                                                 name={[field.name, 'to']}
                                                                 onSelect={(value) =>

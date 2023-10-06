@@ -12,6 +12,8 @@ import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectedRowKeySelector } from '@selectors/app';
 
 const message = defineMessages({
     description: 'Mô tả chi tiết',
@@ -26,20 +28,28 @@ const message = defineMessages({
 const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, subjectId }) => {
     const translate = useTranslate();
     const lectureKindValues = translate.formatKeys(lectureKindOptions, ['label']);
-    const queryParameters = new URLSearchParams(window.location.search);
-    const selectedRowKey = queryParameters.get('selectedRowKey');
+    const selectedRowKey = useSelector(selectedRowKeySelector);
     const { execute: executeOrdering } = useFetch(apiConfig.lecture.updateSort);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
-    const location = useLocation();
-
-    const pathnameSegments = location.pathname.split('/');
-    const { data } = useFetch(apiConfig.lecture.getBySubject, {
-        immediate: false,
-        mappingData: ({ data }) => ({ id: data.id }),
+    const { data } = useListBase({
+        apiConfig: {
+            getList: apiConfig.lecture.getBySubject,
+            delete: apiConfig.lecture.delete,
+            update: apiConfig.lecture.update,
+            getById: apiConfig.lecture.getById,
+        },
+        override: (funcs) => {
+            funcs.prepareGetListPathParams = () => {
+                return {
+                    subjectId: subjectId,
+                };
+            };
+        },
     });
+
     const handleSubmit = (values) => {
         let isSelectedRowKey = false;
         data.map((item) => {
@@ -47,14 +57,27 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 isSelectedRowKey = true;
             } else if (isSelectedRowKey == true) {
                 if (item.lectureKind == 1) {
-                    values.ordering = item.ordering - 1;
+                    values.ordering = item.ordering;
                     isSelectedRowKey = false;
                 }
             }
         });
+        let dataUpdate = [];
+        if (values.ordering) {
+            const indexLecture = data.findIndex((item) => item.ordering == values.ordering);
+            for (let i = indexLecture; i < data.length; i++) {
+                dataUpdate.push({ id: data[i].id, ordering: data[i].ordering + 1 });
+            }
+            executeOrdering({
+                data: dataUpdate,
+            });
+        }
+        if (values.ordering === undefined) {
+            const dataSort = data.sort((a, b) => a.ordering - b.ordering);
+            values.ordering = dataDetail?.ordering || dataSort[dataSort.length - 1].ordering + 1;
+        }
         values.subjectId = subjectId;
         values.status = 1;
-        values.ordering = dataDetail?.ordering;
         return mixinFuncs.handleSubmit({ ...values });
     };
 
