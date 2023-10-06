@@ -1,6 +1,6 @@
 import apiConfig from '@constants/apiConfig';
 import ProjectRoleListPage from '.';
-import ProjectRoleSavePage from './projectRoleSavePage';
+import ProjectRoleSavePage from './ProjectRoleSavePage';
 
 export default {
     projectRoleListPage: {

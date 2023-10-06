@@ -1,6 +1,6 @@
 import apiConfig from '@constants/apiConfig';
 import ProjectListPage from '.';
-import ProjectSavePage from './projectSavePage';
+import ProjectSavePage from './ProjectSavePage';
 
 export default {
     projectListPage: {
