@@ -89,7 +89,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leader?.leaderName,
+            leaderId: dataDetail?.leaderInfo?.leaderName,
         });
     }, [dataDetail]);
 
@@ -113,8 +113,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     </Col>
                     <Col span={12}>
                         <AutoCompleteField
-                            label={translate.formatMessage(message.leader)} 
-                            type="number" 
+                            label={translate.formatMessage(message.leader)}
                             name="leaderId"
                             apiConfig={apiConfig.leader.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
@@ -127,19 +126,19 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={12}>
                         <DatePickerField
-                            label={translate.formatMessage(message.startDate)} 
-                            name="startDate" 
+                            label={translate.formatMessage(message.startDate)}
+                            name="startDate"
                             style={{ width: '100%' }}
-                            format={DEFAULT_FORMAT}/>
+                            format={DEFAULT_FORMAT} />
                     </Col>
                     <Col span={12}>
-                        <DatePickerField 
-                            label={translate.formatMessage(message.endDate)} 
-                            type="email" 
+                        <DatePickerField
+                            label={translate.formatMessage(message.endDate)}
+                            type="email"
                             name="endDate"
                             style={{ width: '100%' }}
-                            format={DATE_FORMAT_DISPLAY} 
-                            required />
+                            format={DATE_FORMAT_DISPLAY}
+                        />
                     </Col>
                 </Row>
                 <TextField
