@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { taskState } from '@constants/masterData';
@@ -17,6 +17,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
+import dayjs from 'dayjs';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
@@ -75,7 +76,11 @@ function TaskListPage() {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
             render: (startDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{startDate}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
             },
             align: 'center',
         },
@@ -83,7 +88,11 @@ function TaskListPage() {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
             render: (dueDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dueDate}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(dueDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
             },
             align: 'center',
         },
