@@ -1,5 +1,4 @@
 import PageNotFound from '@components/common/page/PageNotFound';
-import categoryRoutes from '@modules/category/routes';
 import categoryRoutesEdu from '@modules/categoryEdu/routes';
 import categoryRoutesGen from '@modules/categoryGen/routes';
 import categoryRoutesMajor from '@modules/categoryMajor/routes';
@@ -51,7 +50,6 @@ const routes = {
         auth: true,
         title: 'Profile page',
     },
-    ...categoryRoutes,
     ...subjectRoutes,
     ...courseRoutes,
     ...categoryRoutesEdu,

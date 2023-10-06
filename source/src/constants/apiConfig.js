@@ -452,6 +452,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        checkAsign: {
+            baseURL: `${apiTenantUrl}v1/task/check-asign`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
 };
 
