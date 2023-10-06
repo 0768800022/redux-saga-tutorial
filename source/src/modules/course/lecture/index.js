@@ -1,18 +1,17 @@
 import ListPage from '@components/common/layout/ListPage';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import {  DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import { PlusOutlined } from '@ant-design/icons';
 import routes from '../routes';
-import { Button,Modal }  from 'antd';
-import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
+import { Button,Modal,Radio }  from 'antd';
 import AsignAllForm from './asignAllForm';
-
+import useFetch from '@hooks/useFetch';
+import BaseTable from '@components/common/table/BaseTable';
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
@@ -30,9 +29,7 @@ const LectureListPage = () => {
     const courseName = queryParameters.get("courseName");
     const subjectId = queryParameters.get("subjectId");
     const [ showPreviewModal, setShowPreviewModal ] = useState(false);
-
     const [lectureid, setLectureId] = useState(null);
-
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             getList: apiConfig.lecture.getBySubject,
@@ -62,17 +59,30 @@ const LectureListPage = () => {
         },
     });
 
-    const { sortedData, onDragEnd, sortColumn } = useDrapDropTableItem({
-        data,
-        apiConfig: apiConfig.lecture.update,
-        setTableLoading: () => {},
-        indexField: 'ordering',
-        idField: 'lectureId',
-        getList: mixinFuncs.getList,
-    });
+
+    const onSelectChange = (record) => {
+        setLectureId(record.id);
+    };
+    console.log(lectureid);
 
     const columns = [
-        sortColumn,
+        {
+            title: '',
+            dataIndex: 'id',
+            key: 'id',
+            width : '30px',
+            render: (text, record, index) => {
+                if (record.lectureKind === 1) {
+                    return null; 
+                }
+                return (
+                    <Radio
+                        checked={lectureid && lectureid === record.id}
+                        onChange={() => onSelectChange(record)}
+                    />
+                );
+            },
+        },
         {
             title: translate.formatMessage(message.lectureName),
             dataIndex: 'lectureName',
@@ -105,7 +115,6 @@ const LectureListPage = () => {
 
     const disabledSubmit = lectureid === null;
 
-
     return (
         
         <PageWrapper 
@@ -119,8 +128,9 @@ const LectureListPage = () => {
             ]}
         >
             <ListPage
+                style={{ width: '700px' }}
                 actionBar={
-                    <div style={{ float: 'right', margin: '32px 0' }}>
+                    <div style={{ float: 'right', margin: '0 0 32px 0' }}>
                         <Button 
                             type="primary" 
                             disabled={disabledSubmit}   
@@ -131,18 +141,19 @@ const LectureListPage = () => {
                     </div>
                 }
                 baseTable={
-                    <DragDropTableV2
-                        rowSelection={{
-                            type: "radio",
-                            ...rowSelection,
-                        }}
-                        onDragEnd={onDragEnd}
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={sortedData}
-                        columns={columns}
-                    />
+                    <>
+                        <BaseTable
+                            // rowSelection={{
+                            //     type: "radio",
+                            //     ...rowSelection,
+                            // }}
+                            onChange={changePagination}
+                            pagination={pagination}
+                            loading={loading}
+                            dataSource={data}
+                            columns={columns}
+                        />
+                    </>
                 }
             />
             <Modal

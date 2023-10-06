@@ -8,6 +8,10 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DATE_FORMAT_VALUE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
 import { convertUtcToLocalTime } from '@utils/index';
+import { TeamOutlined, BookOutlined } from '@ant-design/icons';
+import route from '@modules/student/routes';
+import { useNavigate } from 'react-router-dom';
+import { Button, Tag } from 'antd';
 
 const message = defineMessages({
     objectName: 'Student',
@@ -19,6 +23,7 @@ const message = defineMessages({
 
 const StudentListPage = () => {
     const translate = useTranslate();
+    const navigate = useNavigate();
 
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.student,
@@ -35,6 +40,23 @@ const StudentListPage = () => {
                     };
                 }
             };
+            funcs.additionalActionColumnButtons = () => ({
+                task: ({ id, name }) => (
+                    <Button
+                        type="link"
+                        style={{ padding: 0 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(route.studentCourseListPage.path + `?studentId=${id}`);
+                            // navigate(route.studentCourseListPage.path);
+                            // navigate(`./course/${id}`);
+                            // navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
+                        }}
+                    >
+                        <BookOutlined />
+                    </Button>
+                ),
+            });
         },
     });
 
@@ -71,7 +93,7 @@ const StudentListPage = () => {
             title: <FormattedMessage defaultMessage="Hệ" />,
             dataIndex: ['studyClass', 'categoryName'],
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ task:true, edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
