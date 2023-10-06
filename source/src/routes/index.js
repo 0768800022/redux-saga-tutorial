@@ -12,6 +12,8 @@ import courseRoutes from '@modules/course/routes';
 import registrationRoutes from '@modules/registration/routes';
 import leaderRoutes from '@modules/leader/routes';
 import taskRoutes from '@modules/task/routes';
+import projectRoutes from '@modules/project/routes';
+import projectRoleRoutes from '@modules/projectRole/routes';
 
 /*
 	auth
@@ -59,6 +61,8 @@ const routes = {
     ...studentRoutes,
     ...leaderRoutes,
     ...taskRoutes,
+    ...projectRoutes,
+    ...projectRoleRoutes,
 
     // keep this at last
     //
