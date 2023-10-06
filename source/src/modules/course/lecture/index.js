@@ -30,6 +30,8 @@ const LectureListPage = () => {
     const subjectId = queryParameters.get("subjectId");
     const [ showPreviewModal, setShowPreviewModal ] = useState(false);
     const [lectureid, setLectureId] = useState(null);
+    const [checkAsign, SetCheckAsign] = useState([]);
+
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             getList: apiConfig.lecture.getBySubject,
@@ -59,11 +61,9 @@ const LectureListPage = () => {
         },
     });
 
-
     const onSelectChange = (record) => {
         setLectureId(record.id);
     };
-    console.log(lectureid);
 
     const columns = [
         {
@@ -104,17 +104,30 @@ const LectureListPage = () => {
         },
     ];
 
-    const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            setLectureId(selectedRowKeys[0]);
-        },
-        getCheckboxProps: (record) => ({
-            disabled: record.lectureKind === 1,
-        }),
-    };
 
     const disabledSubmit = lectureid === null;
 
+    const { execute: executeCheckAsign } = useFetch(apiConfig.task.checkAsign,{ immediate: false });
+    useEffect(() => {
+        if (data.length > 0) {
+            const ids = data.map(item => item.id);
+            if (ids.length > 0) {
+                executeCheckAsign({
+                    data: {
+                        taskIds: ids,
+                    },
+                    onCompleted: (response) => {
+                        if (response.result === true) {
+                            SetCheckAsign(response.data);
+                        }
+                    },
+                    onError: (err) => {
+                    },
+                });
+            }
+        }
+    }, [data, executeCheckAsign]);
+    
     return (
         
         <PageWrapper 
@@ -143,10 +156,6 @@ const LectureListPage = () => {
                 baseTable={
                     <>
                         <BaseTable
-                            // rowSelection={{
-                            //     type: "radio",
-                            //     ...rowSelection,
-                            // }}
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
