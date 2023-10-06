@@ -42,14 +42,14 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         loading: getCategorysLoading,
         execute: executeGetCategorys,
     } = useFetch(apiConfig.category.autocomplete, {
-        immediate: false,
+        immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.categoryName })),
     });
-    useEffect(() => {
-        executeGetCategorys({
-            params: {},
-        });
-    }, []);
+    // useEffect(() => {
+    //     executeGetCategorys({
+    //         params: {},
+    //     });
+    // }, []);
 
     useEffect(() => {
         dataDetail.birthday = dataDetail?.birthday && dayjs(dataDetail?.birthday, DATE_FORMAT_VALUE);

@@ -35,14 +35,14 @@ const CourseForm = (props) => {
         loading: getSubjectsLoading,
         execute: executeGetSubjects,
     } = useFetch(apiConfig.subject.autocomplete, {
-        immediate: false,
+        immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.subjectName })),
     });
-    useEffect(() => {
-        executeGetSubjects({
-            params: {},
-        });
-    }, []);
+    // useEffect(() => {
+    //     executeGetSubjects({
+    //         params: {},
+    //     });
+    // }, []);
     useEffect(() => {
         dataDetail.dateRegister = dataDetail.dateRegister && dayjs(dataDetail.dateRegister, DATE_FORMAT_VALUE);
         dataDetail.dateEnd = dataDetail.dateEnd && dayjs(dataDetail.dateEnd, DATE_FORMAT_VALUE);
@@ -57,14 +57,14 @@ const CourseForm = (props) => {
         loading: getLeadersLoading,
         execute: executeGetLeaders,
     } = useFetch(apiConfig.leader.autocomplete, {
-        immediate: false,
+        immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.leaderName })),
     });
-    useEffect(() => {
-        executeGetLeaders({
-            params: {},
-        });
-    }, []);
+    // useEffect(() => {
+    //     executeGetLeaders({
+    //         params: {},
+    //     });
+    // }, []);
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
