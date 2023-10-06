@@ -8,7 +8,7 @@ export default {
         title: 'Leader',
         auth: true,
         component: LeaderListPage,
-        permissions: apiConfig.leader.getList.baseURL,
+        permissions: [apiConfig.leader.getList.baseURL],
     },
     leaderSavePage: {
         path: '/leader/:id',

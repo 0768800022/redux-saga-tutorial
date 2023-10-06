@@ -1,6 +1,6 @@
-import apiConfig from "@constants/apiConfig";
-import CategoryListPage from ".";
-import CategorySavePage from "./CategorySavePage";
+import apiConfig from '@constants/apiConfig';
+import CategoryListPage from '.';
+import CategorySavePage from './CategorySavePage';
 
 export default {
     categoryListPageGen: {
@@ -15,6 +15,6 @@ export default {
         title: 'Category Save Page',
         auth: true,
         component: CategorySavePage,
-        permissions: [ apiConfig.category.getById.baseURL ],
+        permissions: [apiConfig.category.getById.baseURL],
     },
 };
