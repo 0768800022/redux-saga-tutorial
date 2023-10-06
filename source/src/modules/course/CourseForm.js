@@ -129,6 +129,7 @@ const CourseForm = (props) => {
                     <Col span={12}>
                         <SelectField
                             name="state"
+                            defaultValue={statusValues[0]}
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
                             options={statusValues}

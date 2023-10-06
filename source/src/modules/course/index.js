@@ -97,7 +97,6 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.leader),
             dataIndex: ['leader', 'leaderName'],
             width: 150,
-            align: 'center',
         },
         {
             title: translate.formatMessage(message.dateRegister),
@@ -121,7 +120,7 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.status),
             dataIndex: 'state',
             align: 'center',
-            width: 250,
+            width: 100,
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
 

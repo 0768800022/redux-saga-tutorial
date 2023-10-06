@@ -224,9 +224,6 @@ const useSaveBase = ({
             </Row>
         );
     };
-    const test = () => {
-        console.log('g');
-    };
     const overrideHandler = () => {
         const centralizedHandler = {
             getDetail,
@@ -249,8 +246,6 @@ const useSaveBase = ({
             setEditing,
             handleShowErrorMessage,
             getActionName,
-            onBack,
-            test,
         };
 
         override?.(centralizedHandler);
