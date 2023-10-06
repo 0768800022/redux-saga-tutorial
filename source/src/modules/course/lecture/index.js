@@ -12,6 +12,8 @@ import { Button,Modal,Radio }  from 'antd';
 import AsignAllForm from './asignAllForm';
 import useFetch from '@hooks/useFetch';
 import BaseTable from '@components/common/table/BaseTable';
+import useDragDrop from '@hooks/useDragDrop';
+
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
@@ -64,6 +66,13 @@ const LectureListPage = () => {
     const onSelectChange = (record) => {
         setLectureId(record.id);
     };
+
+    const { sortedData } = useDragDrop({
+        data,
+        apiConfig: apiConfig.lecture.updateSort,
+        setTableLoading: () => {},
+        indexField: 'ordering',
+    });
 
     const columns = [
         {
@@ -159,7 +168,7 @@ const LectureListPage = () => {
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
-                            dataSource={data}
+                            dataSource={sortedData}
                             columns={columns}
                         />
                     </>
