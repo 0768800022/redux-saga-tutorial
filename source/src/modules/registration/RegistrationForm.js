@@ -5,7 +5,7 @@ import SelectField from '@components/common/form/SelectField';
 import TimePickerField from '@components/common/form/TimePickerField';
 import { TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { daysOfWeekSchedule as daysOfWeekScheduleOptions, stateResgistrationOptions } from '@constants/masterData';
+import { daysOfWeekSchedule as daysOfWeekScheduleOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -22,7 +22,15 @@ const messages = defineMessages({
     isIntern: 'Đăng kí thực tập',
     schedule: 'Thời khoá biểu',
 });
-
+const statesOptionSelect = [
+    {
+        value: 1,
+        label: 'Đăng ký',
+    },
+    { value: 2, label: 'Đang học' },
+    { value: 3, label: 'Đã kết thúc' },
+    { value: 4, label: 'Đã huỷ' },
+];
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
@@ -87,7 +95,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             }, {});
         values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
         if (!values?.state) {
-            values.state = stateResgistrationOptions[0].value;
+            values.state = statesOptionSelect[0].value;
         }
         return mixinFuncs.handleSubmit({ ...values });
     };
@@ -236,10 +244,10 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                         </Col>
                         <Col span={12}>
                             <SelectField
-                                defaultValue={stateResgistrationOptions[0]}
+                                defaultValue={statesOptionSelect[0]}
                                 label={<FormattedMessage defaultMessage="Trạng thái" />}
                                 name="state"
-                                options={stateResgistrationOptions}
+                                options={statesOptionSelect}
                             />
                         </Col>
                         <Col span={12}>

@@ -44,7 +44,7 @@ const DeveloperListPage = () => {
         {
             title: 'Vai trò',
             dataIndex: ['roleInfo', 'projectRoleName'],
-            width: 170,
+            width: 100,
         },
         {
             title: 'Trình độ',

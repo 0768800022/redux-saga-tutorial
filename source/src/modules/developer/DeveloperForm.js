@@ -67,6 +67,7 @@ const DeveloperForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <AutoCompleteField
+                            disabled={isEditing}
                             required
                             label={translate.formatMessage(messages.role)}
                             name="roleId"

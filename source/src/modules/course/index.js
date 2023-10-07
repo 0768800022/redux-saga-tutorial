@@ -42,17 +42,16 @@ const CourseListPage = () => {
         },
         override: (funcs) => {
             funcs.additionalActionColumnButtons = () => ({
-                registration: ({ id, name, state }) => (
+                student: ({ id, name, state }) => (
                     <Button
                         type="link"
-                        style={state === 1 ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' } : { padding: 0 }}
+                        style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            state !== 1 &&
-                                navigate(
-                                    routes.registrationListPage.path +
-                                        `?courseId=${id}&courseName=${name}&courseState=${state}`,
-                                );
+                            navigate(
+                                routes.registrationListPage.path +
+                                    `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                            );
                         }}
                     >
                         <TeamOutlined />
@@ -62,19 +61,13 @@ const CourseListPage = () => {
                 task: ({ id, name, subject, state }) => (
                     <Button
                         type="link"
-                        style={
-                            state === 1 || state === 5
-                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                : { padding: 0 }
-                        }
+                        style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            state !== 1 &&
-                                state !== 5 &&
-                                navigate(
-                                    route.taskListPage.path +
-                                        `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}`,
-                                );
+                            navigate(
+                                route.taskListPage.path +
+                                    `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}`,
+                            );
                         }}
                     >
                         <BookOutlined />
@@ -124,11 +117,7 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.dateEnd),
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(dateEnd, 'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}
-                    </div>
-                );
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateEnd,DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
             },
             width: 130,
             align: 'center',
@@ -143,7 +132,7 @@ const CourseListPage = () => {
                 return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
-        mixinFuncs.renderActionColumn({ task: true, registration: true, edit: true, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ task: true, student: true, edit: true, delete: true }, { width: '150px' }),
     ];
 
     return (
