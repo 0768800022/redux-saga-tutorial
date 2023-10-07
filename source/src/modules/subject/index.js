@@ -65,7 +65,7 @@ const SubjectListPage = () => {
     ];
     const handleOnClick = (event, record) => {
         event.preventDefault();
-        navigate(`./lecture/${record.id}`);
+        navigate(`./lecture/${record.id}?subjectName=${record.subjectName}`);
     };
 
     const columns = [

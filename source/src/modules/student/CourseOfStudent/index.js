@@ -41,10 +41,9 @@ const CourseListPage = () => {
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const stuId = queryParameters.get('studentId');
-    const stuName = queryParameters.get('studentName');
+    const studentName = queryParameters.get('studentName');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig:
-        {
+        apiConfig: {
             // getList : apiConfig.student.getAllCourse,
             getList: apiConfig.registration.getList,
             delete: apiConfig.registration.delete,
@@ -96,7 +95,11 @@ const CourseListPage = () => {
             dataIndex: 'createdDate',
             width: 150,
             render: (createdDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(createdDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(createdDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
             },
             align: 'center',
         },
@@ -118,7 +121,7 @@ const CourseListPage = () => {
         <PageWrapper routes={breadRoutes}>
             <div>
                 <ListPage
-                    title={<p style={{ fontSize: '18px' }}>Tên sinh viên: <span style={{ fontWeight: 'normal' }}>{stuName}</span></p>}
+                    title={<span style={{ fontWeight: 'normal',fontSize: '16px' }}>{studentName}</span>}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}
@@ -127,7 +130,6 @@ const CourseListPage = () => {
                             dataSource={data}
                             columns={columns}
                         />
-
                     }
                 />
             </div>
