@@ -29,7 +29,8 @@ const AppRoutes = () => {
                     <Loading show />
                 ) : (
                     <ValidateAccess
-                        permissions={route.permissions}
+                        permissions={route.permission}
+                        separate={route.separateCheck}
                         onValidatePermissions={route.validatePermissions}
                         authRequire={route.auth}
                         component={route.component}
@@ -37,6 +38,7 @@ const AppRoutes = () => {
                         isAuthenticated={isAuthenticated}
                         profile={profile}
                         layout={route.layout}
+                        path={route.path}
                     />
                 )
             }
