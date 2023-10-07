@@ -63,7 +63,6 @@ const ProjectRoleListPage = () => {
         {
             title: translate.formatMessage(message.name),
             dataIndex: 'projectRoleName',
-            width: 180,
         },
         {
             title: translate.formatMessage(message.createdDate),
@@ -76,10 +75,10 @@ const ProjectRoleListPage = () => {
                 const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
-            width: 180,
+            width: 140,
             align: 'center',
         },
-        mixinFuncs.renderStatusColumn({ width: '150px' }),
+        mixinFuncs.renderStatusColumn({ width: '80px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (

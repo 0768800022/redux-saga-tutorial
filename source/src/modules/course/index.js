@@ -5,7 +5,7 @@ import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_FORMAT, DEFAULT_TABLE
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages,FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
@@ -42,27 +42,30 @@ const CourseListPage = () => {
         },
         override: (funcs) => {
             funcs.additionalActionColumnButtons = () => ({
-                student: ({ id, name }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0 }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(routes.registrationListPage.path + `?courseId=${id}&courseName=${name}`);
-                        }}
-                    >
-                        <TeamOutlined />
-                    </Button>
-                ),
-
-                task: ({ id, name, subject }) => (
+                student: ({ id, name, state }) => (
                     <Button
                         type="link"
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(
-                                route.taskListPage.path + `?courseId=${id}&courseName=${name}&subjectId=${subject.id}`,
+                                routes.registrationListPage.path +
+                                    `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                            );
+                        }}
+                    >
+                        <TeamOutlined />
+                    </Button>
+                ),
+
+                task: ({ id, name, subject,state }) => (
+                    <Button
+                        type="link"
+                        style={{ padding: 0 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(
+                                route.taskListPage.path + `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}`,
                             );
                         }}
                     >
@@ -86,12 +89,10 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(message.name),
             dataIndex: 'name',
-            width: 180,
         },
         {
             title: translate.formatMessage(message.subject),
             dataIndex: ['subject', 'subjectName'],
-            width: 180,
         },
         {
             title: translate.formatMessage(message.leader),
@@ -102,7 +103,11 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.dateRegister),
             dataIndex: 'dateRegister',
             render: (dateRegister) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateRegister,DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(dateRegister, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
             },
             width: 130,
             align: 'center',
@@ -111,7 +116,11 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.dateEnd),
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateEnd,'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(dateEnd, 'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}
+                    </div>
+                );
             },
             width: 130,
             align: 'center',
@@ -120,11 +129,11 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.status),
             dataIndex: 'state',
             align: 'center',
-            width: 150,
+            width: 120,
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
-
-                return <Tag color={status.color}>{status.label}</Tag>;
+                console.log(status);
+                // return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
         mixinFuncs.renderActionColumn({ task: true, student: true, edit: true, delete: true }, { width: '150px' }),

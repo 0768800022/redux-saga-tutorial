@@ -91,7 +91,7 @@ const NavSider = ({ collapsed, onCollapse, width }) => {
             onCollapse={onCollapse}
             trigger={null}
         >
-            <div data-collapsed={collapsed} className={styles.logo} style={{ width: '100%' }}>
+            <div data-collapsed={collapsed} className={styles.logo} style={{ width: '100%', marginTop:'2px' }}>
                 <img src={logo} alt="Mira" />
             </div>
             <Menu

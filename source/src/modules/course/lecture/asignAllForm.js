@@ -37,10 +37,10 @@ const AsignAllForm = ({ courseId, lectureId }) => {
         executeAsign({
             data:{
                 courseId: courseId,
-                lectureId: lectureId,
-                startDate : values.startDate ? (formatDateString(values.startDate, DATE_FORMAT_VALUE) + ' 00:00:00') : formatDateString(new Date(), DATE_FORMAT_VALUE)+ ' 00:00:00',
                 dueDate : formatDateString(values.dueDate, DATE_FORMAT_VALUE) + ' 00:00:00',
+                lectureId: lectureId,
                 note : values.note,
+                startDate : values.startDate ? (formatDateString(values.startDate, DATE_FORMAT_VALUE) + ' 00:00:00') : formatDateString(new Date(), DATE_FORMAT_VALUE)+ ' 00:00:00',
             },
             onCompleted: (response) => {
                 if (response.result === true) {

@@ -9,13 +9,14 @@ import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
+import { Button, Tag } from 'antd';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { convertUtcToLocalTime } from '@utils';
 import routes from './routes';
 import classNames from 'classnames';
 import styles from './subject.module.scss';
+import { statusSubjectOptions } from '@constants/masterData';
 const message = defineMessages({
     name: 'Tên môn học',
     home: 'Trang chủ',
@@ -25,6 +26,7 @@ const message = defineMessages({
     id: 'Id',
     createdDate: 'Ngày tạo',
     student: 'Học viên',
+    status: 'Trạng thái',
 });
 
 const SubjectListPage = () => {
@@ -72,10 +74,7 @@ const SubjectListPage = () => {
             dataIndex: 'subjectName',
             render: (subjectName, record) =>
                 !record.parentId ? (
-                    <div 
-                        onClick={(event) => handleOnClick(event, record)}
-                        className={styles.customDiv}
-                    >
+                    <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
                         {subjectName}
                     </div>
                 ) : (
@@ -86,7 +85,6 @@ const SubjectListPage = () => {
             title: translate.formatMessage(message.code),
             dataIndex: 'subjectCode',
             width: 200,
-            align: 'center',
         },
         {
             title: translate.formatMessage(message.createdDate),
@@ -102,6 +100,18 @@ const SubjectListPage = () => {
             width: 200,
             align: 'center',
         },
+        {
+            title: translate.formatMessage(message.status),
+            dataIndex: 'status',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const status = statusSubjectOptions.find((item) => item.value == dataRow);
+
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
+        },
+
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (

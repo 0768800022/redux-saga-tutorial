@@ -163,6 +163,44 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+    projectRole: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/project-role/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/project-role/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/project-role/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/project-role/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/project-role/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/project-role/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
     course: {
         getList: {
             baseURL: `${apiTenantUrl}v1/course/list`,
@@ -358,6 +396,44 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+    developer: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/developer/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/developer/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/developer/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/developer/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/developer/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/developer/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
     lecture: {
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/lecture/auto-complete`,
@@ -493,45 +569,6 @@ const apiConfig = {
         },
         update: {
             baseURL: `${apiTenantUrl}v1/project/update`,
-            method: 'PUT',
-            headers: baseHeader,
-            isRequiredTenantId: true,
-        },
-    },
-    projectRole: {
-        getList: {
-            baseURL: `${apiTenantUrl}v1/project-role/list`,
-            method: 'GET',
-            headers: baseHeader,
-            isRequiredTenantId: true,
-        },
-        autocomplete: {
-            baseURL: `${apiTenantUrl}v1/project-role/auto-complete`,
-            method: 'GET',
-            headers: baseHeader,
-            isRequiredTenantId: true,
-        },
-        create: {
-            baseURL: `${apiTenantUrl}v1/project-role/create`,
-            method: 'POST',
-            headers: baseHeader,
-            isRequiredTenantId: true,
-        },
-        delete: {
-            baseURL: `${apiTenantUrl}v1/project-role/delete/:id`,
-            method: 'DELETE',
-            headers: baseHeader,
-            isRequiredTenantId: true,
-        },
-
-        getById: {
-            baseURL: `${apiTenantUrl}v1/project-role/get/:id`,
-            method: 'GET',
-            headers: baseHeader,
-            isRequiredTenantId: true,
-        },
-        update: {
-            baseURL: `${apiTenantUrl}v1/project-role/update`,
             method: 'PUT',
             headers: baseHeader,
             isRequiredTenantId: true,

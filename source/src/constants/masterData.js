@@ -14,6 +14,7 @@ import {
     STATE_COURSE_CANCELED,
     STATE_TASK_ASIGN,
     STATE_TASK_DONE,
+    STATE_COURSE_RECRUITED,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -52,6 +53,7 @@ export const lectureState = [
     { value: STATE_COURSE_STARTED, label: lectureStateMessage.started, color: 'yellow' },
     { value: STATE_COURSE_FINISHED, label: lectureStateMessage.finished, color: 'warning' },
     { value: STATE_COURSE_CANCELED, label: lectureStateMessage.canceled, color: 'red' },
+    { value: STATE_COURSE_RECRUITED, label: lectureStateMessage.recruit, color: 'blue' },
 ];
 
 export const taskState = [
@@ -73,6 +75,18 @@ export const statusOptions = [
     {
         value: STATUS_INACTIVE,
         label: statusMessage.inactive,
+        color: '#CC0000',
+    },
+];
+export const statusSubjectOptions = [
+    {
+        value: 1,
+        label: 'Hoạt động',
+        color: '#00A648',
+    },
+    {
+        value: 2,
+        label: 'Đã huỷ',
         color: '#CC0000',
     },
 ];
@@ -222,4 +236,13 @@ export const dateFilterOptions = [
     { value: 2, label: dateFilterMessage.thisMonth },
     { value: 3, label: dateFilterMessage.lastMonth },
     { value: 4, label: dateFilterMessage.custom },
+];
+export const levelOptionSelect = [
+    {
+        value: 1,
+        label: 'Intern',
+    },
+    { value: 2, label: 'Fresher' },
+    { value: 3, label: 'Junior' },
+    { value: 4, label: 'Senior' },
 ];

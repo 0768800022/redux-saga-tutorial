@@ -1,30 +1,26 @@
-import PageWrapper from '@components/common/layout/PageWrapper';
 import ListPage from '@components/common/layout/ListPage';
+import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import useListBase from '@hooks/useListBase';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import React from 'react';
-import { Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { levelOptionSelect } from '@constants/masterData';
+import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
-import { FieldTypes } from '@constants/formConfig';
-import { statusOptions } from '@constants/masterData';
-
+import { convertUtcToLocalTime } from '@utils';
+import React from 'react';
+import { FormattedMessage, defineMessages } from 'react-intl';
 const message = defineMessages({
-    objectName: 'Leader',
-    name: 'Họ và tên',
+    objectName: 'Lập trình viên',
     home: 'Trang chủ',
-    leader: 'Leader',
+    developer: 'Lập trình viên',
     status: 'Trạng thái',
+    name: 'Họ và tên',
 });
 
-const LeaderListPage = () => {
+const DeveloperListPage = () => {
     const translate = useTranslate();
-    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
-        apiConfig: apiConfig.leader,
+        apiConfig: apiConfig.developer,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -40,38 +36,40 @@ const LeaderListPage = () => {
             };
         },
     });
-
     const columns = [
         {
-            title: '#',
-            dataIndex: 'avatar',
-            align: 'center',
-            width: 80,
-            render: (avatar) => (
-                <Avatar
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                />
-            ),
+            title: 'Họ và tên',
+            dataIndex: ['studentInfo', 'fullName'],
+            width: '350px',
         },
         {
-            title: <FormattedMessage defaultMessage="Họ và tên" />,
-            dataIndex: 'leaderName',
-        },
-
-        {
-            title: <FormattedMessage defaultMessage="Email" />,
-            dataIndex: 'email',
-            width: '200px',
+            title: 'Vai trò',
+            dataIndex: ['roleInfo', 'projectRoleName'],
+            width: '60px',
         },
         {
-            title: <FormattedMessage defaultMessage="Số điện thoại" />,
-            dataIndex: 'phone',
-            width: '120px',
+            title: 'Trình độ',
+            dataIndex: 'level',
+            width: '20px',
+            render: (level) => {
+                const levelLabel = levelOptionSelect.map((item) => {
+                    if (level === item.value) {
+                        return item.label;
+                    }
+                });
+                return <div>{levelLabel}</div>;
+            },
         },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        {
+            title: 'Ngày tạo',
+            dataIndex: 'createdDate',
+            width: '20px',
+            render: (createdDate) => {
+                const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                return <div>{createdDateLocal}</div>;
+            },
+        },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '60px' }),
     ];
 
     const searchFields = [
@@ -79,18 +77,13 @@ const LeaderListPage = () => {
             key: 'name',
             placeholder: translate.formatMessage(message.name),
         },
-        {
-            key: 'status',
-            placeholder: translate.formatMessage(message.status),
-            type: FieldTypes.SELECT,
-            options: statusValues,
-        },
     ];
+
     return (
         <PageWrapper
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.leader) },
+                { breadcrumbName: translate.formatMessage(message.developer) },
             ]}
         >
             <ListPage
@@ -109,4 +102,5 @@ const LeaderListPage = () => {
         </PageWrapper>
     );
 };
-export default LeaderListPage;
+
+export default DeveloperListPage;
