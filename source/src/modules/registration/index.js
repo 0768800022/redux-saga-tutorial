@@ -23,7 +23,7 @@ const message = defineMessages({
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     courseid: 'courseId',
-    createDate: 'Ngày tạo',
+    createDate: 'Ngày đăng kí',
     isIntern: 'Đăng kí thực tập',
     course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
@@ -113,7 +113,7 @@ function RegistrationListPage() {
             title: translate.formatMessage(message.createDate),
             dataIndex: 'createdDate',
             align: 'center',
-            width: 150,
+            width: 170,
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
