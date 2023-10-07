@@ -5,7 +5,7 @@ import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { statusOptions } from '@constants/masterData';
+import { stateResgistrationOptions, statusOptions } from '@constants/masterData';
 import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -27,6 +27,7 @@ const message = defineMessages({
     isIntern: 'Đăng kí thực tập',
     course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
+    state: 'Trạng thái',
 });
 
 function RegistrationListPage() {
@@ -116,6 +117,16 @@ function RegistrationListPage() {
             align: 'center',
             width: 170,
         },
+        {
+            title: translate.formatMessage(message.state),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateResgistrationOptions.find((item) => item.value == dataRow);
+                return <Tag color={state.color}>{state.label}</Tag>;
+            },
+        },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
     ];
 
@@ -138,11 +149,16 @@ function RegistrationListPage() {
             ]}
         >
             <ListPage
-                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 title={
-                    <p style={{ fontSize: '18px' }}>
-                        Tên khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span>
-                    </p>
+                    <span
+                        style={
+                            courseState != 5
+                                ? { fontWeight: 'normal', fontSize: '16px' }
+                                : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
+                        }
+                    >
+                        {courseName}
+                    </span>
                 }
                 actionBar={courseState == 5 && mixinFuncs.renderActionBar()}
                 baseTable={
