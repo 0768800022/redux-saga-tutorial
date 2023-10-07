@@ -93,6 +93,7 @@ export const STATE_COURSE_PREPARED = 1;
 export const STATE_COURSE_STARTED = 2;
 export const STATE_COURSE_FINISHED = 3;
 export const STATE_COURSE_CANCELED = 4;
+export const STATE_COURSE_RECRUITED = 5;
 
 export const STATE_TASK_ASIGN = 1;
 export const STATE_TASK_DONE = 2;

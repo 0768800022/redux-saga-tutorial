@@ -3,41 +3,53 @@ import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import routes from './routes';
 import apiConfig from '@constants/apiConfig';
-import ProjectRoleForm from './projectRoleForm';
+import DeveloperForm from './DeveloperForm';
+import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
     home: 'Trang chủ',
-    projectRole: 'Vai trò dự án',
-    objectName: 'Vai trò dự án',
+    subject: 'Lập trình viên',
+    objectName: 'Lập trình viên',
 });
 
-const ProjectRoleSavePage = () => {
-    const projectRoleId = useParams();
+const DeveloperSavePage = () => {
     const translate = useTranslate();
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
+    const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.projectRole.getById,
-            create: apiConfig.projectRole.create,
-            update: apiConfig.projectRole.update,
+            getById: apiConfig.developer.getById,
+            create: apiConfig.developer.create,
+            update: apiConfig.developer.update,
         },
         options: {
-            getListUrl: generatePath(routes.projectRoleListPage.path, { projectRoleId }),
+            getListUrl: generatePath(routes.developerListPage.path, {}),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
-                    id: detail.id,
+                    developerId: detail.id,
+                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
+                    totalCancelProject: 1,
+                    totalProject: 1,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-DEVELOPER-ERROR-0001') {
+                    showErrorMessage('Lập trình viên đã tồn tại');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });
@@ -48,14 +60,14 @@ const ProjectRoleSavePage = () => {
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: translate.formatMessage(messages.projectRole),
-                    path: generatePath(routes.projectRoleListPage.path, { projectRoleId }),
+                    breadcrumbName: translate.formatMessage(messages.subject),
+                    path: generatePath(routes.developerListPage.path, {}),
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <ProjectRoleForm
+            <DeveloperForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -66,4 +78,5 @@ const ProjectRoleSavePage = () => {
         </PageWrapper>
     );
 };
-export default ProjectRoleSavePage;
+
+export default DeveloperSavePage;

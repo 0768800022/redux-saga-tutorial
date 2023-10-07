@@ -10,7 +10,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
-import { useNavigate,generatePath ,useParams,useLocation } from 'react-router-dom';
+import { useNavigate, generatePath, useParams, useLocation } from 'react-router-dom';
 import routes from '@modules/registration/routes';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
@@ -41,14 +41,14 @@ const CourseListPage = () => {
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const stuId = queryParameters.get('studentId');
-    console.log(paramid);
+    const stuName = queryParameters.get('studentName');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig:
         {
             // getList : apiConfig.student.getAllCourse,
-            getList : apiConfig.registration.getList,
-            delete : apiConfig.registration.delete,
-            update : apiConfig.course.update,
+            getList: apiConfig.registration.getList,
+            delete: apiConfig.registration.delete,
+            update: apiConfig.course.update,
             getById: apiConfig.course.getById,
         },
         options: {
@@ -85,11 +85,10 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(message.name),
             dataIndex: ['courseInfo', 'name'],
-            width: 250,
         },
         {
             title: translate.formatMessage(message.subject),
-            dataIndex: ['courseInfo','subject', 'subjectName'],
+            dataIndex: ['courseInfo', 'subject', 'subjectName'],
             width: 250,
         },
         {
@@ -97,7 +96,7 @@ const CourseListPage = () => {
             dataIndex: 'createdDate',
             width: 150,
             render: (createdDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(createdDate,DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(createdDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
             },
             align: 'center',
         },
@@ -105,31 +104,33 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.status),
             dataIndex: 'state',
             align: 'center',
-            width: 150,
+            width: 120,
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
 
                 return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
-        mixinFuncs.renderActionColumn({ delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ delete: true }, { width: '120px' }),
     ];
 
     return (
         <PageWrapper routes={breadRoutes}>
-            <ListPage
-                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                // actionBar={mixinFuncs.renderActionBar()}
-                baseTable={
-                    <BaseTable
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={data}
-                        columns={columns}
-                    />
-                }
-            />
+            <div>
+                <ListPage
+                    title={<p style={{ fontSize: '18px' }}>Tên sinh viên: <span style={{ fontWeight: 'normal' }}>{stuName}</span></p>}
+                    baseTable={
+                        <BaseTable
+                            onChange={changePagination}
+                            pagination={pagination}
+                            loading={loading}
+                            dataSource={data}
+                            columns={columns}
+                        />
+
+                    }
+                />
+            </div>
         </PageWrapper>
     );
 };

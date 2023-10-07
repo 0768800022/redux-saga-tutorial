@@ -1,12 +1,12 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
+import apiConfig from '@constants/apiConfig';
 import useSaveBase from '@hooks/useSaveBase';
+import useTranslate from '@hooks/useTranslate';
 import React from 'react';
 import { defineMessages } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
-import SubjectForm from './SubjectForm';
 import { generatePath, useParams } from 'react-router-dom';
+import SubjectForm from './SubjectForm';
 import routes from './routes';
-import apiConfig from '@constants/apiConfig';
 
 const messages = defineMessages({
     home: 'Trang chủ',

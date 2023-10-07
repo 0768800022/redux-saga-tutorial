@@ -35,6 +35,8 @@ function TaskListPage() {
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const subjectId = queryParameters.get('subjectId');
+    const state = queryParameters.get('state');
+
     const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.task,
@@ -75,6 +77,7 @@ function TaskListPage() {
         {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
+            width: 140,
             render: (startDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
@@ -87,6 +90,7 @@ function TaskListPage() {
         {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
+            width: 140,
             render: (dueDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
@@ -100,7 +104,7 @@ function TaskListPage() {
             title: translate.formatMessage(message.state),
             dataIndex: 'state',
             align: 'center',
-            width: 250,
+            width: 120,
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
 
@@ -122,19 +126,21 @@ function TaskListPage() {
                 { breadcrumbName: translate.formatMessage(message.task) },
             ]}
         >
-            <ListPage
-                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={mixinFuncs.renderActionBar()}
-                baseTable={
-                    <BaseTable
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={data}
-                        columns={columns}
-                    />
-                }
-            />
+            <div>
+                <ListPage
+                    title={<p style={{ fontSize: '18px' }}>Tên khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
+                    actionBar={state ===2 ? mixinFuncs.renderActionBar() : ''}
+                    baseTable={
+                        <BaseTable
+                            onChange={changePagination}
+                            pagination={pagination}
+                            loading={loading}
+                            dataSource={data}
+                            columns={columns}
+                        />
+                    }
+                />
+            </div>
         </PageWrapper>
     );
 }
