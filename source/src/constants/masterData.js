@@ -28,6 +28,8 @@ import {
     lectureKindMessage,
     lectureStateMessage,
     taskStateMessage,
+    stateResgistrationMessage,
+    statusSubjectMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -81,14 +83,24 @@ export const statusOptions = [
 export const statusSubjectOptions = [
     {
         value: 1,
-        label: 'Hoạt động',
+        label: statusSubjectMessage.active,
         color: '#00A648',
     },
     {
         value: 2,
-        label: 'Đã huỷ',
+        label: statusSubjectMessage.canceled,
         color: '#CC0000',
     },
+];
+export const stateResgistrationOptions = [
+    {
+        value: 1,
+        label: stateResgistrationMessage.register,
+        color: 'green',
+    },
+    { value: 2, label: stateResgistrationMessage.learning, color: 'blue' },
+    { value: 3, label: stateResgistrationMessage.finished, color: 'yellow' },
+    { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
 ];
 
 export const lectureKindOptions = [
