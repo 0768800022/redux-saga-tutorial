@@ -40,17 +40,16 @@ const DeveloperListPage = () => {
         {
             title: 'Họ và tên',
             dataIndex: ['studentInfo', 'fullName'],
-            width: '350px',
         },
         {
             title: 'Vai trò',
             dataIndex: ['roleInfo', 'projectRoleName'],
-            width: '60px',
+            width: 100,
         },
         {
             title: 'Trình độ',
             dataIndex: 'level',
-            width: '20px',
+            width: 100,
             render: (level) => {
                 const levelLabel = levelOptionSelect.map((item) => {
                     if (level === item.value) {
@@ -63,13 +62,13 @@ const DeveloperListPage = () => {
         {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
-            width: '20px',
+            width: 170,
             render: (createdDate) => {
                 const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
                 return <div>{createdDateLocal}</div>;
             },
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '60px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 100 }),
     ];
 
     const searchFields = [
