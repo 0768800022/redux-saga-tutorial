@@ -3,7 +3,7 @@ import React from 'react';
 import { accessRouteTypeEnum } from '@constants';
 import { Navigate, Outlet, useLocation, useParams } from 'react-router-dom';
 
-import routes from './routes';
+import routes from '.';
 import PublicLayout from '@modules/main/PublicLayout';
 import MainLayout from '@modules/main/MainLayout';
 import HasPermission from '@components/common/elements/HasPermission';
@@ -25,7 +25,7 @@ const ValidateAccess = ({
     const { id } = useParams();
     const getRedirect = (authRequire) => {
         if (authRequire === accessRouteTypeEnum.NOT_LOGIN && isAuthenticated) {
-            return routes.adminsListPage.path;
+            return routes.homePage.path;
         }
 
         if (authRequire === accessRouteTypeEnum.REQUIRE_LOGIN && !isAuthenticated) {
