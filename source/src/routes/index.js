@@ -15,12 +15,13 @@ import taskRoutes from '@modules/task/routes';
 import projectRoutes from '@modules/project/routes';
 import projectRoleRoutes from '@modules/projectRole/routes';
 import developerRoutes from '@modules/developer/routes';
+import projectTaskRoutes from '@modules/projectTask/routes';
 
 /*
-	auth
-		+ null: access login and not login
-		+ true: access login only
-		+ false: access not login only
+    auth
+        + null: access login and not login
+        + true: access login only
+        + false: access not login only
 */
 const routes = {
     pageNotAllowed: {
@@ -66,6 +67,7 @@ const routes = {
     ...projectRoutes,
     ...projectRoleRoutes,
     ...developerRoutes,
+    ...projectTaskRoutes,
 
     // keep this at last
     //
