@@ -35,6 +35,8 @@ function TaskListPage() {
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const subjectId = queryParameters.get('subjectId');
+    const state = queryParameters.get('state');
+
     const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.task,
@@ -124,7 +126,8 @@ function TaskListPage() {
         >
             <ListPage
                 // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={mixinFuncs.renderActionBar()}
+                
+                actionBar={state ===2 ? mixinFuncs.renderActionBar() : ''}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
