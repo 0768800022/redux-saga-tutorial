@@ -75,13 +75,13 @@ function RegistrationListPage() {
             render: (schedule) => {
                 let check = JSON.parse(schedule);
                 const newCheck = [
-                    { key: 'Monday', value: check.t2 },
-                    { key: 'Tuesday', value: check.t3 },
-                    { key: 'Wednesday', value: check.t4 },
-                    { key: 'Thursday', value: check.t5 },
-                    { key: 'Friday', value: check.t6 },
-                    { key: 'Saturday', value: check.t7 },
-                    { key: 'Sunday', value: check.cn },
+                    { key: 'M', value: check.t2 },
+                    { key: 'T', value: check.t3 },
+                    { key: 'W', value: check.t4 },
+                    { key: 'T', value: check.t5 },
+                    { key: 'F', value: check.t6 },
+                    { key: 'S', value: check.t7 },
+                    { key: 'S', value: check.cn },
                 ];
 
                 let dateString = '';
@@ -93,6 +93,7 @@ function RegistrationListPage() {
 
                 return <div>{dateString}</div>;
             },
+            width: 110,
         },
         {
             title: translate.formatMessage(message.isIntern),
@@ -115,7 +116,7 @@ function RegistrationListPage() {
             align: 'center',
             width: 170,
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
     ];
 
     const searchFields = [
