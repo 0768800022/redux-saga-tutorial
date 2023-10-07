@@ -71,7 +71,7 @@ const ProjectListPage = () => {
             title: '#',
             dataIndex: 'avatar',
             align: 'center',
-            width: 100,
+            width: 80,
             render: (avatar) => (
                 <Avatar
                     size="large"
@@ -83,17 +83,11 @@ const ProjectListPage = () => {
         {
             title: translate.formatMessage(message.name),
             dataIndex: 'name',
-            width: 180,
         },
         {
             title: translate.formatMessage(message.leader),
             dataIndex: ['leaderInfo', 'leaderName'],
-            width: 180,
-        },
-        {
-            title: translate.formatMessage(message.description),
-            dataIndex: 'description',
-            width: 180,
+            width: 150,
         },
         {
             title: translate.formatMessage(message.createdDate),
@@ -106,10 +100,10 @@ const ProjectListPage = () => {
                 const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
-            width: 180,
+            width: 120,
             align: 'center',
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '110px' }),
     ];
     return (
         <PageWrapper routes={breadRoutes}>
