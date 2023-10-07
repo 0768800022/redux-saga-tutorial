@@ -128,8 +128,12 @@ function TaskListPage() {
         >
             <div>
                 <ListPage
-                    title={<p style={{ fontSize: '18px' }}>Tên khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
-                    actionBar={state ===2 ? mixinFuncs.renderActionBar() : ''}
+                    title={
+                        <p style={{ fontSize: '18px' }}>
+                            Tên khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span>
+                        </p>
+                    }
+                    actionBar={state === 2 ? mixinFuncs.renderActionBar() : ''}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}
