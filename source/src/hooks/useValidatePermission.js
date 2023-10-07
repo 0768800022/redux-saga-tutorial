@@ -3,12 +3,24 @@ import React, { useCallback } from 'react';
 import useAuth from './useAuth';
 
 function useValidatePermission() {
-    const { permissions, kind } = useAuth();
+    const { permissions, kind, profile } = useAuth();
 
-    const hasPermission = useCallback((requiredPermissions, requiredKind, onValidate = validatePermission) => {
-        const _onValidate = onValidate ?? validatePermission;
-        return _onValidate(requiredPermissions, permissions, requiredKind, kind);
-    }, [permissions, kind]);
+    const hasPermission = useCallback(
+        (requiredPermissions, requiredKind, excludeKind, onValidate, path, separate) => {
+            const _onValidate = onValidate ?? validatePermission;
+            return _onValidate(
+                requiredPermissions,
+                permissions,
+                requiredKind,
+                excludeKind,
+                kind,
+                profile,
+                path,
+                separate,
+            );
+        },
+        [permissions, kind],
+    );
 
     return hasPermission;
 }

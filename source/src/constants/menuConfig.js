@@ -1,5 +1,5 @@
 import routes from '@routes';
-import { IconCategory2, IconUserBolt, IconSchool } from '@tabler/icons-react';
+import { IconCategory2, IconUserBolt, IconSchool,IconClipboardText } from '@tabler/icons-react';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
@@ -54,7 +54,7 @@ const navMenuConfig = [
     {
         label: <FormattedMessage  defaultMessage='Quản lý dự án'/>,
         key: 'quan-ly-du-an',
-        icon: <IconUserBolt size={16} />,
+        icon: <IconClipboardText size={16} />,
         children: [
             {
                 label: <FormattedMessage  defaultMessage='Quản lý dự án'/>,
