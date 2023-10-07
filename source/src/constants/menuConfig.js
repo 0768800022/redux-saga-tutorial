@@ -25,6 +25,11 @@ const navMenuConfig = [
                 key: 'developer-management',
                 path: generatePath(routes.developerListPage.path, {}),
             },
+            {
+                label: 'Quản lý công ty',
+                key: 'company-management',
+                path: generatePath(routes.companyListPage.path, {}),
+            },
         ],
     },
     {
