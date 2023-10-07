@@ -25,7 +25,7 @@ const messages = defineMessages({
 const statesOptionSelect = [
     {
         value: 1,
-        label: 'Đã đăng ký',
+        label: 'Đăng ký',
     },
     { value: 2, label: 'Đang học' },
     { value: 3, label: 'Đã kết thúc' },
@@ -158,10 +158,8 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     useEffect(() => {
         dataDetail?.isIntern && setIsChecked(dataDetail?.isIntern == 1 && true);
         let data = dataDetail?.schedule && JSON.parse(dataDetail?.schedule);
-        console.log(data);
         if (data) {
             const dataFullFrame = addFrameTime(data);
-            console.log(dataFullFrame);
             data = splitTime(dataFullFrame);
         }
         let dataDefault = {};

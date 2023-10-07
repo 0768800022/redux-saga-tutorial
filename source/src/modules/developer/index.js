@@ -40,28 +40,30 @@ const DeveloperListPage = () => {
         {
             title: 'Họ và tên',
             dataIndex: ['studentInfo', 'fullName'],
-            width: '160px',
+            width: '350px',
         },
         {
             title: 'Vai trò',
             dataIndex: ['roleInfo', 'projectRoleName'],
-            width: '160px',
+            width: '60px',
         },
         {
             title: 'Trình độ',
             dataIndex: 'level',
-            width: '160px',
+            width: '20px',
             render: (level) => {
-                if (level == levelOptionSelect.value) {
-                    level = levelOptionSelect.label;
-                }
-                return <div>{level}</div>;
+                const levelLabel = levelOptionSelect.map((item) => {
+                    if (level === item.value) {
+                        return item.label;
+                    }
+                });
+                return <div>{levelLabel}</div>;
             },
         },
         {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
-            width: '50px',
+            width: '20px',
             render: (createdDate) => {
                 const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
                 return <div>{createdDateLocal}</div>;

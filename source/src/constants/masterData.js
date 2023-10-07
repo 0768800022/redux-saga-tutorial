@@ -239,10 +239,10 @@ export const dateFilterOptions = [
 ];
 export const levelOptionSelect = [
     {
-        value: '1',
-        label: 'Chưa bắt đầu',
+        value: 1,
+        label: 'Intern',
     },
-    { value: '2', label: 'Đã đăng ký' },
-    { value: '3', label: 'Đang thực tập' },
-    { value: '4', label: 'Đã huỷ' },
+    { value: 2, label: 'Fresher' },
+    { value: 3, label: 'Junior' },
+    { value: 4, label: 'Senior' },
 ];

@@ -24,7 +24,6 @@ function useDragDrop({ data = [], apiConfig, setTableLoading, indexField }) {
     const handleUpdate = () => {
         let dataUpdate = [];
         sortedData.map((item, index) => {
-            console.log(index);
             dataUpdate.push({
                 id: item.id,
                 [indexField]: index,

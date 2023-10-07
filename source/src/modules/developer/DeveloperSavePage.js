@@ -7,6 +7,7 @@ import { generatePath } from 'react-router-dom';
 import routes from './routes';
 import apiConfig from '@constants/apiConfig';
 import DeveloperForm from './DeveloperForm';
+import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
     home: 'Trang chủ',
@@ -30,17 +31,25 @@ const DeveloperSavePage = () => {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
-                    id: detail.id,
-                    level: 1,
+                    developerId: detail.id,
+                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    level: 1,
                     totalCancelProject: 1,
                     totalProject: 1,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-DEVELOPER-ERROR-0001') {
+                    showErrorMessage('Lập trình viên đã tồn tại');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });

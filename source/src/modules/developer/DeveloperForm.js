@@ -26,6 +26,9 @@ const DeveloperForm = (props) => {
             delete values.roleName;
             delete values.studentId;
         }
+        if (!values.level) {
+            values.level = 1;
+        }
         values.state = 1;
         return mixinFuncs.handleSubmit({ ...values });
     };

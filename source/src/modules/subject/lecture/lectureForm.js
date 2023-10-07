@@ -49,7 +49,6 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 isSelectedRowKey = true;
             } else if (isSelectedRowKey == true) {
                 if (item.lectureKind == 1) {
-                    console.log(item);
                     values.ordering = item.ordering;
                     isSelectedRowKey = false;
                 }

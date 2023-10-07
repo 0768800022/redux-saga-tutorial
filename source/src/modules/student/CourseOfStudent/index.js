@@ -42,8 +42,6 @@ const CourseListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const stuId = queryParameters.get('studentId');
     const stuName = queryParameters.get('studentName');
-    console.log("paramId");
-    console.log(paramid);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig:
         {
