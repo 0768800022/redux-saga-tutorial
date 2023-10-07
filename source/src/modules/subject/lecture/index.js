@@ -139,7 +139,7 @@ const LectureListPage = () => {
             ]}
         >
             <ListPage
-                style={{ width: '700px' }}
+                style={{ width: '900px' }}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <>
@@ -162,7 +162,7 @@ const LectureListPage = () => {
                             }}
                         />
                         <Button
-                            style={{ marginTop: '20px', marginLeft: '520px' }}
+                            style={{ marginTop: '20px', marginLeft: '710px' }}
                             key="submit"
                             htmlType="submit"
                             type="primary"
