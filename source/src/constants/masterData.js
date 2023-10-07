@@ -90,6 +90,16 @@ export const statusSubjectOptions = [
         color: '#CC0000',
     },
 ];
+export const stateResgistrationOptions = [
+    {
+        value: 1,
+        label: 'Đăng ký',
+        color: 'green',
+    },
+    { value: 2, label: 'Đang học', color: 'blue' },
+    { value: 3, label: 'Đã kết thúc', color: 'yellow' },
+    { value: 4, label: 'Đã huỷ', color: 'red' },
+];
 
 export const lectureKindOptions = [
     {
@@ -240,9 +250,10 @@ export const dateFilterOptions = [
 export const levelOptionSelect = [
     {
         value: 1,
-        label: 'Intern',
+        label: 'Level 1',
     },
-    { value: 2, label: 'Fresher' },
-    { value: 3, label: 'Junior' },
-    { value: 4, label: 'Senior' },
+    { value: 2, label: 'Level 2' },
+    { value: 3, label: 'Level 3' },
+    { value: 4, label: 'Level 4' },
+    { value: 5, label: 'Level 5' },
 ];

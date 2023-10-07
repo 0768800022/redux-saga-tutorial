@@ -34,6 +34,8 @@ const LectureListPage = () => {
     const paramid = useParams();
     const dispatch = useDispatch();
     const selectedRowKey = useSelector(selectedRowKeySelector);
+    const queryParameters = new URLSearchParams(window.location.search);
+    const subjectName = queryParameters.get('subjectName');
     const { data, mixinFuncs, loading, pagination, changePagination, pagePath } = useListBase({
         apiConfig: {
             getList: apiConfig.lecture.getBySubject,
@@ -139,6 +141,9 @@ const LectureListPage = () => {
             ]}
         >
             <ListPage
+                title={
+                    <span style={{ fontWeight: 'normal', position: 'absolute', fontSize: '16px' }}>{subjectName}</span>
+                }
                 style={{ width: '900px' }}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
