@@ -3,28 +3,27 @@ import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-import ProjectForm from './projectForm';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import routes from './routes';
 import apiConfig from '@constants/apiConfig';
+import DeveloperForm from './DeveloperForm';
 
 const messages = defineMessages({
     home: 'Trang chủ',
-    project: 'Dự án',
-    objectName: 'Dự án',
+    subject: 'Lập trình viên',
+    objectName: 'Lập trình viên',
 });
 
-const ProjectSavePage = () => {
-    const projectId = useParams();
+const DeveloperSavePage = () => {
     const translate = useTranslate();
     const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.project.getById,
-            create: apiConfig.project.create,
-            update: apiConfig.project.update,
+            getById: apiConfig.developer.getById,
+            create: apiConfig.developer.create,
+            update: apiConfig.developer.update,
         },
         options: {
-            getListUrl: generatePath(routes.projectListPage.path, { projectId }),
+            getListUrl: generatePath(routes.developerListPage.path, {}),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -32,13 +31,15 @@ const ProjectSavePage = () => {
                 return {
                     ...data,
                     id: detail.id,
-                    state : 1,
-                    status : 1,
+                    level: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
+                    level: 1,
+                    totalCancelProject: 1,
+                    totalProject: 1,
                 };
             };
         },
@@ -50,14 +51,14 @@ const ProjectSavePage = () => {
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: translate.formatMessage(messages.project),
-                    path: generatePath(routes.projectListPage.path, { projectId }),
+                    breadcrumbName: translate.formatMessage(messages.subject),
+                    path: generatePath(routes.developerListPage.path, {}),
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <ProjectForm
+            <DeveloperForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -69,4 +70,4 @@ const ProjectSavePage = () => {
     );
 };
 
-export default ProjectSavePage;
+export default DeveloperSavePage;

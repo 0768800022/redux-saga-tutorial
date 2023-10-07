@@ -20,6 +20,11 @@ const navMenuConfig = [
                 key: 'leader-management',
                 path: generatePath(routes.leaderListPage.path, {}),
             },
+            {
+                label: 'Quản lý lập trình viên',
+                key: 'developer-management',
+                path: generatePath(routes.developerListPage.path, {}),
+            },
         ],
     },
     {

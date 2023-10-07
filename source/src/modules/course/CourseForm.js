@@ -20,6 +20,7 @@ const CourseForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
     const translate = useTranslate();
     const statusValues = translate.formatKeys(lectureState, ['label']);
+    console.log(statusValues);
     const statusValues1 = translate.formatKeys(statusOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
@@ -43,7 +44,6 @@ const CourseForm = (props) => {
     //         params: {},
     //     });
     // }, []);
-    //
     useEffect(() => {
         dataDetail.dateRegister = dataDetail.dateRegister && dayjs(dataDetail.dateRegister, DATE_FORMAT_VALUE);
         dataDetail.dateEnd = dataDetail.dateEnd && dayjs(dataDetail.dateEnd, DATE_FORMAT_VALUE);

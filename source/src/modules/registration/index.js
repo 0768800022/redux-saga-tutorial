@@ -35,6 +35,8 @@ function RegistrationListPage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const courseState = queryParameters.get('courseState');
+    console.log(courseState);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
         options: {
@@ -134,7 +136,7 @@ function RegistrationListPage() {
         >
             <ListPage
                 // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={mixinFuncs.renderActionBar()}
+                actionBar={courseState == 5 && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
