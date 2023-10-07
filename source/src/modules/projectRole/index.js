@@ -75,7 +75,7 @@ const ProjectRoleListPage = () => {
                 const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
-            width: 140,
+            width: 180,
             align: 'center',
         },
         mixinFuncs.renderStatusColumn({ width: '80px' }),

@@ -1,7 +1,7 @@
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import useListBase from '@hooks/useListBase';
 import React from 'react';
-import { UserOutlined ,DeleteOutlined } from '@ant-design/icons';
+import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import ListPage from '@components/common/layout/ListPage';
 import BaseTable from '@components/common/table/BaseTable';
@@ -38,7 +38,6 @@ const message = defineMessages({
 //     },
 // }) {
 const CategoryListPageCommon = ({ routes, kind }) => {
-
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
 
@@ -75,7 +74,6 @@ const CategoryListPageCommon = ({ routes, kind }) => {
                     kind,
                 };
             };
-
         },
     });
 
@@ -84,11 +82,11 @@ const CategoryListPageCommon = ({ routes, kind }) => {
             title: translate.formatMessage(message.name),
             dataIndex: 'categoryName',
         },
-        { 
-            title: translate.formatMessage(message.createDate), 
-            dataIndex: 'createdDate', 
+        {
+            title: translate.formatMessage(message.createDate),
+            dataIndex: 'createdDate',
             align: 'center',
-            width: 150,
+            width: 180,
         },
         {
             title: translate.formatMessage(message.status),
