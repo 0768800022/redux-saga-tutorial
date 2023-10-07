@@ -10,8 +10,8 @@ import ProjectRoleForm from './projectRoleForm';
 
 const messages = defineMessages({
     home: 'Trang chủ',
-    projectRole: 'Quyền dự án',
-    objectName: 'Quyền dự án',
+    projectRole: 'Vai trò dự án',
+    objectName: 'Vai trò dự án',
 });
 
 const ProjectRoleSavePage = () => {
@@ -37,7 +37,6 @@ const ProjectRoleSavePage = () => {
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    status: 1,
                 };
             };
         },

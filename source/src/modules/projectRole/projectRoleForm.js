@@ -12,7 +12,7 @@ const message = defineMessages({
     description: 'Mô tả',
     home: 'Trang chủ',
     objectName: 'Dự án',
-    projectRoleName: 'Tên quyền dự án',
+    projectRoleName: 'Tên vai trò dự án',
     status: 'Trạng thái',
 });
 const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {

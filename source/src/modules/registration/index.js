@@ -85,10 +85,11 @@ function RegistrationListPage() {
 
                 let dateString = '';
                 newCheck.map((item) => {
-                    if (item.value !== '00H00-00H00|00H00-00H00|00H00-00H00') {
+                    if (item.value !== undefined) {
                         dateString += item.key + ' ';
                     }
                 });
+
                 return <div>{dateString}</div>;
             },
         },
