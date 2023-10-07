@@ -43,6 +43,7 @@ const CourseForm = (props) => {
     //         params: {},
     //     });
     // }, []);
+    //
     useEffect(() => {
         dataDetail.dateRegister = dataDetail.dateRegister && dayjs(dataDetail.dateRegister, DATE_FORMAT_VALUE);
         dataDetail.dateEnd = dataDetail.dateEnd && dayjs(dataDetail.dateEnd, DATE_FORMAT_VALUE);
