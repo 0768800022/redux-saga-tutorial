@@ -55,14 +55,14 @@ const CourseListPage = () => {
                     </Button>
                 ),
 
-                task: ({ id, name, subject }) => (
+                task: ({ id, name, subject,state }) => (
                     <Button
                         type="link"
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(
-                                route.taskListPage.path + `?courseId=${id}&courseName=${name}&subjectId=${subject.id}`,
+                                route.taskListPage.path + `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}`,
                             );
                         }}
                     >
@@ -121,8 +121,8 @@ const CourseListPage = () => {
             width: 120,
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
-
-                return <Tag color={status.color}>{status.label}</Tag>;
+                console.log(status);
+                // return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
         mixinFuncs.renderActionColumn({ task: true, student: true, edit: true, delete: true }, { width: '150px' }),
