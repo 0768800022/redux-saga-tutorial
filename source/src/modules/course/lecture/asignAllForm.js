@@ -8,7 +8,6 @@ import DatePickerField from '@components/common/form/DatePickerField';
 import { DATE_FORMAT_VALUE } from '@constants/index';
 import { formatDateString } from '@utils/index';
 import dayjs from 'dayjs';
-import { PlusOutlined } from '@ant-design/icons';
 import useFetch from '@hooks/useFetch';
 import apiConfig from '@constants/apiConfig';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +15,7 @@ import useNotification from '@hooks/useNotification';
 import { useIntl } from 'react-intl';
 
 const message = defineMessages({
-    asignAll: 'Áp dụng',
+    asignAll: 'Tạo',
     objectName: 'Bài giảng',
     dueDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
@@ -110,12 +109,6 @@ const AsignAllForm = ({ courseId, lectureId }) => {
                 <Row gutter={16}>
                     <Col span={24}>
                         <TextField
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng nhập chú thích',
-                                },
-                            ]}
                             name="note"
                             label="Chú thích"
                             type="textarea"
@@ -124,7 +117,6 @@ const AsignAllForm = ({ courseId, lectureId }) => {
                 </Row>
                 <div style={{ float: 'right' }}>
                     <Button key="submit" type="primary" htmlType="submit">
-                        <PlusOutlined />
                         {translate.formatMessage(message.asignAll)}
                     </Button>
                 </div>

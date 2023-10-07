@@ -93,7 +93,7 @@ function RegistrationListPage() {
 
                 return <div>{dateString}</div>;
             },
-            width: 110,
+            width: 120,
         },
         {
             title: translate.formatMessage(message.isIntern),

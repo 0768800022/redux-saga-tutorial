@@ -16,6 +16,7 @@ import projectRoutes from '@modules/project/routes';
 import projectRoleRoutes from '@modules/projectRole/routes';
 import developerRoutes from '@modules/developer/routes';
 import projectTaskRoutes from '@modules/projectTask/routes';
+import companyRoutes from '@modules/company/routes';
 
 /*
     auth
@@ -68,6 +69,7 @@ const routes = {
     ...projectRoleRoutes,
     ...developerRoutes,
     ...projectTaskRoutes,
+    ...companyRoutes,
 
     // keep this at last
     //
