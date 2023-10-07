@@ -84,10 +84,15 @@ const LectureListPage = () => {
                 if (record.lectureKind === 1) {
                     return null; 
                 }
+                const checkAsignItem = checkAsign.find(item => item.id === record.id);
+                const isDisabled = checkAsignItem ? checkAsignItem.status : false;
                 return (
+                    
                     <Radio
                         checked={lectureid && lectureid === record.id}
                         onChange={() => onSelectChange(record)}
+                        disabled={isDisabled}
+
                     />
                 );
             },
@@ -123,7 +128,8 @@ const LectureListPage = () => {
             if (ids.length > 0) {
                 executeCheckAsign({
                     data: {
-                        taskIds: ids,
+                        courseId: courseId,
+                        lectureIds: ids,
                     },
                     onCompleted: (response) => {
                         if (response.result === true) {
