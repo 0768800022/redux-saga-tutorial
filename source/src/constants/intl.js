@@ -85,10 +85,11 @@ export const lectureKindMessage = defineMessages({
 });
 
 export const lectureStateMessage = defineMessages({
-    prepared: 'Đang chuẩn bị',
+    prepared: 'Chưa bắt đầu',
     started: 'Đã bắt đầu',
     finished: 'Đã kết thúc',
     canceled: 'Đã hủy',
+    recruit: 'Chiêu sinh',
 });
 
 export const taskStateMessage = defineMessages({

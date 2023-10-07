@@ -23,12 +23,12 @@ const message = defineMessages({
     code: 'Mã dự án',
     id: 'Id',
     createdDate: 'Ngày tạo',
-    avatar: "Avater",
-    description: "Mô tả",
-    leader: "Người hướng dẫn",
-    name: "Tên dự án",
-    endDate: "Ngày kết thúc",
-    startDate: "Ngày bắt đầu",
+    avatar: 'Avater',
+    description: 'Mô tả',
+    leader: 'Người hướng dẫn',
+    name: 'Tên dự án',
+    endDate: 'Ngày kết thúc',
+    startDate: 'Ngày bắt đầu',
 });
 
 const ProjectListPage = () => {

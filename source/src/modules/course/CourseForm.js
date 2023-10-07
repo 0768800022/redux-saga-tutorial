@@ -46,7 +46,6 @@ const CourseForm = (props) => {
     useEffect(() => {
         dataDetail.dateRegister = dataDetail.dateRegister && dayjs(dataDetail.dateRegister, DATE_FORMAT_VALUE);
         dataDetail.dateEnd = dataDetail.dateEnd && dayjs(dataDetail.dateEnd, DATE_FORMAT_VALUE);
-
         form.setFieldsValue({
             ...dataDetail,
             subjectId: dataDetail?.subject?.subjectName,

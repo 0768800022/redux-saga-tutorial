@@ -20,18 +20,19 @@ import ScheduleTable from '@components/common/table/ScheduleTable';
 const messages = defineMessages({
     student: 'Tên sinh viên',
     isIntern: 'Đăng kí thực tập',
+    schedule: 'Thời khoá biểu',
 });
 const statesOptionSelect = [
     {
-        value: '1',
-        label: 'Chưa bắt đầu',
+        value: 1,
+        label: 'Đăng ký',
     },
-    { value: '2', label: 'Đã đăng ký' },
-    { value: '3', label: 'Đang thực tập' },
-    { value: '4', label: 'Đã huỷ' },
+    { value: 2, label: 'Đang học' },
+    { value: 3, label: 'Đã kết thúc' },
+    { value: 4, label: 'Đã huỷ' },
 ];
 
-function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) {
+function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
@@ -44,21 +45,30 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         setIsChecked(!isChecked);
     };
 
-    const {
-        data: students,
-        loading: getstudentsLoading,
-        execute: executestudents,
-    } = useFetch(apiConfig.student.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.fullName })),
-    });
-    useEffect(() => {
-        executestudents({
-            params: {},
-        });
-    }, []);
+    // const {
+    //     data: students,
+    //     loading: getstudentsLoading,
+    //     execute: executestudents,
+    // } = useFetch(apiConfig.student.autocomplete, {
+    //     immediate: true,
+    //     mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.fullName })),
+    // });
+    // useEffect(() => {
+    //     executestudents({
+    //         params: {},
+    //     });
+    // }, []);
     function formatTimeRange(timeArray) {
-        return timeArray.map((time) => `${time.from}-${time.to}`).join('|');
+        return timeArray
+            .map((time) => {
+                if (time.from === '00H00' && time.to === '00H00') {
+                    return '';
+                } else {
+                    return `${time.from}-${time.to}`;
+                }
+            })
+            .filter((time) => time !== '')
+            .join('|');
     }
     const handleSubmit = (values) => {
         values.isIntern = isChecked ? 1 : 0;
@@ -77,17 +87,43 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             t7: formatTimeRange(values.schedule.saturday),
             cn: formatTimeRange(values.schedule.sunday),
         };
-        values.schedule = values.schedule && JSON.stringify(newSchedule);
-        statesOptionSelect.map((state) => {
-            if (state.label == values.state) {
-                values.state = state.value;
-            }
-        });
-        if(!values?.state){
+        const filterNewSchedule = Object.entries(newSchedule)
+            .filter(([key, value]) => value !== '')
+            .reduce((acc, [key, value]) => {
+                acc[key] = value;
+                return acc;
+            }, {});
+        values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
+        if (!values?.state) {
             values.state = statesOptionSelect[0].value;
         }
         return mixinFuncs.handleSubmit({ ...values });
     };
+    function addFrameTime(data) {
+        const result = {};
+        const keys = ['t2', 't3', 't4', 't5', 't6', 't7', 'cn'];
+
+        keys.forEach((key) => {
+            if (Object.hasOwnProperty.call(data, key)) {
+                result[key] = data[key];
+            } else {
+                result[key] = '00H00-00H00|00H00-00H00|00H00-00H00';
+            }
+        });
+
+        // Split time and update missing fields
+        Object.keys(result).forEach((key) => {
+            const timeArray = result[key].split('|');
+            if (timeArray.length < 3) {
+                while (timeArray.length < 3) {
+                    timeArray.push('00H00-00H00');
+                }
+                result[key] = timeArray.join('|');
+            }
+        });
+
+        return result;
+    }
 
     const splitTime = (data) => {
         const result = {};
@@ -107,7 +143,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     const timeRanges = value.split('|');
                     const fromTo = timeRanges.map((timeRange) => {
                         const [from, to] = timeRange.split('-');
-
                         return {
                             from,
                             to,
@@ -124,9 +159,9 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         dataDetail?.isIntern && setIsChecked(dataDetail?.isIntern == 1 && true);
         let data = dataDetail?.schedule && JSON.parse(dataDetail?.schedule);
         if (data) {
-            data = splitTime(data);
+            const dataFullFrame = addFrameTime(data);
+            data = splitTime(dataFullFrame);
         }
-
         let dataDefault = {};
         daysOfWeekSchedule.map((day) => {
             dataDefault = {
@@ -159,12 +194,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                 timeRange.to = dayjs(timeRange.to, 'HH:mm');
             }
         }
-        dataDetail &&
-            statesOptionSelect.map((state) => {
-                if (state.value == dataDetail.state) {
-                    dataDetail.state = state.label;
-                }
-            });
+
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
@@ -202,6 +232,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     <Row gutter={16}>
                         <Col span={12}>
                             <AutoCompleteField
+                                disabled={isEditing}
                                 required
                                 label={translate.formatMessage(messages.student)}
                                 name="studentId"
@@ -231,8 +262,8 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                         </Col>
                     </Row>
                 </div>
-
                 <ScheduleTable
+                    label={translate.formatMessage(messages.schedule)}
                     onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
                     translate={translate}
                     daysOfWeekSchedule={daysOfWeekSchedule}

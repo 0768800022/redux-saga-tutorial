@@ -18,11 +18,10 @@ import classNames from 'classnames';
 
 const message = defineMessages({
     home: 'Trang chủ',
-    projectRole: 'Quyền dự án',
-    objectName: 'Quyền dự án',
+    projectRole: 'Vai trò dự án',
+    objectName: 'Vai trò dự án',
     createdDate: 'Ngày tạo',
-    description: 'Mô tả',
-    name: 'Tên quyền dự án',
+    name: 'Tên vai trò dự án',
 });
 
 const ProjectRoleListPage = () => {
@@ -66,11 +65,6 @@ const ProjectRoleListPage = () => {
             dataIndex: 'projectRoleName',
         },
         {
-            title: translate.formatMessage(message.description),
-            dataIndex: 'description',
-            width: 180,
-        },
-        {
             title: translate.formatMessage(message.createdDate),
             dataIndex: 'createdDate',
             render: (createdDate) => {
@@ -81,7 +75,7 @@ const ProjectRoleListPage = () => {
                 const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
-            width: 140,
+            width: 180,
             align: 'center',
         },
         mixinFuncs.renderStatusColumn({ width: '80px' }),

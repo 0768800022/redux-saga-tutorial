@@ -20,6 +20,11 @@ const navMenuConfig = [
                 key: 'leader-management',
                 path: generatePath(routes.leaderListPage.path, {}),
             },
+            {
+                label: 'Quản lý lập trình viên',
+                key: 'developer-management',
+                path: generatePath(routes.developerListPage.path, {}),
+            },
         ],
     },
     {
@@ -37,6 +42,23 @@ const navMenuConfig = [
                 label: 'Môn học',
                 key: 'mon-hoc',
                 path: generatePath(routes.subjectListPage.path, {}),
+            },
+        ],
+    },
+    {
+        label: 'Quản lý dự án',
+        key: 'quan-ly-du-an',
+        icon: <IconUserBolt size={16} />,
+        children: [
+            {
+                label: 'Quản lý dự án',
+                key: 'project-management',
+                path: generatePath(routes.projectListPage.path, {}),
+            },
+            {
+                label: 'Quản lý vai trò dự án',
+                key: 'project-role-management',
+                path: generatePath(routes.projectRoleListPage.path, {}),
             },
         ],
     },
@@ -66,23 +88,6 @@ const navMenuConfig = [
                 path: generatePath(routes.categoryListPageMajor.path, {
                     kind: categoryKind.major.value,
                 }),
-            },
-        ],
-    },
-    {
-        label: 'Quản lý dự án',
-        key: 'quan-ly-du-an',
-        icon: <IconUserBolt size={16} />,
-        children: [
-            {
-                label: 'Quản lý dự án',
-                key: 'project-management',
-                path: generatePath(routes.projectListPage.path, {}),
-            },
-            {
-                label: 'Quản lý quyền dự án',
-                key: 'project-role-management',
-                path: generatePath(routes.projectRoleListPage.path, {}),
             },
         ],
     },
