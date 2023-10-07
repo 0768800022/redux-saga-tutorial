@@ -129,7 +129,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             label={translate.formatMessage(message.startDate)}
                             name="startDate"
                             style={{ width: '100%' }}
-                            format={DEFAULT_FORMAT} 
+                            format={DATE_FORMAT_DISPLAY} 
                             required/>
                     </Col>
                     <Col span={12}>

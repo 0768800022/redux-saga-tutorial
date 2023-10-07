@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import React from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
+import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY,DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -90,17 +90,21 @@ const ProjectListPage = () => {
             width: 150,
         },
         {
-            title: translate.formatMessage(message.createdDate),
-            dataIndex: 'createdDate',
-            render: (createdDate) => {
-                const modifiedDate = convertStringToDateTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT).add(
-                    7,
-                    'hour',
-                );
-                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
+            title: translate.formatMessage(message.startDate),
+            dataIndex: 'startDate',
+            render: (startDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(startDate,DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
             },
-            width: 120,
+            width: 130,
+            align: 'center',
+        },
+        {
+            title: translate.formatMessage(message.endDate),
+            dataIndex: 'endDate',
+            render: (endDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(endDate,'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}</div>;
+            },
+            width: 130,
             align: 'center',
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '110px' }),

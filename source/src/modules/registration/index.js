@@ -135,7 +135,7 @@ function RegistrationListPage() {
             ]}
         >
             <ListPage
-                title={<p style={{ fontSize: '18px' }}>Tên khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
+                title={<p style={{ fontSize: '18px' }}>Khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
