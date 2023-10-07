@@ -64,7 +64,6 @@ const CourseForm = (props) => {
     //         params: {},
     //     });
     // }, []);
-    console.log(dataDetail);
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
