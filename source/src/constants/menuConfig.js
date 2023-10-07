@@ -46,6 +46,23 @@ const navMenuConfig = [
         ],
     },
     {
+        label: 'Quản lý dự án',
+        key: 'quan-ly-du-an',
+        icon: <IconUserBolt size={16} />,
+        children: [
+            {
+                label: 'Quản lý dự án',
+                key: 'project-management',
+                path: generatePath(routes.projectListPage.path, {}),
+            },
+            {
+                label: 'Quản lý vai trò dự án',
+                key: 'project-role-management',
+                path: generatePath(routes.projectRoleListPage.path, {}),
+            },
+        ],
+    },
+    {
         label: 'Quản lý hệ thống',
         key: 'quan-ly-he-thong',
         icon: <IconCategory2 size={16} />,
@@ -71,23 +88,6 @@ const navMenuConfig = [
                 path: generatePath(routes.categoryListPageMajor.path, {
                     kind: categoryKind.major.value,
                 }),
-            },
-        ],
-    },
-    {
-        label: 'Quản lý dự án',
-        key: 'quan-ly-du-an',
-        icon: <IconUserBolt size={16} />,
-        children: [
-            {
-                label: 'Quản lý dự án',
-                key: 'project-management',
-                path: generatePath(routes.projectListPage.path, {}),
-            },
-            {
-                label: 'Quản lý quyền dự án',
-                key: 'project-role-management',
-                path: generatePath(routes.projectRoleListPage.path, {}),
             },
         ],
     },

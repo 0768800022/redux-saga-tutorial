@@ -18,11 +18,10 @@ import classNames from 'classnames';
 
 const message = defineMessages({
     home: 'Trang chủ',
-    projectRole: 'Quyền dự án',
-    objectName: 'Quyền dự án',
+    projectRole: 'Vai trò dự án',
+    objectName: 'Vai trò dự án',
     createdDate: 'Ngày tạo',
-    description: 'Mô tả',
-    name: 'Tên quyền dự án',
+    name: 'Tên vai trò dự án',
 });
 
 const ProjectRoleListPage = () => {
@@ -64,11 +63,6 @@ const ProjectRoleListPage = () => {
         {
             title: translate.formatMessage(message.name),
             dataIndex: 'projectRoleName',
-        },
-        {
-            title: translate.formatMessage(message.description),
-            dataIndex: 'description',
-            width: 180,
         },
         {
             title: translate.formatMessage(message.createdDate),
