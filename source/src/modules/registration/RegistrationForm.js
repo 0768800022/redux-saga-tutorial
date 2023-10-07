@@ -5,7 +5,7 @@ import SelectField from '@components/common/form/SelectField';
 import TimePickerField from '@components/common/form/TimePickerField';
 import { TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { daysOfWeekSchedule as daysOfWeekScheduleOptions } from '@constants/masterData';
+import { daysOfWeekSchedule as daysOfWeekScheduleOptions, stateResgistrationOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -22,19 +22,11 @@ const messages = defineMessages({
     isIntern: 'Đăng kí thực tập',
     schedule: 'Thời khoá biểu',
 });
-const statesOptionSelect = [
-    {
-        value: 1,
-        label: 'Đăng ký',
-    },
-    { value: 2, label: 'Đang học' },
-    { value: 3, label: 'Đã kết thúc' },
-    { value: 4, label: 'Đã huỷ' },
-];
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
+    const stateResgistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -95,7 +87,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             }, {});
         values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
         if (!values?.state) {
-            values.state = statesOptionSelect[0].value;
+            values.state = stateResgistration[0].value;
         }
         return mixinFuncs.handleSubmit({ ...values });
     };
@@ -244,10 +236,10 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                         </Col>
                         <Col span={12}>
                             <SelectField
-                                defaultValue={statesOptionSelect[0]}
+                                defaultValue={stateResgistration[0]}
                                 label={<FormattedMessage defaultMessage="Trạng thái" />}
                                 name="state"
-                                options={statesOptionSelect}
+                                options={stateResgistration}
                             />
                         </Col>
                         <Col span={12}>

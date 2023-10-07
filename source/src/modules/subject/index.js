@@ -31,7 +31,8 @@ const message = defineMessages({
 
 const SubjectListPage = () => {
     const translate = useTranslate();
-    const navigate = useNavigate();
+    const navigate = useNavigate(); 
+    const statusSubject = translate.formatKeys(statusSubjectOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.subject,
         options: {
@@ -106,7 +107,7 @@ const SubjectListPage = () => {
             align: 'center',
             width: 120,
             render(dataRow) {
-                const status = statusSubjectOptions.find((item) => item.value == dataRow);
+                const status = statusSubject.find((item) => item.value == dataRow);
 
                 return <Tag color={status.color}>{status.label}</Tag>;
             },

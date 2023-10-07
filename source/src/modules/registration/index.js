@@ -5,7 +5,7 @@ import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { statusOptions } from '@constants/masterData';
+import { stateResgistrationOptions, statusOptions } from '@constants/masterData';
 import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -33,6 +33,7 @@ function RegistrationListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
+    const stateRegistration = translate.formatKeys( stateResgistrationOptions, ['label']);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
@@ -115,6 +116,16 @@ function RegistrationListPage() {
             dataIndex: 'createdDate',
             align: 'center',
             width: 170,
+        },
+        {
+            title: translate.formatMessage(message.state),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateRegistration.find((item) => item.value == dataRow);
+                return <Tag color={state.color}>{state.label}</Tag>;
+            },
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
     ];
