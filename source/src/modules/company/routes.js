@@ -8,13 +8,14 @@ export default {
         title: 'Company',
         auth: true,
         component: CompanyListPage,
-        permissions: apiConfig.company.getList.baseURL,
+        permissions: [apiConfig.company.getList.baseURL],
     },
     studentSavePage: {
         path: '/company/:id',
         title: 'Company Save Page',
         auth: true,
         component: CompanySavePage,
+        separateCheck: true,
         permission: [apiConfig.company.create.baseURL, apiConfig.company.update.baseURL],
     },
 };

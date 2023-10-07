@@ -143,8 +143,8 @@ export const validatePermission = (
     requiredPermissions = [],
     userPermissions = [],
     requiredKind,
-    excludeKind = [],
     userKind,
+    excludeKind = [],
     profile,
     path,
     separate,
@@ -162,7 +162,7 @@ export const validatePermission = (
     } else {
         permissionsSavePage = requiredPermissions;
     }
-    return removePathParams(permissionsSavePage).every((item) => userPermissions?.includes(item?.replace(apiUrl, '/')));
+    return removePathParams(permissionsSavePage).every((item) => userPermissions?.includes(item?.replace(apiTenantUrl, '/')));
 };
 
 export const randomString = (length = 4) => {
