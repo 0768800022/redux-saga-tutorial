@@ -97,7 +97,7 @@ const SubjectListPage = () => {
                 const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
-            width: 200,
+            width: 180,
             align: 'center',
         },
         {
