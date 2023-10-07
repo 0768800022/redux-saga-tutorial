@@ -12,6 +12,8 @@ import { Button,Modal,Radio }  from 'antd';
 import AsignAllForm from './asignAllForm';
 import useFetch from '@hooks/useFetch';
 import BaseTable from '@components/common/table/BaseTable';
+import useDragDrop from '@hooks/useDragDrop';
+
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
@@ -65,6 +67,13 @@ const LectureListPage = () => {
         setLectureId(record.id);
     };
 
+    const { sortedData } = useDragDrop({
+        data,
+        apiConfig: apiConfig.lecture.updateSort,
+        setTableLoading: () => {},
+        indexField: 'ordering',
+    });
+
     const columns = [
         {
             title: '',
@@ -75,10 +84,15 @@ const LectureListPage = () => {
                 if (record.lectureKind === 1) {
                     return null; 
                 }
+                const checkAsignItem = checkAsign.find(item => item.id === record.id);
+                const isDisabled = checkAsignItem ? checkAsignItem.status : false;
                 return (
+                    
                     <Radio
                         checked={lectureid && lectureid === record.id}
                         onChange={() => onSelectChange(record)}
+                        disabled={isDisabled}
+
                     />
                 );
             },
@@ -114,7 +128,8 @@ const LectureListPage = () => {
             if (ids.length > 0) {
                 executeCheckAsign({
                     data: {
-                        taskIds: ids,
+                        courseId: courseId,
+                        lectureIds: ids,
                     },
                     onCompleted: (response) => {
                         if (response.result === true) {
@@ -159,7 +174,7 @@ const LectureListPage = () => {
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
-                            dataSource={data}
+                            dataSource={sortedData}
                             columns={columns}
                         />
                     </>

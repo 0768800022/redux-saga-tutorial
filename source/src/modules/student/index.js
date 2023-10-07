@@ -41,13 +41,13 @@ const StudentListPage = () => {
                 }
             };
             funcs.additionalActionColumnButtons = () => ({
-                task: ({ id, name }) => (
+                task: ({ id, fullName }) => (
                     <Button
                         type="link"
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigate(route.studentCourseListPage.path + `?studentId=${id}`);
+                            navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${fullName}`);
                             // navigate(route.studentCourseListPage.path);
                             // navigate(`./course/${id}`);
                             // navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
@@ -72,10 +72,6 @@ const StudentListPage = () => {
                 const result = convertUtcToLocalTime(birthday, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
                 return <div>{result}</div>;
             },
-        },
-        {
-            title: <FormattedMessage defaultMessage="Mã số sinh viên" />,
-            dataIndex: 'mssv',
         },
         {
             title: <FormattedMessage defaultMessage="Số điện thoại" />,

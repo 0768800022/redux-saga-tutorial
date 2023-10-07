@@ -98,6 +98,7 @@ function RegistrationListPage() {
             title: translate.formatMessage(message.isIntern),
             dataIndex: 'isIntern',
             align: 'center',
+            width: 150,
             render: (item) => {
                 let text;
                 if (item == 1) {
@@ -112,6 +113,7 @@ function RegistrationListPage() {
             title: translate.formatMessage(message.createDate),
             dataIndex: 'createdDate',
             align: 'center',
+            width: 150,
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
@@ -136,6 +138,7 @@ function RegistrationListPage() {
         >
             <ListPage
                 // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                title={<p style={{ fontSize: '18px' }}>Tên khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
                 actionBar={courseState == 5 && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

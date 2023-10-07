@@ -75,6 +75,7 @@ function TaskListPage() {
         {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
+            width: 140,
             render: (startDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
@@ -87,6 +88,7 @@ function TaskListPage() {
         {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
+            width: 140,
             render: (dueDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
@@ -100,7 +102,7 @@ function TaskListPage() {
             title: translate.formatMessage(message.state),
             dataIndex: 'state',
             align: 'center',
-            width: 250,
+            width: 120,
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
 
@@ -122,19 +124,21 @@ function TaskListPage() {
                 { breadcrumbName: translate.formatMessage(message.task) },
             ]}
         >
-            <ListPage
-                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={mixinFuncs.renderActionBar()}
-                baseTable={
-                    <BaseTable
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={data}
-                        columns={columns}
-                    />
-                }
-            />
+            <div>
+                <ListPage
+                    title={<p style={{ fontSize: '18px' }}>Tên khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
+                    actionBar={mixinFuncs.renderActionBar()}
+                    baseTable={
+                        <BaseTable
+                            onChange={changePagination}
+                            pagination={pagination}
+                            loading={loading}
+                            dataSource={data}
+                            columns={columns}
+                        />
+                    }
+                />
+            </div>
         </PageWrapper>
     );
 }

@@ -46,7 +46,7 @@ const LeaderListPage = () => {
             title: '#',
             dataIndex: 'avatar',
             align: 'center',
-            width: 100,
+            width: 80,
             render: (avatar) => (
                 <Avatar
                     size="large"
@@ -63,13 +63,14 @@ const LeaderListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Email" />,
             dataIndex: 'email',
+            width: '200px',
         },
         {
             title: <FormattedMessage defaultMessage="Số điện thoại" />,
             dataIndex: 'phone',
-            width: '200px',
+            width: '120px',
         },
-        mixinFuncs.renderStatusColumn({ width: '150px' }),
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
