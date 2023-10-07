@@ -35,6 +35,7 @@ function RegistrationListPage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const courseState = queryParameters.get('courseState');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
         options: {
@@ -135,8 +136,9 @@ function RegistrationListPage() {
             ]}
         >
             <ListPage
+                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 title={<p style={{ fontSize: '18px' }}>Tên khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
-                actionBar={mixinFuncs.renderActionBar()}
+                actionBar={courseState == 5 && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

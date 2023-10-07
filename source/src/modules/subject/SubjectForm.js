@@ -1,5 +1,7 @@
 import { BaseForm } from '@components/common/form/BaseForm';
+import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
+import { statusSubjectOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import { Card, Col, Form, Row } from 'antd';
 import React, { useEffect } from 'react';
@@ -33,6 +35,14 @@ const SubjectForm = (props) => {
                             required
                             label={<FormattedMessage defaultMessage="Mã môn học" />}
                             name="subjectCode"
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            defaultValue={statusSubjectOptions[0]}
+                            label={<FormattedMessage defaultMessage="Trạng thái" />}
+                            name="status"
+                            options={statusSubjectOptions}
                         />
                     </Col>
                 </Row>
