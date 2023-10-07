@@ -133,7 +133,6 @@ const CourseListPage = () => {
             width: 120,
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
-                console.log(status);
                 return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
