@@ -7,7 +7,7 @@ export default {
         path: '/developer',
         title: 'Developer',
         auth: true,
-        component:  DeveloperListPage,
+        component: DeveloperListPage,
         permissions: [apiConfig.developer.getList.baseURL],
     },
     developerSavePage: {

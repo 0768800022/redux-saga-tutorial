@@ -23,12 +23,12 @@ const message = defineMessages({
     code: 'Mã dự án',
     id: 'Id',
     createdDate: 'Ngày tạo',
-    avatar: "Avater",
-    description: "Mô tả",
-    leader: "Người hướng dẫn",
-    name: "Tên dự án",
-    endDate: "Ngày kết thúc",
-    startDate: "Ngày bắt đầu",
+    avatar: 'Avater',
+    description: 'Mô tả',
+    leader: 'Người hướng dẫn',
+    name: 'Tên dự án',
+    endDate: 'Ngày kết thúc',
+    startDate: 'Ngày bắt đầu',
 });
 
 const ProjectListPage = () => {
@@ -100,7 +100,7 @@ const ProjectListPage = () => {
                 const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
-            width: 120,
+            width: 180,
             align: 'center',
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '110px' }),
