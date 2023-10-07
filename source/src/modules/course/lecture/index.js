@@ -6,21 +6,20 @@ import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
-import { PlusOutlined } from '@ant-design/icons';
 import routes from '../routes';
-import { Button,Modal,Radio }  from 'antd';
+import { Button,Modal,Radio,Checkbox }  from 'antd';
 import AsignAllForm from './asignAllForm';
 import useFetch from '@hooks/useFetch';
 import BaseTable from '@components/common/table/BaseTable';
 import useDragDrop from '@hooks/useDragDrop';
-
+import styles from './AsignAll.module.scss';
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
     student: 'Học viên',
     course: 'Khoá học',
     lectureName: 'Tên bài giảng',
-    asignAll: 'Áp dụng tất cả',
+    asignAll: 'Tạo task',
     task:'Task',
     asignAllModal: 'Tạo task',
 });
@@ -62,7 +61,6 @@ const LectureListPage = () => {
             };
         },
     });
-
     const onSelectChange = (record) => {
         setLectureId(record.id);
     };
@@ -81,20 +79,20 @@ const LectureListPage = () => {
             key: 'id',
             width : '30px',
             render: (text, record, index) => {
-                if (record.lectureKind === 1) {
-                    return null; 
-                }
                 const checkAsignItem = checkAsign.find(item => item.id === record.id);
                 const isDisabled = checkAsignItem ? checkAsignItem.status : false;
-                return (
-                    
-                    <Radio
-                        checked={lectureid && lectureid === record.id}
-                        onChange={() => onSelectChange(record)}
-                        disabled={isDisabled}
-
-                    />
-                );
+                if (record.lectureKind === 1 || isDisabled) {
+                    return null; 
+                }
+                else{
+                    return (
+                        <Radio
+                            checked={lectureid && lectureid === record.id}
+                            onChange={() => onSelectChange(record)}
+                        />
+                    );
+                }
+                
             },
         },
         {
@@ -114,6 +112,28 @@ const LectureListPage = () => {
                     };
                 }
                 return <div style={styles}>{lectureName}</div>;
+            },
+        },
+        {
+            title: '',
+            dataIndex: 'id',
+            key: 'id',
+            width : '30px',
+            render: (text, record, index) => {
+                const checkAsignItem = checkAsign.find(item => item.id === record.id);
+                const isDisabled = checkAsignItem ? checkAsignItem.status : false;
+                if (record.lectureKind === 1) {
+                    return null; 
+                }
+                else if(isDisabled){
+                    return (
+                        <Checkbox 
+                            checked = 'true'    
+                            className={styles.selectedRow}
+                        />
+                    );
+                }
+        
             },
         },
     ];
@@ -143,6 +163,14 @@ const LectureListPage = () => {
         }
     }, [data, executeCheckAsign]);
     
+    const rowClassName = (record) => {
+        const checkAsignItem = checkAsign.find(item => item.id === record.id);
+        const isDisabled = checkAsignItem ? checkAsignItem.status : false;
+        if (isDisabled) {
+            return styles.customRow;
+        }   
+        return '';
+    };
     return (
         
         <PageWrapper 
@@ -163,7 +191,6 @@ const LectureListPage = () => {
                             type="primary" 
                             disabled={disabledSubmit}   
                             onClick={() => setShowPreviewModal(true)} >
-                            <PlusOutlined />
                             {translate.formatMessage(message.asignAll)}
                         </Button>
                     </div>
@@ -171,11 +198,19 @@ const LectureListPage = () => {
                 baseTable={
                     <>
                         <BaseTable
+                            rowClassName={rowClassName}
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
                             dataSource={sortedData}
                             columns={columns}
+                            onRow={(record) => ({
+                                onClick: () => {
+                                    if (record.lectureKind === 2) {
+                                        onSelectChange(record);
+                                    }
+                                },
+                            })}
                         />
                     </>
                 }
