@@ -1,6 +1,7 @@
 REACT_APP_API = https://elms-auth.developteam.net/
 REACT_APP_API_MEDIA = https://org-media-template.developteam.net/
 REACT_APP_ENV = dev
+REACT_APP_API_TENANT = https://elms-tenant-api.developteam.net/
 GENERATE_SOURCEMAP = true
 CI = false
 IMAGE_INLINE_SIZE_LIMIT = 0

@@ -21,25 +21,25 @@ import dayjs from 'dayjs';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
-    studentId: 'Tên sinh viên',
+    developer: 'Người thực hiện',
     home: 'Trang chủ',
     state: 'Trạng thái',
-    task: 'Task',
-    course: 'Khóa học',
+    projectTask: 'Task',
+    project: 'Dự án',
 });
 
-function TaskListPage() {
+function ProjectTaskListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const courseId = queryParameters.get('courseId');
-    const courseName = queryParameters.get('courseName');
-    const subjectId = queryParameters.get('subjectId');
+    const projectId = queryParameters.get('projectId');
+    const projectName = queryParameters.get('projectName');
+    const leaderId = queryParameters.get('leaderId');
     const state = queryParameters.get('state');
 
     const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.task,
+        apiConfig: apiConfig.projectTask,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -58,21 +58,21 @@ function TaskListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+                return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
             };
         },
     });
     const columns = [
         {
-            title: translate.formatMessage(message.task),
-            dataIndex: ['lecture', 'lectureName'],
+            title: translate.formatMessage(message.projectTask),
+            dataIndex: 'taskName',
         },
         {
-            title: translate.formatMessage(message.studentId),
-            dataIndex: ['student', 'fullName'],
+            title: translate.formatMessage(message.developer),
+            dataIndex: ['developer','studentInfo', 'fullName'],
         },
         {
             title: 'Ngày bắt đầu',
@@ -112,7 +112,7 @@ function TaskListPage() {
             },
         },
 
-        mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
     return (
@@ -120,16 +120,16 @@ function TaskListPage() {
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
                 {
-                    breadcrumbName: translate.formatMessage(message.course),
-                    path: generatePath(routes.courseListPage.path),
+                    breadcrumbName: translate.formatMessage(message.project),
+                    path: generatePath(routes.projectListPage.path),
                 },
-                { breadcrumbName: translate.formatMessage(message.task) },
+                { breadcrumbName: translate.formatMessage(message.projectTask) },
             ]}
         >
             <div>
                 <ListPage
-                    title={<p style={{ fontSize: '18px' }}>Khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
-                    actionBar={state === 2 ? mixinFuncs.renderActionBar() : ''}
+                    title={<p style={{ fontSize: '18px' }}>Dự án: <span style={{ fontWeight: 'normal' }}>{projectName}</span></p>}
+                    actionBar={mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}
@@ -145,4 +145,4 @@ function TaskListPage() {
     );
 }
 
-export default TaskListPage;
+export default ProjectTaskListPage;

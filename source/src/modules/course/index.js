@@ -117,11 +117,7 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.dateEnd),
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(dateEnd, 'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}
-                    </div>
-                );
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateEnd,DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
             },
             width: 130,
             align: 'center',

@@ -116,21 +116,19 @@ const CourseListPage = () => {
 
     return (
         <PageWrapper routes={breadRoutes}>
-            <div>
-                <ListPage
-                    title={<p style={{ fontSize: '18px' }}>Tên sinh viên: <span style={{ fontWeight: 'normal' }}>{stuName}</span></p>}
-                    baseTable={
-                        <BaseTable
-                            onChange={changePagination}
-                            pagination={pagination}
-                            loading={loading}
-                            dataSource={data}
-                            columns={columns}
-                        />
+            <ListPage
+                title={<p style={{ fontSize: '18px' }}>Sinh viên: <span style={{ fontWeight: 'normal' }}>{stuName}</span></p>}
+                baseTable={
+                    <BaseTable
+                        onChange={changePagination}
+                        pagination={pagination}
+                        loading={loading}
+                        dataSource={data}
+                        columns={columns}
+                    />
 
-                    }
-                />
-            </div>
+                }
+            />
         </PageWrapper>
     );
 };

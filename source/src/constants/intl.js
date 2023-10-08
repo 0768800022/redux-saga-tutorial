@@ -96,3 +96,16 @@ export const taskStateMessage = defineMessages({
     asign: 'Đang làm',
     done: 'Hoàn thành',
 });
+
+export const stateResgistrationMessage = defineMessages({
+    register: 'Đăng ký',
+    learning: 'Đang học',
+    finished: 'Đã kết thúc',
+    canceled: 'Đã huỷ',
+});
+
+export const statusSubjectMessage = defineMessages({
+    active: 'Hoạt động',
+    canceled: 'Đã huỷ',
+});
+

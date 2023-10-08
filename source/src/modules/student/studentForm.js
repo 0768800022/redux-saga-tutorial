@@ -15,6 +15,8 @@ import { FormattedMessage } from 'react-intl';
 import apiConfig from '@constants/apiConfig';
 import { categoryKinds } from '@constants';
 import { useState } from 'react';
+import { statusOptions } from '@constants/masterData';
+import SelectField from '@components/common/form/SelectField';
 
 const message = defineMessages({
     fullName: 'Họ Và Tên',
@@ -31,6 +33,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     const kindOfEdu = categoryKinds.CATEGORY_KIND_EDUCATION;
     const kindOfGen = categoryKinds.CATEGORY_KIND_GENERATION;
     const [currentKindOfEdu, setCurrentKindOfEdu] = useState(kindOfEdu);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
 
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
@@ -139,6 +142,14 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             searchParams={(text) => ({ name: text })}
                             // disabled={isEditing}
                             required
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            required
+                            label={<FormattedMessage defaultMessage="Trạng thái" />}
+                            name="status"
+                            options={statusValues}
                         />
                     </Col>
                 </Row>

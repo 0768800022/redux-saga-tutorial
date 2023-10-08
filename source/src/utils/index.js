@@ -139,15 +139,30 @@ export const removePathParams = (paths) => {
     });
 };
 
-export const validatePermission = (requiredPermissions = [], userPermissions = [], requiredKind, userKind) => {
+export const validatePermission = (
+    requiredPermissions = [],
+    userPermissions = [],
+    requiredKind,
+    userKind,
+    excludeKind = [],
+    profile,
+    path,
+    separate,
+) => {
+    if (ensureArray(excludeKind).length > 0) {
+        if (ensureArray(excludeKind).some((kind) => kind == userKind)) return false;
+    }
     if (requiredKind) {
         if (requiredKind !== userKind) return false;
     }
     if (!requiredPermissions || requiredPermissions?.length == 0) return true;
-
-    return removePathParams(requiredPermissions).every((item) => {
-        return userPermissions?.includes(item?.replace(getData(storageKeys.TENANT_ID) ? apiTenantUrl : apiUrl, '/'));
-    });
+    let permissionsSavePage = [];
+    if (separate && requiredPermissions.length > 0) {
+        permissionsSavePage.push(path?.type === 'create' ? requiredPermissions[0] : requiredPermissions[1]);
+    } else {
+        permissionsSavePage = requiredPermissions;
+    }
+    return removePathParams(permissionsSavePage).every((item) => userPermissions?.includes(item?.replace(apiTenantUrl, '/')));
 };
 
 export const randomString = (length = 4) => {

@@ -5,7 +5,7 @@ import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { statusOptions } from '@constants/masterData';
+import { stateResgistrationOptions, statusOptions } from '@constants/masterData';
 import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -23,7 +23,7 @@ const message = defineMessages({
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     courseid: 'courseId',
-    createDate: 'Ngày tạo',
+    createDate: 'Ngày đăng kí',
     isIntern: 'Đăng kí thực tập',
     course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
@@ -33,6 +33,7 @@ function RegistrationListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
+    const stateRegistration = translate.formatKeys( stateResgistrationOptions, ['label']);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
@@ -75,13 +76,13 @@ function RegistrationListPage() {
             render: (schedule) => {
                 let check = JSON.parse(schedule);
                 const newCheck = [
-                    { key: 'Monday', value: check.t2 },
-                    { key: 'Tuesday', value: check.t3 },
-                    { key: 'Wednesday', value: check.t4 },
-                    { key: 'Thursday', value: check.t5 },
-                    { key: 'Friday', value: check.t6 },
-                    { key: 'Saturday', value: check.t7 },
-                    { key: 'Sunday', value: check.cn },
+                    { key: 'M', value: check.t2 },
+                    { key: 'T', value: check.t3 },
+                    { key: 'W', value: check.t4 },
+                    { key: 'T', value: check.t5 },
+                    { key: 'F', value: check.t6 },
+                    { key: 'S', value: check.t7 },
+                    { key: 'S', value: check.cn },
                 ];
 
                 let dateString = '';
@@ -93,6 +94,7 @@ function RegistrationListPage() {
 
                 return <div>{dateString}</div>;
             },
+            width: 120,
         },
         {
             title: translate.formatMessage(message.isIntern),
@@ -113,9 +115,19 @@ function RegistrationListPage() {
             title: translate.formatMessage(message.createDate),
             dataIndex: 'createdDate',
             align: 'center',
-            width: 150,
+            width: 170,
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        {
+            title: translate.formatMessage(message.state),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateRegistration.find((item) => item.value == dataRow);
+                return <Tag color={state.color}>{state.label}</Tag>;
+            },
+        },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
     ];
 
     const searchFields = [
@@ -137,13 +149,8 @@ function RegistrationListPage() {
             ]}
         >
             <ListPage
-                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                title={
-                    <p style={{ fontSize: '18px' }}>
-                        Tên khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span>
-                    </p>
-                }
-                actionBar={courseState == 5 && mixinFuncs.renderActionBar()}
+                title={<p style={{ fontSize: '18px' }}>Khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
+                actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

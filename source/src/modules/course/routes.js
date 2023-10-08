@@ -22,6 +22,7 @@ export default {
         title: 'Lecture List Page',
         auth: true,
         component: LectureListPage,
-        permissions: apiConfig.lecture.getList.baseURL,
+        separateCheck: true,
+        permissions: [apiConfig.lecture.getList.baseURL],
     },
 };
