@@ -1,5 +1,5 @@
 import routes from '@routes';
-import { IconCategory2, IconUserBolt, IconSchool,IconClipboardText } from '@tabler/icons-react';
+import { IconCategory2, IconUserBolt, IconSchool,IconClipboardText,IconBuildingCommunity } from '@tabler/icons-react';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
@@ -26,11 +26,7 @@ const navMenuConfig = [
                 key: 'developer-management',
                 path: generatePath(routes.developerListPage.path, {}),
             },
-            {
-                label: <FormattedMessage  defaultMessage='Quản lý công ty'/>,
-                key: 'company-management',
-                path: generatePath(routes.companyListPage.path, {}),
-            },
+            
         ],
     },
     {
@@ -69,6 +65,18 @@ const navMenuConfig = [
         ],
     },
     {
+        label: <FormattedMessage  defaultMessage='Quản lý công ty'/>,
+        key: 'quan-ly-cong-ty',
+        icon: <IconBuildingCommunity size={16} />,
+        children: [
+            {
+                label: <FormattedMessage  defaultMessage='Quản lý công ty'/>,
+                key: 'company-management',
+                path: generatePath(routes.companyListPage.path, {}),
+            },
+        ],
+    },
+    {
         label: <FormattedMessage  defaultMessage='Quản lý hệ thống'/>,
         key: 'quan-ly-he-thong',
         icon: <IconCategory2 size={16} />,
@@ -97,6 +105,8 @@ const navMenuConfig = [
             },
         ],
     },
+   
+    
 ];
 
 export default navMenuConfig;
