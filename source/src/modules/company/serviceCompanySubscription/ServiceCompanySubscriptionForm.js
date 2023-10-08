@@ -45,7 +45,6 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
             });
         }
     }, [isEditing]);
-    console.log(dataDetail);
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} >
             <Card>

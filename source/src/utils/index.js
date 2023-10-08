@@ -176,7 +176,6 @@ export const randomString = (length = 4) => {
 };
 
 export const formatMoney = (value, setting = {}) => {
-    console.log(setting);
     if ((value || value === 0) && !isNaN(value)) {
         const groupSeparator = setting.groupSeparator || '.';
         const decimalSeparator = setting.decimalSeparator || ',';

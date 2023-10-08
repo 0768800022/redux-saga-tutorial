@@ -6,7 +6,7 @@ import apiConfig from '@constants/apiConfig';
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
+import { DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
 import { formatMoney } from '@utils/index';
 const message = defineMessages({
     objectName: 'Company',
@@ -16,7 +16,6 @@ const message = defineMessages({
     price: 'Giá',
     status:'Trạng thái',
     valueable: 'Số ngày sử dụng',
-    
 });
 
 const ServiceCompanySubListPage = () => {

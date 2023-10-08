@@ -8,7 +8,7 @@ import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 const message = defineMessages({
-    objectName:'Công ty',
+    objectName:'Quản lý gói dịch vụ',
     home:'Trang chủ',
     serviceCompanySubscription: 'Quản lý gói dịch vụ',
 });
