@@ -22,7 +22,7 @@ const message = defineMessages({
     holine: 'Holine',
     logo: 'Logo',
     status: 'status',
-    username: 'họ và tên',
+    username: 'Tài khoản đăng nhập',
     company: 'Công ty',
 });
 
