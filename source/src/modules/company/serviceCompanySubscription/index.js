@@ -47,6 +47,7 @@ const ServiceCompanySubListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Giá" />,
             dataIndex: 'price',
+            width: '200px',
             render: (price) => {
                 const formattedValue = formatMoney(price, {
                     groupSeparator: '.',      
@@ -60,6 +61,8 @@ const ServiceCompanySubListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Số ngày sử dụng" />,
             dataIndex: 'valueable',
+            width: '200px',
+            align: 'center',
         },
         mixinFuncs.renderActionColumn({ task:true, edit: true, delete: true }, { width: '120px' }),
     ];
