@@ -184,7 +184,7 @@ const LectureListPage = () => {
             ]}
         >
             <ListPage
-                style={{ width: '700px' }}
+                style={{ width: '50vw' }}
                 actionBar={
                     <div style={{ float: 'right', margin: '0 0 32px 0' }}>
                         <Button 
