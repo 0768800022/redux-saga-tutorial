@@ -21,7 +21,6 @@ function ProjectTaskSavePage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
-    console.log("projectId "+projectId+"projectName "+projectName);
     const projectTaskId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
