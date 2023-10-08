@@ -121,7 +121,6 @@ const LectureListPage = () => {
             key: 'id',
             width : '30px',
             render: (text, record, index) => {
-                console.log(record.ordering);
                 const checkAsignItem = checkAsign.find(item => item.id === record.id);
                 const isDisabled = checkAsignItem ? checkAsignItem.status : false;
                 if (record.lectureKind === 1) {
