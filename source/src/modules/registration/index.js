@@ -150,8 +150,18 @@ function RegistrationListPage() {
             ]}
         >
             <ListPage
-                title={<p style={{ fontSize: '18px' }}>Khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
-                actionBar={mixinFuncs.renderActionBar()}
+                title={
+                    <span
+                        style={
+                            courseState != 5
+                                ? { fontWeight: 'normal', fontSize: '16px' }
+                                : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
+                        }
+                    >
+                        {courseName}
+                    </span>
+                }
+                actionBar={courseState == 5 && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
