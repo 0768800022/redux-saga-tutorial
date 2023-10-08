@@ -27,13 +27,14 @@ const message = defineMessages({
     isIntern: 'Đăng kí thực tập',
     course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
+    state: 'Trạng thái',
 });
 
 function RegistrationListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const stateRegistration = translate.formatKeys( stateResgistrationOptions, ['label']);
+    const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
@@ -149,8 +150,18 @@ function RegistrationListPage() {
             ]}
         >
             <ListPage
-                title={<p style={{ fontSize: '18px' }}>Khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
-                actionBar={mixinFuncs.renderActionBar()}
+                title={
+                    <span
+                        style={
+                            courseState != 5
+                                ? { fontWeight: 'normal', fontSize: '16px' }
+                                : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
+                        }
+                    >
+                        {courseName}
+                    </span>
+                }
+                actionBar={courseState == 5 && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

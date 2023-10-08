@@ -128,7 +128,15 @@ function TaskListPage() {
         >
             <div>
                 <ListPage
-                    title={<p style={{ fontSize: '18px' }}>Khóa học: <span style={{ fontWeight: 'normal' }}>{courseName}</span></p>}
+                    title={
+                        <span
+                            style={
+                                state != 2 ? { fontWeight: 'normal' } : { fontWeight: 'normal', position: 'absolute' }
+                            }
+                        >
+                            {courseName}
+                        </span>
+                    }
                     actionBar={state == 2 ? mixinFuncs.renderActionBar() : ''}
                     baseTable={
                         <BaseTable

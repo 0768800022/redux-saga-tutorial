@@ -252,9 +252,10 @@ export const dateFilterOptions = [
 export const levelOptionSelect = [
     {
         value: 1,
-        label: 'Intern',
+        label: 'Level 1',
     },
-    { value: 2, label: 'Fresher' },
-    { value: 3, label: 'Junior' },
-    { value: 4, label: 'Senior' },
+    { value: 2, label: 'Level 2' },
+    { value: 3, label: 'Level 3' },
+    { value: 4, label: 'Level 4' },
+    { value: 5, label: 'Level 5' },
 ];
