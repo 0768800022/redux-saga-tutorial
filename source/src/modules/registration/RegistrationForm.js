@@ -227,7 +227,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                 disabled={isEditing}
                                 required
                                 label={translate.formatMessage(messages.student)}
-                                name="studentId"
+                                name={['studentInfo', 'id']}
                                 apiConfig={apiConfig.student.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
                                 initialSearchParams={{ pageNumber: 0 }}

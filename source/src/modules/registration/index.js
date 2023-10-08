@@ -27,13 +27,14 @@ const message = defineMessages({
     isIntern: 'Đăng kí thực tập',
     course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
+    state: 'Trạng thái',
 });
 
 function RegistrationListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const stateRegistration = translate.formatKeys( stateResgistrationOptions, ['label']);
+    const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');

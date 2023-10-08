@@ -39,6 +39,7 @@ function RegistrationSavePage() {
                     id: detail.id,
                     status: 1,
                     isIssuedCertify: 1,
+                    studentId: detail.studentInfo.id,
                 };
             };
             funcs.prepareCreateData = (data) => {
@@ -46,6 +47,7 @@ function RegistrationSavePage() {
                     ...data,
                     courseId: courseId,
                     isIssuedCertify: 1,
+                    studentId: data.studentInfo.id,
                 };
             };
         },
