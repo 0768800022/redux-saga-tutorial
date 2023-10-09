@@ -49,7 +49,7 @@ const DeveloperListPage = () => {
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(
-                                routes.projectListPage.path +
+                                routes.developerProjectListPage.path +
                                     `?developerId=${id}&developerName=${studentInfo?.fullName}`,
                             );
                         }}

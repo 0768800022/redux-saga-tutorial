@@ -49,7 +49,7 @@ const LeaderListPage = () => {
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigate(routes.courseListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
+                            navigate(routes.leaderCourseListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
                         }}
                     >
                         <ContainerOutlined />
@@ -62,8 +62,7 @@ const LeaderListPage = () => {
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-
-                            navigate(routes.projectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
+                            navigate(routes.leaderProjectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
                         }}
                     >
                         <ProjectOutlined />
