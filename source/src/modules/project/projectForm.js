@@ -60,20 +60,21 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
 
-    useEffect(() => {
-        form.setFieldsValue({
-            ...dataDetail,
-        });
-        setImageUrl(dataDetail.avatar);
-    }, [dataDetail]);
+    // useEffect(() => {
+    //     form.setFieldsValue({
+    //         ...dataDetail,
+    //         status: statusValues[0].value,
+    //     });
+    //     setImageUrl(dataDetail.avatar);
+    // }, [dataDetail]);
 
-    useEffect(() => {
-        if (!isEditing > 0) {
-            form.setFieldsValue({
-                status: statusValues[0].value,
-            });
-        }
-    }, [isEditing]);
+    // useEffect(() => {
+    //     if (!isEditing > 0) {
+    //         form.setFieldsValue({
+    //             status: statusValues[0].value,
+    //         });
+    //     }
+    // }, [isEditing]);
 
     const {
         data: leaders,
@@ -145,7 +146,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     <Col span={12}>
                         <SelectField
                             required
-                            name="state"
+                            name="status"
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             allowClear={false}
                             options={statusValues}
