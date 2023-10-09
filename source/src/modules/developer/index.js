@@ -8,9 +8,9 @@ import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { IconClipboardText } from '@tabler/icons-react';
 import { convertUtcToLocalTime } from '@utils';
 import { Button } from 'antd';
+import { ProjectOutlined } from '@ant-design/icons';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -48,10 +48,13 @@ const DeveloperListPage = () => {
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigate(routes.projectListPage.path + `?developerId=${id}&developerName=${studentInfo?.fullName}`);
+                            navigate(
+                                routes.projectListPage.path +
+                                    `?developerId=${id}&developerName=${studentInfo?.fullName}`,
+                            );
                         }}
                     >
-                        <IconClipboardText size={16} />
+                        <ProjectOutlined />
                     </Button>
                 ),
             });
@@ -89,7 +92,7 @@ const DeveloperListPage = () => {
                 return <div>{createdDateLocal}</div>;
             },
         },
-        mixinFuncs.renderActionColumn({ project: true,edit: true, delete: true }, { width: 160 }),
+        mixinFuncs.renderActionColumn({ project: true, edit: true, delete: true }, { width: 160 }),
     ];
 
     const searchFields = [
