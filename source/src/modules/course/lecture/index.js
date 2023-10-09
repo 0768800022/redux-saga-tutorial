@@ -5,7 +5,7 @@ import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import routes from '../routes';
 import { Button,Modal,Radio }  from 'antd';
@@ -35,6 +35,7 @@ const LectureListPage = () => {
     const [lectureid, setLectureId] = useState(null);
     const [checkAsign, SetCheckAsign] = useState([]);
     const [asignAll, SetAsignAll] = useState([]);
+    const [visible, setVisible] = useState(true);
 
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
@@ -118,7 +119,7 @@ const LectureListPage = () => {
             render: (text, record, index) => {
                 const checkAsignItem = mergedArray.find(item => item.id === record.id);
                 const isDisabled = checkAsignItem ? checkAsignItem.status : false;
-                if (record.lectureKind === 1 || isDisabled || hasError) {
+                if (record.lectureKind === 1 || isDisabled) {
                     return null; 
                 }
                 else{
@@ -271,6 +272,20 @@ const LectureListPage = () => {
                     setHasError={setHasError}
                 />
             </Modal>
+
+            {hasError && 
+                <Modal 
+                    title={
+                        <span>
+                            <ExclamationCircleOutlined style={{ color: 'red' }} /> Lỗi
+                        </span>
+                    }
+                    open={visible} 
+                    onOk={() => setVisible(false)}
+                    onCancel={() => setVisible(false)}>
+                    <p>Chưa có sinh viên hoặc có sinh viên chưa hoàn tất thủ tục, vui lòng kiểm tra lại</p>
+                </Modal>
+            }
         </PageWrapper>
     );
 };

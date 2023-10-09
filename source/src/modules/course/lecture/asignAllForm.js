@@ -20,7 +20,6 @@ const message = defineMessages({
     dueDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
     asignAllSuccess:'Áp dụng {objectName} thành công',
-    asignAllError:'Chưa có sinh viên hoặc có sinh viên chưa hoàn tất thủ tục, vui lòng kiểm tra lại',
 });
 
 const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
@@ -58,12 +57,6 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
             },
             onError: (err) => {
                 if( err.response.data.message == 'ERROR-COURSE-ERROR-0003'){
-                    notification({
-                        type : 'error',
-                        message: intl.formatMessage(message.asignAllError, {
-                            objectName: translate.formatMessage(message.objectName),
-                        }),
-                    });
                     setHasError(true); 
                 }
             },
