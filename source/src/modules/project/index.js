@@ -24,7 +24,7 @@ import route from '@modules/projectTask/routes';
 import classNames from 'classnames';
 import styles from './project.module.scss';
 import { BookOutlined } from '@ant-design/icons';
-import { statusOptions } from '@constants/masterData';
+import { statusOptions, projectTaskState } from '@constants/masterData';
 
 import useFetch from '@hooks/useFetch';
 const message = defineMessages({
@@ -50,6 +50,7 @@ const ProjectListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const developerId = queryParameters.get('developerId');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const [dataApply, setDataApply] = useState([]);
@@ -196,6 +197,16 @@ const ProjectListPage = () => {
             render(dataRow) {
                 const status = statusValues.find((item) => item.value == dataRow);
                 return <Tag color={status.color}>{status.label}</Tag>;
+            },
+        },
+        {
+            title: "Tình trạng",
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues.find((item) => item.value == dataRow);
+                return <Tag color={state.color}>{state.label}</Tag>;
             },
         },
         mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '130px' }),

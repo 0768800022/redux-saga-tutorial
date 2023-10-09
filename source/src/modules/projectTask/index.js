@@ -17,7 +17,7 @@ import { defineMessages,FormattedMessage } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { projectTaskState } from '@constants/masterData';
+import { projectTaskState,statusOptions } from '@constants/masterData';
 
 
 const message = defineMessages({
@@ -38,7 +38,8 @@ function ProjectTaskListPage() {
     const leaderId = queryParameters.get('leaderId');
     const state = queryParameters.get('state');
 
-    const statusValues = translate.formatKeys(projectTaskState, ['label']);
+    const stateValues = translate.formatKeys(projectTaskState, ['label']);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.projectTask,
         options: {
@@ -91,8 +92,18 @@ function ProjectTaskListPage() {
             width: 200,
         },
         {
-            title: 'Trạng thái',
+            title: 'Tình trạng',
             dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues.find((item) => item.value == dataRow);
+                return <Tag color={state.color}>{state.label}</Tag>;
+            },
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'status',
             align: 'center',
             width: 120,
             render(dataRow) {
@@ -100,7 +111,6 @@ function ProjectTaskListPage() {
                 return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
-
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 

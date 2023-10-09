@@ -23,7 +23,7 @@ const message = defineMessages({
     endDate: 'Ngày kết thúc',
     company: 'Gói dịch vụ',
     status: 'Trạng thái',
-    subscriptionName: 'Tên đăng ký',
+    subscriptionName: 'Gói dịch vụ',
     price: 'Giá',
 });
 
@@ -86,19 +86,24 @@ const CompanySubscriptionListPage = () => {
                 const formattedValue = formatMoney(price, {
                     currentcy: 'đ',            
                     currentDecimal : '0',
+                    groupSeparator: ',',
                 });
                 return <div>{formattedValue}</div>;
             },
         },
         {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
+            title: <FormattedMessage defaultMessage="Sale Off" />,
+            dataIndex: 'saleOff',
+            width: '100px',
+            render: (saleOff) => {
+                const formattedValue = formatMoney(saleOff, {
+                    currentcy: '%',  
+                    currentDecimal : '0',
+                    currencyPosition: 'FRONT',
+                });
+                return <div>{formattedValue}</div>;
             },
+            align: 'center',
         },
         {
             title: 'Ngày bắt đầu',
@@ -125,6 +130,16 @@ const CompanySubscriptionListPage = () => {
                 );
             },
             align: 'center',
+        },
+        {
+            title: translate.formatMessage(message.status),
+            dataIndex: 'status',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];

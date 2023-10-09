@@ -1,4 +1,4 @@
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row, Input  } from 'antd';
 import React, { useEffect } from 'react';
 import SelectField from '@components/common/form/SelectField';
 import useBasicForm from '@hooks/useBasicForm';
@@ -17,6 +17,7 @@ import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import DatePickerField from '@components/common/form/DatePickerField';
 import dayjs from 'dayjs';
 import { formatDateString } from '@utils';
+import NumericField from '@components/common/form/NumericField';
 
 const messages = defineMessages({
     companyName: 'Tên công ty',
@@ -154,6 +155,23 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             name="status"
                             options={statusValues}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <NumericField
+                            label={<FormattedMessage defaultMessage="Giảm giá" />}
+                            name="saleOff"
+                            type="number"
+                            rules={[
+                                {
+                                    validator: (_, value) => {
+                                        if (value >= 1 && value <= 100) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Giá trị phải từ 1 đến 99'));
+                                    },
+                                },
+                            ]}
                         />
                     </Col>
                 </Row>
