@@ -73,7 +73,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         });
         setLogoUrl(dataDetail.logo);
     }, [dataDetail]);
-    
+    const usernamePattern = /^[a-z0-9]+$/;
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} >
             <Card>
@@ -139,7 +139,8 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             rules={[
                                 {
                                     required: true,
-                                    message: translate.formatMessage(messages.required),
+                                    pattern: usernamePattern,
+                                    message: 'Username chỉ được chứa kí tự thường a-z và số 0-9',
                                 },
                             ]}
                             name="username"
@@ -148,12 +149,8 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     <Col span={12}>
                         <TextField 
                             label={translate.formatMessage(messages.password)}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: translate.formatMessage(messages.required),
-                                },
-                            ]} 
+                            required = {isEditing ? false : true}
+
                             name="password" />
                     </Col>
                 </Row>

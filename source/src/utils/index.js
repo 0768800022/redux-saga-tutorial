@@ -181,7 +181,7 @@ export const formatMoney = (value, setting = {}) => {
         const decimalSeparator = setting.decimalSeparator || ',';
         const currentcy = setting.currentcy || '€';
         const currentcyPosition = setting.currentcyPosition || CurrentcyPositions.BACK;
-        value = (+value).toFixed(2);
+        value = (+value).toFixed(0);
         const decimalPosition = value.toString().indexOf('.');
         if (decimalPosition > 0) {
             const intVal = value.toString().substring(0, decimalPosition);
