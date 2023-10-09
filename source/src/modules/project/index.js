@@ -41,6 +41,7 @@ const message = defineMessages({
     endDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
     status: 'Trạng thái',
+    developer: 'Lập trình viên',
 });
 
 const ProjectListPage = () => {
@@ -50,6 +51,7 @@ const ProjectListPage = () => {
     const developerId = queryParameters.get('developerId');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const leaderName = queryParameters.get('leaderName');
+    const developerName = queryParameters.get('developerName');
     const [dataApply, setDataApply] = useState([]);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.project,
@@ -110,15 +112,23 @@ const ProjectListPage = () => {
         }
     }, [data]);
 
-    const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
-        { breadcrumbName: translate.formatMessage(message.project) },
-    ];
-    const breadLeaderRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
-        { breadcrumbName: translate.formatMessage(message.leader), path: routes.leaderListPage.path },
-        { breadcrumbName: translate.formatMessage(message.project) },
-    ];
+    const setBreadRoutes = () => {
+        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        if (leaderName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.leader),
+                path: routes.leaderListPage.path,
+            });
+        } else if (developerName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.developer),
+                path: routes.developerListPage.path,
+            });
+        }
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.project) });
+
+        return breadRoutes;
+    };
     const convertDate = (date) => {
         const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
@@ -184,13 +194,14 @@ const ProjectListPage = () => {
         },
         mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '130px' }),
     ];
+
     return (
-        <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
+        <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={
-                    leaderName && (
-                        <span style={{ fontWeight: 'normal', position: 'absolute', top: '50px' }}>{leaderName}</span>
-                    )
+                    <span style={{ fontWeight: 'normal', position: 'absolute', top: '50px' }}>
+                        {leaderName || developerName}
+                    </span>
                 }
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
