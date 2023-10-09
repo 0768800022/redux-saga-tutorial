@@ -46,12 +46,7 @@ const ProjectListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const developerId = queryParameters.get('developerId');
     const leaderName = queryParameters.get('leaderName');
-    const [dataFilter, setDataFilter] = useState();
-    const [dataApply, setDataApply] = useState();
-    const { data: dataListTask } = useFetch(apiConfig.projectTask.getList, {
-        immediate: true,
-        params: { developerId: developerId },
-    });
+    const [dataApply, setDataApply] = useState([]);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.project,
         options: {
@@ -90,17 +85,26 @@ const ProjectListPage = () => {
             });
         },
     });
+    const { data: dataListTask, execute: executeGetList } = useFetch(apiConfig.projectTask.getList, {
+        immediate: true,
+        params: { developerId: developerId },
+        mappingData: ({ data }) => data.content.map((item) => ({ projectId: item?.project.id })),
+    });
+    useEffect(() => {
+        let filteredList = [];
+        if (data?.length > 0 && developerId) {
+            if (dataListTask?.length > 0) {
+                filteredList = data.filter((item1) => dataListTask.some((item2) => item2.projectId === item1.id));
+            }
+            setDataApply(filteredList);
+        }
+    }, [dataListTask]);
 
     useEffect(() => {
-        const listTask = dataListTask?.data?.content;
-        let filteredList = [];
-        if (data?.length > 0) {
-            if (listTask?.length > 0) {
-                data = data.filter((item1) => listTask.some((item2) => item2.project.id === item1.id));
-            }
-            setDataFilter(filteredList);
+        if (!developerId) {
+            setDataApply(data);
         }
-    }, [dataListTask, data]);
+    }, [data]);
 
     const breadRoutes = [
         { breadcrumbName: translate.formatMessage(message.home) },
@@ -181,7 +185,7 @@ const ProjectListPage = () => {
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={data}
+                        dataSource={dataApply}
                         columns={columns}
                     />
                 }
