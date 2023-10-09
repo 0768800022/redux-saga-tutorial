@@ -63,6 +63,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
+            status: statusValues[0].value,
         });
         setImageUrl(dataDetail.avatar);
     }, [dataDetail]);
@@ -145,7 +146,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     <Col span={12}>
                         <SelectField
                             required
-                            name="state"
+                            name="status"
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             allowClear={false}
                             options={statusValues}

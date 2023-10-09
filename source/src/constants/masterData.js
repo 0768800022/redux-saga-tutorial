@@ -77,14 +77,14 @@ export const projectTaskState = [
 
 export const statusOptions = [
     {
-        value: STATUS_ACTIVE,
-        label: statusMessage.active,
-        color: '#00A648',
-    },
-    {
         value: STATUS_PENDING,
         label: statusMessage.pending,
         color: '#FFBF00',
+    },
+    {
+        value: STATUS_ACTIVE,
+        label: statusMessage.active,
+        color: '#00A648',
     },
     {
         value: STATUS_INACTIVE,

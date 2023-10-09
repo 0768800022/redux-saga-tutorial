@@ -167,7 +167,7 @@ const ProjectListPage = () => {
         },
         {
             title: translate.formatMessage(message.status),
-            dataIndex: 'state',
+            dataIndex: 'status',
             align: 'center',
             width: 120,
             render(dataRow) {

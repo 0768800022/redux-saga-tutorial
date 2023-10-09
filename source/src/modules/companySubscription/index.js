@@ -7,7 +7,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Avatar, Tag } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
@@ -30,6 +30,9 @@ const message = defineMessages({
 const CompanySubscriptionListPage = () => {
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const { pathname: pagePath } = useLocation();
+    const queryParameters = new URLSearchParams(window.location.search);
+    const companyId = queryParameters.get('companyId');
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.companySubscription,
         options: {
@@ -45,13 +48,19 @@ const CompanySubscriptionListPage = () => {
                     };
                 }
             };
+            funcs.getCreateLink = () => {
+                if (companyId !== null) {
+                    return `${pagePath}/create?companyId=${companyId}`;
+                }
+                return `${pagePath}/create`;
+            };
         },
     });
 
     const columns = [
         {
             title: '#',
-            dataIndex: [ 'company','logo' ],
+            dataIndex: ['company', 'logo'],
             align: 'center',
             width: 80,
             render: (logo) => (
@@ -64,28 +73,28 @@ const CompanySubscriptionListPage = () => {
         },
         {
             title: <FormattedMessage defaultMessage="Tên công ty" />,
-            dataIndex: [ 'company', 'companyName' ],
+            dataIndex: ['company', 'companyName'],
         },
         {
             title: <FormattedMessage defaultMessage="Gói dịch vụ" />,
-            dataIndex: ['subscription','name'],
+            dataIndex: ['subscription', 'name'],
         },
         {
             title: <FormattedMessage defaultMessage="Giá dịch vụ" />,
-            dataIndex: ['subscription','price'],
+            dataIndex: ['subscription', 'price'],
             render: (price) => {
                 const formattedValue = formatMoney(price, {
-                    groupSeparator: '.',      
-                    decimalSeparator: ',',    
-                    currentcy: 'đ',            
-                    currentcyPosition: 'BACK', 
+                    groupSeparator: '.',
+                    decimalSeparator: ',',
+                    currentcy: 'đ',
+                    currentcyPosition: 'BACK',
                 });
                 return <div>{formattedValue}</div>;
             },
         },
         {
             title: <FormattedMessage defaultMessage="Địa chỉ" />,
-            dataIndex: [ 'company','address' ],
+            dataIndex: ['company', 'address'],
         },
         {
             title: translate.formatMessage(message.status),
@@ -128,8 +137,14 @@ const CompanySubscriptionListPage = () => {
 
     const searchFields = [
         {
-            key: 'name',
+            key: 'companyName',
             placeholder: translate.formatMessage(message.companyName),
+            // key: 'subscriptionName',
+            // placeholder: translate.formatMessage(message.subscriptionName),
+        },
+        {
+            key: 'subscriptionName',
+            placeholder: translate.formatMessage(message.subscriptionName),
         },
     ];
     return (
