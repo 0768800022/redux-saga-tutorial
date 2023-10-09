@@ -8,8 +8,9 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
 import { useNavigate } from 'react-router-dom';
-import { Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
+import { Avatar, Button } from 'antd';
+import { UserOutlined,ShoppingCartOutlined } from '@ant-design/icons';
+import routes from '@modules/companySubscription/routes';
 
 const message = defineMessages({
     objectName: 'Company',
@@ -28,6 +29,8 @@ const message = defineMessages({
 
 const CompanyListPage = () => {
     const translate = useTranslate();
+    const navigate = useNavigate();
+
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.company,
         options: {
@@ -43,6 +46,23 @@ const CompanyListPage = () => {
                     };
                 }
             };
+            funcs.additionalActionColumnButtons = () => ({
+                registration: ({ id }) => (
+                    <Button
+                        type="link"
+                        style={{ padding: 0 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(
+                                routes.companySubscriptionListPage.path +
+                                    `?companyId=${id}`,
+                            );
+                        }}
+                    >
+                        <ShoppingCartOutlined />
+                    </Button>
+                ),
+            });
         },
     });
 
@@ -76,7 +96,7 @@ const CompanyListPage = () => {
             title: <FormattedMessage defaultMessage="Email" />,
             dataIndex: 'email',
         },
-        mixinFuncs.renderActionColumn({ task:true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ registration:true, edit: true, delete: true }, { width: '150px' }),
     ];
 
     const searchFields = [
