@@ -100,12 +100,19 @@ export const taskStateMessage = defineMessages({
 export const stateResgistrationMessage = defineMessages({
     register: 'Đăng ký',
     learning: 'Đang học',
-    finished: 'Đã kết thúc',
+    finished: 'Đã hoành thành',
     canceled: 'Đã huỷ',
 });
 
 export const statusSubjectMessage = defineMessages({
     active: 'Hoạt động',
     canceled: 'Đã huỷ',
+});
+
+export const projectTaskStateMessage = defineMessages({
+    create : "Đang tạo",
+    processing : "Đang xử lý",
+    done : "Đang làm",
+    cancel : "Đã hủy",
 });
 

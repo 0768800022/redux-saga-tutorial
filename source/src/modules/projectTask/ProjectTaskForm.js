@@ -5,7 +5,7 @@ import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { taskState } from '@constants/masterData';
+import { projectTaskState } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -19,7 +19,7 @@ import { FormattedMessage } from 'react-intl';
 const ProjectTaskForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues,isEditing } = props;
     const translate = useTranslate();
-    const statusValues = translate.formatKeys(taskState, ['label']);
+    const statusValues = translate.formatKeys(projectTaskState, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,

@@ -8,11 +8,12 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
 import { useNavigate } from 'react-router-dom';
-import { Avatar } from 'antd';
+import { Avatar, Tag } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY } from '@constants';
-
+import { formatMoney } from '@utils/index';
+import { statusOptions } from '@constants/masterData';
 
 const message = defineMessages({
     objectName: 'CompanySubscription',
@@ -28,6 +29,7 @@ const message = defineMessages({
 
 const CompanySubscriptionListPage = () => {
     const translate = useTranslate();
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.companySubscription,
         options: {
@@ -69,8 +71,31 @@ const CompanySubscriptionListPage = () => {
             dataIndex: ['subscription','name'],
         },
         {
+            title: <FormattedMessage defaultMessage="Giá dịch vụ" />,
+            dataIndex: ['subscription','price'],
+            render: (price) => {
+                const formattedValue = formatMoney(price, {
+                    groupSeparator: '.',      
+                    decimalSeparator: ',',    
+                    currentcy: 'đ',            
+                    currentcyPosition: 'BACK', 
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
             title: <FormattedMessage defaultMessage="Địa chỉ" />,
             dataIndex: [ 'company','address' ],
+        },
+        {
+            title: translate.formatMessage(message.status),
+            dataIndex: 'status',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
         },
         {
             title: 'Ngày bắt đầu',
@@ -115,7 +140,7 @@ const CompanySubscriptionListPage = () => {
             ]}
         >
             <ListPage
-                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

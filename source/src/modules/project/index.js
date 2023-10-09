@@ -15,7 +15,7 @@ import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Avatar } from 'antd';
+import { Button, Avatar, Tag } from 'antd';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { convertUtcToLocalTime } from '@utils';
@@ -24,6 +24,8 @@ import route from '@modules/projectTask/routes';
 import classNames from 'classnames';
 import styles from './project.module.scss';
 import { BookOutlined } from '@ant-design/icons';
+import { statusOptions } from '@constants/masterData';
+
 import useFetch from '@hooks/useFetch';
 const message = defineMessages({
     home: 'Trang chủ',
@@ -38,6 +40,7 @@ const message = defineMessages({
     name: 'Tên dự án',
     endDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
+    status: 'Trạng thái',
 });
 
 const ProjectListPage = () => {
@@ -45,6 +48,7 @@ const ProjectListPage = () => {
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const developerId = queryParameters.get('developerId');
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const leaderName = queryParameters.get('leaderName');
     const [dataApply, setDataApply] = useState([]);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
@@ -167,6 +171,16 @@ const ProjectListPage = () => {
             },
             width: 130,
             align: 'center',
+        },
+        {
+            title: translate.formatMessage(message.status),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
         },
         mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '130px' }),
     ];

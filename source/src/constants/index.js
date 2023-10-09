@@ -98,6 +98,11 @@ export const STATE_COURSE_RECRUITED = 5;
 export const STATE_TASK_ASIGN = 1;
 export const STATE_TASK_DONE = 2;
 
+export const STATE_PROJECT_TASK_CREATE = 1;
+export const STATE_PROJECT_TASK_PROCESSING = 2;
+export const STATE_PROJECT_TASK_DONE = 3;
+export const STATE_PROJECT_TASK_CANCEL = 4;
+
 export const DEFAULT_TABLE_ITEM_SIZE = 20;
 export const DEFAULT_TABLE_PAGE_START = 0;
 export const DEFAULT_GET_ALL_LIST = 1000;

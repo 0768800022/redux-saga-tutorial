@@ -1,5 +1,5 @@
 import TextField from '@components/common/form/TextField';
-import { Card, Form } from 'antd';
+import { Card, Col, Form, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import CropImageField from '@components/common/form/CropImageField';
@@ -12,11 +12,11 @@ import useTranslate from '@hooks/useTranslate';
 
 const messages = defineMessages({
     banner: 'Banner',
-    avatarPath:'Avatar',
+    avatarPath: 'Avatar',
     username: 'Username',
     career: 'Career Name',
     fullName: 'Leader',
-    email:'Email',
+    email: 'Email',
     hotline: 'Hot line',
     phoneNumber: 'Phone Number',
     taxNumber: 'Tax Number',
@@ -112,14 +112,14 @@ const ProfileForm = (props) => {
     }, [dataDetail]);
 
     const handleFinish = (values) => {
-        values.accountDto.avatar = imageUrl,
+        (values.accountDto.avatar = imageUrl),
         mixinFuncs.handleSubmit({
             ...values,
             fullName: values.accountDto.fullName,
             oldPassword: values.oldPassword,
             password: values.password,
             logo: logoUrl,
-            avatarPath:values.accountDto.avatar,
+            avatarPath: values.accountDto.avatar,
             bannerPath: bannerUrl,
             phone: values.accountDto.phone,
             email: values.accountDto.email,
@@ -137,30 +137,38 @@ const ProfileForm = (props) => {
                 layout="horizontal"
                 onValuesChange={onValuesChange}
             >
-                <CropImageField
-                    label={translate.formatMessage(messages.logo)}
-                    name="logoPath"
-                    imageUrl={logoUrl && `${AppConstants.contentRootUrl}${logoUrl}`}
-                    aspect={1 / 1}
-                    required
-                    uploadFile={uploadLogoFile}
-                />
+                <Row style={{ marginLeft: '8rem' }} gutter={16}>
+                    <Col span={8}>
+                        <CropImageField
+                            label={translate.formatMessage(messages.logo)}
+                            name="logoPath"
+                            imageUrl={logoUrl && `${AppConstants.contentRootUrl}${logoUrl}`}
+                            aspect={1 / 1}
+                            required
+                            uploadFile={uploadLogoFile}
+                        />
+                    </Col>
+                    <Col span={8}>
+                        <CropImageField
+                            label={translate.formatMessage(messages.avatarPath)}
+                            name="avatarPath"
+                            imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
+                            aspect={1 / 1}
+                            required
+                            uploadFile={uploadFile}
+                        />
+                    </Col>
+                    <Col span={8}>
+                        <CropImageField
+                            label={translate.formatMessage(messages.banner)}
+                            name="bannerPath"
+                            imageUrl={bannerUrl && `${AppConstants.contentRootUrl}${bannerUrl}`}
+                            aspect={16 / 9}
+                            uploadFile={uploadBannerFile}
+                        />
+                    </Col>
+                </Row>
 
-                <CropImageField
-                    label={translate.formatMessage(messages.avatarPath)}
-                    name="avatarPath"
-                    imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
-                    aspect={1 / 1}
-                    required
-                    uploadFile={uploadFile}
-                />
-                <CropImageField
-                    label={translate.formatMessage(messages.banner)}
-                    name="bannerPath"
-                    imageUrl={bannerUrl && `${AppConstants.contentRootUrl}${bannerUrl}`}
-                    aspect={1 / 1}    
-                    uploadFile={uploadBannerFile}
-                />
                 <TextField
                     readOnly
                     label={translate.formatMessage(messages.username)}

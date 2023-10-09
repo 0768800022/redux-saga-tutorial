@@ -85,7 +85,7 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
         data: serviceCompanySubscription,
         loading: getserviceCompanySubscriptionLoading,
         execute: executesserviceCompanySubscription,
-    } = useFetch(apiConfig.ServiceCompanySubscription.autocomplete, {
+    } = useFetch(apiConfig.serviceCompanySubscription.autocomplete, {
         immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.name })),
     });
@@ -108,7 +108,7 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                         <AutoCompleteField
                             label={<FormattedMessage defaultMessage="Gói dịch vụ" />}
                             name="serviceCompanySubscriptionId"
-                            apiConfig={apiConfig.ServiceCompanySubscription.autocomplete}
+                            apiConfig={apiConfig.serviceCompanySubscription.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.name })}
                             initialSearchParams={{}}
                             searchParams={(text) => ({ name: text })}
