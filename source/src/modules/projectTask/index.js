@@ -77,39 +77,19 @@ function ProjectTaskListPage() {
         {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
-            width: 140,
-            render: (startDate) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
-            },
+            width: 200,
             align: 'center',
         },
         {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
-            width: 140,
-            render: (dueDate) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(dueDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
-            },
-            align: 'center',
+            width: 200,
         },
         {
             title: translate.formatMessage(message.state),
             dataIndex: 'state',
             align: 'center',
             width: 120,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-
-                return <Tag color={status.color}>{status.label}</Tag>;
-            },
         },
 
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),

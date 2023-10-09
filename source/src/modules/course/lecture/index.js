@@ -5,6 +5,7 @@ import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
+import { CheckCircleOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import routes from '../routes';
 import { Button,Modal,Radio,Checkbox }  from 'antd';
@@ -127,10 +128,7 @@ const LectureListPage = () => {
                 }
                 else if(isDisabled){
                     return (
-                        <Checkbox 
-                            checked = 'true'    
-                            className={styles.selectedRow}
-                        />
+                        <CheckCircleOutlined className={styles.greenCheckIcon}/>
                     );
                 }
         

@@ -4,7 +4,7 @@ import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
 import { FormattedMessage } from 'react-intl';
-
+import apiConfig from './apiConfig';
 const navMenuConfig = [
     {
         label: <FormattedMessage  defaultMessage='Quản lý tài khoản'/>,
@@ -33,7 +33,6 @@ const navMenuConfig = [
         label: <FormattedMessage  defaultMessage='Quản lý môn học'/>,
         key: 'quan-ly-mon-hoc',
         icon: <IconSchool size={16} />,
-        // permission: apiConfig.category.getList.baseURL,
         children: [
             {
                 label: <FormattedMessage  defaultMessage='Khoá học'/>,
@@ -74,6 +73,16 @@ const navMenuConfig = [
                 key: 'company-management',
                 path: generatePath(routes.companyListPage.path, {}),
             },
+            {
+                label: <FormattedMessage  defaultMessage='Quản lý gói dịch vụ'/>,
+                key: 'service-company-subscription',
+                path: generatePath(routes.serviceCompanySubListPage.path, {}),
+            }, 
+            {
+                label: <FormattedMessage  defaultMessage='Quản lý đăng ký gói dịch vụ'/>,
+                key: 'company-subscription-management',
+                path: generatePath(routes.companySubscriptionListPage.path, {}),
+            },                     
         ],
     },
     {
@@ -82,13 +91,13 @@ const navMenuConfig = [
         icon: <IconCategory2 size={16} />,
         // permission: apiConfig.category.getList.baseURL,
         children: [
-            {
-                label: categoryKind.education.title,
-                key: 'education-category',
-                path: generatePath(routes.categoryListPageEdu.path, {
-                    kind: categoryKind.education.value,
-                }),
-            },
+            // {
+            //     label: categoryKind.education.title,
+            //     key: 'education-category',
+            //     path: generatePath(routes.categoryListPageEdu.path, {
+            //         kind: categoryKind.education.value,
+            //     }),
+            // },
             {
                 label: categoryKind.generation.title,
                 key: 'generation-category',
