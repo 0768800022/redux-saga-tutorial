@@ -1,4 +1,4 @@
-import logo from '@assets/images/nav-logo.webp';
+import logo from '@assets/images/logo.jpg';
 
 import { Layout, Menu } from 'antd';
 import React, { useMemo } from 'react';

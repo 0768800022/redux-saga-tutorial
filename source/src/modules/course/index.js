@@ -16,6 +16,7 @@ import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
 import { formSize, lectureState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
+import { formatMoney } from '@utils';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -27,7 +28,7 @@ const message = defineMessages({
     dateRegister: 'Ngày bắt đầu',
     dateEnd: 'Ngày kết thúc',
     status: 'Tình trạng',
-    leader: 'Người hướng dẫn',
+    leader: 'Leader',
 });
 
 const CourseListPage = () => {
@@ -90,6 +91,11 @@ const CourseListPage = () => {
 
         { breadcrumbName: translate.formatMessage(message.course) },
     ];
+    const breadLeaderRoutes = [
+        { breadcrumbName: translate.formatMessage(message.home) },
+        { breadcrumbName: translate.formatMessage(message.leader), path: routes.leaderListPage.path },
+        { breadcrumbName: translate.formatMessage(message.course) },
+    ];
 
     const searchFields = [
         {
@@ -101,15 +107,41 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(message.name),
             dataIndex: 'name',
+            width: 200,
         },
         {
             title: translate.formatMessage(message.subject),
             dataIndex: ['subject', 'subjectName'],
+            width: 150,
         },
         {
             title: translate.formatMessage(message.leader),
             dataIndex: ['leader', 'leaderName'],
-            width: 180,
+            width: 80,
+        },
+        {
+            title: <FormattedMessage defaultMessage="Học phí" />,
+            dataIndex: 'fee',
+            width: '120px',
+            render: (fee) => {
+                const formattedValue = formatMoney(fee, {
+                    currentcy: 'đ',
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
+            title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
+            dataIndex: 'returnFee',
+            width: '120px',
+            render: (returnFee) => {
+                const formattedValue = formatMoney(returnFee, {
+                    currentcy: 'đ',
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
+            },
         },
         {
             title: translate.formatMessage(message.dateRegister),
@@ -147,12 +179,17 @@ const CourseListPage = () => {
                 return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
-        mixinFuncs.renderActionColumn({ task: true, registration: true, edit: true, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ task: true, registration: true, edit: true, delete: true }, { width: '180px' }),
     ];
 
     return (
-        <PageWrapper routes={breadRoutes}>
+        <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
+                title={
+                    leaderName && (
+                        <span style={{ fontWeight: 'normal', position: 'absolute', top: '50px' }}>{leaderName}</span>
+                    )
+                }
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
