@@ -33,8 +33,8 @@ const message = defineMessages({
 function RegistrationListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
-    const queryParameters = new URLSearchParams(window.location.search);
     const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
+    const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
