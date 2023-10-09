@@ -77,9 +77,12 @@ const navMenuConfig = [
                 label: <FormattedMessage  defaultMessage='Quản lý gói dịch vụ'/>,
                 key: 'service-company-subscription',
                 path: generatePath(routes.serviceCompanySubListPage.path, {}),
-            },
-            
-            
+            }, 
+            {
+                label: <FormattedMessage  defaultMessage='Quản lý đăng ký gói dịch vụ'/>,
+                key: 'company-subscription-management',
+                path: generatePath(routes.companySubscriptionListPage.path, {}),
+            },                     
         ],
     },
     {
