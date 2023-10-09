@@ -5,10 +5,10 @@ import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import routes from '../routes';
-import { Button,Modal,Radio,Checkbox }  from 'antd';
+import { Button,Modal,Radio }  from 'antd';
 import AsignAllForm from './asignAllForm';
 import useFetch from '@hooks/useFetch';
 import BaseTable from '@components/common/table/BaseTable';
@@ -31,8 +31,11 @@ const LectureListPage = () => {
     const courseName = queryParameters.get("courseName");
     const subjectId = queryParameters.get("subjectId");
     const [ showPreviewModal, setShowPreviewModal ] = useState(false);
+    const [hasError, setHasError] = useState(false);
     const [lectureid, setLectureId] = useState(null);
     const [checkAsign, SetCheckAsign] = useState([]);
+    const [asignAll, SetAsignAll] = useState([]);
+    const [visible, setVisible] = useState(true);
 
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
@@ -51,9 +54,11 @@ const LectureListPage = () => {
             funcs.mappingData = (response) => {                
                 try {
                     if (response.result === true) {
+                        SetAsignAll(response.data.content);
                         return {
                             data: response.data.content,
                             total: response.data.totalElements,
+                            
                         };
                     }
                 } catch (error) {
@@ -62,6 +67,38 @@ const LectureListPage = () => {
             };
         },
     });
+
+    const mapArray2ById = new Map(asignAll.map((item) => [item.id, item]));
+    const mergedArray = checkAsign.map((item1) => {
+        const item2 = mapArray2ById.get(item1.id);
+        if (item2) {
+            return {
+                ...item2,
+                status: item1.status,
+            };
+        }
+        return item1;
+    });
+
+    for(var i = 0 ; i<mergedArray.length ; i++)
+    {
+        if(mergedArray[i].lectureKind == 1 ) {
+            for(var j = i+1 ;j<mergedArray.length;j++){
+                if(mergedArray[j].lectureKind != 1) {
+                    mergedArray[i].status = true;
+                    if(mergedArray[j].status !== false){
+                        continue;
+                    }
+                    else{
+                        mergedArray[i].status = false;
+                        break;
+                    }
+                }
+                else break;
+            }
+        }
+    }
+
     const onSelectChange = (record) => {
         setLectureId(record.id);
     };
@@ -80,7 +117,7 @@ const LectureListPage = () => {
             key: 'id',
             width : '30px',
             render: (text, record, index) => {
-                const checkAsignItem = checkAsign.find(item => item.id === record.id);
+                const checkAsignItem = mergedArray.find(item => item.id === record.id);
                 const isDisabled = checkAsignItem ? checkAsignItem.status : false;
                 if (record.lectureKind === 1 || isDisabled) {
                     return null; 
@@ -121,10 +158,12 @@ const LectureListPage = () => {
             key: 'id',
             width : '30px',
             render: (text, record, index) => {
-                const checkAsignItem = checkAsign.find(item => item.id === record.id);
+                const checkAsignItem = mergedArray.find(item => item.id === record.id);
                 const isDisabled = checkAsignItem ? checkAsignItem.status : false;
-                if (record.lectureKind === 1) {
-                    return null; 
+                if (record.lectureKind === 1 && isDisabled) {
+                    return (
+                        <CheckCircleOutlined className={styles.greenCheckIcon}/>
+                    );
                 }
                 else if(isDisabled){
                     return (
@@ -135,6 +174,8 @@ const LectureListPage = () => {
             },
         },
     ];
+
+
 
 
     const disabledSubmit = lectureid === null;
@@ -169,6 +210,8 @@ const LectureListPage = () => {
         }   
         return '';
     };
+
+
     return (
         
         <PageWrapper 
@@ -176,18 +219,19 @@ const LectureListPage = () => {
                 { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.course) },
                 { breadcrumbName: translate.formatMessage(message.task),
-                    path: routes.courseListPage.path + `/task?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`,
+                    path: routes.courseListPage.path + `/task?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=2`,
                 },
                 { breadcrumbName: translate.formatMessage(message.objectName) },
             ]}
         >
             <ListPage
+                
                 style={{ width: '50vw' }}
                 actionBar={
                     <div style={{ float: 'right', margin: '0 0 32px 0' }}>
                         <Button 
                             type="primary" 
-                            disabled={disabledSubmit}   
+                            disabled={hasError ? true : disabledSubmit}   
                             onClick={() => setShowPreviewModal(true)} >
                             {translate.formatMessage(message.asignAll)}
                         </Button>
@@ -216,7 +260,7 @@ const LectureListPage = () => {
             <Modal
                 title={translate.formatMessage(message.asignAllModal)}
                 width={600}
-                open={showPreviewModal}
+                open={showPreviewModal && !hasError}
                 footer={null}
                 centered
                 lectureId = {lectureid}
@@ -225,8 +269,23 @@ const LectureListPage = () => {
                 <AsignAllForm
                     courseId = {courseId}
                     lectureId = {lectureid}
+                    setHasError={setHasError}
                 />
             </Modal>
+
+            {hasError && 
+                <Modal 
+                    title={
+                        <span>
+                            <ExclamationCircleOutlined style={{ color: 'red' }} /> Lỗi
+                        </span>
+                    }
+                    open={visible} 
+                    onOk={() => setVisible(false)}
+                    onCancel={() => setVisible(false)}>
+                    <p>Chưa có sinh viên hoặc có sinh viên chưa hoàn tất thủ tục, vui lòng kiểm tra lại</p>
+                </Modal>
+            }
         </PageWrapper>
     );
 };
