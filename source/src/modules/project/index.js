@@ -36,11 +36,11 @@ const message = defineMessages({
     createdDate: 'Ngày tạo',
     avatar: 'Avater',
     description: 'Mô tả',
-    leader: 'Quản lý',
+    leader: 'Leader',
     name: 'Tên dự án',
     endDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
-    status:'Trạng thái',
+    status: 'Trạng thái',
 });
 
 const ProjectListPage = () => {

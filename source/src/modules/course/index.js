@@ -27,7 +27,7 @@ const message = defineMessages({
     dateRegister: 'Ngày bắt đầu',
     dateEnd: 'Ngày kết thúc',
     status: 'Tình trạng',
-    leader: 'Quản lý',
+    leader: 'Leader',
 });
 
 const CourseListPage = () => {
