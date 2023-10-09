@@ -11,7 +11,7 @@ import { formatDateString } from '@utils';
 import { Card, Col, Form, Row } from 'antd';
 import dayjs from 'dayjs';
 import moment from 'moment';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import useTranslate from '@hooks/useTranslate';
@@ -19,13 +19,16 @@ import useTranslate from '@hooks/useTranslate';
 const CourseForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
     const translate = useTranslate();
-    const statusValues = translate.formatKeys(lectureState, ['label']);
-    const statusValues1 = translate.formatKeys(statusOptions, ['label']);
+    const lectureStateOptions = translate.formatKeys(lectureState, ['label']);
+    const [lectureStateFilter, setLectureStateFilter] = useState([lectureStateOptions[0]]);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
+        if (!values?.state) {
+            values.state = 1;
+        }
         values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values });
@@ -44,6 +47,21 @@ const CourseForm = (props) => {
     //     });
     // }, []);
     useEffect(() => {
+        lectureStateOptions.map((state, index) => {
+            if (dataDetail?.state == state.value) {
+                const length = lectureStateOptions.length;
+                let arrayStateFilter = [];
+                if (index < length - 3) {
+                    arrayStateFilter = [state, lectureStateOptions[index + 1], lectureStateOptions[length - 1]];
+                } else if (index === length - 3) {
+                    arrayStateFilter = [state, lectureStateOptions[length - 1]];
+                } else {
+                    arrayStateFilter = [state];
+                }
+
+                setLectureStateFilter(arrayStateFilter);
+            }
+        });
         dataDetail.dateRegister = dataDetail.dateRegister && dayjs(dataDetail.dateRegister, DATE_FORMAT_VALUE);
         dataDetail.dateEnd = dataDetail.dateEnd && dayjs(dataDetail.dateEnd, DATE_FORMAT_VALUE);
         form.setFieldsValue({
@@ -70,16 +88,22 @@ const CourseForm = (props) => {
             leaderId: dataDetail?.leader?.leaderName,
         });
     }, [dataDetail]);
+
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
                 <Row gutter={12}>
                     <Col span={12}>
-                        <TextField label={<FormattedMessage defaultMessage="Tên khoá học" />} name="name" />
+                        <TextField
+                            disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
+                            label={<FormattedMessage defaultMessage="Tên khoá học" />}
+                            name="name"
+                        />
                     </Col>
 
                     <Col span={12}>
                         <AutoCompleteField
+                            disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             required
                             label={<FormattedMessage defaultMessage="Môn học" />}
                             name="subjectId"
@@ -91,6 +115,7 @@ const CourseForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="dateRegister"
                             style={{ width: '100%' }}
@@ -100,6 +125,7 @@ const CourseForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            disabled={dataDetail.state >= 3}
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="dateEnd"
                             style={{ width: '100%' }}
@@ -109,6 +135,7 @@ const CourseForm = (props) => {
                     </Col>
                 </Row>
                 <TextField
+                    disabled={dataDetail.state >= 3}
                     width={'100%'}
                     required
                     label={<FormattedMessage defaultMessage="Mô tả" />}
@@ -118,6 +145,7 @@ const CourseForm = (props) => {
                 <Row gutter={10}>
                     <Col span={12}>
                         <AutoCompleteField
+                            disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             required
                             label={<FormattedMessage defaultMessage="Người hướng dẫn" />}
                             name="leaderId"
@@ -129,11 +157,12 @@ const CourseForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <SelectField
+                            disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
                             name="state"
-                            defaultValue={statusValues[0]}
+                            defaultValue={lectureStateFilter[0]}
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
-                            options={statusValues}
+                            options={lectureStateFilter}
                         />
                     </Col>
                 </Row>

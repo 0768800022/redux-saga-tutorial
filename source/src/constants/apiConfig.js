@@ -689,7 +689,7 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
-    ServiceCompanySubscription: {
+    serviceCompanySubscription: {
         getList: {
             baseURL: `${apiTenantUrl}v1/service-company-subscription/list`,
             method: 'GET',
