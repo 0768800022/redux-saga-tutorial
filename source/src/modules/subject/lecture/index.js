@@ -144,7 +144,7 @@ const LectureListPage = () => {
                 title={
                     <span style={{ fontWeight: 'normal', position: 'absolute', fontSize: '16px' }}>{subjectName}</span>
                 }
-                style={{ width: '900px' }}
+                style={{ width: '50vw' }}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <>
@@ -167,7 +167,7 @@ const LectureListPage = () => {
                             }}
                         />
                         <Button
-                            style={{ marginTop: '20px', marginLeft: '520px' }}
+                            style={{ marginTop: '20px', marginLeft: 'calc(50vw - 190px)' }}
                             key="submit"
                             htmlType="submit"
                             type="primary"

@@ -6,30 +6,22 @@ import apiConfig from '@constants/apiConfig';
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
-import { useNavigate } from 'react-router-dom';
-import { Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-
+import { DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
+import { formatMoney } from '@utils/index';
 const message = defineMessages({
     objectName: 'Company',
+    serviceCompanySubscription: 'Quản lý gói dịch vụ',
     home: 'Trang chủ',
-    companyName: 'Tên công ty',
-    address: 'Địa chỉ',
-    createdDate: 'Ngày tạo',
-    modifiedDate: 'Ngày sửa đổi',
-    email: 'Email',
-    holine: 'Holine',
-    logo: 'Logo',
-    status: 'status',
-    username: 'Tài khoản đăng nhập',
-    company: 'Công ty',
+    name: 'Tên dịch vụ',
+    price: 'Giá',
+    status:'Trạng thái',
+    valueable: 'Số ngày sử dụng',
 });
 
-const CompanyListPage = () => {
+const ServiceCompanySubListPage = () => {
     const translate = useTranslate();
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
-        apiConfig: apiConfig.company,
+        apiConfig: apiConfig.serviceCompanySubscription,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -47,34 +39,30 @@ const CompanyListPage = () => {
     });
 
     const columns = [
+        
         {
-            title: '#',
-            dataIndex: 'logo',
+            title: <FormattedMessage defaultMessage="Tên dịch vụ" />,
+            dataIndex: 'name',
+        },
+        {
+            title: <FormattedMessage defaultMessage="Giá" />,
+            dataIndex: 'price',
+            width: '200px',
+            render: (price) => {
+                const formattedValue = formatMoney(price, {
+                    groupSeparator: '.',      
+                    decimalSeparator: ',',    
+                    currentcy: 'đ',            
+                    currentcyPosition: 'BACK', 
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
+            title: <FormattedMessage defaultMessage="Số ngày sử dụng" />,
+            dataIndex: 'valueable',
+            width: '200px',
             align: 'center',
-            width: 80,
-            render: (logo) => (
-                <Avatar
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={logo ? `${AppConstants.contentRootUrl}${logo}` : null}
-                />
-            ),
-        },
-        {
-            title: <FormattedMessage defaultMessage="Tên công ty" />,
-            dataIndex: 'companyName',
-        },
-        {
-            title: <FormattedMessage defaultMessage="Địa chỉ" />,
-            dataIndex: 'address',
-        },
-        {
-            title: <FormattedMessage defaultMessage="Hotline" />,
-            dataIndex: 'hotline',
-        },
-        {
-            title: <FormattedMessage defaultMessage="Email" />,
-            dataIndex: 'email',
         },
         mixinFuncs.renderActionColumn({ task:true, edit: true, delete: true }, { width: '120px' }),
     ];
@@ -82,14 +70,14 @@ const CompanyListPage = () => {
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.companyName),
+            placeholder: translate.formatMessage(message.name),
         },
     ];
     return (
         <PageWrapper
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.company) },
+                { breadcrumbName: translate.formatMessage(message.serviceCompanySubscription) },
             ]}
         >
             <ListPage
@@ -108,4 +96,4 @@ const CompanyListPage = () => {
         </PageWrapper>
     );
 };
-export default CompanyListPage;
+export default ServiceCompanySubListPage;

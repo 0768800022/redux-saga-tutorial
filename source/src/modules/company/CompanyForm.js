@@ -21,7 +21,7 @@ const messages = defineMessages({
     hotline: 'HotLine',
     logo: 'logo',
     password: 'Mật khẩu',
-    username: 'Họ và tên',
+    username: 'Tài khoản đăng nhập',
     required: 'Không được để trống',
 });
 
@@ -87,13 +87,6 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             uploadFile={uploadLogoFile}
                         />
                     </Col>
-                    <Col span={12}>
-                        <SelectField
-                            label={<FormattedMessage defaultMessage="Trạng thái" />}
-                            name="status"
-                            options={statusValues}
-                        />
-                    </Col>
                 </Row>
                 <Row gutter={16}>
                     <Col span={12}>
@@ -141,17 +134,6 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField 
-                            label={translate.formatMessage(messages.password)}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: translate.formatMessage(messages.required),
-                                },
-                            ]} 
-                            name="password" />
-                    </Col>
-                    <Col span={12}>
                         <TextField
                             label={translate.formatMessage(messages.username)}
                             rules={[
@@ -163,8 +145,27 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             name="username"
                         />
                     </Col>
+                    <Col span={12}>
+                        <TextField 
+                            label={translate.formatMessage(messages.password)}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: translate.formatMessage(messages.required),
+                                },
+                            ]} 
+                            name="password" />
+                    </Col>
                 </Row>
-
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <SelectField
+                            label={<FormattedMessage defaultMessage="Trạng thái" />}
+                            name="status"
+                            options={statusValues}
+                        />
+                    </Col>
+                </Row>
                 <div className="footer-card-form">{actions}</div>
             </Card>
         </BaseForm>

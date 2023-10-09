@@ -66,7 +66,6 @@ const ProjectListPage = () => {
                                 route.ProjectTaskListPage.path
                                 + `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
                             );
-                            console.log("Nhan projectTask dc");
                         }}
                     >
                         <BookOutlined />

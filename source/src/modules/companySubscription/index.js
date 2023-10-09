@@ -10,26 +10,26 @@ import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
 import { useNavigate } from 'react-router-dom';
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import dayjs from 'dayjs';
+import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY } from '@constants';
+
 
 const message = defineMessages({
-    objectName: 'Company',
+    objectName: 'CompanySubscription',
     home: 'Trang chủ',
     companyName: 'Tên công ty',
-    address: 'Địa chỉ',
-    createdDate: 'Ngày tạo',
-    modifiedDate: 'Ngày sửa đổi',
-    email: 'Email',
-    holine: 'Holine',
-    logo: 'Logo',
-    status: 'status',
-    username: 'Tài khoản đăng nhập',
-    company: 'Công ty',
+    startDate: 'Ngày bắt đầu',
+    endDate: 'Ngày kết thúc',
+    company: 'Gói dịch vụ',
+    status: 'Trạng thái',
+    subscriptionName: 'Tên đăng ký',
+    price: 'Giá',
 });
 
-const CompanyListPage = () => {
+const CompanySubscriptionListPage = () => {
     const translate = useTranslate();
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
-        apiConfig: apiConfig.company,
+        apiConfig: apiConfig.companySubscription,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -49,7 +49,7 @@ const CompanyListPage = () => {
     const columns = [
         {
             title: '#',
-            dataIndex: 'logo',
+            dataIndex: [ 'company','logo' ],
             align: 'center',
             width: 80,
             render: (logo) => (
@@ -62,21 +62,43 @@ const CompanyListPage = () => {
         },
         {
             title: <FormattedMessage defaultMessage="Tên công ty" />,
-            dataIndex: 'companyName',
+            dataIndex: [ 'company', 'companyName' ],
+        },
+        {
+            title: <FormattedMessage defaultMessage="Gói dịch vụ" />,
+            dataIndex: ['subscription','name'],
         },
         {
             title: <FormattedMessage defaultMessage="Địa chỉ" />,
-            dataIndex: 'address',
+            dataIndex: [ 'company','address' ],
         },
         {
-            title: <FormattedMessage defaultMessage="Hotline" />,
-            dataIndex: 'hotline',
+            title: 'Ngày bắt đầu',
+            dataIndex: 'startDate',
+            width: 140,
+            render: (startDate) => {
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
+            },
+            align: 'center',
         },
         {
-            title: <FormattedMessage defaultMessage="Email" />,
-            dataIndex: 'email',
+            title: 'Ngày kết thúc',
+            dataIndex: 'endDate',
+            width: 140,
+            render: (endDate) => {
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(endDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
+            },
+            align: 'center',
         },
-        mixinFuncs.renderActionColumn({ task:true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
@@ -93,7 +115,7 @@ const CompanyListPage = () => {
             ]}
         >
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                // searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -108,4 +130,4 @@ const CompanyListPage = () => {
         </PageWrapper>
     );
 };
-export default CompanyListPage;
+export default CompanySubscriptionListPage;
