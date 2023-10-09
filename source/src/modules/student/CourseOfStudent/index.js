@@ -11,12 +11,11 @@ import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
 import { useNavigate, generatePath, useParams, useLocation } from 'react-router-dom';
-import routes from '@modules/registration/routes';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
 import { formSize, lectureState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
-import route1 from '@modules/student/routes';
+import routes from '@routes';
 import { DATE_FORMAT_DISPLAY } from '@constants';
 
 const message = defineMessages({
@@ -30,7 +29,8 @@ const message = defineMessages({
     dateEnd: 'Ngày kết thúc',
     dateCreated: 'Ngày khởi tạo',
     status: 'Tình trạng',
-    leader: 'Người hướng dẫn',
+    leader: 'Leader',
+    student: 'Sinh viên',
 });
 
 const CourseListPage = () => {
@@ -42,6 +42,7 @@ const CourseListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const stuId = queryParameters.get('studentId');
     const studentName = queryParameters.get('studentName');
+    const leaderName = queryParameters.get('leaderName');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -66,14 +67,24 @@ const CourseListPage = () => {
             };
         },
     });
-    const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
-        {
-            breadcrumbName: <FormattedMessage defaultMessage="Sinh viên" />,
-            path: generatePath(route1.studentListPage.path),
-        },
-        { breadcrumbName: translate.formatMessage(message.course) },
-    ];
+
+    const setBreadRoutes = () => {
+        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        if (leaderName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.leader),
+                path: routes.leaderListPage.path,
+            });
+        } else if (studentName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.student),
+                path: routes.studentListPage.path,
+            });
+        }
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.project) });
+
+        return breadRoutes;
+    };
     const searchFields = [
         {
             key: 'courseName',
@@ -118,10 +129,10 @@ const CourseListPage = () => {
     ];
 
     return (
-        <PageWrapper routes={breadRoutes}>
+        <PageWrapper routes={setBreadRoutes()}>
             <div>
                 <ListPage
-                    title={<span style={{ fontWeight: 'normal',fontSize: '16px' }}>{studentName}</span>}
+                    title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{studentName}</span>}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}
