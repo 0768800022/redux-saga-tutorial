@@ -198,13 +198,9 @@ const ProjectListPage = () => {
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
-                title={
-                    <span style={{ fontWeight: 'normal', position: 'absolute', top: '50px' }}>
-                        {leaderName || developerName}
-                    </span>
-                }
+                title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={mixinFuncs.renderActionBar()}
+                actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

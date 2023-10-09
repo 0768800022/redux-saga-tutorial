@@ -187,11 +187,11 @@ const CourseListPage = () => {
             <ListPage
                 title={
                     leaderName && (
-                        <span style={{ fontWeight: 'normal', position: 'absolute', top: '50px' }}>{leaderName}</span>
+                        <span style={{ fontWeight: 'normal' }}>{leaderName}</span>
                     )
                 }
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={mixinFuncs.renderActionBar()}
+                actionBar={!leaderName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
