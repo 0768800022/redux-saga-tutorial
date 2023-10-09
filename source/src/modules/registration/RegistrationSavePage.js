@@ -49,6 +49,7 @@ function RegistrationSavePage() {
                     courseId: courseId,
                     isIssuedCertify: 1,
                     studentId: data.studentInfo.id,
+                    moneyState: 1,
                 };
             };
         },

@@ -27,7 +27,7 @@ const message = defineMessages({
     dateRegister: 'Ngày bắt đầu',
     dateEnd: 'Ngày kết thúc',
     status: 'Tình trạng',
-    leader: 'Người hướng dẫn',
+    leader: 'Quản lý',
 });
 
 const CourseListPage = () => {
@@ -51,7 +51,7 @@ const CourseListPage = () => {
                             state !== 1 &&
                                 navigate(
                                     routes.registrationListPage.path +
-                                        `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                    `?courseId=${id}&courseName=${name}&courseState=${state}`,
                                 );
                         }}
                     >
@@ -73,7 +73,7 @@ const CourseListPage = () => {
                                 state !== 5 &&
                                 navigate(
                                     route.taskListPage.path +
-                                        `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}`,
+                                    `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}`,
                                 );
                         }}
                     >
@@ -124,7 +124,7 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.dateEnd),
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateEnd,DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateEnd, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
             },
             width: 130,
             align: 'center',
