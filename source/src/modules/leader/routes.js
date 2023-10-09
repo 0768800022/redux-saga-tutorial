@@ -1,6 +1,7 @@
 import apiConfig from '@constants/apiConfig';
 import LeaderListPage from '.';
 import LeaderSavePage from './leaderSavePage';
+import CourseListPage from '@modules/student/CourseOfStudent';
 
 export default {
     leaderListPage: {

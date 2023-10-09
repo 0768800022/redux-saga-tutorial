@@ -15,6 +15,10 @@ import {
     STATE_TASK_ASIGN,
     STATE_TASK_DONE,
     STATE_COURSE_RECRUITED,
+    STATE_PROJECT_TASK_CREATE,
+    STATE_PROJECT_TASK_PROCESSING,
+    STATE_PROJECT_TASK_DONE,
+    STATE_PROJECT_TASK_CANCEL,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -30,6 +34,7 @@ import {
     taskStateMessage,
     stateResgistrationMessage,
     statusSubjectMessage,
+    projectTaskStateMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -59,8 +64,15 @@ export const lectureState = [
 ];
 
 export const taskState = [
-    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: 'green' },
     { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: 'orange' },
+    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: 'green' },
+];
+
+export const projectTaskState = [
+    { value: STATE_PROJECT_TASK_CREATE, label: projectTaskStateMessage.create, color: 'yellow' },
+    { value: STATE_PROJECT_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
+    { value: STATE_PROJECT_TASK_DONE, label: projectTaskStateMessage.done, color: 'green' },
+    { value: STATE_PROJECT_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
 ];
 
 export const statusOptions = [

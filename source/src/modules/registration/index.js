@@ -17,6 +17,8 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import style from './Registration.module.scss';
 
 const message = defineMessages({
     objectName: 'Danh sách đăng kí khóa học',
@@ -33,8 +35,8 @@ const message = defineMessages({
 function RegistrationListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
-    const queryParameters = new URLSearchParams(window.location.search);
     const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
+    const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
@@ -103,13 +105,13 @@ function RegistrationListPage() {
             align: 'center',
             width: 150,
             render: (item) => {
-                let text;
-                if (item == 1) {
-                    text = 'Có';
+                if (item == 0) {
+                    return null;
                 } else {
-                    text = 'Không';
+                    return (
+                        <CheckCircleOutlined className={style.greenCheckIcon} />
+                    );
                 }
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{text}</div>;
             },
         },
         {
