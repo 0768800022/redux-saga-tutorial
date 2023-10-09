@@ -27,7 +27,7 @@ const message = defineMessages({
     dateRegister: 'Ngày bắt đầu',
     dateEnd: 'Ngày kết thúc',
     status: 'Tình trạng',
-    leader: 'Người hướng dẫn',
+    leader: 'Leader',
 });
 
 const CourseListPage = () => {
@@ -88,6 +88,11 @@ const CourseListPage = () => {
     const breadRoutes = [
         { breadcrumbName: translate.formatMessage(message.home) },
 
+        { breadcrumbName: translate.formatMessage(message.course) },
+    ];
+    const breadLeaderRoutes = [
+        { breadcrumbName: translate.formatMessage(message.home) },
+        { breadcrumbName: translate.formatMessage(message.leader), path: routes.leaderListPage.path },
         { breadcrumbName: translate.formatMessage(message.course) },
     ];
 
@@ -151,8 +156,13 @@ const CourseListPage = () => {
     ];
 
     return (
-        <PageWrapper routes={breadRoutes}>
+        <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
+                title={
+                    leaderName && (
+                        <span style={{ fontWeight: 'normal', position: 'absolute', top: '50px' }}>{leaderName}</span>
+                    )
+                }
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={

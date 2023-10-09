@@ -19,7 +19,7 @@ import { Button, Avatar } from 'antd';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { convertUtcToLocalTime } from '@utils';
-import routes from './routes';
+import routes from '@routes';
 import route from '@modules/projectTask/routes';
 import classNames from 'classnames';
 import styles from './project.module.scss';
@@ -32,9 +32,9 @@ const message = defineMessages({
     code: 'Mã dự án',
     id: 'Id',
     createdDate: 'Ngày tạo',
-    avatar: 'Avater',
+    avatar: 'Avatar',
     description: 'Mô tả',
-    leader: 'Người hướng dẫn',
+    leader: 'Leader',
     name: 'Tên dự án',
     endDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
@@ -45,6 +45,7 @@ const ProjectListPage = () => {
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const developerId = queryParameters.get('developerId');
+    const leaderName = queryParameters.get('leaderName');
     const [dataFilter, setDataFilter] = useState();
     const [dataApply, setDataApply] = useState();
     const { data: dataListTask } = useFetch(apiConfig.projectTask.getList, {
@@ -105,6 +106,16 @@ const ProjectListPage = () => {
         { breadcrumbName: translate.formatMessage(message.home) },
         { breadcrumbName: translate.formatMessage(message.project) },
     ];
+    const breadLeaderRoutes = [
+        { breadcrumbName: translate.formatMessage(message.home) },
+        { breadcrumbName: translate.formatMessage(message.leader), path: routes.leaderListPage.path },
+        { breadcrumbName: translate.formatMessage(message.project) },
+    ];
+    const convertDate = (date) => {
+        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
+        return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
+    };
+
     const searchFields = [
         {
             key: 'name',
@@ -139,11 +150,7 @@ const ProjectListPage = () => {
             title: translate.formatMessage(message.startDate),
             dataIndex: 'startDate',
             render: (startDate) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
             },
             width: 130,
             align: 'center',
@@ -152,11 +159,7 @@ const ProjectListPage = () => {
             title: translate.formatMessage(message.endDate),
             dataIndex: 'endDate',
             render: (endDate) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(endDate, 'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}
-                    </div>
-                );
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
             },
             width: 130,
             align: 'center',
@@ -164,8 +167,13 @@ const ProjectListPage = () => {
         mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '130px' }),
     ];
     return (
-        <PageWrapper routes={breadRoutes}>
+        <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
+                title={
+                    leaderName && (
+                        <span style={{ fontWeight: 'normal', position: 'absolute', top: '50px' }}>{leaderName}</span>
+                    )
+                }
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
