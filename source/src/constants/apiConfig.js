@@ -651,6 +651,81 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
-
+    companySubscription: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/company-subscription/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/company-subscription/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/company-subscription/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/company-subscription/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/company-subscription/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/company-subscription/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    ServiceCompanySubscription: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/service-company-subscription/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/service-company-subscription/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/service-company-subscription/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/service-company-subscription/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/service-company-subscription/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/service-company-subscription/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
 };
 export default apiConfig;
