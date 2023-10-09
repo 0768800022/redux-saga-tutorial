@@ -20,11 +20,12 @@ const message = defineMessages({
     dueDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
     asignAllSuccess:'Áp dụng {objectName} thành công',
+    asignAllError:'Chưa có sinh viên hoặc có sinh viên chưa hoàn tất thủ tục, vui lòng kiểm tra lại',
 });
 
-const AsignAllForm = ({ courseId, lectureId }) => {
-
+const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
     const translate = useTranslate();
+
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const notification = useNotification();
@@ -43,8 +44,10 @@ const AsignAllForm = ({ courseId, lectureId }) => {
             },
             onCompleted: (response) => {
                 if (response.result === true) {
+
                     notification({
-                        message: intl.formatMessage(message.asignAllSuccess, {
+                        message: 
+                        intl.formatMessage(message.asignAllSuccess, {
                             objectName: translate.formatMessage(message.objectName),
                         }),
                     });
@@ -54,6 +57,15 @@ const AsignAllForm = ({ courseId, lectureId }) => {
 
             },
             onError: (err) => {
+                if( err.response.data.message == 'ERROR-COURSE-ERROR-0003'){
+                    notification({
+                        type : 'error',
+                        message: intl.formatMessage(message.asignAllError, {
+                            objectName: translate.formatMessage(message.objectName),
+                        }),
+                    });
+                    setHasError(true); 
+                }
             },
         });
     };
