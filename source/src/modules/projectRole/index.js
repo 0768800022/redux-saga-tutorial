@@ -9,12 +9,13 @@ import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Avatar } from 'antd';
+import { Button, Avatar, Tag } from 'antd';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { convertUtcToLocalTime } from '@utils';
 import routes from './routes';
 import classNames from 'classnames';
+import { statusOptions } from '@constants/masterData';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -22,11 +23,13 @@ const message = defineMessages({
     objectName: 'Vai trò dự án',
     createdDate: 'Ngày tạo',
     name: 'Tên vai trò dự án',
+    status: 'Tình trạng',
 });
 
 const ProjectRoleListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.projectRole,
         options: {
@@ -78,7 +81,16 @@ const ProjectRoleListPage = () => {
         //     width: 180,
         //     align: 'center',
         // },
-        mixinFuncs.renderStatusColumn({ width: '80px' }),
+        {
+            title: translate.formatMessage(message.status),
+            dataIndex: 'status',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
+        },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (

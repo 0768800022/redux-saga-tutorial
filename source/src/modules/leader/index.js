@@ -4,7 +4,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
 import React from 'react';
-import { Avatar, Button } from 'antd';
+import { Avatar, Button, Tag } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
@@ -62,7 +62,7 @@ const LeaderListPage = () => {
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            
+
                             navigate(routes.projectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
                         }}
                     >
@@ -102,7 +102,16 @@ const LeaderListPage = () => {
             dataIndex: 'phone',
             width: '120px',
         },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        {
+            title: translate.formatMessage(message.status),
+            dataIndex: 'status',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
+        },
         mixinFuncs.renderActionColumn({ course: true, project: true, edit: true, delete: true }, { width: '170px' }),
     ];
 
