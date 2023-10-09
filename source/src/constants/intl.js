@@ -109,3 +109,10 @@ export const statusSubjectMessage = defineMessages({
     canceled: 'Đã huỷ',
 });
 
+export const projectTaskStateMessage = defineMessages({
+    create : "Đang tạo",
+    processing : "Đang xử lý",
+    done : "Đang làm",
+    cancel : "Đã hủy",
+});
+

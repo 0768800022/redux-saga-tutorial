@@ -4,11 +4,16 @@ import BaseTable from '@components/common/table/BaseTable';
 import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { levelOptionSelect } from '@constants/masterData';
+import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
+import routes from '@routes';
+import { IconClipboardText } from '@tabler/icons-react';
 import { convertUtcToLocalTime } from '@utils';
+import { Button } from 'antd';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 const message = defineMessages({
     objectName: 'Lập trình viên',
     home: 'Trang chủ',
@@ -19,6 +24,8 @@ const message = defineMessages({
 
 const DeveloperListPage = () => {
     const translate = useTranslate();
+    const navigate = useNavigate();
+
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.developer,
         options: {
@@ -34,6 +41,20 @@ const DeveloperListPage = () => {
                     };
                 }
             };
+            funcs.additionalActionColumnButtons = () => ({
+                project: ({ id, studentInfo }) => (
+                    <Button
+                        type="link"
+                        style={{ padding: 0 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(routes.projectListPage.path + `?developerId=${id}&developerName=${studentInfo?.fullName}`);
+                        }}
+                    >
+                        <IconClipboardText size={16} />
+                    </Button>
+                ),
+            });
         },
     });
     const columns = [
@@ -68,7 +89,7 @@ const DeveloperListPage = () => {
                 return <div>{createdDateLocal}</div>;
             },
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 100 }),
+        mixinFuncs.renderActionColumn({ project: true,edit: true, delete: true }, { width: 160 }),
     ];
 
     const searchFields = [

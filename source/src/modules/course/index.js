@@ -1,5 +1,5 @@
 import ListPage from '@components/common/layout/ListPage';
-import React from 'react';
+import React, { useEffect } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
@@ -11,7 +11,7 @@ import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import routes from '@modules/registration/routes';
+import routes from '@routes';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
 import { formSize, lectureState } from '@constants/masterData';
@@ -33,6 +33,8 @@ const message = defineMessages({
 const CourseListPage = () => {
     const translate = useTranslate();
     const statusValues = translate.formatKeys(lectureState, ['label']);
+    const queryParameters = new URLSearchParams(window.location.search);
+    const leaderName = queryParameters.get('leaderName');
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.course,
@@ -51,7 +53,7 @@ const CourseListPage = () => {
                             state !== 1 &&
                                 navigate(
                                     routes.registrationListPage.path +
-                                    `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                        `?courseId=${id}&courseName=${name}&courseState=${state}`,
                                 );
                         }}
                     >
@@ -73,7 +75,7 @@ const CourseListPage = () => {
                                 state !== 5 &&
                                 navigate(
                                     route.taskListPage.path +
-                                    `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}`,
+                                        `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}`,
                                 );
                         }}
                     >
@@ -85,8 +87,10 @@ const CourseListPage = () => {
     });
     const breadRoutes = [
         { breadcrumbName: translate.formatMessage(message.home) },
+
         { breadcrumbName: translate.formatMessage(message.course) },
     ];
+
     const searchFields = [
         {
             key: 'name',
@@ -124,7 +128,11 @@ const CourseListPage = () => {
             title: translate.formatMessage(message.dateEnd),
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(dateEnd, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(dateEnd, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
             },
             width: 130,
             align: 'center',

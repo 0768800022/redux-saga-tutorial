@@ -5,7 +5,6 @@ import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { taskState } from '@constants/masterData';
 import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -14,10 +13,12 @@ import { Avatar, Button, Tag } from 'antd';
 import React from 'react';
 import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
 import { DeleteOutlined } from '@ant-design/icons';
-import { defineMessages } from 'react-intl';
+import { defineMessages,FormattedMessage } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
+import { projectTaskState } from '@constants/masterData';
+
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
@@ -37,7 +38,7 @@ function ProjectTaskListPage() {
     const leaderId = queryParameters.get('leaderId');
     const state = queryParameters.get('state');
 
-    const statusValues = translate.formatKeys(taskState, ['label']);
+    const statusValues = translate.formatKeys(projectTaskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.projectTask,
         options: {
@@ -75,6 +76,10 @@ function ProjectTaskListPage() {
             dataIndex: ['developer','studentInfo', 'fullName'],
         },
         {
+            title: <FormattedMessage defaultMessage="Quản lý" />,
+            dataIndex: ['project','leaderInfo', 'leaderName'],
+        },
+        {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
             width: 200,
@@ -86,10 +91,14 @@ function ProjectTaskListPage() {
             width: 200,
         },
         {
-            title: translate.formatMessage(message.state),
+            title: 'Trạng thái',
             dataIndex: 'state',
             align: 'center',
             width: 120,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
         },
 
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
