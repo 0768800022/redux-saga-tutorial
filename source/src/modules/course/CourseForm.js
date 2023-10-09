@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import useTranslate from '@hooks/useTranslate';
+import NumericField from '@components/common/form/NumericField';
 
 const CourseForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
@@ -168,19 +169,23 @@ const CourseForm = (props) => {
                 </Row>
                 <Row gutter={10}>
                     <Col span={12}>
-                        <TextField
+                        <NumericField
                             required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Học phí" />}
                             name="fee"
+                            type="number"
+                            min={0}
                         />
                     </Col>
                     <Col span={12}>
-                        <TextField
+                        <NumericField
                             required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"
+                            type="number"
+                            min={0}
                         />
                     </Col>
                 </Row>
