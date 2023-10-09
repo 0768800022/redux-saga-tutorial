@@ -143,6 +143,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                                     message: 'Username chỉ được chứa kí tự thường a-z và số 0-9',
                                 },
                             ]}
+                            disabled ={isEditing}
                             name="username"
                         />
                     </Col>
@@ -150,7 +151,6 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         <TextField 
                             label={translate.formatMessage(messages.password)}
                             required = {isEditing ? false : true}
-
                             name="password" />
                     </Col>
                 </Row>
