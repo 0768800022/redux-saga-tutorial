@@ -175,6 +175,7 @@ const CourseForm = (props) => {
                             label={<FormattedMessage defaultMessage="Học phí" />}
                             name="fee"
                             type="number"
+                            min={0}
                         />
                     </Col>
                     <Col span={12}>
@@ -184,6 +185,7 @@ const CourseForm = (props) => {
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"
                             type="number"
+                            min={0}
                         />
                     </Col>
                 </Row>
