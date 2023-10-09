@@ -1,6 +1,7 @@
 import apiConfig from '@constants/apiConfig';
 import DeveloperSavePage from './DeveloperSavePage';
 import DeveloperListPage from '.';
+import ProjectListPage from '@modules/project';
 
 export default {
     developerListPage: {
@@ -16,5 +17,12 @@ export default {
         auth: true,
         component: DeveloperSavePage,
         permission: [apiConfig.leader.create.baseURL, apiConfig.leader.update.baseURL],
+    },
+    developerProjectListPage: {
+        path: '/developer/project',
+        title: 'Developer',
+        auth: true,
+        component: ProjectListPage,
+        permissions: [apiConfig.project.getList.baseURL],
     },
 };

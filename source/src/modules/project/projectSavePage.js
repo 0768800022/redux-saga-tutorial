@@ -33,7 +33,6 @@ const ProjectSavePage = () => {
                     ...data,
                     id: detail.id,
                     state: 1,
-                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {

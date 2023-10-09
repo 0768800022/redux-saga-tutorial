@@ -22,9 +22,9 @@ const message = defineMessages({
     asignAllSuccess:'Áp dụng {objectName} thành công',
 });
 
-const AsignAllForm = ({ courseId, lectureId }) => {
-
+const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
     const translate = useTranslate();
+
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const notification = useNotification();
@@ -43,8 +43,10 @@ const AsignAllForm = ({ courseId, lectureId }) => {
             },
             onCompleted: (response) => {
                 if (response.result === true) {
+
                     notification({
-                        message: intl.formatMessage(message.asignAllSuccess, {
+                        message: 
+                        intl.formatMessage(message.asignAllSuccess, {
                             objectName: translate.formatMessage(message.objectName),
                         }),
                     });
@@ -54,6 +56,9 @@ const AsignAllForm = ({ courseId, lectureId }) => {
 
             },
             onError: (err) => {
+                if( err.response.data.message == 'ERROR-COURSE-ERROR-0003'){
+                    setHasError(true); 
+                }
             },
         });
     };

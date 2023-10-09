@@ -143,6 +143,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                                     message: 'Username chỉ được chứa kí tự thường a-z và số 0-9',
                                 },
                             ]}
+                            disabled={isEditing}
                             name="username"
                         />
                     </Col>
