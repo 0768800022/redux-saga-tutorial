@@ -142,6 +142,15 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             required
                         />
                     </Col>
+                    <Col span={12}>
+                        <SelectField
+                            required
+                            name="state"
+                            label={<FormattedMessage defaultMessage="Trạng thái" />}
+                            allowClear={false}
+                            options={statusValues}
+                        />
+                    </Col>
                 </Row>
                 <TextField
                     width={'100%'}

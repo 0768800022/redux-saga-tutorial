@@ -9,7 +9,7 @@ import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Avatar } from 'antd';
+import { Button, Avatar, Tag } from 'antd';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { convertUtcToLocalTime } from '@utils';
@@ -18,6 +18,8 @@ import route from '@modules/projectTask/routes';
 import classNames from 'classnames';
 import styles from './project.module.scss';
 import { BookOutlined } from '@ant-design/icons';
+import { statusOptions } from '@constants/masterData';
+
 const message = defineMessages({
     home: 'Trang chủ',
     project: 'Dự án',
@@ -27,15 +29,17 @@ const message = defineMessages({
     createdDate: 'Ngày tạo',
     avatar: 'Avater',
     description: 'Mô tả',
-    leader: 'Người hướng dẫn',
+    leader: 'Quản lý',
     name: 'Tên dự án',
     endDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
+    status:'Trạng thái',
 });
 
 const ProjectListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.project,
         options: {
@@ -125,6 +129,16 @@ const ProjectListPage = () => {
             },
             width: 130,
             align: 'center',
+        },
+        {
+            title: translate.formatMessage(message.status),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const status = statusValues.find((item) => item.value == dataRow);
+                return <Tag color={status.color}>{status.label}</Tag>;
+            },
         },
         mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '130px' }),
     ];
