@@ -1,7 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
+import {
+    DATE_DISPLAY_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DEFAULT_FORMAT,
+    DEFAULT_TABLE_ITEM_SIZE,
+    AppConstants,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -20,6 +26,7 @@ import styles from './project.module.scss';
 import { BookOutlined } from '@ant-design/icons';
 import { statusOptions } from '@constants/masterData';
 
+import useFetch from '@hooks/useFetch';
 const message = defineMessages({
     home: 'Trang chủ',
     project: 'Dự án',
@@ -39,8 +46,16 @@ const message = defineMessages({
 const ProjectListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const queryParameters = new URLSearchParams(window.location.search);
+    const developerId = queryParameters.get('developerId');
+    const [dataFilter, setDataFilter] = useState();
+    const [dataApply, setDataApply] = useState();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
+    const { data: dataListTask } = useFetch(apiConfig.projectTask.getList, {
+        immediate: true,
+        params: { developerId: developerId },
+    });
+    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.project,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -67,8 +82,8 @@ const ProjectListPage = () => {
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(
-                                route.ProjectTaskListPage.path
-                                + `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
+                                route.ProjectTaskListPage.path +
+                                    `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
                             );
                         }}
                     >
@@ -78,6 +93,18 @@ const ProjectListPage = () => {
             });
         },
     });
+
+    useEffect(() => {
+        const listTask = dataListTask?.data?.content;
+        let filteredList = [];
+        if (data?.length > 0) {
+            if (listTask?.length > 0) {
+                data = data.filter((item1) => listTask.some((item2) => item2.project.id === item1.id));
+            }
+            setDataFilter(filteredList);
+        }
+    }, [dataListTask, data]);
+
     const breadRoutes = [
         { breadcrumbName: translate.formatMessage(message.home) },
         { breadcrumbName: translate.formatMessage(message.project) },
@@ -116,7 +143,11 @@ const ProjectListPage = () => {
             title: translate.formatMessage(message.startDate),
             dataIndex: 'startDate',
             render: (startDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
             },
             width: 130,
             align: 'center',
@@ -125,7 +156,11 @@ const ProjectListPage = () => {
             title: translate.formatMessage(message.endDate),
             dataIndex: 'endDate',
             render: (endDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{dayjs(endDate, 'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(endDate, 'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}
+                    </div>
+                );
             },
             width: 130,
             align: 'center',

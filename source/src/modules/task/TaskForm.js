@@ -57,6 +57,7 @@ const TaskForm = (props) => {
                 <Row gutter={16}>
                     <Col span={12}>
                         <AutoCompleteField
+                            disabled={dataDetail?.state === 2}
                             label={<FormattedMessage defaultMessage="Tên sinh viên" />}
                             name="studentId"
                             apiConfig={apiConfig.student.autocomplete}
@@ -67,6 +68,7 @@ const TaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <SelectField
+                            disabled={dataDetail?.state === 2}
                             required
                             name="state"
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
@@ -76,6 +78,7 @@ const TaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            disabled={dataDetail?.state === 2}
                             required
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="startDate"
@@ -85,6 +88,7 @@ const TaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            disabled={dataDetail?.state === 2}
                             required
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="dueDate"

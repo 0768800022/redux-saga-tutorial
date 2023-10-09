@@ -100,7 +100,7 @@ export const taskStateMessage = defineMessages({
 export const stateResgistrationMessage = defineMessages({
     register: 'Đăng ký',
     learning: 'Đang học',
-    finished: 'Đã kết thúc',
+    finished: 'Đã hoành thành',
     canceled: 'Đã huỷ',
 });
 
