@@ -4,13 +4,16 @@ import BaseTable from '@components/common/table/BaseTable';
 import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
 import React from 'react';
-import { Avatar } from 'antd';
+import { Avatar, Button } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import { FieldTypes } from '@constants/formConfig';
 import { statusOptions } from '@constants/masterData';
+import { useNavigate } from 'react-router-dom';
+import routes from '@routes';
+import { IconClipboardText, IconSchool } from '@tabler/icons-react';
 
 const message = defineMessages({
     objectName: 'Leader',
@@ -21,6 +24,7 @@ const message = defineMessages({
 });
 
 const LeaderListPage = () => {
+    const navigate = useNavigate();
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
@@ -38,6 +42,34 @@ const LeaderListPage = () => {
                     };
                 }
             };
+            funcs.additionalActionColumnButtons = () => ({
+                course: ({ id, leaderName }) => (
+                    <Button
+                        type="link"
+                        style={{ padding: 0 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(routes.courseListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
+                        }}
+                    >
+                        <IconSchool size={16} />
+                    </Button>
+                ),
+
+                project: ({ id, leaderName }) => (
+                    <Button
+                        type="link"
+                        style={{ padding: 0 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            
+                            navigate(routes.projectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
+                        }}
+                    >
+                        <IconClipboardText size={16} />
+                    </Button>
+                ),
+            });
         },
     });
 
@@ -71,7 +103,7 @@ const LeaderListPage = () => {
             width: '120px',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ course: true, project: true, edit: true, delete: true }, { width: '170px' }),
     ];
 
     const searchFields = [

@@ -115,6 +115,7 @@ const SubjectListPage = () => {
 
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
+    console.log(data);
     return (
         <PageWrapper routes={breadRoutes}>
             <ListPage
