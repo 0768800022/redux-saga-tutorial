@@ -19,7 +19,7 @@ import { Button, Avatar, Tag } from 'antd';
 import { generatePath, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { convertUtcToLocalTime } from '@utils';
-import routes from './routes';
+import routes from '@routes';
 import route from '@modules/projectTask/routes';
 import classNames from 'classnames';
 import styles from './project.module.scss';
@@ -34,7 +34,7 @@ const message = defineMessages({
     code: 'Mã dự án',
     id: 'Id',
     createdDate: 'Ngày tạo',
-    avatar: 'Avater',
+    avatar: 'Avatar',
     description: 'Mô tả',
     leader: 'Leader',
     name: 'Tên dự án',
@@ -48,13 +48,9 @@ const ProjectListPage = () => {
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const developerId = queryParameters.get('developerId');
-    const [dataFilter, setDataFilter] = useState();
-    const [dataApply, setDataApply] = useState();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data: dataListTask } = useFetch(apiConfig.projectTask.getList, {
-        immediate: true,
-        params: { developerId: developerId },
-    });
+    const leaderName = queryParameters.get('leaderName');
+    const [dataApply, setDataApply] = useState([]);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.project,
         options: {
@@ -93,22 +89,41 @@ const ProjectListPage = () => {
             });
         },
     });
+    const { data: dataListTask, execute: executeGetList } = useFetch(apiConfig.projectTask.getList, {
+        immediate: true,
+        params: { developerId: developerId },
+        mappingData: ({ data }) => data.content.map((item) => ({ projectId: item?.project.id })),
+    });
+    useEffect(() => {
+        let filteredList = [];
+        if (data?.length > 0 && developerId) {
+            if (dataListTask?.length > 0) {
+                filteredList = data.filter((item1) => dataListTask.some((item2) => item2.projectId === item1.id));
+            }
+            setDataApply(filteredList);
+        }
+    }, [dataListTask]);
 
     useEffect(() => {
-        const listTask = dataListTask?.data?.content;
-        let filteredList = [];
-        if (data?.length > 0) {
-            if (listTask?.length > 0) {
-                data = data.filter((item1) => listTask.some((item2) => item2.project.id === item1.id));
-            }
-            setDataFilter(filteredList);
+        if (!developerId) {
+            setDataApply(data);
         }
-    }, [dataListTask, data]);
+    }, [data]);
 
     const breadRoutes = [
         { breadcrumbName: translate.formatMessage(message.home) },
         { breadcrumbName: translate.formatMessage(message.project) },
     ];
+    const breadLeaderRoutes = [
+        { breadcrumbName: translate.formatMessage(message.home) },
+        { breadcrumbName: translate.formatMessage(message.leader), path: routes.leaderListPage.path },
+        { breadcrumbName: translate.formatMessage(message.project) },
+    ];
+    const convertDate = (date) => {
+        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
+        return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
+    };
+
     const searchFields = [
         {
             key: 'name',
@@ -143,11 +158,7 @@ const ProjectListPage = () => {
             title: translate.formatMessage(message.startDate),
             dataIndex: 'startDate',
             render: (startDate) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
             },
             width: 130,
             align: 'center',
@@ -156,11 +167,7 @@ const ProjectListPage = () => {
             title: translate.formatMessage(message.endDate),
             dataIndex: 'endDate',
             render: (endDate) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(endDate, 'DD/MM/YYYY HH:MM:SS').format('DD/MM/YYYY')}
-                    </div>
-                );
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
             },
             width: 130,
             align: 'center',
@@ -178,8 +185,13 @@ const ProjectListPage = () => {
         mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '130px' }),
     ];
     return (
-        <PageWrapper routes={breadRoutes}>
+        <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
+                title={
+                    leaderName && (
+                        <span style={{ fontWeight: 'normal', position: 'absolute', top: '50px' }}>{leaderName}</span>
+                    )
+                }
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
@@ -187,7 +199,7 @@ const ProjectListPage = () => {
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={data}
+                        dataSource={dataApply}
                         columns={columns}
                     />
                 }

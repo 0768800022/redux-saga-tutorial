@@ -166,6 +166,24 @@ const CourseForm = (props) => {
                         />
                     </Col>
                 </Row>
+                <Row gutter={10}>
+                    <Col span={12}>
+                        <TextField
+                            required
+                            disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
+                            label={<FormattedMessage defaultMessage="Học phí" />}
+                            name="fee"
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <TextField
+                            required
+                            disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
+                            label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
+                            name="returnFee"
+                        />
+                    </Col>
+                </Row>
 
                 <div className="footer-card-form">{actions}</div>
             </Card>
