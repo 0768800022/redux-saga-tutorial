@@ -84,17 +84,11 @@ const CompanySubscriptionListPage = () => {
             dataIndex: ['subscription', 'price'],
             render: (price) => {
                 const formattedValue = formatMoney(price, {
-                    groupSeparator: '.',
-                    decimalSeparator: ',',
-                    currentcy: 'đ',
-                    currentcyPosition: 'BACK',
+                    currentcy: 'đ',            
+                    currentDecimal : '0',
                 });
                 return <div>{formattedValue}</div>;
             },
-        },
-        {
-            title: <FormattedMessage defaultMessage="Địa chỉ" />,
-            dataIndex: ['company', 'address'],
         },
         {
             title: translate.formatMessage(message.status),

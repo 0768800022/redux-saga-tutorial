@@ -60,21 +60,21 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
 
-    useEffect(() => {
-        form.setFieldsValue({
-            ...dataDetail,
-            status: statusValues[0].value,
-        });
-        setImageUrl(dataDetail.avatar);
-    }, [dataDetail]);
+    // useEffect(() => {
+    //     form.setFieldsValue({
+    //         ...dataDetail,
+    //         status: statusValues[0].value,
+    //     });
+    //     setImageUrl(dataDetail.avatar);
+    // }, [dataDetail]);
 
-    useEffect(() => {
-        if (!isEditing > 0) {
-            form.setFieldsValue({
-                status: statusValues[0].value,
-            });
-        }
-    }, [isEditing]);
+    // useEffect(() => {
+    //     if (!isEditing > 0) {
+    //         form.setFieldsValue({
+    //             status: statusValues[0].value,
+    //         });
+    //     }
+    // }, [isEditing]);
 
     const {
         data: leaders,
