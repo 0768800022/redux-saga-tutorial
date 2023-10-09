@@ -16,6 +16,7 @@ import { convertUtcToLocalTime } from '@utils';
 import routes from './routes';
 import classNames from 'classnames';
 import { statusOptions } from '@constants/masterData';
+import { FieldTypes } from '@constants/formConfig';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -60,6 +61,12 @@ const ProjectRoleListPage = () => {
             key: 'projectRoleName',
             placeholder: translate.formatMessage(message.name),
         },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
+        },
     ];
 
     const columns = [
@@ -81,16 +88,17 @@ const ProjectRoleListPage = () => {
         //     width: 180,
         //     align: 'center',
         // },
-        {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
-            },
-        },
+        // {
+        //     title: translate.formatMessage(message.status),
+        //     dataIndex: 'status',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         const status = statusValues.find((item) => item.value == dataRow);
+        //         return <Tag color={status.color}>{status.label}</Tag>;
+        //     },
+        // },
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (

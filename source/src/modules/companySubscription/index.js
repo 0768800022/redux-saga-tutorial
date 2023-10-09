@@ -84,8 +84,8 @@ const CompanySubscriptionListPage = () => {
             dataIndex: ['subscription', 'price'],
             render: (price) => {
                 const formattedValue = formatMoney(price, {
-                    currentcy: 'đ',            
-                    currentDecimal : '0',
+                    currentcy: 'đ',
+                    currentDecimal: '0',
                 });
                 return <div>{formattedValue}</div>;
             },

@@ -25,6 +25,7 @@ import classNames from 'classnames';
 import styles from './project.module.scss';
 import { BookOutlined } from '@ant-design/icons';
 import { statusOptions } from '@constants/masterData';
+import { FieldTypes } from '@constants/formConfig';
 
 import useFetch from '@hooks/useFetch';
 const message = defineMessages({
@@ -145,6 +146,12 @@ const ProjectListPage = () => {
             key: 'name',
             placeholder: translate.formatMessage(message.name),
         },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
+        },
     ];
 
     const columns = [
@@ -188,16 +195,17 @@ const ProjectListPage = () => {
             width: 130,
             align: 'center',
         },
-        {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
-            },
-        },
+        // {
+        //     title: translate.formatMessage(message.status),
+        //     dataIndex: 'status',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         const status = statusValues.find((item) => item.value == dataRow);
+        //         return <Tag color={status.color}>{status.label}</Tag>;
+        //     },
+        // },
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '130px' }),
     ];
 

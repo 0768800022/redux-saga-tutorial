@@ -8,18 +8,22 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
 import { formatMoney } from '@utils/index';
+import { FieldTypes } from '@constants/formConfig';
+import { statusOptions } from '@constants/masterData';
+
 const message = defineMessages({
     objectName: 'Company',
     serviceCompanySubscription: 'Quản lý gói dịch vụ',
     home: 'Trang chủ',
     name: 'Tên dịch vụ',
     price: 'Giá',
-    status:'Trạng thái',
+    status: 'Trạng thái',
     valueable: 'Số ngày sử dụng',
 });
 
 const ServiceCompanySubListPage = () => {
     const translate = useTranslate();
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.serviceCompanySubscription,
         options: {
@@ -39,7 +43,7 @@ const ServiceCompanySubListPage = () => {
     });
 
     const columns = [
-        
+
         {
             title: <FormattedMessage defaultMessage="Tên dịch vụ" />,
             dataIndex: 'name',
@@ -50,8 +54,8 @@ const ServiceCompanySubListPage = () => {
             width: '200px',
             render: (price) => {
                 const formattedValue = formatMoney(price, {
-                    currentcy: 'đ',            
-                    currentDecimal : '0',
+                    currentcy: 'đ',
+                    currentDecimal: '0',
                 });
                 return <div>{formattedValue}</div>;
             },
@@ -62,13 +66,20 @@ const ServiceCompanySubListPage = () => {
             width: '200px',
             align: 'center',
         },
-        mixinFuncs.renderActionColumn({ task:true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
         {
             key: 'name',
             placeholder: translate.formatMessage(message.name),
+        },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
         },
     ];
     return (
