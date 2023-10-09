@@ -73,16 +73,22 @@ const ProjectListPage = () => {
                 }
             };
             funcs.additionalActionColumnButtons = () => ({
-                task: ({ id, name, leaderInfo, state }) => (
+                task: ({ id, name, leaderInfo, status }) => (
                     <Button
                         type="link"
-                        style={{ padding: 0 }}
+                        style={
+                            status === 0 || status === -1
+                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
+                                : { padding: 0 }
+                        }
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigate(
-                                route.ProjectTaskListPage.path +
+                            status !== 0 &&
+                                status !== -1 &&
+                                navigate(
+                                    route.ProjectTaskListPage.path +
                                     `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
-                            );
+                                );
                         }}
                     >
                         <BookOutlined />
@@ -184,7 +190,7 @@ const ProjectListPage = () => {
         },
         {
             title: translate.formatMessage(message.status),
-            dataIndex: 'state',
+            dataIndex: 'status',
             align: 'center',
             width: 120,
             render(dataRow) {
