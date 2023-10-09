@@ -26,7 +26,9 @@ const messages = defineMessages({
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
-    const stateResgistration = translate.formatKeys(stateResgistrationOptions, ['label']);
+    //const stateResgistration = translate.formatKeys(stateResgistrationOptions, ['label']);
+    const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
+    const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -87,7 +89,8 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             }, {});
         values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
         if (!values?.state) {
-            values.state = stateResgistration[0].value;
+            values.state = 1;
+            // values.state = stateResgistration[0].value;
         }
         return mixinFuncs.handleSubmit({ ...values });
     };
@@ -217,6 +220,25 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             console.log(error);
         }
     };
+
+    useEffect(() => {
+        registrationStateOption.map((state, index) => {
+            if (dataDetail?.state == state.value) {
+                const length = registrationStateOption.length;
+                let arrayStateFilter = [];
+                if (index < length - 3) {
+                    arrayStateFilter = [state, registrationStateOption[index + 1], registrationStateOption[length - 1]];
+                } else if (index === length - 3) {
+                    arrayStateFilter = [state, registrationStateOption[length - 1]];
+                } else {
+                    arrayStateFilter = [state];
+                }
+                setRegistrationStateFilter(arrayStateFilter);
+            }
+        });
+    }, [dataDetail]);
+
+
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             <Card className="card-form" bordered={false}>
@@ -236,10 +258,11 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                         </Col>
                         <Col span={12}>
                             <SelectField
-                                defaultValue={stateResgistration[0]}
+                                disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
+                                defaultValue={registrationStateFilter[0]}
                                 label={<FormattedMessage defaultMessage="Trạng thái" />}
                                 name="state"
-                                options={stateResgistration}
+                                options={registrationStateFilter}
                             />
                         </Col>
                         <Col span={12}>

@@ -8,22 +8,24 @@ import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 const message = defineMessages({
-    objectName:'Đăng ký mới',
-    home:'Trang chủ',
+    objectName: 'Đăng ký mới',
+    home: 'Trang chủ',
     company: 'Gói dịch vụ',
 });
 
 const CompanySubscriptionSavePage = () => {
     const CompanySubscriptionId = useParams();
     const translate = useTranslate();
-    
-    const { detail, onSave, mixinFuncs,setIsChangedFormValues,isEditing,errors, loading, title } = useSaveBase({
+    const queryParameters = new URLSearchParams(window.location.search);
+    const companyId = queryParameters.get('companyId');
+    const projectName = queryParameters.get('projectName');
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.companySubscription.getById,
             create: apiConfig.companySubscription.create,
             update: apiConfig.companySubscription.update,
         },
-        options:{
+        options: {
             getListUrl: routes.companySubscriptionListPage.path,
             objectName: translate.formatMessage(message.objectName),
         },
@@ -35,32 +37,38 @@ const CompanySubscriptionSavePage = () => {
                 };
             };
             funcs.prepareCreateData = (data) => {
-                return {
-                    ...data,
-                };
+                if (companyId !== null) {
+                    return {
+                        ...data,
+                        companyId: companyId,
+                    };
+                }
+                return { ...data };
             };
         },
 
     });
-    return(
+    return (
         <PageWrapper
-            loading = {loading}
+            loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.company),
-                    path: generatePath(routes.companySubscriptionListPage.path, { CompanySubscriptionId } ) },
+                {
+                    breadcrumbName: translate.formatMessage(message.company),
+                    path: generatePath(routes.companySubscriptionListPage.path, { CompanySubscriptionId }),
+                },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
             <CompanySubscriptionForm
                 formId={mixinFuncs.getFormId()}
-                actions = {mixinFuncs.renderActions()}
-                dataDetail = {detail ? detail : {}}
-                onSubmit = {onSave}
-                setIsChangedFormValues = {setIsChangedFormValues}
-                isError = {errors}
-                isEditing = {isEditing}
+                actions={mixinFuncs.renderActions()}
+                dataDetail={detail ? detail : {}}
+                onSubmit={onSave}
+                setIsChangedFormValues={setIsChangedFormValues}
+                isError={errors}
+                isEditing={isEditing}
             />
         </PageWrapper>
     );

@@ -91,13 +91,13 @@ const navMenuConfig = [
         icon: <IconCategory2 size={16} />,
         // permission: apiConfig.category.getList.baseURL,
         children: [
-            {
-                label: categoryKind.education.title,
-                key: 'education-category',
-                path: generatePath(routes.categoryListPageEdu.path, {
-                    kind: categoryKind.education.value,
-                }),
-            },
+            // {
+            //     label: categoryKind.education.title,
+            //     key: 'education-category',
+            //     path: generatePath(routes.categoryListPageEdu.path, {
+            //         kind: categoryKind.education.value,
+            //     }),
+            // },
             {
                 label: categoryKind.generation.title,
                 key: 'generation-category',
