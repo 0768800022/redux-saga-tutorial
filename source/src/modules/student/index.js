@@ -12,6 +12,8 @@ import { TeamOutlined, BookOutlined } from '@ant-design/icons';
 import route from '@modules/student/routes';
 import { useNavigate } from 'react-router-dom';
 import { Button, Tag } from 'antd';
+import { statusOptions } from '@constants/masterData';
+import { FieldTypes } from '@constants/formConfig';
 import { CourseIcon } from '@assets/icons';
 
 const message = defineMessages({
@@ -20,12 +22,13 @@ const message = defineMessages({
     home: 'Trang chủ',
     student: 'Sinh viên',
     mssv: 'Mã số sinh viên',
+    status: 'Trạng thái',
 });
 
 const StudentListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
-
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.student,
         options: {
@@ -90,13 +93,20 @@ const StudentListPage = () => {
             title: <FormattedMessage defaultMessage="Hệ" />,
             dataIndex: ['studyClass', 'categoryName'],
         },
-        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderActionColumn({ task:  true, edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
         {
             key: 'fullName',
             placeholder: translate.formatMessage(message.fullName),
+        },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
         },
     ];
     return (
