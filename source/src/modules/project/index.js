@@ -2,8 +2,6 @@ import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import {
-    DATE_DISPLAY_FORMAT,
-    DATE_FORMAT_DISPLAY,
     DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
     AppConstants,
@@ -14,15 +12,12 @@ import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { TeamOutlined, UserOutlined } from '@ant-design/icons';
+import {  UserOutlined } from '@ant-design/icons';
 import { Button, Avatar, Tag } from 'antd';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import { convertUtcToLocalTime } from '@utils';
 import routes from '@routes';
 import route from '@modules/projectTask/routes';
-import classNames from 'classnames';
-import styles from './project.module.scss';
 import { BookOutlined } from '@ant-design/icons';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
@@ -137,8 +132,8 @@ const ProjectListPage = () => {
         return breadRoutes;
     };
     const convertDate = (date) => {
-        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
-        return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
+        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+        return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
     };
 
     const searchFields = [
@@ -183,7 +178,7 @@ const ProjectListPage = () => {
             render: (startDate) => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
             },
-            width: 130,
+            width: 200,
             align: 'center',
         },
         {
@@ -192,7 +187,7 @@ const ProjectListPage = () => {
             render: (endDate) => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
             },
-            width: 130,
+            width: 200,
             align: 'center',
         },
         // {

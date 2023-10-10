@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE,DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { taskState } from '@constants/masterData';
@@ -81,7 +81,7 @@ function TaskListPage() {
             render: (startDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DEFAULT_FORMAT)}
                     </div>
                 );
             },
@@ -94,7 +94,7 @@ function TaskListPage() {
             render: (dueDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(dueDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                        {dayjs(dueDate, DATE_DISPLAY_FORMAT).format(DEFAULT_FORMAT)}
                     </div>
                 );
             },
