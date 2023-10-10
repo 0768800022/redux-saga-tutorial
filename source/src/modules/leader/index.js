@@ -63,8 +63,7 @@ const LeaderListPage = () => {
                         style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                         onClick={(e) => {
                             e.stopPropagation();
-
-                            navigate(routes.projectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
+                            navigate(routes.leaderProjectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
                         }}
                     >
                         <FolderIcon />

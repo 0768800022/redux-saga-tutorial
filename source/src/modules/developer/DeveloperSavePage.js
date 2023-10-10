@@ -32,6 +32,7 @@ const DeveloperSavePage = () => {
                 return {
                     ...data,
                     developerId: detail.id,
+                    roleId: data.roleInfo.id,
                     status: 1,
                 };
             };
@@ -39,6 +40,8 @@ const DeveloperSavePage = () => {
                 return {
                     ...data,
                     totalCancelProject: 1,
+                    roleId: data.roleInfo.id,
+                    studentId: data.studentInfo.id,
                     totalProject: 1,
                 };
             };

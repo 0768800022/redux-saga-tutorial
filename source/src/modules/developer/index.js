@@ -27,7 +27,7 @@ const DeveloperListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFiter, serializeParams } = useListBase({
         apiConfig: apiConfig.developer,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -41,6 +41,9 @@ const DeveloperListPage = () => {
                         total: response.data.totalElements,
                     };
                 }
+            };
+            funcs.changeFilter = (filter) => {
+                mixinFuncs.setQueryParams(serializeParams(filter));
             };
             funcs.additionalActionColumnButtons = () => ({
                 project: ({ id, studentInfo }) => (
@@ -99,7 +102,6 @@ const DeveloperListPage = () => {
             align: 'center',
             width: 120,
             render(dataRow) {
-                console.log(dataRow);
                 const status = statusValues.find((item) => item.value == dataRow);
                 return <Tag color={status.color}>{status.label}</Tag>;
             },
@@ -110,7 +112,7 @@ const DeveloperListPage = () => {
 
     const searchFields = [
         {
-            key: 'name',
+            key: 'studentInfo',
             placeholder: translate.formatMessage(message.name),
         },
     ];
