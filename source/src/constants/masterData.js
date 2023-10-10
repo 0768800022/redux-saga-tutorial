@@ -56,11 +56,11 @@ export const commonStatus = [
 ];
 
 export const lectureState = [
-    { value: STATE_COURSE_PREPARED, label: lectureStateMessage.prepared, color: 'yellow' },
-    { value: STATE_COURSE_RECRUITED, label: lectureStateMessage.recruit, color: 'blue' },
-    { value: STATE_COURSE_STARTED, label: lectureStateMessage.started, color: 'green' },
-    { value: STATE_COURSE_FINISHED, label: lectureStateMessage.finished, color: 'warning' },
-    { value: STATE_COURSE_CANCELED, label: lectureStateMessage.canceled, color: 'red' },
+    { value: STATE_COURSE_PREPARED, label: lectureStateMessage.prepared, color: '#FFBF00' },
+    { value: STATE_COURSE_RECRUITED, label: lectureStateMessage.recruit, color: '#4169E1' },
+    { value: STATE_COURSE_STARTED, label: lectureStateMessage.started, color: '#00A648' },
+    { value: STATE_COURSE_FINISHED, label: lectureStateMessage.finished, color: '#FFA500' },
+    { value: STATE_COURSE_CANCELED, label: lectureStateMessage.canceled, color: '#CC0000' },
 ];
 
 export const taskState = [

@@ -70,7 +70,7 @@ const CourseListPage = () => {
                                 state !== 1 &&
                                     navigate(
                                         routes.registrationListPage.path +
-                                            `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                        `?courseId=${id}&courseName=${name}&courseState=${state}`,
                                     );
                             }}
                         >
@@ -88,7 +88,7 @@ const CourseListPage = () => {
                                 const path =
                                     (leaderName
                                         ? routes.leaderCourseTaskListPage.path
-                                        : routes.ProjectTaskListPage.path) +
+                                        : routes.taskListPage.path) +
                                     `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
                                     (leaderName ? `&leaderName=${leaderName}` : '');
                                 state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
@@ -205,16 +205,18 @@ const CourseListPage = () => {
                 return <Tag color={state.color}>{state.label}</Tag>;
             },
         },
-        {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
-            },
-        },
+        // {
+        //     title: translate.formatMessage(message.status),
+        //     dataIndex: 'status',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         console.log(dataRow);
+        //         const status = statusValues.find((item) => item.value == dataRow);
+        //         return <Tag color={status.color}>{status.label}</Tag>;
+        //     },
+        // },
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             { task: true, registration: !leaderName && true, edit: !leaderName && true, delete: !leaderName && true },
             { width: '180px' },

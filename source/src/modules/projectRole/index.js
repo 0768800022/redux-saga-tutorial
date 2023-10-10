@@ -24,7 +24,7 @@ const message = defineMessages({
     objectName: 'Vai trò dự án',
     createdDate: 'Ngày tạo',
     name: 'Tên vai trò dự án',
-    status: 'Tình trạng',
+    status: 'Trạng thái',
 });
 
 const ProjectRoleListPage = () => {
@@ -58,7 +58,7 @@ const ProjectRoleListPage = () => {
     ];
     const searchFields = [
         {
-            key: 'projectRoleName',
+            key: 'name',
             placeholder: translate.formatMessage(message.name),
         },
         {
