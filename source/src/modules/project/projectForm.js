@@ -56,8 +56,8 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     };
 
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DATE_FORMAT_VALUE) + ' 00:00:00';
-        values.endDate = formatDateString(values.endDate, DATE_FORMAT_VALUE) + ' 00:00:00';
+        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT) ;
+        values.endDate = formatDateString(values.endDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
 
@@ -86,8 +86,8 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.leaderName })),
     });
     useEffect(() => {
-        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DATE_FORMAT_VALUE);
-        dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DATE_FORMAT_VALUE);
+        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
+        dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DEFAULT_FORMAT);
 
         form.setFieldsValue({
             ...dataDetail,
@@ -128,19 +128,21 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={12}>
                         <DatePickerField
+                            showTime = {true}
                             label={translate.formatMessage(message.startDate)}
                             name="startDate"
                             style={{ width: '100%' }}
-                            format={DATE_FORMAT_DISPLAY} 
+                            format={DEFAULT_FORMAT} 
                             required/>
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            showTime = {true}
                             label={translate.formatMessage(message.endDate)}
                             type="email"
                             name="endDate"
                             style={{ width: '100%' }}
-                            format={DATE_FORMAT_DISPLAY}
+                            format={DEFAULT_FORMAT}
                             required
                         />
                     </Col>

@@ -11,35 +11,40 @@ import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Avatar, Button, Tag } from 'antd';
 import React from 'react';
-import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
+import { Link, generatePath, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { DeleteOutlined } from '@ant-design/icons';
-import { defineMessages,FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { projectTaskState,statusOptions } from '@constants/masterData';
-
+import { projectTaskState, statusOptions } from '@constants/masterData';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
-    developer: 'Người thực hiện',
+    developer: 'Lập trình viên',
     home: 'Trang chủ',
     state: 'Trạng thái',
     projectTask: 'Task',
     project: 'Dự án',
+    leader: 'Leader',
 });
 
 function ProjectTaskListPage() {
     const translate = useTranslate();
+    const navigate = useNavigate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const leaderId = queryParameters.get('leaderId');
+    const leaderName = queryParameters.get('leaderName');
+    const developerName = queryParameters.get('developerName');
     const state = queryParameters.get('state');
 
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
-    const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const location = useLocation();
+    console.log(location);
+    const statusValues = translate.formatKeys(projectTaskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.projectTask,
         options: {
@@ -67,75 +72,111 @@ function ProjectTaskListPage() {
             };
         },
     });
-    const columns = [
-        {
-            title: translate.formatMessage(message.projectTask),
-            dataIndex: 'taskName',
-        },
-        {
-            title: translate.formatMessage(message.developer),
-            dataIndex: ['developer','studentInfo', 'fullName'],
-        },
-        {
-            title: <FormattedMessage defaultMessage="Quản lý" />,
-            dataIndex: ['project','leaderInfo', 'leaderName'],
-        },
-        {
-            title: 'Ngày bắt đầu',
-            dataIndex: 'startDate',
-            width: 200,
-            align: 'center',
-        },
-        {
-            title: 'Ngày kết thúc',
-            dataIndex: 'dueDate',
-            width: 200,
-        },
-        {
-            title: 'Tình trạng',
-            dataIndex: 'state',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
-                return <Tag color={state.color}>{state.label}</Tag>;
+    const setColumns = () => {
+        const columns = [
+            {
+                title: translate.formatMessage(message.projectTask),
+                dataIndex: 'taskName',
             },
-        },
-        {
-            title: 'Trạng thái',
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
+            {
+                title: translate.formatMessage(message.developer),
+                dataIndex: ['developer', 'studentInfo', 'fullName'],
             },
-        },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
-    ];
+            {
+                title: <FormattedMessage defaultMessage="Quản lý" />,
+                dataIndex: ['project', 'leaderInfo', 'leaderName'],
+            },
+            {
+                title: 'Ngày bắt đầu',
+                dataIndex: 'startDate',
+                width: 200,
+                align: 'center',
+            },
+            {
+                title: 'Ngày kết thúc',
+                dataIndex: 'dueDate',
+                width: 200,
+            },
+            {
+                title: 'Tình trạng',
+                dataIndex: 'state',
+                align: 'center',
+                width: 120,
+                render(dataRow) {
+                    const state = stateValues.find((item) => item.value == dataRow);
+                    return <Tag color={state.color}>{state.label}</Tag>;
+                },
+            },
+            {
+                title: 'Trạng thái',
+                dataIndex: 'status',
+                align: 'center',
+                width: 120,
+                render(dataRow) {
+                    const status = statusValues.find((item) => item.value == dataRow);
+                    return <Tag color={status.color}>{status.label}</Tag>;
+                },
+            },
+        ];
+        if (!leaderName && !developerName) {
+            columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
+        }
+        return columns;
+    };
+    const setBreadRoutes = () => {
+        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        if (leaderName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.leader),
+                path: routes.leaderListPage.path,
+            });
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.project),
+                path: generatePath(routes.leaderProjectListPage.path + location?.state?.pathPrev),
+            });
+        } else if (developerName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.developer),
+                path: routes.developerListPage.path,
+            });
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.project),
+                path: generatePath(routes.developerProjectListPage.path + location?.state?.pathPrev),
+            });
+        } else {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.project),
+                path: generatePath(routes.projectListPage.path),
+            });
+        }
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.projectTask) });
+
+        return breadRoutes;
+    };
 
     return (
-        <PageWrapper
-            routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
-                {
-                    breadcrumbName: translate.formatMessage(message.project),
-                    path: generatePath(routes.projectListPage.path),
-                },
-                { breadcrumbName: translate.formatMessage(message.projectTask) },
-            ]}
-        >
+        <PageWrapper routes={setBreadRoutes()}>
             <div>
                 <ListPage
-                    title={<p style={{ fontSize: '18px' }}>Dự án: <span style={{ fontWeight: 'normal' }}>{projectName}</span></p>}
-                    actionBar={mixinFuncs.renderActionBar()}
+                    title={
+                        <span
+                            style={
+                                leaderName || developerName
+                                    ? { fontWeight: 'normal', fontSize: '16px' }
+                                    : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
+                            }
+                        >
+                            {projectName}
+                        </span>
+                    }
+                    actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
                             dataSource={data}
-                            columns={columns}
+                            columns={setColumns()}
                         />
                     }
                 />
@@ -143,5 +184,4 @@ function ProjectTaskListPage() {
         </PageWrapper>
     );
 }
-
 export default ProjectTaskListPage;

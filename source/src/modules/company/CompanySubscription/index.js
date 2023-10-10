@@ -7,11 +7,10 @@ import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
-import { useNavigate, useLocation } from 'react-router-dom';
 import { Avatar, Tag } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY } from '@constants';
+import { DATE_DISPLAY_FORMAT,DEFAULT_FORMAT } from '@constants';
 import { formatMoney } from '@utils/index';
 import { statusOptions } from '@constants/masterData';
 
@@ -21,19 +20,21 @@ const message = defineMessages({
     companyName: 'Tên công ty',
     startDate: 'Ngày bắt đầu',
     endDate: 'Ngày kết thúc',
-    company: 'Gói dịch vụ',
+    company: 'Công ty',
+    companySubscription: 'Gói dịch vụ',
     status: 'Trạng thái',
-    subscriptionName: 'Gói dịch vụ',
+    subscriptionName: 'Tên đăng ký',
     price: 'Giá',
 });
 
-const CompanySubscriptionListPage = () => {
+const CompanySubscriptionIdListPage = () => {
     const translate = useTranslate();
-    const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const companyId = queryParameters.get('companyId');
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const companyName = queryParameters.get('companyName');
+
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const { data, mixinFuncs, loading, pagination, queryFiter,pagePath } = useListBase({
         apiConfig: apiConfig.companySubscription,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -49,18 +50,16 @@ const CompanySubscriptionListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                if (companyId !== null) {
-                    return `${pagePath}/create?companyId=${companyId}`;
-                }
-                return `${pagePath}/create`;
+                return `${pagePath}/create?companyId=${companyId}&companyName=${companyName}`;
             };
+
         },
     });
 
     const columns = [
         {
             title: '#',
-            dataIndex: ['company', 'logo'],
+            dataIndex: [ 'company','logo' ],
             align: 'center',
             width: 80,
             render: (logo) => (
@@ -73,45 +72,46 @@ const CompanySubscriptionListPage = () => {
         },
         {
             title: <FormattedMessage defaultMessage="Tên công ty" />,
-            dataIndex: ['company', 'companyName'],
+            dataIndex: [ 'company', 'companyName' ],
         },
         {
             title: <FormattedMessage defaultMessage="Gói dịch vụ" />,
-            dataIndex: ['subscription', 'name'],
+            dataIndex: ['subscription','name'],
         },
         {
             title: <FormattedMessage defaultMessage="Giá dịch vụ" />,
-            dataIndex: ['subscription', 'price'],
-            render: (price) => {
-                const formattedValue = formatMoney(price, {
-                    currentcy: 'đ',
-                    currentDecimal: '0',
+            dataIndex: 'money',
+            render: (monney) => {
+                const formattedValue = formatMoney(monney, {
+                    groupSeparator: ',',      
+                    decimalSeparator: '.',    
+                    currentcy: 'đ',            
+                    currentcyPosition: 'BACK',
+                    currentDecimal : '0',
                 });
                 return <div>{formattedValue}</div>;
             },
         },
         {
-            title: <FormattedMessage defaultMessage="Sale Off" />,
-            dataIndex: 'saleOff',
-            width: '100px',
-            render: (saleOff) => {
-                const formattedValue = formatMoney(saleOff, {
-                    currentcy: '%',  
-                    currentDecimal : '0',
-                    currencyPosition: 'FRONT',
-                });
-                return <div>{formattedValue}</div>;
-            },
+            title: <FormattedMessage defaultMessage="Giảm giá" />,
             align: 'center',
+            dataIndex: 'saleOff',
+            render : (saleOff) => {
+                if(saleOff > 0) {
+                    return <div>{saleOff} %</div>;
+                }
+                else return <div>{saleOff}</div>;
+            },
         },
+        
         {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
-            width: 140,
+            // width: 140,
             render: (startDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                        {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DEFAULT_FORMAT)}
                     </div>
                 );
             },
@@ -120,11 +120,11 @@ const CompanySubscriptionListPage = () => {
         {
             title: 'Ngày kết thúc',
             dataIndex: 'endDate',
-            width: 140,
+            // width: 140,
             render: (endDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(endDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                        {dayjs(endDate, DATE_DISPLAY_FORMAT).format(DEFAULT_FORMAT)}
                     </div>
                 );
             },
@@ -142,28 +142,18 @@ const CompanySubscriptionListPage = () => {
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
-
-    const searchFields = [
-        {
-            key: 'companyName',
-            placeholder: translate.formatMessage(message.companyName),
-            // key: 'subscriptionName',
-            // placeholder: translate.formatMessage(message.subscriptionName),
-        },
-        {
-            key: 'subscriptionName',
-            placeholder: translate.formatMessage(message.subscriptionName),
-        },
-    ];
     return (
         <PageWrapper
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.company) },
+                { breadcrumbName: translate.formatMessage(message.company), path: `/company` },
+                { breadcrumbName: translate.formatMessage(message.companySubscription) },
             ]}
         >
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                title={
+                    <span style={{ fontWeight: 'normal', position: 'absolute', fontSize: '16px' }}>{companyName}</span>
+                }
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -178,4 +168,4 @@ const CompanySubscriptionListPage = () => {
         </PageWrapper>
     );
 };
-export default CompanySubscriptionListPage;
+export default CompanySubscriptionIdListPage;

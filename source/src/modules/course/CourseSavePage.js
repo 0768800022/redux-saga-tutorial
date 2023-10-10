@@ -32,13 +32,11 @@ const CourseSavePage = () => {
                 return {
                     ...data,
                     id: detail.id,
-                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    status: 1,
                 };
             };
         },

@@ -96,12 +96,12 @@ export const statusSubjectOptions = [
     {
         value: 1,
         label: statusSubjectMessage.active,
-        color: '#00A648',
+        color: 'green',
     },
     {
         value: 2,
         label: statusSubjectMessage.canceled,
-        color: '#CC0000',
+        color: 'red',
     },
 ];
 export const stateResgistrationOptions = [

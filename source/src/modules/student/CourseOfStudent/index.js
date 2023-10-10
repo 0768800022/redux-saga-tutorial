@@ -81,7 +81,7 @@ const CourseListPage = () => {
                 path: routes.studentListPage.path,
             });
         }
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.project) });
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.course) });
 
         return breadRoutes;
     };

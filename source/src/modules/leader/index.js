@@ -4,7 +4,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
 import React from 'react';
-import { Avatar, Button } from 'antd';
+import { Avatar, Button, Tag } from 'antd';
 import { UserOutlined, ContainerOutlined, ProjectOutlined } from '@ant-design/icons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
@@ -14,6 +14,7 @@ import { statusOptions } from '@constants/masterData';
 import { useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import { IconClipboardText, IconSchool } from '@tabler/icons-react';
+import FolderIcon, { CourseIcon } from '@assets/icons';
 
 const message = defineMessages({
     objectName: 'Leader',
@@ -46,26 +47,27 @@ const LeaderListPage = () => {
                 course: ({ id, leaderName }) => (
                     <Button
                         type="link"
-                        style={{ padding: 0 }}
+                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(routes.leaderCourseListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
                         }}
                     >
-                        <ContainerOutlined />
+                        <CourseIcon />
                     </Button>
                 ),
 
                 project: ({ id, leaderName }) => (
                     <Button
                         type="link"
-                        style={{ padding: 0 }}
+                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            navigate(routes.leaderProjectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
+
+                            navigate(routes.projectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
                         }}
                     >
-                        <ProjectOutlined />
+                        <FolderIcon />
                     </Button>
                 ),
             });
