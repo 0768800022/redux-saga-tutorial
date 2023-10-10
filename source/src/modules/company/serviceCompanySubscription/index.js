@@ -63,6 +63,17 @@ const ServiceCompanySubListPage = () => {
             },
         },
         {
+            title: <FormattedMessage defaultMessage="Giảm giá" />,
+            align: 'center',
+            dataIndex: 'saleOff',
+            render : (saleOff) => {
+                if(saleOff > 0) {
+                    return <div>{saleOff} %</div>;
+                }
+                else return <div>{saleOff}</div>;
+            },
+        },
+        {
             title: <FormattedMessage defaultMessage="Số ngày sử dụng" />,
             dataIndex: 'valueable',
             width: '200px',
