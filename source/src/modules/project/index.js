@@ -219,8 +219,13 @@ const ProjectListPage = () => {
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
-            { task: true, edit: !leaderName && !developerName && true, delete: !leaderName && !developerName && true },
-            { width: '130px' },
+            {
+                member: true,
+                task: true,
+                edit: !leaderName && !developerName && true,
+                delete: !leaderName && !developerName && true,
+            },
+            { width: '150px' },
         ),
     ];
 
