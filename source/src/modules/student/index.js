@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Tag } from 'antd';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
+import { CourseIcon } from '@assets/icons';
 
 const message = defineMessages({
     objectName: 'Student',
@@ -47,7 +48,7 @@ const StudentListPage = () => {
                 task: ({ id, fullName }) => (
                     <Button
                         type="link"
-                        style={{ padding: 0 }}
+                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${fullName}`);
@@ -56,7 +57,7 @@ const StudentListPage = () => {
                             // navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
                         }}
                     >
-                        <BookOutlined />
+                        <CourseIcon />
                     </Button>
                 ),
             });
@@ -93,7 +94,7 @@ const StudentListPage = () => {
             dataIndex: ['studyClass', 'categoryName'],
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ task:  true, edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [

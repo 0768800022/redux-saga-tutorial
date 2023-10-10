@@ -22,6 +22,7 @@ const CourseForm = (props) => {
     const translate = useTranslate();
     const lectureStateOptions = translate.formatKeys(lectureState, ['label']);
     const [lectureStateFilter, setLectureStateFilter] = useState([lectureStateOptions[0]]);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -29,6 +30,9 @@ const CourseForm = (props) => {
     const handleSubmit = (values) => {
         if (!values?.state) {
             values.state = 1;
+        } 
+        if (!values?.status) {
+            values.status = 0;
         }
         values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
@@ -186,6 +190,16 @@ const CourseForm = (props) => {
                             name="returnFee"
                             type="number"
                             min={0}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
+                            name="status"
+                            defaultValue={statusValues[0]}
+                            label={<FormattedMessage defaultMessage="Trạng thái" />}
+                            allowClear={false}
+                            options={statusValues}
                         />
                     </Col>
                 </Row>

@@ -67,7 +67,7 @@ const ProjectTaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <AutoCompleteField
-                            label={<FormattedMessage defaultMessage="Người thực hiện" />}
+                            label={<FormattedMessage defaultMessage="Lập trình viên" />}
                             name="developerId"
                             apiConfig={apiConfig.developer.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.studentInfo.fullName })}
