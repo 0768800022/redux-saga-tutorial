@@ -121,7 +121,8 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
                             initialSearchParams={{}}
                             searchParams={(text) => ({ name: text })}
-                            required />
+                            required 
+                            disabled={isEditing}/>
                     </Col>
                 </Row>
 

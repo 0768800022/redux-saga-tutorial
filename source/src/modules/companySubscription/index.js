@@ -16,6 +16,8 @@ import { formatMoney } from '@utils/index';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { useState } from 'react';
+import { useEffect } from 'react';
+import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
     objectName: 'CompanySubscription',
@@ -59,8 +61,8 @@ const CompanySubscriptionListPage = () => {
                 return `${pagePath}/create`;
             };
         },
+        
     });
-
     const columns = [
         {
             title: '#',
@@ -101,8 +103,8 @@ const CompanySubscriptionListPage = () => {
             width: '100px',
             render: (saleOff) => {
                 const formattedValue = formatMoney(saleOff, {
-                    currentcy: '%',  
-                    currentDecimal : '0',
+                    currentcy: '%',
+                    currentDecimal: '0',
                 });
                 return <div>{formattedValue}</div>;
             },
@@ -149,10 +151,9 @@ const CompanySubscriptionListPage = () => {
 
     const searchFields = [
         {
-            key: 'companyId',
+            key: 'companyName',
             placeholder: translate.formatMessage(message.companyName),
-            type: FieldTypes.SELECT,
-            options: companyValues,
+            
         },
         {
             key: 'status',
@@ -161,6 +162,7 @@ const CompanySubscriptionListPage = () => {
             options: statusValues,
         },
     ];
+
     return (
         <PageWrapper
             routes={[
