@@ -90,7 +90,7 @@ const CourseListPage = () => {
                                 const path =
                                     (leaderName
                                         ? routes.leaderCourseTaskListPage.path
-                                        : routes.ProjectTaskListPage.path) +
+                                        : routes.taskListPage.path) +
                                     `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
                                     (leaderName ? `&leaderName=${leaderName}` : '');
                                 state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
