@@ -10,11 +10,11 @@ import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
-import { formSize, lectureState } from '@constants/masterData';
+import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { formatMoney } from '@utils';
 
@@ -27,65 +27,79 @@ const message = defineMessages({
     description: 'Mô tả',
     dateRegister: 'Ngày bắt đầu',
     dateEnd: 'Ngày kết thúc',
-    status: 'Tình trạng',
+    state: 'Tình trạng',
+    status: 'Trạng thái',
     leader: 'Leader',
 });
 
 const CourseListPage = () => {
     const translate = useTranslate();
-    const statusValues = translate.formatKeys(lectureState, ['label']);
+    const stateValues = translate.formatKeys(lectureState, ['label']);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const leaderName = queryParameters.get('leaderName');
+    const location = useLocation();
     const navigate = useNavigate();
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.course,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.additionalActionColumnButtons = () => ({
-                registration: ({ id, name, state }) => (
-                    <Button
-                        type="link"
-                        style={state === 1 ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' } : { padding: 0 }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            state !== 1 &&
-                                navigate(
-                                    routes.registrationListPage.path +
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.course,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.changeFilter = (filter) => {
+                    const leaderId = queryParams.get('leaderId');
+                    const leaderName = queryParams.get('leaderName');
+                    if (leaderId) {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({ leaderId: leaderId, leaderName: leaderName, ...filter }),
+                        );
+                    } else {
+                        mixinFuncs.setQueryParams(serializeParams(filter));
+                    }
+                };
+                funcs.additionalActionColumnButtons = () => ({
+                    registration: ({ id, name, state }) => (
+                        <Button
+                            type="link"
+                            disabled={state === 1}
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                state !== 1 &&
+                                    navigate(
+                                        routes.registrationListPage.path +
                                         `?courseId=${id}&courseName=${name}&courseState=${state}`,
-                                );
-                        }}
-                    >
-                        <TeamOutlined />
-                    </Button>
-                ),
+                                    );
+                            }}
+                        >
+                            <TeamOutlined />
+                        </Button>
+                    ),
 
-                task: ({ id, name, subject, state }) => (
-                    <Button
-                        type="link"
-                        style={
-                            state === 1 || state === 5
-                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                : { padding: 0 }
-                        }
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            state !== 1 &&
-                                state !== 5 &&
-                                navigate(
-                                    route.taskListPage.path +
-                                        `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}`,
-                                );
-                        }}
-                    >
-                        <BookOutlined />
-                    </Button>
-                ),
-            });
-        },
-    });
+                    task: ({ id, name, subject, state }) => (
+                        <Button
+                            disabled={state === 1 || state === 5}
+                            type="link"
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                const path =
+                                    (leaderName
+                                        ? routes.leaderCourseTaskListPage.path
+                                        : routes.taskListPage.path) +
+                                    `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
+                                    (leaderName ? `&leaderName=${leaderName}` : '');
+                                state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
+                            }}
+                        >
+                            <BookOutlined />
+                        </Button>
+                    ),
+                });
+            },
+        });
     const breadRoutes = [
         { breadcrumbName: translate.formatMessage(message.home) },
 
@@ -101,6 +115,18 @@ const CourseListPage = () => {
         {
             key: 'name',
             placeholder: translate.formatMessage(message.name),
+        },
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(message.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
         },
     ];
     const columns = [
@@ -170,26 +196,37 @@ const CourseListPage = () => {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.status),
+            title: translate.formatMessage(message.state),
             dataIndex: 'state',
             align: 'center',
             width: 120,
             render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
+                const state = stateValues.find((item) => item.value == dataRow);
+                return <Tag color={state.color}>{state.label}</Tag>;
             },
         },
-        mixinFuncs.renderActionColumn({ task: true, registration: true, edit: true, delete: true }, { width: '180px' }),
+        // {
+        //     title: translate.formatMessage(message.status),
+        //     dataIndex: 'status',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         console.log(dataRow);
+        //         const status = statusValues.find((item) => item.value == dataRow);
+        //         return <Tag color={status.color}>{status.label}</Tag>;
+        //     },
+        // },
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderActionColumn(
+            { task: true, registration: !leaderName && true, edit: !leaderName && true, delete: !leaderName && true },
+            { width: '180px' },
+        ),
     ];
 
     return (
         <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
-                title={
-                    leaderName && (
-                        <span style={{ fontWeight: 'normal' }}>{leaderName}</span>
-                    )
-                }
+                title={leaderName && <span style={{ fontWeight: 'normal' }}>{leaderName}</span>}
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={!leaderName && mixinFuncs.renderActionBar()}
                 baseTable={

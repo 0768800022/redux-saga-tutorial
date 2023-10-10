@@ -1,68 +1,43 @@
-import { Card, Col, Row, Input } from 'antd';
+import { Card, Col, Row } from 'antd';
 import React, { useEffect } from 'react';
 import SelectField from '@components/common/form/SelectField';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
-import TextField from '@components/common/form/TextField';
 import { defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
-import useFetch from '@hooks/useFetch';
 import { FormattedMessage } from 'react-intl';
 import apiConfig from '@constants/apiConfig';
-import { useState } from 'react';
-import CropImageField from '@components/common/form/CropImageField';
-import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import TextField from '@components/common/form/TextField';
+import NumericField from '@components/common/form/NumericField';
+import { DATE_FORMAT_VALUE,DEFAULT_FORMAT } from '@constants';
 import { statusOptions } from '@constants/masterData';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import DatePickerField from '@components/common/form/DatePickerField';
 import dayjs from 'dayjs';
 import { formatDateString } from '@utils';
-import NumericField from '@components/common/form/NumericField';
 
 const messages = defineMessages({
-    companyName: 'Tên công ty',
-    address: 'Địa chỉ',
-    email: 'Email',
-    hotline: 'HotLine',
-    logo: 'logo',
-    password: 'Mật khẩu',
-    username: 'Tài khoản đăng nhập',
-    required: 'Không được để trống',
+    startDate: 'Ngày bắt đầu',
 });
 
-const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
+const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
-    const [logoUrl, setLogoUrl] = useState(null);
-    const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+
+    const queryParameters = new URLSearchParams(window.location.search);
+    const companyId = queryParameters.get('companyId');
+    const companyName = queryParameters.get('companyName');
 
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
 
-    const uploadLogoFile = (file, onSuccess, onError) => {
-        executeUpFile({
-            data: {
-                type: 'LOGO',
-                file: file,
-            },
-            onCompleted: (response) => {
-                if (response.result === true) {
-                    onSuccess();
-                    setLogoUrl(response.data.filePath);
-                    setIsChangedFormValues(true);
-                }
-            },
-            onError: (error) => {
-                onError();
-            },
-        });
-    };
 
     const handleSubmit = (values) => {
         values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
         values.endDate = formatDateString(values.endDate, DEFAULT_FORMAT);
+        values.companyId = companyId;
         return mixinFuncs.handleSubmit({ ...values });
     };
 
@@ -75,32 +50,18 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
         }
     }, [isEditing]);
 
-    const {
-        data: companys,
-        loading: getcompanyLoading,
-        execute: executescompanys,
-    } = useFetch(apiConfig.company.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.companyName })),
-    });
-    const {
-        data: serviceCompanySubscription,
-        loading: getserviceCompanySubscriptionLoading,
-        execute: executesserviceCompanySubscription,
-    } = useFetch(apiConfig.serviceCompanySubscription.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.name })),
-    });
     useEffect(() => {
         dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
         dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DEFAULT_FORMAT);
         form.setFieldsValue({
             ...dataDetail,
-            companyName: dataDetail?.company?.companyName,
+            companyName: companyName ? companyName :dataDetail?.company?.companyName,
             serviceCompanySubscriptionId: dataDetail?.subscription?.name,
             startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT)),
+
         });
     }, [dataDetail]);
+
     const validateDueDate = (_, value) => {
         const { startDate } = form.getFieldValue();
         if (startDate && value && value.isBefore(startDate)) {
@@ -110,14 +71,18 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
     };
 
     const validateStartDate = (_, value) => {
-        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DATE_FORMAT_VALUE);
         if (date && value && value.isBefore(date)) {
             return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
         }
         return Promise.resolve();
     };
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} >
+        <BaseForm 
+            formId={formId} 
+            onFinish={handleSubmit} 
+            form={form} onValuesChange={onValuesChange} 
+        >
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
@@ -130,42 +95,38 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                             searchParams={(text) => ({ name: text })}
                             required
                             disabled={isEditing}
+                            
                         />
                     </Col>
                     <Col span={12}>
-                        <AutoCompleteField
+                        <TextField
                             label={<FormattedMessage defaultMessage="Công ty" />}
-                            name="companyId"
-                            apiConfig={apiConfig.company.autocomplete}
-                            mappingOptions={(item) => ({ value: item.id, label: item.companyName })}
-                            initialSearchParams={{}}
-                            searchParams={(text) => ({ companyName: text })}
-                            required
-                            disabled={isEditing}
+                            name="companyName"
+                            disabled
                         />
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime={true}
-                            required
-                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                            showTime = {true}
                             name="startDate"
+                            label={translate.formatMessage(messages.startDate)}                            
+                            placeholder="Ngày bắt đầu"
+                            format={DEFAULT_FORMAT}
+                            style={{ width: '100%' }}
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Vui lòng chọn ngày kết thúc',
+                                    message: 'Vui lòng chọn ngày bắt đầu',
                                 },
                                 {
-                                    validator: validateDueDate,
+                                    validator: validateStartDate,
                                 },
                             ]}
-                            format={DEFAULT_FORMAT}
-                            style={{ width: '100%' }}
-                        />
+                        />  
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime={true}
+                            showTime = {true}
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="endDate"
                             placeholder="Ngày kết thúc"
@@ -195,18 +156,11 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                     <Col span={12}>
                         <NumericField
                             label={<FormattedMessage defaultMessage="Giảm giá" />}
-                            name="saleOff"
-                            type="number"
-                            rules={[
-                                {
-                                    validator: (_, value) => {
-                                        if (value >= 1 && value <= 100) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('Giá trị phải từ 1 đến 99'));
-                                    },
-                                },
-                            ]}
+                            name="saleOff"                          
+                            min={0}
+                            max={100}
+                            formatter={(value) => `${value}%`}
+                            parser={(value) => value.replace('%', '')}
                         />
                     </Col>
                 </Row>
@@ -216,4 +170,4 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
     );
 };
 
-export default CompanySubscriptionForm;
+export default CompanySubscriptionIdForm;

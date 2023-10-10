@@ -17,6 +17,7 @@ import routes from './routes';
 import classNames from 'classnames';
 import styles from './subject.module.scss';
 import { statusSubjectOptions } from '@constants/masterData';
+import { FieldTypes } from '@constants/formConfig';
 const message = defineMessages({
     name: 'Tên môn học',
     home: 'Trang chủ',
@@ -31,7 +32,7 @@ const message = defineMessages({
 
 const SubjectListPage = () => {
     const translate = useTranslate();
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
     const statusSubject = translate.formatKeys(statusSubjectOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.subject,
@@ -62,6 +63,12 @@ const SubjectListPage = () => {
         {
             key: 'name',
             placeholder: translate.formatMessage(message.name),
+        },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusSubject,
         },
     ];
     const handleOnClick = (event, record) => {
@@ -109,10 +116,9 @@ const SubjectListPage = () => {
             render(dataRow) {
                 const status = statusSubject.find((item) => item.value == dataRow);
 
-                return <Tag color={status.color}>{status.label}</Tag>;
+                return <Tag color={status.color}><div style={{ padding: '0 4px', fontSize: 14 }}>{status.label}</div></Tag>;
             },
         },
-
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (

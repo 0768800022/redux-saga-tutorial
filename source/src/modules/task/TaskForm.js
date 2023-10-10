@@ -25,8 +25,8 @@ const TaskForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DATE_FORMAT_VALUE) + ' 00:00:00';
-        values.dueDate = formatDateString(values.dueDate, DATE_FORMAT_VALUE) + ' 00:00:00';
+        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT) ;
+        values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values });
     };
     const {
@@ -43,8 +43,8 @@ const TaskForm = (props) => {
     //     });
     // }, []);
     useEffect(() => {
-        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DATE_FORMAT_VALUE);
-        dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DATE_FORMAT_VALUE);
+        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
+        dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
 
         form.setFieldsValue({
             ...dataDetail,
@@ -78,22 +78,24 @@ const TaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            showTime = {true}
                             disabled={dataDetail?.state === 2}
                             required
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="startDate"
                             style={{ width: '100%' }}
-                            format={DATE_FORMAT_DISPLAY}
+                            format={DEFAULT_FORMAT}
                         />
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            showTime = {true}
                             disabled={dataDetail?.state === 2}
                             required
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="dueDate"
                             style={{ width: '100%' }}
-                            format={DATE_FORMAT_DISPLAY}
+                            format={DEFAULT_FORMAT}
                         />
                     </Col>
                 </Row>

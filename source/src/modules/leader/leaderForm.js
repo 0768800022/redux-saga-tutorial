@@ -40,6 +40,7 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
                 if (response.result === true) {
                     onSuccess();
                     setImageUrl(response.data.filePath);
+                    setIsChangedFormValues(true);
                 }
             },
             onError: (error) => {

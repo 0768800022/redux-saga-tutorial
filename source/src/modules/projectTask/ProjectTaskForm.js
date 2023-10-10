@@ -5,7 +5,7 @@ import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { projectTaskState } from '@constants/masterData';
+import { projectTaskState, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -17,9 +17,10 @@ import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 const ProjectTaskForm = (props) => {
-    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues,isEditing } = props;
+    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const translate = useTranslate();
-    const statusValues = translate.formatKeys(projectTaskState, ['label']);
+    const stateValues = translate.formatKeys(projectTaskState, ['label']);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -29,6 +30,14 @@ const ProjectTaskForm = (props) => {
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values });
     };
+    useEffect(() => {
+        if (!isEditing > 0) {
+            form.setFieldsValue({
+                status: statusValues[0].value,
+                state: stateValues[0].value,
+            });
+        }
+    }, [isEditing]);
     const {
         data: developers,
         loading: getdevelopersLoading,
@@ -43,31 +52,24 @@ const ProjectTaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
-            developerId: dataDetail?.developer?.studentInfo?.fullName,
+            developerId: dataDetail?.developer?.studentInfo?.id,
         });
     }, [dataDetail]);
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
-                <TextField
-                    width='100%'
-                    label={<FormattedMessage defaultMessage="Tên task" />}
-                    name="taskName"
-                    required
-                />
                 <Row gutter={16}>
                     <Col span={12}>
-                        <SelectField
+                        <TextField
+                            width='100%'
+                            label={<FormattedMessage defaultMessage="Tên task" />}
+                            name="taskName"
                             required
-                            name="state"
-                            label={<FormattedMessage defaultMessage="Trạng thái" />}
-                            allowClear={false}
-                            options={statusValues}
                         />
                     </Col>
                     <Col span={12}>
                         <AutoCompleteField
-                            label={<FormattedMessage defaultMessage="Người thực hiện" />}
+                            label={<FormattedMessage defaultMessage="Lập trình viên" />}
                             name="developerId"
                             apiConfig={apiConfig.developer.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.studentInfo.fullName })}
@@ -78,7 +80,26 @@ const ProjectTaskForm = (props) => {
                         />
                     </Col>
                     <Col span={12}>
+                        <SelectField
+                            required
+                            name="state"
+                            label={<FormattedMessage defaultMessage="Tình trạng" />}
+                            allowClear={false}
+                            options={stateValues}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            required
+                            name="status"
+                            label={<FormattedMessage defaultMessage="Trạng thái" />}
+                            allowClear={false}
+                            options={statusValues}
+                        />
+                    </Col>
+                    <Col span={12}>
                         <DatePickerField
+                            showTime={true}
                             required
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="startDate"
@@ -88,6 +109,7 @@ const ProjectTaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            showTime={true}
                             required
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="dueDate"

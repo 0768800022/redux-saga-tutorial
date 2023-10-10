@@ -90,25 +90,25 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 </Row>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField 
-                            label={translate.formatMessage(messages.companyName)} 
+                        <TextField
+                            label={translate.formatMessage(messages.companyName)}
                             rules={[
                                 {
                                     required: true,
                                     message: translate.formatMessage(messages.required),
                                 },
-                            ]} 
+                            ]}
                             name="companyName" />
                     </Col>
                     <Col span={12}>
-                        <TextField 
+                        <TextField
                             label={translate.formatMessage(messages.address)}
                             rules={[
                                 {
                                     required: true,
                                     message: translate.formatMessage(messages.required),
                                 },
-                            ]} 
+                            ]}
                             name="address" />
                     </Col>
                 </Row>
@@ -143,15 +143,17 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                                     message: 'Username chỉ được chứa kí tự thường a-z và số 0-9',
                                 },
                             ]}
-                            disabled ={isEditing}
+                            disabled={isEditing}
                             name="username"
                         />
                     </Col>
                     <Col span={12}>
-                        <TextField 
+                        <TextField
                             label={translate.formatMessage(messages.password)}
-                            required = {isEditing ? false : true}
-                            name="password" />
+                            required={isEditing ? false : true}
+
+                            name="password"
+                        />
                     </Col>
                 </Row>
                 <Row gutter={16}>
