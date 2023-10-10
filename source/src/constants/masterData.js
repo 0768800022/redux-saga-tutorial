@@ -108,11 +108,11 @@ export const stateResgistrationOptions = [
     {
         value: 1,
         label: stateResgistrationMessage.register,
-        color: 'green',
+        color: '#00A648',
     },
-    { value: 2, label: stateResgistrationMessage.learning, color: 'blue' },
-    { value: 3, label: stateResgistrationMessage.finished, color: 'yellow' },
-    { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
+    { value: 2, label: stateResgistrationMessage.learning, color: '#4169E1' },
+    { value: 3, label: stateResgistrationMessage.finished, color: '#FFBF00' },
+    { value: 4, label: stateResgistrationMessage.canceled, color: '#CC0000' },
 ];
 
 export const lectureKindOptions = [
