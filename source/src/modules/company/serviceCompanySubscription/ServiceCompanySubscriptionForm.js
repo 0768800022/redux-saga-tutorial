@@ -60,8 +60,11 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
                         <NumericField 
                             label={translate.formatMessage(messages.price)}
                             name= 'price' 
+                            min={0}
+                            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                            addonAfter="₫"
                             required
-                            type = 'number'
                         />
                     </Col>
                 </Row>
@@ -71,9 +74,23 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
                             label={<FormattedMessage defaultMessage="Số ngày sử dụng" />}
                             name= 'valueable'
                             required
+                            min={0}
                             type = 'number'
                         />
                     </Col>
+                    <Col span={12}>
+                        <NumericField
+                            label={<FormattedMessage defaultMessage="Giảm giá" />}
+                            name="saleOff"                          
+                            min={0}
+                            max={100}
+                            formatter={(value) => `${value}%`}
+                            parser={(value) => value.replace('%', '')}
+                        />
+                    </Col>
+                    
+                </Row>
+                <Row gutter={16}>
                     <Col span={12}>
                         <SelectField
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
@@ -82,6 +99,7 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
                             options={statusValues}
                         />
                     </Col>
+                    
                 </Row>
                 <div className="footer-card-form">{actions}</div>
             </Card>

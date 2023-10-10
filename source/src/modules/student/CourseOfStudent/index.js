@@ -11,12 +11,11 @@ import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
 import { useNavigate, generatePath, useParams, useLocation } from 'react-router-dom';
-import routes from '@modules/registration/routes';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
-import { formSize, lectureState } from '@constants/masterData';
+import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
-import route1 from '@modules/student/routes';
+import routes from '@routes';
 import { DATE_FORMAT_DISPLAY } from '@constants';
 
 const message = defineMessages({
@@ -30,18 +29,22 @@ const message = defineMessages({
     dateEnd: 'Ngày kết thúc',
     dateCreated: 'Ngày khởi tạo',
     status: 'Tình trạng',
-    leader: 'Người hướng dẫn',
+    leader: 'Leader',
+    student: 'Sinh viên',
+    state: 'Tình trạng',
 });
 
 const CourseListPage = () => {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
-    const statusValues = translate.formatKeys(lectureState, ['label']);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const paramid = useParams();
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const stuId = queryParameters.get('studentId');
     const studentName = queryParameters.get('studentName');
+    const leaderName = queryParameters.get('leaderName');
+    const stateValues = translate.formatKeys(lectureState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -64,20 +67,84 @@ const CourseListPage = () => {
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?studentId=${stuId}`;
             };
+            funcs.additionalActionColumnButtons = () => ({
+                registration: ({ id, name, state }) => (
+                    <Button
+                        type="link"
+                        style={state === 1 ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' } : { padding: 0 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            state !== 1 &&
+                                navigate(
+                                    routes.registrationListPage.path +
+                                    `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                );
+                        }}
+                    >
+                        <TeamOutlined />
+                    </Button>
+                ),
+
+                task: ({ id, name, subject, state }) => (
+                    <Button
+                        type="link"
+                        style={
+                            state === 1 || state === 5
+                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
+                                : { padding: 0 }
+                        }
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            const path =
+                                (leaderName
+                                    ? routes.leaderCourseTaskListPage.path
+                                    : routes.taskListPage.path) +
+                                `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
+                                (leaderName ? `&leaderName=${leaderName}` : '');
+                            state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
+                        }}
+                    >
+                        <BookOutlined />
+                    </Button>
+                ),
+            });
         },
+        
     });
-    const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
-        {
-            breadcrumbName: <FormattedMessage defaultMessage="Sinh viên" />,
-            path: generatePath(route1.studentListPage.path),
-        },
-        { breadcrumbName: translate.formatMessage(message.course) },
-    ];
+
+    const setBreadRoutes = () => {
+        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        if (leaderName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.leader),
+                path: routes.leaderListPage.path,
+            });
+        } else if (studentName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.student),
+                path: routes.studentListPage.path,
+            });
+        }
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.course) });
+
+        return breadRoutes;
+    };
     const searchFields = [
         {
-            key: 'courseName',
+            key: 'name',
             placeholder: translate.formatMessage(message.name),
+        },
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(message.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
         },
     ];
     const columns = [
@@ -104,24 +171,25 @@ const CourseListPage = () => {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.status),
+            title: translate.formatMessage(message.state),
             dataIndex: 'state',
             align: 'center',
             width: 120,
             render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-
-                return <Tag color={status.color}>{status.label}</Tag>;
+                const state = stateValues.find((item) => item.value == dataRow);
+                return <Tag color={state.color}>{state.label}</Tag>;
             },
         },
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ delete: true }, { width: '120px' }),
     ];
 
     return (
-        <PageWrapper routes={breadRoutes}>
+        <PageWrapper routes={setBreadRoutes()}>
             <div>
                 <ListPage
-                    title={<span style={{ fontWeight: 'normal',fontSize: '16px' }}>{studentName}</span>}
+                    title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{studentName}</span>}
+                    searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}

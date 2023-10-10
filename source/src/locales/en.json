@@ -173,7 +173,7 @@
     "constants.intl.genderMessage.male": "Nam",
     "constants.intl.salaryTypeMessage.full": "Toàn thời gian",
     "constants.intl.salaryTypeMessage.share": "Chia sẻ",
-    "constants.intl.statusMessage.active": "Kích hoạt",
+    "constants.intl.statusMessage.active": "Hoạt động",
     "constants.intl.statusMessage.inactive": "Khóa",
     "constants.intl.statusMessage.pending": "Đang chờ",
     "constants.intl.dateFilterMessage.today": "Hôm nay",

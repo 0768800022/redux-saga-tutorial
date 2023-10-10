@@ -172,7 +172,6 @@ const useListBase = ({
 
     const getList = () => {
         const params = mixinFuncs.prepareGetListParams(queryFilter);
-
         mixinFuncs.handleFetchList({ ...params });
     };
 
@@ -496,6 +495,7 @@ const useListBase = ({
             handleFilterSearchChange,
             prepareGetListPathParams,
             actionColumnButtons,
+            setQueryParams,
         };
 
         override?.(centralizedHandler);
@@ -529,6 +529,8 @@ const useListBase = ({
         getList,
         setLoading,
         pagePath,
+        serializeParams,
+        queryParams,
     };
 };
 

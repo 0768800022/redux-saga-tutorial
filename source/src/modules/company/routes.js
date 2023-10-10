@@ -3,6 +3,8 @@ import CompanyListPage from ".";
 import CompanySavePage from "./CompanySavePage";
 import ServiceCompanySubListPage from './serviceCompanySubscription/index';
 import ServiceCompanySubscriptionSavePage from './serviceCompanySubscription/ServiceCompanySubscriptionSavePage';
+import CompanySubscriptionIdListPage from './CompanySubscription/index';
+import CompanySubscriptionIdSavePage from './CompanySubscription/CompanySubscriptionIDSavePage';
 export default {
     companyListPage: {
         path: '/company',
@@ -34,5 +36,21 @@ export default {
         component: ServiceCompanySubscriptionSavePage,
         separateCheck: true,
         permissions: [apiConfig.serviceCompanySubscription.create.baseURL,apiConfig.serviceCompanySubscription.update.baseURL],
+    },
+    companySubscriptionIdListPage: {
+        path: '/company/company-subscription',
+        title: 'Company Subscription By Id ',
+        auth: true,
+        component: CompanySubscriptionIdListPage,
+        separateCheck: true,
+        permissions: [apiConfig.companySubscription.getList.baseURL],
+    },
+    companySubscriptionIdSavePage: {
+        path: '/company/company-subscription/:id',
+        title: 'Company Subscription Save page By Id ',
+        auth: true,
+        component: CompanySubscriptionIdSavePage,
+        separateCheck: true,
+        permissions: [apiConfig.companySubscription.create.baseURL,apiConfig.companySubscription.update.baseURL],
     },
 };

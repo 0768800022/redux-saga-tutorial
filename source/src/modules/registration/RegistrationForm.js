@@ -260,7 +260,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                             <SelectField
                                 disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
                                 defaultValue={registrationStateFilter[0]}
-                                label={<FormattedMessage defaultMessage="Trạng thái" />}
+                                label={<FormattedMessage defaultMessage="Tình trạng" />}
                                 name="state"
                                 options={registrationStateFilter}
                             />

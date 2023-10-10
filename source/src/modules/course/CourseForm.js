@@ -15,12 +15,14 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import useTranslate from '@hooks/useTranslate';
+import NumericField from '@components/common/form/NumericField';
 
 const CourseForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
     const translate = useTranslate();
     const lectureStateOptions = translate.formatKeys(lectureState, ['label']);
     const [lectureStateFilter, setLectureStateFilter] = useState([lectureStateOptions[0]]);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -28,6 +30,9 @@ const CourseForm = (props) => {
     const handleSubmit = (values) => {
         if (!values?.state) {
             values.state = 1;
+        } 
+        if (!values?.status) {
+            values.status = 0;
         }
         values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
@@ -98,6 +103,7 @@ const CourseForm = (props) => {
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Tên khoá học" />}
                             name="name"
+                            required
                         />
                     </Col>
 
@@ -168,19 +174,33 @@ const CourseForm = (props) => {
                 </Row>
                 <Row gutter={10}>
                     <Col span={12}>
-                        <TextField
+                        <NumericField
                             required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Học phí" />}
                             name="fee"
+                            type="number"
+                            min={0}
                         />
                     </Col>
                     <Col span={12}>
-                        <TextField
+                        <NumericField
                             required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"
+                            type="number"
+                            min={0}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
+                            name="status"
+                            defaultValue={statusValues[0]}
+                            label={<FormattedMessage defaultMessage="Trạng thái" />}
+                            allowClear={false}
+                            options={statusValues}
                         />
                     </Col>
                 </Row>

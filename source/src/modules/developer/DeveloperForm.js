@@ -3,7 +3,7 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import apiConfig from '@constants/apiConfig';
-import { levelOptionSelect } from '@constants/masterData';
+import { levelOptionSelect, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -17,6 +17,7 @@ const messages = defineMessages({
 const DeveloperForm = (props) => {
     const translate = useTranslate();
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -29,15 +30,15 @@ const DeveloperForm = (props) => {
         if (!values.level) {
             values.level = 1;
         }
-        values.state = 1;
+        if (!values.status) {
+            values.status = 0;
+        }
         return mixinFuncs.handleSubmit({ ...values });
     };
 
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
-            roleId: dataDetail?.roleInfo?.projectRoleName,
-            studentId: dataDetail?.studentInfo?.fullName,
         });
     }, [dataDetail]);
 
@@ -50,7 +51,7 @@ const DeveloperForm = (props) => {
                             disabled={isEditing}
                             required
                             label={translate.formatMessage(messages.student)}
-                            name="studentId"
+                            name={['studentInfo', 'id']}
                             apiConfig={apiConfig.student.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
                             initialSearchParams={{ pageNumber: 0 }}
@@ -69,11 +70,19 @@ const DeveloperForm = (props) => {
                         <AutoCompleteField
                             required
                             label={translate.formatMessage(messages.role)}
-                            name="roleId"
+                            name={['roleInfo', 'id']}
                             apiConfig={apiConfig.projectRole.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.projectRoleName })}
                             initialSearchParams={{ pageNumber: 0 }}
                             searchParams={(text) => ({ fullName: text })}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            defaultValue={statusValues[0]}
+                            label={<FormattedMessage defaultMessage="Trạng thái" />}
+                            name="status"
+                            options={statusValues}
                         />
                     </Col>
                 </Row>

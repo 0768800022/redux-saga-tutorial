@@ -8,10 +8,14 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DATE_FORMAT_VALUE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
 import { convertUtcToLocalTime } from '@utils/index';
-import { TeamOutlined, BookOutlined } from '@ant-design/icons';
+import { UserOutlined, BookOutlined } from '@ant-design/icons';
 import route from '@modules/student/routes';
 import { useNavigate } from 'react-router-dom';
-import { Button, Tag } from 'antd';
+import { Button, Tag, Avatar } from 'antd';
+import { statusOptions } from '@constants/masterData';
+import { FieldTypes } from '@constants/formConfig';
+import { AppConstants } from '@constants';
+import { CourseIcon } from '@assets/icons';
 
 const message = defineMessages({
     objectName: 'Student',
@@ -19,12 +23,13 @@ const message = defineMessages({
     home: 'Trang chủ',
     student: 'Sinh viên',
     mssv: 'Mã số sinh viên',
+    status: 'Trạng thái',
 });
 
 const StudentListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
-
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.student,
         options: {
@@ -44,7 +49,7 @@ const StudentListPage = () => {
                 task: ({ id, fullName }) => (
                     <Button
                         type="link"
-                        style={{ padding: 0 }}
+                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${fullName}`);
@@ -53,7 +58,7 @@ const StudentListPage = () => {
                             // navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
                         }}
                     >
-                        <BookOutlined />
+                        <CourseIcon />
                     </Button>
                 ),
             });
@@ -61,6 +66,19 @@ const StudentListPage = () => {
     });
 
     const columns = [
+        {
+            title: '#',
+            dataIndex: 'avatar',
+            align: 'center',
+            width: 80,
+            render: (avatar) => (
+                <Avatar
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                />
+            ),
+        },
         {
             title: <FormattedMessage defaultMessage="Họ và tên" />,
             dataIndex: 'fullName',
@@ -89,13 +107,20 @@ const StudentListPage = () => {
             title: <FormattedMessage defaultMessage="Hệ" />,
             dataIndex: ['studyClass', 'categoryName'],
         },
-        mixinFuncs.renderActionColumn({ task:true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderActionColumn({ task:  true, edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
         {
             key: 'fullName',
             placeholder: translate.formatMessage(message.fullName),
+        },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
         },
     ];
     return (

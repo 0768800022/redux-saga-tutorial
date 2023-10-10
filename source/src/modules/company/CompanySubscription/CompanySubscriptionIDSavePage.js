@@ -1,24 +1,24 @@
 import React from 'react';
 import apiConfig from '@constants/apiConfig';
-import routes from './routes';
+import routes from '../routes';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import CompanySubscriptionForm from './CompanySubscriptionForm';
+import CompanySubscriptionIdForm from './CompanySubscriptionIDForm';
 import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
-import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 const message = defineMessages({
-    objectName: 'Đăng ký mới',
+    objectName: 'Gói dịch vụ',
     home: 'Trang chủ',
-    company: 'Gói dịch vụ',
+    company:'Công ty',
+    companySubscription: 'Gói dịch vụ',
 });
 
-const CompanySubscriptionSavePage = () => {
-    const CompanySubscriptionId = useParams();
+const CompanySubscriptionIdSavePage = () => {
     const translate = useTranslate();
+
     const queryParameters = new URLSearchParams(window.location.search);
     const companyId = queryParameters.get('companyId');
-    const projectName = queryParameters.get('projectName');
+    const companyName = queryParameters.get('companyName');
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.companySubscription.getById,
@@ -26,7 +26,7 @@ const CompanySubscriptionSavePage = () => {
             update: apiConfig.companySubscription.update,
         },
         options: {
-            getListUrl: routes.companySubscriptionListPage.path,
+            getListUrl: routes.companySubscriptionIdListPage.path,
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
@@ -37,12 +37,6 @@ const CompanySubscriptionSavePage = () => {
                 };
             };
             funcs.prepareCreateData = (data) => {
-                if (companyId !== null) {
-                    return {
-                        ...data,
-                        companyId: companyId,
-                    };
-                }
                 return { ...data };
             };
         },
@@ -53,15 +47,16 @@ const CompanySubscriptionSavePage = () => {
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
+                { breadcrumbName: translate.formatMessage(message.company) },
                 {
-                    breadcrumbName: translate.formatMessage(message.company),
-                    path: generatePath(routes.companySubscriptionListPage.path, { CompanySubscriptionId }),
+                    breadcrumbName: translate.formatMessage(message.companySubscription),
+                    path: routes.companySubscriptionIdListPage.path +`?companyId=${companyId? companyId : detail.company?.id}&companyName=${companyName ? companyName : detail?.company?.companyName }`,
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <CompanySubscriptionForm
+            <CompanySubscriptionIdForm
                 formId={mixinFuncs.getFormId()}
                 actions={mixinFuncs.renderActions()}
                 dataDetail={detail ? detail : {}}
@@ -73,4 +68,4 @@ const CompanySubscriptionSavePage = () => {
         </PageWrapper>
     );
 };
-export default CompanySubscriptionSavePage;
+export default CompanySubscriptionIdSavePage;

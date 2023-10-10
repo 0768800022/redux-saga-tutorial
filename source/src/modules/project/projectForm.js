@@ -10,7 +10,7 @@ import apiConfig from '@constants/apiConfig';
 import CropImageField from '@components/common/form/CropImageField';
 import { FormattedMessage } from 'react-intl';
 import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
-import { statusOptions } from '@constants/masterData';
+import { statusOptions, projectTaskState } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
 import DatePickerField from '@components/common/form/DatePickerField';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
@@ -31,6 +31,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     const [imageUrl, setImageUrl] = useState(null);
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -55,26 +56,26 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     };
 
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DATE_FORMAT_VALUE) + ' 00:00:00';
-        values.endDate = formatDateString(values.endDate, DATE_FORMAT_VALUE) + ' 00:00:00';
+        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT) ;
+        values.endDate = formatDateString(values.endDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
 
-    // useEffect(() => {
-    //     form.setFieldsValue({
-    //         ...dataDetail,
-    //         status: statusValues[0].value,
-    //     });
-    //     setImageUrl(dataDetail.avatar);
-    // }, [dataDetail]);
+    useEffect(() => {
+        form.setFieldsValue({
+            ...dataDetail,
+        });
+        setImageUrl(dataDetail.avatar);
+    }, [dataDetail]);
 
-    // useEffect(() => {
-    //     if (!isEditing > 0) {
-    //         form.setFieldsValue({
-    //             status: statusValues[0].value,
-    //         });
-    //     }
-    // }, [isEditing]);
+    useEffect(() => {
+        if (!isEditing > 0) {
+            form.setFieldsValue({
+                status: statusValues[0].value,
+                state: stateValues[0].value,
+            });
+        }
+    }, [isEditing]);
 
     const {
         data: leaders,
@@ -85,8 +86,8 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.leaderName })),
     });
     useEffect(() => {
-        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DATE_FORMAT_VALUE);
-        dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DATE_FORMAT_VALUE);
+        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
+        dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DEFAULT_FORMAT);
 
         form.setFieldsValue({
             ...dataDetail,
@@ -120,26 +121,29 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
                             initialSearchParams={{}}
                             searchParams={(text) => ({ name: text })}
-                            required />
+                            required 
+                            disabled={isEditing}/>
                     </Col>
                 </Row>
 
                 <Row gutter={16}>
                     <Col span={12}>
                         <DatePickerField
+                            showTime = {true}
                             label={translate.formatMessage(message.startDate)}
                             name="startDate"
                             style={{ width: '100%' }}
-                            format={DATE_FORMAT_DISPLAY} 
+                            format={DEFAULT_FORMAT} 
                             required/>
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            showTime = {true}
                             label={translate.formatMessage(message.endDate)}
                             type="email"
                             name="endDate"
                             style={{ width: '100%' }}
-                            format={DATE_FORMAT_DISPLAY}
+                            format={DEFAULT_FORMAT}
                             required
                         />
                     </Col>
@@ -150,6 +154,15 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             allowClear={false}
                             options={statusValues}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            required
+                            name="state"
+                            label={<FormattedMessage defaultMessage="Tình trạng" />}
+                            allowClear={false}
+                            options={stateValues}
                         />
                     </Col>
                 </Row>
