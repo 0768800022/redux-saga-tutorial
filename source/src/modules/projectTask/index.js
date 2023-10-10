@@ -106,16 +106,7 @@ function ProjectTaskListPage() {
                     return <Tag color={state.color}>{state.label}</Tag>;
                 },
             },
-            {
-                title: 'Trạng thái',
-                dataIndex: 'status',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const status = statusValues.find((item) => item.value == dataRow);
-                    return <Tag color={status.color}>{status.label}</Tag>;
-                },
-            },
+            mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
         if (!leaderName && !developerName) {
             columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
