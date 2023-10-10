@@ -137,16 +137,17 @@ const CompanySubscriptionListPage = () => {
             },
             align: 'center',
         },
-        {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
-            },
-        },
+        // {
+        //     title: translate.formatMessage(message.status),
+        //     dataIndex: 'status',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         const status = statusValues.find((item) => item.value == dataRow);
+        //         return <Tag color={status.color}>{status.label}</Tag>;
+        //     },
+        // },
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
