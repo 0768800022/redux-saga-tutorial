@@ -61,7 +61,7 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
                             label={translate.formatMessage(messages.price)}
                             name= 'price' 
                             min={0}
-                            formatter={(value) => `${value} đ`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
                             required
                         />
