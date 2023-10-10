@@ -10,7 +10,7 @@ export const CourseIcon = ({ style }) => {
             viewBox="0 0 74.174 74.173"
             xmlSpace="preserve"
             stroke="#1677ff"
-            style={{ width: '20px', height: '20px', ...style }}
+            style={{ width: '18px', height: '20px', ...style }}
         >
             <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
             <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
