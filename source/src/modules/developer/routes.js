@@ -2,6 +2,7 @@ import apiConfig from '@constants/apiConfig';
 import DeveloperSavePage from './DeveloperSavePage';
 import DeveloperListPage from '.';
 import ProjectListPage from '@modules/project';
+import ProjectTaskListPage from '@modules/projectTask';
 
 export default {
     developerListPage: {
@@ -23,6 +24,13 @@ export default {
         title: 'Developer',
         auth: true,
         component: ProjectListPage,
+        permissions: [apiConfig.project.getList.baseURL],
+    },
+    developerProjectTaskListPage: {
+        path: '/developer/project/task',
+        title: 'Developer',
+        auth: true,
+        component: ProjectTaskListPage,
         permissions: [apiConfig.project.getList.baseURL],
     },
 };
