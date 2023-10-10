@@ -72,6 +72,7 @@ const ProjectListPage = () => {
                     return [];
                 }
             };
+
             funcs.additionalActionColumnButtons = () => ({
                 task: ({ id, name, leaderInfo, status }) => (
                     <Button
@@ -87,11 +88,29 @@ const ProjectListPage = () => {
                                 status !== -1 &&
                                 navigate(
                                     route.ProjectTaskListPage.path +
-                                    `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
+                                        `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
                                 );
                         }}
                     >
                         <BookOutlined />
+                    </Button>
+                ),
+                member: ({ id, name }) => (
+                    <Button
+                        type="link"
+                        style={
+                            status === 0 || status === -1
+                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
+                                : { padding: 0 }
+                        }
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            status !== 0 &&
+                                status !== -1 &&
+                                navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
+                        }}
+                    >
+                        <TeamOutlined />
                     </Button>
                 ),
             });
@@ -198,7 +217,7 @@ const ProjectListPage = () => {
                 return <Tag color={status.color}>{status.label}</Tag>;
             },
         },
-        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '130px' }),
+        mixinFuncs.renderActionColumn({ member: true, task: true, edit: true, delete: true }, { width: '150px' }),
     ];
 
     return (
