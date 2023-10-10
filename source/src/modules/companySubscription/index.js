@@ -15,6 +15,7 @@ import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY } from '@constants';
 import { formatMoney } from '@utils/index';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
+import { useState } from 'react';
 
 const message = defineMessages({
     objectName: 'CompanySubscription',
@@ -34,6 +35,8 @@ const CompanySubscriptionListPage = () => {
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const companyId = queryParameters.get('companyId');
+    const [companyOptions, setCompanyOptions] = useState([]);
+    const companyValues = translate.formatKeys(companyOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.companySubscription,
         options: {
@@ -87,6 +90,7 @@ const CompanySubscriptionListPage = () => {
                 const formattedValue = formatMoney(price, {
                     currentcy: 'đ',
                     currentDecimal: '0',
+                    groupSeparator: ',',
                 });
                 return <div>{formattedValue}</div>;
             },
@@ -99,7 +103,6 @@ const CompanySubscriptionListPage = () => {
                 const formattedValue = formatMoney(saleOff, {
                     currentcy: '%',  
                     currentDecimal : '0',
-                    currencyPosition: 'FRONT',
                 });
                 return <div>{formattedValue}</div>;
             },
@@ -146,14 +149,10 @@ const CompanySubscriptionListPage = () => {
 
     const searchFields = [
         {
-            key: 'companyName',
+            key: 'companyId',
             placeholder: translate.formatMessage(message.companyName),
-            // key: 'subscriptionName',
-            // placeholder: translate.formatMessage(message.subscriptionName),
-        },
-        {
-            key: 'subscriptionName',
-            placeholder: translate.formatMessage(message.subscriptionName),
+            type: FieldTypes.SELECT,
+            options: companyValues,
         },
         {
             key: 'status',
