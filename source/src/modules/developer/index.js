@@ -115,7 +115,7 @@ const DeveloperListPage = () => {
 
     const searchFields = [
         {
-            key: 'studentInfo',
+            key: 'name',
             placeholder: translate.formatMessage(message.name),
         },
         {
