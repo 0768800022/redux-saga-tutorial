@@ -15,6 +15,8 @@ import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import FolderIcon from '@assets/icons';
+import { FieldTypes } from '@constants/formConfig';
+
 const message = defineMessages({
     objectName: 'Lập trình viên',
     home: 'Trang chủ',
@@ -51,7 +53,7 @@ const DeveloperListPage = () => {
                             e.stopPropagation();
                             navigate(
                                 routes.developerProjectListPage.path +
-                                    `?developerId=${id}&developerName=${studentInfo?.fullName}`,
+                                `?developerId=${id}&developerName=${studentInfo?.fullName}`,
                             );
                         }}
                     >
@@ -93,18 +95,18 @@ const DeveloperListPage = () => {
                 return <div>{createdDateLocal}</div>;
             },
         },
-        {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                console.log(dataRow);
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
-            },
-        },
-
+        // {
+        //     title: translate.formatMessage(message.status),
+        //     dataIndex: 'status',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         console.log(dataRow);
+        //         const status = statusValues.find((item) => item.value == dataRow);
+        //         return <Tag color={status.color}>{status.label}</Tag>;
+        //     },
+        // },
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ project: true, edit: true, delete: true }, { width: 160 }),
     ];
 
@@ -112,6 +114,12 @@ const DeveloperListPage = () => {
         {
             key: 'name',
             placeholder: translate.formatMessage(message.name),
+        },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
         },
     ];
 
