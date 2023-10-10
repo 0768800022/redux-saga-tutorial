@@ -19,6 +19,7 @@ const CompanySubscriptionSavePage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const companyId = queryParameters.get('companyId');
     const projectName = queryParameters.get('projectName');
+    console.log("CompanySubscriptionSavePage "+companyId);
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.companySubscription.getById,
