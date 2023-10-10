@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY } from '@constants';
 import { formatMoney } from '@utils/index';
 import { statusOptions } from '@constants/masterData';
+import { FieldTypes } from '@constants/formConfig';
 
 const message = defineMessages({
     objectName: 'CompanySubscription',
@@ -153,6 +154,12 @@ const CompanySubscriptionListPage = () => {
         {
             key: 'subscriptionName',
             placeholder: translate.formatMessage(message.subscriptionName),
+        },
+        {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
         },
     ];
     return (

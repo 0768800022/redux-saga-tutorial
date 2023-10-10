@@ -74,16 +74,7 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
                             label={<FormattedMessage defaultMessage="Số ngày sử dụng" />}
                             name= 'valueable'
                             required
-                            rules={[
-                                {
-                                    validator: (_, value) => {
-                                        if (value >= 1) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('Số ngày phải dương'));
-                                    },
-                                },
-                            ]}
+                            min={0}
                             type = 'number'
                         />
                     </Col>
