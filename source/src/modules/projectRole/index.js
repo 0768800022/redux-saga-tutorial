@@ -58,7 +58,7 @@ const ProjectRoleListPage = () => {
     ];
     const searchFields = [
         {
-            key: 'projectRoleName',
+            key: 'name',
             placeholder: translate.formatMessage(message.name),
         },
         {
