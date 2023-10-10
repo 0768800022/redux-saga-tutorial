@@ -69,10 +69,10 @@ export const taskState = [
 ];
 
 export const projectTaskState = [
-    { value: STATE_PROJECT_TASK_CREATE, label: projectTaskStateMessage.create, color: 'yellow' },
-    { value: STATE_PROJECT_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
-    { value: STATE_PROJECT_TASK_DONE, label: projectTaskStateMessage.done, color: 'green' },
-    { value: STATE_PROJECT_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
+    { value: STATE_PROJECT_TASK_CREATE, label: projectTaskStateMessage.create, color: '#FFBF00' },
+    { value: STATE_PROJECT_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: '#4169E1' },
+    { value: STATE_PROJECT_TASK_DONE, label: projectTaskStateMessage.done, color: '#00A648' },
+    { value: STATE_PROJECT_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: '#CC0000' },
 ];
 
 export const statusOptions = [
