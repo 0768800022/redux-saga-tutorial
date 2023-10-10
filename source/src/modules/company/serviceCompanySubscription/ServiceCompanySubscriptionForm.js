@@ -63,6 +63,7 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
                             min={0}
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             parser={(value) => value.replace(/\$\s?|(,*)/g, '')}
+                            addonAfter="đ"
                             required
                         />
                     </Col>
