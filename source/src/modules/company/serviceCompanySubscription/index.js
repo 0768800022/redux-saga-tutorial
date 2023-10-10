@@ -54,8 +54,10 @@ const ServiceCompanySubListPage = () => {
             width: '200px',
             render: (price) => {
                 const formattedValue = formatMoney(price, {
-                    currentcy: 'đ',
-                    currentDecimal: '0',
+                    groupSeparator: ',',      
+                    decimalSeparator: '.',    
+                    currentcy: 'đ',            
+                    currentDecimal : '0',
                 });
                 return <div>{formattedValue}</div>;
             },
