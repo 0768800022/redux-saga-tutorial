@@ -18,6 +18,8 @@ import { FieldTypes } from '@constants/formConfig';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import useFetch from '@hooks/useFetch';
+import { render } from '@testing-library/react';
+import AutoCompleteField from '@components/common/form/AutoCompleteField';
 
 const message = defineMessages({
     objectName: 'CompanySubscription',
@@ -36,9 +38,11 @@ const CompanySubscriptionListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const companyId = queryParameters.get('companyId');
     const [companyOptions, setCompanyOptions] = useState([]);
-    const companyValues = translate.formatKeys(companyOptions, ['label']);
+    // const companyOptions =[];
+    // const companyValues = translate.formatKeys(companyOptions, ['label']);
+    // console.log(companyOptions);
+
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.companySubscription,
         options: {
@@ -55,13 +59,10 @@ const CompanySubscriptionListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                if (companyId !== null) {
-                    return `${pagePath}/create?companyId=${companyId}`;
-                }
                 return `${pagePath}/create`;
             };
         },
-        
+
     });
     const columns = [
         {
@@ -151,9 +152,11 @@ const CompanySubscriptionListPage = () => {
 
     const searchFields = [
         {
-            key: 'companyName',
+            key: 'companyId',
             placeholder: translate.formatMessage(message.companyName),
-            
+            type: FieldTypes.SELECT,
+            options: companyOptions,
+
         },
         {
             key: 'status',
@@ -162,6 +165,24 @@ const CompanySubscriptionListPage = () => {
             options: statusValues,
         },
     ];
+    const {
+        data: companys,
+        // loading: getcompanyLoading,
+        execute: executescompanys,
+    } = useFetch(apiConfig.company.autocomplete, {
+        immediate: true,
+        mappingData: ({ data }) => data.content.map((item) => ({
+            value: item.id,
+            label: item.companyName,
+        })),
+    });
+    useEffect(() => {
+        // Kiểm tra xem có dữ liệu trong companys không và không phải là trạng thái loading
+        if (companys) {
+            setCompanyOptions(companys);
+        }
+        else { console.log("No data"); }
+    }, [companys]);
 
     return (
         <PageWrapper
