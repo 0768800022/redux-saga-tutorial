@@ -64,15 +64,15 @@ export const lectureState = [
 ];
 
 export const taskState = [
-    { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: 'orange' },
-    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: 'green' },
+    { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: '#FFBF00' },
+    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: '#00A648' },
 ];
 
 export const projectTaskState = [
-    { value: STATE_PROJECT_TASK_CREATE, label: projectTaskStateMessage.create, color: 'yellow' },
-    { value: STATE_PROJECT_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
-    { value: STATE_PROJECT_TASK_DONE, label: projectTaskStateMessage.done, color: 'green' },
-    { value: STATE_PROJECT_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
+    { value: STATE_PROJECT_TASK_CREATE, label: projectTaskStateMessage.create, color: '#FFBF00' },
+    { value: STATE_PROJECT_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: '#4169E1' },
+    { value: STATE_PROJECT_TASK_DONE, label: projectTaskStateMessage.done, color: '#00A648' },
+    { value: STATE_PROJECT_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: '#CC0000' },
 ];
 
 export const statusOptions = [
@@ -108,11 +108,11 @@ export const stateResgistrationOptions = [
     {
         value: 1,
         label: stateResgistrationMessage.register,
-        color: 'green',
+        color: '#00A648',
     },
-    { value: 2, label: stateResgistrationMessage.learning, color: 'blue' },
-    { value: 3, label: stateResgistrationMessage.finished, color: 'yellow' },
-    { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
+    { value: 2, label: stateResgistrationMessage.learning, color: '#4169E1' },
+    { value: 3, label: stateResgistrationMessage.finished, color: '#FFBF00' },
+    { value: 4, label: stateResgistrationMessage.canceled, color: '#CC0000' },
 ];
 
 export const lectureKindOptions = [
