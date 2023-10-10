@@ -1,4 +1,4 @@
-import { Card, Col, Row } from 'antd';
+import { Card, Col, Row, Input } from 'antd';
 import React, { useEffect } from 'react';
 import SelectField from '@components/common/form/SelectField';
 import useBasicForm from '@hooks/useBasicForm';
@@ -11,12 +11,13 @@ import { FormattedMessage } from 'react-intl';
 import apiConfig from '@constants/apiConfig';
 import { useState } from 'react';
 import CropImageField from '@components/common/form/CropImageField';
-import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE } from '@constants';
+import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import { statusOptions } from '@constants/masterData';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import DatePickerField from '@components/common/form/DatePickerField';
 import dayjs from 'dayjs';
 import { formatDateString } from '@utils';
+import NumericField from '@components/common/form/NumericField';
 
 const messages = defineMessages({
     companyName: 'Tên công ty',
@@ -60,14 +61,15 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
     };
 
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DATE_FORMAT_VALUE) + ' 00:00:00';
-        values.endDate = formatDateString(values.endDate, DATE_FORMAT_VALUE) + ' 00:00:00';
+        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
+        values.endDate = formatDateString(values.endDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values });
     };
 
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
+                startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT)),
                 status: statusValues[0].value,
             });
         }
@@ -90,16 +92,30 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.name })),
     });
     useEffect(() => {
-        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DATE_FORMAT_VALUE);
-        dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DATE_FORMAT_VALUE);
-
+        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
+        dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DEFAULT_FORMAT);
         form.setFieldsValue({
             ...dataDetail,
-            companyId: dataDetail?.company?.companyName,
+            companyName: dataDetail?.company?.companyName,
             serviceCompanySubscriptionId: dataDetail?.subscription?.name,
+            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT)),
         });
     }, [dataDetail]);
+    const validateDueDate = (_, value) => {
+        const { startDate } = form.getFieldValue();
+        if (startDate && value && value.isBefore(startDate)) {
+            return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
+        }
+        return Promise.resolve();
+    };
 
+    const validateStartDate = (_, value) => {
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+        if (date && value && value.isBefore(date)) {
+            return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
+        }
+        return Promise.resolve();
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} >
             <Card>
@@ -130,20 +146,40 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            showTime={true}
                             required
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="startDate"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày kết thúc',
+                                },
+                                {
+                                    validator: validateDueDate,
+                                },
+                            ]}
+                            format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
-                            format={DATE_FORMAT_DISPLAY}
                         />
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            required
+                            showTime={true}
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="endDate"
+                            placeholder="Ngày kết thúc"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày kết thúc',
+                                },
+                                {
+                                    validator: validateDueDate,
+                                },
+                            ]}
+                            format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
-                            format={DATE_FORMAT_DISPLAY}
                         />
                     </Col>
                 </Row>
@@ -154,6 +190,23 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             name="status"
                             options={statusValues}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <NumericField
+                            label={<FormattedMessage defaultMessage="Giảm giá" />}
+                            name="saleOff"
+                            type="number"
+                            rules={[
+                                {
+                                    validator: (_, value) => {
+                                        if (value >= 1 && value <= 100) {
+                                            return Promise.resolve();
+                                        }
+                                        return Promise.reject(new Error('Giá trị phải từ 1 đến 99'));
+                                    },
+                                },
+                            ]}
                         />
                     </Col>
                 </Row>

@@ -17,7 +17,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { projectTaskState } from '@constants/masterData';
+import { projectTaskState, statusOptions } from '@constants/masterData';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
@@ -40,6 +40,8 @@ function ProjectTaskListPage() {
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const state = queryParameters.get('state');
+
+    const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const location = useLocation();
     const statusValues = translate.formatKeys(projectTaskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
@@ -80,7 +82,7 @@ function ProjectTaskListPage() {
                 dataIndex: ['developer', 'studentInfo', 'fullName'],
             },
             {
-                title: translate.formatMessage(message.leader),
+                title: <FormattedMessage defaultMessage="Quản lý" />,
                 dataIndex: ['project', 'leaderInfo', 'leaderName'],
             },
             {
@@ -95,8 +97,18 @@ function ProjectTaskListPage() {
                 width: 200,
             },
             {
-                title: 'Trạng thái',
+                title: 'Tình trạng',
                 dataIndex: 'state',
+                align: 'center',
+                width: 120,
+                render(dataRow) {
+                    const state = stateValues.find((item) => item.value == dataRow);
+                    return <Tag color={state.color}>{state.label}</Tag>;
+                },
+            },
+            {
+                title: 'Trạng thái',
+                dataIndex: 'status',
                 align: 'center',
                 width: 120,
                 render(dataRow) {
@@ -171,5 +183,4 @@ function ProjectTaskListPage() {
         </PageWrapper>
     );
 }
-
 export default ProjectTaskListPage;
