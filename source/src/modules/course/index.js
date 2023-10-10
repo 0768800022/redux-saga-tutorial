@@ -63,7 +63,8 @@ const CourseListPage = () => {
                     registration: ({ id, name, state }) => (
                         <Button
                             type="link"
-                            style={state === 1 ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' } : { padding: 0 }}
+                            disabled={state === 1}
+                            style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 state !== 1 &&
@@ -79,12 +80,9 @@ const CourseListPage = () => {
 
                     task: ({ id, name, subject, state }) => (
                         <Button
+                            disabled={state === 1 || state === 5}
                             type="link"
-                            style={
-                                state === 1 || state === 5
-                                    ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                    : { padding: 0 }
-                            }
+                            style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 const path =

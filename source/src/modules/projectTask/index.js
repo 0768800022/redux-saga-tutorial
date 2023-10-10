@@ -41,7 +41,6 @@ function ProjectTaskListPage() {
     const developerName = queryParameters.get('developerName');
     const state = queryParameters.get('state');
     const location = useLocation();
-    console.log(location);
     const statusValues = translate.formatKeys(projectTaskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.projectTask,

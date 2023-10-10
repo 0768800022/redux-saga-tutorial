@@ -39,8 +39,6 @@ const DeveloperForm = (props) => {
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
-            roleId: dataDetail?.roleInfo?.projectRoleName,
-            studentId: dataDetail?.studentInfo?.fullName,
         });
     }, [dataDetail]);
 
@@ -53,7 +51,7 @@ const DeveloperForm = (props) => {
                             disabled={isEditing}
                             required
                             label={translate.formatMessage(messages.student)}
-                            name="studentId"
+                            name={['studentInfo', 'id']}
                             apiConfig={apiConfig.student.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
                             initialSearchParams={{ pageNumber: 0 }}
@@ -72,7 +70,7 @@ const DeveloperForm = (props) => {
                         <AutoCompleteField
                             required
                             label={translate.formatMessage(messages.role)}
-                            name="roleId"
+                            name={['roleInfo', 'id']}
                             apiConfig={apiConfig.projectRole.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.projectRoleName })}
                             initialSearchParams={{ pageNumber: 0 }}
@@ -83,7 +81,7 @@ const DeveloperForm = (props) => {
                         <SelectField
                             defaultValue={statusValues[0]}
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
-                            name="state"
+                            name="status"
                             options={statusValues}
                         />
                     </Col>
