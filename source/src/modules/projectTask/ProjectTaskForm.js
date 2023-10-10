@@ -79,6 +79,7 @@ const ProjectTaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            showTime={true}
                             required
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="startDate"
@@ -88,6 +89,7 @@ const ProjectTaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            showTime={true}
                             required
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="dueDate"
