@@ -43,7 +43,6 @@ function ProjectTaskListPage() {
 
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const location = useLocation();
-    console.log(location);
     const statusValues = translate.formatKeys(projectTaskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.projectTask,
@@ -107,16 +106,7 @@ function ProjectTaskListPage() {
                     return <Tag color={state.color}>{state.label}</Tag>;
                 },
             },
-            {
-                title: 'Trạng thái',
-                dataIndex: 'status',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const status = statusValues.find((item) => item.value == dataRow);
-                    return <Tag color={status.color}>{status.label}</Tag>;
-                },
-            },
+            mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
         if (!leaderName && !developerName) {
             columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));

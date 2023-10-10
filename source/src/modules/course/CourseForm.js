@@ -103,6 +103,7 @@ const CourseForm = (props) => {
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Tên khoá học" />}
                             name="name"
+                            required
                         />
                     </Col>
 

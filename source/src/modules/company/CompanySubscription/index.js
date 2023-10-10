@@ -10,7 +10,7 @@ import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
 import { Avatar, Tag } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { DATE_DISPLAY_FORMAT,DEFAULT_FORMAT } from '@constants';
+import { DATE_DISPLAY_FORMAT, DEFAULT_FORMAT } from '@constants';
 import { formatMoney } from '@utils/index';
 import { statusOptions } from '@constants/masterData';
 
@@ -34,7 +34,7 @@ const CompanySubscriptionIdListPage = () => {
     const companyName = queryParameters.get('companyName');
 
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFiter,pagePath } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFiter, pagePath } = useListBase({
         apiConfig: apiConfig.companySubscription,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -59,7 +59,7 @@ const CompanySubscriptionIdListPage = () => {
     const columns = [
         {
             title: '#',
-            dataIndex: [ 'company','logo' ],
+            dataIndex: ['company', 'logo'],
             align: 'center',
             width: 80,
             render: (logo) => (
@@ -72,22 +72,22 @@ const CompanySubscriptionIdListPage = () => {
         },
         {
             title: <FormattedMessage defaultMessage="Tên công ty" />,
-            dataIndex: [ 'company', 'companyName' ],
+            dataIndex: ['company', 'companyName'],
         },
         {
             title: <FormattedMessage defaultMessage="Gói dịch vụ" />,
-            dataIndex: ['subscription','name'],
+            dataIndex: ['subscription', 'name'],
         },
         {
             title: <FormattedMessage defaultMessage="Giá dịch vụ" />,
             dataIndex: 'money',
             render: (monney) => {
                 const formattedValue = formatMoney(monney, {
-                    groupSeparator: ',',      
-                    decimalSeparator: '.',    
-                    currentcy: 'đ',            
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: 'đ',
                     currentcyPosition: 'BACK',
-                    currentDecimal : '0',
+                    currentDecimal: '0',
                 });
                 return <div>{formattedValue}</div>;
             },
@@ -96,14 +96,14 @@ const CompanySubscriptionIdListPage = () => {
             title: <FormattedMessage defaultMessage="Giảm giá" />,
             align: 'center',
             dataIndex: 'saleOff',
-            render : (saleOff) => {
-                if(saleOff > 0) {
+            render: (saleOff) => {
+                if (saleOff > 0) {
                     return <div>{saleOff} %</div>;
                 }
                 else return <div>{saleOff}</div>;
             },
         },
-        
+
         {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
@@ -130,16 +130,17 @@ const CompanySubscriptionIdListPage = () => {
             },
             align: 'center',
         },
-        {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
-            },
-        },
+        // {
+        //     title: translate.formatMessage(message.status),
+        //     dataIndex: 'status',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         const status = statusValues.find((item) => item.value == dataRow);
+        //         return <Tag color={status.color}>{status.label}</Tag>;
+        //     },
+        // },
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (
