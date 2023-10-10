@@ -17,6 +17,7 @@ function DatePickerField({
     fieldProps,
     style,
     disabled,
+    showTime,
     ...props
 }) {
     const { rules, placeholder } = useFormField(props);
@@ -24,6 +25,7 @@ function DatePickerField({
     return (
         <Form.Item key={key} {...formItemProps} label={label} name={name} rules={rules}>
             <DatePicker
+                showTime = {showTime}
                 {...fieldProps}
                 disabled={disabled}
                 size={size}

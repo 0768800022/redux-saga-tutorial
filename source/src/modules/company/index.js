@@ -8,12 +8,12 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, Button, Tag } from 'antd';
+import { Avatar, Button } from 'antd';
 import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import routes from '@modules/companySubscription/routes';
+// import routes from '@modules/companySubscription/routes';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
-
+import routes from './routes';
 const message = defineMessages({
     objectName: 'Company',
     home: 'Trang chủ',
@@ -49,15 +49,15 @@ const CompanyListPage = () => {
                 }
             };
             funcs.additionalActionColumnButtons = () => ({
-                registration: ({ id }) => (
+                registration: ({ id,companyName }) => (
                     <Button
                         type="link"
                         style={{ padding: 0 }}
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(
-                                routes.companySubscriptionListPage.path +
-                                `?companyId=${id}`,
+                                routes.companyListPage.path +
+                                    `/company-subscription?companyId=${id}&companyName=${companyName}`,
                             );
                         }}
                     >

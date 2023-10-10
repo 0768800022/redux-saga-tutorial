@@ -5,7 +5,7 @@ import TextField from '@components/common/form/TextField';
 import { defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
-import { DATE_FORMAT_VALUE } from '@constants/index';
+import { DATE_FORMAT_VALUE,DEFAULT_FORMAT } from '@constants/index';
 import { formatDateString } from '@utils/index';
 import dayjs from 'dayjs';
 import useFetch from '@hooks/useFetch';
@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import useNotification from '@hooks/useNotification';
 import { useIntl } from 'react-intl';
 
-const message = defineMessages({
+const messages = defineMessages({
     asignAll: 'Tạo',
     objectName: 'Bài giảng',
     dueDate: 'Ngày kết thúc',
@@ -36,21 +36,19 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
         executeAsign({
             data:{
                 courseId: courseId,
-                dueDate : formatDateString(values.dueDate, DATE_FORMAT_VALUE) + ' 00:00:00',
+                dueDate : formatDateString(values.dueDate, DEFAULT_FORMAT),
                 lectureId: lectureId,
                 note : values.note,
-                startDate : values.startDate ? (formatDateString(values.startDate, DATE_FORMAT_VALUE) + ' 00:00:00') : formatDateString(new Date(), DATE_FORMAT_VALUE)+ ' 00:00:00',
+                startDate : values.startDate ? (formatDateString(values.startDate, DEFAULT_FORMAT)) : formatDateString(new Date(), DEFAULT_FORMAT),
             },
             onCompleted: (response) => {
                 if (response.result === true) {
-
                     notification({
                         message: 
-                        intl.formatMessage(message.asignAllSuccess, {
-                            objectName: translate.formatMessage(message.objectName),
+                        intl.formatMessage(messages.asignAllSuccess, {
+                            objectName: translate.formatMessage(messages.objectName),
                         }),
                     });
-                    
                     return navigate(-1);
                 }
 
@@ -64,7 +62,7 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
     };
 
     const initialValues = {
-        startDate: dayjs(formatDateString(new Date(), DATE_FORMAT_VALUE), DATE_FORMAT_VALUE),
+        startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT)),
     };
     const validateDueDate = (_, value) => {
         const { startDate } = form.getFieldValue();
@@ -84,16 +82,18 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
                 <Row gutter={16}>
                     <Col span={12}>
                         <DatePickerField
+                            showTime = {true}
                             required
                             name="startDate"
-                            label={translate.formatMessage(message.startDate)}                            
+                            label={translate.formatMessage(messages.startDate)}                            
                             placeholder="Ngày bắt đầu"
-                            format={DATE_FORMAT_VALUE}
+                            format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
                         />
                     </Col>
                     <Col span={12}>
                         <DatePickerField
+                            showTime = {true}
                             name={"dueDate"}
                             rules={[
                                 {
@@ -104,9 +104,9 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
                                     validator: validateDueDate,
                                 },
                             ]}
-                            label={translate.formatMessage(message.dueDate)}
+                            label={translate.formatMessage(messages.dueDate)}
                             placeholder="Ngày kết thúc"
-                            format={DATE_FORMAT_VALUE}
+                            format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
                         />
                     </Col>
@@ -122,7 +122,7 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
                 </Row>
                 <div style={{ float: 'right' }}>
                     <Button key="submit" type="primary" htmlType="submit">
-                        {translate.formatMessage(message.asignAll)}
+                        {translate.formatMessage(messages.asignAll)}
                     </Button>
                 </div>
                 
