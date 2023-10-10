@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE,DEFAULT_FORMAT } from '@constants';
+import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { taskState } from '@constants/masterData';
@@ -23,7 +23,7 @@ const message = defineMessages({
     objectName: 'Danh sách khóa học',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
-    state: 'Trạng thái',
+    state: 'Tình trạng',
     task: 'Task',
     course: 'Khóa học',
     leader: 'Leader',
