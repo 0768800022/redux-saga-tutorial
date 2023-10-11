@@ -116,9 +116,12 @@ function TaskListPage() {
                 align: 'center',
                 width: 120,
                 render(dataRow) {
-                    const status = statusValues.find((item) => item.value == dataRow);
-
-                    return <Tag color={status.color}>{status.label}</Tag>;
+                    const state = statusValues.find((item) => item.value == dataRow);
+                    return (
+                        <Tag color={state.color}>
+                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                        </Tag>
+                    );
                 },
             },
         ];
