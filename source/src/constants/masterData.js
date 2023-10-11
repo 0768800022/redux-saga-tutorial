@@ -94,12 +94,12 @@ export const statusOptions = [
 ];
 export const statusSubjectOptions = [
     {
-        value: 1,
+        value: 0,
         label: statusSubjectMessage.active,
         color: 'green',
     },
     {
-        value: 2,
+        value: 1,
         label: statusSubjectMessage.canceled,
         color: 'red',
     },

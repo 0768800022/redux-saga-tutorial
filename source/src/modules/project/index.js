@@ -32,6 +32,7 @@ const message = defineMessages({
     name: 'Tên dự án',
     endDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
+    state: 'Tình trạng',
     status: 'Trạng thái',
     developer: 'Lập trình viên',
 });
@@ -153,89 +154,105 @@ const ProjectListPage = () => {
         return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
     };
 
-    const searchFields = [
-        {
-            key: 'name',
-            placeholder: translate.formatMessage(message.name),
-        },
-        {
-            key: 'status',
-            placeholder: translate.formatMessage(message.status),
-            type: FieldTypes.SELECT,
-            options: statusValues,
-        },
-    ];
-
-    const columns = [
-        {
-            title: '#',
-            dataIndex: 'avatar',
-            align: 'center',
-            width: 80,
-            render: (avatar) => (
-                <Avatar
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                />
-            ),
-        },
-        {
-            title: translate.formatMessage(message.name),
-            dataIndex: 'name',
-        },
-        {
-            title: translate.formatMessage(message.leader),
-            dataIndex: ['leaderInfo', 'leaderName'],
-            width: 150,
-        },
-        {
-            title: translate.formatMessage(message.startDate),
-            dataIndex: 'startDate',
-            render: (startDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
-            },
-            width: 200,
-            align: 'center',
-        },
-        {
-            title: translate.formatMessage(message.endDate),
-            dataIndex: 'endDate',
-            render: (endDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
-            },
-            width: 200,
-            align: 'center',
-        },
-        {
-            title: 'Tình trạng',
-            dataIndex: 'state',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
-                return <Tag color={state.color}>
-                    <div style={{ padding: '0 4px', fontSize: 14 }}> {state.label}</div>
-                </Tag>;
-            },
-        },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn(
+    const setSearchField = () => {
+        let searchFields = [
             {
-                member: true,
-                task: true,
-                edit: !leaderName && !developerName && true,
-                delete: !leaderName && !developerName && true,
+                key: 'name',
+                placeholder: translate.formatMessage(message.name),
             },
-            { width: '150px' },
-        ),
-    ];
+            {
+                key: 'state',
+                placeholder: translate.formatMessage(message.state),
+                type: FieldTypes.SELECT,
+                options: stateValues,
+            },
+        ];
+        !leaderName &&
+            searchFields.splice(1, 0, {
+                key: 'status',
+                placeholder: translate.formatMessage(message.status),
+                type: FieldTypes.SELECT,
+                options: statusValues,
+            });
+        return searchFields;
+    };
 
+    const setColumns = () => {
+        const columns = [
+            {
+                title: '#',
+                dataIndex: 'avatar',
+                align: 'center',
+                width: 80,
+                render: (avatar) => (
+                    <Avatar
+                        size="large"
+                        icon={<UserOutlined />}
+                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                    />
+                ),
+            },
+            {
+                title: translate.formatMessage(message.name),
+                dataIndex: 'name',
+            },
+            {
+                title: translate.formatMessage(message.leader),
+                dataIndex: ['leaderInfo', 'leaderName'],
+                width: 150,
+            },
+            {
+                title: translate.formatMessage(message.startDate),
+                dataIndex: 'startDate',
+                render: (startDate) => {
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
+                },
+                width: 200,
+                align: 'center',
+            },
+            {
+                title: translate.formatMessage(message.endDate),
+                dataIndex: 'endDate',
+                render: (endDate) => {
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
+                },
+                width: 200,
+                align: 'center',
+            },
+            {
+                title: 'Tình trạng',
+                dataIndex: 'state',
+                align: 'center',
+                width: 120,
+                render(dataRow) {
+                    const state = stateValues.find((item) => item.value == dataRow);
+                    return (
+                        <Tag color={state.color}>
+                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                        </Tag>
+                    );
+                },
+            },
+        ];
+
+        !leaderName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
+        columns.push(
+            mixinFuncs.renderActionColumn(
+                {
+                    task: true,
+                    edit: !leaderName && !developerName && true,
+                    delete: !leaderName && !developerName && true,
+                },
+                { width: '130px' },
+            ),
+        );
+        return columns;
+    };
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
                 actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -243,7 +260,7 @@ const ProjectListPage = () => {
                         pagination={pagination}
                         loading={loading}
                         dataSource={dataApply}
-                        columns={columns}
+                        columns={setColumns()}
                     />
                 }
             />

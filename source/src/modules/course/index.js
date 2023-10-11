@@ -70,7 +70,7 @@ const CourseListPage = () => {
                                 state !== 1 &&
                                     navigate(
                                         routes.registrationListPage.path +
-                                        `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                            `?courseId=${id}&courseName=${name}&courseState=${state}`,
                                     );
                             }}
                         >
@@ -86,9 +86,7 @@ const CourseListPage = () => {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 const path =
-                                    (leaderName
-                                        ? routes.leaderCourseTaskListPage.path
-                                        : routes.taskListPage.path) +
+                                    (leaderName ? routes.leaderCourseTaskListPage.path : routes.taskListPage.path) +
                                     `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
                                     (leaderName ? `&leaderName=${leaderName}` : '');
                                 state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
@@ -111,124 +109,143 @@ const CourseListPage = () => {
         { breadcrumbName: translate.formatMessage(message.course) },
     ];
 
-    const searchFields = [
-        {
-            key: 'name',
-            placeholder: translate.formatMessage(message.name),
-        },
-        {
-            key: 'state',
-            placeholder: translate.formatMessage(message.state),
-            type: FieldTypes.SELECT,
-            options: stateValues,
-        },
-        {
-            key: 'status',
-            placeholder: translate.formatMessage(message.status),
-            type: FieldTypes.SELECT,
-            options: statusValues,
-        },
-    ];
-    const columns = [
-        {
-            title: translate.formatMessage(message.name),
-            dataIndex: 'name',
-            width: 200,
-        },
-        {
-            title: translate.formatMessage(message.subject),
-            dataIndex: ['subject', 'subjectName'],
-            width: 150,
-        },
-        {
-            title: translate.formatMessage(message.leader),
-            dataIndex: ['leader', 'leaderName'],
-            width: 80,
-        },
-        {
-            title: <FormattedMessage defaultMessage="Học phí" />,
-            dataIndex: 'fee',
-            width: '120px',
-            render: (fee) => {
-                const formattedValue = formatMoney(fee, {
-                    currentcy: 'đ',
-                    currentDecimal: '0',
-                });
-                return <div>{formattedValue}</div>;
+    const setSearchField = () => {
+        let searchFields = [
+            {
+                key: 'name',
+                placeholder: translate.formatMessage(message.name),
             },
-        },
-        {
-            title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
-            dataIndex: 'returnFee',
-            width: '120px',
-            render: (returnFee) => {
-                const formattedValue = formatMoney(returnFee, {
-                    currentcy: 'đ',
-                    currentDecimal: '0',
-                });
-                return <div>{formattedValue}</div>;
+            {
+                key: 'state',
+                placeholder: translate.formatMessage(message.state),
+                type: FieldTypes.SELECT,
+                options: stateValues,
             },
-        },
-        {
-            title: translate.formatMessage(message.dateRegister),
-            dataIndex: 'dateRegister',
-            render: (dateRegister) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(dateRegister, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
+        ];
+        !leaderName &&
+            searchFields.splice(1, 0, {
+                key: 'status',
+                placeholder: translate.formatMessage(message.status),
+                type: FieldTypes.SELECT,
+                options: statusValues,
+            });
+        return searchFields;
+    };
+    const setColumns = () => {
+        const columns = [
+            {
+                title: translate.formatMessage(message.name),
+                dataIndex: 'name',
+                width: 200,
             },
-            width: 130,
-            align: 'center',
-        },
-        {
-            title: translate.formatMessage(message.dateEnd),
-            dataIndex: 'dateEnd',
-            render: (dateEnd) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(dateEnd, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
+            {
+                title: translate.formatMessage(message.subject),
+                dataIndex: ['subject', 'subjectName'],
+                width: 150,
             },
-            width: 130,
-            align: 'center',
-        },
-        {
-            title: translate.formatMessage(message.state),
-            dataIndex: 'state',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
-                return <Tag color={state.color}>
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div></Tag>;
+            {
+                title: translate.formatMessage(message.leader),
+                dataIndex: ['leader', 'leaderName'],
+                width: 80,
             },
-        },
-        // {
-        //     title: translate.formatMessage(message.status),
-        //     dataIndex: 'status',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         console.log(dataRow);
-        //         const status = statusValues.find((item) => item.value == dataRow);
-        //         return <Tag color={status.color}>{status.label}</Tag>;
-        //     },
-        // },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn(
-            { task: true, registration: !leaderName && true, edit: !leaderName && true, delete: !leaderName && true },
-            { width: '180px' },
-        ),
-    ];
+            {
+                title: <FormattedMessage defaultMessage="Học phí" />,
+                dataIndex: 'fee',
+                width: '120px',
+                render: (fee) => {
+                    const formattedValue = formatMoney(fee, {
+                        currentcy: 'đ',
+                        currentDecimal: '0',
+                        groupSeparator: ',',
+                    });
+                    return <div>{formattedValue}</div>;
+                },
+            },
+            {
+                title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
+                dataIndex: 'returnFee',
+                width: '120px',
+                render: (returnFee) => {
+                    const formattedValue = formatMoney(returnFee, {
+                        currentcy: 'đ',
+                        currentDecimal: '0',
+                        groupSeparator: ',',
+                    });
+                    return <div>{formattedValue}</div>;
+                },
+            },
+            {
+                title: translate.formatMessage(message.dateRegister),
+                dataIndex: 'dateRegister',
+                render: (dateRegister) => {
+                    return (
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>
+                            {dayjs(dateRegister, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                        </div>
+                    );
+                },
+                width: 130,
+                align: 'center',
+            },
+            {
+                title: translate.formatMessage(message.dateEnd),
+                dataIndex: 'dateEnd',
+                render: (dateEnd) => {
+                    return (
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>
+                            {dayjs(dateEnd, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                        </div>
+                    );
+                },
+                width: 130,
+                align: 'center',
+            },
+            {
+                title: translate.formatMessage(message.state),
+                dataIndex: 'state',
+                align: 'center',
+                width: 120,
+                render(dataRow) {
+                    const state = stateValues.find((item) => item.value == dataRow);
+                    return (
+                        <Tag color={state.color}>
+                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                        </Tag>
+                    );
+                },
+            },
+            // {
+            //     title: translate.formatMessage(message.status),
+            //     dataIndex: 'status',
+            //     align: 'center',
+            //     width: 120,
+            //     render(dataRow) {
+            //         console.log(dataRow);
+            //         const status = statusValues.find((item) => item.value == dataRow);
+            //         return <Tag color={status.color}>{status.label}</Tag>;
+            //     },
+            // },
+        ];
+        !leaderName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
+        columns.push(
+            mixinFuncs.renderActionColumn(
+                {
+                    task: true,
+                    registration: !leaderName && true,
+                    edit: !leaderName && true,
+                    delete: !leaderName && true,
+                },
+                { width: '180px' },
+            ),
+        );
+        return columns;
+    };
 
     return (
         <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
                 title={leaderName && <span style={{ fontWeight: 'normal' }}>{leaderName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
                 actionBar={!leaderName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -236,7 +253,7 @@ const CourseListPage = () => {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={columns}
+                        columns={setColumns()}
                     />
                 }
             />
