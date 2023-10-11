@@ -93,7 +93,13 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.password)} name="password" required={isEditing ? false : true} />
+                        <TextField label={translate.formatMessage(message.password)} name="password"
+                            rules={[
+                                {
+                                    min: 6,
+                                    message: 'Mật khẩu phải có ít nhất 6 kí tự!',
+                                },
+                            ]} required={isEditing ? false : true} />
                     </Col>
                     <Col span={12}>
                         <TextField label={translate.formatMessage(message.email)} type="email" name="email" required />
