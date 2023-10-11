@@ -64,8 +64,8 @@ export const lectureState = [
 ];
 
 export const taskState = [
-    { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: 'warning' },
-    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: 'green' },
+    { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: '#FFBF00' },
+    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: '#00A648' },
 ];
 
 export const projectTaskState = [
