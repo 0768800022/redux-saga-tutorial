@@ -24,6 +24,7 @@ import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
@@ -74,6 +75,10 @@ function TaskListPage() {
             };
         },
     });
+    const convertDate = (date) => {
+        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+        return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
+    };
     const setColumns = () => {
         const columns = [
             {
@@ -87,26 +92,18 @@ function TaskListPage() {
             {
                 title: 'Ngày bắt đầu',
                 dataIndex: 'startDate',
-                width: 140,
+                width: 180,
                 render: (startDate) => {
-                    return (
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>
-                            {dayjs(startDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                        </div>
-                    );
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
                 },
                 align: 'center',
             },
             {
                 title: 'Ngày kết thúc',
                 dataIndex: 'dueDate',
-                width: 140,
+                width: 180,
                 render: (dueDate) => {
-                    return (
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>
-                            {dayjs(dueDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                        </div>
-                    );
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(dueDate)}</div>;
                 },
                 align: 'center',
             },
