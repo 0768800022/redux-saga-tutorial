@@ -7,6 +7,7 @@ import useTranslate from '@hooks/useTranslate';
 import CourseForm from './CourseForm';
 import routes from './routes';
 import { generatePath, useParams } from 'react-router-dom';
+import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
     home: 'Trang chủ',
@@ -38,6 +39,15 @@ const CourseSavePage = () => {
                 return {
                     ...data,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-COURSE-ERROR-0001') {
+                    showErrorMessage('Khoá học đã tồn tại');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });

@@ -16,7 +16,7 @@ import { convertUtcToLocalTime } from '@utils';
 import routes from './routes';
 import classNames from 'classnames';
 import styles from './subject.module.scss';
-import { statusSubjectOptions } from '@constants/masterData';
+import { statusOptions, statusSubjectOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 const message = defineMessages({
     name: 'Tên môn học',
@@ -33,7 +33,7 @@ const message = defineMessages({
 const SubjectListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
-    const statusSubject = translate.formatKeys(statusSubjectOptions, ['label']);
+    const statusValue = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.subject,
         options: {
@@ -68,7 +68,7 @@ const SubjectListPage = () => {
             key: 'status',
             placeholder: translate.formatMessage(message.status),
             type: FieldTypes.SELECT,
-            options: statusSubject,
+            options: statusValue,
         },
     ];
     const handleOnClick = (event, record) => {
@@ -108,17 +108,7 @@ const SubjectListPage = () => {
             width: 180,
             align: 'center',
         },
-        {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const status = statusSubject.find((item) => item.value == dataRow);
-
-                return <Tag color={status.color}><div style={{ padding: '0 4px', fontSize: 14 }}>{status.label}</div></Tag>;
-            },
-        },
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (

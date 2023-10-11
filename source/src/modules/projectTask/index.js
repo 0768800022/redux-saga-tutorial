@@ -23,10 +23,12 @@ const message = defineMessages({
     objectName: 'Danh sách khóa học',
     developer: 'Lập trình viên',
     home: 'Trang chủ',
-    state: 'Trạng thái',
+    state: 'Tình trạng',
     projectTask: 'Task',
     project: 'Dự án',
     leader: 'Leader',
+    name: 'Tên task',
+    status: 'Trạng thái',
 });
 
 function ProjectTaskListPage() {
@@ -43,34 +45,52 @@ function ProjectTaskListPage() {
 
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const location = useLocation();
-    const statusValues = translate.formatKeys(projectTaskState, ['label']);
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.projectTask,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
-                        };
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.projectTask,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.mappingData = (response) => {
+                    try {
+                        if (response.result === true) {
+                            return {
+                                data: response.data.content,
+                                total: response.data.totalElements,
+                            };
+                        }
+                    } catch (error) {
+                        return [];
                     }
-                } catch (error) {
-                    return [];
-                }
-            };
-            funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
-            };
-        },
-    });
+                };
+                funcs.getCreateLink = () => {
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
+                };
+                funcs.getItemDetailLink = (dataRow) => {
+                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
+                };
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const projectName = queryParams.get('projectName');
+                    const leaderId = queryParams.get('leaderId');
+                    if (projectId) {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({
+                                projectId: projectId,
+                                projectName: projectName,
+                                leaderId: leaderId,
+                                ...filter,
+                            }),
+                        );
+                    } else {
+                        mixinFuncs.setQueryParams(serializeParams(filter));
+                    }
+                };
+            },
+        });
     const setColumns = () => {
         const columns = [
             {
@@ -103,16 +123,44 @@ function ProjectTaskListPage() {
                 width: 120,
                 render(dataRow) {
                     const state = stateValues.find((item) => item.value == dataRow);
-                    return <Tag color={state.color}>{state.label}</Tag>;
+                    return (
+                        <Tag color={state.color}>
+                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                        </Tag>
+                    );
                 },
             },
-            mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
         if (!leaderName && !developerName) {
+            columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
             columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
         }
         return columns;
     };
+
+    const setSearchField = () => {
+        let searchFields = [
+            {
+                key: 'taskName',
+                placeholder: translate.formatMessage(message.name),
+            },
+            {
+                key: 'state',
+                placeholder: translate.formatMessage(message.state),
+                type: FieldTypes.SELECT,
+                options: stateValues,
+            },
+        ];
+        !leaderName &&
+            searchFields.splice(1, 0, {
+                key: 'status',
+                placeholder: translate.formatMessage(message.status),
+                type: FieldTypes.SELECT,
+                options: statusValues,
+            });
+        return searchFields;
+    };
+
     const setBreadRoutes = () => {
         const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
         if (leaderName) {
@@ -159,6 +207,7 @@ function ProjectTaskListPage() {
                             {projectName}
                         </span>
                     }
+                    searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
                     actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable

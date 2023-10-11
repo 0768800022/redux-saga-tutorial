@@ -11,14 +11,14 @@ import { BaseForm } from '@components/common/form/BaseForm';
 
 const messages = defineMessages({
     id: 'Id',
-    name: 'Name',
-    status: 'Status',
+    name: 'Tên hệ',
+    status: 'Trạng thái',
     description: 'Description',
     kind: 'kind',
 });
 
 const CategoryForm = (props) => {
-    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
+    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
 
@@ -33,9 +33,16 @@ const CategoryForm = (props) => {
     };
 
     useEffect(() => {
+        if (!isEditing > 0) {
+            form.setFieldsValue({
+                status: statusValues[0].value,
+            });
+        }
+    }, [isEditing]);
+
+    useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
-            status: statusValues[0].value,
         });
     }, [dataDetail]);
 

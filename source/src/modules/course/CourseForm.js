@@ -30,7 +30,7 @@ const CourseForm = (props) => {
     const handleSubmit = (values) => {
         if (!values?.state) {
             values.state = 1;
-        } 
+        }
         if (!values?.status) {
             values.status = 0;
         }
@@ -93,6 +93,20 @@ const CourseForm = (props) => {
             leaderId: dataDetail?.leader?.leaderName,
         });
     }, [dataDetail]);
+    const validateStartDate = (_, value) => {
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+        if (date && value && value.isBefore(date)) {
+            return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
+        }
+        return Promise.resolve();
+    };
+    const validateDueDate = (_, value) => {
+        const { dateRegister } = form.getFieldValue();
+        if (dateRegister && value && value <= dateRegister) {
+            return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
+        }
+        return Promise.resolve();
+    };
 
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
@@ -123,10 +137,18 @@ const CourseForm = (props) => {
                         <DatePickerField
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày bắt đầu',
+                                },
+                                {
+                                    validator: validateStartDate,
+                                },
+                            ]}
                             name="dateRegister"
                             style={{ width: '100%' }}
                             format={DATE_FORMAT_DISPLAY}
-                            required
                         />
                     </Col>
                     <Col span={12}>
@@ -134,6 +156,15 @@ const CourseForm = (props) => {
                             disabled={dataDetail.state >= 3}
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="dateEnd"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày kết thúc',
+                                },
+                                {
+                                    validator: validateDueDate,
+                                },
+                            ]}
                             style={{ width: '100%' }}
                             format={DATE_FORMAT_DISPLAY}
                             required

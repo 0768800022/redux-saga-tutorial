@@ -1,7 +1,7 @@
 import { BaseForm } from '@components/common/form/BaseForm';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { statusSubjectOptions } from '@constants/masterData';
+import { statusOptions, statusSubjectOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
 import { Card, Col, Form, Row } from 'antd';
@@ -11,12 +11,16 @@ import { FormattedMessage } from 'react-intl';
 const SubjectForm = (props) => {
     const translate = useTranslate();
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
-    const statusSubject = translate.formatKeys(statusSubjectOptions, ['label']);
+    const statusValue = translate.formatKeys(statusOptions, ['label']);
+    //const statusSubject = translate.formatKeys(statusSubjectOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
+        if (!values.status) {
+            values.status = 0;
+        }
         return mixinFuncs.handleSubmit({ ...values });
     };
 
@@ -31,7 +35,11 @@ const SubjectForm = (props) => {
             <Card className="card-form" bordered={false}>
                 <Row gutter={10}>
                     <Col span={12}>
-                        <TextField label={<FormattedMessage defaultMessage="Tên môn học" />} required name="subjectName" />
+                        <TextField
+                            label={<FormattedMessage defaultMessage="Tên môn học" />}
+                            required
+                            name="subjectName"
+                        />
                     </Col>
                     <Col span={12}>
                         <TextField
@@ -42,11 +50,11 @@ const SubjectForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <SelectField
-                            defaultValue={statusSubject[0]}
+                            defaultValue={statusValue[0]}
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             name="status"
                             required
-                            options={statusSubject}
+                            options={statusValue}
                         />
                     </Col>
                 </Row>

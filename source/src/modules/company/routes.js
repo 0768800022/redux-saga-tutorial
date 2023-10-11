@@ -22,7 +22,7 @@ export default {
         permission: [apiConfig.company.create.baseURL, apiConfig.company.update.baseURL],
     },
     serviceCompanySubListPage: {
-        path: '/sevice-company-subscription',
+        path: '/service-company-subscription',
         title: 'Service Company Subscription',
         auth: true,
         component: ServiceCompanySubListPage,
@@ -30,7 +30,7 @@ export default {
         permissions: [apiConfig.serviceCompanySubscription.getList.baseURL],
     },
     serviceCompanySubSavePage: {
-        path: '/sevice-company-subscription/:id',
+        path: '/service-company-subscription/:id',
         title: 'Service Company Subscription Save page',
         auth: true,
         component: ServiceCompanySubscriptionSavePage,

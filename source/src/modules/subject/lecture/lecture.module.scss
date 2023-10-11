@@ -3,6 +3,10 @@
     border-radius: 10px;
     &:hover{
         background-color: #bdbdc8!important;
+        opacity: 1;
+    }
+    :global .ant-table-cell-row-hover{
+        background-color: #bdbdc8!important;
     }
   }
 .cursorPoint{
