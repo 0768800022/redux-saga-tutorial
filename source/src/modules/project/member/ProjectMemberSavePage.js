@@ -45,6 +45,7 @@ function ProjectMemberSavePage() {
                     projectId: projectId,
                     developerId: data.developer.studentInfo.fullName,
                     projectRoleId: data.projectRole.projectRoleName,
+                    schedule: data.schedule,
                 };
             };
         },
