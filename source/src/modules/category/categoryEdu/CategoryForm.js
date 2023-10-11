@@ -34,9 +34,10 @@ const CategoryForm = (props) => {
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
+            status: statusValues[0].value,
         });
     }, [dataDetail]);
-
+    
     return (
         <BaseForm
             id={formId}
