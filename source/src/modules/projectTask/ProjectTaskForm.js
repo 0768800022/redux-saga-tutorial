@@ -33,6 +33,7 @@ const ProjectTaskForm = (props) => {
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
+                startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT)),
                 status: statusValues[0].value,
                 state: stateValues[0].value,
             });
@@ -47,14 +48,29 @@ const ProjectTaskForm = (props) => {
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.studentInfo.fullName })),
     });
     useEffect(() => {
-        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DATE_FORMAT_VALUE);
-        dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DATE_FORMAT_VALUE);
+        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
+        dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
 
         form.setFieldsValue({
             ...dataDetail,
             developerId: dataDetail?.developer?.studentInfo?.id,
         });
     }, [dataDetail]);
+    const validateDueDate = (_, value) => {
+        const { startDate } = form.getFieldValue();
+        if (startDate && value && value.isBefore(startDate)) {
+            return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
+        }
+        return Promise.resolve();
+    };
+
+    const validateStartDate = (_, value) => {
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DATE_FORMAT_VALUE);
+        if (date && value && value.isBefore(date)) {
+            return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
+        }
+        return Promise.resolve();
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
@@ -103,8 +119,18 @@ const ProjectTaskForm = (props) => {
                             required
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="startDate"
-                            style={{ width: '100%' }}
+                            placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
+                            style={{ width: '100%' }}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày bắt đầu',
+                                },
+                                {
+                                    validator: validateStartDate,
+                                },
+                            ]}
                         />
                     </Col>
                     <Col span={12}>
@@ -113,8 +139,18 @@ const ProjectTaskForm = (props) => {
                             required
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="dueDate"
-                            style={{ width: '100%' }}
+                            placeholder="Ngày kết thúc"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày kết thúc',
+                                },
+                                {
+                                    validator: validateDueDate,
+                                },
+                            ]}
                             format={DEFAULT_FORMAT}
+                            style={{ width: '100%' }}
                         />
                     </Col>
                 </Row>
@@ -123,6 +159,7 @@ const ProjectTaskForm = (props) => {
                     label={<FormattedMessage defaultMessage="Mô tả" />}
                     name="description"
                     type="textarea"
+                    required
                 />
 
                 <div className="footer-card-form">{actions}</div>
