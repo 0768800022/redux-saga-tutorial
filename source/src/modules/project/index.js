@@ -78,18 +78,30 @@ const ProjectListPage = () => {
                         }
                         onClick={(e) => {
                             e.stopPropagation();
+                            const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
+                            let path;
+                            if (leaderName) {
+                                path =
+                                    routes.leaderProjectTaskListPage.path +
+                                    pathDefault +
+                                    `&leaderName=${leaderName}`;
+                            } else if (developerName) {
+                                path =
+                                    routes.developerProjectTaskListPage.path +
+                                    pathDefault +
+                                    `&developerName=${developerName}`;
+                            } else {
+                                path = route.ProjectTaskListPage.path + pathDefault;
+                            }
                             status !== 0 &&
                                 status !== -1 &&
-                                navigate(
-                                    route.ProjectTaskListPage.path +
-                                        `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
-                                );
+                                navigate(path, { state: { pathPrev: location.search } });
                         }}
                     >
                         <BookOutlined />
                     </Button>
                 ),
-                member: ({ id, name }) => (
+                member: ({ id, name, status }) => (
                     <Button
                         type="link"
                         style={
