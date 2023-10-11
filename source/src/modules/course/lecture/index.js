@@ -267,6 +267,7 @@ const LectureListPage = () => {
                 centered
                 lectureId = {lectureid}
                 onCancel={() => setShowPreviewModal(false)}
+                maskClosable={false}
             >
                 <AsignAllForm
                     courseId = {courseId}
