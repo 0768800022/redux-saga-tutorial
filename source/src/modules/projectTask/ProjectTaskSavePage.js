@@ -8,6 +8,7 @@ import routes from './routes';
 import ProjectTaskForm from './ProjectTaskForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
+import route1 from '@modules/project/routes';
 
 const messages = defineMessages({
     objectName: 'Task',
@@ -53,7 +54,10 @@ function ProjectTaskSavePage() {
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
-                { breadcrumbName: translate.formatMessage(messages.project) },
+                { 
+                    breadcrumbName: translate.formatMessage(messages.project),
+                    path: route1.projectListPage.path,
+                },
                 {
                     breadcrumbName: translate.formatMessage(messages.ProjectTask),
                     path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,

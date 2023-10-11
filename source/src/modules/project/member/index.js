@@ -25,7 +25,7 @@ import route from '@modules/project/routes';
 const message = defineMessages({
     home: 'Trang chủ',
     project: 'Dự án',
-    objectName: 'Dự án',
+    objectName: 'Thành viên dự án',
     role: 'Vai trò',
     name: 'Họ và tên ',
     developer: 'Lập trình viên',
@@ -78,13 +78,6 @@ const ProjectMemberListPage = () => {
 
         return breadRoutes;
     };
-
-    const searchFields = [
-        {
-            key: 'name',
-            placeholder: translate.formatMessage(message.name),
-        },
-    ];
 
     const columns = [
         {
@@ -142,7 +135,6 @@ const ProjectMemberListPage = () => {
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
