@@ -69,18 +69,27 @@ function ProjectTaskListPage() {
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
                     const projectName = queryParams.get('projectName');
-                    const leaderId = queryParams.get('leaderId');
-                    if (projectId) {
+                    const developerName = queryParams.get('developerName');
+                    const leaderName = queryParams.get('leaderName');
+                    let filterAdd;
+                    if (developerName) {
+                        filterAdd = { developerName };
+                    } else if (leaderName) {
+                        filterAdd = { leaderName };
+                    }
+                    if (filterAdd) {
                         mixinFuncs.setQueryParams(
                             serializeParams({
                                 projectId: projectId,
                                 projectName: projectName,
-                                leaderId: leaderId,
+                                ...filterAdd,
                                 ...filter,
                             }),
                         );
                     } else {
-                        mixinFuncs.setQueryParams(serializeParams(filter));
+                        mixinFuncs.setQueryParams(
+                            serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                        );
                     }
                 };
             },
@@ -146,6 +155,7 @@ function ProjectTaskListPage() {
             },
         ];
         !leaderName &&
+            !developerName &&
             searchFields.splice(1, 0, {
                 key: 'status',
                 placeholder: translate.formatMessage(message.status),

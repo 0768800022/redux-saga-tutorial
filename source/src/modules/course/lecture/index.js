@@ -217,7 +217,9 @@ const LectureListPage = () => {
         <PageWrapper 
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.course) },
+                { breadcrumbName: translate.formatMessage(message.course),
+                    path: routes.courseListPage.path,
+                },
                 { breadcrumbName: translate.formatMessage(message.task),
                     path: routes.courseListPage.path + `/task?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=2`,
                 },
