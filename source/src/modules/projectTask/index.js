@@ -72,7 +72,6 @@ function ProjectTaskListPage() {
                     const developerName = queryParams.get('developerName');
                     const leaderName = queryParams.get('leaderName');
                     let filterAdd;
-                    console.log(filterAdd);
                     if (developerName) {
                         filterAdd = { developerName };
                     } else if (leaderName) {
