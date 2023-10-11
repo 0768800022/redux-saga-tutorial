@@ -23,7 +23,7 @@ const message = defineMessages({
     objectName: 'Danh sách khóa học',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
-    state: 'Trạng thái',
+    state: 'Tình trạng',
     task: 'Task',
     course: 'Khóa học',
     leader: 'Leader',

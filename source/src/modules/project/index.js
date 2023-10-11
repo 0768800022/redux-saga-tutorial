@@ -1,18 +1,14 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import {
-    DEFAULT_FORMAT,
-    DEFAULT_TABLE_ITEM_SIZE,
-    AppConstants,
-} from '@constants';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import {  UserOutlined } from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
 import { Button, Avatar, Tag } from 'antd';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
@@ -36,6 +32,7 @@ const message = defineMessages({
     name: 'Tên dự án',
     endDate: 'Ngày kết thúc',
     startDate: 'Ngày bắt đầu',
+    state: 'Tình trạng',
     status: 'Trạng thái',
     developer: 'Lập trình viên',
 });
@@ -168,91 +165,111 @@ const ProjectListPage = () => {
         return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
     };
 
-    const searchFields = [
-        {
-            key: 'name',
-            placeholder: translate.formatMessage(message.name),
-        },
-        {
-            key: 'status',
-            placeholder: translate.formatMessage(message.status),
-            type: FieldTypes.SELECT,
-            options: statusValues,
-        },
-    ];
+    const setSearchField = () => {
+        let searchFields = [
+            {
+                key: 'name',
+                placeholder: translate.formatMessage(message.name),
+            },
+            {
+                key: 'state',
+                placeholder: translate.formatMessage(message.state),
+                type: FieldTypes.SELECT,
+                options: stateValues,
+            },
+        ];
+        !leaderName &&
+            searchFields.splice(1, 0, {
+                key: 'status',
+                placeholder: translate.formatMessage(message.status),
+                type: FieldTypes.SELECT,
+                options: statusValues,
+            });
+        return searchFields;
+    };
 
-    const columns = [
-        {
-            title: '#',
-            dataIndex: 'avatar',
-            align: 'center',
-            width: 80,
-            render: (avatar) => (
-                <Avatar
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                />
+    const setColumns = () => {
+        const columns = [
+            {
+                title: '#',
+                dataIndex: 'avatar',
+                align: 'center',
+                width: 80,
+                render: (avatar) => (
+                    <Avatar
+                        size="large"
+                        icon={<UserOutlined />}
+                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                    />
+                ),
+            },
+            {
+                title: translate.formatMessage(message.name),
+                dataIndex: 'name',
+            },
+            {
+                title: translate.formatMessage(message.leader),
+                dataIndex: ['leaderInfo', 'leaderName'],
+                width: 150,
+            },
+            {
+                title: translate.formatMessage(message.startDate),
+                dataIndex: 'startDate',
+                render: (startDate) => {
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
+                },
+                width: 200,
+                align: 'center',
+            },
+            {
+                title: translate.formatMessage(message.endDate),
+                dataIndex: 'endDate',
+                render: (endDate) => {
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
+                },
+                width: 200,
+                align: 'center',
+            },
+            {
+                title: 'Tình trạng',
+                dataIndex: 'state',
+                align: 'center',
+                width: 120,
+                render(dataRow) {
+                    const state = stateValues.find((item) => item.value == dataRow);
+                    return <Tag color={state.color}>{state.label}</Tag>;
+                },
+            },
+        ];
+
+        !leaderName &&
+            columns.push({
+                title: translate.formatMessage(message.status),
+                dataIndex: 'status',
+                align: 'center',
+                width: 120,
+                render(dataRow) {
+                    const status = statusValues.find((item) => item.value == dataRow);
+                    return <Tag color={status.color}>{status.label}</Tag>;
+                },
+            });
+        columns.push(
+            mixinFuncs.renderActionColumn(
+                {
+                    task: true,
+                    edit: !leaderName && !developerName && true,
+                    delete: !leaderName && !developerName && true,
+                },
+                { width: '130px' },
             ),
-        },
-        {
-            title: translate.formatMessage(message.name),
-            dataIndex: 'name',
-        },
-        {
-            title: translate.formatMessage(message.leader),
-            dataIndex: ['leaderInfo', 'leaderName'],
-            width: 150,
-        },
-        {
-            title: translate.formatMessage(message.startDate),
-            dataIndex: 'startDate',
-            render: (startDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
-            },
-            width: 200,
-            align: 'center',
-        },
-        {
-            title: translate.formatMessage(message.endDate),
-            dataIndex: 'endDate',
-            render: (endDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
-            },
-            width: 200,
-            align: 'center',
-        },
-        {
-            title: translate.formatMessage(message.status),
-            dataIndex: 'status',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const status = statusValues.find((item) => item.value == dataRow);
-                return <Tag color={status.color}>{status.label}</Tag>;
-            },
-        },
-        {
-            title: "Tình trạng",
-            dataIndex: 'state',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
-                return <Tag color={state.color}>{state.label}</Tag>;
-            },
-        },
-        mixinFuncs.renderActionColumn(
-            { task: true, edit: !leaderName && !developerName && true, delete: !leaderName && !developerName && true },
-            { width: '130px' },
-        ),
-    ];
-
+        );
+        return columns;
+    };
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
                 actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -260,7 +277,7 @@ const ProjectListPage = () => {
                         pagination={pagination}
                         loading={loading}
                         dataSource={dataApply}
-                        columns={columns}
+                        columns={setColumns()}
                     />
                 }
             />

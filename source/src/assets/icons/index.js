@@ -33,18 +33,71 @@ export const CourseIcon = ({ style }) => {
 
 export const FolderIcon = ({ style }) => (
     <svg
-        viewBox="0 0 24 24"
-        fill="none"
+        viewBox="-7.77 0 61.035 61.035"
         xmlns="http://www.w3.org/2000/svg"
-        stroke="#1677ff"
-        style={{ width: '18px', height: '18px', ...style }}
+        fill="#1677ff"
+        height="18px"
+        width="18px"
+        style={style}
     >
-        <path
-            d="M21 11V15.8C21 16.9201 21 17.4802 20.782 17.908C20.5903 18.2843 20.2843 18.5903 19.908 18.782C19.4802 19 18.9201 19 17.8 19H6.2C5.0799 19 4.51984 19 4.09202 18.782C3.71569 18.5903 3.40973 18.2843 3.21799 17.908C3 17.4802 3 16.9201 3 15.8V8.2C3 7.0799 3 6.51984 3.21799 6.09202C3.40973 5.71569 3.71569 5.40973 4.09202 5.21799C4.51984 5 5.0799 5 6.2 5H15M21 11L15 5M21 11H16.6C16.0399 11 15.7599 11 15.546 10.891C15.3578 10.7951 15.2049 10.6422 15.109 10.454C15 10.2401 15 9.96005 15 9.4V5"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-        />
+        <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+        <g id="SVGRepo_iconCarrier">
+            <g id="Group_29" transform="translate(-788.374 -1136.157)">
+                <path
+                    id="Path_73"
+                    d="M827.765,1167.51a16.353,16.353,0,1,0-21.69,15.443v12.239H816.75v-12.239A16.346,16.346,0,0,0,827.765,1167.51Z"
+                    fill="#ffffffff"
+                    stroke="#1677ff"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="4"
+                ></path>
+                <rect
+                    id="Rectangle_13"
+                    width="14.217"
+                    height="5.549"
+                    transform="translate(804.387 1187.563)"
+                    fill="#fff"
+                    stroke="#1677ff"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="4"
+                ></rect>
+                <line
+                    id="Line_34"
+                    y2="3.813"
+                    transform="translate(811.413 1138.157)"
+                    fill="#fff"
+                    stroke="#1677ff"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="4"
+                ></line>
+                <line
+                    id="Line_35"
+                    x1="2.419"
+                    y2="2.948"
+                    transform="translate(828.636 1145.697)"
+                    fill="#fff"
+                    stroke="#1677ff"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="4"
+                ></line>
+                <line
+                    id="Line_36"
+                    x2="2.419"
+                    y2="2.948"
+                    transform="translate(791.188 1145.697)"
+                    fill="#fff"
+                    stroke="#1677ff"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="4"
+                ></line>
+            </g>
+        </g>
     </svg>
 );
 

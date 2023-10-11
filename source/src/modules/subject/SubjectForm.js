@@ -17,6 +17,9 @@ const SubjectForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
+        if (!values.status) {
+            values.status = 0;
+        }
         return mixinFuncs.handleSubmit({ ...values });
     };
 
@@ -31,7 +34,11 @@ const SubjectForm = (props) => {
             <Card className="card-form" bordered={false}>
                 <Row gutter={10}>
                     <Col span={12}>
-                        <TextField label={<FormattedMessage defaultMessage="Tên môn học" />} required name="subjectName" />
+                        <TextField
+                            label={<FormattedMessage defaultMessage="Tên môn học" />}
+                            required
+                            name="subjectName"
+                        />
                     </Col>
                     <Col span={12}>
                         <TextField
@@ -45,7 +52,6 @@ const SubjectForm = (props) => {
                             defaultValue={statusSubject[0]}
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             name="status"
-                            required
                             options={statusSubject}
                         />
                     </Col>

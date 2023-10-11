@@ -147,13 +147,12 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                     <Col span={12}>
                         <DatePickerField
                             showTime={true}
-                            required
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="startDate"
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Vui lòng chọn ngày kết thúc',
+                                    message: 'Vui lòng chọn ngày bắt đầu',
                                 },
                                 {
                                     validator: validateDueDate,
