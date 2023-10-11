@@ -141,7 +141,6 @@ const ProjectListPage = () => {
         immediate: true,
         pathParams: { id: developerId },
     });
-    console.log(dataDeveloperProject);
 
     useEffect(() => {
         if (!developerId) {
