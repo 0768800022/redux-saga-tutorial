@@ -4,7 +4,7 @@ import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import routes from './routes';
+import routes from '@routes';
 import RegistrationForm from './RegistrationForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
@@ -59,7 +59,7 @@ function RegistrationSavePage() {
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
-                { breadcrumbName: translate.formatMessage(messages.course) },
+                { breadcrumbName: translate.formatMessage(messages.course), path: routes.courseListPage.path },
                 {
                     breadcrumbName: translate.formatMessage(messages.registration),
                     path: routes.registrationListPage.path + `?courseId=${courseId}&courseName=${courseName}`,

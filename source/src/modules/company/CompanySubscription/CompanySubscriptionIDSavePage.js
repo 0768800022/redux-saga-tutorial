@@ -47,7 +47,9 @@ const CompanySubscriptionIdSavePage = () => {
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.company) },
+                { breadcrumbName: translate.formatMessage(message.company),
+                    path: routes.companyListPage.path,
+                },
                 {
                     breadcrumbName: translate.formatMessage(message.companySubscription),
                     path: routes.companySubscriptionIdListPage.path +`?companyId=${companyId? companyId : detail.company?.id}&companyName=${companyName ? companyName : detail?.company?.companyName }`,

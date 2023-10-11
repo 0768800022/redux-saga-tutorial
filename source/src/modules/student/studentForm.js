@@ -82,7 +82,6 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     }, [isEditing]);
 
     useEffect(() => {
-        console.log(dataDetail);
         dataDetail.birthday = dataDetail?.birthday && dayjs(dataDetail?.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,

@@ -433,6 +433,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getProject: {
+            baseURL: `${apiTenantUrl}v1/developer/project/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     lecture: {
         autocomplete: {
