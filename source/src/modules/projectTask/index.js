@@ -1,32 +1,28 @@
-import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import BaseTable from '@components/common/table/BaseTable';
+import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
+import { projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Avatar, Button, Tag } from 'antd';
+import { Tag } from 'antd';
 import React from 'react';
-import { Link, generatePath, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { DeleteOutlined } from '@ant-design/icons';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { date } from 'yup/lib/locale';
-import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
-import { projectTaskState, statusOptions } from '@constants/masterData';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
     developer: 'Lập trình viên',
     home: 'Trang chủ',
-    state: 'Trạng thái',
+    state: 'Tình trạng',
     projectTask: 'Task',
     project: 'Dự án',
     leader: 'Leader',
+    name: 'Tên task',
+    status: 'Trạng thái',
 });
 
 function ProjectTaskListPage() {
@@ -43,34 +39,61 @@ function ProjectTaskListPage() {
 
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const location = useLocation();
-    const statusValues = translate.formatKeys(projectTaskState, ['label']);
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.projectTask,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
-                        };
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.projectTask,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.mappingData = (response) => {
+                    try {
+                        if (response.result === true) {
+                            return {
+                                data: response.data.content,
+                                total: response.data.totalElements,
+                            };
+                        }
+                    } catch (error) {
+                        return [];
                     }
-                } catch (error) {
-                    return [];
-                }
-            };
-            funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
-            };
-        },
-    });
+                };
+                funcs.getCreateLink = () => {
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
+                };
+                funcs.getItemDetailLink = (dataRow) => {
+                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
+                };
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const projectName = queryParams.get('projectName');
+                    const developerName = queryParams.get('developerName');
+                    const leaderName = queryParams.get('leaderName');
+                    let filterAdd;
+                    if (developerName) {
+                        filterAdd = { developerName };
+                    } else if (leaderName) {
+                        filterAdd = { leaderName };
+                    }
+                    if (filterAdd) {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({
+                                projectId: projectId,
+                                projectName: projectName,
+                                ...filterAdd,
+                                ...filter,
+                            }),
+                        );
+                    } else {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                        );
+                    }
+                };
+            },
+        });
     const setColumns = () => {
         const columns = [
             {
@@ -103,16 +126,45 @@ function ProjectTaskListPage() {
                 width: 120,
                 render(dataRow) {
                     const state = stateValues.find((item) => item.value == dataRow);
-                    return <Tag color={state.color}>{state.label}</Tag>;
+                    return (
+                        <Tag color={state.color}>
+                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                        </Tag>
+                    );
                 },
             },
-            mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
         if (!leaderName && !developerName) {
+            columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
             columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
         }
         return columns;
     };
+
+    const setSearchField = () => {
+        let searchFields = [
+            {
+                key: 'taskName',
+                placeholder: translate.formatMessage(message.name),
+            },
+            {
+                key: 'state',
+                placeholder: translate.formatMessage(message.state),
+                type: FieldTypes.SELECT,
+                options: stateValues,
+            },
+        ];
+        !leaderName &&
+            !developerName &&
+            searchFields.splice(1, 0, {
+                key: 'status',
+                placeholder: translate.formatMessage(message.status),
+                type: FieldTypes.SELECT,
+                options: statusValues,
+            });
+        return searchFields;
+    };
+
     const setBreadRoutes = () => {
         const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
         if (leaderName) {
@@ -159,6 +211,7 @@ function ProjectTaskListPage() {
                             {projectName}
                         </span>
                     }
+                    searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
                     actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable

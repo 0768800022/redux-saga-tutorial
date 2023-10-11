@@ -86,7 +86,9 @@ body {
         margin: unset;
     }
 }
-
+.ant-tag{
+    margin-inline-end: 0px;
+}
 .ant-input-number {
     width: 100% !important;
 }

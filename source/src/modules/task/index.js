@@ -2,7 +2,13 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
+import {
+    AppConstants,
+    DATE_DISPLAY_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DEFAULT_TABLE_ITEM_SIZE,
+    DEFAULT_FORMAT,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { taskState } from '@constants/masterData';
@@ -110,9 +116,12 @@ function TaskListPage() {
                 align: 'center',
                 width: 120,
                 render(dataRow) {
-                    const status = statusValues.find((item) => item.value == dataRow);
-
-                    return <Tag color={status.color}>{status.label}</Tag>;
+                    const state = statusValues.find((item) => item.value == dataRow);
+                    return (
+                        <Tag color={state.color}>
+                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                        </Tag>
+                    );
                 },
             },
         ];
@@ -156,7 +165,7 @@ function TaskListPage() {
                             {courseName}
                         </span>
                     }
-                    actionBar={state == 2 ? mixinFuncs.renderActionBar() : ''}
+                    actionBar={state == 2 && !leaderName ? mixinFuncs.renderActionBar() : ''}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}

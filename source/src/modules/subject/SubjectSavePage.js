@@ -7,6 +7,7 @@ import { defineMessages } from 'react-intl';
 import { generatePath, useParams } from 'react-router-dom';
 import SubjectForm from './SubjectForm';
 import routes from './routes';
+import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
     home: 'Trang chủ',
@@ -26,6 +27,17 @@ const SubjectSavePage = () => {
         options: {
             getListUrl: generatePath(routes.subjectListPage.path, { subjectId }),
             objectName: translate.formatMessage(messages.objectName),
+        },
+        override: (funcs) => {
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-SUBJECT-ERROR-0001') {
+                    showErrorMessage('Môn học đã tồn tại');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
+            };
         },
     });
 

@@ -64,8 +64,8 @@ export const lectureState = [
 ];
 
 export const taskState = [
-    { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: '#FFBF00' },
-    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: '#00A648' },
+    { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: 'warning' },
+    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: 'green' },
 ];
 
 export const projectTaskState = [
@@ -94,12 +94,12 @@ export const statusOptions = [
 ];
 export const statusSubjectOptions = [
     {
-        value: 1,
+        value: 0,
         label: statusSubjectMessage.active,
         color: 'green',
     },
     {
-        value: 2,
+        value: 1,
         label: statusSubjectMessage.canceled,
         color: 'red',
     },
