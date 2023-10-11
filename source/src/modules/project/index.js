@@ -214,7 +214,9 @@ const ProjectListPage = () => {
             width: 120,
             render(dataRow) {
                 const state = stateValues.find((item) => item.value == dataRow);
-                return <Tag color={state.color}>{state.label}</Tag>;
+                return <Tag color={state.color}>
+                    <div style={{ padding: '0 4px', fontSize: 14 }}> {state.label}</div>
+                </Tag>;
             },
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
