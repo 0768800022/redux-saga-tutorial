@@ -1,23 +1,17 @@
-import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import BaseTable from '@components/common/table/BaseTable';
+import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
+import { projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Avatar, Button, Tag } from 'antd';
+import { Tag } from 'antd';
 import React from 'react';
-import { Link, generatePath, useLocation, useNavigate, useParams } from 'react-router-dom';
-import { DeleteOutlined } from '@ant-design/icons';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { date } from 'yup/lib/locale';
-import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
-import { projectTaskState, statusOptions } from '@constants/masterData';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',

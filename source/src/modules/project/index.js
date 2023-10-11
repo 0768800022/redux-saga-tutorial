@@ -47,7 +47,7 @@ const ProjectListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const [dataApply, setDataApply] = useState([]);
-    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
+    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } = useListBase({
         apiConfig: apiConfig.project,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -78,18 +78,30 @@ const ProjectListPage = () => {
                         }
                         onClick={(e) => {
                             e.stopPropagation();
+                            const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
+                            let path;
+                            if (leaderName) {
+                                path =
+                                    routes.leaderProjectTaskListPage.path +
+                                    pathDefault +
+                                    `&leaderName=${leaderName}`;
+                            } else if (developerName) {
+                                path =
+                                    routes.developerProjectTaskListPage.path +
+                                    pathDefault +
+                                    `&developerName=${developerName}`;
+                            } else {
+                                path = route.ProjectTaskListPage.path + pathDefault;
+                            }
                             status !== 0 &&
                                 status !== -1 &&
-                                navigate(
-                                    route.ProjectTaskListPage.path +
-                                        `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
-                                );
+                                navigate(path, { state: { pathPrev: location.search } });
                         }}
                     >
                         <BookOutlined />
                     </Button>
                 ),
-                member: ({ id, name }) => (
+                member: ({ id, name, status }) => (
                     <Button
                         type="link"
                         style={
@@ -108,6 +120,24 @@ const ProjectListPage = () => {
                     </Button>
                 ),
             });
+
+            funcs.changeFilter = (filter) => {
+                const leaderId = queryParams.get('leaderId');
+                const leaderName = queryParams.get('leaderName');
+                const developerId = queryParams.get('developerId');
+                const developerName = queryParams.get('developerName');
+                if (leaderId) {
+                    mixinFuncs.setQueryParams(
+                        serializeParams({ leaderId: leaderId, leaderName: leaderName, ...filter }),
+                    );
+                } else if (developerId) {
+                    mixinFuncs.setQueryParams(
+                        serializeParams({ developerId: developerId, developerName: developerName, ...filter }),
+                    );
+                } else {
+                    mixinFuncs.setQueryParams(serializeParams(filter));
+                }
+            };
         },
     });
 
