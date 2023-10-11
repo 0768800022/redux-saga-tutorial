@@ -4,14 +4,14 @@ import CompanySubscriptionSavePage from "./CompanySubscriptionSavePage";
 
 export default {
     companySubscriptionListPage: {
-        path: '/companySubscription',
+        path: '/company-subscription',
         title: 'Company Subscription',
         auth: true,
         component: CompanySubscriptionListPage,
         permissions: [apiConfig.companySubscription.getList.baseURL],
     },
     companySubscriptionSavePage: {
-        path: '/companySubscription/:id',
+        path: '/company-subscription/:id',
         title: 'Company Subscription Save Page',
         auth: true,
         component: CompanySubscriptionSavePage,
