@@ -47,120 +47,109 @@ const ProjectListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const [dataApply, setDataApply] = useState([]);
-    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } = useListBase({
-        apiConfig: apiConfig.project,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.mappingData = (response) => {
-                try {
+    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.project,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.mappingData = (response) => {
                     if (response.result === true) {
                         return {
                             data: response.data.content,
                             total: response.data.totalElements,
                         };
                     }
-                } catch (error) {
-                    return [];
-                }
-            };
+                };
 
-            funcs.additionalActionColumnButtons = () => ({
-                task: ({ id, name, leaderInfo, status }) => (
-                    <Button
-                        type="link"
-                        style={
-                            status === 0 || status === -1
-                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                : { padding: 0 }
-                        }
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
-                            let path;
-                            if (leaderName) {
-                                path =
-                                    routes.leaderProjectTaskListPage.path +
-                                    pathDefault +
-                                    `&leaderName=${leaderName}`;
-                            } else if (developerName) {
-                                path =
-                                    routes.developerProjectTaskListPage.path +
-                                    pathDefault +
-                                    `&developerName=${developerName}`;
-                            } else {
-                                path = route.ProjectTaskListPage.path + pathDefault;
+                funcs.additionalActionColumnButtons = () => ({
+                    task: ({ id, name, leaderInfo, status }) => (
+                        <Button
+                            type="link"
+                            disabled={status === 0 || status === -1}
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
+                                let path;
+                                if (leaderName) {
+                                    path =
+                                        routes.leaderProjectTaskListPage.path +
+                                        pathDefault +
+                                        `&leaderName=${leaderName}`;
+                                } else if (developerName) {
+                                    path =
+                                        routes.developerProjectTaskListPage.path +
+                                        pathDefault +
+                                        `&developerName=${developerName}`;
+                                } else {
+                                    path = route.ProjectTaskListPage.path + pathDefault;
+                                }
+                                status !== 0 &&
+                                    status !== -1 &&
+                                    navigate(path, { state: { pathPrev: location.search } });
+                            }}
+                        >
+                            <BookOutlined />
+                        </Button>
+                    ),
+                    member: ({ id, name, status }) => (
+                        <Button
+                            type="link"
+                            style={
+                                status === 0 || status === -1
+                                    ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
+                                    : { padding: 0 }
                             }
-                            status !== 0 &&
-                                status !== -1 &&
-                                navigate(path, { state: { pathPrev: location.search } });
-                        }}
-                    >
-                        <BookOutlined />
-                    </Button>
-                ),
-                member: ({ id, name, status }) => (
-                    <Button
-                        type="link"
-                        style={
-                            status === 0 || status === -1
-                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                : { padding: 0 }
-                        }
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            status !== 0 &&
-                                status !== -1 &&
-                                navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
-                        }}
-                    >
-                        <TeamOutlined />
-                    </Button>
-                ),
-            });
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                status !== 0 &&
+                                    status !== -1 &&
+                                    navigate(
+                                        routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
+                                    );
+                            }}
+                        >
+                            <TeamOutlined />
+                        </Button>
+                    ),
+                });
 
-            funcs.changeFilter = (filter) => {
-                const leaderId = queryParams.get('leaderId');
-                const leaderName = queryParams.get('leaderName');
-                const developerId = queryParams.get('developerId');
-                const developerName = queryParams.get('developerName');
-                if (leaderId) {
-                    mixinFuncs.setQueryParams(
-                        serializeParams({ leaderId: leaderId, leaderName: leaderName, ...filter }),
-                    );
-                } else if (developerId) {
-                    mixinFuncs.setQueryParams(
-                        serializeParams({ developerId: developerId, developerName: developerName, ...filter }),
-                    );
-                } else {
-                    mixinFuncs.setQueryParams(serializeParams(filter));
-                }
-            };
-        },
-    });
+                funcs.changeFilter = (filter) => {
+                    const leaderId = queryParams.get('leaderId');
+                    const leaderName = queryParams.get('leaderName');
+                    const developerId = queryParams.get('developerId');
+                    const developerName = queryParams.get('developerName');
+                    if (leaderId) {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({ leaderId: leaderId, leaderName: leaderName, ...filter }),
+                        );
+                    } else if (developerId) {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({ developerId: developerId, developerName: developerName, ...filter }),
+                        );
+                    } else {
+                        mixinFuncs.setQueryParams(serializeParams(filter));
+                    }
+                };
+            },
+        });
 
-    const { data: dataListTask, execute: executeGetList } = useFetch(apiConfig.projectTask.getList, {
+    const { data: dataDeveloperProject, execute: executeGetList } = useFetch(apiConfig.developer.getProject, {
         immediate: true,
-        params: { developerId: developerId },
-        mappingData: ({ data }) => data.content.map((item) => ({ projectId: item?.project.id })),
+        pathParams: { id: developerId },
     });
-    useEffect(() => {
-        let filteredList = [];
-        if (data?.length > 0 && developerId) {
-            if (dataListTask?.length > 0) {
-                filteredList = data.filter((item1) => dataListTask.some((item2) => item2.projectId === item1.id));
-            }
-            setDataApply(filteredList);
-        }
-    }, [dataListTask]);
+    console.log(dataDeveloperProject);
 
     useEffect(() => {
         if (!developerId) {
             setDataApply(data);
+        } else {
+            setDataApply(dataDeveloperProject?.data?.content);
         }
-    }, [data]);
+    }, [data, dataDeveloperProject]);
 
     const setBreadRoutes = () => {
         const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
@@ -198,6 +187,7 @@ const ProjectListPage = () => {
             },
         ];
         !leaderName &&
+            !developerName &&
             searchFields.splice(1, 0, {
                 key: 'status',
                 placeholder: translate.formatMessage(message.status),
@@ -265,7 +255,7 @@ const ProjectListPage = () => {
             },
         ];
 
-        !leaderName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
+        !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
         columns.push(
             mixinFuncs.renderActionColumn(
                 {

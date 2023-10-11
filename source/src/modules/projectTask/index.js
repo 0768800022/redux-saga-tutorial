@@ -146,6 +146,7 @@ function ProjectTaskListPage() {
             },
         ];
         !leaderName &&
+            !developerName &&
             searchFields.splice(1, 0, {
                 key: 'status',
                 placeholder: translate.formatMessage(message.status),
