@@ -38,6 +38,7 @@ const CompanySubscriptionListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
+    const companyId = queryParameters.get('companyId');
     const [companyOptions, setCompanyOptions] = useState([]);
     // const companyOptions =[];
     // const companyValues = translate.formatKeys(companyOptions, ['label']);
@@ -59,6 +60,9 @@ const CompanySubscriptionListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
+                if (companyId !== null){
+                    return `${pagePath}/create?companyId=${companyId}`;
+                }
                 return `${pagePath}/create`;
             };
         },

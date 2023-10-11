@@ -96,7 +96,7 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
         dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DEFAULT_FORMAT);
         form.setFieldsValue({
             ...dataDetail,
-            companyName: dataDetail?.company?.companyName,
+            companyId: dataDetail?.company?.companyName,
             serviceCompanySubscriptionId: dataDetail?.subscription?.name,
             startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT)),
         });
@@ -146,26 +146,26 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime={true}
-                            required
-                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                            showTime = {true}
                             name="startDate"
+                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}                            
+                            placeholder="Ngày bắt đầu"
+                            format={DEFAULT_FORMAT}
+                            style={{ width: '100%' }}
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Vui lòng chọn ngày kết thúc',
+                                    message: 'Vui lòng chọn ngày bắt đầu',
                                 },
                                 {
-                                    validator: validateDueDate,
+                                    validator: validateStartDate,
                                 },
                             ]}
-                            format={DEFAULT_FORMAT}
-                            style={{ width: '100%' }}
-                        />
+                        />  
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime={true}
+                            showTime = {true}
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="endDate"
                             placeholder="Ngày kết thúc"
@@ -196,17 +196,10 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                         <NumericField
                             label={<FormattedMessage defaultMessage="Giảm giá" />}
                             name="saleOff"
-                            type="number"
-                            rules={[
-                                {
-                                    validator: (_, value) => {
-                                        if (value >= 1 && value <= 100) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('Giá trị phải từ 1 đến 99'));
-                                    },
-                                },
-                            ]}
+                            min={0}
+                            max={100}
+                            formatter={(value) => `${value}%`}
+                            parser={(value) => value.replace('%', '')}
                         />
                     </Col>
                 </Row>
