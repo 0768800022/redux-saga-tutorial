@@ -149,7 +149,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.mssv)} required = {isEditing ? false : true} name="mssv" />
+                        <TextField label={translate.formatMessage(message.mssv)} disabled={isEditing} required = {isEditing ? false : true} name="mssv" />
                     </Col>
                     <Col span={12}>
                         <TextField
