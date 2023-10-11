@@ -1,7 +1,8 @@
 import apiConfig from '@constants/apiConfig';
 import ProjectListPage from '.';
 import ProjectSavePage from './projectSavePage';
-
+import ProjectMemberListPage from './member';
+import ProjectMemberSavePage from './member/ProjectMemberSavePage';
 export default {
     projectListPage: {
         path: '/project',
@@ -15,6 +16,20 @@ export default {
         title: 'Project Save Page',
         auth: true,
         component: ProjectSavePage,
+        // permission: [apiConfig.leader.create.baseURL, apiConfig.leader.update.baseURL],
+    },
+    projectMemberListPage: {
+        path: '/project/member',
+        title: 'Project Member',
+        auth: true,
+        component: ProjectMemberListPage,
+        // permissions: [apiConfig.leader.getList.baseURL],
+    },
+    projectMemberSavePage: {
+        path: '/project/member/:id',
+        title: 'Project Save Page',
+        auth: true,
+        component: ProjectMemberSavePage,
         // permission: [apiConfig.leader.create.baseURL, apiConfig.leader.update.baseURL],
     },
 };
