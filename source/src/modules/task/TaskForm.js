@@ -71,7 +71,7 @@ const TaskForm = (props) => {
                 <Row gutter={16}>
                     <Col span={12}>
                         <AutoCompleteField
-                            disabled={dataDetail?.state === 2}
+                            disabled
                             label={<FormattedMessage defaultMessage="Tên sinh viên" />}
                             name="studentId"
                             apiConfig={apiConfig.student.autocomplete}
