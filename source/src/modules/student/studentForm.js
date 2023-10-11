@@ -5,7 +5,7 @@ import useTranslate from '@hooks/useTranslate';
 import TextField from '@components/common/form/TextField';
 import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
-import { DATE_FORMAT_VALUE } from '@constants/index';
+import { DATE_FORMAT_VALUE,DEFAULT_FORMAT } from '@constants/index';
 import { formatDateString } from '@utils/index';
 import dayjs from 'dayjs';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
@@ -99,6 +99,14 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
 
+    const validateDate = (_, value) => {
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DATE_FORMAT_VALUE);
+        if (date && value && value.isAfter(date)) {
+            return Promise.reject('Ngày sinh phải nhỏ hơn ngày hiện tại');
+        }
+        return Promise.resolve();
+    };
+
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} >
             <Card>
@@ -130,6 +138,11 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             format={DATE_FORMAT_VALUE}
                             style={{ width: '100%' }}
                             required = {isEditing ? false : true}
+                            rules={[
+                                {
+                                    validator: validateDate,
+                                },
+                            ]}
                         />
                     </Col>
                 </Row>
@@ -150,7 +163,16 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.password)} required = {isEditing ? false : true} name="password" />
+                        <TextField 
+                            label={translate.formatMessage(message.password)} 
+                            rules={[
+                                {
+                                    min: 6,
+                                    message: 'Mật khẩu phải có ít nhất 6 kí tự!',
+                                },
+                            ]}
+                            required = {isEditing ? false : true} 
+                            name="password" />
                     </Col>
                     <Col span={12}>
                         <TextField
