@@ -14,19 +14,17 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
-import styles from './Registration.module.scss';
 import ScheduleTable from '@components/common/table/ScheduleTable';
 
 const messages = defineMessages({
-    student: 'Tên sinh viên',
-    isIntern: 'Đăng kí thực tập',
-    schedule: 'Thời khoá biểu',
+    developer: 'Tên Lập trình viên',
+    role: 'Vai trò',
+    schedule: 'Lịch trình',
 });
 
-function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
+function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
-    //const stateResgistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
@@ -35,23 +33,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     });
     const [isChecked, setIsChecked] = useState(false);
 
-    const handleOnChangeCheckBox = () => {
-        setIsChecked(!isChecked);
-    };
-
-    // const {
-    //     data: students,
-    //     loading: getstudentsLoading,
-    //     execute: executestudents,
-    // } = useFetch(apiConfig.student.autocomplete, {
-    //     immediate: true,
-    //     mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.fullName })),
-    // });
-    // useEffect(() => {
-    //     executestudents({
-    //         params: {},
-    //     });
-    // }, []);
     function formatTimeRange(timeArray) {
         return timeArray
             .map((time) => {
@@ -90,7 +71,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
         if (!values?.state) {
             values.state = 1;
-            // values.state = stateResgistration[0].value;
         }
         return mixinFuncs.handleSubmit({ ...values });
     };
@@ -238,7 +218,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         });
     }, [dataDetail]);
 
-
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             <Card className="card-form" bordered={false}>
@@ -248,32 +227,32 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                             <AutoCompleteField
                                 disabled={isEditing}
                                 required
-                                label={translate.formatMessage(messages.student)}
-                                name={['studentInfo', 'id']}
-                                apiConfig={apiConfig.student.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
+                                label={translate.formatMessage(messages.developer)}
+                                name={['developer', 'studentInfo', 'fullName']}
+                                apiConfig={apiConfig.developer.autocomplete}
+                                mappingOptions={(item) => ({
+                                    value: item.id,
+                                    label: item.studentInfo.fullName,
+                                })}
                                 initialSearchParams={{ pageNumber: 0 }}
                                 searchParams={(text) => ({ fullName: text })}
                             />
                         </Col>
                         <Col span={12}>
-                            <SelectField
-                                disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
-                                defaultValue={registrationStateFilter[0]}
-                                label={<FormattedMessage defaultMessage="Tình trạng" />}
-                                name="state"
-                                options={registrationStateFilter}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <CheckboxField
-                                className={styles.customCheckbox}
-                                required
-                                label={translate.formatMessage(messages.isIntern)}
-                                name="isIntern"
-                                checked={isChecked}
-                                onChange={handleOnChangeCheckBox}
-                            />
+                            <Col span={12}>
+                                <AutoCompleteField
+                                    disabled={isEditing}
+                                    label={translate.formatMessage(messages.role)}
+                                    name={['projectRole', 'projectRoleName']}
+                                    apiConfig={apiConfig.projectRole.autocomplete}
+                                    mappingOptions={(item) => ({
+                                        value: item.id,
+                                        label: item.projectRoleName,
+                                    })}
+                                    initialSearchParams={{ pageNumber: 0 }}
+                                    searchParams={(text) => ({ fullName: text })}
+                                />
+                            </Col>
                         </Col>
                     </Row>
                 </div>
@@ -291,4 +270,4 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     );
 }
 
-export default RegistrationForm;
+export default ProjectMemberForm;

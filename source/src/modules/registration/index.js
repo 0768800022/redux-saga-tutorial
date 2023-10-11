@@ -29,7 +29,7 @@ const message = defineMessages({
     isIntern: 'Đăng kí thực tập',
     course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
-    state: 'Trạng thái',
+    state: 'Tình trạng',
 });
 
 function RegistrationListPage() {

@@ -14,7 +14,7 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
 import route from '@modules/projectTask/routes';
-import { BookOutlined } from '@ant-design/icons';
+import { BookOutlined, TeamOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 
@@ -47,81 +47,70 @@ const ProjectListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const [dataApply, setDataApply] = useState([]);
-    const location = useLocation();
-    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, serializeParams, queryParams } =
-        useListBase({
-            apiConfig: apiConfig.project,
-            options: {
-                pageSize: DEFAULT_TABLE_ITEM_SIZE,
-                objectName: translate.formatMessage(message.objectName),
-            },
-            override: (funcs) => {
-                funcs.mappingData = (response) => {
-                    try {
-                        if (response.result === true) {
-                            return {
-                                data: response.data.content,
-                                total: response.data.totalElements,
-                            };
+    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
+        apiConfig: apiConfig.project,
+        options: {
+            pageSize: DEFAULT_TABLE_ITEM_SIZE,
+            objectName: translate.formatMessage(message.objectName),
+        },
+        override: (funcs) => {
+            funcs.mappingData = (response) => {
+                try {
+                    if (response.result === true) {
+                        return {
+                            data: response.data.content,
+                            total: response.data.totalElements,
+                        };
+                    }
+                } catch (error) {
+                    return [];
+                }
+            };
+
+            funcs.additionalActionColumnButtons = () => ({
+                task: ({ id, name, leaderInfo, status }) => (
+                    <Button
+                        type="link"
+                        style={
+                            status === 0 || status === -1
+                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
+                                : { padding: 0 }
                         }
-                    } catch (error) {
-                        return [];
-                    }
-                };
-                funcs.changeFilter = (filter) => {
-                    const leaderId = queryParams.get('leaderId');
-                    const leaderName = queryParams.get('leaderName');
-                    const developerId = queryParams.get('developerId');
-                    const developerName = queryParams.get('developerName');
-                    if (leaderId) {
-                        mixinFuncs.setQueryParams(
-                            serializeParams({ leaderId: leaderId, leaderName: leaderName, ...filter }),
-                        );
-                    } else if (developerId) {
-                        mixinFuncs.setQueryParams(
-                            serializeParams({ developerId: developerId, developerName: developerName, ...filter }),
-                        );
-                    } else {
-                        mixinFuncs.setQueryParams(serializeParams(filter));
-                    }
-                };
-                funcs.additionalActionColumnButtons = () => ({
-                    task: ({ id, name, leaderInfo, status }) => (
-                        <Button
-                            type="link"
-                            style={
-                                status === 0 || status === -1
-                                    ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                    : { padding: 0 }
-                            }
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
-                                let path;
-                                if (leaderName) {
-                                    path =
-                                        routes.leaderProjectTaskListPage.path +
-                                        pathDefault +
-                                        `&leaderName=${leaderName}`;
-                                } else if (developerName) {
-                                    path =
-                                        routes.developerProjectTaskListPage.path +
-                                        pathDefault +
-                                        `&developerName=${developerName}`;
-                                } else {
-                                    path = route.ProjectTaskListPage.path + pathDefault;
-                                }
-                                status !== 0 &&
-                                    status !== -1 &&
-                                    navigate(path, { state: { pathPrev: location.search } });
-                            }}
-                        >
-                            <BookOutlined />
-                        </Button>
-                    ),
-                });
-            },
-        });
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            status !== 0 &&
+                                status !== -1 &&
+                                navigate(
+                                    route.ProjectTaskListPage.path +
+                                        `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
+                                );
+                        }}
+                    >
+                        <BookOutlined />
+                    </Button>
+                ),
+                member: ({ id, name }) => (
+                    <Button
+                        type="link"
+                        style={
+                            status === 0 || status === -1
+                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
+                                : { padding: 0 }
+                        }
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            status !== 0 &&
+                                status !== -1 &&
+                                navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
+                        }}
+                    >
+                        <TeamOutlined />
+                    </Button>
+                ),
+            });
+        },
+    });
+
     const { data: dataListTask, execute: executeGetList } = useFetch(apiConfig.projectTask.getList, {
         immediate: true,
         params: { developerId: developerId },
@@ -243,16 +232,7 @@ const ProjectListPage = () => {
         ];
 
         !leaderName &&
-            columns.push({
-                title: translate.formatMessage(message.status),
-                dataIndex: 'status',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const status = statusValues.find((item) => item.value == dataRow);
-                    return <Tag color={status.color}>{status.label}</Tag>;
-                },
-            });
+            columns.push(  mixinFuncs.renderStatusColumn({ width: '120px' }));
         columns.push(
             mixinFuncs.renderActionColumn(
                 {

@@ -128,16 +128,7 @@ function ProjectTaskListPage() {
             },
         ];
         if (!leaderName && !developerName) {
-            columns.push({
-                title: 'Trạng thái',
-                dataIndex: 'status',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const status = statusValues.find((item) => item.value == dataRow);
-                    return <Tag color={status.color}>{status.label}</Tag>;
-                },
-            });
+            columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
             columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
         }
         return columns;

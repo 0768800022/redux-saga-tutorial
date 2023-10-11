@@ -56,16 +56,16 @@ export const commonStatus = [
 ];
 
 export const lectureState = [
-    { value: STATE_COURSE_PREPARED, label: lectureStateMessage.prepared, color: '#FFBF00' },
-    { value: STATE_COURSE_RECRUITED, label: lectureStateMessage.recruit, color: '#4169E1' },
-    { value: STATE_COURSE_STARTED, label: lectureStateMessage.started, color: '#00A648' },
-    { value: STATE_COURSE_FINISHED, label: lectureStateMessage.finished, color: '#FFA500' },
-    { value: STATE_COURSE_CANCELED, label: lectureStateMessage.canceled, color: '#CC0000' },
+    { value: STATE_COURSE_PREPARED, label: lectureStateMessage.prepared, color: 'yellow' },
+    { value: STATE_COURSE_RECRUITED, label: lectureStateMessage.recruit, color: 'blue' },
+    { value: STATE_COURSE_STARTED, label: lectureStateMessage.started, color: 'green' },
+    { value: STATE_COURSE_FINISHED, label: lectureStateMessage.finished, color: 'warning' },
+    { value: STATE_COURSE_CANCELED, label: lectureStateMessage.canceled, color: 'red' },
 ];
 
 export const taskState = [
-    { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: 'orange' },
-    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: 'green' },
+    { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: '#FFBF00' },
+    { value: STATE_TASK_DONE, label: taskStateMessage.done, color: '#00A648' },
 ];
 
 export const projectTaskState = [
@@ -108,11 +108,11 @@ export const stateResgistrationOptions = [
     {
         value: 1,
         label: stateResgistrationMessage.register,
-        color: 'green',
+        color: '#00A648',
     },
-    { value: 2, label: stateResgistrationMessage.learning, color: 'blue' },
-    { value: 3, label: stateResgistrationMessage.finished, color: 'yellow' },
-    { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
+    { value: 2, label: stateResgistrationMessage.learning, color: '#4169E1' },
+    { value: 3, label: stateResgistrationMessage.finished, color: '#FFBF00' },
+    { value: 4, label: stateResgistrationMessage.canceled, color: '#CC0000' },
 ];
 
 export const lectureKindOptions = [
