@@ -71,16 +71,13 @@ const CompanySubscriptionIdListPage = () => {
             ),
         },
         {
-            title: <FormattedMessage defaultMessage="Tên công ty" />,
-            dataIndex: ['company', 'companyName'],
-        },
-        {
             title: <FormattedMessage defaultMessage="Gói dịch vụ" />,
             dataIndex: ['subscription', 'name'],
         },
         {
             title: <FormattedMessage defaultMessage="Giá dịch vụ" />,
             dataIndex: 'money',
+            width: 150,
             render: (monney) => {
                 const formattedValue = formatMoney(monney, {
                     groupSeparator: ',',
@@ -95,6 +92,7 @@ const CompanySubscriptionIdListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Giảm giá" />,
             align: 'center',
+            width: 130,
             dataIndex: 'saleOff',
             render: (saleOff) => {
                 if (saleOff > 0) {
@@ -107,7 +105,7 @@ const CompanySubscriptionIdListPage = () => {
         {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
-            // width: 140,
+            width: 180,
             render: (startDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
@@ -120,7 +118,7 @@ const CompanySubscriptionIdListPage = () => {
         {
             title: 'Ngày kết thúc',
             dataIndex: 'endDate',
-            // width: 140,
+            width: 180,
             render: (endDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
