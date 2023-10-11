@@ -56,15 +56,11 @@ const ProjectListPage = () => {
             },
             override: (funcs) => {
                 funcs.mappingData = (response) => {
-                    try {
-                        if (response.result === true) {
-                            return {
-                                data: response.data.content,
-                                total: response.data.totalElements,
-                            };
-                        }
-                    } catch (error) {
-                        return [];
+                    if (response.result === true) {
+                        return {
+                            data: response.data.content,
+                            total: response.data.totalElements,
+                        };
                     }
                 };
 
@@ -72,11 +68,8 @@ const ProjectListPage = () => {
                     task: ({ id, name, leaderInfo, status }) => (
                         <Button
                             type="link"
-                            style={
-                                status === 0 || status === -1
-                                    ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                    : { padding: 0 }
-                            }
+                            disabled={status === 0 || status === -1}
+                            style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
@@ -144,26 +137,18 @@ const ProjectListPage = () => {
             },
         });
 
-    const { data: dataListTask, execute: executeGetList } = useFetch(apiConfig.projectTask.getList, {
+    const { data: dataDeveloperProject, execute: executeGetList } = useFetch(apiConfig.developer.getProject, {
         immediate: true,
-        params: { developerId: developerId },
-        mappingData: ({ data }) => data.content.map((item) => ({ projectId: item?.project.id })),
+        pathParams: { id: developerId },
     });
-    useEffect(() => {
-        let filteredList = [];
-        if (data?.length > 0 && developerId) {
-            if (dataListTask?.length > 0) {
-                filteredList = data.filter((item1) => dataListTask.some((item2) => item2.projectId === item1.id));
-            }
-            setDataApply(filteredList);
-        }
-    }, [dataListTask]);
 
     useEffect(() => {
         if (!developerId) {
             setDataApply(data);
+        } else {
+            setDataApply(dataDeveloperProject?.data?.content);
         }
-    }, [data]);
+    }, [data, dataDeveloperProject]);
 
     const setBreadRoutes = () => {
         const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
@@ -201,6 +186,7 @@ const ProjectListPage = () => {
             },
         ];
         !leaderName &&
+            !developerName &&
             searchFields.splice(1, 0, {
                 key: 'status',
                 placeholder: translate.formatMessage(message.status),
@@ -268,7 +254,7 @@ const ProjectListPage = () => {
             },
         ];
 
-        !leaderName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
+        !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
         columns.push(
             mixinFuncs.renderActionColumn(
                 {
