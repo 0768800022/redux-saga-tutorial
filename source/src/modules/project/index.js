@@ -105,11 +105,8 @@ const ProjectListPage = () => {
                     member: ({ id, name, status }) => (
                         <Button
                             type="link"
-                            style={
-                                status === 0 || status === -1
-                                    ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                    : { padding: 0 }
-                            }
+                            style={{ padding: '0' }}
+                            disabled={status === 0 || status === -1}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 status !== 0 &&
@@ -272,11 +269,12 @@ const ProjectListPage = () => {
         columns.push(
             mixinFuncs.renderActionColumn(
                 {
+                    member: true,
                     task: true,
                     edit: !leaderName && !developerName && true,
                     delete: !leaderName && !developerName && true,
                 },
-                { width: '130px' },
+                { width: '150px' },
             ),
         );
         return columns;
