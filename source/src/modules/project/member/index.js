@@ -79,13 +79,6 @@ const ProjectMemberListPage = () => {
         return breadRoutes;
     };
 
-    // const searchFields = [
-    //     {
-    //         key: 'name',
-    //         placeholder: translate.formatMessage(message.name),
-    //     },
-    // ];
-
     const columns = [
         {
             title: '#',
