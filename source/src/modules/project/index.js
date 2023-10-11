@@ -47,99 +47,102 @@ const ProjectListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const [dataApply, setDataApply] = useState([]);
-    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } = useListBase({
-        apiConfig: apiConfig.project,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
-                        };
+    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.project,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.mappingData = (response) => {
+                    try {
+                        if (response.result === true) {
+                            return {
+                                data: response.data.content,
+                                total: response.data.totalElements,
+                            };
+                        }
+                    } catch (error) {
+                        return [];
                     }
-                } catch (error) {
-                    return [];
-                }
-            };
+                };
 
-            funcs.additionalActionColumnButtons = () => ({
-                task: ({ id, name, leaderInfo, status }) => (
-                    <Button
-                        type="link"
-                        style={
-                            status === 0 || status === -1
-                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                : { padding: 0 }
-                        }
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
-                            let path;
-                            if (leaderName) {
-                                path =
-                                    routes.leaderProjectTaskListPage.path +
-                                    pathDefault +
-                                    `&leaderName=${leaderName}`;
-                            } else if (developerName) {
-                                path =
-                                    routes.developerProjectTaskListPage.path +
-                                    pathDefault +
-                                    `&developerName=${developerName}`;
-                            } else {
-                                path = route.ProjectTaskListPage.path + pathDefault;
+                funcs.additionalActionColumnButtons = () => ({
+                    task: ({ id, name, leaderInfo, status }) => (
+                        <Button
+                            type="link"
+                            style={
+                                status === 0 || status === -1
+                                    ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
+                                    : { padding: 0 }
                             }
-                            status !== 0 &&
-                                status !== -1 &&
-                                navigate(path, { state: { pathPrev: location.search } });
-                        }}
-                    >
-                        <BookOutlined />
-                    </Button>
-                ),
-                member: ({ id, name, status }) => (
-                    <Button
-                        type="link"
-                        style={
-                            status === 0 || status === -1
-                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                : { padding: 0 }
-                        }
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            status !== 0 &&
-                                status !== -1 &&
-                                navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
-                        }}
-                    >
-                        <TeamOutlined />
-                    </Button>
-                ),
-            });
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
+                                let path;
+                                if (leaderName) {
+                                    path =
+                                        routes.leaderProjectTaskListPage.path +
+                                        pathDefault +
+                                        `&leaderName=${leaderName}`;
+                                } else if (developerName) {
+                                    path =
+                                        routes.developerProjectTaskListPage.path +
+                                        pathDefault +
+                                        `&developerName=${developerName}`;
+                                } else {
+                                    path = route.ProjectTaskListPage.path + pathDefault;
+                                }
+                                status !== 0 &&
+                                    status !== -1 &&
+                                    navigate(path, { state: { pathPrev: location.search } });
+                            }}
+                        >
+                            <BookOutlined />
+                        </Button>
+                    ),
+                    member: ({ id, name, status }) => (
+                        <Button
+                            type="link"
+                            style={
+                                status === 0 || status === -1
+                                    ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
+                                    : { padding: 0 }
+                            }
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                status !== 0 &&
+                                    status !== -1 &&
+                                    navigate(
+                                        routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
+                                    );
+                            }}
+                        >
+                            <TeamOutlined />
+                        </Button>
+                    ),
+                });
 
-            funcs.changeFilter = (filter) => {
-                const leaderId = queryParams.get('leaderId');
-                const leaderName = queryParams.get('leaderName');
-                const developerId = queryParams.get('developerId');
-                const developerName = queryParams.get('developerName');
-                if (leaderId) {
-                    mixinFuncs.setQueryParams(
-                        serializeParams({ leaderId: leaderId, leaderName: leaderName, ...filter }),
-                    );
-                } else if (developerId) {
-                    mixinFuncs.setQueryParams(
-                        serializeParams({ developerId: developerId, developerName: developerName, ...filter }),
-                    );
-                } else {
-                    mixinFuncs.setQueryParams(serializeParams(filter));
-                }
-            };
-        },
-    });
+                funcs.changeFilter = (filter) => {
+                    const leaderId = queryParams.get('leaderId');
+                    const leaderName = queryParams.get('leaderName');
+                    const developerId = queryParams.get('developerId');
+                    const developerName = queryParams.get('developerName');
+                    if (leaderId) {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({ leaderId: leaderId, leaderName: leaderName, ...filter }),
+                        );
+                    } else if (developerId) {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({ developerId: developerId, developerName: developerName, ...filter }),
+                        );
+                    } else {
+                        mixinFuncs.setQueryParams(serializeParams(filter));
+                    }
+                };
+            },
+        });
 
     const { data: dataListTask, execute: executeGetList } = useFetch(apiConfig.projectTask.getList, {
         immediate: true,

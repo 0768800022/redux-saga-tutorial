@@ -25,9 +25,23 @@ const TaskForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT) ;
+        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values });
+    };
+    const validateStartDate = (_, value) => {
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+        if (date && value && value.isBefore(date)) {
+            return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
+        }
+        return Promise.resolve();
+    };
+    const validateDueDate = (_, value) => {
+        const { startDate } = form.getFieldValue();
+        if (startDate && value && value.isBefore(startDate)) {
+            return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
+        }
+        return Promise.resolve();
     };
     const {
         data: students,
@@ -78,24 +92,40 @@ const TaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime = {true}
-                            disabled={dataDetail?.state === 2}
-                            required
-                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                            showTime={true}
                             name="startDate"
-                            style={{ width: '100%' }}
+                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                            placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
+                            style={{ width: '100%' }}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày bắt đầu',
+                                },
+                                {
+                                    validator: validateStartDate,
+                                },
+                            ]}
                         />
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime = {true}
-                            disabled={dataDetail?.state === 2}
-                            required
+                            showTime={true}
+                            name={'dueDate'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày kết thúc',
+                                },
+                                {
+                                    validator: validateDueDate,
+                                },
+                            ]}
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
-                            name="dueDate"
-                            style={{ width: '100%' }}
+                            placeholder="Ngày kết thúc"
                             format={DEFAULT_FORMAT}
+                            style={{ width: '100%' }}
                         />
                     </Col>
                 </Row>
