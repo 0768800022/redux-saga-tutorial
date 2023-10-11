@@ -4,7 +4,7 @@ import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import routes from './routes';
+import routes from '@routes';
 import TaskForm from './TaskForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
@@ -52,7 +52,7 @@ function TaskSavePage() {
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
-                { breadcrumbName: translate.formatMessage(messages.course) },
+                { breadcrumbName: translate.formatMessage(messages.course), path: routes.courseListPage.path },
                 {
                     breadcrumbName: translate.formatMessage(messages.task),
                     path: routes.taskListPage.path + `?courseId=${courseId}&courseName=${courseName}`,
