@@ -123,7 +123,7 @@ const CourseListPage = () => {
             },
         ];
         !leaderName &&
-            searchFields.splice(1, 0, {
+            searchFields.push({
                 key: 'status',
                 placeholder: translate.formatMessage(message.status),
                 type: FieldTypes.SELECT,

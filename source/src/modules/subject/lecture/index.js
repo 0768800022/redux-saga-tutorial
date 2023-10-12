@@ -80,11 +80,12 @@ const LectureListPage = () => {
             className += ` ${styles.highlightRowStyle}`;
             return className;
         } else if (!selectedRowKey) {
-            data.map((item) => {
-                if (item.lectureKind === 1) {
-                    lastItem = item;
-                }
-            });
+            data &&
+                data.map((item) => {
+                    if (item.lectureKind === 1) {
+                        lastItem = item;
+                    }
+                });
             if (lastItem?.id === record.id) {
                 className += ` ${styles.highlightRowStyle}`;
             }
