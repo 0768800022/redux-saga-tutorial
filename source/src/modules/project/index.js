@@ -229,7 +229,7 @@ const ProjectListPage = () => {
             {
                 title: translate.formatMessage(message.endDate),
                 dataIndex: 'endDate',
-                render: (endDate) => {
+                render: (endDate) => {  
                     return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
                 },
                 width: 200,
@@ -255,7 +255,7 @@ const ProjectListPage = () => {
         columns.push(
             mixinFuncs.renderActionColumn(
                 {
-                    member: true,
+                    member: !leaderName && !developerName && true,
                     task: true,
                     edit: !leaderName && !developerName && true,
                     delete: !leaderName && !developerName && true,

@@ -18,7 +18,7 @@ import developerRoutes from '@modules/developer/routes';
 import projectTaskRoutes from '@modules/projectTask/routes';
 import companyRoutes from '@modules/company/routes';
 import companySubscriptionRoutes from '@modules/companySubscription/routes';
-
+import settingsRoutes from '@modules/settings/routes';
 /*
     auth
         + null: access login and not login
@@ -37,12 +37,6 @@ const routes = {
         component: Dashboard,
         auth: true,
         title: 'Home',
-    },
-    settingPage: {
-        path: '/setting',
-        component: Dashboard,
-        auth: true,
-        title: 'Setting',
     },
     loginPage: {
         path: '/login',
@@ -72,6 +66,7 @@ const routes = {
     ...projectTaskRoutes,
     ...companyRoutes,
     ...companySubscriptionRoutes,
+    ...settingsRoutes,
 
     // keep this at last
     //

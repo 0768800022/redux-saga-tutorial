@@ -53,7 +53,6 @@ const SubjectForm = (props) => {
                             defaultValue={statusValue[0]}
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             name="status"
-                            required
                             options={statusValue}
                         />
                     </Col>
