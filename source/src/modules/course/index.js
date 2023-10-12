@@ -1,15 +1,15 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { TeamOutlined, BookOutlined } from '@ant-design/icons';
-import { Button, Tag, Tooltip } from 'antd';
+import { TeamOutlined, BookOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Tag, Tooltip } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import route from '@modules/task/routes';
@@ -139,6 +139,19 @@ const CourseListPage = () => {
     };
     const setColumns = () => {
         const columns = [
+            {
+                title: '#',
+                dataIndex: 'avatar',
+                align: 'center',
+                width: 80,
+                render: (avatar) => (
+                    <Avatar
+                        size="large"
+                        icon={<UserOutlined />}
+                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                    />
+                ),
+            },
             {
                 title: translate.formatMessage(message.name),
                 dataIndex: 'name',

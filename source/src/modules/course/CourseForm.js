@@ -3,7 +3,7 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
@@ -16,6 +16,7 @@ import { FormattedMessage } from 'react-intl';
 import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import useTranslate from '@hooks/useTranslate';
 import NumericField from '@components/common/form/NumericField';
+import CropImageField from '@components/common/form/CropImageField';
 
 const CourseForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
@@ -23,6 +24,8 @@ const CourseForm = (props) => {
     const lectureStateOptions = translate.formatKeys(lectureState, ['label']);
     const [lectureStateFilter, setLectureStateFilter] = useState([lectureStateOptions[0]]);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const [imageUrl, setImageUrl] = useState(null);
+    const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -36,7 +39,7 @@ const CourseForm = (props) => {
         }
         values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
-        return mixinFuncs.handleSubmit({ ...values });
+        return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
     const {
         data: subjects,
@@ -92,6 +95,7 @@ const CourseForm = (props) => {
             ...dataDetail,
             leaderId: dataDetail?.leader?.leaderName,
         });
+        setImageUrl(dataDetail.avatar);
     }, [dataDetail]);
     const validateStartDate = (_, value) => {
         const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
@@ -107,10 +111,36 @@ const CourseForm = (props) => {
         }
         return Promise.resolve();
     };
-
+    const uploadFile = (file, onSuccess, onError) => {
+        executeUpFile({
+            data: {
+                type: 'AVATAR',
+                file: file,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    onSuccess();
+                    setImageUrl(response.data.filePath);
+                    setIsChangedFormValues(true);
+                }
+            },
+            onError: (error) => {
+                onError();
+            },
+        });
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
+                <Col span={12}>
+                    <CropImageField
+                        label={<FormattedMessage defaultMessage="Avatar" />}
+                        name="avatar"
+                        imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
+                        aspect={1 / 1}
+                        uploadFile={uploadFile}
+                    />
+                </Col>
                 <Row gutter={12}>
                     <Col span={12}>
                         <TextField
