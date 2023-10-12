@@ -182,7 +182,7 @@ const LectureListPage = () => {
 
     const { execute: executeCheckAsign } = useFetch(apiConfig.task.checkAsign,{ immediate: false });
     useEffect(() => {
-        if (data.length > 0) {
+        if (data?.length > 0) {
             const ids = data?.map(item => item.id);
             if (ids.length > 0) {
                 executeCheckAsign({
