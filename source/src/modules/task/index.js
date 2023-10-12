@@ -24,7 +24,7 @@ import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import { convertUtcToLocalTime } from '@utils';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
@@ -75,10 +75,7 @@ function TaskListPage() {
             };
         },
     });
-    const convertDate = (date) => {
-        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
-        return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
-    };
+
     const setColumns = () => {
         const columns = [
             {
@@ -94,7 +91,8 @@ function TaskListPage() {
                 dataIndex: 'startDate',
                 width: 180,
                 render: (startDate) => {
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
+                    const startDateLocal = convertUtcToLocalTime(startDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                    return <div>{startDateLocal}</div>;
                 },
                 align: 'center',
             },
@@ -103,7 +101,8 @@ function TaskListPage() {
                 dataIndex: 'dueDate',
                 width: 180,
                 render: (dueDate) => {
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(dueDate)}</div>;
+                    const dueDateLocal = convertUtcToLocalTime(dueDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                    return <div>{dueDateLocal}</div>;
                 },
                 align: 'center',
             },
