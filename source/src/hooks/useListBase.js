@@ -8,7 +8,7 @@ import {
     STATUS_INACTIVE,
 } from '@constants';
 
-import { Modal, Button, Divider, Tag, Tooltip } from 'antd';
+import { Modal, Button, Divider, Tag } from 'antd';
 import { DeleteOutlined, LockOutlined, CheckOutlined, EditOutlined } from '@ant-design/icons';
 
 import { defineMessages, useIntl } from 'react-intl';
@@ -20,6 +20,7 @@ import SearchForm from '@components/common/form/SearchForm';
 import HasPermission from '@components/common/elements/HasPermission';
 import useAuth from './useAuth';
 import { validatePermission } from '@utils';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     delete: 'Xoá',
@@ -274,7 +275,7 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
 
             return (
-                <Tooltip  placement="bottom" title={intl.formatMessage(message.delete)}>
+                <BaseTooltip title={intl.formatMessage(message.delete)}>
                     <Button
                         {...buttonProps}
                         type="link"
@@ -286,7 +287,7 @@ const useListBase = ({
                     >
                         <DeleteOutlined />
                     </Button>
-                </Tooltip>
+                </BaseTooltip>
             );
         },
         changeStatus: ({ id, status, buttonProps }) => {
@@ -308,7 +309,7 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
 
             return (
-                <Tooltip placement="bottom" title={intl.formatMessage(message.edit)} >
+                <BaseTooltip title={intl.formatMessage(message.edit)} >
                     <Button
                         {...buttonProps}
                         onClick={(e) => {
@@ -322,7 +323,7 @@ const useListBase = ({
                     >
                         <EditOutlined color="red" />
                     </Button>
-                </Tooltip>
+                </BaseTooltip>
             );
         },
         ...additionalButtons,

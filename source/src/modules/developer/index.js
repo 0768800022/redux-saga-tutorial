@@ -9,13 +9,14 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { convertUtcToLocalTime } from '@utils';
-import { Avatar, Button, Tag, Tooltip } from 'antd';
+import { Avatar, Button, Tag } from 'antd';
 import { ProjectOutlined, UserOutlined } from '@ant-design/icons';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import FolderIcon from '@assets/icons';
 import { FieldTypes } from '@constants/formConfig';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     objectName: 'Lập trình viên',
@@ -50,7 +51,7 @@ const DeveloperListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 project: ({ id, studentInfo }) => (
-                    <Tooltip placement="bottom" title={translate.formatMessage(message.project)}>
+                    <BaseTooltip title={translate.formatMessage(message.project)}>
                         <Button
                             type="link"
                             style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
@@ -64,7 +65,7 @@ const DeveloperListPage = () => {
                         >
                             <FolderIcon />
                         </Button>
-                    </Tooltip>
+                    </BaseTooltip>
                 ),
             });
         },

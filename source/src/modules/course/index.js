@@ -9,7 +9,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Tag, Tooltip } from 'antd';
+import { Avatar, Button, Tag } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import route from '@modules/task/routes';
@@ -17,6 +17,7 @@ import { convertDateTimeToString } from '@utils/dayHelper';
 import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { formatMoney } from '@utils';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -63,7 +64,7 @@ const CourseListPage = () => {
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     registration: ({ id, name, state }) => (
-                        <Tooltip placement="bottom" title={translate.formatMessage(message.registration)}>
+                        <BaseTooltip title={translate.formatMessage(message.registration)}>
                             <Button
                                 type="link"
                                 disabled={state === 1}
@@ -79,11 +80,11 @@ const CourseListPage = () => {
                             >
                                 <TeamOutlined />
                             </Button>
-                        </Tooltip>
+                        </BaseTooltip>
                     ),
 
                     task: ({ id, name, subject, state }) => (
-                        <Tooltip placement="bottom" title={translate.formatMessage(message.task)}>
+                        <BaseTooltip title={translate.formatMessage(message.task)}>
                             <Button
                                 disabled={state === 1 || state === 5}
                                 type="link"
@@ -94,12 +95,14 @@ const CourseListPage = () => {
                                         (leaderName ? routes.leaderCourseTaskListPage.path : routes.taskListPage.path) +
                                         `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
                                         (leaderName ? `&leaderName=${leaderName}` : '');
-                                    state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
+                                    state !== 1 &&
+                                        state !== 5 &&
+                                        navigate(path, { state: { pathPrev: location.search } });
                                 }}
                             >
                                 <BookOutlined />
                             </Button>
-                        </Tooltip>
+                        </BaseTooltip>
                     ),
                 });
             },

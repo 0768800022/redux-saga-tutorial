@@ -4,7 +4,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
 import React from 'react';
-import { Avatar, Button, Tag, Tooltip } from 'antd';
+import { Avatar, Button, Tag } from 'antd';
 import { UserOutlined, ContainerOutlined, ProjectOutlined } from '@ant-design/icons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import { IconClipboardText, IconSchool } from '@tabler/icons-react';
 import FolderIcon, { CourseIcon } from '@assets/icons';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     objectName: 'Leader',
@@ -47,7 +48,7 @@ const LeaderListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 course: ({ id, leaderName }) => (
-                    <Tooltip  placement="bottom" title={translate.formatMessage(message.course)}>
+                    <BaseTooltip title={translate.formatMessage(message.course)}>
                         <Button
                             type="link"
                             style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
@@ -58,11 +59,11 @@ const LeaderListPage = () => {
                         >
                             <CourseIcon />
                         </Button>
-                    </Tooltip>
+                    </BaseTooltip>
                 ),
 
                 project: ({ id, leaderName }) => (
-                    <Tooltip  placement="bottom" title={translate.formatMessage(message.project)}>
+                    <BaseTooltip title={translate.formatMessage(message.project)}>
                         <Button
                             type="link"
                             style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
@@ -73,7 +74,7 @@ const LeaderListPage = () => {
                         >
                             <FolderIcon />
                         </Button>
-                    </Tooltip>
+                    </BaseTooltip>
                 ),
             });
         },

@@ -9,7 +9,7 @@ import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Avatar, Tag, Tooltip } from 'antd';
+import { Button, Avatar, Tag } from 'antd';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
@@ -19,6 +19,7 @@ import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 
 import useFetch from '@hooks/useFetch';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 const message = defineMessages({
     home: 'Trang chủ',
     project: 'Dự án',
@@ -68,7 +69,7 @@ const ProjectListPage = () => {
 
                 funcs.additionalActionColumnButtons = () => ({
                     task: ({ id, name, leaderInfo, status, state }) => (
-                        <Tooltip  placement="bottom" title={translate.formatMessage(message.task)}>
+                        <BaseTooltip title={translate.formatMessage(message.task)}>
                             <Button
                                 type="link"
                                 disabled={state === 1}
@@ -97,10 +98,10 @@ const ProjectListPage = () => {
                             >
                                 <BookOutlined />
                             </Button>
-                        </Tooltip>
+                        </BaseTooltip>
                     ),
                     member: ({ id, name, status }) => (
-                        <Tooltip  placement="bottom" title={translate.formatMessage(message.member)}>
+                        <BaseTooltip  title={translate.formatMessage(message.member)}>
                             <Button
                                 type="link"
                                 style={{ padding: '0' }}
@@ -116,7 +117,7 @@ const ProjectListPage = () => {
                             >
                                 <TeamOutlined />
                             </Button>
-                        </Tooltip>
+                        </BaseTooltip>
                     ),
                 });
 

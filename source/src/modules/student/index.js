@@ -11,11 +11,12 @@ import { convertUtcToLocalTime } from '@utils/index';
 import { UserOutlined, BookOutlined } from '@ant-design/icons';
 import route from '@modules/student/routes';
 import { useNavigate } from 'react-router-dom';
-import { Button, Tag, Avatar, Tooltip } from 'antd';
+import { Button, Tag, Avatar } from 'antd';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { AppConstants } from '@constants';
 import { CourseIcon } from '@assets/icons';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     objectName: 'Student',
@@ -48,7 +49,7 @@ const StudentListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 task: ({ id, fullName }) => (
-                    <Tooltip placement="bottom" title={translate.formatMessage(message.course)}>
+                    <BaseTooltip title={translate.formatMessage(message.course)}>
                         <Button
                             type="link"
                             style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
@@ -62,7 +63,7 @@ const StudentListPage = () => {
                         >
                             <CourseIcon />
                         </Button>
-                    </Tooltip>
+                    </BaseTooltip>
                 ),
             });
         },

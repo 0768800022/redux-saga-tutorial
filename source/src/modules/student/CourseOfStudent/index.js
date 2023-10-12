@@ -9,7 +9,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
-import { Button, Tag, Tooltip } from 'antd';
+import { Button, Tag } from 'antd';
 import { useNavigate, generatePath, useParams, useLocation } from 'react-router-dom';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
@@ -17,6 +17,7 @@ import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import routes from '@routes';
 import { DATE_FORMAT_DISPLAY } from '@constants';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -71,7 +72,7 @@ const CourseListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 registration: ({ id, name, state }) => (
-                    <Tooltip placement="bottom" title={translate.formatMessage(message.registration)}>
+                    <BaseTooltip title={translate.formatMessage(message.registration)}>
                         <Button
                             type="link"
                             style={state === 1 ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' } : { padding: 0 }}
@@ -86,11 +87,11 @@ const CourseListPage = () => {
                         >
                             <TeamOutlined />
                         </Button>
-                    </Tooltip>
+                    </BaseTooltip>
                 ),
 
                 task: ({ id, name, subject, state }) => (
-                    <Tooltip  placement="bottom" title={translate.formatMessage(message.task)}>
+                    <BaseTooltip  placement="bottom" title={translate.formatMessage(message.task)}>
                         <Button
                             type="link"
                             style={
@@ -111,7 +112,7 @@ const CourseListPage = () => {
                         >
                             <BookOutlined />
                         </Button>
-                    </Tooltip>
+                    </BaseTooltip>
                 ),
             });
         },

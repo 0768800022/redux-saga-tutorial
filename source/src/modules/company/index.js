@@ -8,12 +8,13 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, Button, Tooltip } from 'antd';
+import { Avatar, Button } from 'antd';
 import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 // import routes from '@modules/companySubscription/routes';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import routes from './routes';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 const message = defineMessages({
     objectName: 'Company',
     home: 'Trang chủ',
@@ -51,7 +52,7 @@ const CompanyListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 registration: ({ id, companyName }) => (
-                    <Tooltip placement="bottom" title={translate.formatMessage(message.registration)}>
+                    <BaseTooltip title={translate.formatMessage(message.registration)}>
                         <Button
                             type="link"
                             style={{ padding: 0 }}
@@ -65,7 +66,7 @@ const CompanyListPage = () => {
                         >
                             <ShoppingCartOutlined />
                         </Button>
-                    </Tooltip>
+                    </BaseTooltip>
                 ),
             });
         },
