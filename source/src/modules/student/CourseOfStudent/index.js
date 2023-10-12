@@ -9,7 +9,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined } from '@ant-design/icons';
-import { Button, Tag } from 'antd';
+import { Button, Tag, Tooltip } from 'antd';
 import { useNavigate, generatePath, useParams, useLocation } from 'react-router-dom';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
@@ -32,6 +32,8 @@ const message = defineMessages({
     leader: 'Leader',
     student: 'Sinh viên',
     state: 'Tình trạng',
+    registration: 'Đăng ký',
+    task: 'Task',
 });
 
 const CourseListPage = () => {
@@ -69,43 +71,47 @@ const CourseListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 registration: ({ id, name, state }) => (
-                    <Button
-                        type="link"
-                        style={state === 1 ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' } : { padding: 0 }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            state !== 1 &&
-                                navigate(
-                                    routes.registrationListPage.path +
-                                    `?courseId=${id}&courseName=${name}&courseState=${state}`,
-                                );
-                        }}
-                    >
-                        <TeamOutlined />
-                    </Button>
+                    <Tooltip placement="bottom" title={translate.formatMessage(message.registration)}>
+                        <Button
+                            type="link"
+                            style={state === 1 ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' } : { padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                state !== 1 &&
+                                    navigate(
+                                        routes.registrationListPage.path +
+                                        `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                    );
+                            }}
+                        >
+                            <TeamOutlined />
+                        </Button>
+                    </Tooltip>
                 ),
 
                 task: ({ id, name, subject, state }) => (
-                    <Button
-                        type="link"
-                        style={
-                            state === 1 || state === 5
-                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                : { padding: 0 }
-                        }
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            const path =
-                                (leaderName
-                                    ? routes.leaderCourseTaskListPage.path
-                                    : routes.taskListPage.path) +
-                                `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
-                                (leaderName ? `&leaderName=${leaderName}` : '');
-                            state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
-                        }}
-                    >
-                        <BookOutlined />
-                    </Button>
+                    <Tooltip  placement="bottom" title={translate.formatMessage(message.task)}>
+                        <Button
+                            type="link"
+                            style={
+                                state === 1 || state === 5
+                                    ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
+                                    : { padding: 0 }
+                            }
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                const path =
+                                    (leaderName
+                                        ? routes.leaderCourseTaskListPage.path
+                                        : routes.taskListPage.path) +
+                                    `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
+                                    (leaderName ? `&leaderName=${leaderName}` : '');
+                                state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
+                            }}
+                        >
+                            <BookOutlined />
+                        </Button>
+                    </Tooltip>
                 ),
             });
         },

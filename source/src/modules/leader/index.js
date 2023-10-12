@@ -4,7 +4,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
 import React from 'react';
-import { Avatar, Button, Tag } from 'antd';
+import { Avatar, Button, Tag, Tooltip } from 'antd';
 import { UserOutlined, ContainerOutlined, ProjectOutlined } from '@ant-design/icons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
@@ -22,6 +22,8 @@ const message = defineMessages({
     home: 'Trang chủ',
     leader: 'Leader',
     status: 'Trạng thái',
+    course: 'Khoá học',
+    project:'Dự án',
 });
 
 const LeaderListPage = () => {
@@ -45,29 +47,33 @@ const LeaderListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 course: ({ id, leaderName }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(routes.leaderCourseListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
-                        }}
-                    >
-                        <CourseIcon />
-                    </Button>
+                    <Tooltip  placement="bottom" title={translate.formatMessage(message.course)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(routes.leaderCourseListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
+                            }}
+                        >
+                            <CourseIcon />
+                        </Button>
+                    </Tooltip>
                 ),
 
                 project: ({ id, leaderName }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(routes.leaderProjectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
-                        }}
-                    >
-                        <FolderIcon />
-                    </Button>
+                    <Tooltip  placement="bottom" title={translate.formatMessage(message.project)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(routes.leaderProjectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
+                            }}
+                        >
+                            <FolderIcon />
+                        </Button>
+                    </Tooltip>
                 ),
             });
         },

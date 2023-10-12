@@ -9,7 +9,7 @@ import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Avatar, Tag } from 'antd';
+import { Button, Avatar, Tag, Tooltip } from 'antd';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
@@ -35,6 +35,8 @@ const message = defineMessages({
     state: 'Tình trạng',
     status: 'Trạng thái',
     developer: 'Lập trình viên',
+    task: 'Task',
+    member: 'Thành viên',
 });
 
 const ProjectListPage = () => {
@@ -66,51 +68,55 @@ const ProjectListPage = () => {
 
                 funcs.additionalActionColumnButtons = () => ({
                     task: ({ id, name, leaderInfo, status }) => (
-                        <Button
-                            type="link"
-                            disabled={status === 0 || status === -1}
-                            style={{ padding: 0 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
-                                let path;
-                                if (leaderName) {
-                                    path =
-                                        routes.leaderProjectTaskListPage.path +
-                                        pathDefault +
-                                        `&leaderName=${leaderName}`;
-                                } else if (developerName) {
-                                    path =
-                                        routes.developerProjectTaskListPage.path +
-                                        pathDefault +
-                                        `&developerName=${developerName}`;
-                                } else {
-                                    path = route.ProjectTaskListPage.path + pathDefault;
-                                }
-                                status !== 0 &&
-                                    status !== -1 &&
-                                    navigate(path, { state: { pathPrev: location.search } });
-                            }}
-                        >
-                            <BookOutlined />
-                        </Button>
+                        <Tooltip  placement="bottom" title={translate.formatMessage(message.task)}>
+                            <Button
+                                type="link"
+                                disabled={status === 0 || status === -1}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
+                                    let path;
+                                    if (leaderName) {
+                                        path =
+                                            routes.leaderProjectTaskListPage.path +
+                                            pathDefault +
+                                            `&leaderName=${leaderName}`;
+                                    } else if (developerName) {
+                                        path =
+                                            routes.developerProjectTaskListPage.path +
+                                            pathDefault +
+                                            `&developerName=${developerName}`;
+                                    } else {
+                                        path = route.ProjectTaskListPage.path + pathDefault;
+                                    }
+                                    status !== 0 &&
+                                        status !== -1 &&
+                                        navigate(path, { state: { pathPrev: location.search } });
+                                }}
+                            >
+                                <BookOutlined />
+                            </Button>
+                        </Tooltip>
                     ),
                     member: ({ id, name, status }) => (
-                        <Button
-                            type="link"
-                            style={{ padding: '0' }}
-                            disabled={status === 0 || status === -1}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                status !== 0 &&
-                                    status !== -1 &&
-                                    navigate(
-                                        routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
-                                    );
-                            }}
-                        >
-                            <TeamOutlined />
-                        </Button>
+                        <Tooltip  placement="bottom" title={translate.formatMessage(message.member)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                disabled={status === 0 || status === -1}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    status !== 0 &&
+                                        status !== -1 &&
+                                        navigate(
+                                            routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
+                                        );
+                                }}
+                            >
+                                <TeamOutlined />
+                            </Button>
+                        </Tooltip>
                     ),
                 });
 
@@ -229,7 +235,7 @@ const ProjectListPage = () => {
             {
                 title: translate.formatMessage(message.endDate),
                 dataIndex: 'endDate',
-                render: (endDate) => {  
+                render: (endDate) => {
                     return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
                 },
                 width: 200,

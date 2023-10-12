@@ -22,6 +22,8 @@ import useAuth from './useAuth';
 import { validatePermission } from '@utils';
 
 const message = defineMessages({
+    delete: 'Xoá',
+    edit: 'Sửa',
     deleteConfirm: {
         title: {
             id: 'hook.useListBase.deleteConfirm.title',
@@ -272,7 +274,7 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
 
             return (
-                <Tooltip placement="bottom" title={'Xoá'}>
+                <Tooltip  placement="bottom" title={intl.formatMessage(message.delete)}>
                     <Button
                         {...buttonProps}
                         type="link"
@@ -306,7 +308,7 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
 
             return (
-                <Tooltip placement="bottom" title={'Sửa'}>
+                <Tooltip placement="bottom" title={intl.formatMessage(message.edit)} >
                     <Button
                         {...buttonProps}
                         onClick={(e) => {

@@ -8,7 +8,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
 import { useNavigate } from 'react-router-dom';
-import { Avatar, Button } from 'antd';
+import { Avatar, Button, Tooltip } from 'antd';
 import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 // import routes from '@modules/companySubscription/routes';
 import { statusOptions } from '@constants/masterData';
@@ -27,6 +27,7 @@ const message = defineMessages({
     status: 'Trạng thái',
     username: 'Tài khoản đăng nhập',
     company: 'Công ty',
+    registration: 'Dịch vụ',
 });
 
 const CompanyListPage = () => {
@@ -49,20 +50,22 @@ const CompanyListPage = () => {
                 }
             };
             funcs.additionalActionColumnButtons = () => ({
-                registration: ({ id,companyName }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0 }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(
-                                routes.companyListPage.path +
-                                    `/company-subscription?companyId=${id}&companyName=${companyName}`,
-                            );
-                        }}
-                    >
-                        <ShoppingCartOutlined />
-                    </Button>
+                registration: ({ id, companyName }) => (
+                    <Tooltip placement="bottom" title={translate.formatMessage(message.registration)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    routes.companyListPage.path +
+                                        `/company-subscription?companyId=${id}&companyName=${companyName}`,
+                                );
+                            }}
+                        >
+                            <ShoppingCartOutlined />
+                        </Button>
+                    </Tooltip>
                 ),
             });
         },
