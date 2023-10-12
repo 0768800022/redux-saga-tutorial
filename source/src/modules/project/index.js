@@ -65,10 +65,10 @@ const ProjectListPage = () => {
                 };
 
                 funcs.additionalActionColumnButtons = () => ({
-                    task: ({ id, name, leaderInfo, status }) => (
+                    task: ({ id, name, leaderInfo, status, state }) => (
                         <Button
                             type="link"
-                            disabled={status === 0 || status === -1}
+                            disabled={state === 1}
                             style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
@@ -99,7 +99,7 @@ const ProjectListPage = () => {
                         <Button
                             type="link"
                             style={{ padding: '0' }}
-                            disabled={status === 0 || status === -1}
+                            // disabled={status === -1}
                             onClick={(e) => {
                                 e.stopPropagation();
                                 status !== 0 &&
