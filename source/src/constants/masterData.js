@@ -271,3 +271,7 @@ export const levelOptionSelect = [
     { value: 4, label: 'Level 4' },
     { value: 5, label: 'Level 5' },
 ];
+
+export const settingGroups = {
+    GENERAL: 'page_config',
+};

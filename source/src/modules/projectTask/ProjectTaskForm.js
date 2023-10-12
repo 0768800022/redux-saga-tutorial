@@ -33,7 +33,6 @@ const ProjectTaskForm = (props) => {
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT)),
                 status: statusValues[0].value,
                 state: stateValues[0].value,
             });
@@ -54,6 +53,7 @@ const ProjectTaskForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
             developerId: dataDetail?.developer?.studentInfo?.id,
+            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DEFAULT_FORMAT),
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {

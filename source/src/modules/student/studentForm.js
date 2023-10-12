@@ -5,17 +5,17 @@ import useTranslate from '@hooks/useTranslate';
 import TextField from '@components/common/form/TextField';
 import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
-import { DATE_FORMAT_VALUE,DEFAULT_FORMAT } from '@constants/index';
+import { DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants/index';
 import { formatDateString } from '@utils/index';
 import dayjs from 'dayjs';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import useFetch from '@hooks/useFetch';
-import { FormattedMessage,defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import apiConfig from '@constants/apiConfig';
 import { statusOptions } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
 import CropImageField from '@components/common/form/CropImageField';
-import { AppConstants,categoryKinds } from '@constants';
+import { AppConstants, categoryKinds } from '@constants';
 
 const message = defineMessages({
     fullName: 'Họ Và Tên',
@@ -51,7 +51,6 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     onSuccess();
                     setImageUrl(response.data.filePath);
                     setIsChangedFormValues(true);
-
                 }
             },
             onError: (error) => {
@@ -90,7 +89,6 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             studyClass: dataDetail?.studyClass?.categoryName,
         });
         setImageUrl(dataDetail.avatar);
-
     }, [dataDetail]);
 
     const handleSubmit = (values) => {
@@ -99,7 +97,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     };
 
     const validateDate = (_, value) => {
-        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DATE_FORMAT_VALUE);
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
         if (date && value && value.isAfter(date)) {
             return Promise.reject('Ngày sinh phải nhỏ hơn ngày hiện tại');
         }
@@ -107,7 +105,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     };
 
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} >
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
@@ -122,11 +120,11 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 </Row>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField 
-                            label={translate.formatMessage(message.fullName)}                             required = {isEditing ? false : true}
-                            disabled={isEditing} 
-                            
-                            name="fullName" 
+                        <TextField
+                            label={translate.formatMessage(message.fullName)}
+                            required={isEditing ? false : true}
+                            disabled={isEditing}
+                            name="fullName"
                         />
                     </Col>
                     <Col span={12}>
@@ -136,7 +134,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             placeholder="Ngày sinh"
                             format={DATE_FORMAT_VALUE}
                             style={{ width: '100%' }}
-                            required = {isEditing ? false : true}
+                            required={isEditing ? false : true}
                             rules={[
                                 {
                                     validator: validateDate,
@@ -148,37 +146,43 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.mssv)} disabled={isEditing} required = {isEditing ? false : true} name="mssv" />
+                        <TextField
+                            label={translate.formatMessage(message.mssv)}
+                            disabled={isEditing}
+                            required={isEditing ? false : true}
+                            name="mssv"
+                        />
                     </Col>
                     <Col span={12}>
                         <TextField
                             label={translate.formatMessage(message.phone)}
                             type="number"
                             name="phone"
-                            required = {isEditing ? false : true}
+                            required={isEditing ? false : true}
                         />
                     </Col>
                 </Row>
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField 
-                            label={translate.formatMessage(message.password)} 
+                        <TextField
+                            label={translate.formatMessage(message.password)}
                             rules={[
                                 {
                                     min: 6,
                                     message: 'Mật khẩu phải có ít nhất 6 kí tự!',
                                 },
                             ]}
-                            required = {isEditing ? false : true} 
-                            name="password" />
+                            required={isEditing ? false : true}
+                            name="password"
+                        />
                     </Col>
                     <Col span={12}>
                         <TextField
                             label={translate.formatMessage(message.email)}
                             type="email"
                             name="email"
-                            required = {isEditing ? false : true}
+                            required={isEditing ? false : true}
                             disabled={isEditing}
                         />
                     </Col>
