@@ -21,6 +21,7 @@ import CropImageField from '@components/common/form/CropImageField';
 const CourseForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
     const translate = useTranslate();
+    const [isDisableStartDate, setIsDisableStartDate] = useState(false);
     const lectureStateOptions = translate.formatKeys(lectureState, ['label']);
     const [lectureStateFilter, setLectureStateFilter] = useState([lectureStateOptions[0]]);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
@@ -129,6 +130,32 @@ const CourseForm = (props) => {
             },
         });
     };
+
+    useEffect(() => {
+        if (dataDetail.state !== undefined && dataDetail.state !== 1) {
+            setIsDisableStartDate(true);
+        } else {
+            setIsDisableStartDate(false);
+        }
+    }, [dataDetail.state]);
+    const initialRules = [
+        {
+            required: true,
+            message: 'Vui lòng chọn ngày bắt đầu',
+        },
+    ];
+
+    const getRules = () => {
+        let rules = [...initialRules];
+
+        if (!isDisableStartDate) {
+            rules.push({
+                validator: validateStartDate,
+            });
+        }
+
+        return rules;
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
@@ -167,15 +194,7 @@ const CourseForm = (props) => {
                         <DatePickerField
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày bắt đầu',
-                                },
-                                {
-                                    validator: validateStartDate,
-                                },
-                            ]}
+                            rules={getRules()}
                             name="dateRegister"
                             style={{ width: '100%' }}
                             format={DATE_FORMAT_DISPLAY}
