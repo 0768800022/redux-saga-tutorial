@@ -21,6 +21,7 @@ function ProjectMemberSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
 
+    const projectName = queryParameters.get('projectName');
     const projectId = queryParameters.get('projectId');
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -58,7 +59,7 @@ function ProjectMemberSavePage() {
                 { breadcrumbName: translate.formatMessage(messages.project) },
                 {
                     breadcrumbName: translate.formatMessage(messages.member),
-                    path: routes.projectMemberListPage.path,
+                    path: routes.projectMemberListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
                 },
                 { breadcrumbName: title },
             ]}

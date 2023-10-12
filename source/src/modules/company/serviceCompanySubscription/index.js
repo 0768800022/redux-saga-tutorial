@@ -51,7 +51,7 @@ const ServiceCompanySubListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Giá" />,
             dataIndex: 'price',
-            width: '200px',
+            width: 150,
             render: (price) => {
                 const formattedValue = formatMoney(price, {
                     groupSeparator: ',',      
@@ -66,6 +66,7 @@ const ServiceCompanySubListPage = () => {
             title: <FormattedMessage defaultMessage="Giảm giá" />,
             align: 'center',
             dataIndex: 'saleOff',
+            width: 130,
             render : (saleOff) => {
                 if(saleOff > 0) {
                     return <div>{saleOff} %</div>;
@@ -76,7 +77,7 @@ const ServiceCompanySubListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Số ngày sử dụng" />,
             dataIndex: 'valueable',
-            width: '200px',
+            width: 150,
             align: 'center',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),

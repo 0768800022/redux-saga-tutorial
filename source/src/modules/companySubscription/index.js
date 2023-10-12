@@ -93,6 +93,7 @@ const CompanySubscriptionListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Giá dịch vụ" />,
             dataIndex: ['subscription', 'price'],
+            width:150,
             render: (price) => {
                 const formattedValue = formatMoney(price, {
                     currentcy: 'đ',
@@ -103,7 +104,7 @@ const CompanySubscriptionListPage = () => {
             },
         },
         {
-            title: <FormattedMessage defaultMessage="Sale Off" />,
+            title: <FormattedMessage defaultMessage="Giảm giá" />,
             dataIndex: 'saleOff',
             width: '100px',
             render: (saleOff) => {

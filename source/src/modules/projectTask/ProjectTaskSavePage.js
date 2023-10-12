@@ -4,10 +4,11 @@ import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import routes from './routes';
+import routes from '@routes';
 import ProjectTaskForm from './ProjectTaskForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
+// import route1 from '@modules/project/routes';
 
 const messages = defineMessages({
     objectName: 'Task',
@@ -53,7 +54,10 @@ function ProjectTaskSavePage() {
             loading={loading}
             routes={[
                 { breadcrumbName: translate.formatMessage(messages.home) },
-                { breadcrumbName: translate.formatMessage(messages.project) },
+                { 
+                    breadcrumbName: translate.formatMessage(messages.project),
+                    path: routes.projectListPage.path,
+                },
                 {
                     breadcrumbName: translate.formatMessage(messages.ProjectTask),
                     path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
