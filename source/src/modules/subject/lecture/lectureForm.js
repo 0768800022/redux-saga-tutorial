@@ -43,29 +43,32 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     const dataSort = dataLectureBySubject && dataLectureBySubject.sort((a, b) => a.ordering - b.ordering);
 
     const handleSubmit = (values) => {
-        let isSelectedRowKey = false;
-        dataLectureBySubject.map((item) => {
-            if (item.id == selectedRowKey) {
-                isSelectedRowKey = true;
-            } else if (isSelectedRowKey == true) {
-                if (item.lectureKind == 1) {
-                    values.ordering = item.ordering;
-                    isSelectedRowKey = false;
+        if(dataLectureBySubject) {
+            let isSelectedRowKey = false;
+            dataLectureBySubject.map((item) => {
+                if (item.id == selectedRowKey) {
+                    isSelectedRowKey = true;
+                } else if (isSelectedRowKey == true) {
+                    if (item.lectureKind == 1) {
+                        values.ordering = item.ordering;
+                        isSelectedRowKey = false;
+
+                    }
                 }
-            }
-        });
-        let dataUpdate = [];
-        if (values.ordering) {
-            const indexLecture = dataSort.findIndex((item) => item.ordering == values.ordering);
-            for (let i = indexLecture; i < dataSort.length; i++) {
-                dataUpdate.push({ id: dataSort[i].id, ordering: dataSort[i].ordering + 1 });
-            }
-            executeOrdering({
-                data: dataUpdate,
             });
-        }
-        if (values.ordering === undefined) {
-            values.ordering = dataDetail?.ordering || dataSort[dataSort.length - 1].ordering + 1;
+            let dataUpdate = [];
+            if (values.ordering) {
+                const indexLecture = dataSort.findIndex((item) => item.ordering == values.ordering);
+                for (let i = indexLecture; i < dataSort.length; i++) {
+                    dataUpdate.push({ id: dataSort[i].id, ordering: dataSort[i].ordering + 1 });
+                }
+                executeOrdering({
+                    data: dataUpdate,
+                });
+            }
+            if (values.ordering === undefined) {
+                values.ordering = dataDetail?.ordering || dataSort[dataSort.length - 1].ordering + 1;
+            }
         }
         values.subjectId = subjectId;
         values.status = 1;

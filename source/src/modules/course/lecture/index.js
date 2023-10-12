@@ -68,7 +68,9 @@ const LectureListPage = () => {
         },
     });
 
-    const mapArray2ById = new Map(asignAll.map((item) => [item.id, item]));
+    if(Array.isArray(asignAll) && asignAll.length > 0) {
+        var mapArray2ById = new Map(asignAll.map((item) => [item.id, item]));
+    }
     const mergedArray = checkAsign.map((item1) => {
         const item2 = mapArray2ById.get(item1.id);
         if (item2) {
@@ -182,7 +184,7 @@ const LectureListPage = () => {
 
     const { execute: executeCheckAsign } = useFetch(apiConfig.task.checkAsign,{ immediate: false });
     useEffect(() => {
-        if (data.length > 0) {
+        if (Array.isArray(data) && data.length > 0) {
             const ids = data.map(item => item.id);
             if (ids.length > 0) {
                 executeCheckAsign({
