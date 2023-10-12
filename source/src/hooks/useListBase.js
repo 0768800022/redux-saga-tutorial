@@ -8,7 +8,7 @@ import {
     STATUS_INACTIVE,
 } from '@constants';
 
-import { Modal, Button, Divider, Tag } from 'antd';
+import { Modal, Button, Divider, Tag, Tooltip } from 'antd';
 import { DeleteOutlined, LockOutlined, CheckOutlined, EditOutlined } from '@ant-design/icons';
 
 import { defineMessages, useIntl } from 'react-intl';
@@ -272,17 +272,19 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
 
             return (
-                <Button
-                    {...buttonProps}
-                    type="link"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        mixinFuncs.showDeleteItemConfirm(id);
-                    }}
-                    style={{ padding: 0 }}
-                >
-                    <DeleteOutlined />
-                </Button>
+                <Tooltip placement="bottom" title={'Xoá'}>
+                    <Button
+                        {...buttonProps}
+                        type="link"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            mixinFuncs.showDeleteItemConfirm(id);
+                        }}
+                        style={{ padding: 0 }}
+                    >
+                        <DeleteOutlined />
+                    </Button>
+                </Tooltip>
             );
         },
         changeStatus: ({ id, status, buttonProps }) => {
@@ -304,19 +306,21 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
 
             return (
-                <Button
-                    {...buttonProps}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(mixinFuncs.getItemDetailLink(dataRow), {
-                            state: { action: 'edit', prevPath: location.pathname },
-                        });
-                    }}
-                    type="link"
-                    style={{ padding: 0 }}
-                >
-                    <EditOutlined color="red" />
-                </Button>
+                <Tooltip placement="bottom" title={'Sửa'}>
+                    <Button
+                        {...buttonProps}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(mixinFuncs.getItemDetailLink(dataRow), {
+                                state: { action: 'edit', prevPath: location.pathname },
+                            });
+                        }}
+                        type="link"
+                        style={{ padding: 0 }}
+                    >
+                        <EditOutlined color="red" />
+                    </Button>
+                </Tooltip>
             );
         },
         ...additionalButtons,
