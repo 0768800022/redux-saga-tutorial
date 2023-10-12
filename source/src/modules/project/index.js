@@ -255,7 +255,7 @@ const ProjectListPage = () => {
         columns.push(
             mixinFuncs.renderActionColumn(
                 {
-                    member: true,
+                    member: !leaderName && !developerName && true,
                     task: true,
                     edit: !leaderName && !developerName && true,
                     delete: !leaderName && !developerName && true,
