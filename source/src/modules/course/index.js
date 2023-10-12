@@ -1,7 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import {
+    AppConstants,
+    DATE_DISPLAY_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DEFAULT_FORMAT,
+    DEFAULT_TABLE_ITEM_SIZE,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -148,11 +154,7 @@ const CourseListPage = () => {
                 align: 'center',
                 width: 80,
                 render: (avatar) => (
-                    <Avatar
-                        size="large"
-                        icon={<UserOutlined />}
-                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                    />
+                    <Avatar size="large" icon={<UserOutlined />} src={`${AppConstants.contentRootUrl}${avatar}`} />
                 ),
             },
             {
