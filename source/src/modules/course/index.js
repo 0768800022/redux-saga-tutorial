@@ -69,7 +69,7 @@ const CourseListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
-                    registration: ({ id, name, state }) => (
+                    registration: ({ id, name, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(message.registration)}>
                             <Button
                                 type="link"
@@ -80,7 +80,7 @@ const CourseListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationListPage.path +
-                                                `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
                             >
@@ -89,7 +89,7 @@ const CourseListPage = () => {
                         </BaseTooltip>
                     ),
 
-                    task: ({ id, name, subject, state }) => (
+                    task: ({ id, name, subject, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(message.task)}>
                             <Button
                                 disabled={state === 1 || state === 5}
@@ -99,7 +99,7 @@ const CourseListPage = () => {
                                     e.stopPropagation();
                                     const path =
                                         (leaderName ? routes.leaderCourseTaskListPage.path : routes.taskListPage.path) +
-                                        `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
+                                        `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}&courseStatus=${status}` +
                                         (leaderName ? `&leaderName=${leaderName}` : '');
                                     state !== 1 &&
                                         state !== 5 &&
