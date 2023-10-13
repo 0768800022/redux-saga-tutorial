@@ -20,8 +20,11 @@ import SearchForm from '@components/common/form/SearchForm';
 import HasPermission from '@components/common/elements/HasPermission';
 import useAuth from './useAuth';
 import { validatePermission } from '@utils';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
+    delete: 'Xoá',
+    edit: 'Sửa',
     deleteConfirm: {
         title: {
             id: 'hook.useListBase.deleteConfirm.title',
@@ -272,17 +275,19 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
 
             return (
-                <Button
-                    {...buttonProps}
-                    type="link"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        mixinFuncs.showDeleteItemConfirm(id);
-                    }}
-                    style={{ padding: 0 }}
-                >
-                    <DeleteOutlined />
-                </Button>
+                <BaseTooltip title={intl.formatMessage(message.delete)}>
+                    <Button
+                        {...buttonProps}
+                        type="link"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            mixinFuncs.showDeleteItemConfirm(id);
+                        }}
+                        style={{ padding: 0 }}
+                    >
+                        <DeleteOutlined />
+                    </Button>
+                </BaseTooltip>
             );
         },
         changeStatus: ({ id, status, buttonProps }) => {
@@ -304,19 +309,21 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
 
             return (
-                <Button
-                    {...buttonProps}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(mixinFuncs.getItemDetailLink(dataRow), {
-                            state: { action: 'edit', prevPath: location.pathname },
-                        });
-                    }}
-                    type="link"
-                    style={{ padding: 0 }}
-                >
-                    <EditOutlined color="red" />
-                </Button>
+                <BaseTooltip title={intl.formatMessage(message.edit)} >
+                    <Button
+                        {...buttonProps}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(mixinFuncs.getItemDetailLink(dataRow), {
+                                state: { action: 'edit', prevPath: location.pathname },
+                            });
+                        }}
+                        type="link"
+                        style={{ padding: 0 }}
+                    >
+                        <EditOutlined color="red" />
+                    </Button>
+                </BaseTooltip>
             );
         },
         ...additionalButtons,

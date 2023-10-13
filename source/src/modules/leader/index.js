@@ -15,13 +15,16 @@ import { useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import { IconClipboardText, IconSchool } from '@tabler/icons-react';
 import FolderIcon, { CourseIcon } from '@assets/icons';
-
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import styles from './leader.module.scss';
 const message = defineMessages({
     objectName: 'Leader',
     name: 'Họ và tên',
     home: 'Trang chủ',
     leader: 'Leader',
     status: 'Trạng thái',
+    course: 'Khoá học',
+    project: 'Dự án',
 });
 
 const LeaderListPage = () => {
@@ -45,29 +48,37 @@ const LeaderListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 course: ({ id, leaderName }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(routes.leaderCourseListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
-                        }}
-                    >
-                        <CourseIcon />
-                    </Button>
+                    <BaseTooltip title={translate.formatMessage(message.course)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0 }}
+                            className={styles.verticalCenter}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(routes.leaderCourseListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
+                            }}
+                        >
+                            <CourseIcon />
+                        </Button>
+                    </BaseTooltip>
                 ),
 
                 project: ({ id, leaderName }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(routes.leaderProjectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`);
-                        }}
-                    >
-                        <FolderIcon />
-                    </Button>
+                    <BaseTooltip title={translate.formatMessage(message.project)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0 }}
+                            className={styles.verticalCenter}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    routes.leaderProjectListPage.path + `?leaderId=${id}&leaderName=${leaderName}`,
+                                );
+                            }}
+                        >
+                            <FolderIcon />
+                        </Button>
+                    </BaseTooltip>
                 ),
             });
         },

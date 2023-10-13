@@ -16,6 +16,7 @@ import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { AppConstants } from '@constants';
 import { CourseIcon } from '@assets/icons';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     objectName: 'Student',
@@ -24,6 +25,7 @@ const message = defineMessages({
     student: 'Sinh viên',
     mssv: 'Mã số sinh viên',
     status: 'Trạng thái',
+    course: 'Khoá học',
 });
 
 const StudentListPage = () => {
@@ -47,19 +49,21 @@ const StudentListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 task: ({ id, fullName }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${fullName}`);
-                            // navigate(route.studentCourseListPage.path);
-                            // navigate(`./course/${id}`);
-                            // navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
-                        }}
-                    >
-                        <CourseIcon />
-                    </Button>
+                    <BaseTooltip title={translate.formatMessage(message.course)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${fullName}`);
+                                // navigate(route.studentCourseListPage.path);
+                                // navigate(`./course/${id}`);
+                                // navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
+                            }}
+                        >
+                            <CourseIcon />
+                        </Button>
+                    </BaseTooltip>
                 ),
             });
         },
@@ -108,7 +112,7 @@ const StudentListPage = () => {
             dataIndex: ['studyClass', 'categoryName'],
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ task:  true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [

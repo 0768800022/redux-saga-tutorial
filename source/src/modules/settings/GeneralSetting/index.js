@@ -3,12 +3,16 @@ import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { Button } from 'antd';
-import React, { useState } from 'react';
+import { Button,Avatar } from 'antd';
+import React, { useState,useEffect } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { EditOutlined } from '@ant-design/icons';
 import EditGenralModal from './EditGenralModal';
 import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
+import { UserOutlined } from '@ant-design/icons';
+import { AppConstants } from '@constants';
+
 const message = defineMessages({
     objectName: 'Cài đặt chung',
     home: 'Trang chủ',
@@ -30,7 +34,7 @@ const GeneralSettingPage = ({ groupName }) => {
                     return {
                         data: response.data.content.filter((item) => {
                             if (item.keyName === 'slider') {
-                                setSlider(item);
+                                setSlider(JSON.parse(item.valueData));
                                 return false;
                             }
 
@@ -75,18 +79,76 @@ const GeneralSettingPage = ({ groupName }) => {
             title: <FormattedMessage defaultMessage="Giá trị" />,
             dataIndex: 'valueData',
         },
+        mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '120px' }),
+    ];
+    const columnsSlider = [
+        {
+            title: '#',
+            dataIndex: 'imageUrl',
+            align: 'center',
+            width: 80,
+            render: (imageUrl) => (
+                <Avatar
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={imageUrl ? `${AppConstants.contentRootUrl}${imageUrl}` : null}
+                />
+            ),
+        },
+        {
+            title: <FormattedMessage defaultMessage="Tiêu đề" />,
+            dataIndex: 'title',
+            width: 200,
+        },
+        {
+            title: <FormattedMessage defaultMessage="Mô tả ngắn" />,
+            dataIndex: 'shortDescription',
+        },
+        {
+            title: <FormattedMessage defaultMessage="Đường dẫn" />,
+            dataIndex: 'targetUrl',
+        },
         mixinFuncs.renderActionColumn({ editSetting: true, delete: true }, { width: '120px' }),
     ];
+    const { execute: executeUpdate } = useFetch(apiConfig.settings.update,{ immediate: false });
+    const {
+        data: listSetting,
+        loading: dataLoading,
+        execute: executeLoading,
+    } = useFetch(apiConfig.settings.getList, {
+        immediate: false,
+        mappingData : (response) => {
+            if (response.result === true) {
+                console.log(response.data.content);
+                return {
+                    data: response.data.content.filter((item) => {
+                        if (item.keyName === 'slider') {
+                            setSlider(JSON.parse(item.valueData));
+                            return false;
+                        }
+                        return true;
+                    }),        
+                };
+            }
+        },
+    });
     return (
         <div>
             <BaseTable
                 onChange={mixinFuncs.changePagination}
                 columns={columns}
-                dataSource={data}
+                dataSource={listSetting ? listSetting?.data : data}
+                loading={loading ||dataLoading}
+                pagination={pagination}
+            />
+            <BaseTable
+                onChange={mixinFuncs.changePagination}
+                columns={columnsSlider}
+                dataSource={sliderData.length > 0 ? sliderData : []}
                 loading={loading}
                 pagination={pagination}
             />
-            <EditGenralModal open={openedEdit} onCancel={() => handlersEdit.close()} data={detail || {}} />
+            <EditGenralModal open={openedEdit} onCancel={() => handlersEdit.close()} data={detail || {}} executeUpdate={executeUpdate} executeLoading={executeLoading} />
         </div>
     );
 };
