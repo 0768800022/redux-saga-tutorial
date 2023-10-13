@@ -8,10 +8,11 @@ import { projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Tag } from 'antd';
+import { Tag, Button } from 'antd';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
+import { EditOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
     objectName: 'Danh sách khóa học',
@@ -35,6 +36,7 @@ function ProjectTaskListPage() {
     const leaderId = queryParameters.get('leaderId');
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
+    const active = queryParameters.get('active');
     const state = queryParameters.get('state');
 
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
@@ -92,6 +94,21 @@ function ProjectTaskListPage() {
                         );
                     }
                 };
+                funcs.additionalActionColumnButtons = () => ({
+                    edit: ({ id, name, project, status, state }) => (
+                        <Button
+                            disabled={project.status === 0 || project.status === -1}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(routes.ProjectTaskSavePage.path);
+                            }}
+                            type="link"
+                            style={{ padding: 0 }}
+                        >
+                            <EditOutlined color="red" />
+                        </Button>
+                    ),
+                });
             },
         });
     const setColumns = () => {
@@ -134,9 +151,10 @@ function ProjectTaskListPage() {
                 },
             },
         ];
-        if (!leaderName && !developerName) {
+        if (!leaderName && !developerName ) {
             columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-            columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
+            if (active)
+                columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
         }
         return columns;
     };
@@ -212,7 +230,7 @@ function ProjectTaskListPage() {
                         </span>
                     }
                     searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
-                    actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
+                    actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}

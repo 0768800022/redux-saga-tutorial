@@ -10,14 +10,12 @@ const loginSaga = (payload) => processAction(apiConfig.account.login, payload);
 const getProfileSaga = (payload) => {
     const useKind = getData(storageKeys.USER_KIND);
     let api;
-    if(useKind === UserTypes.ADMIN) {
-        api = apiConfig.account.getProfile;
-    }else if(useKind === UserTypes.ORG) {
+    if (useKind === UserTypes.MANAGER) {
         api = apiConfig.organize.getProfile;
-    }else if(useKind === UserTypes.EMPLOYEE){
-        api = apiConfig.employee.getProfile;
+    } else if (useKind === UserTypes.LEADER) {
+        api = apiConfig.leader.getProfile;
     }
-    
+
     return processAction(api, payload);
 };
 

@@ -22,6 +22,10 @@ const Dashboard = () => {
             removeCacheToken();
             dispatch(accountActions.logout());
             notification({ type: 'error', message: 'Loại tài khoản không phù hợp để đăng nhập vô trang này !!!' });
+        } else if (userKind == UserTypes.STUDENT) {
+            console.log('first');
+        } else if (userKind == UserTypes.LEADER) {
+            console.log('sed');
         } else {
             navigate(routes.studentListPage.path);
         }

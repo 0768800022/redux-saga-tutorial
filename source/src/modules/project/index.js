@@ -89,11 +89,13 @@ const ProjectListPage = () => {
                                             pathDefault +
                                             `&developerName=${developerName}`;
                                     } else {
-                                        path = route.ProjectTaskListPage.path + pathDefault;
+                                        if (status == 1) {
+                                            path = route.ProjectTaskListPage.path + pathDefault + `&active=${true}`;
+                                        }
+                                        else
+                                            path = route.ProjectTaskListPage.path + pathDefault;
                                     }
-                                    status !== 0 &&
-                                        status !== -1 &&
-                                        navigate(path, { state: { pathPrev: location.search } });
+                                    navigate(path, { state: { pathPrev: location.search } });
                                 }}
                             >
                                 <BookOutlined />
@@ -101,18 +103,19 @@ const ProjectListPage = () => {
                         </BaseTooltip>
                     ),
                     member: ({ id, name, status }) => (
-                        <BaseTooltip  title={translate.formatMessage(message.member)}>
+                        <BaseTooltip title={translate.formatMessage(message.member)}>
                             <Button
                                 type="link"
                                 style={{ padding: '0' }}
                                 // disabled={status === -1}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    status !== 0 &&
-                                        status !== -1 &&
-                                        navigate(
-                                            routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
-                                        );
+                                    if (status == 1) {
+                                        navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}&active=${true}`);
+                                    }
+                                    else {
+                                        navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
+                                    }
                                 }}
                             >
                                 <TeamOutlined />
