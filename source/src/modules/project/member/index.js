@@ -42,7 +42,7 @@ const ProjectMemberListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
-    const statusProject = queryParameters.get('statusProject');
+    const active = queryParameters.get('active');
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.memberProject,
         options: {
@@ -68,21 +68,21 @@ const ProjectMemberListPage = () => {
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?projectId=${projectId}`;
             };
-            funcs.additionalActionColumnButtons = () => ({
-                edit: ({ id, name, project, status, state }) => (
-                    <Button
-                        disabled={project.status === 0 || project.status === -1}
-                        onClick={(e) => {
-                            // e.stopPropagation();
-                            navigate(routes.projectMemberSavePage.path);
-                        }}
-                        type="link"
-                        style={{ padding: 0 }}
-                    >
-                        <EditOutlined color="red" />
-                    </Button>
-                ),
-            });
+            // funcs.additionalActionColumnButtons = () => ({
+            //     edit: ({ id, name, project, status, state }) => (
+            //         <Button
+            //             disabled={project.status === 0 || project.status === -1}
+            //             onClick={(e) => {
+            //                 // e.stopPropagation();
+            //                 navigate(routes.projectMemberSavePage.path);
+            //             }}
+            //             type="link"
+            //             style={{ padding: 0 }}
+            //         >
+            //             <EditOutlined color="red" />
+            //         </Button>
+            //     ),
+            // });
         },
     });
 
@@ -98,70 +98,84 @@ const ProjectMemberListPage = () => {
         return breadRoutes;
     };
 
-    const columns = [
-        {
-            title: '#',
-            dataIndex: 'avatar',
-            align: 'center',
-            width: 80,
-            render: (avatar) => (
-                <Avatar
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                />
-            ),
-        },
-        {
-            title: translate.formatMessage(message.name),
-            dataIndex: ['developer', 'studentInfo', 'fullName'],
-        },
-        {
-            title: translate.formatMessage(message.role),
-            dataIndex: ['projectRole', 'projectRoleName'],
-            width: 150,
-        },
-
-        {
-            title: 'Lịch trình',
-            dataIndex: 'schedule',
-            render: (schedule) => {
-                let check = JSON.parse(schedule);
-                const newCheck = [
-                    { key: 'M', value: check.t2 },
-                    { key: 'T', value: check.t3 },
-                    { key: 'W', value: check.t4 },
-                    { key: 'T', value: check.t5 },
-                    { key: 'F', value: check.t6 },
-                    { key: 'S', value: check.t7 },
-                    { key: 'S', value: check.cn },
-                ];
-
-                let dateString = '';
-                newCheck.map((item) => {
-                    if (item.value !== undefined) {
-                        dateString += item.key + ' ';
-                    }
-                });
-
-                return <div>{dateString}</div>;
+    const setColumns = () => {
+        const columns = [
+            {
+                title: '#',
+                dataIndex: 'avatar',
+                align: 'center',
+                width: 80,
+                render: (avatar) => (
+                    <Avatar
+                        size="large"
+                        icon={<UserOutlined />}
+                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                    />
+                ),
             },
-        },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '130px' }),
-    ];
+            {
+                title: translate.formatMessage(message.name),
+                dataIndex: ['developer', 'studentInfo', 'fullName'],
+            },
+            {
+                title: translate.formatMessage(message.role),
+                dataIndex: ['projectRole', 'projectRoleName'],
+                width: 150,
+            },
+
+            {
+                title: 'Lịch trình',
+                dataIndex: 'schedule',
+                render: (schedule) => {
+                    let check = JSON.parse(schedule);
+                    const newCheck = [
+                        { key: 'M', value: check.t2 },
+                        { key: 'T', value: check.t3 },
+                        { key: 'W', value: check.t4 },
+                        { key: 'T', value: check.t5 },
+                        { key: 'F', value: check.t6 },
+                        { key: 'S', value: check.t7 },
+                        { key: 'S', value: check.cn },
+                    ];
+
+                    let dateString = '';
+                    newCheck.map((item) => {
+                        if (item.value !== undefined) {
+                            dateString += item.key + ' ';
+                        }
+                    });
+
+                    return <div>{dateString}</div>;
+                },
+            },
+        ];
+
+        // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
+        active && columns.push(
+            mixinFuncs.renderActionColumn(
+                {
+                    
+                    edit: true,
+                    delete: true,
+                },
+                { width: '150px' },
+            ),
+        );
+        return columns;
+    };
 
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
-                actionBar={statusProject && mixinFuncs.renderActionBar()}
+                actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={columns}
+                        columns={setColumns()}
                     />
                 }
             />
