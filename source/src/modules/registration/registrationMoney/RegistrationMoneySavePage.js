@@ -10,10 +10,11 @@ import { useLocation } from 'react-router-dom';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
-    objectName: 'Danh sách đăng kí khóa học',
+    objectName: 'Danh sách Lịch sử trả phí',
     home: 'Trang chủ',
     course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
+    moneyHistory: 'Lịch sử trả phí',
 });
 
 function RegistrationMoneySavePage() {
@@ -59,6 +60,12 @@ function RegistrationMoneySavePage() {
                 {
                     breadcrumbName: translate.formatMessage(messages.registration),
                     path: routes.registrationListPage.path + `?courseId=${courseId}&courseName=${courseName}`,
+                },
+                {
+                    breadcrumbName: translate.formatMessage(messages.moneyHistory),
+                    path:
+                        routes.registrationMoneyListPage.path +
+                        `?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}`,
                 },
                 { breadcrumbName: title },
             ]}

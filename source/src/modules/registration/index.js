@@ -81,7 +81,8 @@ function RegistrationListPage() {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 navigate(
-                                    routes.registrationMoneyListPage.path + `?registrationId=${id}&projectName=${name}`,
+                                    routes.registrationMoneyListPage.path +
+                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                                 );
                             }}
                         >

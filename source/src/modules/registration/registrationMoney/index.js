@@ -14,7 +14,7 @@ import { useLocation } from 'react-router-dom';
 import style from './Registration.module.scss';
 import { formatMoney } from '@utils';
 import Avatar from 'antd';
-
+import routes from '../routes';
 const message = defineMessages({
     objectName: 'Danh sách đăng kí khóa học',
     studentId: 'Tên sinh viên',
@@ -38,6 +38,7 @@ function RegistrationMoneyListPage() {
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
+    const courseStatus = queryParameters.get('courseStatus');
     // const courseStatus = queryParameters.get('courseStatus');
     //  const courseStatus = queryParameters.get('courseStatus');
     const registrationId = queryParameters.get('registrationId');
@@ -61,10 +62,10 @@ function RegistrationMoneyListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?registrationId=${registrationId}`;
+                return `${pagePath}/create?registrationId=${registrationId}&courseState=${courseState}&courseStatus=${courseStatus}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?registrationId=${registrationId}`;
+                return `${pagePath}/${dataRow.id}?registrationId=${registrationId}&courseState=${courseState}&courseStatus=${courseStatus}`;
             };
         },
     });
@@ -128,7 +129,9 @@ function RegistrationMoneyListPage() {
                 },
                 {
                     breadcrumbName: translate.formatMessage(message.registration),
-                    path: '/course',
+                    path:
+                        routes.registrationListPage.path +
+                        `?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                 },
                 { breadcrumbName: translate.formatMessage(message.history) },
             ]}
