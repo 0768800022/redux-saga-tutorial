@@ -116,10 +116,21 @@ export const commonStatus = {
 
 export const UserTypes = {
     ADMIN: 1,
-    ORG: 2,
-    CUSTOMER: 3,
-    EMPLOYEE: 4,
+    MANAGER: 2,
+    STUDENT: 3,
+    LEADER: 4,
 };
+
+export const LEADER_LOGIN_TYPE = 'leader';
+export const ADMIN_LOGIN_TYPE = 'password';
+export const STUDENT_LOGIN_TYPE = 'student';
+
+
+export const loginOptions = [
+    { label: 'Admin', value: ADMIN_LOGIN_TYPE },
+    { label: 'Sinh viên', value: STUDENT_LOGIN_TYPE },
+    { label: 'Leader', value: LEADER_LOGIN_TYPE },
+];
 
 export const commonStatusColor = {
     [commonStatus.PENDING]: 'warning',
