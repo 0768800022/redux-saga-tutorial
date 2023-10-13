@@ -13,20 +13,20 @@ const messages = defineMessages({
     update: 'Cập nhật',
     updateSuccess: 'Cập nhật {objectName} thành công',
 });
-const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, executeLoading }) => {
+const IntroduceModal = ({ open, onCancel, onOk, title, data, introduceData, executeUpdate, executeLoading }) => {
     const [form] = Form.useForm();
     const [isChanged, setChange] = useState(false);
     const notification = useNotification();
     const intl = useIntl();
     const translate = useTranslate();
-
     const updateSetting = (values) => {
+        console.log(values);
         executeUpdate({
             data: {
                 id: data.id,
                 isSystem: data.isSystem,
                 status: data.status,
-                valueData: values?.valueData,
+                valueData: JSON.stringify(values),
             },
             onCompleted: (response) => {
                 if (response.result === true) {
@@ -51,18 +51,33 @@ const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, exe
     useEffect(() => {
         // form.setFields(data);
         form.setFieldsValue({
-            ...data,
+            ...introduceData,
         });
-    }, [data]);
+    }, [introduceData]);
     return (
-        <Modal centered open={open} onCancel={onCancel} footer={null} title={data?.keyName}>
+        <Modal
+            centered
+            open={open}
+            onCancel={onCancel}
+            footer={null}
+            title={data?.keyName}
+        >
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} onFinish={updateSetting} size="100%">
                     <Row gutter={16}>
                         <Col span={24}>
                             <TextField
+                                label={<FormattedMessage defaultMessage="Tiêu đề" />}
+                                name="title"
+                                onChange={handleInputChange}
+                            />
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={24}>
+                            <TextField
                                 label={<FormattedMessage defaultMessage="Nội dung" />}
-                                name="valueData"
+                                name="message"
                                 onChange={handleInputChange}
                             />
                         </Col>
@@ -78,4 +93,4 @@ const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, exe
     );
 };
 
-export default EditGenralModal;
+export default IntroduceModal;

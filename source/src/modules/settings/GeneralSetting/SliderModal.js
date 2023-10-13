@@ -14,6 +14,8 @@ import useFetch from '@hooks/useFetch';
 
 const messages = defineMessages({
     objectName: 'slider',
+    update: 'Cập nhật',
+    create: 'Thêm mới',
     updateSuccess: 'Cập nhật {objectName} thành công',
     createSuccess: 'Thêm mới {objectName} thành công',
 });
@@ -114,7 +116,11 @@ const SliderModal = ({
             open={open}
             onCancel={onCancel}
             footer={null}
-            title={(isEditing ? 'CẬP NHẬT' : 'THÊM MỚI') + ' SLIDER'}
+            title={
+                (isEditing ? intl.formatMessage(messages.update) : intl.formatMessage(messages.create)) +
+                ' ' +
+                intl.formatMessage(messages.objectName)
+            }
         >
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} onFinish={updateSetting} size="100%" onValuesChange={handleFormChange}>
@@ -123,7 +129,7 @@ const SliderModal = ({
                             label={<FormattedMessage defaultMessage="Hình nền" />}
                             name="imageUrl"
                             imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
-                            aspect={1 / 1}
+                            aspect={16 / 9}
                             uploadFile={uploadFile}
                         />
                     </Col>
@@ -148,7 +154,7 @@ const SliderModal = ({
                     </Row>
                     <div style={{ float: 'right' }}>
                         <Button key="submit" type="primary" htmlType="submit" disabled={!isChangeValues}>
-                            {isEditing ? 'Cập nhật' : 'Thêm mới'}
+                            {isEditing ? intl.formatMessage(messages.update) : intl.formatMessage(messages.create)}
                         </Button>
                     </div>
                 </BaseForm>
