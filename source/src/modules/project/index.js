@@ -90,7 +90,7 @@ const ProjectListPage = () => {
                                             `&developerName=${developerName}`;
                                     } else {
                                         if (status == 1) {
-                                            path = route.ProjectTaskListPage.path + pathDefault + `&statusProject=${status}`;
+                                            path = route.ProjectTaskListPage.path + pathDefault + `&active=${true}`;
                                         }
                                         else
                                             path = route.ProjectTaskListPage.path + pathDefault;
@@ -111,7 +111,7 @@ const ProjectListPage = () => {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     if (status == 1) {
-                                        navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}&statusProject=${status}`);
+                                        navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}&active=${true}`);
                                     }
                                     else {
                                         navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
