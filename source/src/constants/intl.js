@@ -110,9 +110,13 @@ export const statusSubjectMessage = defineMessages({
 });
 
 export const projectTaskStateMessage = defineMessages({
-    create : "Đang tạo",
-    processing : "Đang xử lý",
-    done : "Hoàn tất",
-    cancel : "Đã hủy",
+    create: 'Đang tạo',
+    processing: 'Đang xử lý',
+    done: 'Hoàn tất',
+    cancel: 'Đã hủy',
 });
 
+export const registrationMoneyKindMessage = defineMessages({
+    receivedMoney: 'Tiền nhận',
+    returnMoney: 'Tiền trả lại',
+});
