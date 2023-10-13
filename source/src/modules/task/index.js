@@ -124,7 +124,7 @@ function TaskListPage() {
                 },
             },
         ];
-        if (!leaderName) {
+        if (!leaderName && courseStatus == 1) {
             columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }));
         }
         return columns;
