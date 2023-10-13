@@ -151,7 +151,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         <TextField
                             label={translate.formatMessage(messages.password)}
                             required={isEditing ? false : true}
-
+                            type="password"
                             name="password"
                         />
                     </Col>

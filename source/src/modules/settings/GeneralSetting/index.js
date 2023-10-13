@@ -14,17 +14,23 @@ import { UserOutlined } from '@ant-design/icons';
 import { AppConstants } from '@constants';
 import SliderModal from './SliderModal';
 import useNotification from '@hooks/useNotification';
+import IntroduceModal from './IntroduceModal';
+import ColumnGroup from 'antd/es/table/ColumnGroup';
 
 const messages = defineMessages({
     objectName: 'Cài đặt chung',
+    createNew: 'Thêm mới',
     deleteSuccess: 'Xoá slider thành công',
+    slider: 'Slider',
 });
 const GeneralSettingPage = ({ groupName }) => {
     const translate = useTranslate();
     const intl = useIntl();
     const notification = useNotification();
     const [sliderData, setSliderData] = useState({});
+    const [introduceData, setIntroduceData] = useState({});
     const [openedGeneralModal, handlersGeneralModal] = useDisclosure(false);
+    const [openedIntroduceModal, handlersIntroduceModal] = useDisclosure(false);
     const [openedSliderModal, handlersSliderModal] = useDisclosure(false);
     const [detail, setDetail] = useState();
     const [isEditing, setIsEditing] = useState(false);
@@ -40,22 +46,24 @@ const GeneralSettingPage = ({ groupName }) => {
                 if (response.result === true) {
                     return {
                         data: response.data.content.filter((item) => {
-                            if (item.keyName === 'slider') {
-                                const dataSlider = JSON.parse(item.valueData);
-                                const updatedDataSlider = dataSlider.map((obj) => ({
-                                    ...obj,
-                                    isSlider: true,
-                                }));
-                                setSliderData(updatedDataSlider);
-                                setParentData(item);
-                                return false;
+                            if (item.valueData) {
+                                if (item?.keyName === 'slider') {
+                                    const sliderDataParseJson = JSON.parse(item.valueData);
+                                    const updatedSliderData = sliderDataParseJson?.map((obj) => ({
+                                        ...obj,
+                                        isSlider: true,
+                                    }));
+                                    setSliderData(updatedSliderData);
+                                    setParentData(item);
+                                    return false;
+                                }
+
+                                if (item?.keyName === 'introduce') {
+                                    setIntroduceData(JSON.parse(item.valueData));
+                                }
+
+                                return true;
                             }
-
-                            // if (item.keyName === 'introduce') {
-                            //     return false;
-                            // }
-
-                            return true;
                         }),
                         total: response.data.totalElements,
                     };
@@ -77,6 +85,8 @@ const GeneralSettingPage = ({ groupName }) => {
                                 if (item?.isSlider) {
                                     setIsEditing(true);
                                     handlersSliderModal.open();
+                                } else if (item?.keyName === 'introduce') {
+                                    handlersIntroduceModal.open();
                                 } else {
                                     handlersGeneralModal.open();
                                 }
@@ -103,7 +113,6 @@ const GeneralSettingPage = ({ groupName }) => {
     });
     const deleteSlider = (item) => {
         const updateSliderData = sliderData.filter((obj) => obj.action !== item?.action);
-        console.log(updateSliderData);
         executeUpdate({
             data: {
                 id: parentData.id,
@@ -112,7 +121,6 @@ const GeneralSettingPage = ({ groupName }) => {
                 valueData: JSON.stringify(updateSliderData),
             },
             onCompleted: (response) => {
-                console.log(response);
                 if (response.result === true) {
                     notification({
                         message: intl.formatMessage(messages.deleteSuccess),
@@ -131,8 +139,21 @@ const GeneralSettingPage = ({ groupName }) => {
             width: 200,
         },
         {
-            title: <FormattedMessage defaultMessage="Giá trị" />,
+            title: <FormattedMessage defaultMessage="Nội dung" />,
             dataIndex: 'valueData',
+            render: (valueData, record) => {
+                if (record?.keyName === 'introduce') {
+                    const valueDataParseJson = JSON.parse(valueData);
+                    return (
+                        <div>
+                            <span style={{ fontWeight: 600 }}>{valueDataParseJson?.title}</span>
+                            <p>{valueDataParseJson?.message}</p>
+                        </div>
+                    );
+                } else {
+                    return <div>{valueData}</div>;
+                }
+            },
         },
         mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '120px' }),
     ];
@@ -141,10 +162,12 @@ const GeneralSettingPage = ({ groupName }) => {
             title: '#',
             dataIndex: 'imageUrl',
             align: 'center',
-            width: 80,
+            width: '100px',
             render: (imageUrl) => (
                 <Avatar
+                    style={{ width: '100%', height: '60px' }}
                     size="large"
+                    shape="square"
                     icon={<UserOutlined />}
                     src={imageUrl ? `${AppConstants.contentRootUrl}${imageUrl}` : null}
                 />
@@ -153,17 +176,10 @@ const GeneralSettingPage = ({ groupName }) => {
         {
             title: <FormattedMessage defaultMessage="Tiêu đề" />,
             dataIndex: 'title',
-            width: 200,
+            width: '420px',
         },
-        {
-            title: <FormattedMessage defaultMessage="Mô tả ngắn" />,
-            dataIndex: 'shortDescription',
-        },
-        {
-            title: <FormattedMessage defaultMessage="Đường dẫn" />,
-            dataIndex: 'targetUrl',
-        },
-        mixinFuncs.renderActionColumn({ editSetting: true, delete: true }, { width: '120px' }),
+
+        mixinFuncs.renderActionColumn({ editSetting: true, delete: true }, { width: '60px' }),
     ];
     const { execute: executeUpdate } = useFetch(apiConfig.settings.update, { immediate: false });
     const {
@@ -193,16 +209,18 @@ const GeneralSettingPage = ({ groupName }) => {
 
     return (
         <div>
-            <BaseTable
-                onChange={mixinFuncs.changePagination}
-                columns={columns}
-                dataSource={listSetting ? listSetting?.data : data}
-                loading={loading || dataLoading}
-                pagination={pagination}
-            />
+            <Card>
+                <BaseTable
+                    onChange={mixinFuncs.changePagination}
+                    columns={columns}
+                    dataSource={listSetting ? listSetting?.data : data}
+                    loading={loading || dataLoading}
+                    pagination={pagination}
+                />
+            </Card>
             <Card style={{ marginTop: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ marginTop: '10px', fontSize: '20px' }}>Slider</span>
+                    <span style={{ marginTop: '10px', fontSize: '20px' }}>{intl.formatMessage(messages.slider)}</span>
                     <Button
                         type="primary"
                         onClick={(e) => {
@@ -211,7 +229,7 @@ const GeneralSettingPage = ({ groupName }) => {
                             handlersSliderModal.open();
                         }}
                     >
-                        Thêm mới
+                        {intl.formatMessage(messages.createNew)}
                     </Button>
                 </div>
                 <BaseTable
@@ -225,6 +243,14 @@ const GeneralSettingPage = ({ groupName }) => {
             <EditGenralModal
                 open={openedGeneralModal}
                 onCancel={() => handlersGeneralModal.close()}
+                data={detail || {}}
+                executeUpdate={executeUpdate}
+                executeLoading={executeLoading}
+            />
+            <IntroduceModal
+                open={openedIntroduceModal}
+                onCancel={() => handlersIntroduceModal.close()}
+                introduceData={introduceData}
                 data={detail || {}}
                 executeUpdate={executeUpdate}
                 executeLoading={executeLoading}
