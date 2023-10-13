@@ -82,7 +82,6 @@ const GeneralSettingPage = ({ groupName }) => {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setDetail(item);
-                                console.log(item);
                                 if (item?.isSlider) {
                                     setIsEditing(true);
                                     handlersSliderModal.open();
@@ -122,7 +121,6 @@ const GeneralSettingPage = ({ groupName }) => {
                 valueData: JSON.stringify(updateSliderData),
             },
             onCompleted: (response) => {
-                console.log(response);
                 if (response.result === true) {
                     notification({
                         message: intl.formatMessage(messages.deleteSuccess),
