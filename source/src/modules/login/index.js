@@ -19,10 +19,12 @@ import useFetch from '@hooks/useFetch';
 import useFetchAction from '@hooks/useFetchAction';
 import Title from 'antd/es/typography/Title';
 import { showErrorMessage } from '@services/notifyService';
-import { appAccount, brandName, groupPermissionKinds, storageKeys } from '@constants';
+import { LEADER_LOGIN_TYPE, appAccount, brandName, groupPermissionKinds, loginOptions, storageKeys } from '@constants';
 import { Buffer } from 'buffer';
 import { setData } from '@utils/localStorage';
 import useNotification from '@hooks/useNotification';
+import SelectField from '@components/common/form/SelectField';
+import { FormattedMessage } from 'react-intl';
 window.Buffer = window.Buffer || Buffer;
 
 const LoginPage = () => {
@@ -32,22 +34,36 @@ const LoginPage = () => {
         ...apiConfig.account.loginBasic,
         authorization: `Basic ${base64Credentials}`,
     });
+    const { execute: executeLeaderLogin, loading: loadingLeader } = useFetch(apiConfig.leader.login);
     const { execute: executeGetProfile } = useFetchAction(accountActions.getProfile, {
         loading: useFetchAction.LOADING_TYPE.APP,
     });
     const notification = useNotification();
     const onFinish = (values) => {
-        execute({
-            data: { ...values, grant_type: 'password' },
-            onCompleted: (res) => {
-                setCacheAccessToken(res.access_token);
-                setData(storageKeys.USER_KIND, res.user_kind);
-                executeGetProfile({ kind: res.user_kind });
-            },
-            onError: (res) => {
-                notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
-            },
-        });
+        if (values.grant_type === LEADER_LOGIN_TYPE)
+            executeLeaderLogin({
+                data: { ...values, phone: values.username, tenantId: 'cnttdev' },
+                onCompleted: (res) => {
+                    setCacheAccessToken(res.access_token);
+                    setData(storageKeys.USER_KIND, res.user_kind);
+                    executeGetProfile({ kind: res.user_kind });
+                },
+                onError: (res) => {
+                    notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
+                },
+            });
+        else
+            execute({
+                data: { ...values },
+                onCompleted: (res) => {
+                    setCacheAccessToken(res.access_token);
+                    setData(storageKeys.USER_KIND, res.user_kind);
+                    executeGetProfile({ kind: res.user_kind });
+                },
+                onError: (res) => {
+                    notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
+                },
+            });
     };
 
     return (
@@ -79,6 +95,13 @@ const LoginPage = () => {
                         size="large"
                         required
                         type="password"
+                    />
+
+                    <SelectField
+                        placeholder={<FormattedMessage defaultMessage="Loại tài khoản" />}
+                        required
+                        name="grant_type"
+                        options={loginOptions}
                     />
 
                     <Button type="primary" size="large" loading={loading} htmlType="submit" style={{ width: '100%' }}>
