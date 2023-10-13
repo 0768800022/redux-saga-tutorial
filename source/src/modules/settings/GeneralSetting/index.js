@@ -4,11 +4,13 @@ import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { Button } from 'antd';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { EditOutlined } from '@ant-design/icons';
 import EditGenralModal from './EditGenralModal';
 import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
+
 const message = defineMessages({
     objectName: 'Cài đặt chung',
     home: 'Trang chủ',
@@ -75,18 +77,38 @@ const GeneralSettingPage = ({ groupName }) => {
             title: <FormattedMessage defaultMessage="Giá trị" />,
             dataIndex: 'valueData',
         },
-        mixinFuncs.renderActionColumn({ editSetting: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '120px' }),
     ];
+    const { execute: executeUpdate } = useFetch(apiConfig.settings.update,{ immediate: false });
+    const {
+        data: listSetting,
+        loading: dataLoading,
+        execute: executeLoading,
+    } = useFetch(apiConfig.settings.getList, {
+        immediate: false,
+        mappingData : (response) => {
+            if (response.result === true) {
+                return {
+                    data: response.data.content.filter((item) => {
+                        if (item.keyName === 'slider') {
+                            return false;
+                        }
+                        return true;
+                    }),        
+                };
+            }
+        },
+    });
     return (
         <div>
             <BaseTable
                 onChange={mixinFuncs.changePagination}
                 columns={columns}
-                dataSource={data}
-                loading={loading}
+                dataSource={listSetting ? listSetting?.data : data}
+                loading={loading ||dataLoading}
                 pagination={pagination}
             />
-            <EditGenralModal open={openedEdit} onCancel={() => handlersEdit.close()} data={detail || {}} />
+            <EditGenralModal open={openedEdit} onCancel={() => handlersEdit.close()} data={detail || {}} executeUpdate={executeUpdate} executeLoading={executeLoading} />
         </div>
     );
 };
