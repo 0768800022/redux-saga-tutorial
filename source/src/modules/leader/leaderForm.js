@@ -93,7 +93,7 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.password)} name="password"
+                        <TextField label={translate.formatMessage(message.password)} name="password" type="password"
                             rules={[
                                 {
                                     min: 6,

@@ -175,6 +175,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             ]}
                             required={isEditing ? false : true}
                             name="password"
+                            type="password"
                         />
                     </Col>
                     <Col span={12}>
