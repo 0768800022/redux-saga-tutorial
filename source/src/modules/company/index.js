@@ -14,6 +14,7 @@ import { UserOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import routes from './routes';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 const message = defineMessages({
     objectName: 'Company',
     home: 'Trang chủ',
@@ -27,6 +28,7 @@ const message = defineMessages({
     status: 'Trạng thái',
     username: 'Tài khoản đăng nhập',
     company: 'Công ty',
+    registration: 'Dịch vụ',
 });
 
 const CompanyListPage = () => {
@@ -49,20 +51,22 @@ const CompanyListPage = () => {
                 }
             };
             funcs.additionalActionColumnButtons = () => ({
-                registration: ({ id,companyName }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0 }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(
-                                routes.companyListPage.path +
-                                    `/company-subscription?companyId=${id}&companyName=${companyName}`,
-                            );
-                        }}
-                    >
-                        <ShoppingCartOutlined />
-                    </Button>
+                registration: ({ id, companyName }) => (
+                    <BaseTooltip title={translate.formatMessage(message.registration)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    routes.companyListPage.path +
+                                        `/company-subscription?companyId=${id}&companyName=${companyName}`,
+                                );
+                            }}
+                        >
+                            <ShoppingCartOutlined />
+                        </Button>
+                    </BaseTooltip>
                 ),
             });
         },

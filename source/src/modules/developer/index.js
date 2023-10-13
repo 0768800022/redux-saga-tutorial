@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, TIME_FORMAT_DISPLAY } from '@constants';
+import { AppConstants, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { levelOptionSelect, statusOptions } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
@@ -9,13 +9,14 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { convertUtcToLocalTime } from '@utils';
-import { Button, Tag } from 'antd';
-import { ProjectOutlined } from '@ant-design/icons';
+import { Avatar, Button, Tag } from 'antd';
+import { ProjectOutlined, UserOutlined } from '@ant-design/icons';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import FolderIcon from '@assets/icons';
 import { FieldTypes } from '@constants/formConfig';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     objectName: 'Lập trình viên',
@@ -23,6 +24,7 @@ const message = defineMessages({
     developer: 'Lập trình viên',
     status: 'Trạng thái',
     name: 'Họ và tên',
+    project: 'Dự án',
 });
 
 const DeveloperListPage = () => {
@@ -49,24 +51,39 @@ const DeveloperListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 project: ({ id, studentInfo }) => (
-                    <Button
-                        type="link"
-                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(
-                                routes.developerProjectListPage.path +
-                                `?developerId=${id}&developerName=${studentInfo?.fullName}`,
-                            );
-                        }}
-                    >
-                        <FolderIcon />
-                    </Button>
+                    <BaseTooltip title={translate.formatMessage(message.project)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    routes.developerProjectListPage.path +
+                                        `?developerId=${id}&developerName=${studentInfo?.fullName}`,
+                                );
+                            }}
+                        >
+                            <FolderIcon />
+                        </Button>
+                    </BaseTooltip>
                 ),
             });
         },
     });
     const columns = [
+        {
+            title: '#',
+            dataIndex: ['studentInfo', 'avatar'],
+            align: 'center',
+            width: 80,
+            render: (avatar) => (
+                <Avatar
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                />
+            ),
+        },
         {
             title: 'Họ và tên',
             dataIndex: ['studentInfo', 'fullName'],

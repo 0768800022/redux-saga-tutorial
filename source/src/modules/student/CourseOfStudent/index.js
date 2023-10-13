@@ -17,6 +17,7 @@ import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import routes from '@routes';
 import { DATE_FORMAT_DISPLAY } from '@constants';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -32,6 +33,8 @@ const message = defineMessages({
     leader: 'Leader',
     student: 'Sinh viên',
     state: 'Tình trạng',
+    registration: 'Đăng ký',
+    task: 'Task',
 });
 
 const CourseListPage = () => {
@@ -69,47 +72,46 @@ const CourseListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 registration: ({ id, name, state }) => (
-                    <Button
-                        type="link"
-                        style={state === 1 ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' } : { padding: 0 }}
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            state !== 1 &&
-                                navigate(
-                                    routes.registrationListPage.path +
-                                    `?courseId=${id}&courseName=${name}&courseState=${state}`,
-                                );
-                        }}
-                    >
-                        <TeamOutlined />
-                    </Button>
+                    <BaseTooltip title={translate.formatMessage(message.registration)}>
+                        <Button
+                            type="link"
+                            disabled={state === 1}
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                state !== 1 &&
+                                    navigate(
+                                        routes.registrationListPage.path +
+                                            `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                    );
+                            }}
+                        >
+                            <TeamOutlined />
+                        </Button>
+                    </BaseTooltip>
                 ),
 
                 task: ({ id, name, subject, state }) => (
-                    <Button
-                        type="link"
-                        style={
-                            state === 1 || state === 5
-                                ? { padding: 0, opacity: 0.5, cursor: 'not-allowed' }
-                                : { padding: 0 }
-                        }
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            const path =
-                                (leaderName
-                                    ? routes.leaderCourseTaskListPage.path
-                                    : routes.taskListPage.path) +
-                                `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
-                                (leaderName ? `&leaderName=${leaderName}` : '');
-                            state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
-                        }}
-                    >
-                        <BookOutlined />
-                    </Button>
+                    <BaseTooltip placement="bottom" title={translate.formatMessage(message.task)}>
+                        <Button
+                            type="link"
+                            disabled={state === 1 || state === 5}
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                const path =
+                                    (leaderName ? routes.leaderCourseTaskListPage.path : routes.taskListPage.path) +
+                                    `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
+                                    (leaderName ? `&leaderName=${leaderName}` : '');
+                                state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
+                            }}
+                        >
+                            <BookOutlined />
+                        </Button>
+                    </BaseTooltip>
                 ),
             });
         },
-
     });
 
     const setBreadRoutes = () => {
@@ -177,8 +179,11 @@ const CourseListPage = () => {
             width: 120,
             render(dataRow) {
                 const state = stateValues.find((item) => item.value == dataRow);
-                return <Tag color={state.color}>
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div></Tag>;
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
             },
         },
         mixinFuncs.renderActionColumn({ delete: true }, { width: '120px' }),

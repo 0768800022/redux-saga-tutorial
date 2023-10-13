@@ -1,15 +1,21 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import {
+    AppConstants,
+    DATE_DISPLAY_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DEFAULT_FORMAT,
+    DEFAULT_TABLE_ITEM_SIZE,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { TeamOutlined, BookOutlined } from '@ant-design/icons';
-import { Button, Tag } from 'antd';
+import { TeamOutlined, BookOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Tag } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import route from '@modules/task/routes';
@@ -17,6 +23,7 @@ import { convertDateTimeToString } from '@utils/dayHelper';
 import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { formatMoney } from '@utils';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -30,6 +37,8 @@ const message = defineMessages({
     state: 'Tình trạng',
     status: 'Trạng thái',
     leader: 'Leader',
+    registration: 'Đăng ký',
+    task: 'Task',
 });
 
 const CourseListPage = () => {
@@ -61,39 +70,45 @@ const CourseListPage = () => {
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     registration: ({ id, name, state }) => (
-                        <Button
-                            type="link"
-                            disabled={state === 1}
-                            style={{ padding: 0 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                state !== 1 &&
-                                    navigate(
-                                        routes.registrationListPage.path +
-                                            `?courseId=${id}&courseName=${name}&courseState=${state}`,
-                                    );
-                            }}
-                        >
-                            <TeamOutlined />
-                        </Button>
+                        <BaseTooltip title={translate.formatMessage(message.registration)}>
+                            <Button
+                                type="link"
+                                disabled={state === 1}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    state !== 1 &&
+                                        navigate(
+                                            routes.registrationListPage.path +
+                                                `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                        );
+                                }}
+                            >
+                                <TeamOutlined />
+                            </Button>
+                        </BaseTooltip>
                     ),
 
                     task: ({ id, name, subject, state }) => (
-                        <Button
-                            disabled={state === 1 || state === 5}
-                            type="link"
-                            style={{ padding: 0 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                const path =
-                                    (leaderName ? routes.leaderCourseTaskListPage.path : routes.taskListPage.path) +
-                                    `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
-                                    (leaderName ? `&leaderName=${leaderName}` : '');
-                                state !== 1 && state !== 5 && navigate(path, { state: { pathPrev: location.search } });
-                            }}
-                        >
-                            <BookOutlined />
-                        </Button>
+                        <BaseTooltip title={translate.formatMessage(message.task)}>
+                            <Button
+                                disabled={state === 1 || state === 5}
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const path =
+                                        (leaderName ? routes.leaderCourseTaskListPage.path : routes.taskListPage.path) +
+                                        `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}` +
+                                        (leaderName ? `&leaderName=${leaderName}` : '');
+                                    state !== 1 &&
+                                        state !== 5 &&
+                                        navigate(path, { state: { pathPrev: location.search } });
+                                }}
+                            >
+                                <BookOutlined />
+                            </Button>
+                        </BaseTooltip>
                     ),
                 });
             },
@@ -133,6 +148,15 @@ const CourseListPage = () => {
     };
     const setColumns = () => {
         const columns = [
+            {
+                title: '#',
+                dataIndex: 'avatar',
+                align: 'center',
+                width: 80,
+                render: (avatar) => (
+                    <Avatar size="large" icon={<UserOutlined />} src={`${AppConstants.contentRootUrl}${avatar}`} />
+                ),
+            },
             {
                 title: translate.formatMessage(message.name),
                 dataIndex: 'name',
