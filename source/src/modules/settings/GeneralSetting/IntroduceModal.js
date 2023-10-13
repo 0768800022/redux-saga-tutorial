@@ -20,7 +20,6 @@ const IntroduceModal = ({ open, onCancel, onOk, title, data, introduceData, exec
     const intl = useIntl();
     const translate = useTranslate();
     const updateSetting = (values) => {
-        console.log(values);
         executeUpdate({
             data: {
                 id: data.id,
