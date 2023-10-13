@@ -75,10 +75,7 @@ function TaskListPage() {
             };
         },
     });
-    const convertDate = (date) => {
-        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
-        return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
-    };
+
     const setColumns = () => {
         const columns = [
             {
@@ -94,7 +91,9 @@ function TaskListPage() {
                 dataIndex: 'startDate',
                 width: 180,
                 render: (startDate) => {
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
+                    const modifiedstartDate = convertStringToDateTime(startDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                    const modifiedstartDateTimeString = convertDateTimeToString(modifiedstartDate, DEFAULT_FORMAT);
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedstartDateTimeString}</div>;
                 },
                 align: 'center',
             },
@@ -103,7 +102,9 @@ function TaskListPage() {
                 dataIndex: 'dueDate',
                 width: 180,
                 render: (dueDate) => {
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(dueDate)}</div>;
+                    const modifieddueDate = convertStringToDateTime(dueDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                    const modifieddueDateTimeString = convertDateTimeToString(modifieddueDate, DEFAULT_FORMAT);
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifieddueDateTimeString}</div>;
                 },
                 align: 'center',
             },

@@ -69,7 +69,6 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT)),
                 status: statusValues[0].value,
             });
         }
@@ -98,7 +97,7 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
             ...dataDetail,
             companyId: dataDetail?.company?.companyName,
             serviceCompanySubscriptionId: dataDetail?.subscription?.name,
-            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT)),
+            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DEFAULT_FORMAT),
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {

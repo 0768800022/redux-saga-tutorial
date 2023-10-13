@@ -108,11 +108,11 @@ export const stateResgistrationOptions = [
     {
         value: 1,
         label: stateResgistrationMessage.register,
-        color: '#00A648',
+        color: 'green',
     },
-    { value: 2, label: stateResgistrationMessage.learning, color: '#4169E1' },
-    { value: 3, label: stateResgistrationMessage.finished, color: '#FFBF00' },
-    { value: 4, label: stateResgistrationMessage.canceled, color: '#CC0000' },
+    { value: 2, label: stateResgistrationMessage.learning, color: 'warning' },
+    { value: 3, label: stateResgistrationMessage.finished, color: 'yellow' },
+    { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
 ];
 
 export const lectureKindOptions = [
@@ -271,3 +271,7 @@ export const levelOptionSelect = [
     { value: 4, label: 'Level 4' },
     { value: 5, label: 'Level 5' },
 ];
+
+export const settingGroups = {
+    GENERAL: 'page_config',
+};
