@@ -40,6 +40,7 @@ function RegistrationListPage() {
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
+    const courseStatus = queryParameters.get('courseStatus');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
         options: {
@@ -165,7 +166,7 @@ function RegistrationListPage() {
                         {courseName}
                     </span>
                 }
-                actionBar={courseState == 5 && mixinFuncs.renderActionBar()}
+                actionBar={courseState == 5 && courseStatus == 1  && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

@@ -43,6 +43,7 @@ function TaskListPage() {
     const leaderName = queryParameters.get('leaderName');
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const courseStatus = queryParameters.get('courseStatus');
     const subjectId = queryParameters.get('subjectId');
     const state = queryParameters.get('state');
     const location = useLocation();
@@ -163,7 +164,7 @@ function TaskListPage() {
                             {courseName}
                         </span>
                     }
-                    actionBar={state == 2 && !leaderName ? mixinFuncs.renderActionBar() : ''}
+                    actionBar={state == 2 && courseStatus == 1 && !leaderName ? mixinFuncs.renderActionBar() : ''}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}
