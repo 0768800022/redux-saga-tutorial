@@ -85,11 +85,15 @@ const ProjectListPage = () => {
                                         pathDefault +
                                         `&developerName=${developerName}`;
                                 } else {
-                                    path = route.ProjectTaskListPage.path + pathDefault;
+                                    if (status == 1) {
+                                        path = route.ProjectTaskListPage.path + pathDefault + `&statusProject=${status}`;
+                                    }
+                                    else
+                                        path = route.ProjectTaskListPage.path + pathDefault;
                                 }
-                                status !== 0 &&
-                                    status !== -1 &&
-                                    navigate(path, { state: { pathPrev: location.search } });
+                                // status !== 0 &&
+                                //     status !== -1 &&
+                                navigate(path, { state: { pathPrev: location.search } });
                             }}
                         >
                             <BookOutlined />
@@ -102,11 +106,15 @@ const ProjectListPage = () => {
                             // disabled={status === -1}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                status !== 0 &&
-                                    status !== -1 &&
-                                    navigate(
-                                        routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
-                                    );
+                                // status !== 0 &&
+                                //     status !== -1 &&
+                                if (status == 1) {
+                                    navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}&statusProject=${status}`);
+                                }
+                                else {
+                                    navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
+                                }
+
                             }}
                         >
                             <TeamOutlined />
@@ -229,7 +237,7 @@ const ProjectListPage = () => {
             {
                 title: translate.formatMessage(message.endDate),
                 dataIndex: 'endDate',
-                render: (endDate) => {  
+                render: (endDate) => {
                     return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
                 },
                 width: 200,
