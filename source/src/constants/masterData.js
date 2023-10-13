@@ -220,6 +220,7 @@ export const stateOptions = [
     { label: 'Bận', value: BUSY_STATE, color: '#FFBF00' },
 ];
 
+
 export const HALF = 0;
 export const FULL = 1;
 

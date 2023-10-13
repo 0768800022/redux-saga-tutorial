@@ -36,7 +36,7 @@ function ProjectTaskListPage() {
     const leaderId = queryParameters.get('leaderId');
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
-    const statusProject = queryParameters.get('statusProject');
+    const active = queryParameters.get('active');
     const state = queryParameters.get('state');
 
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
@@ -151,9 +151,10 @@ function ProjectTaskListPage() {
                 },
             },
         ];
-        if (!leaderName && !developerName) {
+        if (!leaderName && !developerName ) {
             columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-            columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
+            if (active)
+                columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
         }
         return columns;
     };
@@ -229,7 +230,7 @@ function ProjectTaskListPage() {
                         </span>
                     }
                     searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
-                    actionBar={statusProject && !leaderName && !developerName && mixinFuncs.renderActionBar()}
+                    actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}
