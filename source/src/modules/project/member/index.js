@@ -22,6 +22,9 @@ import { convertUtcToLocalTime } from '@utils';
 import { useLocation } from 'react-router-dom';
 import useFetch from '@hooks/useFetch';
 import route from '@modules/project/routes';
+import routes from '@routes';
+import { EditOutlined } from '@ant-design/icons';
+
 const message = defineMessages({
     home: 'Trang chủ',
     project: 'Dự án',
@@ -39,6 +42,7 @@ const ProjectMemberListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
+    const statusProject = queryParameters.get('statusProject');
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.memberProject,
         options: {
@@ -64,6 +68,21 @@ const ProjectMemberListPage = () => {
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?projectId=${projectId}`;
             };
+            funcs.additionalActionColumnButtons = () => ({
+                edit: ({ id, name, project, status, state }) => (
+                    <Button
+                        disabled={project.status === 0 || project.status === -1}
+                        onClick={(e) => {
+                            // e.stopPropagation();
+                            navigate(routes.projectMemberSavePage.path);
+                        }}
+                        type="link"
+                        style={{ padding: 0 }}
+                    >
+                        <EditOutlined color="red" />
+                    </Button>
+                ),
+            });
         },
     });
 
@@ -135,7 +154,7 @@ const ProjectMemberListPage = () => {
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
-                actionBar={mixinFuncs.renderActionBar()}
+                actionBar={statusProject && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
