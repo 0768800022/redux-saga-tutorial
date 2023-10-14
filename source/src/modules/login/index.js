@@ -141,7 +141,7 @@ const LoginPage = () => {
                     />
 
                     <SelectField
-                        placeholder={<FormattedMessage defaultMessage="Loại tài khoản" />}
+                        placeholder={<FormattedMessage defaultMessage="Bạn là?" />}
                         required
                         name="grant_type"
                         options={loginOptions}
