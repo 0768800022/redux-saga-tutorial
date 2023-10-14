@@ -45,7 +45,6 @@ const SliderModal = ({
     const updateSetting = (values) => {
         values.imageUrl = imageUrl;
         if (isEditing) {
-            console.log(isEditing);
             sliderData.splice(data?.index, 1, values);
         } else {
             sliderData.push(values);
