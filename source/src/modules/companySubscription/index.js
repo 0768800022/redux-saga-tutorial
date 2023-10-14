@@ -60,7 +60,7 @@ const CompanySubscriptionListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                if (companyId !== null){
+                if (companyId !== null) {
                     return `${pagePath}/create?companyId=${companyId}`;
                 }
                 return `${pagePath}/create`;
@@ -92,10 +92,10 @@ const CompanySubscriptionListPage = () => {
         },
         {
             title: <FormattedMessage defaultMessage="Giá dịch vụ" />,
-            dataIndex: ['subscription', 'price'],
-            width:150,
-            render: (price) => {
-                const formattedValue = formatMoney(price, {
+            dataIndex: 'money',
+            width: 150,
+            render: (money) => {
+                const formattedValue = formatMoney(money, {
                     currentcy: 'đ',
                     currentDecimal: '0',
                     groupSeparator: ',',
@@ -115,6 +115,24 @@ const CompanySubscriptionListPage = () => {
                 return <div>{formattedValue}</div>;
             },
             align: 'center',
+        },
+        {
+            title: <FormattedMessage defaultMessage="Tiền thanh toán" />,
+            dataIndex: 'totalAmount',
+            width: 150,
+            render: (text, record) => {
+                const priceTotal = record.money;
+                const sale = record.saleOff;
+                if ( sale ) { var totalAmount = priceTotal - (priceTotal * sale / 100); }
+                else  
+                    totalAmount = priceTotal;
+                const formattedValue = formatMoney(totalAmount, {
+                    currentcy: 'đ',
+                    currentDecimal: '0',
+                    groupSeparator: ',',
+                });
+                return <div>{formattedValue}</div>;
+            },
         },
         {
             title: 'Ngày bắt đầu',

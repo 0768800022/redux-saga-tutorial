@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
+import { DEFAULT_FORMAT,DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -175,8 +175,8 @@ const ProjectListPage = () => {
         return breadRoutes;
     };
     const convertDate = (date) => {
-        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
-        return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
+        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
+        return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
     };
 
     const setSearchField = () => {
@@ -233,7 +233,7 @@ const ProjectListPage = () => {
                 render: (startDate) => {
                     return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
                 },
-                width: 200,
+                width: 140,
                 align: 'center',
             },
             {
@@ -242,7 +242,7 @@ const ProjectListPage = () => {
                 render: (endDate) => {
                     return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
                 },
-                width: 200,
+                width: 140,
                 align: 'center',
             },
             {
