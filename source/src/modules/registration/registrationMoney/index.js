@@ -62,10 +62,10 @@ function RegistrationMoneyListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?registrationId=${registrationId}&courseState=${courseState}&courseStatus=${courseStatus}`;
+                return `${pagePath}/create?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?registrationId=${registrationId}&courseState=${courseState}&courseStatus=${courseStatus}`;
+                return `${pagePath}/${dataRow.id}?registrationId=${registrationId}&?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
             };
         },
     });
