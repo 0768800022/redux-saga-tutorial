@@ -23,6 +23,8 @@ function RegistrationMoneySavePage() {
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const registrationId = queryParameters.get('registrationId');
+    const courseState = queryParameters.get('courseState');
+    const courseStatus = queryParameters.get('courseStatus');
     const { pathname: pagePath } = useLocation();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -59,13 +61,15 @@ function RegistrationMoneySavePage() {
                 { breadcrumbName: translate.formatMessage(messages.course), path: routes.courseListPage.path },
                 {
                     breadcrumbName: translate.formatMessage(messages.registration),
-                    path: routes.registrationListPage.path + `?courseId=${courseId}&courseName=${courseName}`,
+                    path:
+                        routes.registrationListPage.path +
+                        `?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                 },
                 {
                     breadcrumbName: translate.formatMessage(messages.moneyHistory),
                     path:
                         routes.registrationMoneyListPage.path +
-                        `?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}`,
+                        `?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                 },
                 { breadcrumbName: title },
             ]}

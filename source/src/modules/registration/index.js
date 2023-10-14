@@ -17,7 +17,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
-import { CheckCircleOutlined, MoneyCollectOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, DollarOutlined } from '@ant-design/icons';
 import style from './Registration.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -86,7 +86,7 @@ function RegistrationListPage() {
                                 );
                             }}
                         >
-                            <MoneyCollectOutlined />
+                            <DollarOutlined />
                         </Button>
                     </BaseTooltip>
                 ),
