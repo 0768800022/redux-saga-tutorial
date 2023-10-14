@@ -17,12 +17,16 @@ const messages = defineMessages({
     profile: 'Profile',
 });
 
+const userProfileType = {
+    [UserTypes.MANAGER]: 'organize',
+    [UserTypes.LEADER]: 'leader',
+    [UserTypes.STUDENT]: 'student',
+};
+
 const ProfilePage = () => {
     const { profile } = useAuth();
-    const isAdmin = profile.kind === UserTypes.ADMIN;
     const translate = useTranslate();
-
-    const { data, loading } = useFetch(apiConfig[isAdmin ? 'account' : 'organize'].getProfile, {
+    const { data, loading } = useFetch(apiConfig[userProfileType[profile.kind]].getProfile, {
         immediate: true,
         mappingData: (res) => res.data,
     });
@@ -33,8 +37,8 @@ const ProfilePage = () => {
             objectName: translate.formatMessage(messages.profile),
         },
         apiConfig: {
-            getById: apiConfig[isAdmin ? 'account' : 'organize'].getProfile,
-            update: apiConfig[isAdmin ? 'account' : 'organize'].updateProfile,
+            getById: apiConfig[userProfileType[profile.kind]].getProfile,
+            update: apiConfig[userProfileType[profile.kind]].updateProfile,
         },
         override: (funcs) => {
             const onSaveCompleted = funcs.onSaveCompleted;
@@ -61,7 +65,7 @@ const ProfilePage = () => {
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
                 onSubmit={onSave}
-                isAdmin={isAdmin}
+                // isAdmin={isAdmin}
             />
         </PageWrapper>
     );

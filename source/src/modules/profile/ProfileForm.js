@@ -178,7 +178,7 @@ const ProfileForm = (props) => {
                 <TextField label={translate.formatMessage(messages.email)} name={['accountDto', 'email']} />
                 <TextField label={translate.formatMessage(messages.fullName)} name={['accountDto', 'fullName']} />
                 <TextField label={translate.formatMessage(messages.hotline)} name="hotline" />
-                {!isAdmin && (
+                {/* {!isAdmin && (
                     <Fragment>
                         <TextField
                             name={['accountDto', 'phone']}
@@ -186,7 +186,7 @@ const ProfileForm = (props) => {
                             required
                         />
                     </Fragment>
-                )}
+                )} */}
                 <TextField
                     type="password"
                     label={translate.formatMessage(messages.currentPassword)}

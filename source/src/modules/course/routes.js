@@ -2,6 +2,7 @@ import apiConfig from '@constants/apiConfig';
 import CourseListPage from '.';
 import CourseSavePage from './CourseSavePage';
 import LectureListPage from './lecture';
+import CourseLeaderListPage from './courseLeader';
 export default {
     courseListPage: {
         path: '/course',
@@ -9,6 +10,13 @@ export default {
         auth: true,
         component: CourseListPage,
         permissions: apiConfig.course.getList.baseURL,
+    },
+    courseLeaderListPage: {
+        path: '/course-leader',
+        title: 'Course List Page',
+        auth: true,
+        component: CourseLeaderListPage,
+        permissions: apiConfig.course.getListLeaderCourse.baseURL,
     },
     courseSavePage: {
         path: '/course/:id',
