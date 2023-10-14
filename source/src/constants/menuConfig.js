@@ -144,7 +144,7 @@ const navMenuConfig = [
             {
                 label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
                 key: 'my-course-leader',
-                path: routes.courseListPage.path,
+                path: routes.courseLeaderListPage.path,
                 permission: apiConfig.course.getListLeaderCourse.baseURL,
             },
         ],

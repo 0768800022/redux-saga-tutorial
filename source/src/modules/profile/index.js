@@ -8,9 +8,10 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import ProfileForm from './ProfileForm';
 import useAuth from '@hooks/useAuth';
-import { UserTypes } from '@constants';
+import { UserTypes, storageKeys } from '@constants';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
+import { getData } from '@utils/localStorage';
 
 const messages = defineMessages({
     home: 'Home',
@@ -26,7 +27,8 @@ const userProfileType = {
 const ProfilePage = () => {
     const { profile } = useAuth();
     const translate = useTranslate();
-    const { data, loading } = useFetch(apiConfig[userProfileType[profile.kind]].getProfile, {
+    const useKind = getData(storageKeys.USER_KIND);
+    const { data, loading } = useFetch(apiConfig[userProfileType[useKind]].getProfile, {
         immediate: true,
         mappingData: (res) => res.data,
     });
@@ -37,8 +39,8 @@ const ProfilePage = () => {
             objectName: translate.formatMessage(messages.profile),
         },
         apiConfig: {
-            getById: apiConfig[userProfileType[profile.kind]].getProfile,
-            update: apiConfig[userProfileType[profile.kind]].updateProfile,
+            getById: apiConfig[userProfileType[useKind]].getProfile,
+            update: apiConfig[userProfileType[useKind]].updateProfile,
         },
         override: (funcs) => {
             const onSaveCompleted = funcs.onSaveCompleted;
