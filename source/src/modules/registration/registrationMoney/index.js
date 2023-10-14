@@ -78,7 +78,7 @@ function RegistrationMoneyListPage() {
             {
                 title: translate.formatMessage(message.money),
                 dataIndex: 'money',
-                align: 'center',
+                align: 'right',
 
                 render: (price) => {
                     const formattedValue = formatMoney(price, {
@@ -94,7 +94,6 @@ function RegistrationMoneyListPage() {
                 title: translate.formatMessage(message.kind),
                 dataIndex: 'kind',
                 align: 'center',
-
                 render(kind) {
                     return kind == 1 ? (
                         <Tag>

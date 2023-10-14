@@ -172,6 +172,7 @@ const CourseListPage = () => {
                 title: <FormattedMessage defaultMessage="Học phí" />,
                 dataIndex: 'fee',
                 width: '120px',
+                align: 'right',
                 render: (fee) => {
                     const formattedValue = formatMoney(fee, {
                         currentcy: 'đ',
@@ -185,6 +186,7 @@ const CourseListPage = () => {
                 title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
                 dataIndex: 'returnFee',
                 width: '120px',
+                align: 'right',
                 render: (returnFee) => {
                     const formattedValue = formatMoney(returnFee, {
                         currentcy: 'đ',
