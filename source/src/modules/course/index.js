@@ -155,7 +155,7 @@ const CourseListPage = () => {
                 align: 'center',
                 width: 80,
                 render: (avatar) => (
-                    <AvatarField size="large" icon={<UserOutlined />} src={`${AppConstants.contentRootUrl}${avatar}`} />
+                    <AvatarField size="large" icon={<UserOutlined />} src={avatar?`${AppConstants.contentRootUrl}${avatar}`:null} />
                 ),
             },
             {
