@@ -23,8 +23,6 @@ import { validatePermission } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 
 const message = defineMessages({
-    delete: 'Xoá',
-    edit: 'Sửa',
     deleteConfirm: {
         title: {
             id: 'hook.useListBase.deleteConfirm.title',
@@ -275,7 +273,7 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
 
             return (
-                <BaseTooltip title={intl.formatMessage(message.delete)}>
+                <BaseTooltip type="delete" objectName={options.objectName}>
                     <Button
                         {...buttonProps}
                         type="link"
@@ -309,7 +307,7 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
 
             return (
-                <BaseTooltip title={intl.formatMessage(message.edit)} >
+                <BaseTooltip type="edit" objectName={options.objectName}>
                     <Button
                         {...buttonProps}
                         onClick={(e) => {

@@ -200,6 +200,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getListLeaderCourse: {
+            baseURL: `${apiTenantUrl}v1/course/leader-course`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
         getById: {
             baseURL: `${apiTenantUrl}v1/course/get/:id`,
             method: 'GET',
@@ -393,7 +399,7 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
         getProfile: {
-            baseURL: `${apiTenantUrl}v1/student/profile`,
+            baseURL: `${apiTenantUrl}v1/student/get-myprofile`,
             method: 'GET',
             headers: baseHeader,
         },

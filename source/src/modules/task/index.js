@@ -27,7 +27,7 @@ import dayjs from 'dayjs';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 
 const message = defineMessages({
-    objectName: 'Danh sách khóa học',
+    objectName: 'Task',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     state: 'Tình trạng',

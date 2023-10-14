@@ -16,7 +16,9 @@ const useAuth = () => {
 
     const { loading } = useActionLoading(accountActions.getProfile.type);
 
-    const permissions = profile?.accountDto?.group?.permissions?.map((permission) => permission.action);
+    const permissions =
+        profile?.accountDto?.group?.permissions?.map((permission) => permission.action) ||
+        profile?.permissions?.map((permission) => permission.action);
     const kind = profile?.kind;
 
     return { isAuthenticated: !!profile, profile, kind, permissions, token, loading: immediate || loading };

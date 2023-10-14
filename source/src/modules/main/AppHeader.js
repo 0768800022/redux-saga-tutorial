@@ -50,7 +50,7 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                                     icon={<UserOutlined />}
                                     src={`${AppConstants.contentRootUrl}${profile.logoPath || profile.avatar}`}
                                 />
-                                {profile?.careerName || profile?.leaderName}
+                                {profile?.careerName || profile?.leaderName || profile?.fullName}
                                 <DownOutlined />
                             </Space>
                         ),
