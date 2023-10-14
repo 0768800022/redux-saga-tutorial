@@ -33,7 +33,7 @@ function RegistrationMoneySavePage() {
             update: apiConfig.registrationMoney.update,
         },
         options: {
-            getListUrl: `${routes.registrationMoneyListPage.path}?registrationId=${registrationId}`,
+            getListUrl: `${routes.registrationMoneyListPage.path}?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
