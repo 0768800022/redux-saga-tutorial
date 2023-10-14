@@ -607,6 +607,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getListLeader: {
+            baseURL: `${apiTenantUrl}v1/project/leader-project`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/project/auto-complete`,
             method: 'GET',
