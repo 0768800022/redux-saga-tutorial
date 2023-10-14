@@ -65,7 +65,7 @@ function RegistrationMoneyListPage() {
                 return `${pagePath}/create?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?registrationId=${registrationId}&?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
+                return `${pagePath}/${dataRow.id}?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
             };
         },
     });
@@ -108,9 +108,7 @@ function RegistrationMoneyListPage() {
                 },
             },
         ];
-        columns.push(
-            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
-        );
+        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }));
         return columns;
     };
 
