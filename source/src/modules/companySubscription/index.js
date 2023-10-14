@@ -95,6 +95,7 @@ const CompanySubscriptionListPage = () => {
             title: <FormattedMessage defaultMessage="Giá dịch vụ" />,
             dataIndex: 'money',
             width: 150,
+            align: 'right',
             render: (money) => {
                 const formattedValue = formatMoney(money, {
                     currentcy: 'đ',
@@ -121,6 +122,7 @@ const CompanySubscriptionListPage = () => {
             title: <FormattedMessage defaultMessage="Tiền thanh toán" />,
             dataIndex: 'totalAmount',
             width: 150,
+            align: 'right',
             render: (text, record) => {
                 const priceTotal = record.money;
                 const sale = record.saleOff;
