@@ -13,11 +13,12 @@ export const BaseTooltip = ({
     if (toLowerCase) {
         objectName = objectName.toLowerCase();
     }
-    if (type === 'edit') {
-        title = `Sửa ${objectName}`;
-    } else if (type === 'delete') {
-        title = `Xoá ${objectName}`;
-    }
+    const titleMapping = {
+        edit: `Sửa ${objectName}`,
+        delete: `Xoá ${objectName}`,
+    };
+
+    title = titleMapping[type] || title;
     return (
         <Tooltip placement={placement} title={title} {...props}>
             {children}
