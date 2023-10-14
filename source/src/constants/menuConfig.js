@@ -73,6 +73,7 @@ const navMenuConfig = [
         label: <FormattedMessage defaultMessage="Quản lý công ty" />,
         key: 'quan-ly-cong-ty',
         icon: <IconBuildingCommunity size={16} />,
+        permission: apiConfig.company.getList.baseURL,
         children: [
             {
                 label: <FormattedMessage defaultMessage="Quản lý công ty" />,
@@ -95,7 +96,7 @@ const navMenuConfig = [
         label: <FormattedMessage defaultMessage="Quản lý hệ thống" />,
         key: 'quan-ly-he-thong',
         icon: <IconSettings size={16} />,
-        // permission: apiConfig.category.getList.baseURL,
+        permission: apiConfig.category.getList.baseURL,
         children: [
             {
                 label: categoryKind.education.title,

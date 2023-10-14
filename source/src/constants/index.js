@@ -1,5 +1,6 @@
 export const apiUrl = process.env.REACT_APP_API;
 export const apiTenantUrl = process.env.REACT_APP_API_TENANT;
+export const apiTenantId = process.env.REACT_APP_TENANT_ID;
 export const enableExposure = process.env.REACT_APP_ENABLE_EXPOSURE === 'true';
 
 export const fixedPath = {
@@ -20,6 +21,14 @@ export const storageKeys = {
     RESTAURANT_ID: `${appName}-restaurant-id`,
     TENANT_HEADER: `X-tenant`,
     TENANT_API_URL: `${appName}-tenant-api-url`,
+};
+
+export const baseHeader = {
+    'Content-Type': 'application/json',
+};
+
+export const multipartFormHeader = {
+    'Content-Type': 'multipart/form-data',
 };
 
 export const AppConstants = {

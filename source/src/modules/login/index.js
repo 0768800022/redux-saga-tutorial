@@ -19,12 +19,23 @@ import useFetch from '@hooks/useFetch';
 import useFetchAction from '@hooks/useFetchAction';
 import Title from 'antd/es/typography/Title';
 import { showErrorMessage } from '@services/notifyService';
-import { LEADER_LOGIN_TYPE, appAccount, brandName, groupPermissionKinds, loginOptions, storageKeys } from '@constants';
+import {
+    LEADER_LOGIN_TYPE,
+    apiTenantId,
+    appAccount,
+    brandName,
+    groupPermissionKinds,
+    loginOptions,
+    storageKeys,
+    baseHeader,
+    STUDENT_LOGIN_TYPE,
+} from '@constants';
 import { Buffer } from 'buffer';
 import { setData } from '@utils/localStorage';
 import useNotification from '@hooks/useNotification';
 import SelectField from '@components/common/form/SelectField';
 import { FormattedMessage } from 'react-intl';
+import { sendRequest } from '@services/api';
 window.Buffer = window.Buffer || Buffer;
 
 const LoginPage = () => {
@@ -35,35 +46,67 @@ const LoginPage = () => {
         authorization: `Basic ${base64Credentials}`,
     });
     const { execute: executeLeaderLogin, loading: loadingLeader } = useFetch(apiConfig.leader.login);
+    const { execute: executeStudentLogin, loading: loadingStudent } = useFetch(apiConfig.student.login);
+    const { execute: executeGetCareerDetail, loading: loadingCareer } = useFetch(apiConfig.organize.getDetail, {
+        pathParams: { id: apiTenantId },
+    });
     const { execute: executeGetProfile } = useFetchAction(accountActions.getProfile, {
         loading: useFetchAction.LOADING_TYPE.APP,
     });
     const notification = useNotification();
     const onFinish = (values) => {
         if (values.grant_type === LEADER_LOGIN_TYPE)
-            executeLeaderLogin({
-                data: { ...values, phone: values.username, tenantId: 'cnttdev' },
+            executeGetCareerDetail({
                 onCompleted: (res) => {
-                    setCacheAccessToken(res.access_token);
-                    setData(storageKeys.USER_KIND, res.user_kind);
-                    executeGetProfile({ kind: res.user_kind });
+                    setData(storageKeys.TENANT_HEADER, res.data?.name);
+                    setData(storageKeys.TENANT_API_URL, res?.data?.serverProviderDto?.url);
+                    setData(storageKeys.TENANT_HEADER, res.data?.name);
+                    setData(storageKeys.TENANT_ID, res?.data?.id);
+                    executeLeaderLogin({
+                        data: { ...values, phone: values.username, tenantId: apiTenantId },
+                        onCompleted: (res) => {
+                            handleLoginSuccess(res.data);
+                        },
+                        onError: (res) => {
+                            notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
+                        },
+                    });
                 },
-                onError: (res) => {
-                    notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
+            });
+        else if (values.grant_type === STUDENT_LOGIN_TYPE)
+            executeGetCareerDetail({
+                onCompleted: (res) => {
+                    setData(storageKeys.TENANT_HEADER, res.data?.name);
+                    setData(storageKeys.TENANT_API_URL, res?.data?.serverProviderDto?.url);
+                    setData(storageKeys.TENANT_HEADER, res.data?.name);
+                    setData(storageKeys.TENANT_ID, res?.data?.id);
+                    executeStudentLogin({
+                        data: { ...values, phone: values.username, tenantId: apiTenantId },
+                        onCompleted: (res) => {
+                            handleLoginSuccess(res.data);
+                        },
+                        onError: (res) => {
+                            notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
+                        },
+                    });
                 },
             });
         else
             execute({
                 data: { ...values },
                 onCompleted: (res) => {
-                    setCacheAccessToken(res.access_token);
-                    setData(storageKeys.USER_KIND, res.user_kind);
-                    executeGetProfile({ kind: res.user_kind });
+                    handleLoginSuccess(res);
                 },
                 onError: (res) => {
                     notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
                 },
             });
+    };
+
+    const handleLoginSuccess = (res) => {
+        setCacheAccessToken(res.access_token);
+        setData(storageKeys.USER_KIND, res.user_kind);
+        executeGetProfile({ kind: res.user_kind });
     };
 
     return (

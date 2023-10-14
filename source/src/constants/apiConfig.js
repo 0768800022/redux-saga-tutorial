@@ -1,12 +1,4 @@
-import { AppConstants, apiUrl, apiTenantUrl } from '.';
-
-const baseHeader = {
-    'Content-Type': 'application/json',
-};
-
-const multipartFormHeader = {
-    'Content-Type': 'multipart/form-data',
-};
+import { AppConstants, apiUrl, apiTenantUrl, baseHeader, multipartFormHeader } from '.';
 
 const apiConfig = {
     account: {
@@ -239,7 +231,6 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
-
     registration: {
         getList: {
             baseURL: `${apiTenantUrl}v1/registration/list`,
@@ -312,6 +303,11 @@ const apiConfig = {
         },
         getById: {
             baseURL: `${apiUrl}v1/career/get/:id`,
+            method: `GET`,
+            headers: baseHeader,
+        },
+        getDetail: {
+            baseURL: `${apiUrl}v1/career/detail/:id`,
             method: `GET`,
             headers: baseHeader,
         },
@@ -389,6 +385,18 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        login: {
+            baseURL: `${apiTenantUrl}v1/student/login-student`,
+            method: 'POST',
+            headers: baseHeader,
+            isLogin: true,
+            isRequiredTenantId: true,
+        },
+        getProfile: {
+            baseURL: `${apiTenantUrl}v1/student/profile`,
+            method: 'GET',
+            headers: baseHeader,
+        },
     },
     leader: {
         getList: {
@@ -431,12 +439,14 @@ const apiConfig = {
             baseURL: `${apiTenantUrl}v1/leader/profile`,
             method: 'GET',
             headers: baseHeader,
-            isRequiredTenantId: true,
+            // isRequiredTenantId: true,
         },
         login: {
             baseURL: `${apiTenantUrl}v1/leader/login`,
             method: 'POST',
             headers: baseHeader,
+            isLogin: true,
+            isRequiredTenantId: true,
         },
     },
     developer: {
