@@ -17,9 +17,11 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, MoneyCollectOutlined } from '@ant-design/icons';
 import style from './Registration.module.scss';
-
+import { useNavigate } from 'react-router-dom';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import routers from './routes';
 const message = defineMessages({
     objectName: 'Danh sách đăng kí khóa học',
     studentId: 'Tên sinh viên',
@@ -30,6 +32,7 @@ const message = defineMessages({
     course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
     state: 'Tình trạng',
+    money: 'Thanh Toán',
 });
 
 function RegistrationListPage() {
@@ -41,6 +44,7 @@ function RegistrationListPage() {
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
+    const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
         options: {
@@ -66,6 +70,27 @@ function RegistrationListPage() {
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}`;
             };
+
+            funcs.additionalActionColumnButtons = () => ({
+                money: ({ id, name, status }) => (
+                    <BaseTooltip title={translate.formatMessage(message.money)}>
+                        <Button
+                            type="link"
+                            style={{ padding: '0' }}
+                            disabled={status === -1}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    routes.registrationMoneyListPage.path +
+                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
+                                );
+                            }}
+                        >
+                            <MoneyCollectOutlined />
+                        </Button>
+                    </BaseTooltip>
+                ),
+            });
         },
     });
     const setColumns = () => {
@@ -134,7 +159,8 @@ function RegistrationListPage() {
                 },
             },
         ];
-        courseStatus == 1 && columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }));
+        courseStatus == 1 &&
+            columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 120 }));
         return columns;
     };
 
