@@ -173,15 +173,13 @@ const ProjectLeaderListPage = () => {
 
             mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
-        columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }));
+
         return columns;
     };
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
-                // searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
-                actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
