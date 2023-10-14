@@ -63,10 +63,10 @@ function ProjectTaskListPage() {
                     }
                 };
                 funcs.getCreateLink = () => {
-                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
+                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');

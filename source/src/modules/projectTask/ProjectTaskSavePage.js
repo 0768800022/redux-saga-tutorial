@@ -22,6 +22,7 @@ function ProjectTaskSavePage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
+    const active = queryParameters.get('active');
     const projectTaskId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -49,21 +50,34 @@ function ProjectTaskSavePage() {
             };
         },
     });
+    const setBreadRoutes = () => {
+        const breadRoutes = [
+            { breadcrumbName: translate.formatMessage(messages.home) },
+            {
+                breadcrumbName: translate.formatMessage(messages.project),
+                path: routes.projectListPage.path,
+            },
+        ];
+
+        if (active) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(messages.ProjectTask),
+                path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
+            });
+        } else {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(messages.ProjectTask),
+                path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
+            });
+        }
+        breadRoutes.push({ breadcrumbName: title });
+
+        return breadRoutes;
+    };
     return (
         <PageWrapper
             loading={loading}
-            routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
-                { 
-                    breadcrumbName: translate.formatMessage(messages.project),
-                    path: routes.projectListPage.path,
-                },
-                {
-                    breadcrumbName: translate.formatMessage(messages.ProjectTask),
-                    path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
-                },
-                { breadcrumbName: title },
-            ]}
+            routes={setBreadRoutes()}
             title={title}
         >
             <ProjectTaskForm
