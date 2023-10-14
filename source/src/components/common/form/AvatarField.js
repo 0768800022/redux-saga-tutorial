@@ -11,6 +11,7 @@ const AvatarField = ({ size, icon, src, ...props }) => {
     return (
         <>
             <Avatar
+                style = {{ cursor: 'pointer' }}
                 size = {size}
                 icon = {icon}
                 src = {src}
@@ -22,6 +23,7 @@ const AvatarField = ({ size, icon, src, ...props }) => {
                 onCancel={() => setIsModalVisible(false)}
                 footer={null}
                 centered
+                closable={false}
             >
                 <img
                     alt="Avatar"
