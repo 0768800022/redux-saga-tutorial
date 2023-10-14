@@ -3,6 +3,9 @@ import ProjectListPage from '.';
 import ProjectSavePage from './projectSavePage';
 import ProjectMemberListPage from './member';
 import ProjectMemberSavePage from './member/ProjectMemberSavePage';
+import TeamListPage from './team';
+import TeamSavePage from './team/TeamSavePage';
+import ProjectTaskSavePage from '@modules/projectTask/ProjectTaskSavePage';
 export default {
     projectListPage: {
         path: '/project',
@@ -30,6 +33,20 @@ export default {
         title: 'Project Save Page',
         auth: true,
         component: ProjectMemberSavePage,
+        // permission: [apiConfig.leader.create.baseURL, apiConfig.leader.update.baseURL],
+    },
+    teamListPage: {
+        path: '/project/team',
+        title: 'Team List Page',
+        auth: true,
+        component: TeamListPage,
+        // permissions: [apiConfig.leader.getList.baseURL],
+    },
+    teamSavePage: {
+        path: '/project/team/:id',
+        title: 'Team Save Page',
+        auth: true,
+        component: TeamSavePage,
         // permission: [apiConfig.leader.create.baseURL, apiConfig.leader.update.baseURL],
     },
 };
