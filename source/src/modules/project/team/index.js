@@ -16,10 +16,10 @@ import routes from '@routes';
 import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
-    objectName: 'Team',
+    objectName: 'Nhóm',
     name: 'Họ và tên',
     home: 'Trang chủ',
-    team: 'Team',
+    team: 'Nhóm',
     status: 'Trạng thái',
     course: 'Khoá học',
     project: 'Dự án',
@@ -54,7 +54,7 @@ const TeamListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
+                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
@@ -84,12 +84,12 @@ const TeamListPage = () => {
             {
                 title: <FormattedMessage defaultMessage="Người hướng dẫn" />,
                 dataIndex: ['leaderInfo', 'leaderName'],
-                width: '200px',
+                width: '150px',
             },
             {
                 title: <FormattedMessage defaultMessage="Dự án" />,
                 dataIndex: ['projectInfo', 'name'],
-                width: '120px',
+                width: '200px',
             },
             mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];

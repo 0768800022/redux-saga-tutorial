@@ -11,7 +11,7 @@ import ProjectTaskForm from '@modules/projectTask/ProjectTaskForm';
 const message = defineMessages({
     objectName: 'Team',
     home: 'Trang chủ',
-    team: 'Team',
+    team: 'Nhóm',
     project: 'Dự án',
 });
 
@@ -20,6 +20,7 @@ function TeamSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
+    const active = queryParameters.get('active');
     // const projectName = queryParameters.get('projectName');
     const teamId = useParams();
     // console.log(projectId);
@@ -49,21 +50,34 @@ function TeamSavePage() {
             };
         },
     });
+    const setBreadRoutes = () => {
+        const breadRoutes = [
+            { breadcrumbName: translate.formatMessage(message.home) },
+            {
+                breadcrumbName: translate.formatMessage(message.project),
+                path: routes.projectListPage.path,
+            },
+        ];
+
+        if (active) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.team),
+                path: routes.teamListPage.path + `?active=${active}`,
+            });
+        } else {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.team),
+                path: routes.teamListPage.path,
+            });
+        }
+        breadRoutes.push({ breadcrumbName: title });
+
+        return breadRoutes;
+    };
     return (
         <PageWrapper
             loading={loading}
-            routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
-                { 
-                    breadcrumbName: translate.formatMessage(message.project),
-                    path: routes.projectListPage.path,
-                },
-                { 
-                    breadcrumbName: translate.formatMessage(message.team),
-                    path: routes.teamListPage.path + `?projectId=${projectId}`,
-                },
-                { breadcrumbName: title },
-            ]}
+            routes={setBreadRoutes()}
             title={title}
         >
             <TeamForm
