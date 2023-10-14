@@ -35,7 +35,7 @@ export default {
     },
     projectLeaderListPage: {
         path: '/project-leader',
-        title: 'Project Save Page',
+        title: 'Project List Page',
         auth: true,
         component: ProjectLeaderListPage,
         // permission: [apiConfig.leader.create.baseURL, apiConfig.leader.update.baseURL],

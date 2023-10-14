@@ -92,19 +92,6 @@ const ProjectLeaderListPage = () => {
             },
         });
 
-    // const { data: dataDeveloperProject, execute: executeGetList } = useFetch(apiConfig.developer.getProject, {
-    //     immediate: true,
-    //     pathParams: { id: developerId },
-    // });
-
-    // useEffect(() => {
-    //     if (!developerId) {
-    //         setDataApply(data);
-    //     } else {
-    //         setDataApply(dataDeveloperProject?.data?.content);
-    //     }
-    // }, [data, dataDeveloperProject]);
-
     const setBreadRoutes = () => {
         const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
         if (leaderName) {
@@ -126,30 +113,6 @@ const ProjectLeaderListPage = () => {
         const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
     };
-
-    // const setSearchField = () => {
-    //     let searchFields = [
-    //         {
-    //             key: 'name',
-    //             placeholder: translate.formatMessage(message.name),
-    //         },
-    //         {
-    //             key: 'state',
-    //             placeholder: translate.formatMessage(message.state),
-    //             type: FieldTypes.SELECT,
-    //             options: stateValues,
-    //         },
-    //     ];
-    //     !leaderName &&
-    //         !developerName &&
-    //         searchFields.splice(1, 0, {
-    //             key: 'status',
-    //             placeholder: translate.formatMessage(message.status),
-    //             type: FieldTypes.SELECT,
-    //             options: statusValues,
-    //         });
-    //     return searchFields;
-    // };
 
     const setColumns = () => {
         const columns = [
@@ -207,20 +170,10 @@ const ProjectLeaderListPage = () => {
                     );
                 },
             },
-        ];
 
-        !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-        columns.push(
-            mixinFuncs.renderActionColumn(
-                {
-                    member: !leaderName && !developerName && true,
-                    task: true,
-                    edit: !leaderName && !developerName && true,
-                    delete: !leaderName && !developerName && true,
-                },
-                { width: '150px' },
-            ),
-        );
+            mixinFuncs.renderStatusColumn({ width: '120px' }),
+        ];
+        columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }));
         return columns;
     };
     return (

@@ -15,7 +15,7 @@ import { defineMessages } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 import routes from '../routes';
 import dayjs from 'dayjs';
-
+import { projectTaskState, statusOptions, registrationMoneyKind } from '@constants/masterData';
 import {
     AppConstants,
     DATE_DISPLAY_FORMAT,
@@ -42,6 +42,7 @@ function RegistrationMoneyListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
+    const registrationMoneyKindValues = translate.formatKeys(registrationMoneyKind, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
@@ -110,6 +111,7 @@ function RegistrationMoneyListPage() {
                     });
                     return <div>{formattedValue}</div>;
                 },
+                width: 130,
             },
             {
                 title: translate.formatMessage(message.createDate),
@@ -129,19 +131,17 @@ function RegistrationMoneyListPage() {
                 title: translate.formatMessage(message.kind),
                 dataIndex: 'kind',
                 align: 'center',
-
-                render(kind) {
-                    return kind == 1 ? (
-                        <Tag>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>Tiền nhận </div>
-                        </Tag>
-                    ) : (
-                        <Tag>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>Tiền trả </div>
+                width: 120,
+                render(dataRow) {
+                    const state = registrationMoneyKindValues.find((item) => item.value == dataRow);
+                    return (
+                        <Tag color={state.color}>
+                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
                         </Tag>
                     );
                 },
             },
+
             mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
 
