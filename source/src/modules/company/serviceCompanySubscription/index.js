@@ -12,14 +12,13 @@ import { FieldTypes } from '@constants/formConfig';
 import { statusOptions } from '@constants/masterData';
 
 const message = defineMessages({
-    objectName: 'Company',
+    objectName: 'gói dịch vụ',
     serviceCompanySubscription: 'Quản lý gói dịch vụ',
     home: 'Trang chủ',
     name: 'Tên dịch vụ',
     price: 'Giá',
     status: 'Trạng thái',
     valueable: 'Số ngày sử dụng',
-    lastTitle: ' gói dịch vụ',
 });
 
 const ServiceCompanySubListPage = () => {
@@ -103,7 +102,7 @@ const ServiceCompanySubListPage = () => {
             align: 'center',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }),
+        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [

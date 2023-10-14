@@ -28,7 +28,6 @@ const message = defineMessages({
     createdDate: 'Ngày tạo',
     student: 'Học viên',
     status: 'Trạng thái',
-    lastTitle: ' môn học',
 });
 
 const SubjectListPage = () => {
@@ -110,7 +109,7 @@ const SubjectListPage = () => {
             align: 'center',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (
         <PageWrapper routes={breadRoutes}>

@@ -23,7 +23,7 @@ import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import routers from './routes';
 const message = defineMessages({
-    objectName: 'Danh sách đăng kí khóa học',
+    objectName: 'Đăng kí khoá học',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     courseid: 'courseId',
@@ -33,7 +33,6 @@ const message = defineMessages({
     registration: 'Danh sách sinh viên đăng kí khóa học',
     state: 'Tình trạng',
     money: 'Thanh Toán',
-    lastTitle: ' đăng ký',
 });
 
 function RegistrationListPage() {
@@ -161,7 +160,7 @@ function RegistrationListPage() {
             },
         ];
         courseStatus == 1 &&
-            columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 120 }),{ lastTitle: translate.formatMessage(message.lastTitle) });
+            columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }));
         return columns;
     };
 

@@ -18,7 +18,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
-    objectName: 'Company',
+    objectName: 'công ty',
     home: 'Trang chủ',
     companyName: 'Tên công ty',
     address: 'Địa chỉ',
@@ -31,7 +31,6 @@ const message = defineMessages({
     username: 'Tài khoản đăng nhập',
     company: 'Công ty',
     registration: 'Dịch vụ',
-    lastTitle: ' công ty',
 });
 
 const CompanyListPage = () => {
@@ -116,7 +115,7 @@ const CompanyListPage = () => {
         //     },
         // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '150px' }, { lastTitle: translate.formatMessage(message.lastTitle) }),
+        mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '150px' }),
     ];
 
     const searchFields = [

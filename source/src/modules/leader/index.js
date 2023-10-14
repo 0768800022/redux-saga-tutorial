@@ -27,7 +27,6 @@ const message = defineMessages({
     status: 'Trạng thái',
     course: 'Khoá học',
     project: 'Dự án',
-    lastTitle: ' leader',
 });
 
 const LeaderListPage = () => {
@@ -117,7 +116,7 @@ const LeaderListPage = () => {
             width: '120px',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ course: true, project: true, edit: true, delete: true }, { width: '170px' },{ lastTitle: translate.formatMessage(message.lastTitle) }),
+        mixinFuncs.renderActionColumn({ course: true, project: true, edit: true, delete: true }, { width: '170px' }),
     ];
 
     const searchFields = [

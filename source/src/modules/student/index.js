@@ -19,14 +19,13 @@ import { CourseIcon } from '@assets/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 const message = defineMessages({
-    objectName: 'Student',
+    objectName: 'Sinh viên',
     fullName: 'Họ và tên',
     home: 'Trang chủ',
     student: 'Sinh viên',
     mssv: 'Mã số sinh viên',
     status: 'Trạng thái',
     course: 'Khoá học',
-    lastTitle: ' sinh viên',
 });
 
 const StudentListPage = () => {
@@ -113,7 +112,7 @@ const StudentListPage = () => {
             dataIndex: ['studyClass', 'categoryName'],
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' },{ lastTitle: translate.formatMessage(message.lastTitle) }),
+        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [

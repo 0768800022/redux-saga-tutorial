@@ -27,14 +27,13 @@ import dayjs from 'dayjs';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 
 const message = defineMessages({
-    objectName: 'Danh sách khóa học',
+    objectName: 'Task',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     state: 'Tình trạng',
     task: 'Task',
     course: 'Khóa học',
     leader: 'Leader',
-    lastTitle: ' task',
 });
 
 function TaskListPage() {
@@ -126,7 +125,7 @@ function TaskListPage() {
             },
         ];
         if (!leaderName && courseStatus == 1) {
-            columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }));
+            columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }));
         }
         return columns;
     };

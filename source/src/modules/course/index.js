@@ -30,7 +30,7 @@ const message = defineMessages({
     name: 'Tên khoá học',
     home: 'Trang chủ',
     subject: 'Môn học',
-    objectName: 'course',
+    objectName: 'khoá học',
     course: 'Khoá học',
     description: 'Mô tả',
     dateRegister: 'Ngày bắt đầu',
@@ -40,7 +40,6 @@ const message = defineMessages({
     leader: 'Leader',
     registration: 'Đăng ký',
     task: 'Task',
-    lastTitle: ' khoá học' ,
 });
 
 const CourseListPage = () => {
@@ -257,7 +256,6 @@ const CourseListPage = () => {
                     delete: !leaderName && true,
                 },
                 { width: '180px' },
-                { lastTitle: translate.formatMessage(message.lastTitle) },
             ),
         );
         return columns;

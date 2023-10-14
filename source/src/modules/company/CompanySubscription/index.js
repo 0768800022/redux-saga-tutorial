@@ -16,7 +16,7 @@ import { statusOptions } from '@constants/masterData';
 import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
-    objectName: 'CompanySubscription',
+    objectName: 'dịch vụ',
     home: 'Trang chủ',
     companyName: 'Tên công ty',
     startDate: 'Ngày bắt đầu',
@@ -26,7 +26,6 @@ const message = defineMessages({
     status: 'Trạng thái',
     subscriptionName: 'Tên đăng ký',
     price: 'Giá',
-    lastTitle: ' dịch vụ',
 });
 
 const CompanySubscriptionIdListPage = () => {
@@ -158,7 +157,7 @@ const CompanySubscriptionIdListPage = () => {
         //     },
         // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (
         <PageWrapper

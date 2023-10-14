@@ -23,7 +23,7 @@ import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
-    objectName: 'CompanySubscription',
+    objectName: 'đăng ký gói',
     home: 'Trang chủ',
     companyName: 'Tên công ty',
     startDate: 'Ngày bắt đầu',
@@ -32,7 +32,6 @@ const message = defineMessages({
     status: 'Trạng thái',
     subscriptionName: 'Gói dịch vụ',
     price: 'Giá',
-    lastTitle: ' đăng ký',
 });
 
 const CompanySubscriptionListPage = () => {
@@ -173,7 +172,7 @@ const CompanySubscriptionListPage = () => {
         //     },
         // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [

@@ -15,7 +15,7 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { EditOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
-    objectName: 'Danh sách khóa học',
+    objectName: 'Task',
     developer: 'Lập trình viên',
     home: 'Trang chủ',
     state: 'Tình trạng',
@@ -24,7 +24,6 @@ const message = defineMessages({
     leader: 'Leader',
     name: 'Tên task',
     status: 'Trạng thái',
-    lastTitle: ' task',
 });
 
 function ProjectTaskListPage() {
@@ -155,7 +154,7 @@ function ProjectTaskListPage() {
         if (!leaderName && !developerName ) {
             columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
             if (active)
-                columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }));
+                columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
         }
         return columns;
     };
