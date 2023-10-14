@@ -24,6 +24,7 @@ import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { formatMoney } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
     name: 'Tên khoá học',
@@ -154,7 +155,7 @@ const CourseListPage = () => {
                 align: 'center',
                 width: 80,
                 render: (avatar) => (
-                    <Avatar size="large" icon={<UserOutlined />} src={`${AppConstants.contentRootUrl}${avatar}`} />
+                    <AvatarField size="large" icon={<UserOutlined />} src={`${AppConstants.contentRootUrl}${avatar}`} />
                 ),
             },
             {

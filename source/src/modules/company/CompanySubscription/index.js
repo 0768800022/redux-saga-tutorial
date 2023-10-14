@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import { DATE_DISPLAY_FORMAT, DEFAULT_FORMAT } from '@constants';
 import { formatMoney } from '@utils/index';
 import { statusOptions } from '@constants/masterData';
+import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
     objectName: 'CompanySubscription',
@@ -63,7 +64,7 @@ const CompanySubscriptionIdListPage = () => {
             align: 'center',
             width: 80,
             render: (logo) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={logo ? `${AppConstants.contentRootUrl}${logo}` : null}

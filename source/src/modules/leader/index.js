@@ -17,6 +17,8 @@ import { IconClipboardText, IconSchool } from '@tabler/icons-react';
 import FolderIcon, { CourseIcon } from '@assets/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import styles from './leader.module.scss';
+import AvatarField from '@components/common/form/AvatarField';
+
 const message = defineMessages({
     objectName: 'Leader',
     name: 'Họ và tên',
@@ -91,7 +93,7 @@ const LeaderListPage = () => {
             align: 'center',
             width: 80,
             render: (avatar) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}

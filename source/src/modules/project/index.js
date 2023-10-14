@@ -17,6 +17,7 @@ import route from '@modules/projectTask/routes';
 import { BookOutlined, TeamOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
+import AvatarField from '@components/common/form/AvatarField';
 
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -211,7 +212,7 @@ const ProjectListPage = () => {
                 align: 'center',
                 width: 80,
                 render: (avatar) => (
-                    <Avatar
+                    <AvatarField
                         size="large"
                         icon={<UserOutlined />}
                         src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
