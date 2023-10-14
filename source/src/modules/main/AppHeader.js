@@ -48,16 +48,16 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                             <Space>
                                 <Avatar
                                     icon={<UserOutlined />}
-                                    src={profile.logoPath && `${AppConstants.contentRootUrl}${profile.logoPath}`}
+                                    src={`${AppConstants.contentRootUrl}${profile.logoPath || profile.avatar}`}
                                 />
-                                {profile?.careerName}
+                                {profile?.careerName || profile?.leaderName || profile?.fullName}
                                 <DownOutlined />
                             </Space>
                         ),
                         children: [
                             {
                                 label: (
-                                    <div style={{ display: 'flex', gap: '5px', alignItems:'center' }}>
+                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
                                         <UserOutlined />
                                         <span>{translate.formatMessage(messages.profile)}</span>
                                     </div>
@@ -67,7 +67,7 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                             },
                             {
                                 label: (
-                                    <div style={{ display: 'flex', gap: '5px',alignItems:'center' }}>
+                                    <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
                                         <LoginOutlined />
                                         <span>{translate.formatMessage(messages.logout)}</span>
                                     </div>

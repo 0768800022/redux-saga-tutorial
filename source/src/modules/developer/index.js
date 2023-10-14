@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import FolderIcon from '@assets/icons';
 import { FieldTypes } from '@constants/formConfig';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
     objectName: 'Lập trình viên',
@@ -77,7 +78,7 @@ const DeveloperListPage = () => {
             align: 'center',
             width: 80,
             render: (avatar) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}

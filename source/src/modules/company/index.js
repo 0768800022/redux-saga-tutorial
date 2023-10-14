@@ -15,8 +15,10 @@ import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import routes from './routes';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import AvatarField from '@components/common/form/AvatarField';
+
 const message = defineMessages({
-    objectName: 'Company',
+    objectName: 'công ty',
     home: 'Trang chủ',
     companyName: 'Tên công ty',
     address: 'Địa chỉ',
@@ -79,7 +81,7 @@ const CompanyListPage = () => {
             align: 'center',
             width: 80,
             render: (logo) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={logo ? `${AppConstants.contentRootUrl}${logo}` : null}

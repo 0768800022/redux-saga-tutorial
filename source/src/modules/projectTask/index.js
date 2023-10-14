@@ -15,7 +15,7 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { EditOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
-    objectName: 'Danh sách khóa học',
+    objectName: 'Task',
     developer: 'Lập trình viên',
     home: 'Trang chủ',
     state: 'Tình trạng',

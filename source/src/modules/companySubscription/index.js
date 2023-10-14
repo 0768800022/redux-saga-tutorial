@@ -20,9 +20,10 @@ import { useEffect } from 'react';
 import useFetch from '@hooks/useFetch';
 import { render } from '@testing-library/react';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
+import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
-    objectName: 'CompanySubscription',
+    objectName: 'đăng ký gói',
     home: 'Trang chủ',
     companyName: 'Tên công ty',
     startDate: 'Ngày bắt đầu',
@@ -75,7 +76,7 @@ const CompanySubscriptionListPage = () => {
             align: 'center',
             width: 80,
             render: (logo) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={logo ? `${AppConstants.contentRootUrl}${logo}` : null}

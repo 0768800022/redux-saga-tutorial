@@ -19,6 +19,8 @@ import {
     STATE_PROJECT_TASK_PROCESSING,
     STATE_PROJECT_TASK_DONE,
     STATE_PROJECT_TASK_CANCEL,
+    REGISTRATION_MONEY_RECEIVED,
+    REGISTRATION_MONEY_RETURN,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -35,6 +37,8 @@ import {
     stateResgistrationMessage,
     statusSubjectMessage,
     projectTaskStateMessage,
+    registrationMoneyKindMessage,
+    actionMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -220,7 +224,6 @@ export const stateOptions = [
     { label: 'Bận', value: BUSY_STATE, color: '#FFBF00' },
 ];
 
-
 export const HALF = 0;
 export const FULL = 1;
 
@@ -276,3 +279,15 @@ export const levelOptionSelect = [
 export const settingGroups = {
     GENERAL: 'page_config',
 };
+
+export const registrationMoneyKind = [
+    { value: REGISTRATION_MONEY_RECEIVED, label: registrationMoneyKindMessage.receivedMoney, color: 'yellow' },
+    { value: REGISTRATION_MONEY_RETURN, label: registrationMoneyKindMessage.returnMoney, color: 'blue' },
+];
+export const actionOptions = [
+    {
+        value: 1,
+        label: actionMessage.contactForm,
+    },
+    { value: 2, label: actionMessage.navigation },
+];
