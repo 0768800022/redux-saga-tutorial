@@ -19,6 +19,8 @@ import {
     STATE_PROJECT_TASK_PROCESSING,
     STATE_PROJECT_TASK_DONE,
     STATE_PROJECT_TASK_CANCEL,
+    REGISTRATION_MONEY_RECEIVED,
+    REGISTRATION_MONEY_RETURN,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -35,6 +37,7 @@ import {
     stateResgistrationMessage,
     statusSubjectMessage,
     projectTaskStateMessage,
+    registrationMoneyKindMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -276,3 +279,8 @@ export const levelOptionSelect = [
 export const settingGroups = {
     GENERAL: 'page_config',
 };
+
+export const registrationMoneyKind = [
+    { value: REGISTRATION_MONEY_RECEIVED, label: registrationMoneyKindMessage.receivedMoney, color: 'yellow' },
+    { value: REGISTRATION_MONEY_RETURN, label: registrationMoneyKindMessage.returnMoney, color: 'blue' },
+];
