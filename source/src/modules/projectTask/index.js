@@ -63,10 +63,10 @@ function ProjectTaskListPage() {
                     }
                 };
                 funcs.getCreateLink = () => {
-                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
+                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
@@ -94,21 +94,6 @@ function ProjectTaskListPage() {
                         );
                     }
                 };
-                funcs.additionalActionColumnButtons = () => ({
-                    edit: ({ id, name, project, status, state }) => (
-                        <Button
-                            disabled={project.status === 0 || project.status === -1}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(routes.ProjectTaskSavePage.path);
-                            }}
-                            type="link"
-                            style={{ padding: 0 }}
-                        >
-                            <EditOutlined color="red" />
-                        </Button>
-                    ),
-                });
             },
         });
     const setColumns = () => {

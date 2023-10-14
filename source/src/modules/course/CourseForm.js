@@ -26,6 +26,7 @@ const CourseForm = (props) => {
     const [lectureStateFilter, setLectureStateFilter] = useState([lectureStateOptions[0]]);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [imageUrl, setImageUrl] = useState(null);
+    const [bannerUrl, setBannerUrl] = useState(null);
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
@@ -40,7 +41,7 @@ const CourseForm = (props) => {
         }
         values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
-        return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
+        return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl, banner: bannerUrl });
     };
     const {
         data: subjects,
@@ -96,6 +97,7 @@ const CourseForm = (props) => {
             ...dataDetail,
             leaderId: dataDetail?.leader?.leaderName,
         });
+        setBannerUrl(dataDetail.banner);
         setImageUrl(dataDetail.avatar);
     }, [dataDetail]);
     const validateStartDate = (_, value) => {
@@ -130,7 +132,24 @@ const CourseForm = (props) => {
             },
         });
     };
-
+    const uploadBanner = (file, onSuccess, onError) => {
+        executeUpFile({
+            data: {
+                type: 'AVATAR',
+                file: file,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    onSuccess();
+                    setBannerUrl(response.data.filePath);
+                    setIsChangedFormValues(true);
+                }
+            },
+            onError: (error) => {
+                onError();
+            },
+        });
+    };
     useEffect(() => {
         if (dataDetail.state !== undefined && dataDetail.state !== 1) {
             setIsDisableStartDate(true);
@@ -159,15 +178,26 @@ const CourseForm = (props) => {
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
-                <Col span={12}>
-                    <CropImageField
-                        label={<FormattedMessage defaultMessage="Avatar" />}
-                        name="avatar"
-                        imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
-                        aspect={1 / 1}
-                        uploadFile={uploadFile}
-                    />
-                </Col>
+                <Row>
+                    <Col span={12}>
+                        <CropImageField
+                            label={<FormattedMessage defaultMessage="Avatar" />}
+                            name="avatar"
+                            imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
+                            aspect={1 / 1}
+                            uploadFile={uploadFile}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <CropImageField
+                            label={<FormattedMessage defaultMessage="Banner" />}
+                            name="banner"
+                            imageUrl={bannerUrl && `${AppConstants.contentRootUrl}${bannerUrl}`}
+                            aspect={4 / 3}
+                            uploadFile={uploadBanner}
+                        />
+                    </Col>
+                </Row>
                 <Row gutter={12}>
                     <Col span={12}>
                         <TextField
