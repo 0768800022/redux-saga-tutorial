@@ -24,6 +24,7 @@ const message = defineMessages({
     leader: 'Leader',
     name: 'Tên task',
     status: 'Trạng thái',
+    lastTitle: ' task',
 });
 
 function ProjectTaskListPage() {
@@ -154,7 +155,7 @@ function ProjectTaskListPage() {
         if (!leaderName && !developerName ) {
             columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
             if (active)
-                columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
+                columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }));
         }
         return columns;
     };

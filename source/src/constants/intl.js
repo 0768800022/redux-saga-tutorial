@@ -115,7 +115,10 @@ export const projectTaskStateMessage = defineMessages({
     done: 'Hoàn tất',
     cancel: 'Đã hủy',
 });
-
+export const actionMessage = defineMessages({
+    contactForm: 'Biểu mẫu liên hệ',
+    navigation: 'Chuyển hướng',
+});
 export const registrationMoneyKindMessage = defineMessages({
     receivedMoney: 'Tiền nhận',
     returnMoney: 'Tiền trả lại',

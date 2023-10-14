@@ -26,6 +26,7 @@ const message = defineMessages({
     mssv: 'Mã số sinh viên',
     status: 'Trạng thái',
     course: 'Khoá học',
+    lastTitle: ' sinh viên',
 });
 
 const StudentListPage = () => {
@@ -112,7 +113,7 @@ const StudentListPage = () => {
             dataIndex: ['studyClass', 'categoryName'],
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' },{ lastTitle: translate.formatMessage(message.lastTitle) }),
     ];
 
     const searchFields = [

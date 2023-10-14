@@ -40,6 +40,7 @@ const message = defineMessages({
     leader: 'Leader',
     registration: 'Đăng ký',
     task: 'Task',
+    lastTitle: ' khoá học' ,
 });
 
 const CourseListPage = () => {
@@ -164,11 +165,6 @@ const CourseListPage = () => {
                 width: 200,
             },
             {
-                title: translate.formatMessage(message.subject),
-                dataIndex: ['subject', 'subjectName'],
-                width: 150,
-            },
-            {
                 title: translate.formatMessage(message.leader),
                 dataIndex: ['leader', 'leaderName'],
                 width: 80,
@@ -261,6 +257,7 @@ const CourseListPage = () => {
                     delete: !leaderName && true,
                 },
                 { width: '180px' },
+                { lastTitle: translate.formatMessage(message.lastTitle) },
             ),
         );
         return columns;

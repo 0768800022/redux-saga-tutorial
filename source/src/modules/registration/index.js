@@ -33,6 +33,7 @@ const message = defineMessages({
     registration: 'Danh sách sinh viên đăng kí khóa học',
     state: 'Tình trạng',
     money: 'Thanh Toán',
+    lastTitle: ' đăng ký',
 });
 
 function RegistrationListPage() {
@@ -160,7 +161,7 @@ function RegistrationListPage() {
             },
         ];
         courseStatus == 1 &&
-            columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 120 }));
+            columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 120 }),{ lastTitle: translate.formatMessage(message.lastTitle) });
         return columns;
     };
 

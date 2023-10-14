@@ -26,6 +26,7 @@ const message = defineMessages({
     status: 'Trạng thái',
     name: 'Họ và tên',
     project: 'Dự án',
+    lastTitle: ' lập trình viên', 
 });
 
 const DeveloperListPage = () => {
@@ -128,7 +129,7 @@ const DeveloperListPage = () => {
         //     },
         // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ project: true, edit: true, delete: true }, { width: 160 }),
+        mixinFuncs.renderActionColumn({ project: true, edit: true, delete: true }, { width: 160 },{ lastTitle: translate.formatMessage(message.lastTitle) }),
     ];
 
     const searchFields = [

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Tooltip } from 'antd';
 
-export const BaseTooltip = ({ placement = 'bottom', title, children, ...props }) => {
+export const BaseTooltip = ({ placement = 'bottom',firstTitle = '', lastTitle = '', children, ...props }) => {
     return (
-        <Tooltip placement={placement} title={title} {...props}>
+        <Tooltip placement={placement} title={firstTitle + lastTitle} {...props}>
             {children}
         </Tooltip>
     );

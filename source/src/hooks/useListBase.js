@@ -271,11 +271,11 @@ const useListBase = ({
     };
 
     const actionColumnButtons = (additionalButtons = {}) => ({
-        delete: ({ id, buttonProps }) => {
+        delete: ({ id, buttonProps, ...dataRow }) => {
             if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
 
             return (
-                <BaseTooltip title={intl.formatMessage(message.delete)}>
+                <BaseTooltip firstTitle={intl.formatMessage(message.delete)} lastTitle={dataRow?.lastTitle}>
                     <Button
                         {...buttonProps}
                         type="link"
@@ -309,7 +309,7 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
 
             return (
-                <BaseTooltip title={intl.formatMessage(message.edit)} >
+                <BaseTooltip firstTitle={intl.formatMessage(message.edit)} lastTitle={dataRow?.lastTitle}>
                     <Button
                         {...buttonProps}
                         onClick={(e) => {

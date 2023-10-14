@@ -25,6 +25,7 @@ const message = defineMessages({
     createdDate: 'Ngày tạo',
     name: 'Tên vai trò dự án',
     status: 'Trạng thái',
+    lastTitle: ' vai trò',
 });
 
 const ProjectRoleListPage = () => {
@@ -99,7 +100,7 @@ const ProjectRoleListPage = () => {
         //     },
         // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' },{ lastTitle: translate.formatMessage(message.lastTitle) }),
     ];
     return (
         <PageWrapper routes={breadRoutes}>

@@ -26,6 +26,7 @@ const message = defineMessages({
     status: 'Trạng thái',
     subscriptionName: 'Tên đăng ký',
     price: 'Giá',
+    lastTitle: ' dịch vụ',
 });
 
 const CompanySubscriptionIdListPage = () => {
@@ -53,7 +54,6 @@ const CompanySubscriptionIdListPage = () => {
             funcs.getCreateLink = () => {
                 return `${pagePath}/create?companyId=${companyId}&companyName=${companyName}`;
             };
-
         },
     });
 
@@ -98,8 +98,7 @@ const CompanySubscriptionIdListPage = () => {
             render: (saleOff) => {
                 if (saleOff > 0) {
                     return <div>{saleOff} %</div>;
-                }
-                else return <div>{saleOff}</div>;
+                } else return <div>{saleOff}</div>;
             },
         },
         {
@@ -109,17 +108,16 @@ const CompanySubscriptionIdListPage = () => {
             render: (text, record) => {
                 const totalPrice = record.money;
                 const saleOff = record.saleOff;
-                if(saleOff){
-                    var totalAmount = totalPrice - (totalPrice * (saleOff / 100));
-                }
-                else totalAmount = totalPrice;
+                if (saleOff) {
+                    var totalAmount = totalPrice - totalPrice * (saleOff / 100);
+                } else totalAmount = totalPrice;
                 const formattedValue = formatMoney(totalAmount, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: 'đ',
                     currentDecimal: '0',
                 });
-        
+
                 return <div>{formattedValue}</div>;
             },
         },
@@ -160,7 +158,7 @@ const CompanySubscriptionIdListPage = () => {
         //     },
         // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }),
     ];
     return (
         <PageWrapper

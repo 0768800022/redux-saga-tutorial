@@ -32,6 +32,7 @@ const message = defineMessages({
     status: 'Trạng thái',
     subscriptionName: 'Gói dịch vụ',
     price: 'Giá',
+    lastTitle: ' đăng ký',
 });
 
 const CompanySubscriptionListPage = () => {
@@ -172,7 +173,7 @@ const CompanySubscriptionListPage = () => {
         //     },
         // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }),
     ];
 
     const searchFields = [

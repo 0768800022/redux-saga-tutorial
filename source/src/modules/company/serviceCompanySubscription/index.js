@@ -19,6 +19,7 @@ const message = defineMessages({
     price: 'Giá',
     status: 'Trạng thái',
     valueable: 'Số ngày sử dụng',
+    lastTitle: ' gói dịch vụ',
 });
 
 const ServiceCompanySubListPage = () => {
@@ -102,7 +103,7 @@ const ServiceCompanySubListPage = () => {
             align: 'center',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }),
     ];
 
     const searchFields = [

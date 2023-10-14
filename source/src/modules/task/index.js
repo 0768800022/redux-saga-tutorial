@@ -34,6 +34,7 @@ const message = defineMessages({
     task: 'Task',
     course: 'Khóa học',
     leader: 'Leader',
+    lastTitle: ' task',
 });
 
 function TaskListPage() {
@@ -125,7 +126,7 @@ function TaskListPage() {
             },
         ];
         if (!leaderName && courseStatus == 1) {
-            columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }));
+            columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }, { lastTitle: translate.formatMessage(message.lastTitle) }));
         }
         return columns;
     };

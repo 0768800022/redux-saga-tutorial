@@ -31,6 +31,7 @@ const message = defineMessages({
     username: 'Tài khoản đăng nhập',
     company: 'Công ty',
     registration: 'Dịch vụ',
+    lastTitle: ' công ty',
 });
 
 const CompanyListPage = () => {
@@ -115,7 +116,7 @@ const CompanyListPage = () => {
         //     },
         // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '150px' }, { lastTitle: translate.formatMessage(message.lastTitle) }),
     ];
 
     const searchFields = [

@@ -39,6 +39,7 @@ const message = defineMessages({
     developer: 'Lập trình viên',
     task: 'Task',
     member: 'Thành viên',
+    lastTitle: ' dự án',
 });
 
 const ProjectListPage = () => {
@@ -272,6 +273,7 @@ const ProjectListPage = () => {
                     delete: !leaderName && !developerName && true,
                 },
                 { width: '150px' },
+                { lastTitle: translate.formatMessage(message.lastTitle) },
             ),
         );
         return columns;

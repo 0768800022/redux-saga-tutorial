@@ -108,7 +108,9 @@ function RegistrationMoneyListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }));
+        columns.push(
+            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }, { lastTitle: ' lịch sử trả phí' }),
+        );
         return columns;
     };
 
