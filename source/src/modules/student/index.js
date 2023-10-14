@@ -17,7 +17,7 @@ import { FieldTypes } from '@constants/formConfig';
 import { AppConstants } from '@constants';
 import { CourseIcon } from '@assets/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
-
+import AvatarField from '@components/common/form/AvatarField';
 const message = defineMessages({
     objectName: 'Student',
     fullName: 'Họ và tên',
@@ -76,7 +76,7 @@ const StudentListPage = () => {
             align: 'center',
             width: 80,
             render: (avatar) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
