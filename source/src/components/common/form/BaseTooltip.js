@@ -6,7 +6,7 @@ export const BaseTooltip = ({
     type,
     objectName = '',
     title,
-    toLowerCase = false,
+    toLowerCase = true,
     children,
     ...props
 }) => {

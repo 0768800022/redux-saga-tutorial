@@ -273,7 +273,7 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
 
             return (
-                <BaseTooltip type="delete" objectName={options.objectName} toLowerCase>
+                <BaseTooltip type="delete" objectName={options.objectName}>
                     <Button
                         {...buttonProps}
                         type="link"
@@ -307,7 +307,7 @@ const useListBase = ({
             if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
 
             return (
-                <BaseTooltip type="edit" objectName={options.objectName} toLowerCase>
+                <BaseTooltip type="edit" objectName={options.objectName}>
                     <Button
                         {...buttonProps}
                         onClick={(e) => {
