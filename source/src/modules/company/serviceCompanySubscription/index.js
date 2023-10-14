@@ -75,6 +75,27 @@ const ServiceCompanySubListPage = () => {
             },
         },
         {
+            title: <FormattedMessage defaultMessage="Tiền thanh toán" />,
+            dataIndex: 'totalAmount',
+            width: 150,
+            render: (text, record) => {
+                const totalPrice = record.price;
+                const saleOff = record.saleOff;
+                if(saleOff){
+                    var totalAmount = totalPrice - (totalPrice * (saleOff / 100));
+                }
+                else totalAmount = totalPrice;
+                const formattedValue = formatMoney(totalAmount, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: 'đ',
+                    currentDecimal: '0',
+                });
+        
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
             title: <FormattedMessage defaultMessage="Số ngày sử dụng" />,
             dataIndex: 'valueable',
             width: 150,
