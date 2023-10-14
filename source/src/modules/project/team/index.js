@@ -13,9 +13,8 @@ import { FieldTypes } from '@constants/formConfig';
 import { statusOptions } from '@constants/masterData';
 import { useNavigate, generatePath, useLocation } from 'react-router-dom';
 import routes from '@routes';
-import { IconClipboardText, IconSchool } from '@tabler/icons-react';
-import FolderIcon, { CourseIcon } from '@assets/icons';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import AvatarField from '@components/common/form/AvatarField';
+
 const message = defineMessages({
     objectName: 'Team',
     name: 'Họ và tên',
@@ -70,7 +69,7 @@ const TeamListPage = () => {
                 align: 'center',
                 width: 80,
                 render: (avatar) => (
-                    <Avatar
+                    <AvatarField
                         size="large"
                         icon={<UserOutlined />}
                         src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
