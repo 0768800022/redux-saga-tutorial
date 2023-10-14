@@ -30,7 +30,7 @@ const message = defineMessages({
     name: 'Tên khoá học',
     home: 'Trang chủ',
     subject: 'Môn học',
-    objectName: 'course',
+    objectName: 'khoá học',
     course: 'Khoá học',
     description: 'Mô tả',
     dateRegister: 'Ngày bắt đầu',
@@ -162,11 +162,6 @@ const CourseListPage = () => {
                 title: translate.formatMessage(message.name),
                 dataIndex: 'name',
                 width: 200,
-            },
-            {
-                title: translate.formatMessage(message.subject),
-                dataIndex: ['subject', 'subjectName'],
-                width: 150,
             },
             {
                 title: translate.formatMessage(message.leader),

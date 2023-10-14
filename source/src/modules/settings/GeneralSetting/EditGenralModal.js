@@ -13,7 +13,7 @@ const messages = defineMessages({
     update: 'Cập nhật',
     updateSuccess: 'Cập nhật {objectName} thành công',
 });
-const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, executeLoading }) => {
+const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, executeLoading, ...props }) => {
     const [form] = Form.useForm();
     const [isChanged, setChange] = useState(false);
     const notification = useNotification();
@@ -55,7 +55,7 @@ const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, exe
         });
     }, [data]);
     return (
-        <Modal centered open={open} onCancel={onCancel} footer={null} title={data?.keyName}>
+        <Modal centered open={open} onCancel={onCancel} footer={null} title={data?.keyName} {...props}>
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} onFinish={updateSetting} size="100%">
                     <Row gutter={16}>

@@ -19,7 +19,7 @@ import { CourseIcon } from '@assets/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 const message = defineMessages({
-    objectName: 'Student',
+    objectName: 'Sinh viên',
     fullName: 'Họ và tên',
     home: 'Trang chủ',
     student: 'Sinh viên',

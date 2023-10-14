@@ -16,7 +16,7 @@ import { formatMoney } from '@utils';
 import Avatar from 'antd';
 import routes from '../routes';
 const message = defineMessages({
-    objectName: 'Danh sách đăng kí khóa học',
+    objectName: 'Lịch sử trả phí',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     courseid: 'courseId',
@@ -108,7 +108,9 @@ function RegistrationMoneyListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }));
+        columns.push(
+            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
+        );
         return columns;
     };
 

@@ -12,7 +12,7 @@ import { FieldTypes } from '@constants/formConfig';
 import { statusOptions } from '@constants/masterData';
 
 const message = defineMessages({
-    objectName: 'Company',
+    objectName: 'gói dịch vụ',
     serviceCompanySubscription: 'Quản lý gói dịch vụ',
     home: 'Trang chủ',
     name: 'Tên dịch vụ',

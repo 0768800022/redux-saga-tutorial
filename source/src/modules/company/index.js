@@ -18,7 +18,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
-    objectName: 'Company',
+    objectName: 'công ty',
     home: 'Trang chủ',
     companyName: 'Tên công ty',
     address: 'Địa chỉ',
