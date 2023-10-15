@@ -22,6 +22,8 @@ import style from './Registration.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import routers from './routes';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
+
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
     studentId: 'Tên sinh viên',
@@ -82,7 +84,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.registrationMoneyListPage.path +
-                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
+                                    `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                                 );
                             }}
                         >
@@ -102,28 +104,11 @@ function RegistrationListPage() {
             {
                 title: 'Lịch trình',
                 dataIndex: 'schedule',
+                align: 'center',
                 render: (schedule) => {
-                    let check = JSON.parse(schedule);
-                    const newCheck = [
-                        { key: 'M', value: check.t2 },
-                        { key: 'T', value: check.t3 },
-                        { key: 'W', value: check.t4 },
-                        { key: 'T', value: check.t5 },
-                        { key: 'F', value: check.t6 },
-                        { key: 'S', value: check.t7 },
-                        { key: 'S', value: check.cn },
-                    ];
-
-                    let dateString = '';
-                    newCheck.map((item) => {
-                        if (item.value !== undefined) {
-                            dateString += item.key + ' ';
-                        }
-                    });
-
-                    return <div>{dateString}</div>;
+                    return <ScheduleFile schedule={schedule} />;
                 },
-                width: 140,
+                width: 180,
             },
             {
                 title: translate.formatMessage(message.isIntern),
