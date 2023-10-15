@@ -206,6 +206,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getListStudentCourse: {
+            baseURL: `${apiTenantUrl}v1/course/student-course`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
         getById: {
             baseURL: `${apiTenantUrl}v1/course/get/:id`,
             method: 'GET',
