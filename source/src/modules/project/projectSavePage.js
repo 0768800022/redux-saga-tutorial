@@ -9,7 +9,6 @@ import routes from './routes';
 import apiConfig from '@constants/apiConfig';
 
 const messages = defineMessages({
-    home: 'Trang chủ',
     project: 'Dự án',
     objectName: 'Dự án',
 });
@@ -46,7 +45,6 @@ const ProjectSavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
                 {
                     breadcrumbName: translate.formatMessage(messages.project),
                     path: generatePath(routes.projectListPage.path, { projectId }),

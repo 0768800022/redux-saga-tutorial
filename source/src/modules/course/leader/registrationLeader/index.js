@@ -21,18 +21,13 @@ import { CheckCircleOutlined, DollarOutlined } from '@ant-design/icons';
 import style from '@modules/registration/Registration.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { commonMessage } from '@locales/intl';
+
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
-    studentId: 'Tên sinh viên',
-    home: 'Trang chủ',
-    courseid: 'courseId',
     createDate: 'Ngày đăng kí',
     isIntern: 'Đăng kí thực tập',
-    course: 'Khóa học',
-    registration: 'Danh sách sinh viên đăng kí khóa học',
-    state: 'Tình trạng',
-    money: 'Thanh Toán',
 });
 
 function RegistrationLeaderListPage() {
@@ -70,7 +65,7 @@ function RegistrationLeaderListPage() {
     const setColumns = () => {
         const columns = [
             {
-                title: translate.formatMessage(message.studentId),
+                title: translate.formatMessage(commonMessage.studentName),
                 dataIndex: ['studentInfo', 'fullName'],
             },
             {
@@ -102,7 +97,7 @@ function RegistrationLeaderListPage() {
                 width: 170,
             },
             {
-                title: translate.formatMessage(message.state),
+                title: translate.formatMessage(commonMessage.state),
                 dataIndex: 'state',
                 align: 'center',
                 width: 120,

@@ -16,19 +16,10 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    name: 'Tên khoá học',
-    home: 'Trang chủ',
-    subject: 'Môn học',
-    objectName: 'course',
-    course: 'Khoá học',
-    description: 'Mô tả',
-    dateRegister: 'Ngày bắt đầu',
-    dateEnd: 'Ngày kết thúc',
-    leader: 'Leader',
-    registration: 'Đăng ký',
-    task: 'Task',
+    objectName: 'Khóa học',
 });
 
 const CourseStudentListPage = () => {
@@ -61,7 +52,7 @@ const CourseStudentListPage = () => {
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     task: ({ id, name, subject, state, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.task)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
                                 disabled={state === 1 || state === 5}
                                 type="link"
@@ -80,8 +71,7 @@ const CourseStudentListPage = () => {
             },
         });
     const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
-        { breadcrumbName: translate.formatMessage(message.course) },
+        { breadcrumbName: translate.formatMessage(commonMessage.course) },
     ];
     const columns = [
         {
@@ -94,12 +84,12 @@ const CourseStudentListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(message.name),
+            title: translate.formatMessage(commonMessage.courseName),
             dataIndex: 'name',
             width: 200,
         },
         {
-            title: translate.formatMessage(message.subject),
+            title: translate.formatMessage(commonMessage.subject),
             dataIndex: ['subject', 'subjectName'],
             width: 150,
         },
@@ -130,7 +120,7 @@ const CourseStudentListPage = () => {
             },
         },
         {
-            title: translate.formatMessage(message.dateRegister),
+            title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'dateRegister',
             render: (dateRegister) => {
                 return (
@@ -143,7 +133,7 @@ const CourseStudentListPage = () => {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.dateEnd),
+            title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
                 return (

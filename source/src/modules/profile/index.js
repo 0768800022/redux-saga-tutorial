@@ -14,7 +14,6 @@ import useTranslate from '@hooks/useTranslate';
 import { getData } from '@utils/localStorage';
 
 const messages = defineMessages({
-    home: 'Home',
     profile: 'Profile',
 });
 
@@ -56,7 +55,6 @@ const ProfilePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
                 { breadcrumbName: translate.formatMessage(messages.profile) },
             ]}
         >

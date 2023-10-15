@@ -6,10 +6,9 @@ import apiConfig from '@constants/apiConfig';
 import { setCacheAccessToken } from '@services/userService';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import InputTextField from '@components/common/form/InputTextField';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    username: 'Username',
-    password: 'Password',
     login: 'Login',
 });
 
@@ -29,6 +28,7 @@ import {
     storageKeys,
     baseHeader,
     STUDENT_LOGIN_TYPE,
+    COMPANY_LOGIN_TYPE,
 } from '@constants';
 import { Buffer } from 'buffer';
 import { setData } from '@utils/localStorage';
@@ -47,6 +47,7 @@ const LoginPage = () => {
     });
     const { execute: executeLeaderLogin, loading: loadingLeader } = useFetch(apiConfig.leader.login);
     const { execute: executeStudentLogin, loading: loadingStudent } = useFetch(apiConfig.student.login);
+    const { execute: executeCompanyLogin, loading: loadingCompany } = useFetch(apiConfig.company.login);
     const { execute: executeGetCareerDetail, loading: loadingCareer } = useFetch(apiConfig.organize.getDetail, {
         pathParams: { id: apiTenantId },
     });
@@ -55,42 +56,9 @@ const LoginPage = () => {
     });
     const notification = useNotification();
     const onFinish = (values) => {
-        if (values.grant_type === LEADER_LOGIN_TYPE)
-            executeGetCareerDetail({
-                onCompleted: (res) => {
-                    setData(storageKeys.TENANT_HEADER, res.data?.name);
-                    setData(storageKeys.TENANT_API_URL, res?.data?.serverProviderDto?.url);
-                    setData(storageKeys.TENANT_HEADER, res.data?.name);
-                    setData(storageKeys.TENANT_ID, res?.data?.id);
-                    executeLeaderLogin({
-                        data: { ...values, phone: values.username, tenantId: apiTenantId },
-                        onCompleted: (res) => {
-                            handleLoginSuccess(res.data);
-                        },
-                        onError: (res) => {
-                            notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
-                        },
-                    });
-                },
-            });
-        else if (values.grant_type === STUDENT_LOGIN_TYPE)
-            executeGetCareerDetail({
-                onCompleted: (res) => {
-                    setData(storageKeys.TENANT_HEADER, res.data?.name);
-                    setData(storageKeys.TENANT_API_URL, res?.data?.serverProviderDto?.url);
-                    setData(storageKeys.TENANT_HEADER, res.data?.name);
-                    setData(storageKeys.TENANT_ID, res?.data?.id);
-                    executeStudentLogin({
-                        data: { ...values, phone: values.username, tenantId: apiTenantId },
-                        onCompleted: (res) => {
-                            handleLoginSuccess(res.data);
-                        },
-                        onError: (res) => {
-                            notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
-                        },
-                    });
-                },
-            });
+        if (values.grant_type === LEADER_LOGIN_TYPE) handleGetCareerInfo(values, executeLeaderLogin);
+        else if (values.grant_type === STUDENT_LOGIN_TYPE) handleGetCareerInfo(values, executeStudentLogin);
+        else if (values.grant_type === COMPANY_LOGIN_TYPE) handleGetCareerInfo(values, executeCompanyLogin);
         else
             execute({
                 data: { ...values },
@@ -107,6 +75,26 @@ const LoginPage = () => {
         setCacheAccessToken(res.access_token);
         setData(storageKeys.USER_KIND, res.user_kind);
         executeGetProfile({ kind: res.user_kind });
+    };
+
+    const handleGetCareerInfo = (values, login) => {
+        executeGetCareerDetail({
+            onCompleted: (res) => {
+                setData(storageKeys.TENANT_HEADER, res.data?.name);
+                setData(storageKeys.TENANT_API_URL, res?.data?.serverProviderDto?.url);
+                setData(storageKeys.TENANT_HEADER, res.data?.name);
+                setData(storageKeys.TENANT_ID, res?.data?.id);
+                login({
+                    data: { ...values, phone: values.username, tenantId: apiTenantId },
+                    onCompleted: (res) => {
+                        handleLoginSuccess(res.data);
+                    },
+                    onError: (res) => {
+                        notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
+                    },
+                });
+            },
+        });
     };
 
     return (
@@ -126,7 +114,7 @@ const LoginPage = () => {
                         name="username"
                         fieldProps={{ prefix: <UserOutlined /> }}
                         // label={intl.formatMessage(message.username)}
-                        placeholder={intl.formatMessage(message.username)}
+                        placeholder={intl.formatMessage(commonMessage.username)}
                         size="large"
                         required
                     />
@@ -134,7 +122,7 @@ const LoginPage = () => {
                         name="password"
                         fieldProps={{ prefix: <LockOutlined /> }}
                         // label={intl.formatMessage(message.password)}
-                        placeholder={intl.formatMessage(message.password)}
+                        placeholder={intl.formatMessage(commonMessage.password)}
                         size="large"
                         required
                         type="password"

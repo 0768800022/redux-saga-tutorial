@@ -128,17 +128,19 @@ export const UserTypes = {
     MANAGER: 2,
     STUDENT: 3,
     LEADER: 4,
+    COMPANY: 5,
 };
 
 export const LEADER_LOGIN_TYPE = 'leader';
 export const ADMIN_LOGIN_TYPE = 'password';
 export const STUDENT_LOGIN_TYPE = 'student';
-
+export const COMPANY_LOGIN_TYPE = 'company';
 
 export const loginOptions = [
     { label: 'Admin', value: ADMIN_LOGIN_TYPE },
     { label: 'Sinh viên', value: STUDENT_LOGIN_TYPE },
     { label: 'Leader', value: LEADER_LOGIN_TYPE },
+    { label: 'Công ty', value: COMPANY_LOGIN_TYPE },
 ];
 
 export const commonStatusColor = {

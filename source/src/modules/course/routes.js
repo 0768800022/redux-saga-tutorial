@@ -4,7 +4,7 @@ import CourseSavePage from './CourseSavePage';
 import LectureListPage from './lecture';
 import CourseLeaderListPage from './leader/courseLeader';
 import TaskListPage from './leader/taskLeader';
-import TaskSavePage from './leader/taskLeader/TaskSavePage';
+import TaskLeaderSavePage from './leader/taskLeader/TaskSavePage';
 import AsignAllListPage from './leader/asignAll';
 import CourseStudentListPage from './student/courseStudent';
 import TaskStudentListPage from './student/taskStudent';
@@ -60,7 +60,7 @@ export default {
         path: '/course-leader/task/:courseId/:id',
         title: 'Task Save Page',
         auth: true,
-        component: TaskSavePage,
+        component: TaskLeaderSavePage,
         permissions: [apiConfig.task.update.baseURL],
     },
     lectureTaskLeaderListPage: {

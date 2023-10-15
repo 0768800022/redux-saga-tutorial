@@ -14,45 +14,28 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
 import route from '@modules/projectTask/routes';
-import { BookOutlined, TeamOutlined } from '@ant-design/icons';
+import { BookOutlined, TeamOutlined, EditOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
 import { IconBrandTeams } from '@tabler/icons-react';
-
-import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { commonMessage } from '@locales/intl';
 const message = defineMessages({
-    home: 'Trang chủ',
-    project: 'Dự án',
     objectName: 'dự án',
     code: 'Mã dự án',
     id: 'Id',
-    createdDate: 'Ngày tạo',
-    avatar: 'Avatar',
-    description: 'Mô tả',
-    leader: 'Leader',
-    name: 'Tên dự án',
-    endDate: 'Ngày kết thúc',
-    startDate: 'Ngày bắt đầu',
-    state: 'Tình trạng',
-    status: 'Trạng thái',
-    developer: 'Lập trình viên',
-    task: 'Task',
-    member: 'Thành viên',
     group: 'Nhóm',
+    startDate: ' Ngày bắt đầu',
 });
 
 const ProjectLeaderListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
-    const developerId = queryParameters.get('developerId');
-    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
-    const [dataApply, setDataApply] = useState([]);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: {
@@ -92,35 +75,29 @@ const ProjectLeaderListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
-                    task: ({ id, name, leaderInfo, status, state }) => (
-                        <BaseTooltip title={translate.formatMessage(message.task)}>
+                    task: ({ id, name, state }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
                                 type="link"
                                 disabled={state === 1}
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
-                                    let path;
 
-                                    path =
-                                        routes.projectLeaderTaskListPage.path +
-                                        pathDefault +
-                                        `&leaderName=${leaderName}`;
-
-                                    navigate(path, { state: { pathPrev: location.search } });
+                                    navigate(
+                                        routes.projectLeaderTaskListPage.path + `?projectId=${id}&projectName=${name}`,
+                                    );
                                 }}
                             >
                                 <BookOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
-                    member: ({ id, name, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.member)}>
+                    member: ({ id, name }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.member)}>
                             <Button
                                 type="link"
                                 style={{ padding: '0' }}
-                                // disabled={status === -1}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     navigate(
@@ -133,25 +110,17 @@ const ProjectLeaderListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    team: ({ id, name, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.group)}>
+                    team: ({ id, name }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
                                 type="link"
                                 style={{ padding: '0' }}
-                                // disabled={status === -1}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    if (status === 1) {
-                                        navigate(
-                                            routes.projectLeaderTeamListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
-                                        );
-                                    } else {
-                                        navigate(
-                                            routes.projectLeaderTeamListPage.path +
-                                                `?projectId=${id}&projectName=${name}`,
-                                        );
-                                    }
+
+                                    navigate(
+                                        routes.projectLeaderTeamListPage.path + `?projectId=${id}&projectName=${name}`,
+                                    );
                                 }}
                             >
                                 <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
@@ -182,11 +151,11 @@ const ProjectLeaderListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(message.name),
+            title: translate.formatMessage(commonMessage.fullName),
             dataIndex: 'name',
         },
         {
-            title: translate.formatMessage(message.leader),
+            title: translate.formatMessage(commonMessage.leader),
             dataIndex: ['leaderInfo', 'leaderName'],
             width: 150,
         },
@@ -200,7 +169,7 @@ const ProjectLeaderListPage = () => {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.endDate),
+            title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'endDate',
             render: (endDate) => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
@@ -224,18 +193,12 @@ const ProjectLeaderListPage = () => {
         },
 
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn(
-            {
-                member: true,
-                task: true,
-                team: true,
-            },
-            { width: '200px' },
-        ),
-    ].filter(Boolean);
+
+        mixinFuncs.renderActionColumn({ team: true, member: true, task: true }, { width: '120px' }),
+    ];
 
     return (
-        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(message.project) }]}>
+        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.project) }]}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
                 baseTable={

@@ -15,10 +15,7 @@ import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import DatePickerField from '@components/common/form/DatePickerField';
 import dayjs from 'dayjs';
 import { formatDateString } from '@utils';
-
-const messages = defineMessages({
-    startDate: 'Ngày bắt đầu',
-});
+import { commonMessage } from '@locales/intl';
 
 const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
@@ -108,7 +105,7 @@ const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onS
                         <DatePickerField
                             showTime = {true}
                             name="startDate"
-                            label={translate.formatMessage(messages.startDate)}                            
+                            label={translate.formatMessage(commonMessage.startDate)}                            
                             placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}

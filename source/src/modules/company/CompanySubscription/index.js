@@ -14,18 +14,10 @@ import { DATE_DISPLAY_FORMAT, DEFAULT_FORMAT } from '@constants';
 import { formatMoney } from '@utils/index';
 import { statusOptions } from '@constants/masterData';
 import AvatarField from '@components/common/form/AvatarField';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'dịch vụ',
-    home: 'Trang chủ',
-    companyName: 'Tên công ty',
-    startDate: 'Ngày bắt đầu',
-    endDate: 'Ngày kết thúc',
-    company: 'Công ty',
-    companySubscription: 'Gói dịch vụ',
-    status: 'Trạng thái',
-    subscriptionName: 'Tên đăng ký',
-    price: 'Giá',
 });
 
 const CompanySubscriptionIdListPage = () => {
@@ -148,24 +140,14 @@ const CompanySubscriptionIdListPage = () => {
             },
             align: 'center',
         },
-        // {
-        //     title: translate.formatMessage(message.status),
-        //     dataIndex: 'status',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const status = statusValues.find((item) => item.value == dataRow);
-        //         return <Tag color={status.color}>{status.label}</Tag>;
-        //     },
-        // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.company), path: `/company` },
-                { breadcrumbName: translate.formatMessage(message.companySubscription) },
+                { breadcrumbName: translate.formatMessage(commonMessage.company), path: `/company` },
+                { breadcrumbName: translate.formatMessage(commonMessage.companySubscription) },
             ]}
         >
             <ListPage

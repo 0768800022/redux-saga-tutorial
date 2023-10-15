@@ -12,18 +12,10 @@ import { Tag, Button } from 'antd';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
-import { EditOutlined } from '@ant-design/icons';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Task',
-    developer: 'Lập trình viên',
-    home: 'Trang chủ',
-    state: 'Tình trạng',
-    projectTask: 'Task',
-    project: 'Dự án',
-    leader: 'Leader',
-    name: 'Tên task',
-    status: 'Trạng thái',
 });
 
 function ProjectTaskListPage() {
@@ -98,11 +90,11 @@ function ProjectTaskListPage() {
         });
     const columns = [
         {
-            title: translate.formatMessage(message.projectTask),
+            title: translate.formatMessage(commonMessage.task),
             dataIndex: 'taskName',
         },
         {
-            title: translate.formatMessage(message.developer),
+            title: translate.formatMessage(commonMessage.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
         },
         {
@@ -141,18 +133,18 @@ function ProjectTaskListPage() {
     const searchFields = [
         {
             key: 'taskName',
-            placeholder: translate.formatMessage(message.name),
+            placeholder: translate.formatMessage(commonMessage.name),
         },
         {
             key: 'state',
-            placeholder: translate.formatMessage(message.state),
+            placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
         },
         !leaderName &&
             !developerName && {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -163,29 +155,29 @@ function ProjectTaskListPage() {
         const breadRoutes = [];
         if (leaderName) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.leader),
+                breadcrumbName: translate.formatMessage(commonMessage.leader),
                 path: routes.leaderListPage.path,
             });
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.project),
+                breadcrumbName: translate.formatMessage(commonMessage.project),
                 path: generatePath(routes.leaderProjectListPage.path + location?.state?.pathPrev),
             });
         } else if (developerName) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.developer),
+                breadcrumbName: translate.formatMessage(commonMessage.developer),
                 path: routes.developerListPage.path,
             });
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.project),
+                breadcrumbName: translate.formatMessage(commonMessage.project),
                 path: generatePath(routes.developerProjectListPage.path + location?.state?.pathPrev),
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.project),
+                breadcrumbName: translate.formatMessage(commonMessage.project),
                 path: generatePath(routes.projectListPage.path),
             });
         }
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.projectTask) });
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.task) });
 
         return breadRoutes;
     };

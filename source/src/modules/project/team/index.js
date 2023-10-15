@@ -14,19 +14,10 @@ import { statusOptions } from '@constants/masterData';
 import { useNavigate, generatePath, useLocation } from 'react-router-dom';
 import routes from '@routes';
 import AvatarField from '@components/common/form/AvatarField';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Nhóm',
-    name: 'Họ và tên',
-    home: 'Trang chủ',
-    team: 'Nhóm',
-    status: 'Trạng thái',
-    course: 'Khoá học',
-    project: 'Dự án',
-    description: "Mô tả",
-    leaderId: "Người hướng dẫn",
-    projectId: "Dự án",
-    teamName: "Tên nhóm",
 });
 
 const TeamListPage = () => {
@@ -113,11 +104,11 @@ const TeamListPage = () => {
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.teamName),
+            placeholder: translate.formatMessage(commonMessage.teamName),
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -126,10 +117,10 @@ const TeamListPage = () => {
         <PageWrapper
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(message.project),
+                    breadcrumbName: translate.formatMessage(commonMessage.project),
                     path: generatePath(routes.projectListPage.path),
                 },
-                { breadcrumbName: translate.formatMessage(message.team) },
+                { breadcrumbName: translate.formatMessage(commonMessage.team) },
             ]}
         >
             <ListPage

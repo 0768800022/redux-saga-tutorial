@@ -25,15 +25,10 @@ import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Task',
-    studentId: 'Tên sinh viên',
-    home: 'Trang chủ',
-    state: 'Tình trạng',
-    task: 'Task',
-    course: 'Khóa học',
-    leader: 'Leader',
 });
 
 function TaskListPage() {
@@ -79,11 +74,11 @@ function TaskListPage() {
 
     const columns = [
         {
-            title: translate.formatMessage(message.task),
+            title: translate.formatMessage(commonMessage.task),
             dataIndex: ['lecture', 'lectureName'],
         },
         {
-            title: translate.formatMessage(message.studentId),
+            title: translate.formatMessage(commonMessage.studentName),
             dataIndex: ['student', 'fullName'],
         },
         {
@@ -109,7 +104,7 @@ function TaskListPage() {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.state),
+            title: translate.formatMessage(commonMessage.state),
             dataIndex: 'state',
             align: 'center',
             width: 120,
@@ -129,20 +124,20 @@ function TaskListPage() {
         const breadRoutes = [];
         if (leaderName) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.leader),
+                breadcrumbName: translate.formatMessage(commonMessage.leader),
                 path: routes.leaderListPage.path,
             });
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.course),
+                breadcrumbName: translate.formatMessage(commonMessage.course),
                 path: generatePath(routes.leaderCourseListPage.path + location?.state?.pathPrev),
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.course),
+                breadcrumbName: translate.formatMessage(commonMessage.course),
                 path: generatePath(routes.courseListPage.path),
             });
         }
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.task) });
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.task) });
 
         return breadRoutes;
     };

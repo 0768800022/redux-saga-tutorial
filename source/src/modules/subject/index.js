@@ -18,16 +18,12 @@ import classNames from 'classnames';
 import styles from './subject.module.scss';
 import { statusOptions, statusSubjectOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
-    name: 'Tên môn học',
-    home: 'Trang chủ',
-    subject: 'Môn học',
     objectName: 'môn học',
     code: 'Mã môn học',
     id: 'Id',
-    createdDate: 'Ngày tạo',
-    student: 'Học viên',
-    status: 'Trạng thái',
 });
 
 const SubjectListPage = () => {
@@ -56,16 +52,16 @@ const SubjectListPage = () => {
         },
     });
     const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.subject) },
+        { breadcrumbName: translate.formatMessage(commonMessage.subject) },
     ];
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.name),
+            placeholder: translate.formatMessage(commonMessage.subjectName),
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValue,
         },
@@ -77,7 +73,7 @@ const SubjectListPage = () => {
 
     const columns = [
         {
-            title: translate.formatMessage(message.name),
+            title: translate.formatMessage(commonMessage.subjectName),
             dataIndex: 'subjectName',
             render: (subjectName, record) =>
                 !record.parentId ? (
@@ -94,7 +90,7 @@ const SubjectListPage = () => {
             width: 200,
         },
         {
-            title: translate.formatMessage(message.createdDate),
+            title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
             render: (createdDate) => {
                 const modifiedDate = convertStringToDateTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT).add(

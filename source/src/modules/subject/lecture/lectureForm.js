@@ -14,13 +14,12 @@ import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectedRowKeySelector } from '@selectors/app';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     description: 'Mô tả chi tiết',
     lectureKind: 'Loại bài giảng',
     shortDescription: 'Mô tả Ngắn',
-    lectureName: 'Tên bài giảng',
-    status: 'Trạng thái',
     urlDocument: 'Đường dẫn tài liệu',
     subjectId: 'Mã Môn học',
 });
@@ -88,7 +87,7 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.lectureName)} required name="lectureName" />
+                        <TextField label={translate.formatMessage(commonMessage.lectureName)} required name="lectureName" />
                     </Col>
                     <Col span={12}>
                         <SelectField

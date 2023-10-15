@@ -9,7 +9,6 @@ import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 const message = defineMessages({
     objectName:'Sinh viên',
-    home:'Trang chủ',
     student: 'Sinh viên',
 });
 

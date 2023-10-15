@@ -11,32 +11,16 @@ import { FieldTypes } from '@constants/formConfig';
 import apiConfig from '@constants/apiConfig';
 import { defineMessages } from 'react-intl';
 import { Button, Tag } from 'antd';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Loại',
     name: 'Tên',
     status: 'Trạng thái',
     createDate: 'Ngày tạo',
-    home: 'Trang chủ',
     category: 'Danh mục hệ',
 });
 
-// function CategoryListPageCommon({
-//     routes,
-//     kind,
-//     dataIndexes = {
-//         image: 'categoryImage',
-//         name: 'categoryName',
-//     },
-//     message = {
-//         objectName: 'Loại',
-//         name: 'Tên',
-//         status: 'Trạng thái',
-//         createDate: 'Ngày tạo',
-//         home: 'Trang chủ',
-//         category: 'Danh mục hệ',
-//     },
-// }) {
 const CategoryListPageCommon = ({ routes, kind }) => {
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);

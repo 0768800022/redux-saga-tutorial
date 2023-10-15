@@ -7,11 +7,10 @@ import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
     objectName: 'Bài giảng',
-    subject: 'Môn học',
-    lecture: 'Bài giảng',
-    home: 'Trang chủ',
 });
 
 const LectureSavePage = () => {
@@ -45,9 +44,9 @@ const LectureSavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(message.subject) },
+                { breadcrumbName: translate.formatMessage(commonMessage.subject) },
                 {
-                    breadcrumbName: translate.formatMessage(message.lecture),
+                    breadcrumbName: translate.formatMessage(commonMessage.lecture),
                     path: routes.subjectListPage.path + `/lecture/${lectureId.subjectId}`,
                 },
                 { breadcrumbName: title },

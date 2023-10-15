@@ -11,7 +11,6 @@ import { categoryKinds } from '@constants';
 
 const messages = defineMessages({
     objectName: 'chuyên ngành',
-    home: 'Trang chủ',
     category: 'Danh mục chuyên ngành',
 });
 
@@ -55,7 +54,6 @@ const CategorySavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
                 {
                     breadcrumbName: translate.formatMessage(messages.category),
                     path: generatePath(routes.categoryListPageMajor.path, { categoryId }),

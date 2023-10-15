@@ -16,6 +16,8 @@ const getProfileSaga = (payload) => {
         api = apiConfig.leader.getProfile;
     } else if (useKind === UserTypes.STUDENT) {
         api = apiConfig.student.getProfile;
+    } else if (useKind === UserTypes.COMPANY) {
+        api = apiConfig.company.getProfile;
     }
 
     return processAction(api, payload);
