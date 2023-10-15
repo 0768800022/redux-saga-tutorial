@@ -20,6 +20,7 @@ const ValidateAccess = ({
     onValidatePermissions,
     path,
     separate,
+    breadcrumbs,
 }) => {
     const location = useLocation();
     const { id } = useParams();
@@ -54,7 +55,7 @@ const ValidateAccess = ({
                 separate={separate}
                 fallback={<PageUnauthorized />}
             >
-                <Component {...(componentProps || {})}>
+                <Component {...(componentProps || {})} breadcrumbs={breadcrumbs}>
                     <Outlet />
                 </Component>
             </HasPermission>

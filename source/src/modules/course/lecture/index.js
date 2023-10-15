@@ -14,6 +14,8 @@ import useFetch from '@hooks/useFetch';
 import BaseTable from '@components/common/table/BaseTable';
 import useDragDrop from '@hooks/useDragDrop';
 import styles from './AsignAll.module.scss';
+import { useLocation,useParams } from 'react-router-dom';
+
 const message = defineMessages({
     objectName: 'Bài giảng',
     home: 'Trang chủ',
@@ -26,10 +28,16 @@ const message = defineMessages({
 });
 const LectureListPage = ({ breadcrumbName }) => {
     const translate = useTranslate();
+    const location = useLocation();
+    const state = location.state.prevPath;
+    const paramHead = routes.courseListPage.path;
     const queryParameters = new URLSearchParams(window.location.search);
+
     const courseId = queryParameters.get("courseId");
     const courseName = queryParameters.get("courseName");
     const subjectId = queryParameters.get("subjectId");
+
+
     const [ showPreviewModal, setShowPreviewModal ] = useState(false);
     const [hasError, setHasError] = useState(false);
     const [lectureid, setLectureId] = useState(null);
@@ -210,22 +218,12 @@ const LectureListPage = ({ breadcrumbName }) => {
         }   
         return '';
     };
-
-
     return (
         
         <PageWrapper 
-            routes={breadcrumbName ? breadcrumbName() : 
-                [
-                    { breadcrumbName: translate.formatMessage(message.home) },
-                    { breadcrumbName: translate.formatMessage(message.course),
-                        path: routes.courseListPage.path,
-                    },
-                    { breadcrumbName: translate.formatMessage(message.task),
-                        path: routes.courseListPage.path + `/task?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=2`,
-                    },
-                    { breadcrumbName: translate.formatMessage(message.objectName) },
-                ]}
+            routes={breadcrumbName ? breadcrumbName : 
+                routes.lectureTaskListPage.breadcrumbs(message,paramHead,state,location.search)
+            }
         >
             <ListPage
                 

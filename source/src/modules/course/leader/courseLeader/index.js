@@ -185,11 +185,10 @@ const CourseLeaderListPage = () => {
             { width: '80px' },
         ),
     ].filter(Boolean);
-
     return (
         <PageWrapper routes={ breadRoutes}>
             <ListPage
-                actionBar={mixinFuncs.renderActionBar()}
+                // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

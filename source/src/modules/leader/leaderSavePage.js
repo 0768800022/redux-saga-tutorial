@@ -4,7 +4,7 @@ import routes from './routes';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useParams, useLocation } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import LeaderForm from './leaderForm';
 const message = defineMessages({
@@ -16,7 +16,6 @@ const message = defineMessages({
 const LeaderSavePage = () => {
     const leaderId = useParams();
     const translate = useTranslate();
-
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.leader.getById,
