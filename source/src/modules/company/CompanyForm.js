@@ -102,15 +102,19 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     </Col>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(messages.address)}
+                            label={translate.formatMessage(messages.username)}
                             rules={[
                                 {
                                     required: true,
-                                    message: translate.formatMessage(messages.required),
+                                    pattern: usernamePattern,
+                                    message: 'Username chỉ được chứa kí tự thường a-z và số 0-9',
                                 },
                             ]}
-                            name="address" />
+                            disabled={isEditing}
+                            name="username"
+                        />
                     </Col>
+                    
                 </Row>
 
                 <Row gutter={16}>
@@ -135,34 +139,31 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(messages.username)}
-                            rules={[
-                                {
-                                    required: true,
-                                    pattern: usernamePattern,
-                                    message: 'Username chỉ được chứa kí tự thường a-z và số 0-9',
-                                },
-                            ]}
-                            disabled={isEditing}
-                            name="username"
-                        />
-                    </Col>
-                    <Col span={12}>
-                        <TextField
                             label={translate.formatMessage(messages.password)}
                             required={isEditing ? false : true}
                             type="password"
                             name="password"
                         />
                     </Col>
-                </Row>
-                <Row gutter={16}>
                     <Col span={12}>
                         <SelectField
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             name="status"
                             options={statusValues}
                         />
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={24}>
+                        <TextField
+                            label={translate.formatMessage(messages.address)}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: translate.formatMessage(messages.required),
+                                },
+                            ]}
+                            name="address" />
                     </Col>
                 </Row>
                 <div className="footer-card-form">{actions}</div>

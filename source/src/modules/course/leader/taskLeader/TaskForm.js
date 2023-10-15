@@ -27,13 +27,6 @@ const TaskForm = (props) => {
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values });
     };
-    const validateStartDate = (_, value) => {
-        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
-        if (date && value && value.isBefore(date)) {
-            return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
-        }
-        return Promise.resolve();
-    };
     const validateDueDate = (_, value) => {
         const { startDate } = form.getFieldValue();
         if (startDate && value && value.isBefore(startDate)) {
@@ -88,9 +81,6 @@ const TaskForm = (props) => {
                                 {
                                     required: true,
                                     message: 'Vui lòng chọn ngày bắt đầu',
-                                },
-                                {
-                                    validator: validateStartDate,
                                 },
                             ]}
                         />
