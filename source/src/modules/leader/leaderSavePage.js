@@ -45,7 +45,6 @@ const LeaderSavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 {
                     breadcrumbName: translate.formatMessage(message.leader),
                     path: generatePath(routes.leaderListPage.path, { leaderId }),

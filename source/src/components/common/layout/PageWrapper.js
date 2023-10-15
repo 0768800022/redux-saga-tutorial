@@ -4,10 +4,13 @@ import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 
 import styles from './PageWrapper.module.scss';
+import { commonMessage } from '@locales/intl';
+import useTranslate from '@hooks/useTranslate';
 
 const PageWrapper = ({ loading, children, routes = [], tabs, onChangeTab, activeTab }) => {
+    const translate = useTranslate();
     const hasTab = !!tabs?.length;
-
+    routes = [{ breadcrumbName: translate.formatMessage(commonMessage.home) }, ...routes];
     return (
         <Spin spinning={!!loading} wrapperClassName={styles.pageWrapper}>
             <div className={classNames(styles.pageHeader, hasTab && styles.hasTab)}>
@@ -18,7 +21,9 @@ const PageWrapper = ({ loading, children, routes = [], tabs, onChangeTab, active
                             const last = routes.indexOf(route) === routes.length - 1;
 
                             if (last) {
-                                return <span className={styles.breadcrumbLast}>{route.breadcrumbName || route.title}</span>;
+                                return (
+                                    <span className={styles.breadcrumbLast}>{route.breadcrumbName || route.title}</span>
+                                );
                             } else if (route.path) {
                                 return (
                                     <Link to={route.path} style={{ color: '#1890ff' }}>

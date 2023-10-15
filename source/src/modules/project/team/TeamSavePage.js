@@ -52,7 +52,6 @@ function TeamSavePage() {
     });
     const setBreadRoutes = () => {
         const breadRoutes = [
-            { breadcrumbName: translate.formatMessage(message.home) },
             {
                 breadcrumbName: translate.formatMessage(message.project),
                 path: routes.projectListPage.path,

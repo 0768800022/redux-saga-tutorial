@@ -164,7 +164,6 @@ const CompanySubscriptionIdListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.company), path: `/company` },
                 { breadcrumbName: translate.formatMessage(message.companySubscription) },
             ]}

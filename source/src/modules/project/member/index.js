@@ -88,7 +88,7 @@ const ProjectMemberListPage = () => {
     });
 
     const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        const breadRoutes = [];
 
         breadRoutes.push({
             breadcrumbName: translate.formatMessage(message.project),
@@ -99,42 +99,52 @@ const ProjectMemberListPage = () => {
         return breadRoutes;
     };
 
-    const setColumns = () => {
-        const columns = [
-            {
-                title: translate.formatMessage(message.name),
-                dataIndex: ['developer', 'studentInfo', 'fullName'],
-            },
-            {
-                title: translate.formatMessage(message.role),
-                dataIndex: ['projectRole', 'projectRoleName'],
-                width: 150,
-            },
+    const columns = [
+        {
+            title: '#',
+            dataIndex: 'avatar',
+            align: 'center',
+            width: 80,
+            render: (avatar) => (
+                <Avatar
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                />
+            ),
+        },
+        {
+            title: translate.formatMessage(message.name),
+            dataIndex: ['developer', 'studentInfo', 'fullName'],
+        },
+        {
+            title: translate.formatMessage(message.role),
+            dataIndex: ['projectRole', 'projectRoleName'],
+            width: 150,
+        },
 
-            {
-                title: 'Lịch trình',
-                dataIndex: 'schedule',
-                align: 'center',
-                render: (schedule) => {
-                    return <ScheduleFile schedule={schedule} />;
-                },
-                width: 180,
+        {
+            title: 'Lịch trình',
+            dataIndex: 'schedule',
+            align: 'center',
+            render: (schedule) => {
+                return <ScheduleFile schedule={schedule} />;
             },
-        ];
+            width: 180,
+        },
 
         // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-        active && columns.push(
+        active &&
             mixinFuncs.renderActionColumn(
                 {
-
                     edit: true,
                     delete: true,
                 },
                 { width: '150px' },
             ),
-        );
-        return columns;
-    };
+    ].filter(Boolean);
+
+    // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
 
     return (
         <PageWrapper routes={setBreadRoutes()}>
@@ -147,7 +157,7 @@ const ProjectMemberListPage = () => {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />

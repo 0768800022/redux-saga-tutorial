@@ -122,7 +122,6 @@ const CompanyListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(commonMessage.home) },
                 { breadcrumbName: translate.formatMessage(commonMessage.company) },
             ]}
         >

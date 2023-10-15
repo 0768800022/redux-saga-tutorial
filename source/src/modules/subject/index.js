@@ -56,7 +56,6 @@ const SubjectListPage = () => {
         },
     });
     const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
         { breadcrumbName: translate.formatMessage(message.subject) },
     ];
     const searchFields = [

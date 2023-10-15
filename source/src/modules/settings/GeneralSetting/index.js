@@ -16,6 +16,7 @@ import SliderModal from './SliderModal';
 import useNotification from '@hooks/useNotification';
 import IntroduceModal from './IntroduceModal';
 import ColumnGroup from 'antd/es/table/ColumnGroup';
+import AvatarField from '@components/common/form/AvatarField';
 
 const messages = defineMessages({
     objectName: 'Cài đặt chung',
@@ -166,7 +167,7 @@ const GeneralSettingPage = ({ groupName }) => {
             align: 'center',
             width: '100px',
             render: (imageUrl) => (
-                <Avatar
+                <AvatarField 
                     style={{ width: '100%', height: '60px' }}
                     size="large"
                     shape="square"

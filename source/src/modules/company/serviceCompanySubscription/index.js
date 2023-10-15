@@ -119,7 +119,6 @@ const ServiceCompanySubListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.serviceCompanySubscription) },
             ]}
         >
