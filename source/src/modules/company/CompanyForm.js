@@ -96,11 +96,15 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             rules={[
                                 {
                                     required: true,
-                                    message: translate.formatMessage(commonMessage.required),
+                                    pattern: usernamePattern,
+                                    message: 'Username chỉ được chứa kí tự thường a-z và số 0-9',
                                 },
                             ]}
-                            name="address" />
+                            disabled={isEditing}
+                            name="username"
+                        />
                     </Col>
+                    
                 </Row>
 
                 <Row gutter={16}>
@@ -145,14 +149,25 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             name="password"
                         />
                     </Col>
-                </Row>
-                <Row gutter={16}>
                     <Col span={12}>
                         <SelectField
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             name="status"
                             options={statusValues}
                         />
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={24}>
+                        <TextField
+                            label={translate.formatMessage(commonMessage.address)}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: translate.formatMessage(commonMessage.required),
+                                },
+                            ]}
+                            name="address" />
                     </Col>
                 </Row>
                 <div className="footer-card-form">{actions}</div>
