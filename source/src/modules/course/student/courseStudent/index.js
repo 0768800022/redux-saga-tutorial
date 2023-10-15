@@ -1,4 +1,4 @@
-import { BookOutlined, UserOutlined,TeamOutlined } from '@ant-design/icons';
+import { BookOutlined, UserOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
@@ -31,7 +31,7 @@ const message = defineMessages({
     task: 'Task',
 });
 
-const CourseLeaderListPage = () => {
+const CourseStudentListPage = () => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(lectureState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
@@ -39,7 +39,7 @@ const CourseLeaderListPage = () => {
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: {
-                getList: apiConfig.course.getListLeaderCourse,
+                getList: apiConfig.course.getListStudentCourse,
                 getById: apiConfig.course.getById,
                 delete: apiConfig.course.delete,
             },
@@ -60,26 +60,6 @@ const CourseLeaderListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
-                    registration: ({ id, name, state, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.registration)}>
-                            <Button
-                                type="link"
-                                disabled={state === 1}
-                                style={{ padding: 0 }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    state !== 1 &&
-                                        navigate(
-                                            routes.registrationLeaderListPage.path +
-                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
-                                        );
-                                }}
-                            >
-                                <TeamOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
-
                     task: ({ id, name, subject, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(message.task)}>
                             <Button
@@ -88,7 +68,7 @@ const CourseLeaderListPage = () => {
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const path = routes.courseLeaderListPage.path + `/task/${id}?courseName=${name}&subjectId=${subject.id}`;
+                                    const path = routes.courseStudentListPage.path + `/task?courseId=${id}&courseName=${name}&subjectId=${subject.id}`;
                                     navigate(path);
                                 }}
                             >
@@ -178,7 +158,6 @@ const CourseLeaderListPage = () => {
         mixinFuncs.renderActionColumn(
             {
                 task: true,
-                registration: true,
                 edit:  true,
                 delete: true,
             },
@@ -189,7 +168,7 @@ const CourseLeaderListPage = () => {
     return (
         <PageWrapper routes={ breadRoutes}>
             <ListPage
-                actionBar={mixinFuncs.renderActionBar()}
+                // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
@@ -204,4 +183,4 @@ const CourseLeaderListPage = () => {
     );
 };
 
-export default CourseLeaderListPage;
+export default CourseStudentListPage;
