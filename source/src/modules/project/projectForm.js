@@ -208,17 +208,6 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             options={stateValues}
                         />
                     </Col>
-                    <Col span={12}>
-                        <AutoCompleteField
-                            label={<FormattedMessage defaultMessage="Nhóm" />}
-                            name="leaderId"
-                            apiConfig={apiConfig.team.autocomplete}
-                            mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                            initialSearchParams={{}}
-                            searchParams={(text) => ({ name: text })}
-                            required 
-                            disabled={isEditing}/>
-                    </Col>
                 </Row>
                 <TextField
                     width={'100%'}

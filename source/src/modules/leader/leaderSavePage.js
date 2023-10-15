@@ -7,10 +7,10 @@ import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import LeaderForm from './leaderForm';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
     objectName: 'Leader',
-    home: 'Trang chủ',
-    leader: 'Leader',
 });
 
 const LeaderSavePage = () => {
@@ -46,7 +46,7 @@ const LeaderSavePage = () => {
             loading={loading}
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(message.leader),
+                    breadcrumbName: translate.formatMessage(commonMessage.leader),
                     path: generatePath(routes.leaderListPage.path, { leaderId }),
                 },
                 { breadcrumbName: title },

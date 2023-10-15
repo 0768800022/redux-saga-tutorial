@@ -16,16 +16,7 @@ import { statusOptions } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
 import CropImageField from '@components/common/form/CropImageField';
 import { AppConstants, categoryKinds } from '@constants';
-
-const message = defineMessages({
-    fullName: 'Họ Và Tên',
-    birthday: 'Ngày Sinh',
-    mssv: 'MSSV',
-    phone: 'Số Điện Thoại',
-    email: 'Email',
-    password: 'Mật Khẩu',
-    // university: 'university',
-});
+import { commonMessage } from '@locales/intl';
 
 const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
     const translate = useTranslate();
@@ -121,7 +112,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(message.fullName)}
+                            label={translate.formatMessage(commonMessage.name)}
                             required={isEditing ? false : true}
                             disabled={isEditing}
                             name="fullName"
@@ -147,7 +138,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(message.mssv)}
+                            label={translate.formatMessage(commonMessage.mssv)}
                             disabled={isEditing}
                             required={isEditing ? false : true}
                             name="mssv"
@@ -155,7 +146,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     </Col>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(message.phone)}
+                            label={translate.formatMessage(commonMessage.phone)}
                             type="number"
                             name="phone"
                             required={isEditing ? false : true}
@@ -166,7 +157,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(message.password)}
+                            label={translate.formatMessage(commonMessage.password)}
                             rules={[
                                 {
                                     min: 6,
@@ -180,7 +171,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     </Col>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(message.email)}
+                            label={translate.formatMessage(commonMessage.email)}
                             type="email"
                             name="email"
                             required={isEditing ? false : true}

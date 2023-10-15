@@ -13,12 +13,10 @@ import apiConfig from '@constants/apiConfig';
 import { useNavigate } from 'react-router-dom';
 import useNotification from '@hooks/useNotification';
 import { useIntl } from 'react-intl';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
-    asignAll: 'Tạo',
     objectName: 'Bài giảng',
-    dueDate: 'Ngày kết thúc',
-    startDate: 'Ngày bắt đầu',
     asignAllSuccess:'Áp dụng {objectName} thành công',
 });
 
@@ -93,7 +91,7 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
                         <DatePickerField
                             showTime = {true}
                             name="startDate"
-                            label={translate.formatMessage(messages.startDate)}                            
+                            label={translate.formatMessage(commonMessage.startDate)}                            
                             placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
@@ -121,7 +119,7 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
                                     validator: validateDueDate,
                                 },
                             ]}
-                            label={translate.formatMessage(messages.dueDate)}
+                            label={translate.formatMessage(commonMessage.endDate)}
                             placeholder="Ngày kết thúc"
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
@@ -139,7 +137,7 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
                 </Row>
                 <div style={{ float: 'right' }}>
                     <Button key="submit" type="primary" htmlType="submit">
-                        {translate.formatMessage(messages.asignAll)}
+                        {translate.formatMessage(commonMessage.asignAll)}
                     </Button>
                 </div>
                 

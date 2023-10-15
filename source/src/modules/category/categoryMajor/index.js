@@ -27,7 +27,6 @@ const message = defineMessages({
     name: 'Tên',
     status: 'Trạng thái',
     createDate: 'Ngày tạo',
-    home: 'Trang chủ',
     category: 'Danh mục chuyên ngành',
 });
 

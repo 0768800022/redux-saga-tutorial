@@ -18,14 +18,10 @@ import { AppConstants } from '@constants';
 import { CourseIcon } from '@assets/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
     objectName: 'Sinh viên',
-    fullName: 'Họ và tên',
-    home: 'Trang chủ',
-    student: 'Sinh viên',
-    mssv: 'Mã số sinh viên',
-    status: 'Trạng thái',
-    course: 'Khoá học',
 });
 
 const StudentListPage = () => {
@@ -49,7 +45,7 @@ const StudentListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 task: ({ id, fullName }) => (
-                    <BaseTooltip title={translate.formatMessage(message.course)}>
+                    <BaseTooltip title={translate.formatMessage(commonMessage.course)}>
                         <Button
                             type="link"
                             style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
@@ -118,11 +114,11 @@ const StudentListPage = () => {
     const searchFields = [
         {
             key: 'fullName',
-            placeholder: translate.formatMessage(message.fullName),
+            placeholder: translate.formatMessage(commonMessage.name),
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -130,7 +126,7 @@ const StudentListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.student) },
+                { breadcrumbName: translate.formatMessage(commonMessage.student) },
             ]}
         >
             <ListPage

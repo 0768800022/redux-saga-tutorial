@@ -8,12 +8,10 @@ import routes from '@routes';
 import TaskForm from './TaskForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
     objectName: 'Task',
-    home: 'Trang chủ',
-    task: 'Task',
-    course: 'Khóa học',
 });
 
 function TaskSavePage() {
@@ -53,10 +51,9 @@ function TaskSavePage() {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
-                { breadcrumbName: translate.formatMessage(messages.course), path: routes.courseLeaderListPage.path },
+                { breadcrumbName: translate.formatMessage(commonMessage.course), path: routes.courseLeaderListPage.path },
                 {
-                    breadcrumbName: translate.formatMessage(messages.task),
+                    breadcrumbName: translate.formatMessage(commonMessage.task),
                     path: routes.courseLeaderListPage.path + `/task/${paramid.courseId}?courseName=${courseName}&subjectId=${subjectId}`,
                 },
                 { breadcrumbName: title },

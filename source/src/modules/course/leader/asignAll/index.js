@@ -4,14 +4,8 @@ import { defineMessages } from 'react-intl';
 import routes from '@routes';
 import LectureListPage from '@modules/course/lecture';
 import { useParams } from 'react-router-dom';
+import { commonMessage } from '@locales/intl';
 
-const message = defineMessages({
-    objectName: 'Task',
-    home: 'Trang chủ',
-    task: 'Task',
-    course: 'Khóa học',
-    lecture: 'Bài giảng',
-});
 const AsignAllListPage = () => {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
@@ -19,16 +13,16 @@ const AsignAllListPage = () => {
     const subjectId = queryParameters.get('subjectId');
     const paramid = useParams();
     const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        const breadRoutes = [];
         breadRoutes.push({
-            breadcrumbName: translate.formatMessage(message.course),
+            breadcrumbName: translate.formatMessage(commonMessage.course),
             path: routes.courseLeaderListPage.path,
         });
         breadRoutes.push({
-            breadcrumbName: translate.formatMessage(message.task),
+            breadcrumbName: translate.formatMessage(commonMessage.task),
             path: routes.courseLeaderListPage.path + `/task/${paramid.courseId}?courseName=${courseName}&subjectId=${subjectId}`,
         });
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.lecture) });
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.lecture) });
 
         return breadRoutes;
     };

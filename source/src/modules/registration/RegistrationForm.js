@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import styles from './Registration.module.scss';
 import ScheduleTable from '@components/common/table/ScheduleTable';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
     student: 'Tên sinh viên',
@@ -248,7 +249,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                             <AutoCompleteField
                                 disabled={isEditing}
                                 required
-                                label={translate.formatMessage(messages.student)}
+                                label={translate.formatMessage(commonMessage.studentName)}
                                 name={['studentInfo', 'id']}
                                 apiConfig={apiConfig.student.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
@@ -269,7 +270,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                             <CheckboxField
                                 className={styles.customCheckbox}
                                 required
-                                label={translate.formatMessage(messages.isIntern)}
+                                label={translate.formatMessage(commonMessage.isIntern)}
                                 name="isIntern"
                                 checked={isChecked}
                                 onChange={handleOnChangeCheckBox}
@@ -278,7 +279,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     </Row>
                 </div>
                 <ScheduleTable
-                    label={translate.formatMessage(messages.schedule)}
+                    label={translate.formatMessage(commonMessage.schedule)}
                     onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
                     translate={translate}
                     daysOfWeekSchedule={daysOfWeekSchedule}

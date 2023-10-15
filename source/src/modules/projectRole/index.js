@@ -17,14 +17,10 @@ import routes from './routes';
 import classNames from 'classnames';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    home: 'Trang chủ',
-    projectRole: 'Vai trò dự án',
     objectName: 'Vai trò dự án',
-    createdDate: 'Ngày tạo',
-    name: 'Tên vai trò dự án',
-    status: 'Trạng thái',
 });
 
 const ProjectRoleListPage = () => {
@@ -53,16 +49,16 @@ const ProjectRoleListPage = () => {
         },
     });
     const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.projectRole) },
+        { breadcrumbName: translate.formatMessage(commonMessage.projectRole) },
     ];
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.name),
+            placeholder: translate.formatMessage(commonMessage.projectRoleName),
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -70,33 +66,9 @@ const ProjectRoleListPage = () => {
 
     const columns = [
         {
-            title: translate.formatMessage(message.name),
+            title: translate.formatMessage(commonMessage.projectRoleName),
             dataIndex: 'projectRoleName',
         },
-        // {
-        //     title: translate.formatMessage(message.createdDate),
-        //     dataIndex: 'createdDate',
-        //     render: (createdDate) => {
-        //         const modifiedDate = convertStringToDateTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT).add(
-        //             7,
-        //             'hour',
-        //         );
-        //         const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
-        //         return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
-        //     },
-        //     width: 180,
-        //     align: 'center',
-        // },
-        // {
-        //     title: translate.formatMessage(message.status),
-        //     dataIndex: 'status',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const status = statusValues.find((item) => item.value == dataRow);
-        //         return <Tag color={status.color}>{status.label}</Tag>;
-        //     },
-        // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];

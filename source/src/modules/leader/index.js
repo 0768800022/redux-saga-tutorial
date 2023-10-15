@@ -18,15 +18,10 @@ import FolderIcon, { CourseIcon } from '@assets/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import styles from './leader.module.scss';
 import AvatarField from '@components/common/form/AvatarField';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Leader',
-    name: 'Họ và tên',
-    home: 'Trang chủ',
-    leader: 'Leader',
-    status: 'Trạng thái',
-    course: 'Khoá học',
-    project: 'Dự án',
 });
 
 const LeaderListPage = () => {
@@ -50,7 +45,7 @@ const LeaderListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 course: ({ id, leaderName }) => (
-                    <BaseTooltip title={translate.formatMessage(message.course)}>
+                    <BaseTooltip title={translate.formatMessage(commonMessage.course)}>
                         <Button
                             type="link"
                             style={{ padding: 0 }}
@@ -66,7 +61,7 @@ const LeaderListPage = () => {
                 ),
 
                 project: ({ id, leaderName }) => (
-                    <BaseTooltip title={translate.formatMessage(message.project)}>
+                    <BaseTooltip title={translate.formatMessage(commonMessage.project)}>
                         <Button
                             type="link"
                             style={{ padding: 0 }}
@@ -122,11 +117,11 @@ const LeaderListPage = () => {
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.name),
+            placeholder: translate.formatMessage(commonMessage.name),
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -134,7 +129,7 @@ const LeaderListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.leader) },
+                { breadcrumbName: translate.formatMessage(commonMessage.leader) },
             ]}
         >
             <ListPage
