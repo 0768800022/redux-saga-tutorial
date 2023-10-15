@@ -1,54 +1,58 @@
 import { UserOutlined } from '@ant-design/icons';
+import AvatarField from '@components/common/form/AvatarField';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import DragDropTableV2 from '@components/common/table/DragDropTableV2';
-import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import BaseTable from '@components/common/table/BaseTable';
+import {} from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { FieldTypes } from '@constants/formConfig';
-import { stateResgistrationOptions, statusOptions } from '@constants/masterData';
-import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
+import { stateResgistrationOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import routes from '@routes';
-import { Avatar, Button, Tag } from 'antd';
+import { formatMoney } from '@utils';
+import { Tag } from 'antd';
 import React from 'react';
-import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
-import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
-import { date } from 'yup/lib/locale';
-import BaseTable from '@components/common/table/BaseTable';
-import { CheckCircleOutlined, DollarOutlined } from '@ant-design/icons';
-import style from './Registration.module.scss';
-import { useNavigate } from 'react-router-dom';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import routers from './routes';
-import ScheduleFile from '@components/common/elements/ScheduleFile';
-
+import { useLocation } from 'react-router-dom';
+import routes from '../routes';
+import dayjs from 'dayjs';
+import { projectTaskState, statusOptions, registrationMoneyKind } from '@constants/masterData';
+import {
+    AppConstants,
+    DATE_DISPLAY_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DEFAULT_FORMAT,
+    DEFAULT_TABLE_ITEM_SIZE,
+} from '@constants';
 const message = defineMessages({
-    objectName: 'Đăng kí khoá học',
+    objectName: 'Lịch sử trả phí',
     studentId: 'Tên sinh viên',
     home: 'Trang chủ',
     courseid: 'courseId',
-    createDate: 'Ngày đăng kí',
+    createDate: 'Ngày Tạo',
     isIntern: 'Đăng kí thực tập',
     course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
     state: 'Tình trạng',
-    money: 'Thanh Toán',
+    money: ' Số tiền',
+    kind: 'Loại tiền',
+    history: ' Lịch sử trả phí',
 });
 
-function RegistrationListPage() {
+function RegistrationMoneyListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
+    const registrationMoneyKindValues = translate.formatKeys(registrationMoneyKind, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
-    const navigate = useNavigate();
+    // const courseStatus = queryParameters.get('courseStatus');
+    //  const courseStatus = queryParameters.get('courseStatus');
+    const registrationId = queryParameters.get('registrationId');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.registration,
+        apiConfig: apiConfig.registrationMoney,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -67,75 +71,69 @@ function RegistrationListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?courseId=${courseId}&courseName=${courseName}`;
+                return `${pagePath}/create?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}`;
+                return `${pagePath}/${dataRow.id}?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
             };
-
-            funcs.additionalActionColumnButtons = () => ({
-                money: ({ id, name, status }) => (
-                    <BaseTooltip title={translate.formatMessage(message.money)}>
-                        <Button
-                            type="link"
-                            style={{ padding: '0' }}
-                            disabled={status === -1}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(
-                                    routes.registrationMoneyListPage.path +
-                                    `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
-                                );
-                            }}
-                        >
-                            <DollarOutlined />
-                        </Button>
-                    </BaseTooltip>
-                ),
-            });
         },
     });
     const setColumns = () => {
         const columns = [
             {
+                title: '#',
+                dataIndex: ['registrationInfo', 'studentInfo', 'avatar'],
+                align: 'center',
+                width: 80,
+                render: (avatar) => (
+                    <AvatarField
+                        size="large"
+                        icon={<UserOutlined />}
+                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                    />
+                ),
+            },
+            {
                 title: translate.formatMessage(message.studentId),
-                dataIndex: ['studentInfo', 'fullName'],
+                dataIndex: ['registrationInfo', 'studentInfo', 'fullName'],
             },
+
             {
-                title: 'Lịch trình',
-                dataIndex: 'schedule',
-                align: 'center',
-                render: (schedule) => {
-                    return <ScheduleFile schedule={schedule} />;
+                title: translate.formatMessage(message.money),
+                dataIndex: 'money',
+                align: 'right',
+
+                render: (price) => {
+                    const formattedValue = formatMoney(price, {
+                        currentcy: 'đ',
+                        currentDecimal: '0',
+                        groupSeparator: ',',
+                    });
+                    return <div>{formattedValue}</div>;
                 },
-                width: 180,
-            },
-            {
-                title: translate.formatMessage(message.isIntern),
-                dataIndex: 'isIntern',
-                align: 'center',
-                width: 150,
-                render: (item) => {
-                    if (item == 0) {
-                        return null;
-                    } else {
-                        return <CheckCircleOutlined className={style.greenCheckIcon} />;
-                    }
-                },
+                width: 130,
             },
             {
                 title: translate.formatMessage(message.createDate),
                 dataIndex: 'createdDate',
+                render: (createdDate) => {
+                    return (
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>
+                            {dayjs(createdDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                        </div>
+                    );
+                },
+                width: 130,
                 align: 'center',
-                width: 170,
             },
+
             {
-                title: translate.formatMessage(message.state),
-                dataIndex: 'state',
+                title: translate.formatMessage(message.kind),
+                dataIndex: 'kind',
                 align: 'center',
                 width: 120,
                 render(dataRow) {
-                    const state = stateRegistration.find((item) => item.value == dataRow);
+                    const state = registrationMoneyKindValues.find((item) => item.value == dataRow);
                     return (
                         <Tag color={state.color}>
                             <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
@@ -143,9 +141,11 @@ function RegistrationListPage() {
                     );
                 },
             },
+
+            mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
-        courseStatus == 1 &&
-            columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }));
+
+        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }));
         return columns;
     };
 
@@ -164,7 +164,13 @@ function RegistrationListPage() {
                     breadcrumbName: translate.formatMessage(message.course),
                     path: '/course',
                 },
-                { breadcrumbName: translate.formatMessage(message.registration) },
+                {
+                    breadcrumbName: translate.formatMessage(message.registration),
+                    path:
+                        routes.registrationListPage.path +
+                        `?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
+                },
+                { breadcrumbName: translate.formatMessage(message.history) },
             ]}
         >
             <ListPage
@@ -179,7 +185,7 @@ function RegistrationListPage() {
                         {courseName}
                     </span>
                 }
-                actionBar={courseState == 5 && courseStatus == 1 && mixinFuncs.renderActionBar()}
+                actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
@@ -194,4 +200,4 @@ function RegistrationListPage() {
     );
 }
 
-export default RegistrationListPage;
+export default RegistrationMoneyListPage;

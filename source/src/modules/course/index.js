@@ -24,12 +24,13 @@ import { formSize, lectureState, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { formatMoney } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
     name: 'Tên khoá học',
     home: 'Trang chủ',
     subject: 'Môn học',
-    objectName: 'course',
+    objectName: 'khoá học',
     course: 'Khoá học',
     description: 'Mô tả',
     dateRegister: 'Ngày bắt đầu',
@@ -154,18 +155,13 @@ const CourseListPage = () => {
                 align: 'center',
                 width: 80,
                 render: (avatar) => (
-                    <Avatar size="large" icon={<UserOutlined />} src={`${AppConstants.contentRootUrl}${avatar}`} />
+                    <AvatarField size="large" icon={<UserOutlined />} src={avatar?`${AppConstants.contentRootUrl}${avatar}`:null} />
                 ),
             },
             {
                 title: translate.formatMessage(message.name),
                 dataIndex: 'name',
                 width: 200,
-            },
-            {
-                title: translate.formatMessage(message.subject),
-                dataIndex: ['subject', 'subjectName'],
-                width: 150,
             },
             {
                 title: translate.formatMessage(message.leader),
@@ -176,6 +172,7 @@ const CourseListPage = () => {
                 title: <FormattedMessage defaultMessage="Học phí" />,
                 dataIndex: 'fee',
                 width: '120px',
+                align: 'right',
                 render: (fee) => {
                     const formattedValue = formatMoney(fee, {
                         currentcy: 'đ',
@@ -189,6 +186,7 @@ const CourseListPage = () => {
                 title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
                 dataIndex: 'returnFee',
                 width: '120px',
+                align: 'right',
                 render: (returnFee) => {
                     const formattedValue = formatMoney(returnFee, {
                         currentcy: 'đ',

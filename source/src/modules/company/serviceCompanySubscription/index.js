@@ -12,7 +12,7 @@ import { FieldTypes } from '@constants/formConfig';
 import { statusOptions } from '@constants/masterData';
 
 const message = defineMessages({
-    objectName: 'Company',
+    objectName: 'gói dịch vụ',
     serviceCompanySubscription: 'Quản lý gói dịch vụ',
     home: 'Trang chủ',
     name: 'Tên dịch vụ',
@@ -43,7 +43,6 @@ const ServiceCompanySubListPage = () => {
     });
 
     const columns = [
-
         {
             title: <FormattedMessage defaultMessage="Tên dịch vụ" />,
             dataIndex: 'name',
@@ -52,12 +51,13 @@ const ServiceCompanySubListPage = () => {
             title: <FormattedMessage defaultMessage="Giá" />,
             dataIndex: 'price',
             width: 150,
+            align: 'right',
             render: (price) => {
                 const formattedValue = formatMoney(price, {
-                    groupSeparator: ',',      
-                    decimalSeparator: '.',    
-                    currentcy: 'đ',            
-                    currentDecimal : '0',
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: 'đ',
+                    currentDecimal: '0',
                 });
                 return <div>{formattedValue}</div>;
             },
@@ -67,11 +67,31 @@ const ServiceCompanySubListPage = () => {
             align: 'center',
             dataIndex: 'saleOff',
             width: 130,
-            render : (saleOff) => {
-                if(saleOff > 0) {
+            render: (saleOff) => {
+                if (saleOff > 0) {
                     return <div>{saleOff} %</div>;
-                }
-                else return <div>{saleOff}</div>;
+                } else return <div>{saleOff}</div>;
+            },
+        },
+        {
+            title: <FormattedMessage defaultMessage="Tiền thanh toán" />,
+            dataIndex: 'totalAmount',
+            width: 150,
+            align: 'right',
+            render: (text, record) => {
+                const totalPrice = record.price;
+                const saleOff = record.saleOff;
+                if (saleOff) {
+                    var totalAmount = totalPrice - totalPrice * (saleOff / 100);
+                } else totalAmount = totalPrice;
+                const formattedValue = formatMoney(totalAmount, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: 'đ',
+                    currentDecimal: '0',
+                });
+
+                return <div>{formattedValue}</div>;
             },
         },
         {

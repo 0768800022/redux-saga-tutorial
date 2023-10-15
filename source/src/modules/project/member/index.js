@@ -102,19 +102,6 @@ const ProjectMemberListPage = () => {
     const setColumns = () => {
         const columns = [
             {
-                title: '#',
-                dataIndex: 'avatar',
-                align: 'center',
-                width: 80,
-                render: (avatar) => (
-                    <Avatar
-                        size="large"
-                        icon={<UserOutlined />}
-                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                    />
-                ),
-            },
-            {
                 title: translate.formatMessage(message.name),
                 dataIndex: ['developer', 'studentInfo', 'fullName'],
             },

@@ -14,7 +14,7 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
 import route from '@modules/projectTask/routes';
-import { BookOutlined, TeamOutlined, WomanOutlined } from '@ant-design/icons';
+import { BookOutlined, TeamOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
@@ -39,10 +39,9 @@ const message = defineMessages({
     developer: 'Lập trình viên',
     task: 'Task',
     member: 'Thành viên',
-    group: 'Nhóm',
 });
 
-const ProjectListPage = () => {
+const ProjectLeaderListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
@@ -54,7 +53,11 @@ const ProjectListPage = () => {
     const [dataApply, setDataApply] = useState([]);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
-            apiConfig: apiConfig.project,
+            apiConfig: {
+                getList: apiConfig.project.getListLeader,
+                getById: apiConfig.project.getById,
+                delete: apiConfig.project.delete,
+            },
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
@@ -68,84 +71,6 @@ const ProjectListPage = () => {
                         };
                     }
                 };
-
-                funcs.additionalActionColumnButtons = () => ({
-                    task: ({ id, name, leaderInfo, status, state }) => (
-                        <BaseTooltip title={translate.formatMessage(message.task)}>
-                            <Button
-                                type="link"
-                                disabled={state === 1}
-                                style={{ padding: 0 }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
-                                    let path;
-                                    if (leaderName) {
-                                        path =
-                                            routes.leaderProjectTaskListPage.path +
-                                            pathDefault +
-                                            `&leaderName=${leaderName}`;
-                                    } else if (developerName) {
-                                        path =
-                                            routes.developerProjectTaskListPage.path +
-                                            pathDefault +
-                                            `&developerName=${developerName}`;
-                                    } else {
-                                        if (status == 1) {
-                                            path = route.ProjectTaskListPage.path + pathDefault + `&active=${true}`;
-                                        }
-                                        else
-                                            path = route.ProjectTaskListPage.path + pathDefault;
-                                    }
-                                    navigate(path, { state: { pathPrev: location.search } });
-                                }}
-                            >
-                                <BookOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
-                    member: ({ id, name, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.member)}>
-                            <Button
-                                type="link"
-                                style={{ padding: '0' }}
-                                // disabled={status === -1}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (status == 1) {
-                                        navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}&active=${true}`);
-                                    }
-                                    else {
-                                        navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
-                                    }
-                                }
-                                }
-                            >
-                                <WomanOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
-                    team: ({ id, name, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.group)}>
-                            <Button
-                                type="link"
-                                style={{ padding: '0' }}
-                                // disabled={status === -1}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (status === 1) {
-                                        navigate(routes.teamListPage.path + `?projectId=${id}&projectName=${name}&active=${true}`);
-                                    }
-                                    else {
-                                        navigate(routes.teamListPage.path + `?projectId=${id}&projectName=${name}`);
-                                    }
-                                }}
-                            >
-                                <TeamOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
-                });
 
                 funcs.changeFilter = (filter) => {
                     const leaderId = queryParams.get('leaderId');
@@ -167,19 +92,6 @@ const ProjectListPage = () => {
             },
         });
 
-    const { data: dataDeveloperProject, execute: executeGetList } = useFetch(apiConfig.developer.getProject, {
-        immediate: true,
-        pathParams: { id: developerId },
-    });
-
-    useEffect(() => {
-        if (!developerId) {
-            setDataApply(data);
-        } else {
-            setDataApply(dataDeveloperProject?.data?.content);
-        }
-    }, [data, dataDeveloperProject]);
-
     const setBreadRoutes = () => {
         const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
         if (leaderName) {
@@ -200,30 +112,6 @@ const ProjectListPage = () => {
     const convertDate = (date) => {
         const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
-    };
-
-    const setSearchField = () => {
-        let searchFields = [
-            {
-                key: 'name',
-                placeholder: translate.formatMessage(message.name),
-            },
-            {
-                key: 'state',
-                placeholder: translate.formatMessage(message.state),
-                type: FieldTypes.SELECT,
-                options: stateValues,
-            },
-        ];
-        !leaderName &&
-            !developerName &&
-            searchFields.splice(1, 0, {
-                key: 'status',
-                placeholder: translate.formatMessage(message.status),
-                type: FieldTypes.SELECT,
-                options: statusValues,
-            });
-        return searchFields;
     };
 
     const setColumns = () => {
@@ -282,35 +170,22 @@ const ProjectListPage = () => {
                     );
                 },
             },
+
+            mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
 
-        !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-        columns.push(
-            mixinFuncs.renderActionColumn(
-                {
-                    team: true,
-                    member: !leaderName && !developerName && true,
-                    task: true,
-                    edit: !leaderName && !developerName && true,
-                    delete: !leaderName && !developerName && true,
-                },
-                { width: '200px' },
-            ),
-        );
         return columns;
     };
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
-                actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={dataApply}
+                        dataSource={data}
                         columns={setColumns()}
                     />
                 }
@@ -319,4 +194,4 @@ const ProjectListPage = () => {
     );
 };
 
-export default ProjectListPage;
+export default ProjectLeaderListPage;

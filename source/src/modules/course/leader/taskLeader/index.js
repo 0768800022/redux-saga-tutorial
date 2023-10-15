@@ -1,29 +1,19 @@
-import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import {
-    AppConstants,
-    DATE_DISPLAY_FORMAT,
-    DATE_FORMAT_DISPLAY,
     DEFAULT_TABLE_ITEM_SIZE,
     DEFAULT_FORMAT,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { FieldTypes } from '@constants/formConfig';
 import { taskState } from '@constants/masterData';
-import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Avatar, Button, Tag } from 'antd';
+import {  Tag } from 'antd';
 import React from 'react';
-import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
-import { DeleteOutlined } from '@ant-design/icons';
+import { useLocation,useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
-import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 
 const message = defineMessages({
@@ -40,22 +30,28 @@ function TaskListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const leaderName = queryParameters.get('leaderName');
-    const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
-    const courseStatus = queryParameters.get('courseStatus');
     const subjectId = queryParameters.get('subjectId');
     const state = queryParameters.get('state');
-    const location = useLocation();
-
+    const paramid = useParams();
     const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.task,
+        apiConfig: {
+            getList: apiConfig.task.courseTask,
+            delete: apiConfig.task.delete,
+            update: apiConfig.task.update,
+            getById: apiConfig.task.getById,
+        },
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
+            funcs.prepareGetListPathParams = () => {
+                return {
+                    courseId: paramid.courseId,
+                };
+            };
             funcs.mappingData = (response) => {
                 try {
                     if (response.result === true) {
@@ -69,10 +65,10 @@ function TaskListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+                return routes.courseLeaderListPage.path + `/task/${paramid.courseId}/lecture?courseId=${paramid.courseId}&courseName=${courseName}&subjectId=${subjectId}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+                return `${pagePath}/${dataRow.id}?courseName=${courseName}&subjectId=${subjectId}`;
             };
         },
     });
@@ -124,35 +120,19 @@ function TaskListPage() {
                 },
             },
         ];
-        if (!leaderName && courseStatus == 1) {
-            columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }));
-        }
+        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }));
         return columns;
     };
-    const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
-        if (leaderName) {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.leader),
-                path: routes.leaderListPage.path,
-            });
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.course),
-                path: generatePath(routes.leaderCourseListPage.path + location?.state?.pathPrev),
-            });
-        } else {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.course),
-                path: generatePath(routes.courseListPage.path),
-            });
-        }
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.task) });
 
-        return breadRoutes;
-    };
 
     return (
-        <PageWrapper routes={setBreadRoutes()}>
+        <PageWrapper
+            routes={[
+                { breadcrumbName: translate.formatMessage(message.home) },
+                { breadcrumbName: translate.formatMessage(message.course), path: routes.courseLeaderListPage.path },
+                { breadcrumbName: translate.formatMessage(message.task) },
+            ]}
+        >
             <div>
                 <ListPage
                     title={
@@ -164,7 +144,8 @@ function TaskListPage() {
                             {courseName}
                         </span>
                     }
-                    actionBar={state == 2 && courseStatus == 1 && !leaderName ? mixinFuncs.renderActionBar() : ''}
+                    actionBar={mixinFuncs.renderActionBar()}
+
                     baseTable={
                         <BaseTable
                             onChange={changePagination}

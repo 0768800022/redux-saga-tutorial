@@ -13,9 +13,10 @@ import dayjs from 'dayjs';
 import { DATE_DISPLAY_FORMAT, DEFAULT_FORMAT } from '@constants';
 import { formatMoney } from '@utils/index';
 import { statusOptions } from '@constants/masterData';
+import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
-    objectName: 'CompanySubscription',
+    objectName: 'dịch vụ',
     home: 'Trang chủ',
     companyName: 'Tên công ty',
     startDate: 'Ngày bắt đầu',
@@ -52,7 +53,6 @@ const CompanySubscriptionIdListPage = () => {
             funcs.getCreateLink = () => {
                 return `${pagePath}/create?companyId=${companyId}&companyName=${companyName}`;
             };
-
         },
     });
 
@@ -63,7 +63,7 @@ const CompanySubscriptionIdListPage = () => {
             align: 'center',
             width: 80,
             render: (logo) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={logo ? `${AppConstants.contentRootUrl}${logo}` : null}
@@ -78,8 +78,9 @@ const CompanySubscriptionIdListPage = () => {
             title: <FormattedMessage defaultMessage="Giá dịch vụ" />,
             dataIndex: 'money',
             width: 150,
-            render: (monney) => {
-                const formattedValue = formatMoney(monney, {
+            align: 'right',
+            render: (money) => {
+                const formattedValue = formatMoney(money, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: 'đ',
@@ -97,11 +98,30 @@ const CompanySubscriptionIdListPage = () => {
             render: (saleOff) => {
                 if (saleOff > 0) {
                     return <div>{saleOff} %</div>;
-                }
-                else return <div>{saleOff}</div>;
+                } else return <div>{saleOff}</div>;
             },
         },
+        {
+            title: <FormattedMessage defaultMessage="Tiền thanh toán" />,
+            dataIndex: 'totalAmount',
+            width: 150,
+            align: 'right',
+            render: (text, record) => {
+                const totalPrice = record.money;
+                const saleOff = record.saleOff;
+                if (saleOff) {
+                    var totalAmount = totalPrice - totalPrice * (saleOff / 100);
+                } else totalAmount = totalPrice;
+                const formattedValue = formatMoney(totalAmount, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: 'đ',
+                    currentDecimal: '0',
+                });
 
+                return <div>{formattedValue}</div>;
+            },
+        },
         {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',

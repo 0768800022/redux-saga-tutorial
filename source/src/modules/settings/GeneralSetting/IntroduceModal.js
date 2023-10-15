@@ -13,14 +13,23 @@ const messages = defineMessages({
     update: 'Cập nhật',
     updateSuccess: 'Cập nhật {objectName} thành công',
 });
-const IntroduceModal = ({ open, onCancel, onOk, title, data, introduceData, executeUpdate, executeLoading }) => {
+const IntroduceModal = ({
+    open,
+    onCancel,
+    onOk,
+    title,
+    data,
+    introduceData,
+    executeUpdate,
+    executeLoading,
+    ...props
+}) => {
     const [form] = Form.useForm();
     const [isChanged, setChange] = useState(false);
     const notification = useNotification();
     const intl = useIntl();
     const translate = useTranslate();
     const updateSetting = (values) => {
-        console.log(values);
         executeUpdate({
             data: {
                 id: data.id,
@@ -55,13 +64,7 @@ const IntroduceModal = ({ open, onCancel, onOk, title, data, introduceData, exec
         });
     }, [introduceData]);
     return (
-        <Modal
-            centered
-            open={open}
-            onCancel={onCancel}
-            footer={null}
-            title={data?.keyName}
-        >
+        <Modal centered open={open} onCancel={onCancel} footer={null} title={data?.keyName} {...props}>
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} onFinish={updateSetting} size="100%">
                     <Row gutter={16}>
@@ -79,6 +82,7 @@ const IntroduceModal = ({ open, onCancel, onOk, title, data, introduceData, exec
                                 label={<FormattedMessage defaultMessage="Nội dung" />}
                                 name="message"
                                 onChange={handleInputChange}
+                                type="textarea"
                             />
                         </Col>
                     </Row>

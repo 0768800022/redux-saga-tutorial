@@ -15,20 +15,11 @@ import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import routes from './routes';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import AvatarField from '@components/common/form/AvatarField';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
-    objectName: 'Company',
-    home: 'Trang chủ',
-    companyName: 'Tên công ty',
-    address: 'Địa chỉ',
-    createdDate: 'Ngày tạo',
-    modifiedDate: 'Ngày sửa đổi',
-    email: 'Email',
-    holine: 'Holine',
-    logo: 'Logo',
-    status: 'Trạng thái',
-    username: 'Tài khoản đăng nhập',
-    company: 'Công ty',
-    registration: 'Dịch vụ',
+    objectName: 'công ty',
 });
 
 const CompanyListPage = () => {
@@ -52,7 +43,7 @@ const CompanyListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 registration: ({ id, companyName }) => (
-                    <BaseTooltip title={translate.formatMessage(message.registration)}>
+                    <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
                         <Button
                             type="link"
                             style={{ padding: 0 }}
@@ -79,7 +70,7 @@ const CompanyListPage = () => {
             align: 'center',
             width: 80,
             render: (logo) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={logo ? `${AppConstants.contentRootUrl}${logo}` : null}
@@ -103,7 +94,7 @@ const CompanyListPage = () => {
             dataIndex: 'email',
         },
         // {
-        //     title: translate.formatMessage(message.status),
+        //     title: translate.formatMessage(commonMessage.status),
         //     dataIndex: 'status',
         //     align: 'center',
         //     width: 120,
@@ -119,11 +110,11 @@ const CompanyListPage = () => {
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.companyName),
+            placeholder: translate.formatMessage(commonMessage.companyName),
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -131,8 +122,8 @@ const CompanyListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.company) },
+                { breadcrumbName: translate.formatMessage(commonMessage.home) },
+                { breadcrumbName: translate.formatMessage(commonMessage.company) },
             ]}
         >
             <ListPage

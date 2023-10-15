@@ -25,7 +25,7 @@ const Dashboard = () => {
         } else if (userKind == UserTypes.STUDENT) {
             console.log('first');
         } else if (userKind == UserTypes.LEADER) {
-            console.log('sed');
+            navigate(routes.courseLeaderListPage.path);
         } else {
             navigate(routes.studentListPage.path);
         }

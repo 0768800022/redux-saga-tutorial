@@ -5,33 +5,33 @@ import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 import routes from '@routes';
-import ProjectTaskForm from './ProjectTaskForm';
+import TaskForm from './TaskForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
-// import route1 from '@modules/project/routes';
 
 const messages = defineMessages({
     objectName: 'Task',
     home: 'Trang chủ',
-    ProjectTask: 'Task',
-    project: 'Dự án',
+    task: 'Task',
+    course: 'Khóa học',
 });
 
-function ProjectTaskSavePage() {
+function TaskSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
-    const projectId = queryParameters.get('projectId');
-    const projectName = queryParameters.get('projectName');
-    const active = queryParameters.get('active');
-    const projectTaskId = useParams();
+    const courseName = queryParameters.get('courseName');
+    const subjectId = queryParameters.get('subjectId');
+
+    const paramid = useParams();
+    const courseId = paramid.courseId;
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.projectTask.getById,
-            create: apiConfig.projectTask.create,
-            update: apiConfig.projectTask.update,
+            getById: apiConfig.task.getById,
+            create: apiConfig.task.create,
+            update: apiConfig.task.update,
         },
         options: {
-            getListUrl: generatePath(routes.ProjectTaskListPage.path, { projectTaskId }),
+            getListUrl: generatePath(routes.taskLeaderListPage.path, { courseId }),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -45,42 +45,25 @@ function ProjectTaskSavePage() {
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    projectId: projectId,
                 };
             };
         },
     });
-    const setBreadRoutes = () => {
-        const breadRoutes = [
-            { breadcrumbName: translate.formatMessage(messages.home) },
-            {
-                breadcrumbName: translate.formatMessage(messages.project),
-                path: routes.projectListPage.path,
-            },
-        ];
-
-        if (active) {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(messages.ProjectTask),
-                path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
-            });
-        } else {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(messages.ProjectTask),
-                path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
-            });
-        }
-        breadRoutes.push({ breadcrumbName: title });
-
-        return breadRoutes;
-    };
     return (
         <PageWrapper
             loading={loading}
-            routes={setBreadRoutes()}
+            routes={[
+                { breadcrumbName: translate.formatMessage(messages.home) },
+                { breadcrumbName: translate.formatMessage(messages.course), path: routes.courseLeaderListPage.path },
+                {
+                    breadcrumbName: translate.formatMessage(messages.task),
+                    path: routes.courseLeaderListPage.path + `/task/${paramid.courseId}?courseName=${courseName}&subjectId=${subjectId}`,
+                },
+                { breadcrumbName: title },
+            ]}
             title={title}
         >
-            <ProjectTaskForm
+            <TaskForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -92,4 +75,4 @@ function ProjectTaskSavePage() {
     );
 }
 
-export default ProjectTaskSavePage;
+export default TaskSavePage;

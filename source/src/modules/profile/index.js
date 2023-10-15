@@ -8,21 +8,27 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import ProfileForm from './ProfileForm';
 import useAuth from '@hooks/useAuth';
-import { UserTypes } from '@constants';
+import { UserTypes, storageKeys } from '@constants';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
+import { getData } from '@utils/localStorage';
 
 const messages = defineMessages({
     home: 'Home',
     profile: 'Profile',
 });
 
+const userProfileType = {
+    [UserTypes.MANAGER]: 'organize',
+    [UserTypes.LEADER]: 'leader',
+    [UserTypes.STUDENT]: 'student',
+};
+
 const ProfilePage = () => {
     const { profile } = useAuth();
-    const isAdmin = profile.kind === UserTypes.ADMIN;
     const translate = useTranslate();
-
-    const { data, loading } = useFetch(apiConfig[isAdmin ? 'account' : 'organize'].getProfile, {
+    const useKind = getData(storageKeys.USER_KIND);
+    const { data, loading } = useFetch(apiConfig[userProfileType[useKind]].getProfile, {
         immediate: true,
         mappingData: (res) => res.data,
     });
@@ -33,8 +39,8 @@ const ProfilePage = () => {
             objectName: translate.formatMessage(messages.profile),
         },
         apiConfig: {
-            getById: apiConfig[isAdmin ? 'account' : 'organize'].getProfile,
-            update: apiConfig[isAdmin ? 'account' : 'organize'].updateProfile,
+            getById: apiConfig[userProfileType[useKind]].getProfile,
+            update: apiConfig[userProfileType[useKind]].updateProfile,
         },
         override: (funcs) => {
             const onSaveCompleted = funcs.onSaveCompleted;
@@ -61,7 +67,7 @@ const ProfilePage = () => {
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
                 onSubmit={onSave}
-                isAdmin={isAdmin}
+                // isAdmin={isAdmin}
             />
         </PageWrapper>
     );

@@ -11,6 +11,8 @@ import CropImageField from '@components/common/form/CropImageField';
 import { AppConstants } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useFetch from '@hooks/useFetch';
+import SelectField from '@components/common/form/SelectField';
+import { actionOptions } from '@constants/masterData';
 
 const messages = defineMessages({
     objectName: 'slider',
@@ -30,6 +32,7 @@ const SliderModal = ({
     sliderData,
     parentData,
     isEditing,
+    ...props
 }) => {
     const [form] = Form.useForm();
     const [isChangeValues, setIsChangeValues] = useState(false);
@@ -38,19 +41,19 @@ const SliderModal = ({
     const translate = useTranslate();
     const [imageUrl, setImageUrl] = useState(null);
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
+    const actionValues = translate.formatKeys(actionOptions, ['label']);
     const updateSetting = (values) => {
         values.imageUrl = imageUrl;
-        const sliderIndex = sliderData.findIndex((obj) => obj.action === data?.action);
-        if (sliderIndex !== -1 && isEditing) {
-            sliderData.splice(sliderIndex, 1, { action: data?.action, ...values });
+        if (isEditing) {
+            sliderData.splice(data?.index, 1, values);
         } else {
-            sliderData.push({ action: sliderData[sliderData.length - 1]?.action + 1, ...values });
+            sliderData.push(values);
         }
 
         executeUpdate({
             data: {
                 id: parentData?.id,
-                isSystem: parentData?.isSystem,
+                isSystem: 0,
                 status: parentData?.status,
                 valueData: JSON.stringify(sliderData),
             },
@@ -121,6 +124,7 @@ const SliderModal = ({
                 ' ' +
                 intl.formatMessage(messages.objectName)
             }
+            {...props}
         >
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} onFinish={updateSetting} size="100%" onValuesChange={handleFormChange}>
@@ -135,7 +139,7 @@ const SliderModal = ({
                     </Col>
                     <Row gutter={16}>
                         <Col span={24}>
-                            <TextField label={<FormattedMessage defaultMessage="Tiêu đề" />} name="title" />
+                            <TextField label={<FormattedMessage defaultMessage="Tiêu đề" />} name="title" required />
                         </Col>
                     </Row>
                     <Row gutter={16}>
@@ -146,9 +150,21 @@ const SliderModal = ({
                     <Row gutter={16}>
                         <Col span={24}>
                             <TextField
+                                required
                                 label={<FormattedMessage defaultMessage="Mô tả ngắn" />}
                                 name="shortDescription"
                                 type="textarea"
+                            />
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={24}>
+                            <SelectField
+                                defaultValue={actionValues[0]}
+                                name="action"
+                                label={<FormattedMessage defaultMessage="Nút hành động" />}
+                                allowClear={false}
+                                options={actionValues}
                             />
                         </Col>
                     </Row>

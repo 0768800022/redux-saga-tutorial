@@ -155,11 +155,6 @@ const CourseListPage = () => {
             dataIndex: ['courseInfo', 'name'],
         },
         {
-            title: translate.formatMessage(message.subject),
-            dataIndex: ['courseInfo', 'subject', 'subjectName'],
-            width: 250,
-        },
-        {
             title: translate.formatMessage(message.dateCreated),
             dataIndex: 'createdDate',
             width: 150,

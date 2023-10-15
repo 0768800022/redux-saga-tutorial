@@ -19,7 +19,7 @@ import ColumnGroup from 'antd/es/table/ColumnGroup';
 
 const messages = defineMessages({
     objectName: 'Cài đặt chung',
-    createNew: 'Thêm mới',
+    createNew: '+',
     deleteSuccess: 'Xoá slider thành công',
     slider: 'Slider',
 });
@@ -49,9 +49,10 @@ const GeneralSettingPage = ({ groupName }) => {
                             if (item.valueData) {
                                 if (item?.keyName === 'slider') {
                                     const sliderDataParseJson = JSON.parse(item.valueData);
-                                    const updatedSliderData = sliderDataParseJson?.map((obj) => ({
+                                    const updatedSliderData = sliderDataParseJson?.map((obj, index) => ({
                                         ...obj,
                                         isSlider: true,
+                                        index,
                                     }));
                                     setSliderData(updatedSliderData);
                                     setParentData(item);
@@ -82,7 +83,6 @@ const GeneralSettingPage = ({ groupName }) => {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setDetail(item);
-                                console.log(item);
                                 if (item?.isSlider) {
                                     setIsEditing(true);
                                     handlersSliderModal.open();
@@ -113,16 +113,15 @@ const GeneralSettingPage = ({ groupName }) => {
         },
     });
     const deleteSlider = (item) => {
-        const updateSliderData = sliderData.filter((obj) => obj.action !== item?.action);
+        const updateSliderData = sliderData.filter((obj) => obj.index !== item?.index);
         executeUpdate({
             data: {
                 id: parentData.id,
-                isSystem: parentData.isSystem,
+                isSystem: 0,
                 status: parentData.status,
                 valueData: JSON.stringify(updateSliderData),
             },
             onCompleted: (response) => {
-                console.log(response);
                 if (response.result === true) {
                     notification({
                         message: intl.formatMessage(messages.deleteSuccess),
@@ -143,6 +142,7 @@ const GeneralSettingPage = ({ groupName }) => {
         {
             title: <FormattedMessage defaultMessage="Nội dung" />,
             dataIndex: 'valueData',
+            width: 500,
             render: (valueData, record) => {
                 if (record?.keyName === 'introduce') {
                     const valueDataParseJson = JSON.parse(valueData);
@@ -157,7 +157,7 @@ const GeneralSettingPage = ({ groupName }) => {
                 }
             },
         },
-        mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '100px' }),
     ];
     const columnsSlider = [
         {
@@ -178,7 +178,7 @@ const GeneralSettingPage = ({ groupName }) => {
         {
             title: <FormattedMessage defaultMessage="Tiêu đề" />,
             dataIndex: 'title',
-            width: '420px',
+            width: '400px',
         },
 
         mixinFuncs.renderActionColumn({ editSetting: true, delete: true }, { width: '60px' }),
@@ -204,10 +204,7 @@ const GeneralSettingPage = ({ groupName }) => {
             }
         },
     });
-    const handleCloseSliderModal = () => {
-        setIsEditing(false);
-        handlersSliderModal.close();
-    };
+    const handleCloseSliderModal = () => {};
 
     return (
         <div>
@@ -220,9 +217,20 @@ const GeneralSettingPage = ({ groupName }) => {
                     pagination={pagination}
                 />
             </Card>
-            <Card style={{ marginTop: '20px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ marginTop: '10px', fontSize: '20px' }}>{intl.formatMessage(messages.slider)}</span>
+            <Card
+                style={{
+                    marginTop: '16px',
+                }}
+            >
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '16px',
+                    }}
+                >
+                    <span style={{ fontSize: '20px' }}>{intl.formatMessage(messages.slider)}</span>
                     <Button
                         type="primary"
                         onClick={(e) => {
@@ -248,6 +256,7 @@ const GeneralSettingPage = ({ groupName }) => {
                 data={detail || {}}
                 executeUpdate={executeUpdate}
                 executeLoading={executeLoading}
+                width={800}
             />
             <IntroduceModal
                 open={openedIntroduceModal}
@@ -256,10 +265,11 @@ const GeneralSettingPage = ({ groupName }) => {
                 data={detail || {}}
                 executeUpdate={executeUpdate}
                 executeLoading={executeLoading}
+                width={800}
             />
             <SliderModal
                 open={openedSliderModal}
-                onCancel={handleCloseSliderModal}
+                onCancel={() => handlersSliderModal.close()}
                 data={detail || {}}
                 reload={mixinFuncs.getList}
                 sliderData={sliderData}
@@ -268,6 +278,7 @@ const GeneralSettingPage = ({ groupName }) => {
                 executeLoading={executeLoading}
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}
+                width={800}
             />
         </div>
     );

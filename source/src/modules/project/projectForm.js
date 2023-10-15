@@ -85,6 +85,15 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.leaderName })),
     });
+
+    const {
+        data: teams,
+        loading: getTeamsLoading,
+        execute: executeGetTeams,
+    } = useFetch(apiConfig.team.autocomplete, {
+        immediate: true,
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
+    });
     useEffect(() => {
         dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
         dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DEFAULT_FORMAT);
@@ -198,6 +207,17 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             allowClear={false}
                             options={stateValues}
                         />
+                    </Col>
+                    <Col span={12}>
+                        <AutoCompleteField
+                            label={<FormattedMessage defaultMessage="Nhóm" />}
+                            name="leaderId"
+                            apiConfig={apiConfig.team.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
+                            initialSearchParams={{}}
+                            searchParams={(text) => ({ name: text })}
+                            required 
+                            disabled={isEditing}/>
                     </Col>
                 </Row>
                 <TextField
