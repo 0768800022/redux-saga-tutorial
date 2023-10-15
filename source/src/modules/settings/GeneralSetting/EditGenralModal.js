@@ -40,7 +40,7 @@ const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, exe
                     setChange(false);
                 }
             },
-            onError: (err) => {},
+            onError: (err) => { },
         });
     };
 

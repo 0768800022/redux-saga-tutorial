@@ -70,7 +70,7 @@ const CourseListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationListPage.path +
-                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
                             >
@@ -108,7 +108,7 @@ const CourseListPage = () => {
     ];
     const breadLeaderRoutes = [
         { breadcrumbName: translate.formatMessage(commonMessage.leader), path: routes.leaderListPage.path },
-        { breadcrumbName: translate.formatMessage( commonMessage.course) },
+        { breadcrumbName: translate.formatMessage(commonMessage.course) },
     ];
 
     const searchFields = [
