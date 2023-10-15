@@ -39,6 +39,7 @@ import {
     projectTaskStateMessage,
     registrationMoneyKindMessage,
     actionMessage,
+    stateCourseRequestMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -290,4 +291,14 @@ export const actionOptions = [
         label: actionMessage.contactForm,
     },
     { value: 2, label: actionMessage.navigation },
+];
+
+export const stateCourseRequestOptions = [
+    { value: 0, label: stateCourseRequestMessage.request, color: 'green' },
+    {
+        value: 1,
+        label: stateCourseRequestMessage.processed,
+        color: 'blue',
+    },
+    { value: 2, label: stateCourseRequestMessage.cancel, color: 'red' },
 ];

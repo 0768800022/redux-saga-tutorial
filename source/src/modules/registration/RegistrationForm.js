@@ -24,6 +24,8 @@ const messages = defineMessages({
 });
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
+    const queryParameters = new URLSearchParams(window.location.search);
+    const fullName = queryParameters.get('fullName');
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     //const stateResgistration = translate.formatKeys(stateResgistrationOptions, ['label']);
@@ -237,7 +239,11 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             }
         });
     }, [dataDetail]);
-
+    useEffect(() => {
+        form.setFieldsValue({
+            studentInfo: { fullName, id: fullName },
+        });
+    }, [fullName]);
 
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
