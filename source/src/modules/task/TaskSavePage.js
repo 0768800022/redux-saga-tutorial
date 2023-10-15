@@ -3,7 +3,7 @@ import apiConfig from '@constants/apiConfig';
 import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useLocation, useParams } from 'react-router-dom';
 import routes from '@routes';
 import TaskForm from './TaskForm';
 import useTranslate from '@hooks/useTranslate';
@@ -16,11 +16,12 @@ const messages = defineMessages({
     course: 'Khóa học',
 });
 
-function TaskSavePage() {
+function TaskSavePage({ getListUrl, breadcrumbName }) {
     const translate = useTranslate();
-    const queryParameters = new URLSearchParams(window.location.search);
-    const courseId = queryParameters.get('courseId');
-    const courseName = queryParameters.get('courseName');
+    const location = useLocation();
+    const state = location.state.prevPath;
+    const search = location.search;
+    const paramHead = routes.courseListPage.path;
     const taskId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -29,7 +30,7 @@ function TaskSavePage() {
             update: apiConfig.task.update,
         },
         options: {
-            getListUrl: generatePath(routes.taskListPage.path, { taskId }),
+            getListUrl: getListUrl ? getListUrl : generatePath(routes.taskListPage.path, { taskId }),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -50,16 +51,9 @@ function TaskSavePage() {
     return (
         <PageWrapper
             loading={loading}
-            routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
-                { breadcrumbName: translate.formatMessage(messages.course), path: routes.courseListPage.path },
-                {
-                    breadcrumbName: translate.formatMessage(messages.task),
-                    path: routes.taskListPage.path + `?courseId=${courseId}&courseName=${courseName}`,
-                },
-                { breadcrumbName: title },
-            ]}
-            title={title}
+            routes={breadcrumbName ? breadcrumbName : 
+                routes.taskSavePage.breadcrumbs(messages,paramHead,state,search,title)
+            }
         >
             <TaskForm
                 setIsChangedFormValues={setIsChangedFormValues}
