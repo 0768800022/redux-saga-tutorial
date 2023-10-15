@@ -10,6 +10,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Avatar, Tag } from 'antd';
+import { IconBrandTeams } from '@tabler/icons-react';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
@@ -18,6 +19,7 @@ import { BookOutlined, TeamOutlined, WomanOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
+// import icon_team_1 from '@assets/images/team-Members-Icon.png';
 
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -121,7 +123,7 @@ const ProjectListPage = () => {
                                 }
                                 }
                             >
-                                <WomanOutlined />
+                                <UserOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -141,7 +143,7 @@ const ProjectListPage = () => {
                                     }
                                 }}
                             >
-                                <TeamOutlined />
+                                <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }}/>
                             </Button>
                         </BaseTooltip>
                     ),

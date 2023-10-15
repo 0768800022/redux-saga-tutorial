@@ -57,7 +57,11 @@ const TeamListPage = () => {
                 return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
+                const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+                if (active)
+                    return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
+                else 
+                    return `${pagePath}/${dataRow.id}` + pathDefault ;
             };
         },
     });

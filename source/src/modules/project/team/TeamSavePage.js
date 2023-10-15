@@ -20,6 +20,7 @@ function TeamSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
+    const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
     // const projectName = queryParameters.get('projectName');
     const teamId = useParams();
@@ -51,6 +52,8 @@ function TeamSavePage() {
         },
     });
     const setBreadRoutes = () => {
+        const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+
         const breadRoutes = [
             { breadcrumbName: translate.formatMessage(message.home) },
             {
@@ -62,12 +65,12 @@ function TeamSavePage() {
         if (active) {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(message.team),
-                path: routes.teamListPage.path + `?active=${active}`,
+                path: routes.teamListPage.path + pathDefault +`&active=${active}`,
             });
         } else {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(message.team),
-                path: routes.teamListPage.path,
+                path: routes.teamListPage.path + pathDefault,
             });
         }
         breadRoutes.push({ breadcrumbName: title });
