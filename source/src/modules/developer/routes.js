@@ -17,7 +17,7 @@ export default {
         title: 'Developer Save Page',
         auth: true,
         component: DeveloperSavePage,
-        permission: [apiConfig.leader.create.baseURL, apiConfig.leader.update.baseURL],
+        permission: [apiConfig.developer.create.baseURL, apiConfig.developer.update.baseURL],
     },
     developerProjectListPage: {
         path: '/developer/project',
@@ -31,6 +31,6 @@ export default {
         title: 'Developer',
         auth: true,
         component: ProjectTaskListPage,
-        permissions: [apiConfig.project.getList.baseURL],
+        permissions: [apiConfig.projectTask.getList.baseURL],
     },
 };

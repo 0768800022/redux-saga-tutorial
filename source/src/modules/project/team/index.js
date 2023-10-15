@@ -57,7 +57,11 @@ const TeamListPage = () => {
                 return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
+                const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+                if (active)
+                    return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
+                else 
+                    return `${pagePath}/${dataRow.id}` + pathDefault ;
             };
         },
     });
@@ -121,7 +125,6 @@ const TeamListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 {
                     breadcrumbName: translate.formatMessage(message.project),
                     path: generatePath(routes.projectListPage.path),

@@ -206,6 +206,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getListStudentCourse: {
+            baseURL: `${apiTenantUrl}v1/course/student-course`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
         getById: {
             baseURL: `${apiTenantUrl}v1/course/get/:id`,
             method: 'GET',
@@ -596,6 +602,18 @@ const apiConfig = {
         checkAsign: {
             baseURL: `${apiTenantUrl}v1/task/check-asign`,
             method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        courseTask: {
+            baseURL: `${apiTenantUrl}v1/task/course-task/:courseId`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        studentTask: {
+            baseURL: `${apiTenantUrl}v1/task/student-task`,
+            method: 'GET',
             headers: baseHeader,
             isRequiredTenantId: true,
         },

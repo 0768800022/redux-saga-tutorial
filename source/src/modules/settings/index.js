@@ -17,7 +17,6 @@ const SettingPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.generalSetting) },
             ]}
         >

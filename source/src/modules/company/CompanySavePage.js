@@ -46,7 +46,6 @@ const CompanySavePage = () => {
         <PageWrapper
             loading = {loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.company),
                     path: generatePath(routes.companyListPage.path, { companyId } ) },
                 { breadcrumbName: title },

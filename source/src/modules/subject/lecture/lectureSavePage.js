@@ -45,7 +45,6 @@ const LectureSavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.subject) },
                 {
                     breadcrumbName: translate.formatMessage(message.lecture),

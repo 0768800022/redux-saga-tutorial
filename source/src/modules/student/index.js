@@ -130,7 +130,6 @@ const StudentListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.student) },
             ]}
         >

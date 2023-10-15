@@ -40,6 +40,7 @@ const SliderModal = ({
     const intl = useIntl();
     const translate = useTranslate();
     const [imageUrl, setImageUrl] = useState(null);
+    const [valueSelect, setValueSelect] = useState(1);
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const actionValues = translate.formatKeys(actionOptions, ['label']);
     const updateSetting = (values) => {
@@ -85,12 +86,15 @@ const SliderModal = ({
             form.setFieldsValue({
                 ...data,
             });
+            setValueSelect(data?.action);
             setImageUrl(data?.imageUrl);
         } else {
             const nullData = Object.keys(data).reduce((acc, key) => {
                 acc[key] = null;
                 return acc;
             }, {});
+            nullData.action = 1;
+            setValueSelect(1);
             form.setFieldsValue({ ...nullData });
             setImageUrl(null);
         }
@@ -113,11 +117,25 @@ const SliderModal = ({
             },
         });
     };
+    const handleOnCancel = () => {
+        if (!isEditing) {
+            const nullData = Object.keys(data).reduce((acc, key) => {
+                acc[key] = null;
+                return acc;
+            }, {});
+            form.setFieldsValue({ ...nullData });
+            setImageUrl(null);
+        }
+        onCancel();
+    };
+    const handleOnSelect = (value) => {
+        setValueSelect(value);
+    };
     return (
         <Modal
             centered
             open={open}
-            onCancel={onCancel}
+            onCancel={handleOnCancel}
             footer={null}
             title={
                 (isEditing ? intl.formatMessage(messages.update) : intl.formatMessage(messages.create)) +
@@ -143,9 +161,11 @@ const SliderModal = ({
                         </Col>
                     </Row>
                     <Row gutter={16}>
-                        <Col span={24}>
-                            <TextField label={<FormattedMessage defaultMessage="Đường dẫn" />} name="targetUrl" />
-                        </Col>
+                        {valueSelect == 2 && (
+                            <Col span={24}>
+                                <TextField label={<FormattedMessage defaultMessage="Đường dẫn" />} name="targetUrl" />
+                            </Col>
+                        )}
                     </Row>
                     <Row gutter={16}>
                         <Col span={24}>
@@ -164,6 +184,7 @@ const SliderModal = ({
                                 name="action"
                                 label={<FormattedMessage defaultMessage="Nút hành động" />}
                                 allowClear={false}
+                                onSelect={handleOnSelect}
                                 options={actionValues}
                             />
                         </Col>

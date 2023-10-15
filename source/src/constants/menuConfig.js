@@ -163,6 +163,23 @@ const navMenuConfig = [
             },
         ],
     },
+
+    ///////////////////// STUDENT MENU /////////////////////////////
+    {
+        label: <FormattedMessage defaultMessage="Khoá học" />,
+        key: 'course-student',
+        icon: <IconSchool size={16} />,
+        permission: apiConfig.course.getListStudentCourse.baseURL,
+        children: [
+            {
+                label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
+                key: 'my-course-student',
+                path: routes.courseStudentListPage.path,
+                permission: apiConfig.course.getListStudentCourse.baseURL,
+            },
+        ],
+    },
+
 ];
 
 export default navMenuConfig;

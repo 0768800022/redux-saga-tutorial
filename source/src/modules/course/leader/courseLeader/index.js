@@ -1,58 +1,48 @@
+import { BookOutlined, UserOutlined,TeamOutlined } from '@ant-design/icons';
+import AvatarField from '@components/common/form/AvatarField';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import {
-    AppConstants,
-    DATE_DISPLAY_FORMAT,
-    DATE_FORMAT_DISPLAY,
-    DEFAULT_FORMAT,
-    DEFAULT_TABLE_ITEM_SIZE,
-} from '@constants';
+import BaseTable from '@components/common/table/BaseTable';
+import { AppConstants, DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
+import { lectureState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
-import { TeamOutlined, BookOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, Button, Tag } from 'antd';
-import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
-import route from '@modules/task/routes';
-import { convertDateTimeToString } from '@utils/dayHelper';
-import { formSize, lectureState, statusOptions } from '@constants/masterData';
-import { FieldTypes } from '@constants/formConfig';
 import { formatMoney } from '@utils';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import AvatarField from '@components/common/form/AvatarField';
+import { Button } from 'antd';
+import dayjs from 'dayjs';
+import React from 'react';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 
 const message = defineMessages({
     name: 'Tên khoá học',
     home: 'Trang chủ',
     subject: 'Môn học',
-    objectName: 'khoá học',
+    objectName: 'course',
     course: 'Khoá học',
     description: 'Mô tả',
     dateRegister: 'Ngày bắt đầu',
     dateEnd: 'Ngày kết thúc',
-    state: 'Tình trạng',
-    status: 'Trạng thái',
     leader: 'Leader',
     registration: 'Đăng ký',
     task: 'Task',
 });
 
-const CourseListPage = () => {
+const CourseLeaderListPage = () => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(lectureState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const queryParameters = new URLSearchParams(window.location.search);
-    const leaderName = queryParameters.get('leaderName');
-    const location = useLocation();
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
-            apiConfig: apiConfig.course,
+            apiConfig: {
+                getList: apiConfig.course.getListLeaderCourse,
+                getById: apiConfig.course.getById,
+                delete: apiConfig.course.delete,
+            },
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
@@ -80,7 +70,7 @@ const CourseListPage = () => {
                                     e.stopPropagation();
                                     state !== 1 &&
                                         navigate(
-                                            routes.registrationListPage.path +
+                                            routes.registrationLeaderListPage.path +
                                                 `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
@@ -98,13 +88,8 @@ const CourseListPage = () => {
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const path =
-                                        (leaderName ? routes.leaderCourseTaskListPage.path : routes.taskListPage.path) +
-                                        `?courseId=${id}&courseName=${name}&subjectId=${subject.id}&state=${state}&courseStatus=${status}` +
-                                        (leaderName ? `&leaderName=${leaderName}` : '');
-                                    state !== 1 &&
-                                        state !== 5 &&
-                                        navigate(path, { state: { pathPrev: location.search } });
+                                    const path = routes.courseLeaderListPage.path + `/task/${id}?courseName=${name}&subjectId=${subject.id}`;
+                                    navigate(path);
                                 }}
                             >
                                 <BookOutlined />
@@ -115,32 +100,9 @@ const CourseListPage = () => {
             },
         });
     const breadRoutes = [
+        { breadcrumbName: translate.formatMessage(message.home) },
         { breadcrumbName: translate.formatMessage(message.course) },
     ];
-    const breadLeaderRoutes = [
-        { breadcrumbName: translate.formatMessage(message.leader), path: routes.leaderListPage.path },
-        { breadcrumbName: translate.formatMessage(message.course) },
-    ];
-
-    const searchFields = [
-        {
-            key: 'name',
-            placeholder: translate.formatMessage(message.name),
-        },
-        {
-            key: 'state',
-            placeholder: translate.formatMessage(message.state),
-            type: FieldTypes.SELECT,
-            options: stateValues,
-        },
-        !leaderName && {
-            key: 'status',
-            placeholder: translate.formatMessage(message.status),
-            type: FieldTypes.SELECT,
-            options: statusValues,
-        },
-    ].filter(Boolean);
-
     const columns = [
         {
             title: '#',
@@ -148,11 +110,7 @@ const CourseListPage = () => {
             align: 'center',
             width: 80,
             render: (avatar) => (
-                <AvatarField
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                />
+                <AvatarField size="large" icon={<UserOutlined />} src={`${AppConstants.contentRootUrl}${avatar}`} />
             ),
         },
         {
@@ -161,15 +119,14 @@ const CourseListPage = () => {
             width: 200,
         },
         {
-            title: translate.formatMessage(message.leader),
-            dataIndex: ['leader', 'leaderName'],
-            width: 80,
+            title: translate.formatMessage(message.subject),
+            dataIndex: ['subject', 'subjectName'],
+            width: 150,
         },
         {
             title: <FormattedMessage defaultMessage="Học phí" />,
             dataIndex: 'fee',
             width: '120px',
-            align: 'right',
             render: (fee) => {
                 const formattedValue = formatMoney(fee, {
                     currentcy: 'đ',
@@ -183,7 +140,6 @@ const CourseListPage = () => {
             title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
             dataIndex: 'returnFee',
             width: '120px',
-            align: 'right',
             render: (returnFee) => {
                 const formattedValue = formatMoney(returnFee, {
                     currentcy: 'đ',
@@ -219,38 +175,21 @@ const CourseListPage = () => {
             width: 130,
             align: 'center',
         },
-        {
-            title: translate.formatMessage(message.state),
-            dataIndex: 'state',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
-                return (
-                    <Tag color={state.color}>
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                    </Tag>
-                );
-            },
-        },
-        !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
                 task: true,
-                registration: !leaderName && true,
-                edit: !leaderName && true,
-                delete: !leaderName && true,
+                registration: true,
+                edit:  true,
+                delete: true,
             },
-            { width: '180px' },
+            { width: '80px' },
         ),
     ].filter(Boolean);
 
     return (
-        <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
+        <PageWrapper routes={ breadRoutes}>
             <ListPage
-                title={leaderName && <span style={{ fontWeight: 'normal' }}>{leaderName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={!leaderName && mixinFuncs.renderActionBar()}
+                actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
@@ -265,4 +204,4 @@ const CourseListPage = () => {
     );
 };
 
-export default CourseListPage;
+export default CourseLeaderListPage;

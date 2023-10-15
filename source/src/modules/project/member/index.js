@@ -24,6 +24,7 @@ import useFetch from '@hooks/useFetch';
 import route from '@modules/project/routes';
 import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -87,7 +88,7 @@ const ProjectMemberListPage = () => {
     });
 
     const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        const breadRoutes = [];
 
         breadRoutes.push({
             breadcrumbName: translate.formatMessage(message.project),
@@ -98,58 +99,52 @@ const ProjectMemberListPage = () => {
         return breadRoutes;
     };
 
-    const setColumns = () => {
-        const columns = [
-            {
-                title: translate.formatMessage(message.name),
-                dataIndex: ['developer', 'studentInfo', 'fullName'],
-            },
-            {
-                title: translate.formatMessage(message.role),
-                dataIndex: ['projectRole', 'projectRoleName'],
-                width: 150,
-            },
+    const columns = [
+        {
+            title: '#',
+            dataIndex: 'avatar',
+            align: 'center',
+            width: 80,
+            render: (avatar) => (
+                <Avatar
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                />
+            ),
+        },
+        {
+            title: translate.formatMessage(message.name),
+            dataIndex: ['developer', 'studentInfo', 'fullName'],
+        },
+        {
+            title: translate.formatMessage(message.role),
+            dataIndex: ['projectRole', 'projectRoleName'],
+            width: 150,
+        },
 
-            {
-                title: 'Lịch trình',
-                dataIndex: 'schedule',
-                render: (schedule) => {
-                    let check = JSON.parse(schedule);
-                    const newCheck = [
-                        { key: 'M', value: check.t2 },
-                        { key: 'T', value: check.t3 },
-                        { key: 'W', value: check.t4 },
-                        { key: 'T', value: check.t5 },
-                        { key: 'F', value: check.t6 },
-                        { key: 'S', value: check.t7 },
-                        { key: 'S', value: check.cn },
-                    ];
-
-                    let dateString = '';
-                    newCheck.map((item) => {
-                        if (item.value !== undefined) {
-                            dateString += item.key + ' ';
-                        }
-                    });
-
-                    return <div>{dateString}</div>;
-                },
+        {
+            title: 'Lịch trình',
+            dataIndex: 'schedule',
+            align: 'center',
+            render: (schedule) => {
+                return <ScheduleFile schedule={schedule} />;
             },
-        ];
+            width: 180,
+        },
 
         // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-        active && columns.push(
+        active &&
             mixinFuncs.renderActionColumn(
                 {
-                    
                     edit: true,
                     delete: true,
                 },
                 { width: '150px' },
             ),
-        );
-        return columns;
-    };
+    ].filter(Boolean);
+
+    // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
 
     return (
         <PageWrapper routes={setBreadRoutes()}>
@@ -162,7 +157,7 @@ const ProjectMemberListPage = () => {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />
