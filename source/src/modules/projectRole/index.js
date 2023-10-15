@@ -53,7 +53,6 @@ const ProjectRoleListPage = () => {
         },
     });
     const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
         { breadcrumbName: translate.formatMessage(message.projectRole) },
     ];
     const searchFields = [

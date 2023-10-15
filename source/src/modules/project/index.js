@@ -10,6 +10,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Avatar, Tag } from 'antd';
+import { IconBrandTeams } from '@tabler/icons-react';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
@@ -18,6 +19,7 @@ import { BookOutlined, TeamOutlined, WomanOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
+// import icon_team_1 from '@assets/images/team-Members-Icon.png';
 
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -121,7 +123,7 @@ const ProjectListPage = () => {
                                 }
                                 }
                             >
-                                <WomanOutlined />
+                                <UserOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -141,7 +143,7 @@ const ProjectListPage = () => {
                                     }
                                 }}
                             >
-                                <TeamOutlined />
+                                <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }}/>
                             </Button>
                         </BaseTooltip>
                     ),
@@ -181,7 +183,7 @@ const ProjectListPage = () => {
     }, [data, dataDeveloperProject]);
 
     const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        const breadRoutes = [];
         if (leaderName) {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(message.leader),
@@ -202,108 +204,98 @@ const ProjectListPage = () => {
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
     };
 
-    const setSearchField = () => {
-        let searchFields = [
-            {
-                key: 'name',
-                placeholder: translate.formatMessage(message.name),
-            },
-            {
-                key: 'state',
-                placeholder: translate.formatMessage(message.state),
-                type: FieldTypes.SELECT,
-                options: stateValues,
-            },
-        ];
+    const searchFields = [
+        {
+            key: 'name',
+            placeholder: translate.formatMessage(message.name),
+        },
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(message.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
         !leaderName &&
-            !developerName &&
-            searchFields.splice(1, 0, {
-                key: 'status',
-                placeholder: translate.formatMessage(message.status),
-                type: FieldTypes.SELECT,
-                options: statusValues,
-            });
-        return searchFields;
-    };
+            !developerName && {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
+        },
+    ].filter(Boolean);
 
-    const setColumns = () => {
-        const columns = [
-            {
-                title: '#',
-                dataIndex: 'avatar',
-                align: 'center',
-                width: 80,
-                render: (avatar) => (
-                    <AvatarField
-                        size="large"
-                        icon={<UserOutlined />}
-                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                    />
-                ),
-            },
-            {
-                title: translate.formatMessage(message.name),
-                dataIndex: 'name',
-            },
-            {
-                title: translate.formatMessage(message.leader),
-                dataIndex: ['leaderInfo', 'leaderName'],
-                width: 150,
-            },
-            {
-                title: translate.formatMessage(message.startDate),
-                dataIndex: 'startDate',
-                render: (startDate) => {
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
-                },
-                width: 140,
-                align: 'center',
-            },
-            {
-                title: translate.formatMessage(message.endDate),
-                dataIndex: 'endDate',
-                render: (endDate) => {
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
-                },
-                width: 140,
-                align: 'center',
-            },
-            {
-                title: 'Tình trạng',
-                dataIndex: 'state',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const state = stateValues.find((item) => item.value == dataRow);
-                    return (
-                        <Tag color={state.color}>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                        </Tag>
-                    );
-                },
-            },
-        ];
-
-        !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-        columns.push(
-            mixinFuncs.renderActionColumn(
-                {
-                    team: true,
-                    member: !leaderName && !developerName && true,
-                    task: true,
-                    edit: !leaderName && !developerName && true,
-                    delete: !leaderName && !developerName && true,
-                },
-                { width: '200px' },
+    const columns = [
+        {
+            title: '#',
+            dataIndex: 'avatar',
+            align: 'center',
+            width: 80,
+            render: (avatar) => (
+                <AvatarField
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                />
             ),
-        );
-        return columns;
-    };
+        },
+        {
+            title: translate.formatMessage(message.name),
+            dataIndex: 'name',
+        },
+        {
+            title: translate.formatMessage(message.leader),
+            dataIndex: ['leaderInfo', 'leaderName'],
+            width: 150,
+        },
+        {
+            title: translate.formatMessage(message.startDate),
+            dataIndex: 'startDate',
+            render: (startDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
+            },
+            width: 140,
+            align: 'center',
+        },
+        {
+            title: translate.formatMessage(message.endDate),
+            dataIndex: 'endDate',
+            render: (endDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
+            },
+            width: 140,
+            align: 'center',
+        },
+        {
+            title: 'Tình trạng',
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
+            },
+        },
+        !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderActionColumn(
+            {
+                team: true,
+                member: !leaderName && !developerName && true,
+                task: true,
+                edit: !leaderName && !developerName && true,
+                delete: !leaderName && !developerName && true,
+            },
+            { width: '200px' },
+        ),
+    ].filter(Boolean);
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -311,7 +303,7 @@ const ProjectListPage = () => {
                         pagination={pagination}
                         loading={loading}
                         dataSource={dataApply}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />

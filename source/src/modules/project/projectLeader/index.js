@@ -93,7 +93,7 @@ const ProjectLeaderListPage = () => {
         });
 
     const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        const breadRoutes = [];
         if (leaderName) {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(message.leader),

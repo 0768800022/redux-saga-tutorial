@@ -24,6 +24,7 @@ export default {
         title: 'lecture List Page',
         auth: true,
         component: LectureListPage,
+        permissions: [apiConfig.lecture.update.baseURL, apiConfig.lecture.create.baseURL],
     },
 
     lectureSavePage: {
@@ -31,5 +32,6 @@ export default {
         title: 'Lecture Save Page',
         auth: true,
         component: LectureSavePage,
+        permissions: [apiConfig.lecture.update.baseURL, apiConfig.lecture.create.baseURL],
     },
 };

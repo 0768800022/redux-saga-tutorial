@@ -96,80 +96,71 @@ function ProjectTaskListPage() {
                 };
             },
         });
-    const setColumns = () => {
-        const columns = [
-            {
-                title: translate.formatMessage(message.projectTask),
-                dataIndex: 'taskName',
+    const columns = [
+        {
+            title: translate.formatMessage(message.projectTask),
+            dataIndex: 'taskName',
+        },
+        {
+            title: translate.formatMessage(message.developer),
+            dataIndex: ['developer', 'studentInfo', 'fullName'],
+        },
+        {
+            title: <FormattedMessage defaultMessage="Quản lý" />,
+            dataIndex: ['project', 'leaderInfo', 'leaderName'],
+        },
+        {
+            title: 'Ngày bắt đầu',
+            dataIndex: 'startDate',
+            width: 200,
+            align: 'center',
+        },
+        {
+            title: 'Ngày kết thúc',
+            dataIndex: 'dueDate',
+            width: 200,
+        },
+        {
+            title: 'Tình trạng',
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
             },
-            {
-                title: translate.formatMessage(message.developer),
-                dataIndex: ['developer', 'studentInfo', 'fullName'],
-            },
-            {
-                title: <FormattedMessage defaultMessage="Quản lý" />,
-                dataIndex: ['project', 'leaderInfo', 'leaderName'],
-            },
-            {
-                title: 'Ngày bắt đầu',
-                dataIndex: 'startDate',
-                width: 200,
-                align: 'center',
-            },
-            {
-                title: 'Ngày kết thúc',
-                dataIndex: 'dueDate',
-                width: 200,
-            },
-            {
-                title: 'Tình trạng',
-                dataIndex: 'state',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const state = stateValues.find((item) => item.value == dataRow);
-                    return (
-                        <Tag color={state.color}>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                        </Tag>
-                    );
-                },
-            },
-        ];
-        if (!leaderName && !developerName ) {
-            columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-            if (active)
-                columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }));
-        }
-        return columns;
-    };
+        },
+        !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
+        active && mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+    ].filter(Boolean);
 
-    const setSearchField = () => {
-        let searchFields = [
-            {
-                key: 'taskName',
-                placeholder: translate.formatMessage(message.name),
-            },
-            {
-                key: 'state',
-                placeholder: translate.formatMessage(message.state),
-                type: FieldTypes.SELECT,
-                options: stateValues,
-            },
-        ];
+    const searchFields = [
+        {
+            key: 'taskName',
+            placeholder: translate.formatMessage(message.name),
+        },
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(message.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
         !leaderName &&
-            !developerName &&
-            searchFields.splice(1, 0, {
-                key: 'status',
-                placeholder: translate.formatMessage(message.status),
-                type: FieldTypes.SELECT,
-                options: statusValues,
-            });
-        return searchFields;
-    };
+            !developerName && {
+            key: 'status',
+            placeholder: translate.formatMessage(message.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
+        },
+    ].filter(Boolean);
+    
 
     const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        const breadRoutes = [];
         if (leaderName) {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(message.leader),
@@ -214,7 +205,7 @@ function ProjectTaskListPage() {
                             {projectName}
                         </span>
                     }
-                    searchForm={mixinFuncs.renderSearchForm({ fields: setSearchField(), initialValues: queryFilter })}
+                    searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
@@ -222,7 +213,7 @@ function ProjectTaskListPage() {
                             pagination={pagination}
                             loading={loading}
                             dataSource={data}
-                            columns={setColumns()}
+                            columns={columns}
                         />
                     }
                 />
