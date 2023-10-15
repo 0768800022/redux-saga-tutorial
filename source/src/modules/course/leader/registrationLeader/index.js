@@ -18,12 +18,10 @@ import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import { CheckCircleOutlined, DollarOutlined } from '@ant-design/icons';
-import style from './Registration.module.scss';
+// import style from './Registration.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import routers from './routes';
-import ScheduleFile from '@components/common/elements/ScheduleFile';
-
+// import RegistrationListPage from '@modules/registration';
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
     studentId: 'Tên sinh viên',
@@ -37,7 +35,7 @@ const message = defineMessages({
     money: 'Thanh Toán',
 });
 
-function RegistrationListPage() {
+function RegistrationLeaderListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
@@ -66,33 +64,6 @@ function RegistrationListPage() {
                     return [];
                 }
             };
-            funcs.getCreateLink = () => {
-                return `${pagePath}/create?courseId=${courseId}&courseName=${courseName}`;
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}`;
-            };
-
-            funcs.additionalActionColumnButtons = () => ({
-                money: ({ id, name, status }) => (
-                    <BaseTooltip title={translate.formatMessage(message.money)}>
-                        <Button
-                            type="link"
-                            style={{ padding: '0' }}
-                            disabled={status === -1}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(
-                                    routes.registrationMoneyListPage.path +
-                                    `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
-                                );
-                            }}
-                        >
-                            <DollarOutlined />
-                        </Button>
-                    </BaseTooltip>
-                ),
-            });
         },
     });
     const setColumns = () => {
@@ -104,11 +75,28 @@ function RegistrationListPage() {
             {
                 title: 'Lịch trình',
                 dataIndex: 'schedule',
-                align: 'center',
                 render: (schedule) => {
-                    return <ScheduleFile schedule={schedule} />;
+                    let check = JSON.parse(schedule);
+                    const newCheck = [
+                        { key: 'M', value: check.t2 },
+                        { key: 'T', value: check.t3 },
+                        { key: 'W', value: check.t4 },
+                        { key: 'T', value: check.t5 },
+                        { key: 'F', value: check.t6 },
+                        { key: 'S', value: check.t7 },
+                        { key: 'S', value: check.cn },
+                    ];
+
+                    let dateString = '';
+                    newCheck.map((item) => {
+                        if (item.value !== undefined) {
+                            dateString += item.key + ' ';
+                        }
+                    });
+
+                    return <div>{dateString}</div>;
                 },
-                width: 180,
+                width: 140,
             },
             {
                 title: translate.formatMessage(message.isIntern),
@@ -119,7 +107,7 @@ function RegistrationListPage() {
                     if (item == 0) {
                         return null;
                     } else {
-                        return <CheckCircleOutlined className={style.greenCheckIcon} />;
+                        return <CheckCircleOutlined  />;
                     }
                 },
             },
@@ -149,23 +137,8 @@ function RegistrationListPage() {
         return columns;
     };
 
-    const searchFields = [
-        {
-            key: 'id',
-            placeholder: translate.formatMessage(message.studentId),
-        },
-    ];
-
     return (
         <PageWrapper
-            routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
-                {
-                    breadcrumbName: translate.formatMessage(message.course),
-                    path: '/course',
-                },
-                { breadcrumbName: translate.formatMessage(message.registration) },
-            ]}
         >
             <ListPage
                 title={
@@ -179,7 +152,6 @@ function RegistrationListPage() {
                         {courseName}
                     </span>
                 }
-                actionBar={courseState == 5 && courseStatus == 1 && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
@@ -194,4 +166,4 @@ function RegistrationListPage() {
     );
 }
 
-export default RegistrationListPage;
+export default RegistrationLeaderListPage;

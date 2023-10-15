@@ -2,7 +2,13 @@ import apiConfig from '@constants/apiConfig';
 import CourseListPage from '.';
 import CourseSavePage from './CourseSavePage';
 import LectureListPage from './lecture';
-import CourseLeaderListPage from './courseLeader';
+import CourseLeaderListPage from './leader/courseLeader';
+import TaskListPage from './leader/taskLeader';
+import TaskSavePage from './leader/taskLeader/TaskSavePage';
+import AsignAllListPage from './leader/asignAll';
+import CourseStudentListPage from './student/courseStudent';
+import TaskStudentListPage from './student/taskStudent';
+import RegistrationLeaderListPage from './leader/registrationLeader';
 export default {
     courseListPage: {
         path: '/course',
@@ -33,4 +39,52 @@ export default {
         separateCheck: true,
         permissions: [apiConfig.lecture.getList.baseURL],
     },
+
+    taskLeaderListPage: {
+        path: '/course-leader/task/:courseId',
+        title: 'Task List Page',
+        auth: true,
+        component: TaskListPage,
+        permissions: [apiConfig.task.courseTask.baseURL],
+    },
+    taskLeaderSavePage: {
+        path: '/course-leader/task/:courseId/:id',
+        title: 'Task Save Page',
+        auth: true,
+        component: TaskSavePage,
+        permissions: [apiConfig.task.update.baseURL],
+    },
+    lectureTaskLeaderListPage: {
+        path: '/course-leader/task/:courseId/lecture',
+        title: 'Lecture Leader List Page',
+        auth: true,
+        component: AsignAllListPage,
+        separateCheck: true,
+        permissions: [apiConfig.lecture.getList.baseURL],
+    },
+    registrationLeaderListPage: {
+        path: '/course-leader/registration',
+        title: 'Registration',
+        auth: true,
+        component: RegistrationLeaderListPage,
+        permissions: [apiConfig.registration.getList.baseURL],
+    },
+    // STUDENT
+    courseStudentListPage: {
+        path: '/course-student',
+        title: 'Course Student List Page',
+        auth: true,
+        component: CourseStudentListPage,
+        permissions: apiConfig.course.getListStudentCourse.baseURL,
+    },
+    taskStudentListPage: {
+        path: '/course-student/task',
+        title: 'Task List Page',
+        auth: true,
+        component: TaskStudentListPage,
+        permissions: [apiConfig.task.courseTask.baseURL],
+    },
+  
+
+
 };
