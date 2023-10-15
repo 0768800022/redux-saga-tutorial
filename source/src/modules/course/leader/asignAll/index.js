@@ -3,37 +3,25 @@ import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import routes from '@routes';
 import LectureListPage from '@modules/course/lecture';
-import { useParams } from 'react-router-dom';
+import { useParams,useLocation } from 'react-router-dom';
 
 const message = defineMessages({
-    objectName: 'Task',
+    objectName: 'Bài giảng',
     home: 'Trang chủ',
-    task: 'Task',
-    course: 'Khóa học',
-    lecture: 'Bài giảng',
+    student: 'Học viên',
+    course: 'Khoá học',
+    lectureName: 'Tên bài giảng',
+    asignAll: 'Tạo task',
+    task:'Task',
+    asignAllModal: 'Tạo task',
 });
 const AsignAllListPage = () => {
-    const translate = useTranslate();
-    const queryParameters = new URLSearchParams(window.location.search);
-    const courseName = queryParameters.get('courseName');
-    const subjectId = queryParameters.get('subjectId');
-    const paramid = useParams();
-    const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
-        breadRoutes.push({
-            breadcrumbName: translate.formatMessage(message.course),
-            path: routes.courseLeaderListPage.path,
-        });
-        breadRoutes.push({
-            breadcrumbName: translate.formatMessage(message.task),
-            path: routes.courseLeaderListPage.path + `/task/${paramid.courseId}?courseName=${courseName}&subjectId=${subjectId}`,
-        });
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.lecture) });
-
-        return breadRoutes;
-    };
+    const location =useLocation();
+    const search = location.search;
+    const state = location.state.prevPath;
+    const paramHead = routes.courseLeaderListPage.path;
     return (
-        <LectureListPage breadcrumbName={setBreadRoutes}/>
+        <LectureListPage breadcrumbName={routes.lectureTaskListPage.breadcrumbs(message,paramHead,state,search)}/>
     );
 };
 
