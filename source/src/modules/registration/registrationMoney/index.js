@@ -69,49 +69,44 @@ function RegistrationMoneyListPage() {
             };
         },
     });
-    const setColumns = () => {
-        const columns = [
-            {
-                title: translate.formatMessage(message.studentId),
-                dataIndex: ['registrationInfo', 'studentInfo', 'fullName'],
-            },
-            {
-                title: translate.formatMessage(message.money),
-                dataIndex: 'money',
-                align: 'right',
+    const columns = [
+        {
+            title: translate.formatMessage(message.studentId),
+            dataIndex: ['registrationInfo', 'studentInfo', 'fullName'],
+        },
+        {
+            title: translate.formatMessage(message.money),
+            dataIndex: 'money',
+            align: 'right',
 
-                render: (price) => {
-                    const formattedValue = formatMoney(price, {
-                        currentcy: 'đ',
-                        currentDecimal: '0',
-                        groupSeparator: ',',
-                    });
-                    return <div>{formattedValue}</div>;
-                },
+            render: (price) => {
+                const formattedValue = formatMoney(price, {
+                    currentcy: 'đ',
+                    currentDecimal: '0',
+                    groupSeparator: ',',
+                });
+                return <div>{formattedValue}</div>;
             },
+        },
 
-            {
-                title: translate.formatMessage(message.kind),
-                dataIndex: 'kind',
-                align: 'center',
-                render(kind) {
-                    return kind == 1 ? (
-                        <Tag>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>Tiền nhận </div>
-                        </Tag>
-                    ) : (
-                        <Tag>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>Tiền trả </div>
-                        </Tag>
-                    );
-                },
+        {
+            title: translate.formatMessage(message.kind),
+            dataIndex: 'kind',
+            align: 'center',
+            render(kind) {
+                return kind == 1 ? (
+                    <Tag>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>Tiền nhận </div>
+                    </Tag>
+                ) : (
+                    <Tag>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>Tiền trả </div>
+                    </Tag>
+                );
             },
-        ];
-        columns.push(
-            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
-        );
-        return columns;
-    };
+        },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
+    ];
 
     const searchFields = [
         {
@@ -156,7 +151,7 @@ function RegistrationMoneyListPage() {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />

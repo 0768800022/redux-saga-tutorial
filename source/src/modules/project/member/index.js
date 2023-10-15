@@ -98,71 +98,66 @@ const ProjectMemberListPage = () => {
         return breadRoutes;
     };
 
-    const setColumns = () => {
-        const columns = [
-            {
-                title: '#',
-                dataIndex: 'avatar',
-                align: 'center',
-                width: 80,
-                render: (avatar) => (
-                    <Avatar
-                        size="large"
-                        icon={<UserOutlined />}
-                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                    />
-                ),
-            },
-            {
-                title: translate.formatMessage(message.name),
-                dataIndex: ['developer', 'studentInfo', 'fullName'],
-            },
-            {
-                title: translate.formatMessage(message.role),
-                dataIndex: ['projectRole', 'projectRoleName'],
-                width: 150,
-            },
+    const columns = [
+        {
+            title: '#',
+            dataIndex: 'avatar',
+            align: 'center',
+            width: 80,
+            render: (avatar) => (
+                <Avatar
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                />
+            ),
+        },
+        {
+            title: translate.formatMessage(message.name),
+            dataIndex: ['developer', 'studentInfo', 'fullName'],
+        },
+        {
+            title: translate.formatMessage(message.role),
+            dataIndex: ['projectRole', 'projectRoleName'],
+            width: 150,
+        },
 
-            {
-                title: 'Lịch trình',
-                dataIndex: 'schedule',
-                render: (schedule) => {
-                    let check = JSON.parse(schedule);
-                    const newCheck = [
-                        { key: 'M', value: check.t2 },
-                        { key: 'T', value: check.t3 },
-                        { key: 'W', value: check.t4 },
-                        { key: 'T', value: check.t5 },
-                        { key: 'F', value: check.t6 },
-                        { key: 'S', value: check.t7 },
-                        { key: 'S', value: check.cn },
-                    ];
+        {
+            title: 'Lịch trình',
+            dataIndex: 'schedule',
+            render: (schedule) => {
+                let check = JSON.parse(schedule);
+                const newCheck = [
+                    { key: 'M', value: check.t2 },
+                    { key: 'T', value: check.t3 },
+                    { key: 'W', value: check.t4 },
+                    { key: 'T', value: check.t5 },
+                    { key: 'F', value: check.t6 },
+                    { key: 'S', value: check.t7 },
+                    { key: 'S', value: check.cn },
+                ];
 
-                    let dateString = '';
-                    newCheck.map((item) => {
-                        if (item.value !== undefined) {
-                            dateString += item.key + ' ';
-                        }
-                    });
+                let dateString = '';
+                newCheck.map((item) => {
+                    if (item.value !== undefined) {
+                        dateString += item.key + ' ';
+                    }
+                });
 
-                    return <div>{dateString}</div>;
-                },
+                return <div>{dateString}</div>;
             },
-        ];
-
-        // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-        active && columns.push(
+        },
+        active &&
             mixinFuncs.renderActionColumn(
                 {
-                    
                     edit: true,
                     delete: true,
                 },
                 { width: '150px' },
             ),
-        );
-        return columns;
-    };
+    ].filter(Boolean);
+
+    // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
 
     return (
         <PageWrapper routes={setBreadRoutes()}>
@@ -175,7 +170,7 @@ const ProjectMemberListPage = () => {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />

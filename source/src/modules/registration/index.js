@@ -93,76 +93,72 @@ function RegistrationListPage() {
             });
         },
     });
-    const setColumns = () => {
-        const columns = [
-            {
-                title: translate.formatMessage(message.studentId),
-                dataIndex: ['studentInfo', 'fullName'],
-            },
-            {
-                title: 'Lịch trình',
-                dataIndex: 'schedule',
-                render: (schedule) => {
-                    let check = JSON.parse(schedule);
-                    const newCheck = [
-                        { key: 'M', value: check.t2 },
-                        { key: 'T', value: check.t3 },
-                        { key: 'W', value: check.t4 },
-                        { key: 'T', value: check.t5 },
-                        { key: 'F', value: check.t6 },
-                        { key: 'S', value: check.t7 },
-                        { key: 'S', value: check.cn },
-                    ];
+    const columns = [
+        {
+            title: translate.formatMessage(message.studentId),
+            dataIndex: ['studentInfo', 'fullName'],
+        },
+        {
+            title: 'Lịch trình',
+            dataIndex: 'schedule',
+            render: (schedule) => {
+                let check = JSON.parse(schedule);
+                const newCheck = [
+                    { key: 'M', value: check.t2 },
+                    { key: 'T', value: check.t3 },
+                    { key: 'W', value: check.t4 },
+                    { key: 'T', value: check.t5 },
+                    { key: 'F', value: check.t6 },
+                    { key: 'S', value: check.t7 },
+                    { key: 'S', value: check.cn },
+                ];
 
-                    let dateString = '';
-                    newCheck.map((item) => {
-                        if (item.value !== undefined) {
-                            dateString += item.key + ' ';
-                        }
-                    });
-
-                    return <div>{dateString}</div>;
-                },
-                width: 140,
-            },
-            {
-                title: translate.formatMessage(message.isIntern),
-                dataIndex: 'isIntern',
-                align: 'center',
-                width: 150,
-                render: (item) => {
-                    if (item == 0) {
-                        return null;
-                    } else {
-                        return <CheckCircleOutlined className={style.greenCheckIcon} />;
+                let dateString = '';
+                newCheck.map((item) => {
+                    if (item.value !== undefined) {
+                        dateString += item.key + ' ';
                     }
-                },
+                });
+
+                return <div>{dateString}</div>;
             },
-            {
-                title: translate.formatMessage(message.createDate),
-                dataIndex: 'createdDate',
-                align: 'center',
-                width: 170,
+            width: 140,
+        },
+        {
+            title: translate.formatMessage(message.isIntern),
+            dataIndex: 'isIntern',
+            align: 'center',
+            width: 150,
+            render: (item) => {
+                if (item == 0) {
+                    return null;
+                } else {
+                    return <CheckCircleOutlined className={style.greenCheckIcon} />;
+                }
             },
-            {
-                title: translate.formatMessage(message.state),
-                dataIndex: 'state',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const state = stateRegistration.find((item) => item.value == dataRow);
-                    return (
-                        <Tag color={state.color}>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                        </Tag>
-                    );
-                },
+        },
+        {
+            title: translate.formatMessage(message.createDate),
+            dataIndex: 'createdDate',
+            align: 'center',
+            width: 170,
+        },
+        {
+            title: translate.formatMessage(message.state),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateRegistration.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
             },
-        ];
-        courseStatus == 1 &&
-            columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }));
-        return columns;
-    };
+        },
+        courseStatus == 1 && mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }),
+    ].filter(Boolean);
 
     const searchFields = [
         {
@@ -201,7 +197,7 @@ function RegistrationListPage() {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />

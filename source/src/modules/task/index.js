@@ -77,58 +77,54 @@ function TaskListPage() {
         },
     });
 
-    const setColumns = () => {
-        const columns = [
-            {
-                title: translate.formatMessage(message.task),
-                dataIndex: ['lecture', 'lectureName'],
+    const columns = [
+        {
+            title: translate.formatMessage(message.task),
+            dataIndex: ['lecture', 'lectureName'],
+        },
+        {
+            title: translate.formatMessage(message.studentId),
+            dataIndex: ['student', 'fullName'],
+        },
+        {
+            title: 'Ngày bắt đầu',
+            dataIndex: 'startDate',
+            width: 180,
+            render: (startDate) => {
+                const modifiedstartDate = convertStringToDateTime(startDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                const modifiedstartDateTimeString = convertDateTimeToString(modifiedstartDate, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedstartDateTimeString}</div>;
             },
-            {
-                title: translate.formatMessage(message.studentId),
-                dataIndex: ['student', 'fullName'],
+            align: 'center',
+        },
+        {
+            title: 'Ngày kết thúc',
+            dataIndex: 'dueDate',
+            width: 180,
+            render: (dueDate) => {
+                const modifieddueDate = convertStringToDateTime(dueDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                const modifieddueDateTimeString = convertDateTimeToString(modifieddueDate, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifieddueDateTimeString}</div>;
             },
-            {
-                title: 'Ngày bắt đầu',
-                dataIndex: 'startDate',
-                width: 180,
-                render: (startDate) => {
-                    const modifiedstartDate = convertStringToDateTime(startDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
-                    const modifiedstartDateTimeString = convertDateTimeToString(modifiedstartDate, DEFAULT_FORMAT);
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedstartDateTimeString}</div>;
-                },
-                align: 'center',
+            align: 'center',
+        },
+        {
+            title: translate.formatMessage(message.state),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = statusValues.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
             },
-            {
-                title: 'Ngày kết thúc',
-                dataIndex: 'dueDate',
-                width: 180,
-                render: (dueDate) => {
-                    const modifieddueDate = convertStringToDateTime(dueDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
-                    const modifieddueDateTimeString = convertDateTimeToString(modifieddueDate, DEFAULT_FORMAT);
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifieddueDateTimeString}</div>;
-                },
-                align: 'center',
-            },
-            {
-                title: translate.formatMessage(message.state),
-                dataIndex: 'state',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const state = statusValues.find((item) => item.value == dataRow);
-                    return (
-                        <Tag color={state.color}>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                        </Tag>
-                    );
-                },
-            },
-        ];
-        if (!leaderName && courseStatus == 1) {
-            columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }));
-        }
-        return columns;
-    };
+        },
+        !leaderName && courseStatus == 1 && mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }),
+    ].filter(Boolean);
+
     const setBreadRoutes = () => {
         const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
         if (leaderName) {
@@ -171,7 +167,7 @@ function TaskListPage() {
                             pagination={pagination}
                             loading={loading}
                             dataSource={data}
-                            columns={setColumns()}
+                            columns={columns}
                         />
                     }
                 />
