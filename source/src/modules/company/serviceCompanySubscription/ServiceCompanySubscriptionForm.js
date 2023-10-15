@@ -9,14 +9,7 @@ import { defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
 import { FormattedMessage } from 'react-intl';
 import { statusOptions } from '@constants/masterData';
-
-const messages = defineMessages({
-    name: 'Tên dịch vụ',
-    price: 'Giá',
-    valueable: 'Số ngày sử dụng',
-    status: 'Trạng thái',
-    required: 'Không được để trống',
-});
+import { commonMessage } from '@locales/intl';
 
 const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
@@ -51,14 +44,14 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField 
-                            label={translate.formatMessage(messages.name)} 
+                            label={translate.formatMessage(commonMessage.ServiceCompanySubscriptionName)} 
                             name="name"
                             required
                         />
                     </Col>
                     <Col span={12}>
                         <NumericField 
-                            label={translate.formatMessage(messages.price)}
+                            label={translate.formatMessage(commonMessage.price)}
                             name= 'price' 
                             min={0}
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}

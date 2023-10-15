@@ -11,15 +11,6 @@ import { defineMessages } from 'react-intl';
 import SelectField from '@components/common/form/SelectField';
 import { FormattedMessage } from 'react-intl';
 import NumericField from '@components/common/form/NumericField';
-const message = defineMessages({
-    avatar: 'Avater',
-    description: 'Mô tả',
-    leader: 'Người hướng dẫn',
-    name: 'Tên dự án',
-    endDate: 'Ngày kết thúc',
-    startDate: 'Ngày bắt đầu',
-    money: 'Số Tiền',
-});
 
 const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();

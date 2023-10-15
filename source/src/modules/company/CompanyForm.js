@@ -13,17 +13,7 @@ import { useState } from 'react';
 import CropImageField from '@components/common/form/CropImageField';
 import { AppConstants } from '@constants';
 import { statusOptions } from '@constants/masterData';
-
-const messages = defineMessages({
-    companyName: 'Tên công ty',
-    address: 'Địa chỉ',
-    email: 'Email',
-    hotline: 'HotLine',
-    logo: 'logo',
-    password: 'Mật khẩu',
-    username: 'Tài khoản đăng nhập',
-    required: 'Không được để trống',
-});
+import { commonMessage } from '@locales/intl';
 
 const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
     const translate = useTranslate();
@@ -80,7 +70,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={12}>
                         <CropImageField
-                            label={translate.formatMessage(messages.logo)}
+                            label={translate.formatMessage(commonMessage.logo)}
                             name="logo"
                             imageUrl={logoUrl && `${AppConstants.contentRootUrl}${logoUrl}`}
                             aspect={1 / 1}
@@ -91,18 +81,18 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(messages.companyName)}
+                            label={translate.formatMessage(commonMessage.companyName)}
                             rules={[
                                 {
                                     required: true,
-                                    message: translate.formatMessage(messages.required),
+                                    message: translate.formatMessage(commonMessage.required),
                                 },
                             ]}
                             name="companyName" />
                     </Col>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(messages.username)}
+                            label={translate.formatMessage(commonMessage.address)}
                             rules={[
                                 {
                                     required: true,
@@ -119,16 +109,16 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(messages.email)} type='email' name="email" />
+                        <TextField label={translate.formatMessage(commonMessage.email)} type='email' name="email" />
                     </Col>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(messages.hotline)}
+                            label={translate.formatMessage(commonMessage.holine)}
                             type="number"
                             rules={[
                                 {
                                     required: true,
-                                    message: translate.formatMessage(messages.required),
+                                    message: translate.formatMessage(commonMessage.required),
                                 },
                             ]}
                             name="hotline"
@@ -139,7 +129,21 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(messages.password)}
+                            label={translate.formatMessage(commonMessage.username)}
+                            rules={[
+                                {
+                                    required: true,
+                                    pattern: usernamePattern,
+                                    message: 'Username chỉ được chứa kí tự thường a-z và số 0-9',
+                                },
+                            ]}
+                            disabled={isEditing}
+                            name="username"
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <TextField
+                            label={translate.formatMessage(commonMessage.password)}
                             required={isEditing ? false : true}
                             type="password"
                             name="password"
@@ -156,11 +160,11 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 <Row gutter={16}>
                     <Col span={24}>
                         <TextField
-                            label={translate.formatMessage(messages.address)}
+                            label={translate.formatMessage(commonMessage.address)}
                             rules={[
                                 {
                                     required: true,
-                                    message: translate.formatMessage(messages.required),
+                                    message: translate.formatMessage(commonMessage.required),
                                 },
                             ]}
                             name="address" />

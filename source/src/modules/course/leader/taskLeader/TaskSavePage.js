@@ -4,11 +4,10 @@ import routes from '@routes';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import TaskSavePage from '@modules/task/TaskSavePage';
-const message = defineMessages({
-    objectName: 'Sửa Task',
-    home: 'Trang chủ',
-    task: 'Task',
-    course: 'Khóa học',
+import { commonMessage } from '@locales/intl';
+
+const messages = defineMessages({
+    objectName: 'Task',
 });
 
 function TaskLeaderSavePage() {
@@ -19,7 +18,7 @@ function TaskLeaderSavePage() {
     const paramHead = routes.courseLeaderListPage.path;
     const paramid = useParams();
     const courseId = paramid.courseId;
-    const breadcrumbName= routes.taskSavePage.breadcrumbs(message,paramHead,state,search);
+    const breadcrumbName= routes.taskSavePage.breadcrumbs(messages,paramHead,state,search);
     const getListUrl = generatePath(routes.taskLeaderListPage.path, { courseId });
     return (
         <TaskSavePage getListUrl={getListUrl} breadcrumbName={breadcrumbName}/>

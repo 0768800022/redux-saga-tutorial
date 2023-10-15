@@ -25,11 +25,10 @@ import route from '@modules/project/routes';
 import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    home: 'Trang chủ',
-    project: 'Dự án',
-    objectName: 'Thành viên dự án',
+    objectName: 'Thành viên',
     role: 'Vai trò',
     name: 'Họ và tên ',
     developer: 'Lập trình viên',
@@ -51,6 +50,7 @@ const ProjectMemberListPage = () => {
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
+            const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
             funcs.mappingData = (response) => {
                 try {
                     if (response.result === true) {
@@ -64,26 +64,15 @@ const ProjectMemberListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}`;
+                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?projectId=${projectId}`;
+                if (active)
+                    return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
+                else 
+                    return `${pagePath}/${dataRow.id}` + pathDefault ;
             };
-            // funcs.additionalActionColumnButtons = () => ({
-            //     edit: ({ id, name, project, status, state }) => (
-            //         <Button
-            //             disabled={project.status === 0 || project.status === -1}
-            //             onClick={(e) => {
-            //                 // e.stopPropagation();
-            //                 navigate(routes.projectMemberSavePage.path);
-            //             }}
-            //             type="link"
-            //             style={{ padding: 0 }}
-            //         >
-            //             <EditOutlined color="red" />
-            //         </Button>
-            //     ),
-            // });
+            
         },
     });
 
@@ -91,10 +80,10 @@ const ProjectMemberListPage = () => {
         const breadRoutes = [];
 
         breadRoutes.push({
-            breadcrumbName: translate.formatMessage(message.project),
+            breadcrumbName: translate.formatMessage(commonMessage.project),
             path: route.projectListPage.path,
         });
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.member) });
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.member) });
 
         return breadRoutes;
     };
@@ -114,11 +103,11 @@ const ProjectMemberListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(message.name),
+            title: translate.formatMessage(commonMessage.name),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
         },
         {
-            title: translate.formatMessage(message.role),
+            title: translate.formatMessage(commonMessage.role),
             dataIndex: ['projectRole', 'projectRoleName'],
             width: 150,
         },

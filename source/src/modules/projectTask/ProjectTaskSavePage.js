@@ -8,13 +8,10 @@ import routes from '@routes';
 import ProjectTaskForm from './ProjectTaskForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
-// import route1 from '@modules/project/routes';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
     objectName: 'Task',
-    home: 'Trang chủ',
-    ProjectTask: 'Task',
-    project: 'Dự án',
 });
 
 function ProjectTaskSavePage() {
@@ -52,21 +49,20 @@ function ProjectTaskSavePage() {
     });
     const setBreadRoutes = () => {
         const breadRoutes = [
-            { breadcrumbName: translate.formatMessage(messages.home) },
             {
-                breadcrumbName: translate.formatMessage(messages.project),
+                breadcrumbName: translate.formatMessage(commonMessage.project),
                 path: routes.projectListPage.path,
             },
         ];
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(messages.ProjectTask),
+                breadcrumbName: translate.formatMessage(commonMessage.task),
                 path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(messages.ProjectTask),
+                breadcrumbName: translate.formatMessage(commonMessage.task),
                 path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
             });
         }

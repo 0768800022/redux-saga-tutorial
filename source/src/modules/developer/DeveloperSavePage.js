@@ -8,10 +8,9 @@ import routes from './routes';
 import apiConfig from '@constants/apiConfig';
 import DeveloperForm from './DeveloperForm';
 import { showErrorMessage } from '@services/notifyService';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
-    home: 'Trang chủ',
-    subject: 'Lập trình viên',
     objectName: 'Lập trình viên',
 });
 
@@ -61,9 +60,8 @@ const DeveloperSavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: translate.formatMessage(messages.subject),
+                    breadcrumbName: translate.formatMessage(commonMessage.developer),
                     path: generatePath(routes.developerListPage.path, {}),
                 },
                 { breadcrumbName: title },

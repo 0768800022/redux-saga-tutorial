@@ -6,10 +6,9 @@ import apiConfig from '@constants/apiConfig';
 import { setCacheAccessToken } from '@services/userService';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import InputTextField from '@components/common/form/InputTextField';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    username: 'Username',
-    password: 'Password',
     login: 'Login',
 });
 
@@ -126,7 +125,7 @@ const LoginPage = () => {
                         name="username"
                         fieldProps={{ prefix: <UserOutlined /> }}
                         // label={intl.formatMessage(message.username)}
-                        placeholder={intl.formatMessage(message.username)}
+                        placeholder={intl.formatMessage(commonMessage.username)}
                         size="large"
                         required
                     />
@@ -134,7 +133,7 @@ const LoginPage = () => {
                         name="password"
                         fieldProps={{ prefix: <LockOutlined /> }}
                         // label={intl.formatMessage(message.password)}
-                        placeholder={intl.formatMessage(message.password)}
+                        placeholder={intl.formatMessage(commonMessage.password)}
                         size="large"
                         required
                         type="password"

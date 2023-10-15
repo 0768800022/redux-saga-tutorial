@@ -124,17 +124,6 @@ const TeamForm = (props) => {
                             required
                             disabled={isEditing} />
                     </Col>
-                    {/* <Col span={12}>
-                        <AutoCompleteField
-                            label={<FormattedMessage defaultMessage="Dự án" />}
-                            name="projectId"
-                            apiConfig={apiConfig.project.autocomplete}
-                            mappingOptions={(item) => ({ value: item.id, label: item.name })}
-                            initialSearchParams={{}}
-                            searchParams={(text) => ({ name: text })}
-                            required
-                            disabled={isEditing} />
-                    </Col> */}
                 </Row>
                 <TextField
                     disabled={dataDetail.state >= 3}

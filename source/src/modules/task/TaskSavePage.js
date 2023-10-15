@@ -8,12 +8,10 @@ import routes from '@routes';
 import TaskForm from './TaskForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
     objectName: 'Task',
-    home: 'Trang chủ',
-    task: 'Task',
-    course: 'Khóa học',
 });
 
 function TaskSavePage({ getListUrl, breadcrumbName }) {

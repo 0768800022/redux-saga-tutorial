@@ -8,7 +8,6 @@ import { settingGroups } from '@constants/masterData';
 
 const message = defineMessages({
     generalSetting: 'Cài đặt chung',
-    home: 'Trang chủ',
 });
 
 const SettingPage = () => {

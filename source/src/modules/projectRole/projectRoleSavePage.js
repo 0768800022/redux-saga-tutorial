@@ -7,10 +7,9 @@ import { generatePath, useParams } from 'react-router-dom';
 import routes from './routes';
 import apiConfig from '@constants/apiConfig';
 import ProjectRoleForm from './projectRoleForm';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
-    home: 'Trang chủ',
-    projectRole: 'Vai trò dự án',
     objectName: 'Vai trò dự án',
 });
 
@@ -46,9 +45,8 @@ const ProjectRoleSavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: translate.formatMessage(messages.projectRole),
+                    breadcrumbName: translate.formatMessage(commonMessage.projectRole),
                     path: generatePath(routes.projectRoleListPage.path, { projectRoleId }),
                 },
                 { breadcrumbName: title },
