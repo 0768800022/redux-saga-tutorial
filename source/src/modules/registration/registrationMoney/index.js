@@ -78,76 +78,72 @@ function RegistrationMoneyListPage() {
             };
         },
     });
-    const setColumns = () => {
-        const columns = [
-            {
-                title: '#',
-                dataIndex: ['registrationInfo', 'studentInfo', 'avatar'],
-                align: 'center',
-                width: 80,
-                render: (avatar) => (
-                    <AvatarField
-                        size="large"
-                        icon={<UserOutlined />}
-                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                    />
-                ),
-            },
-            {
-                title: translate.formatMessage(message.studentId),
-                dataIndex: ['registrationInfo', 'studentInfo', 'fullName'],
-            },
+    const columns = [
+        {
+            title: '#',
+            dataIndex: ['registrationInfo', 'studentInfo', 'avatar'],
+            align: 'center',
+            width: 80,
+            render: (avatar) => (
+                <AvatarField
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                />
+            ),
+        },
+        {
+            title: translate.formatMessage(message.studentId),
+            dataIndex: ['registrationInfo', 'studentInfo', 'fullName'],
+        },
 
-            {
-                title: translate.formatMessage(message.money),
-                dataIndex: 'money',
-                align: 'right',
+        {
+            title: translate.formatMessage(message.money),
+            dataIndex: 'money',
+            align: 'right',
 
-                render: (price) => {
-                    const formattedValue = formatMoney(price, {
-                        currentcy: 'đ',
-                        currentDecimal: '0',
-                        groupSeparator: ',',
-                    });
-                    return <div>{formattedValue}</div>;
-                },
-                width: 130,
+            render: (price) => {
+                const formattedValue = formatMoney(price, {
+                    currentcy: 'đ',
+                    currentDecimal: '0',
+                    groupSeparator: ',',
+                });
+                return <div>{formattedValue}</div>;
             },
-            {
-                title: translate.formatMessage(message.createDate),
-                dataIndex: 'createdDate',
-                render: (createdDate) => {
-                    return (
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>
-                            {dayjs(createdDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                        </div>
-                    );
-                },
-                width: 130,
-                align: 'center',
+            width: 130,
+        },
+        {
+            title: translate.formatMessage(message.createDate),
+            dataIndex: 'createdDate',
+            render: (createdDate) => {
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(createdDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
             },
+            width: 130,
+            align: 'center',
+        },
 
-            {
-                title: translate.formatMessage(message.kind),
-                dataIndex: 'kind',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const state = registrationMoneyKindValues.find((item) => item.value == dataRow);
-                    return (
-                        <Tag color={state.color}>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                        </Tag>
-                    );
-                },
+        {
+            title: translate.formatMessage(message.kind),
+            dataIndex: 'kind',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = registrationMoneyKindValues.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
             },
+        },
 
-            mixinFuncs.renderStatusColumn({ width: '120px' }),
-        ];
-
-        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }));
-        return columns;
-    };
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
+    ];
 
     const searchFields = [
         {
@@ -159,7 +155,6 @@ function RegistrationMoneyListPage() {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 {
                     breadcrumbName: translate.formatMessage(message.course),
                     path: '/course',
@@ -192,7 +187,7 @@ function RegistrationMoneyListPage() {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />

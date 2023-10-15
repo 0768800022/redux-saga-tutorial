@@ -46,7 +46,6 @@ const ServiceCompanySubSavePage = () => {
         <PageWrapper
             loading = {loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.serviceCompanySubscription),
                     path: generatePath(routes.serviceCompanySubListPage.path, { serviceId } ) },
                 { breadcrumbName: title },

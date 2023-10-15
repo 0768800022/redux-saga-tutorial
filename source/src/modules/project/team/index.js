@@ -125,7 +125,6 @@ const TeamListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 {
                     breadcrumbName: translate.formatMessage(message.project),
                     path: generatePath(routes.projectListPage.path),

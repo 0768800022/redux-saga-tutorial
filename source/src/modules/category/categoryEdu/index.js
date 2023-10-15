@@ -36,7 +36,6 @@ const CategoryListPage  = () => {
     return (
         <CategoryListPageCommon
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.category) },
             ]}
             kind={kindOfEdu}

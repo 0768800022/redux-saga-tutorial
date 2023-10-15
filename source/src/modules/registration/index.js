@@ -84,7 +84,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.registrationMoneyListPage.path +
-                                    `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
+                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                                 );
                             }}
                         >
@@ -95,59 +95,56 @@ function RegistrationListPage() {
             });
         },
     });
-    const setColumns = () => {
-        const columns = [
-            {
-                title: translate.formatMessage(message.studentId),
-                dataIndex: ['studentInfo', 'fullName'],
+
+    const columns = [
+        {
+            title: translate.formatMessage(message.studentId),
+            dataIndex: ['studentInfo', 'fullName'],
+        },
+        {
+            title: 'Lịch trình',
+            dataIndex: 'schedule',
+            align: 'center',
+            render: (schedule) => {
+                return <ScheduleFile schedule={schedule} />;
             },
-            {
-                title: 'Lịch trình',
-                dataIndex: 'schedule',
-                align: 'center',
-                render: (schedule) => {
-                    return <ScheduleFile schedule={schedule} />;
-                },
-                width: 180,
+            width: 180,
+        },
+        {
+            title: translate.formatMessage(message.isIntern),
+            dataIndex: 'isIntern',
+            align: 'center',
+            width: 150,
+            render: (item) => {
+                if (item == 0) {
+                    return null;
+                } else {
+                    return <CheckCircleOutlined className={style.greenCheckIcon} />;
+                }
             },
-            {
-                title: translate.formatMessage(message.isIntern),
-                dataIndex: 'isIntern',
-                align: 'center',
-                width: 150,
-                render: (item) => {
-                    if (item == 0) {
-                        return null;
-                    } else {
-                        return <CheckCircleOutlined className={style.greenCheckIcon} />;
-                    }
-                },
+        },
+        {
+            title: translate.formatMessage(message.createDate),
+            dataIndex: 'createdDate',
+            align: 'center',
+            width: 170,
+        },
+        {
+            title: translate.formatMessage(message.state),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateRegistration.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
             },
-            {
-                title: translate.formatMessage(message.createDate),
-                dataIndex: 'createdDate',
-                align: 'center',
-                width: 170,
-            },
-            {
-                title: translate.formatMessage(message.state),
-                dataIndex: 'state',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const state = stateRegistration.find((item) => item.value == dataRow);
-                    return (
-                        <Tag color={state.color}>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                        </Tag>
-                    );
-                },
-            },
-        ];
-        courseStatus == 1 &&
-            columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }));
-        return columns;
-    };
+        },
+        courseStatus == 1 && mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }),
+    ].filter(Boolean);
 
     const searchFields = [
         {
@@ -159,7 +156,6 @@ function RegistrationListPage() {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 {
                     breadcrumbName: translate.formatMessage(message.course),
                     path: '/course',
@@ -186,7 +182,7 @@ function RegistrationListPage() {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />

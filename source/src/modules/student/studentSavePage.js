@@ -46,7 +46,6 @@ const StudentSavePage = () => {
         <PageWrapper
             loading = {loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 { breadcrumbName: translate.formatMessage(message.student),
                     path: generatePath(routes.studentListPage.path, { studentId } ) },
                 { breadcrumbName: title },

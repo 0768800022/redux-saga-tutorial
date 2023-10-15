@@ -55,7 +55,6 @@ function TeamSavePage() {
         const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
 
         const breadRoutes = [
-            { breadcrumbName: translate.formatMessage(message.home) },
             {
                 breadcrumbName: translate.formatMessage(message.project),
                 path: routes.projectListPage.path,
