@@ -18,6 +18,7 @@ import { BookOutlined, TeamOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
+import { IconBrandTeams } from '@tabler/icons-react';
 
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -39,6 +40,7 @@ const message = defineMessages({
     developer: 'Lập trình viên',
     task: 'Task',
     member: 'Thành viên',
+    group: 'Nhóm',
 });
 
 const ProjectLeaderListPage = () => {
@@ -89,95 +91,151 @@ const ProjectLeaderListPage = () => {
                         mixinFuncs.setQueryParams(serializeParams(filter));
                     }
                 };
+                funcs.additionalActionColumnButtons = () => ({
+                    task: ({ id, name, leaderInfo, status, state }) => (
+                        <BaseTooltip title={translate.formatMessage(message.task)}>
+                            <Button
+                                type="link"
+                                disabled={state === 1}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
+                                    let path;
+
+                                    path =
+                                        routes.projectLeaderTaskListPage.path +
+                                        pathDefault +
+                                        `&leaderName=${leaderName}`;
+
+                                    navigate(path, { state: { pathPrev: location.search } });
+                                }}
+                            >
+                                <BookOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    member: ({ id, name, status }) => (
+                        <BaseTooltip title={translate.formatMessage(message.member)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                // disabled={status === -1}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        routes.projectLeaderMemberListPage.path +
+                                            `?projectId=${id}&projectName=${name}`,
+                                    );
+                                }}
+                            >
+                                <UserOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    team: ({ id, name, status }) => (
+                        <BaseTooltip title={translate.formatMessage(message.group)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                // disabled={status === -1}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (status === 1) {
+                                        navigate(
+                                            routes.projectLeaderTeamListPage.path +
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                        );
+                                    } else {
+                                        navigate(
+                                            routes.projectLeaderTeamListPage.path +
+                                                `?projectId=${id}&projectName=${name}`,
+                                        );
+                                    }
+                                }}
+                            >
+                                <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                });
             },
         });
 
-    const setBreadRoutes = () => {
-        const breadRoutes = [];
-        if (leaderName) {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.leader),
-                path: routes.leaderListPage.path,
-            });
-        } else if (developerName) {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.developer),
-                path: routes.developerListPage.path,
-            });
-        }
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.project) });
-
-        return breadRoutes;
-    };
     const convertDate = (date) => {
         const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
     };
 
-    const setColumns = () => {
-        const columns = [
-            {
-                title: '#',
-                dataIndex: 'avatar',
-                align: 'center',
-                width: 80,
-                render: (avatar) => (
-                    <AvatarField
-                        size="large"
-                        icon={<UserOutlined />}
-                        src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                    />
-                ),
+    const columns = [
+        {
+            title: '#',
+            dataIndex: 'avatar',
+            align: 'center',
+            width: 80,
+            render: (avatar) => (
+                <AvatarField
+                    size="large"
+                    icon={<UserOutlined />}
+                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+                />
+            ),
+        },
+        {
+            title: translate.formatMessage(message.name),
+            dataIndex: 'name',
+        },
+        {
+            title: translate.formatMessage(message.leader),
+            dataIndex: ['leaderInfo', 'leaderName'],
+            width: 150,
+        },
+        {
+            title: translate.formatMessage(message.startDate),
+            dataIndex: 'startDate',
+            render: (startDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
             },
-            {
-                title: translate.formatMessage(message.name),
-                dataIndex: 'name',
+            width: 140,
+            align: 'center',
+        },
+        {
+            title: translate.formatMessage(message.endDate),
+            dataIndex: 'endDate',
+            render: (endDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
             },
-            {
-                title: translate.formatMessage(message.leader),
-                dataIndex: ['leaderInfo', 'leaderName'],
-                width: 150,
+            width: 140,
+            align: 'center',
+        },
+        {
+            title: 'Tình trạng',
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
             },
-            {
-                title: translate.formatMessage(message.startDate),
-                dataIndex: 'startDate',
-                render: (startDate) => {
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
-                },
-                width: 140,
-                align: 'center',
-            },
-            {
-                title: translate.formatMessage(message.endDate),
-                dataIndex: 'endDate',
-                render: (endDate) => {
-                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
-                },
-                width: 140,
-                align: 'center',
-            },
-            {
-                title: 'Tình trạng',
-                dataIndex: 'state',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const state = stateValues.find((item) => item.value == dataRow);
-                    return (
-                        <Tag color={state.color}>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                        </Tag>
-                    );
-                },
-            },
+        },
 
-            mixinFuncs.renderStatusColumn({ width: '120px' }),
-        ];
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderActionColumn(
+            {
+                member: true,
+                task: true,
+                team: true,
+            },
+            { width: '200px' },
+        ),
+    ].filter(Boolean);
 
-        return columns;
-    };
     return (
-        <PageWrapper routes={setBreadRoutes()}>
+        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(message.project) }]}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
                 baseTable={
@@ -186,7 +244,7 @@ const ProjectLeaderListPage = () => {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />

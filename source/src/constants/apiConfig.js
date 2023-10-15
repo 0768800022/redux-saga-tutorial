@@ -701,6 +701,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        changeState: {
+            baseURL: `${apiTenantUrl}v1/project-task/change-state`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     memberProject: {
         getList: {
