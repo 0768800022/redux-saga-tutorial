@@ -24,6 +24,7 @@ import useFetch from '@hooks/useFetch';
 import route from '@modules/project/routes';
 import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -126,27 +127,11 @@ const ProjectMemberListPage = () => {
             {
                 title: 'Lịch trình',
                 dataIndex: 'schedule',
+                align: 'center',
                 render: (schedule) => {
-                    let check = JSON.parse(schedule);
-                    const newCheck = [
-                        { key: 'M', value: check.t2 },
-                        { key: 'T', value: check.t3 },
-                        { key: 'W', value: check.t4 },
-                        { key: 'T', value: check.t5 },
-                        { key: 'F', value: check.t6 },
-                        { key: 'S', value: check.t7 },
-                        { key: 'S', value: check.cn },
-                    ];
-
-                    let dateString = '';
-                    newCheck.map((item) => {
-                        if (item.value !== undefined) {
-                            dateString += item.key + ' ';
-                        }
-                    });
-
-                    return <div>{dateString}</div>;
+                    return <ScheduleFile schedule={schedule} />;
                 },
+                width: 180,
             },
         ];
 
@@ -154,7 +139,7 @@ const ProjectMemberListPage = () => {
         active && columns.push(
             mixinFuncs.renderActionColumn(
                 {
-                    
+
                     edit: true,
                     delete: true,
                 },

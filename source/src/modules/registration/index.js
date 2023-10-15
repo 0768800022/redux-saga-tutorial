@@ -19,6 +19,7 @@ import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import { CheckCircleOutlined } from '@ant-design/icons';
 import style from './Registration.module.scss';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
 
 const message = defineMessages({
     objectName: 'Danh sách đăng kí khóa học',
@@ -77,28 +78,11 @@ function RegistrationListPage() {
             {
                 title: 'Lịch trình',
                 dataIndex: 'schedule',
+                align: 'center',
                 render: (schedule) => {
-                    let check = JSON.parse(schedule);
-                    const newCheck = [
-                        { key: 'M', value: check.t2 },
-                        { key: 'T', value: check.t3 },
-                        { key: 'W', value: check.t4 },
-                        { key: 'T', value: check.t5 },
-                        { key: 'F', value: check.t6 },
-                        { key: 'S', value: check.t7 },
-                        { key: 'S', value: check.cn },
-                    ];
-
-                    let dateString = '';
-                    newCheck.map((item) => {
-                        if (item.value !== undefined) {
-                            dateString += item.key + ' ';
-                        }
-                    });
-
-                    return <div>{dateString}</div>;
+                    return <ScheduleFile schedule={schedule} />;
                 },
-                width: 140,
+                width: 180,
             },
             {
                 title: translate.formatMessage(message.isIntern),
