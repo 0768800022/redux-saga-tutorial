@@ -21,17 +21,10 @@ import useFetch from '@hooks/useFetch';
 import { render } from '@testing-library/react';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import AvatarField from '@components/common/form/AvatarField';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'đăng ký gói',
-    home: 'Trang chủ',
-    companyName: 'Tên công ty',
-    startDate: 'Ngày bắt đầu',
-    endDate: 'Ngày kết thúc',
-    company: 'Gói dịch vụ',
-    status: 'Trạng thái',
-    subscriptionName: 'Gói dịch vụ',
-    price: 'Giá',
 });
 
 const CompanySubscriptionListPage = () => {
@@ -163,16 +156,6 @@ const CompanySubscriptionListPage = () => {
             },
             align: 'center',
         },
-        // {
-        //     title: translate.formatMessage(message.status),
-        //     dataIndex: 'status',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const status = statusValues.find((item) => item.value == dataRow);
-        //         return <Tag color={status.color}>{status.label}</Tag>;
-        //     },
-        // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
@@ -180,14 +163,14 @@ const CompanySubscriptionListPage = () => {
     const searchFields = [
         {
             key: 'companyId',
-            placeholder: translate.formatMessage(message.companyName),
+            placeholder: translate.formatMessage(commonMessage.companyName),
             type: FieldTypes.SELECT,
             options: companyOptions,
 
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -214,7 +197,7 @@ const CompanySubscriptionListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.company) },
+                { breadcrumbName: translate.formatMessage(commonMessage.companySubscription) },
             ]}
         >
             <ListPage

@@ -17,16 +17,10 @@ import styles from './lecture.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '@store/actions/app';
 import { selectedRowKeySelector } from '@selectors/app';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
     objectName: 'Bài giảng',
-    home: 'Trang chủ',
-    student: 'Học viên',
-    subject: 'Môn học',
-    description: 'Mô tả chi tiết',
-    lectureKind: 'Loại bài giảng',
-    shortDescription: 'Mô tả Ngắn',
-    lectureName: 'Tên bài giảng',
-    status: 'Trạng thái',
 });
 
 const LectureListPage = () => {
@@ -111,7 +105,7 @@ const LectureListPage = () => {
     const columns = [
         sortColumn,
         {
-            title: translate.formatMessage(message.lectureName),
+            title: translate.formatMessage(commonMessage.lectureName),
             dataIndex: 'lectureName',
 
             render: (lectureName, record) => {
@@ -135,7 +129,7 @@ const LectureListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.subject), path: `/subject` },
+                { breadcrumbName: translate.formatMessage(commonMessage.subject), path: `/subject` },
                 { breadcrumbName: translate.formatMessage(message.objectName) },
             ]}
         >

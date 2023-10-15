@@ -15,15 +15,10 @@ import { useLocation,useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Task',
-    studentId: 'Tên sinh viên',
-    home: 'Trang chủ',
-    state: 'Tình trạng',
-    task: 'Task',
-    course: 'Khóa học',
-    student: 'Học sinh',
 });
 
 function TaskStudentListPage() {
@@ -73,7 +68,7 @@ function TaskStudentListPage() {
     const setColumns = () => {
         const columns = [
             {
-                title: translate.formatMessage(message.task),
+                title: translate.formatMessage(commonMessage.task),
                 dataIndex: ['lecture', 'lectureName'],
             },
             {
@@ -99,7 +94,7 @@ function TaskStudentListPage() {
                 align: 'center',
             },
             {
-                title: translate.formatMessage(message.state),
+                title: translate.formatMessage(commonMessage.state),
                 dataIndex: 'state',
                 align: 'center',
                 width: 120,
@@ -121,9 +116,8 @@ function TaskStudentListPage() {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.course), path: routes.courseStudentListPage.path },
-                { breadcrumbName: translate.formatMessage(message.task) },
+                { breadcrumbName: translate.formatMessage(commonMessage.course), path: routes.courseStudentListPage.path },
+                { breadcrumbName: translate.formatMessage(commonMessage.task) },
             ]}
         >
             <div>

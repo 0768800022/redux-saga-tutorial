@@ -23,17 +23,11 @@ import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import routers from './routes';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
-    studentId: 'Tên sinh viên',
-    home: 'Trang chủ',
-    courseid: 'courseId',
-    createDate: 'Ngày đăng kí',
-    isIntern: 'Đăng kí thực tập',
-    course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
-    state: 'Tình trạng',
     money: 'Thanh Toán',
 });
 
@@ -98,7 +92,7 @@ function RegistrationListPage() {
 
     const columns = [
         {
-            title: translate.formatMessage(message.studentId),
+            title: translate.formatMessage(commonMessage.studentName),
             dataIndex: ['studentInfo', 'fullName'],
         },
         {
@@ -111,7 +105,7 @@ function RegistrationListPage() {
             width: 180,
         },
         {
-            title: translate.formatMessage(message.isIntern),
+            title: translate.formatMessage(commonMessage.isIntern),
             dataIndex: 'isIntern',
             align: 'center',
             width: 150,
@@ -124,13 +118,13 @@ function RegistrationListPage() {
             },
         },
         {
-            title: translate.formatMessage(message.createDate),
+            title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
             align: 'center',
             width: 170,
         },
         {
-            title: translate.formatMessage(message.state),
+            title: translate.formatMessage(commonMessage.state),
             dataIndex: 'state',
             align: 'center',
             width: 120,
@@ -149,7 +143,7 @@ function RegistrationListPage() {
     const searchFields = [
         {
             key: 'id',
-            placeholder: translate.formatMessage(message.studentId),
+            placeholder: translate.formatMessage(commonMessage.studentName),
         },
     ];
 
@@ -157,7 +151,7 @@ function RegistrationListPage() {
         <PageWrapper
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(message.course),
+                    breadcrumbName: translate.formatMessage(commonMessage.course),
                     path: '/course',
                 },
                 { breadcrumbName: translate.formatMessage(message.registration) },

@@ -18,17 +18,7 @@ import DatePickerField from '@components/common/form/DatePickerField';
 import dayjs from 'dayjs';
 import { formatDateString } from '@utils';
 import NumericField from '@components/common/form/NumericField';
-
-const messages = defineMessages({
-    companyName: 'Tên công ty',
-    address: 'Địa chỉ',
-    email: 'Email',
-    hotline: 'HotLine',
-    logo: 'logo',
-    password: 'Mật khẩu',
-    username: 'Tài khoản đăng nhập',
-    required: 'Không được để trống',
-});
+import { commonMessage } from '@locales/intl';
 
 const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
     const translate = useTranslate();

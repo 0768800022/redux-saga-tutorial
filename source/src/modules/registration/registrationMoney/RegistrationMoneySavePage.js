@@ -7,14 +7,12 @@ import React from 'react';
 import { defineMessages } from 'react-intl';
 import RegistrationMoneyForm from './RegistrationMoneyForm';
 import { useLocation } from 'react-router-dom';
+import { commonMessage } from '@locales/intl';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
     objectName: 'Danh sách Lịch sử trả phí',
-    home: 'Trang chủ',
-    course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
-    moneyHistory: 'Lịch sử trả phí',
 });
 
 function RegistrationMoneySavePage() {
@@ -57,8 +55,7 @@ function RegistrationMoneySavePage() {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
-                { breadcrumbName: translate.formatMessage(messages.course), path: routes.courseListPage.path },
+                { breadcrumbName: translate.formatMessage(commonMessage.course), path: routes.courseListPage.path },
                 {
                     breadcrumbName: translate.formatMessage(messages.registration),
                     path:
@@ -66,7 +63,7 @@ function RegistrationMoneySavePage() {
                         `?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                 },
                 {
-                    breadcrumbName: translate.formatMessage(messages.moneyHistory),
+                    breadcrumbName: translate.formatMessage(commonMessage.moneyHistory),
                     path:
                         routes.registrationMoneyListPage.path +
                         `?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,

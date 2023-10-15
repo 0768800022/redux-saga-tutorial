@@ -18,14 +18,10 @@ import FolderIcon from '@assets/icons';
 import { FieldTypes } from '@constants/formConfig';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Lập trình viên',
-    home: 'Trang chủ',
-    developer: 'Lập trình viên',
-    status: 'Trạng thái',
-    name: 'Họ và tên',
-    project: 'Dự án',
 });
 
 const DeveloperListPage = () => {
@@ -52,7 +48,7 @@ const DeveloperListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 project: ({ id, studentInfo }) => (
-                    <BaseTooltip title={translate.formatMessage(message.project)}>
+                    <BaseTooltip title={translate.formatMessage(commonMessage.project)}>
                         <Button
                             type="link"
                             style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
@@ -116,17 +112,6 @@ const DeveloperListPage = () => {
                 return <div>{createdDateLocal}</div>;
             },
         },
-        // {
-        //     title: translate.formatMessage(message.status),
-        //     dataIndex: 'status',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         console.log(dataRow);
-        //         const status = statusValues.find((item) => item.value == dataRow);
-        //         return <Tag color={status.color}>{status.label}</Tag>;
-        //     },
-        // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ project: true, edit: true, delete: true }, { width: 160 }),
     ];
@@ -134,11 +119,11 @@ const DeveloperListPage = () => {
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.name),
+            placeholder: translate.formatMessage(commonMessage.name),
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -147,7 +132,7 @@ const DeveloperListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.developer) },
+                { breadcrumbName: translate.formatMessage(commonMessage.developer) },
             ]}
         >
             <ListPage

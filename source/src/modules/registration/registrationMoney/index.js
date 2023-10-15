@@ -16,6 +16,7 @@ import { useLocation } from 'react-router-dom';
 import routes from '../routes';
 import dayjs from 'dayjs';
 import { projectTaskState, statusOptions, registrationMoneyKind } from '@constants/masterData';
+import { commonMessage } from '@locales/intl';
 import {
     AppConstants,
     DATE_DISPLAY_FORMAT,
@@ -25,14 +26,7 @@ import {
 } from '@constants';
 const message = defineMessages({
     objectName: 'Lịch sử trả phí',
-    studentId: 'Tên sinh viên',
-    home: 'Trang chủ',
-    courseid: 'courseId',
-    createDate: 'Ngày Tạo',
-    isIntern: 'Đăng kí thực tập',
-    course: 'Khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
-    state: 'Tình trạng',
     money: ' Số tiền',
     kind: 'Loại tiền',
     history: ' Lịch sử trả phí',
@@ -93,7 +87,7 @@ function RegistrationMoneyListPage() {
             ),
         },
         {
-            title: translate.formatMessage(message.studentId),
+            title: translate.formatMessage(commonMessage.studentName),
             dataIndex: ['registrationInfo', 'studentInfo', 'fullName'],
         },
 
@@ -113,7 +107,7 @@ function RegistrationMoneyListPage() {
             width: 130,
         },
         {
-            title: translate.formatMessage(message.createDate),
+            title: translate.formatMessage(commonMessage.createDate),
             dataIndex: 'createdDate',
             render: (createdDate) => {
                 return (
@@ -148,7 +142,7 @@ function RegistrationMoneyListPage() {
     const searchFields = [
         {
             key: 'id',
-            placeholder: translate.formatMessage(message.studentId),
+            placeholder: translate.formatMessage(commonMessage.studentName),
         },
     ];
 
@@ -156,7 +150,7 @@ function RegistrationMoneyListPage() {
         <PageWrapper
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(message.course),
+                    breadcrumbName: translate.formatMessage(commonMessage.course),
                     path: '/course',
                 },
                 {
@@ -165,7 +159,7 @@ function RegistrationMoneyListPage() {
                         routes.registrationListPage.path +
                         `?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                 },
-                { breadcrumbName: translate.formatMessage(message.history) },
+                { breadcrumbName: translate.formatMessage(message.money) },
             ]}
         >
             <ListPage

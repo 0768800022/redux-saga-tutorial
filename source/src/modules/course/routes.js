@@ -4,11 +4,12 @@ import CourseSavePage from './CourseSavePage';
 import LectureListPage from './lecture';
 import CourseLeaderListPage from './leader/courseLeader';
 import TaskListPage from './leader/taskLeader';
-import TaskSavePage from './leader/taskLeader/TaskSavePage';
+import TaskLeaderSavePage from './leader/taskLeader/TaskSavePage';
 import AsignAllListPage from './leader/asignAll';
 import CourseStudentListPage from './student/courseStudent';
 import TaskStudentListPage from './student/taskStudent';
 import RegistrationLeaderListPage from './leader/registrationLeader';
+import routes from '@routes';
 export default {
     courseListPage: {
         path: '/course',
@@ -23,6 +24,7 @@ export default {
         auth: true,
         component: CourseLeaderListPage,
         permissions: apiConfig.course.getListLeaderCourse.baseURL,
+        
     },
     courseSavePage: {
         path: '/course/:id',
@@ -38,6 +40,14 @@ export default {
         component: LectureListPage,
         separateCheck: true,
         permissions: [apiConfig.lecture.getList.baseURL],
+        breadcrumbs: (message,paramHead, state, location) => {
+            return [
+                { breadcrumbName: message.home.defaultMessage },
+                { breadcrumbName: message.course.defaultMessage, path: paramHead },
+                { breadcrumbName: message.task.defaultMessage, path: state + location },
+                { breadcrumbName: message.objectName.defaultMessage },
+            ];
+        },
     },
 
     taskLeaderListPage: {
@@ -51,7 +61,7 @@ export default {
         path: '/course-leader/task/:courseId/:id',
         title: 'Task Save Page',
         auth: true,
-        component: TaskSavePage,
+        component: TaskLeaderSavePage,
         permissions: [apiConfig.task.update.baseURL],
     },
     lectureTaskLeaderListPage: {
@@ -69,6 +79,7 @@ export default {
         component: RegistrationLeaderListPage,
         permissions: [apiConfig.registration.getList.baseURL],
     },
+
     // STUDENT
     courseStudentListPage: {
         path: '/course-student',

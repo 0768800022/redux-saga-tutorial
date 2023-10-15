@@ -7,14 +7,8 @@ import { defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
 import { statusOptions } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
+import { commonMessage } from '@locales/intl';
 
-const message = defineMessages({
-    description: 'Mô tả',
-    home: 'Trang chủ',
-    objectName: 'Dự án',
-    projectRoleName: 'Tên vai trò dự án',
-    status: 'Trạng thái',
-});
 const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
@@ -48,7 +42,7 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(message.projectRoleName)}
+                            label={translate.formatMessage(commonMessage.projectRoleName)}
                             name="projectRoleName"
                             required
                         />
@@ -56,7 +50,7 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
                     <Col span={12}>
                         <SelectField
                             required
-                            label={translate.formatMessage(message.status)}
+                            label={translate.formatMessage(commonMessage.status)}
                             name="status"
                             allowClear={false}
                             options={statusValues}
@@ -65,7 +59,7 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
                 </Row>
                 <TextField
                     width={'100%'}
-                    label={translate.formatMessage(message.description)}
+                    label={translate.formatMessage(commonMessage.description)}
                     name="description"
                     type="textarea"
                 />

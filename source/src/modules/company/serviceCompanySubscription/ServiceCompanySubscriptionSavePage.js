@@ -7,10 +7,10 @@ import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
     objectName:'Quản lý gói dịch vụ',
-    home:'Trang chủ',
-    serviceCompanySubscription: 'Quản lý gói dịch vụ',
 });
 
 const ServiceCompanySubSavePage = () => {
@@ -46,7 +46,7 @@ const ServiceCompanySubSavePage = () => {
         <PageWrapper
             loading = {loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(message.serviceCompanySubscription),
+                { breadcrumbName: translate.formatMessage(commonMessage.serviceCompanySubscription),
                     path: generatePath(routes.serviceCompanySubListPage.path, { serviceId } ) },
                 { breadcrumbName: title },
             ]}

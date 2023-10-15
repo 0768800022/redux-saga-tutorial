@@ -7,12 +7,9 @@ import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import TeamForm from './TeamForm';
-import ProjectTaskForm from '@modules/projectTask/ProjectTaskForm';
+import { commonMessage } from '@locales/intl';
 const message = defineMessages({
-    objectName: 'Team',
-    home: 'Trang chủ',
-    team: 'Nhóm',
-    project: 'Dự án',
+    objectName: 'Nhóm',
 });
 
 // const TeamSavePage = () => {
@@ -20,6 +17,7 @@ function TeamSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
+    const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
     // const projectName = queryParameters.get('projectName');
     const teamId = useParams();
@@ -51,22 +49,24 @@ function TeamSavePage() {
         },
     });
     const setBreadRoutes = () => {
+        const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+
         const breadRoutes = [
             {
-                breadcrumbName: translate.formatMessage(message.project),
+                breadcrumbName: translate.formatMessage(commonMessage.project),
                 path: routes.projectListPage.path,
             },
         ];
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.team),
-                path: routes.teamListPage.path + `?active=${active}`,
+                breadcrumbName: translate.formatMessage(commonMessage.team),
+                path: routes.teamListPage.path + pathDefault +`&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.team),
-                path: routes.teamListPage.path,
+                breadcrumbName: translate.formatMessage(commonMessage.team),
+                path: routes.teamListPage.path + pathDefault,
             });
         }
         breadRoutes.push({ breadcrumbName: title });
@@ -86,7 +86,6 @@ function TeamSavePage() {
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
                 onSubmit={mixinFuncs.onSave}
-                projectId={projectId}
             />
         </PageWrapper>
     );

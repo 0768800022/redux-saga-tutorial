@@ -15,15 +15,10 @@ import { useLocation,useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Task',
-    studentId: 'Tên sinh viên',
-    home: 'Trang chủ',
-    state: 'Tình trạng',
-    task: 'Task',
-    course: 'Khóa học',
-    leader: 'Leader',
 });
 
 function TaskListPage() {
@@ -76,11 +71,11 @@ function TaskListPage() {
     const setColumns = () => {
         const columns = [
             {
-                title: translate.formatMessage(message.task),
+                title: translate.formatMessage(commonMessage.task),
                 dataIndex: ['lecture', 'lectureName'],
             },
             {
-                title: translate.formatMessage(message.studentId),
+                title: translate.formatMessage(commonMessage.studentName),
                 dataIndex: ['student', 'fullName'],
             },
             {
@@ -106,7 +101,7 @@ function TaskListPage() {
                 align: 'center',
             },
             {
-                title: translate.formatMessage(message.state),
+                title: translate.formatMessage(commonMessage.state),
                 dataIndex: 'state',
                 align: 'center',
                 width: 120,
@@ -128,9 +123,8 @@ function TaskListPage() {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
-                { breadcrumbName: translate.formatMessage(message.course), path: routes.courseLeaderListPage.path },
-                { breadcrumbName: translate.formatMessage(message.task) },
+                { breadcrumbName: translate.formatMessage(commonMessage.course), path: routes.courseLeaderListPage.path },
+                { breadcrumbName: translate.formatMessage(commonMessage.task) },
             ]}
         >
             <div>

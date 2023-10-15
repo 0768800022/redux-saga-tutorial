@@ -10,10 +10,8 @@ import useTranslate from '@hooks/useTranslate';
 import { Card, Col, Form, Row } from 'antd';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
-const messages = defineMessages({
-    student: 'Tên sinh viên',
-    role: 'Vai trò',
-});
+import { commonMessage } from '@locales/intl';
+
 const DeveloperForm = (props) => {
     const translate = useTranslate();
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
@@ -50,7 +48,7 @@ const DeveloperForm = (props) => {
                         <AutoCompleteField
                             disabled={isEditing}
                             required
-                            label={translate.formatMessage(messages.student)}
+                            label={translate.formatMessage(commonMessage.studentName)}
                             name={['studentInfo', 'id']}
                             apiConfig={apiConfig.student.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
@@ -69,7 +67,7 @@ const DeveloperForm = (props) => {
                     <Col span={12}>
                         <AutoCompleteField
                             required
-                            label={translate.formatMessage(messages.role)}
+                            label={translate.formatMessage(commonMessage.role)}
                             name={['roleInfo', 'id']}
                             apiConfig={apiConfig.projectRole.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.projectRoleName })}

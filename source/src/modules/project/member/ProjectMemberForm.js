@@ -15,12 +15,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import ScheduleTable from '@components/common/table/ScheduleTable';
-
-const messages = defineMessages({
-    developer: 'Tên Lập trình viên',
-    role: 'Vai trò',
-    schedule: 'Lịch trình',
-});
+import { commonMessage } from '@locales/intl';
 
 function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
@@ -173,6 +168,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
+            teamId: dataDetail?.team?.teamName,
             studentId: dataDetail?.studentInfo?.fullName,
         });
     }, [dataDetail]);
@@ -201,6 +197,15 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         }
     };
 
+    const {
+        data: teams,
+        loading: getTeamsLoading,
+        execute: executeGetTeams,
+    } = useFetch(apiConfig.team.autocomplete, {
+        immediate: true,
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
+    });
+
     useEffect(() => {
         registrationStateOption.map((state, index) => {
             if (dataDetail?.state == state.value) {
@@ -223,11 +228,11 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
             <Card className="card-form" bordered={false}>
                 <div style={{ width: '980px' }}>
                     <Row gutter={16}>
-                        <Col span={12}>
+                        <Col span={6}>
                             <AutoCompleteField
                                 disabled={isEditing}
                                 required
-                                label={translate.formatMessage(messages.developer)}
+                                label={translate.formatMessage(commonMessage.developer)}
                                 name={['developer', 'studentInfo', 'fullName']}
                                 apiConfig={apiConfig.developer.autocomplete}
                                 mappingOptions={(item) => ({
@@ -235,29 +240,35 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                     label: item.studentInfo.fullName,
                                 })}
                                 initialSearchParams={{ pageNumber: 0 }}
-                                searchParams={(text) => ({ fullName: text })}
-                            />
+                                searchParams={(text) => ({ fullName: text })} />
                         </Col>
-                        <Col span={12}>
-                            <Col span={12}>
-                                <AutoCompleteField
-                                    disabled={isEditing}
-                                    label={translate.formatMessage(messages.role)}
-                                    name={['projectRole', 'projectRoleName']}
-                                    apiConfig={apiConfig.projectRole.autocomplete}
-                                    mappingOptions={(item) => ({
-                                        value: item.id,
-                                        label: item.projectRoleName,
-                                    })}
-                                    initialSearchParams={{ pageNumber: 0 }}
-                                    searchParams={(text) => ({ fullName: text })}
-                                />
-                            </Col>
+                        <Col span={6}>
+                            <AutoCompleteField
+                                disabled={isEditing}
+                                label={translate.formatMessage(commonMessage.role)}
+                                name={['projectRole', 'projectRoleName']}
+                                apiConfig={apiConfig.projectRole.autocomplete}
+                                mappingOptions={(item) => ({
+                                    value: item.id,
+                                    label: item.projectRoleName,
+                                })}
+                                initialSearchParams={{ pageNumber: 0 }}
+                                searchParams={(text) => ({ fullName: text })} />
+                        </Col>
+                        <Col span={6}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Nhóm" />}
+                                name="teamId"
+                                apiConfig={apiConfig.team.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
+                                initialSearchParams={{}}
+                                searchParams={(text) => ({ name: text })}
+                                disabled={isEditing} />
                         </Col>
                     </Row>
                 </div>
                 <ScheduleTable
-                    label={translate.formatMessage(messages.schedule)}
+                    label={translate.formatMessage(commonMessage.schedule)}
                     onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
                     translate={translate}
                     daysOfWeekSchedule={daysOfWeekSchedule}

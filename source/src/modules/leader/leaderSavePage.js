@@ -4,19 +4,18 @@ import routes from './routes';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useParams, useLocation } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import LeaderForm from './leaderForm';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
     objectName: 'Leader',
-    home: 'Trang chủ',
-    leader: 'Leader',
 });
 
 const LeaderSavePage = () => {
     const leaderId = useParams();
     const translate = useTranslate();
-
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.leader.getById,
@@ -46,7 +45,7 @@ const LeaderSavePage = () => {
             loading={loading}
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(message.leader),
+                    breadcrumbName: translate.formatMessage(commonMessage.leader),
                     path: generatePath(routes.leaderListPage.path, { leaderId }),
                 },
                 { breadcrumbName: title },

@@ -8,11 +8,10 @@ import CourseForm from './CourseForm';
 import routes from './routes';
 import { generatePath, useParams } from 'react-router-dom';
 import { showErrorMessage } from '@services/notifyService';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
-    home: 'Trang chủ',
     objectName: 'khoá học',
-    course: 'Khoá học',
 });
 
 const CourseSavePage = () => {
@@ -56,9 +55,8 @@ const CourseSavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
                 {
-                    breadcrumbName: translate.formatMessage(messages.course),
+                    breadcrumbName: translate.formatMessage(commonMessage.course),
                     path: generatePath(routes.courseListPage.path, { courseId }),
                 },
                 { breadcrumbName: title },

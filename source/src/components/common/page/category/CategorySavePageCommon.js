@@ -46,7 +46,7 @@ function CategorySavePageCommon({
     return (
         <PageWrapper
             loading={loading}
-            routes={[ { breadcrumbName: 'Home' }, ...breadcrumb, { breadcrumbName: title } ]}
+            routes={[ { breadcrumbName: title } ]}
             title={title}
         >
             <CategoryFormCommon

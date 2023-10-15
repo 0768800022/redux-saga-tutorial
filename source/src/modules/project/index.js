@@ -10,6 +10,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { UserOutlined } from '@ant-design/icons';
 import { Button, Avatar, Tag } from 'antd';
+import { IconBrandTeams } from '@tabler/icons-react';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
@@ -18,28 +19,13 @@ import { BookOutlined, TeamOutlined, WomanOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
+import { commonMessage } from '@locales/intl';
+// import icon_team_1 from '@assets/images/team-Members-Icon.png';
 
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 const message = defineMessages({
-    home: 'Trang chủ',
-    project: 'Dự án',
-    objectName: 'dự án',
-    code: 'Mã dự án',
-    id: 'Id',
-    createdDate: 'Ngày tạo',
-    avatar: 'Avatar',
-    description: 'Mô tả',
-    leader: 'Leader',
-    name: 'Tên dự án',
-    endDate: 'Ngày kết thúc',
-    startDate: 'Ngày bắt đầu',
-    state: 'Tình trạng',
-    status: 'Trạng thái',
-    developer: 'Lập trình viên',
-    task: 'Task',
-    member: 'Thành viên',
-    group: 'Nhóm',
+    objectName: 'Dự án',  
 });
 
 const ProjectListPage = () => {
@@ -71,7 +57,7 @@ const ProjectListPage = () => {
 
                 funcs.additionalActionColumnButtons = () => ({
                     task: ({ id, name, leaderInfo, status, state }) => (
-                        <BaseTooltip title={translate.formatMessage(message.task)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
                                 type="link"
                                 disabled={state === 1}
@@ -105,7 +91,7 @@ const ProjectListPage = () => {
                         </BaseTooltip>
                     ),
                     member: ({ id, name, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.member)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.member)}>
                             <Button
                                 type="link"
                                 style={{ padding: '0' }}
@@ -121,12 +107,12 @@ const ProjectListPage = () => {
                                 }
                                 }
                             >
-                                <WomanOutlined />
+                                <UserOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
                     team: ({ id, name, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.group)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
                                 type="link"
                                 style={{ padding: '0' }}
@@ -141,7 +127,7 @@ const ProjectListPage = () => {
                                     }
                                 }}
                             >
-                                <TeamOutlined />
+                                <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }}/>
                             </Button>
                         </BaseTooltip>
                     ),
@@ -184,16 +170,16 @@ const ProjectListPage = () => {
         const breadRoutes = [];
         if (leaderName) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.leader),
+                breadcrumbName: translate.formatMessage(commonMessage.leader),
                 path: routes.leaderListPage.path,
             });
         } else if (developerName) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.developer),
+                breadcrumbName: translate.formatMessage(commonMessage.developer),
                 path: routes.developerListPage.path,
             });
         }
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.project) });
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.project) });
 
         return breadRoutes;
     };
@@ -205,18 +191,18 @@ const ProjectListPage = () => {
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.name),
+            placeholder: translate.formatMessage(commonMessage.projectName),
         },
         {
             key: 'state',
-            placeholder: translate.formatMessage(message.state),
+            placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
         },
         !leaderName &&
             !developerName && {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -237,16 +223,16 @@ const ProjectListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(message.name),
+            title: translate.formatMessage(commonMessage.projectName),
             dataIndex: 'name',
         },
         {
-            title: translate.formatMessage(message.leader),
+            title: translate.formatMessage(commonMessage.leader),
             dataIndex: ['leaderInfo', 'leaderName'],
             width: 150,
         },
         {
-            title: translate.formatMessage(message.startDate),
+            title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'startDate',
             render: (startDate) => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
@@ -255,7 +241,7 @@ const ProjectListPage = () => {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.endDate),
+            title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'endDate',
             render: (endDate) => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
