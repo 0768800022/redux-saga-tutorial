@@ -1,45 +1,45 @@
-import PageWrapper from '@components/common/layout/PageWrapper';
-import apiConfig from '@constants/apiConfig';
-import { categoryKind } from '@constants/masterData';
-import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import apiConfig from '@constants/apiConfig';
 import routes from '@routes';
-import ProjectTaskForm from './ProjectTaskForm';
+import PageWrapper from '@components/common/layout/PageWrapper';
 import useTranslate from '@hooks/useTranslate';
+import useSaveBase from '@hooks/useSaveBase';
+import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
-// import route1 from '@modules/project/routes';
-
-const messages = defineMessages({
-    objectName: 'Task',
+import TeamForm from './TeamForm';
+import ProjectTaskForm from '@modules/projectTask/ProjectTaskForm';
+const message = defineMessages({
+    objectName: 'Team',
     home: 'Trang chủ',
-    ProjectTask: 'Task',
+    team: 'Nhóm',
     project: 'Dự án',
 });
 
-function ProjectTaskSavePage() {
+// const TeamSavePage = () => {
+function TeamSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
-    const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
-    const projectTaskId = useParams();
+    // const projectName = queryParameters.get('projectName');
+    const teamId = useParams();
+    // console.log(projectId);
+    console.log("projectId " + projectId);
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.projectTask.getById,
-            create: apiConfig.projectTask.create,
-            update: apiConfig.projectTask.update,
+            getById: apiConfig.team.getById,
+            create: apiConfig.team.create,
+            update: apiConfig.team.update,
         },
         options: {
-            getListUrl: generatePath(routes.ProjectTaskListPage.path, { projectTaskId }),
-            objectName: translate.formatMessage(messages.objectName),
+            getListUrl: generatePath(routes.teamListPage.path, { teamId }),
+            objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
                     id: detail.id,
-                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
@@ -52,22 +52,21 @@ function ProjectTaskSavePage() {
     });
     const setBreadRoutes = () => {
         const breadRoutes = [
-            { breadcrumbName: translate.formatMessage(messages.home) },
             {
-                breadcrumbName: translate.formatMessage(messages.project),
+                breadcrumbName: translate.formatMessage(message.project),
                 path: routes.projectListPage.path,
             },
         ];
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(messages.ProjectTask),
-                path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
+                breadcrumbName: translate.formatMessage(message.team),
+                path: routes.teamListPage.path + `?active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(messages.ProjectTask),
-                path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
+                breadcrumbName: translate.formatMessage(message.team),
+                path: routes.teamListPage.path,
             });
         }
         breadRoutes.push({ breadcrumbName: title });
@@ -80,16 +79,17 @@ function ProjectTaskSavePage() {
             routes={setBreadRoutes()}
             title={title}
         >
-            <ProjectTaskForm
+            <TeamForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
                 onSubmit={mixinFuncs.onSave}
+                projectId={projectId}
             />
         </PageWrapper>
     );
 }
 
-export default ProjectTaskSavePage;
+export default TeamSavePage;

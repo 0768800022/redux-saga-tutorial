@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT,DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
+import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -14,7 +14,7 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
 import route from '@modules/projectTask/routes';
-import { BookOutlined, TeamOutlined } from '@ant-design/icons';
+import { BookOutlined, TeamOutlined, WomanOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
@@ -39,6 +39,7 @@ const message = defineMessages({
     developer: 'Lập trình viên',
     task: 'Task',
     member: 'Thành viên',
+    group: 'Nhóm',
 });
 
 const ProjectListPage = () => {
@@ -117,6 +118,27 @@ const ProjectListPage = () => {
                                     else {
                                         navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
                                     }
+                                }
+                                }
+                            >
+                                <WomanOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    team: ({ id, name, status }) => (
+                        <BaseTooltip title={translate.formatMessage(message.group)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                // disabled={status === -1}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (status === 1) {
+                                        navigate(routes.teamListPage.path + `?projectId=${id}&projectName=${name}&active=${true}`);
+                                    }
+                                    else {
+                                        navigate(routes.teamListPage.path + `?projectId=${id}&projectName=${name}`);
+                                    }
                                 }}
                             >
                                 <TeamOutlined />
@@ -159,7 +181,7 @@ const ProjectListPage = () => {
     }, [data, dataDeveloperProject]);
 
     const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        const breadRoutes = [];
         if (leaderName) {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(message.leader),
@@ -258,12 +280,13 @@ const ProjectListPage = () => {
         !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
+                team: true,
                 member: !leaderName && !developerName && true,
                 task: true,
                 edit: !leaderName && !developerName && true,
                 delete: !leaderName && !developerName && true,
             },
-            { width: '150px' },
+            { width: '200px' },
         ),
     ].filter(Boolean);
     return (

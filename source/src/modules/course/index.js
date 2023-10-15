@@ -115,12 +115,9 @@ const CourseListPage = () => {
             },
         });
     const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
-
         { breadcrumbName: translate.formatMessage(message.course) },
     ];
     const breadLeaderRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
         { breadcrumbName: translate.formatMessage(message.leader), path: routes.leaderListPage.path },
         { breadcrumbName: translate.formatMessage(message.course) },
     ];

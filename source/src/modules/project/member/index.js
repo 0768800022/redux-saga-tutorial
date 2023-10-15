@@ -87,7 +87,7 @@ const ProjectMemberListPage = () => {
     });
 
     const setBreadRoutes = () => {
-        const breadRoutes = [{ breadcrumbName: translate.formatMessage(message.home) }];
+        const breadRoutes = [];
 
         breadRoutes.push({
             breadcrumbName: translate.formatMessage(message.project),

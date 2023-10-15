@@ -170,7 +170,6 @@ function RegistrationListPage() {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
                 {
                     breadcrumbName: translate.formatMessage(message.course),
                     path: '/course',
