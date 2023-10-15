@@ -611,6 +611,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        studentTask: {
+            baseURL: `${apiTenantUrl}v1/task/student-task`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     project: {
         getList: {
