@@ -64,7 +64,7 @@ function TaskListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;

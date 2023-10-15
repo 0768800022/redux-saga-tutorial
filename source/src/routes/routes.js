@@ -14,9 +14,7 @@ import useFetch from '@hooks/useFetch';
 import apiConfig from '@constants/apiConfig';
 import { UserTypes } from '@constants';
 import { appActions } from '@store/actions';
-
 const routesArray = Object.values(routes);
-
 const AppRoutes = () => {
     const { isAuthenticated, loading: loadingProfile, profile } = useAuth();
     const renderRoute = (route) => (
@@ -39,6 +37,7 @@ const AppRoutes = () => {
                         profile={profile}
                         layout={route.layout}
                         path={route.path}
+                        breadcrumbs={route.breadcrumbs}
                     />
                 )
             }

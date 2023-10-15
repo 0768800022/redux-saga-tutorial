@@ -15,17 +15,23 @@ import BaseTable from '@components/common/table/BaseTable';
 import useDragDrop from '@hooks/useDragDrop';
 import styles from './AsignAll.module.scss';
 import { commonMessage } from '@locales/intl';
-
+import { useLocation } from 'react-router';
 const message = defineMessages({
     objectName: 'Bài giảng',
     asignAllModal: 'Tạo task',
 });
 const LectureListPage = ({ breadcrumbName }) => {
     const translate = useTranslate();
+    const location = useLocation();
+    const state = location.state.prevPath;
+    const paramHead = routes.courseListPage.path;
     const queryParameters = new URLSearchParams(window.location.search);
+
     const courseId = queryParameters.get("courseId");
     const courseName = queryParameters.get("courseName");
     const subjectId = queryParameters.get("subjectId");
+
+
     const [ showPreviewModal, setShowPreviewModal ] = useState(false);
     const [hasError, setHasError] = useState(false);
     const [lectureid, setLectureId] = useState(null);
@@ -206,17 +212,15 @@ const LectureListPage = ({ breadcrumbName }) => {
         }   
         return '';
     };
-
-
     return (
         
         <PageWrapper 
             routes={breadcrumbName ? breadcrumbName() : 
                 [
-                    { breadcrumbName: translate.formatMessage(commonMessage.course),
+                    { breadcrumbName: translate.formatMessage(message.course),
                         path: routes.courseListPage.path,
                     },
-                    { breadcrumbName: translate.formatMessage(commonMessage.task),
+                    { breadcrumbName: translate.formatMessage(message.task),
                         path: routes.courseListPage.path + `/task?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=2`,
                     },
                     { breadcrumbName: translate.formatMessage(message.objectName) },

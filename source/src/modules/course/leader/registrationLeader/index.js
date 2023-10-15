@@ -18,11 +18,12 @@ import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import { CheckCircleOutlined, DollarOutlined } from '@ant-design/icons';
-// import style from './Registration.module.scss';
+import style from '@modules/registration/Registration.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
 
+import ScheduleFile from '@components/common/elements/ScheduleFile';
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
     createDate: 'Ngày đăng kí',
@@ -58,6 +59,7 @@ function RegistrationLeaderListPage() {
                     return [];
                 }
             };
+            
         },
     });
     const setColumns = () => {
@@ -70,25 +72,8 @@ function RegistrationLeaderListPage() {
                 title: 'Lịch trình',
                 dataIndex: 'schedule',
                 render: (schedule) => {
-                    let check = JSON.parse(schedule);
-                    const newCheck = [
-                        { key: 'M', value: check.t2 },
-                        { key: 'T', value: check.t3 },
-                        { key: 'W', value: check.t4 },
-                        { key: 'T', value: check.t5 },
-                        { key: 'F', value: check.t6 },
-                        { key: 'S', value: check.t7 },
-                        { key: 'S', value: check.cn },
-                    ];
+                    return <ScheduleFile schedule={schedule} />;
 
-                    let dateString = '';
-                    newCheck.map((item) => {
-                        if (item.value !== undefined) {
-                            dateString += item.key + ' ';
-                        }
-                    });
-
-                    return <div>{dateString}</div>;
                 },
                 width: 140,
             },
@@ -101,7 +86,7 @@ function RegistrationLeaderListPage() {
                     if (item == 0) {
                         return null;
                     } else {
-                        return <CheckCircleOutlined  />;
+                        return <CheckCircleOutlined className={style.greenCheckIcon} />;
                     }
                 },
             },
@@ -126,13 +111,20 @@ function RegistrationLeaderListPage() {
                 },
             },
         ];
-        courseStatus == 1 &&
-            columns.push(mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }));
+       
         return columns;
     };
 
     return (
         <PageWrapper
+            routes={[
+                { breadcrumbName: translate.formatMessage(message.home) },
+                {
+                    breadcrumbName: translate.formatMessage(message.course),
+                    path: routes.courseLeaderListPage.path,
+                },
+                { breadcrumbName: translate.formatMessage(message.registration) },
+            ]}
         >
             <ListPage
                 title={
