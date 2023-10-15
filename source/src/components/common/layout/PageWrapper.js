@@ -10,7 +10,7 @@ import useTranslate from '@hooks/useTranslate';
 const PageWrapper = ({ loading, children, routes = [], tabs, onChangeTab, activeTab }) => {
     const translate = useTranslate();
     const hasTab = !!tabs?.length;
-    routes = [{ breadcrumbName: translate.formatMessage(commonMessage.home) }, ...routes];
+    routes = [{ breadcrumbName: translate.formatMessage(commonMessage.home),   path: '/' }, ...routes];
     return (
         <Spin spinning={!!loading} wrapperClassName={styles.pageWrapper}>
             <div className={classNames(styles.pageHeader, hasTab && styles.hasTab)}>
