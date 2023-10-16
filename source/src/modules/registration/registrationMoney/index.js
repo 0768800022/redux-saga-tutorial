@@ -107,7 +107,7 @@ function RegistrationMoneyListPage() {
             width: 130,
         },
         {
-            title: translate.formatMessage(commonMessage.createDate),
+            title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
             render: (createdDate) => {
                 return (
