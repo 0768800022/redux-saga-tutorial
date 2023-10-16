@@ -253,7 +253,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                     label: item.projectRoleName,
                                 })}
                                 initialSearchParams={{ pageNumber: 0 }}
-                                searchParams={(text) => ({ fullName: text })} />
+                                searchParams={(text) => ({ name: text })} />
                         </Col>
                         <Col span={6}>
                             <AutoCompleteField
