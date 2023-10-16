@@ -637,6 +637,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getListStudent: {
+            baseURL: `${apiTenantUrl}v1/project/student-project`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/project/auto-complete`,
             method: 'GET',
@@ -993,6 +999,5 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
-
 };
 export default apiConfig;
