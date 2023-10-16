@@ -55,6 +55,12 @@ const navMenuConfig = [
                 path: generatePath(routes.subjectListPage.path, {}),
                 permission: apiConfig.subject.getList.baseURL,
             },
+            {
+                label: <FormattedMessage defaultMessage="Yêu cầu khoá học" />,
+                key: 'yeu-cau-khoa-hoc',
+                path: generatePath(routes.courseRequestListPage.path, {}),
+                permission: apiConfig.subject.getList.baseURL,
+            },
         ],
     },
     {
@@ -179,7 +185,6 @@ const navMenuConfig = [
             },
         ],
     },
-
 ];
 
 export default navMenuConfig;

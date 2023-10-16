@@ -84,7 +84,7 @@ const GeneralSettingPage = ({ groupName }) => {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setDetail(item);
-                                if (item?.isSlider) {
+                                if (item?.action) {
                                     setIsEditing(true);
                                     handlersSliderModal.open();
                                 } else if (item?.keyName === 'introduce') {

@@ -17,6 +17,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import styles from './Registration.module.scss';
 import ScheduleTable from '@components/common/table/ScheduleTable';
 import { commonMessage } from '@locales/intl';
+import { useLocation } from 'react-router-dom';
 
 const messages = defineMessages({
     student: 'Tên sinh viên',
@@ -25,6 +26,8 @@ const messages = defineMessages({
 });
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
+    const location = useLocation();
+    const { data: dataLocation } = location.state;
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     //const stateResgistration = translate.formatKeys(stateResgistrationOptions, ['label']);
@@ -238,7 +241,11 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             }
         });
     }, [dataDetail]);
-
+    useEffect(() => {
+        form.setFieldsValue({
+            studentInfo: { fullName: dataLocation.fullName, id: dataLocation.fullName },
+        });
+    }, [dataLocation]);
 
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
