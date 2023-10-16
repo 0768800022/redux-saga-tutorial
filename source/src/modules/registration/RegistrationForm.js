@@ -3,9 +3,13 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import CheckboxField from '@components/common/form/CheckboxField';
 import SelectField from '@components/common/form/SelectField';
 import TimePickerField from '@components/common/form/TimePickerField';
-import { TIME_FORMAT_DISPLAY } from '@constants';
+import { DATE_FORMAT_VALUE, TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { daysOfWeekSchedule as daysOfWeekScheduleOptions, stateResgistrationOptions } from '@constants/masterData';
+import {
+    daysOfWeekSchedule as daysOfWeekScheduleOptions,
+    stateResgistrationOptions,
+    statusOptions,
+} from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -18,6 +22,8 @@ import styles from './Registration.module.scss';
 import ScheduleTable from '@components/common/table/ScheduleTable';
 import { commonMessage } from '@locales/intl';
 import { useLocation } from 'react-router-dom';
+import TextField from '@components/common/form/TextField';
+import DatePickerField from '@components/common/form/DatePickerField';
 
 const messages = defineMessages({
     student: 'Tên sinh viên',
@@ -32,6 +38,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     //const stateResgistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
@@ -242,60 +249,187 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         });
     }, [dataDetail]);
     useEffect(() => {
-        form.setFieldsValue({
-            studentInfo: { fullName: dataLocation.fullName, id: dataLocation.fullName },
-        });
+        if (dataLocation) {
+            form.setFieldsValue({
+                studentInfo: { fullName: dataLocation.fullName, id: dataLocation.fullName },
+            });
+        }
     }, [dataLocation]);
 
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
-            <Card className="card-form" bordered={false}>
-                <div style={{ width: '980px' }}>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <AutoCompleteField
-                                disabled={isEditing}
-                                required
-                                label={translate.formatMessage(commonMessage.studentName)}
-                                name={['studentInfo', 'id']}
-                                apiConfig={apiConfig.student.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
-                                initialSearchParams={{ pageNumber: 0 }}
-                                searchParams={(text) => ({ fullName: text })}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <SelectField
-                                disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
-                                defaultValue={registrationStateFilter[0]}
-                                label={<FormattedMessage defaultMessage="Tình trạng" />}
-                                name="state"
-                                options={registrationStateFilter}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <CheckboxField
-                                className={styles.customCheckbox}
-                                required
-                                label={translate.formatMessage(commonMessage.isIntern)}
-                                name="isIntern"
-                                checked={isChecked}
-                                onChange={handleOnChangeCheckBox}
-                            />
-                        </Col>
-                    </Row>
+        <>
+            {dataLocation && (
+                <div style={{ marginBottom: '20px' }}>
+                    <BaseForm
+                        formId={formId}
+                        onFinish={handleSubmit}
+                        form={form}
+                        onValuesChange={onValuesChange}
+                        size="1100px"
+                    >
+                        <Card className="card-form" bordered={false}>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <TextField
+                                        label={translate.formatMessage(commonMessage.name)}
+                                        required={isEditing ? false : true}
+                                        disabled={isEditing}
+                                        name="fullName"
+                                    />
+                                </Col>
+                                <Col span={12}>
+                                    <DatePickerField
+                                        name="birthday"
+                                        label="Ngày sinh"
+                                        placeholder="Ngày sinh"
+                                        format={DATE_FORMAT_VALUE}
+                                        style={{ width: '100%' }}
+                                        required={isEditing ? false : true}
+                                        // rules={[
+                                        //     {
+                                        //         validator: validateDate,
+                                        //     },
+                                        // ]}
+                                    />
+                                </Col>
+                            </Row>
+
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <TextField
+                                        label={translate.formatMessage(commonMessage.mssv)}
+                                        disabled={isEditing}
+                                        required={isEditing ? false : true}
+                                        name="mssv"
+                                    />
+                                </Col>
+                                <Col span={12}>
+                                    <TextField
+                                        label={translate.formatMessage(commonMessage.phone)}
+                                        type="number"
+                                        name="phone"
+                                        required={isEditing ? false : true}
+                                    />
+                                </Col>
+                            </Row>
+
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <TextField
+                                        label={translate.formatMessage(commonMessage.password)}
+                                        rules={[
+                                            {
+                                                min: 6,
+                                                message: 'Mật khẩu phải có ít nhất 6 kí tự!',
+                                            },
+                                        ]}
+                                        required={isEditing ? false : true}
+                                        name="password"
+                                        type="password"
+                                    />
+                                </Col>
+                                <Col span={12}>
+                                    <TextField
+                                        label={translate.formatMessage(commonMessage.email)}
+                                        type="email"
+                                        name="email"
+                                        required={isEditing ? false : true}
+                                        disabled={isEditing}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={12}>
+                                    <AutoCompleteField
+                                        label={<FormattedMessage defaultMessage="Trường" />}
+                                        name="universityId"
+                                        disabled={isEditing}
+                                        apiConfig={apiConfig.category.autocomplete}
+                                        mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                                        // initialSearchParams={{
+                                        //     kind: kindOfEdu,
+                                        // }}
+                                        searchParams={(text) => ({ name: text })}
+                                        // onFocus={handleFocus}
+                                        required
+                                    />
+                                </Col>
+                                <Col span={12}>
+                                    <AutoCompleteField
+                                        label={<FormattedMessage defaultMessage="Hệ" />}
+                                        name="studyClass"
+                                        disabled={isEditing}
+                                        apiConfig={apiConfig.category.autocomplete}
+                                        mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                                        // initialSearchParams={{
+                                        //     kind: kindOfGen,
+                                        // }}
+                                        searchParams={(text) => ({ name: text })}
+                                        required
+                                    />
+                                </Col>
+                                <Col span={12}>
+                                    <SelectField
+                                        required
+                                        label={<FormattedMessage defaultMessage="Trạng thái" />}
+                                        name="status"
+                                        options={statusValues}
+                                    />
+                                </Col>
+                            </Row>
+                        </Card>
+                    </BaseForm>
                 </div>
-                <ScheduleTable
-                    label={translate.formatMessage(commonMessage.schedule)}
-                    onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
-                    translate={translate}
-                    daysOfWeekSchedule={daysOfWeekSchedule}
-                />
-                <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
-                    {actions}
-                </div>
-            </Card>
-        </BaseForm>
+            )}
+            <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
+                <Card className="card-form" bordered={false}>
+                    <div style={{ width: '980px' }}>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <AutoCompleteField
+                                    disabled={isEditing}
+                                    required
+                                    label={translate.formatMessage(commonMessage.studentName)}
+                                    name={['studentInfo', 'id']}
+                                    apiConfig={apiConfig.student.autocomplete}
+                                    mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
+                                    initialSearchParams={{ pageNumber: 0 }}
+                                    searchParams={(text) => ({ fullName: text })}
+                                />
+                            </Col>
+                            <Col span={12}>
+                                <SelectField
+                                    disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
+                                    defaultValue={registrationStateFilter[0]}
+                                    label={<FormattedMessage defaultMessage="Tình trạng" />}
+                                    name="state"
+                                    options={registrationStateFilter}
+                                />
+                            </Col>
+                            <Col span={12}>
+                                <CheckboxField
+                                    className={styles.customCheckbox}
+                                    required
+                                    label={translate.formatMessage(commonMessage.isIntern)}
+                                    name="isIntern"
+                                    checked={isChecked}
+                                    onChange={handleOnChangeCheckBox}
+                                />
+                            </Col>
+                        </Row>
+                    </div>
+                    <ScheduleTable
+                        label={translate.formatMessage(commonMessage.schedule)}
+                        onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
+                        translate={translate}
+                        daysOfWeekSchedule={daysOfWeekSchedule}
+                    />
+                    <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
+                        {actions}
+                    </div>
+                </Card>
+            </BaseForm>
+        </>
     );
 }
 
