@@ -80,7 +80,7 @@ function TaskListPage() {
             };
             funcs.additionalActionColumnButtons = () => ({
                 state: (item) => (
-                    <BaseTooltip title={translate.formatMessage(message.state)}>
+                    <BaseTooltip title={translate.formatMessage(commonMessage.state)}>
                         <Button
                             type="link"
                             disabled={item.state === 2}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Button, Form } from 'antd';
 
@@ -45,6 +45,7 @@ const LoginPage = () => {
         ...apiConfig.account.loginBasic,
         authorization: `Basic ${base64Credentials}`,
     });
+    const [loginLoading, setLoading] = useState(false);
     const { execute: executeLeaderLogin, loading: loadingLeader } = useFetch(apiConfig.leader.login);
     const { execute: executeStudentLogin, loading: loadingStudent } = useFetch(apiConfig.student.login);
     const { execute: executeCompanyLogin, loading: loadingCompany } = useFetch(apiConfig.company.login);
@@ -78,6 +79,7 @@ const LoginPage = () => {
     };
 
     const handleGetCareerInfo = (values, login) => {
+        setLoading(true);
         executeGetCareerDetail({
             onCompleted: (res) => {
                 setData(storageKeys.TENANT_HEADER, res.data?.name);
@@ -88,8 +90,10 @@ const LoginPage = () => {
                     data: { ...values, phone: values.username, tenantId: apiTenantId },
                     onCompleted: (res) => {
                         handleLoginSuccess(res.data);
+                        setLoading(false);
                     },
                     onError: (res) => {
+                        setLoading(false);
                         notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
                     },
                 });
@@ -135,7 +139,13 @@ const LoginPage = () => {
                         options={loginOptions}
                     />
 
-                    <Button type="primary" size="large" loading={loading} htmlType="submit" style={{ width: '100%' }}>
+                    <Button
+                        type="primary"
+                        size="large"
+                        loading={loading || loginLoading}
+                        htmlType="submit"
+                        style={{ width: '100%' }}
+                    >
                         {intl.formatMessage(message.login)}
                     </Button>
                     <center className="s-mt4px">

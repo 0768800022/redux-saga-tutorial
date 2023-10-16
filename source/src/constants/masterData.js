@@ -294,11 +294,11 @@ export const actionOptions = [
 ];
 
 export const stateCourseRequestOptions = [
-    { value: 0, label: stateCourseRequestMessage.request, color: 'green' },
+    { value: 0, label: stateCourseRequestMessage.request, color: 'orange' },
     {
         value: 1,
         label: stateCourseRequestMessage.processed,
-        color: 'blue',
+        color: 'green',
     },
     { value: 2, label: stateCourseRequestMessage.cancel, color: 'red' },
 ];

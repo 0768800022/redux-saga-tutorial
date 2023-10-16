@@ -175,7 +175,7 @@ const ProjectStudentListPage = () => {
             },
         },
 
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        // mixinFuncs.renderStatusColumn({ width: '120px' }),
 
         mixinFuncs.renderActionColumn({ member: true, task: true }, { width: '120px' }),
     ];
