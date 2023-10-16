@@ -18,7 +18,7 @@ export default {
         permissions: [apiConfig.courseRequest.update.baseURL],
     },
     courseRequestRegistrationSavePage: {
-        path: '/course-request/registration/create',
+        path: '/course-request/registration/:id',
         title: 'Course Save Page',
         auth: true,
         component: RegistrationSavePage,

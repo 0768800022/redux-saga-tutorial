@@ -42,7 +42,8 @@ const CourseRequestListPage = () => {
                             style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                navigate(routes.courseRequestRegistrationSavePage.path + `?fullName=${fullName}`);
+                                const id = 'create';
+                                navigate(`/course-request/registration/${id}`, { state: { fullName } });
                             }}
                         >
                             <TeamOutlined />

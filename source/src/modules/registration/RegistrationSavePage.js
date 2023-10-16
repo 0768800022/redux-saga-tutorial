@@ -3,7 +3,7 @@ import apiConfig from '@constants/apiConfig';
 import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, useLocation, useParams } from 'react-router-dom';
 import routes from '@routes';
 import RegistrationForm from './RegistrationForm';
 import useTranslate from '@hooks/useTranslate';
@@ -14,6 +14,7 @@ import { commonMessage } from '@locales/intl';
 const messages = defineMessages({
     objectName: 'Danh sách đăng kí khóa học',
     registration: 'Danh sách sinh viên đăng kí khóa học',
+    courseRequest: 'Yêu cầu khoá học',
 });
 
 function RegistrationSavePage() {
@@ -21,6 +22,8 @@ function RegistrationSavePage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const location = useLocation();
+    const { fullName } = location.state;
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.registration.getById,
@@ -57,13 +60,20 @@ function RegistrationSavePage() {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(commonMessage.course), path: routes.courseListPage.path },
-                {
+                !fullName && {
+                    breadcrumbName: translate.formatMessage(commonMessage.course),
+                    path: routes.courseListPage.path,
+                },
+                !fullName && {
                     breadcrumbName: translate.formatMessage(messages.registration),
                     path: routes.registrationListPage.path + `?courseId=${courseId}&courseName=${courseName}`,
                 },
+                fullName && {
+                    breadcrumbName: translate.formatMessage(messages.courseRequest),
+                    path: routes.courseRequestListPage.path,
+                },
                 { breadcrumbName: title },
-            ]}
+            ].filter(Boolean)}
             title={title}
         >
             <RegistrationForm
