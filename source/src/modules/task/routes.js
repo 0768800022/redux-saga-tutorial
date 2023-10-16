@@ -30,7 +30,7 @@ export default {
         title: 'Task Log Save Page',
         auth: true,
         component: TaskLogListPage,
-        // permissions: [apiConfig.task.create.baseURL, apiConfig.task.update.baseURL],
+        permissions: [apiConfig.taskLog.getList.baseURL],
         breadcrumbs: (message,paramHead, state, location) => {
             return [
                 { breadcrumbName: message.course.defaultMessage, path: paramHead },
@@ -44,7 +44,7 @@ export default {
         title: 'Task Log Save Page',
         auth: true,
         component: TaskLogSavePage,
-        // permissions: [apiConfig.task.create.baseURL, apiConfig.task.update.baseURL],
+        permissions: [apiConfig.taskLog.create.baseURL, apiConfig.taskLog.update.baseURL],
         breadcrumbs: (message,paramHead,taskParam, state, location,title) => {
             return [
                 { breadcrumbName: message.course.defaultMessage, path: paramHead },
