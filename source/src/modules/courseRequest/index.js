@@ -5,9 +5,11 @@ import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { stateCourseRequestOptions } from '@constants/masterData';
+import { FieldTypes } from '@constants/formConfig';
+import { stateCourseRequestOptions, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { Button, Tag } from 'antd';
@@ -22,12 +24,14 @@ const message = defineMessages({
     status: 'Trạng thái',
     state: 'Tình trạng',
     registration: 'Đăng ký',
+    phone: 'Số điện thoại',
 });
 const CourseRequestListPage = () => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(stateCourseRequestOptions, ['label']);
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const navigate = useNavigate();
-    const { data, mixinFuncs, loading, pagination, changePagination } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter, changePagination } = useListBase({
         apiConfig: apiConfig.courseRequest,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -63,6 +67,11 @@ const CourseRequestListPage = () => {
             dataIndex: ['course', 'name'],
         },
         {
+            title: translate.formatMessage(message.phone),
+            dataIndex: 'phone',
+            width: 150,
+        },
+        {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
             width: 200,
@@ -90,8 +99,15 @@ const CourseRequestListPage = () => {
                 );
             },
         },
-        mixinFuncs.renderStatusColumn({ width: '60px' }),
         mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '120px' }),
+    ];
+    const searchFields = [
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(commonMessage.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
     ];
     return (
         <PageWrapper
@@ -102,6 +118,7 @@ const CourseRequestListPage = () => {
             ]}
         >
             <ListPage
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

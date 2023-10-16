@@ -1,5 +1,6 @@
 import { BaseForm } from '@components/common/form/BaseForm';
 import SelectField from '@components/common/form/SelectField';
+import TextField from '@components/common/form/TextField';
 import { stateCourseRequestOptions, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
@@ -28,6 +29,22 @@ const CourseRequestForm = (props) => {
             <Card className="card-form" bordered={false}>
                 <Row gutter={10}>
                     <Col span={12}>
+                        <TextField disabled label={<FormattedMessage defaultMessage="Họ và tên" />} name="fullName" />
+                    </Col>
+                    <Col span={12}>
+                        <TextField
+                            disabled
+                            label={<FormattedMessage defaultMessage="Khoá học" />}
+                            name={['course', 'name']}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <TextField disabled label={<FormattedMessage defaultMessage="Số điện thoại" />} name="phone" />
+                    </Col>
+                    <Col span={12}>
+                        <TextField disabled label={<FormattedMessage defaultMessage="Email" />} name="email" />
+                    </Col>
+                    <Col span={12}>
                         <SelectField
                             name="state"
                             defaultValue={stateValues[0]}
@@ -46,6 +63,13 @@ const CourseRequestForm = (props) => {
                         />
                     </Col>
                 </Row>
+                <TextField
+                    disabled
+                    width={'100%'}
+                    label={<FormattedMessage defaultMessage="Lời nhắn" />}
+                    name="message"
+                    type="textarea"
+                />
                 <div className="footer-card-form">{actions}</div>
             </Card>
         </BaseForm>

@@ -247,6 +247,7 @@ const useSaveBase = ({
             handleShowErrorMessage,
             getActionName,
             setSubmit,
+            onBack,
         };
 
         override?.(centralizedHandler);

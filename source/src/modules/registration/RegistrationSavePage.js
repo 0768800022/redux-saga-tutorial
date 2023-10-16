@@ -3,7 +3,7 @@ import apiConfig from '@constants/apiConfig';
 import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
-import { generatePath, useLocation, useParams } from 'react-router-dom';
+import { generatePath, useLocation, useNavigate, useParams } from 'react-router-dom';
 import routes from '@routes';
 import RegistrationForm from './RegistrationForm';
 import useTranslate from '@hooks/useTranslate';
@@ -24,6 +24,7 @@ function RegistrationSavePage() {
     const courseName = queryParameters.get('courseName');
     const location = useLocation();
     const { data: dataLocation } = location.state;
+    const navigate = useNavigate();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.registration.getById,
