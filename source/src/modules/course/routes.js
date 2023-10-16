@@ -24,7 +24,6 @@ export default {
         auth: true,
         component: CourseLeaderListPage,
         permissions: apiConfig.course.getListLeaderCourse.baseURL,
-        
     },
     courseSavePage: {
         path: '/course/:id',
@@ -40,7 +39,7 @@ export default {
         component: LectureListPage,
         separateCheck: true,
         permissions: [apiConfig.lecture.getList.baseURL],
-        breadcrumbs: (message,paramHead, state, location) => {
+        breadcrumbs: (message, paramHead, state, location) => {
             return [
                 { breadcrumbName: message.home.defaultMessage },
                 { breadcrumbName: message.course.defaultMessage, path: paramHead },
@@ -95,7 +94,4 @@ export default {
         component: TaskStudentListPage,
         permissions: [apiConfig.task.courseTask.baseURL],
     },
-  
-
-
 };
