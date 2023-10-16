@@ -29,7 +29,6 @@ const message = defineMessages({
 const CourseRequestListPage = () => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(stateCourseRequestOptions, ['label']);
-    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const navigate = useNavigate();
     const { data, mixinFuncs, loading, pagination, queryFilter, changePagination } = useListBase({
         apiConfig: apiConfig.courseRequest,
