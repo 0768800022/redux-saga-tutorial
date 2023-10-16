@@ -215,12 +215,12 @@ const LectureListPage = ({ breadcrumbName }) => {
     return (
         
         <PageWrapper 
-            routes={breadcrumbName ? breadcrumbName() : 
+            routes={breadcrumbName ? breadcrumbName : 
                 [
-                    { breadcrumbName: translate.formatMessage(message.course),
+                    { breadcrumbName: translate.formatMessage(commonMessage.course),
                         path: routes.courseListPage.path,
                     },
-                    { breadcrumbName: translate.formatMessage(message.task),
+                    { breadcrumbName: translate.formatMessage(commonMessage.task),
                         path: routes.courseListPage.path + `/task?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=2`,
                     },
                     { breadcrumbName: translate.formatMessage(message.objectName) },
