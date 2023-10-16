@@ -9,27 +9,40 @@ import { taskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import {  Tag } from 'antd';
-import React from 'react';
-import { useLocation,useParams } from 'react-router-dom';
+import { Tag, Modal } from 'antd';
+import React, { useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { Button } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
+import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
+import useNotification from '@hooks/useNotification';
+import { useIntl } from 'react-intl';
 import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'Task',
+    updateSuccess: 'Cập nhật {objectName} thành công',
+    updateTaskSuccess: 'Cập nhật tình trạng thành công',
 });
 
 function TaskListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
+    const notification = useNotification();
+    const intl = useIntl();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseName = queryParameters.get('courseName');
     const subjectId = queryParameters.get('subjectId');
     const state = queryParameters.get('state');
     const paramid = useParams();
+    const [detail, setDetail] = useState();
     const statusValues = translate.formatKeys(taskState, ['label']);
+    const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             getList: apiConfig.task.courseTask,
@@ -65,8 +78,31 @@ function TaskListPage() {
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?courseName=${courseName}&subjectId=${subjectId}`;
             };
+            funcs.additionalActionColumnButtons = () => ({
+                state: (item) => (
+                    <BaseTooltip title={translate.formatMessage(message.state)}>
+                        <Button
+                            type="link"
+                            disabled={item.state === 2}
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setDetail(item);
+                                handlersStateTaskModal.open();
+                            }}
+                        >
+                            <ExclamationCircleOutlined />
+                        </Button>
+                    </BaseTooltip>
+                ),
+            });
+            funcs.getList = () => {
+                const params = mixinFuncs.prepareGetListParams(queryFilter);
+                mixinFuncs.handleFetchList({ ...params });
+            };
         },
     });
+
 
     const setColumns = () => {
         const columns = [
@@ -115,8 +151,32 @@ function TaskListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }));
+        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false, state: true }, { width: '120px' }));
         return columns;
+    };
+
+
+    const { execute: executeUpdate } = useFetch(apiConfig.task.updateState, { immediate: false });
+    const handleOk = () => {
+        handlersStateTaskModal.close();
+        updateState(detail);
+    };
+    const updateState = (values) => {
+        executeUpdate({
+            data: {
+                taskId: values.id,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    mixinFuncs.getList();
+                    notification({
+                        message: intl.formatMessage(message.updateTaskSuccess),
+                    });
+                    handlersStateTaskModal.close();
+                }
+            },
+            onError: (err) => { },
+        });
     };
 
 
@@ -150,6 +210,17 @@ function TaskListPage() {
                         />
                     }
                 />
+                {/* <Modal
+                    open={openedStateTaskModal}
+                    onCancel={() => handlersStateTaskModal.close()}
+                    data={detail || {}}
+                    executeUpdate={executeUpdate}
+                    width={400}
+
+                /> */}
+                <Modal title="Thay đổi tình trạng" open={openedStateTaskModal} onOk={handleOk} onCancel={() => handlersStateTaskModal.close()} data={detail || {}}>
+                    <p>Bạn có muốn thay đổi tình trạng không???</p>
+                </Modal>
             </div>
         </PageWrapper>
     );

@@ -1,4 +1,4 @@
-import { BookOutlined, UserOutlined,TeamOutlined } from '@ant-design/icons';
+import { BookOutlined, UserOutlined, TeamOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
@@ -62,7 +62,7 @@ const CourseLeaderListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationLeaderListPage.path +
-                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
                             >
@@ -169,14 +169,14 @@ const CourseLeaderListPage = () => {
             {
                 task: true,
                 registration: true,
-                edit:  true,
+                edit: true,
                 delete: true,
             },
             { width: '80px' },
         ),
     ].filter(Boolean);
     return (
-        <PageWrapper routes={ breadRoutes}>
+        <PageWrapper routes={breadRoutes}>
             <ListPage
                 // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
