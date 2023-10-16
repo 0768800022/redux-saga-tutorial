@@ -35,7 +35,7 @@ const CourseRequestListPage = () => {
         },
         override: (funcs) => {
             funcs.additionalActionColumnButtons = () => ({
-                registration: ({ fullName }) => (
+                registration: (item) => (
                     <BaseTooltip title={translate.formatMessage(message.registration)}>
                         <Button
                             type="link"
@@ -43,7 +43,7 @@ const CourseRequestListPage = () => {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 const id = 'create';
-                                navigate(`/course-request/registration/${id}`, { state: { fullName } });
+                                navigate(`/course-request/registration/${id}`, { state: { data: item } });
                             }}
                         >
                             <TeamOutlined />

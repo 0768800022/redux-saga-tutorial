@@ -23,7 +23,7 @@ function RegistrationSavePage() {
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const location = useLocation();
-    const { fullName } = location.state;
+    const { data: dataLocation } = location.state;
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.registration.getById,
@@ -60,15 +60,15 @@ function RegistrationSavePage() {
         <PageWrapper
             loading={loading}
             routes={[
-                !fullName && {
+                !dataLocation && {
                     breadcrumbName: translate.formatMessage(commonMessage.course),
                     path: routes.courseListPage.path,
                 },
-                !fullName && {
+                !dataLocation && {
                     breadcrumbName: translate.formatMessage(messages.registration),
                     path: routes.registrationListPage.path + `?courseId=${courseId}&courseName=${courseName}`,
                 },
-                fullName && {
+                dataLocation && {
                     breadcrumbName: translate.formatMessage(messages.courseRequest),
                     path: routes.courseRequestListPage.path,
                 },
