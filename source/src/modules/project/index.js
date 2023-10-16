@@ -25,7 +25,7 @@ import { commonMessage } from '@locales/intl';
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 const message = defineMessages({
-    objectName: 'Dự án',  
+    objectName: 'Dự án',
 });
 
 const ProjectListPage = () => {
@@ -79,9 +79,7 @@ const ProjectListPage = () => {
                                     } else {
                                         if (status == 1) {
                                             path = route.ProjectTaskListPage.path + pathDefault + `&active=${true}`;
-                                        }
-                                        else
-                                            path = route.ProjectTaskListPage.path + pathDefault;
+                                        } else path = route.ProjectTaskListPage.path + pathDefault;
                                     }
                                     navigate(path, { state: { pathPrev: location.search } });
                                 }}
@@ -99,13 +97,16 @@ const ProjectListPage = () => {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     if (status == 1) {
-                                        navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}&active=${true}`);
+                                        navigate(
+                                            routes.projectMemberListPage.path +
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                        );
+                                    } else {
+                                        navigate(
+                                            routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
+                                        );
                                     }
-                                    else {
-                                        navigate(routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`);
-                                    }
-                                }
-                                }
+                                }}
                             >
                                 <UserOutlined />
                             </Button>
@@ -120,14 +121,16 @@ const ProjectListPage = () => {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     if (status === 1) {
-                                        navigate(routes.teamListPage.path + `?projectId=${id}&projectName=${name}&active=${true}`);
-                                    }
-                                    else {
+                                        navigate(
+                                            routes.teamListPage.path +
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                        );
+                                    } else {
                                         navigate(routes.teamListPage.path + `?projectId=${id}&projectName=${name}`);
                                     }
                                 }}
                             >
-                                <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }}/>
+                                <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -199,8 +202,7 @@ const ProjectListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        !leaderName &&
-            !developerName && {
+        {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,

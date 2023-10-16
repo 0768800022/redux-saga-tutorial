@@ -230,6 +230,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                     <Row gutter={16}>
                         <Col span={6}>
                             <AutoCompleteField
+                                maxOptions={1000}
                                 disabled={isEditing}
                                 required
                                 label={translate.formatMessage(commonMessage.developer)}
@@ -240,10 +241,12 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                     label: item.studentInfo.fullName,
                                 })}
                                 initialSearchParams={{ pageNumber: 0 }}
-                                searchParams={(text) => ({ fullName: text })} />
+                                searchParams={(text) => ({ fullName: text })}
+                            />
                         </Col>
                         <Col span={6}>
                             <AutoCompleteField
+                                maxOptions={1000}
                                 disabled={isEditing}
                                 label={translate.formatMessage(commonMessage.role)}
                                 name={['projectRole', 'projectRoleName']}
@@ -253,17 +256,20 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                     label: item.projectRoleName,
                                 })}
                                 initialSearchParams={{ pageNumber: 0 }}
-                                searchParams={(text) => ({ fullName: text })} />
+                                searchParams={(text) => ({ fullName: text })}
+                            />
                         </Col>
                         <Col span={6}>
                             <AutoCompleteField
+                                maxOptions={1000}
                                 label={<FormattedMessage defaultMessage="Nhóm" />}
                                 name="teamId"
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
                                 initialSearchParams={{}}
                                 searchParams={(text) => ({ name: text })}
-                                disabled={isEditing} />
+                                disabled={isEditing}
+                            />
                         </Col>
                     </Row>
                 </div>
