@@ -167,7 +167,7 @@ const GeneralSettingPage = ({ groupName }) => {
             align: 'center',
             width: '100px',
             render: (imageUrl) => (
-                <AvatarField 
+                <AvatarField
                     style={{ width: '100%', height: '60px' }}
                     size="large"
                     shape="square"

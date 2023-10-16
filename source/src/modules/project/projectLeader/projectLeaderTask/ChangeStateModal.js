@@ -7,26 +7,38 @@ import useNotification from '@hooks/useNotification';
 import { defineMessages } from 'react-intl';
 import { useIntl } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-
+import SelectField from '@components/common/form/SelectField';
+import { statusOptions, projectTaskState } from '@constants/masterData';
 const messages = defineMessages({
-    objectName: 'setting',
+    objectName: 'Trang thái',
     update: 'Cập nhật',
     updateSuccess: 'Cập nhật {objectName} thành công',
 });
-const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, executeLoading, ...props }) => {
+const ChangeStateModal = ({
+    open,
+    onCancel,
+    onOk,
+    title,
+    data,
+    introduceData,
+    executeUpdate,
+    executeLoading,
+    setLoading,
+    ...props
+}) => {
     const [form] = Form.useForm();
     const [isChanged, setChange] = useState(false);
     const notification = useNotification();
     const intl = useIntl();
     const translate = useTranslate();
-
+    const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const projectTaskStateValues = translate.formatKeys(projectTaskState, ['label']);
     const updateSetting = (values) => {
         executeUpdate({
             data: {
+                ...values,
                 id: data.id,
-                isSystem: data.isSystem,
-                status: data.status,
-                valueData: values?.valueData,
+                // state: data.state,
             },
             onCompleted: (response) => {
                 if (response.result === true) {
@@ -40,7 +52,7 @@ const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, exe
                     setChange(false);
                 }
             },
-            onError: (err) => { },
+            onError: (err) => {},
         });
     };
 
@@ -51,23 +63,23 @@ const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, exe
     useEffect(() => {
         // form.setFields(data);
         form.setFieldsValue({
-            ...data,
+            ...introduceData,
         });
-    }, [data]);
+    }, [introduceData]);
     return (
         <Modal centered open={open} onCancel={onCancel} footer={null} title={data?.keyName} {...props}>
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} onFinish={updateSetting} size="100%">
-                    <Row gutter={16}>
-                        <Col span={24}>
-                            <TextField
-                                label={<FormattedMessage defaultMessage="Nội dung" />}
-                                name="valueData"
-                                onChange={handleInputChange}
-                            />
-                        </Col>
-                    </Row>
-                    <div style={{ float: 'right' }}>
+                    <SelectField
+                        required
+                        name="state"
+                        label={<FormattedMessage defaultMessage="Trạng thái" />}
+                        allowClear={false}
+                        options={projectTaskStateValues}
+                        onChange={handleInputChange}
+                    />
+
+                    <div style={{ float: 'left' }}>
                         <Button key="submit" type="primary" htmlType="submit" disabled={!isChanged}>
                             {intl.formatMessage(messages.update)}
                         </Button>
@@ -78,4 +90,4 @@ const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, exe
     );
 };
 
-export default EditGenralModal;
+export default ChangeStateModal;

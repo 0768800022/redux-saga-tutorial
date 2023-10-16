@@ -617,6 +617,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        updateState: {
+            baseURL: `${apiTenantUrl}v1/task/update-state`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     project: {
         getList: {
@@ -697,6 +703,12 @@ const apiConfig = {
         },
         update: {
             baseURL: `${apiTenantUrl}v1/project-task/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        changeState: {
+            baseURL: `${apiTenantUrl}v1/project-task/change-state`,
             method: 'PUT',
             headers: baseHeader,
             isRequiredTenantId: true,

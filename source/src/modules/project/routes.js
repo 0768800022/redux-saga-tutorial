@@ -6,6 +6,9 @@ import ProjectMemberSavePage from './member/ProjectMemberSavePage';
 import ProjectLeaderListPage from './projectLeader';
 import TeamListPage from './team';
 import TeamSavePage from './team/TeamSavePage';
+import ProjectLeaderMemberListPage from './projectLeader/projectLeaderMember';
+import ProjectLeaderTaskListPage from './projectLeader/projectLeaderTask';
+import ProjectLeaderTeamListPage from './projectLeader/projectLeaderGroup';
 export default {
     projectListPage: {
         path: '/project',
@@ -40,6 +43,27 @@ export default {
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderListPage,
+        permission: [apiConfig.project.getListLeader.baseURL],
+    },
+    projectLeaderMemberListPage: {
+        path: '/project-leader/member',
+        title: 'Project Leader Page',
+        auth: true,
+        component: ProjectLeaderMemberListPage,
+        permission: [apiConfig.project.getListLeader.baseURL],
+    },
+    projectLeaderTaskListPage: {
+        path: '/project-leader/task',
+        title: 'Project Leader Page',
+        auth: true,
+        component: ProjectLeaderTaskListPage,
+        permission: [apiConfig.project.getListLeader.baseURL],
+    },
+    projectLeaderTeamListPage: {
+        path: '/project-leader/team',
+        title: 'Project Leader Page',
+        auth: true,
+        component: ProjectLeaderTeamListPage,
         permission: [apiConfig.project.getListLeader.baseURL],
     },
     teamListPage: {
