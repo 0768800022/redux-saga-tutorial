@@ -92,7 +92,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     </Col>
                     <Col span={12}>
                         <TextField
-                            label={translate.formatMessage(commonMessage.address)}
+                            label={translate.formatMessage(commonMessage.username)}
                             rules={[
                                 {
                                     required: true,
@@ -127,20 +127,6 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 </Row>
 
                 <Row gutter={16}>
-                    <Col span={12}>
-                        <TextField
-                            label={translate.formatMessage(commonMessage.username)}
-                            rules={[
-                                {
-                                    required: true,
-                                    pattern: usernamePattern,
-                                    message: 'Username chỉ được chứa kí tự thường a-z và số 0-9',
-                                },
-                            ]}
-                            disabled={isEditing}
-                            name="username"
-                        />
-                    </Col>
                     <Col span={12}>
                         <TextField
                             label={translate.formatMessage(commonMessage.password)}

@@ -185,6 +185,20 @@ const navMenuConfig = [
             },
         ],
     },
+    {
+        label: <FormattedMessage defaultMessage="Dự án" />,
+        key: 'project-student',
+        icon: <IconSchool size={16} />,
+        permission: apiConfig.course.getListStudentCourse.baseURL,
+        children: [
+            {
+                label: <FormattedMessage defaultMessage="Dự án của tôi" />,
+                key: 'my-project-student',
+                path: routes.projectStudentListPage.path,
+                permission: apiConfig.course.getListStudentCourse.baseURL,
+            },
+        ],
+    },
 ];
 
 export default navMenuConfig;
