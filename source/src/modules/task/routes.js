@@ -16,5 +16,13 @@ export default {
         auth: true,
         component: TaskSavePage,
         permissions: [apiConfig.task.create.baseURL, apiConfig.task.update.baseURL],
+        breadcrumbs: (message,paramHead, state, location,title) => {
+            return [
+                { breadcrumbName: message.home.defaultMessage },
+                { breadcrumbName: message.course.defaultMessage, path: paramHead },
+                { breadcrumbName: message.task.defaultMessage, path: state + location },
+                { breadcrumbName: title ? title : message.objectName.defaultMessage },
+            ];
+        },
     },
 };

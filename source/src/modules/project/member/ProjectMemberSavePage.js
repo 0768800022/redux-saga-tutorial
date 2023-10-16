@@ -4,17 +4,15 @@ import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import routes from '../routes';
+import routes from '@routes';
 import ProjectMemberForm from './ProjectMemberForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
+import { commonMessage } from '@locales/intl';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
-    objectName: 'Danh sách thành viên tham gia',
-    home: 'Trang chủ',
-    project: 'Dự án',
-    member: 'Danh sách thành viên tham gia',
+    objectName: 'Thành viên',
 });
 
 function ProjectMemberSavePage() {
@@ -23,6 +21,7 @@ function ProjectMemberSavePage() {
 
     const projectName = queryParameters.get('projectName');
     const projectId = queryParameters.get('projectId');
+    const active = queryParameters.get('active');
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.memberProject.getById,
@@ -47,22 +46,41 @@ function ProjectMemberSavePage() {
                     developerId: data.developer.studentInfo.fullName,
                     projectRoleId: data.projectRole.projectRoleName,
                     schedule: data.schedule,
+                    teamId: data.teamId,
                 };
             };
         },
     });
+
+    const setBreadRoutes = () => {
+        const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+        const breadRoutes = [
+            {
+                breadcrumbName: translate.formatMessage(commonMessage.project),
+                path: routes.projectListPage.path,
+            },
+        ];
+
+        if (active) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.member),
+                path: routes.projectMemberListPage.path + pathDefault +`&active=${active}`,
+            });
+        } else {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.member),
+                path: routes.projectMemberListPage.path + pathDefault,
+            });
+        }
+        breadRoutes.push({ breadcrumbName: title });
+
+        return breadRoutes;
+    };
+
     return (
         <PageWrapper
             loading={loading}
-            routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
-                { breadcrumbName: translate.formatMessage(messages.project) },
-                {
-                    breadcrumbName: translate.formatMessage(messages.member),
-                    path: routes.projectMemberListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
-                },
-                { breadcrumbName: title },
-            ]}
+            routes={setBreadRoutes()}
             title={title}
         >
             <ProjectMemberForm

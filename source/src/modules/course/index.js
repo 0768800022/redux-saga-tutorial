@@ -25,21 +25,10 @@ import { FieldTypes } from '@constants/formConfig';
 import { formatMoney } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    name: 'Tên khoá học',
-    home: 'Trang chủ',
-    subject: 'Môn học',
-    objectName: 'khoá học',
-    course: 'Khoá học',
-    description: 'Mô tả',
-    dateRegister: 'Ngày bắt đầu',
-    dateEnd: 'Ngày kết thúc',
-    state: 'Tình trạng',
-    status: 'Trạng thái',
-    leader: 'Leader',
-    registration: 'Đăng ký',
-    task: 'Task',
+    objectName: 'Khoá học',
 });
 
 const CourseListPage = () => {
@@ -71,7 +60,7 @@ const CourseListPage = () => {
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     registration: ({ id, name, state, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.registration)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
                             <Button
                                 type="link"
                                 disabled={state === 1}
@@ -81,7 +70,7 @@ const CourseListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationListPage.path +
-                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
                             >
@@ -91,7 +80,7 @@ const CourseListPage = () => {
                     ),
 
                     task: ({ id, name, subject, state, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.task)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
                                 disabled={state === 1 || state === 5}
                                 type="link"
@@ -115,27 +104,27 @@ const CourseListPage = () => {
             },
         });
     const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.course) },
+        { breadcrumbName: translate.formatMessage(commonMessage.course) },
     ];
     const breadLeaderRoutes = [
-        { breadcrumbName: translate.formatMessage(message.leader), path: routes.leaderListPage.path },
-        { breadcrumbName: translate.formatMessage(message.course) },
+        { breadcrumbName: translate.formatMessage(commonMessage.leader), path: routes.leaderListPage.path },
+        { breadcrumbName: translate.formatMessage(commonMessage.course) },
     ];
 
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.name),
+            placeholder: translate.formatMessage(commonMessage.courseName),
         },
         {
             key: 'state',
-            placeholder: translate.formatMessage(message.state),
+            placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
         },
         !leaderName && {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -156,12 +145,12 @@ const CourseListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(message.name),
+            title: translate.formatMessage(commonMessage.name),
             dataIndex: 'name',
             width: 200,
         },
         {
-            title: translate.formatMessage(message.leader),
+            title: translate.formatMessage(commonMessage.leader),
             dataIndex: ['leader', 'leaderName'],
             width: 80,
         },
@@ -194,7 +183,7 @@ const CourseListPage = () => {
             },
         },
         {
-            title: translate.formatMessage(message.dateRegister),
+            title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'dateRegister',
             render: (dateRegister) => {
                 return (
@@ -207,7 +196,7 @@ const CourseListPage = () => {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.dateEnd),
+            title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
                 return (
@@ -220,7 +209,7 @@ const CourseListPage = () => {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.state),
+            title: translate.formatMessage(commonMessage.state),
             dataIndex: 'state',
             align: 'center',
             width: 120,

@@ -18,23 +18,10 @@ import { FieldTypes } from '@constants/formConfig';
 import routes from '@routes';
 import { DATE_FORMAT_DISPLAY } from '@constants';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    name: 'Tên khoá học',
-    home: 'Trang chủ',
-    subject: 'Môn học',
     objectName: 'course',
-    course: 'Khoá học',
-    description: 'Mô tả',
-    dateRegister: 'Ngày bắt đầu',
-    dateEnd: 'Ngày kết thúc',
-    dateCreated: 'Ngày khởi tạo',
-    status: 'Tình trạng',
-    leader: 'Leader',
-    student: 'Sinh viên',
-    state: 'Tình trạng',
-    registration: 'Đăng ký',
-    task: 'Task',
 });
 
 const CourseListPage = () => {
@@ -72,7 +59,7 @@ const CourseListPage = () => {
             };
             funcs.additionalActionColumnButtons = () => ({
                 registration: ({ id, name, state }) => (
-                    <BaseTooltip title={translate.formatMessage(message.registration)}>
+                    <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
                         <Button
                             type="link"
                             disabled={state === 1}
@@ -92,7 +79,7 @@ const CourseListPage = () => {
                 ),
 
                 task: ({ id, name, subject, state }) => (
-                    <BaseTooltip placement="bottom" title={translate.formatMessage(message.task)}>
+                    <BaseTooltip placement="bottom" title={translate.formatMessage(commonMessage.task)}>
                         <Button
                             type="link"
                             disabled={state === 1 || state === 5}
@@ -118,44 +105,44 @@ const CourseListPage = () => {
         const breadRoutes = [];
         if (leaderName) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.leader),
+                breadcrumbName: translate.formatMessage(commonMessage.leader),
                 path: routes.leaderListPage.path,
             });
         } else if (studentName) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.student),
+                breadcrumbName: translate.formatMessage(commonMessage.student),
                 path: routes.studentListPage.path,
             });
         }
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(message.course) });
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.course) });
 
         return breadRoutes;
     };
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.name),
+            placeholder: translate.formatMessage(commonMessage.name),
         },
         {
             key: 'state',
-            placeholder: translate.formatMessage(message.state),
+            placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
     ];
     const columns = [
         {
-            title: translate.formatMessage(message.name),
+            title: translate.formatMessage(commonMessage.name),
             dataIndex: ['courseInfo', 'name'],
         },
         {
-            title: translate.formatMessage(message.dateCreated),
+            title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
             width: 150,
             render: (createdDate) => {
@@ -168,7 +155,7 @@ const CourseListPage = () => {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.state),
+            title: translate.formatMessage(commonMessage.state),
             dataIndex: 'state',
             align: 'center',
             width: 120,

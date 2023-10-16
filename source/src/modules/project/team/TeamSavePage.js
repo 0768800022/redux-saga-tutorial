@@ -7,12 +7,9 @@ import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import TeamForm from './TeamForm';
-import ProjectTaskForm from '@modules/projectTask/ProjectTaskForm';
+import { commonMessage } from '@locales/intl';
 const message = defineMessages({
-    objectName: 'Team',
-    home: 'Trang chủ',
-    team: 'Nhóm',
-    project: 'Dự án',
+    objectName: 'Nhóm',
 });
 
 // const TeamSavePage = () => {
@@ -56,19 +53,19 @@ function TeamSavePage() {
 
         const breadRoutes = [
             {
-                breadcrumbName: translate.formatMessage(message.project),
+                breadcrumbName: translate.formatMessage(commonMessage.project),
                 path: routes.projectListPage.path,
             },
         ];
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.team),
+                breadcrumbName: translate.formatMessage(commonMessage.team),
                 path: routes.teamListPage.path + pathDefault +`&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(message.team),
+                breadcrumbName: translate.formatMessage(commonMessage.team),
                 path: routes.teamListPage.path + pathDefault,
             });
         }
@@ -89,7 +86,6 @@ function TeamSavePage() {
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
                 onSubmit={mixinFuncs.onSave}
-                projectId={projectId}
             />
         </PageWrapper>
     );

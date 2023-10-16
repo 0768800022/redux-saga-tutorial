@@ -6,11 +6,10 @@ import CompanySubscriptionIdForm from './CompanySubscriptionIDForm';
 import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
 import { defineMessages } from 'react-intl';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
     objectName: 'Gói dịch vụ',
-    home: 'Trang chủ',
-    company:'Công ty',
-    companySubscription: 'Gói dịch vụ',
 });
 
 const CompanySubscriptionIdSavePage = () => {
@@ -46,11 +45,11 @@ const CompanySubscriptionIdSavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(message.company),
+                { breadcrumbName: translate.formatMessage(commonMessage.company),
                     path: routes.companyListPage.path,
                 },
                 {
-                    breadcrumbName: translate.formatMessage(message.companySubscription),
+                    breadcrumbName: translate.formatMessage(commonMessage.companySubscription),
                     path: routes.companySubscriptionIdListPage.path +`?companyId=${companyId? companyId : detail.company?.id}&companyName=${companyName ? companyName : detail?.company?.companyName }`,
                 },
                 { breadcrumbName: title },

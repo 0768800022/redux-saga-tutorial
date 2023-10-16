@@ -123,3 +123,9 @@ export const registrationMoneyKindMessage = defineMessages({
     receivedMoney: 'Tiền nhận',
     returnMoney: 'Tiền trả lại',
 });
+
+export const stateCourseRequestMessage = defineMessages({
+    request: 'Yêu cầu',
+    processed: 'Đã xử lý',
+    cancel: 'Đã huỷ',
+});

@@ -1,4 +1,4 @@
-import { BookOutlined, UserOutlined,TeamOutlined } from '@ant-design/icons';
+import { BookOutlined, UserOutlined, TeamOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
@@ -16,19 +16,10 @@ import dayjs from 'dayjs';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    name: 'Tên khoá học',
-    home: 'Trang chủ',
-    subject: 'Môn học',
     objectName: 'course',
-    course: 'Khoá học',
-    description: 'Mô tả',
-    dateRegister: 'Ngày bắt đầu',
-    dateEnd: 'Ngày kết thúc',
-    leader: 'Leader',
-    registration: 'Đăng ký',
-    task: 'Task',
 });
 
 const CourseLeaderListPage = () => {
@@ -61,7 +52,7 @@ const CourseLeaderListPage = () => {
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     registration: ({ id, name, state, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.registration)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
                             <Button
                                 type="link"
                                 disabled={state === 1}
@@ -71,7 +62,7 @@ const CourseLeaderListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationLeaderListPage.path +
-                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
                             >
@@ -81,7 +72,7 @@ const CourseLeaderListPage = () => {
                     ),
 
                     task: ({ id, name, subject, state, status }) => (
-                        <BaseTooltip title={translate.formatMessage(message.task)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
                                 disabled={state === 1 || state === 5}
                                 type="link"
@@ -100,8 +91,7 @@ const CourseLeaderListPage = () => {
             },
         });
     const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(message.home) },
-        { breadcrumbName: translate.formatMessage(message.course) },
+        { breadcrumbName: translate.formatMessage(commonMessage.course) },
     ];
     const columns = [
         {
@@ -114,12 +104,12 @@ const CourseLeaderListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(message.name),
+            title: translate.formatMessage(commonMessage.courseName),
             dataIndex: 'name',
             width: 200,
         },
         {
-            title: translate.formatMessage(message.subject),
+            title: translate.formatMessage(commonMessage.subject),
             dataIndex: ['subject', 'subjectName'],
             width: 150,
         },
@@ -150,7 +140,7 @@ const CourseLeaderListPage = () => {
             },
         },
         {
-            title: translate.formatMessage(message.dateRegister),
+            title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'dateRegister',
             render: (dateRegister) => {
                 return (
@@ -163,7 +153,7 @@ const CourseLeaderListPage = () => {
             align: 'center',
         },
         {
-            title: translate.formatMessage(message.dateEnd),
+            title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'dateEnd',
             render: (dateEnd) => {
                 return (
@@ -179,17 +169,16 @@ const CourseLeaderListPage = () => {
             {
                 task: true,
                 registration: true,
-                edit:  true,
+                edit: true,
                 delete: true,
             },
             { width: '80px' },
         ),
     ].filter(Boolean);
-
     return (
-        <PageWrapper routes={ breadRoutes}>
+        <PageWrapper routes={breadRoutes}>
             <ListPage
-                actionBar={mixinFuncs.renderActionBar()}
+                // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

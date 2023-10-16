@@ -10,14 +10,11 @@ import { DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
 import { formatMoney } from '@utils/index';
 import { FieldTypes } from '@constants/formConfig';
 import { statusOptions } from '@constants/masterData';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     objectName: 'gói dịch vụ',
-    serviceCompanySubscription: 'Quản lý gói dịch vụ',
-    home: 'Trang chủ',
     name: 'Tên dịch vụ',
-    price: 'Giá',
-    status: 'Trạng thái',
     valueable: 'Số ngày sử dụng',
 });
 
@@ -107,11 +104,11 @@ const ServiceCompanySubListPage = () => {
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(message.name),
+            placeholder: translate.formatMessage(commonMessage.ServiceCompanySubscriptionName),
         },
         {
             key: 'status',
-            placeholder: translate.formatMessage(message.status),
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
         },
@@ -119,7 +116,7 @@ const ServiceCompanySubListPage = () => {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.serviceCompanySubscription) },
+                { breadcrumbName: translate.formatMessage(commonMessage.serviceCompanySubscription) },
             ]}
         >
             <ListPage

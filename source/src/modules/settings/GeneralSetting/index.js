@@ -84,7 +84,7 @@ const GeneralSettingPage = ({ groupName }) => {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setDetail(item);
-                                if (item?.isSlider) {
+                                if (item?.action) {
                                     setIsEditing(true);
                                     handlersSliderModal.open();
                                 } else if (item?.keyName === 'introduce') {
@@ -167,7 +167,7 @@ const GeneralSettingPage = ({ groupName }) => {
             align: 'center',
             width: '100px',
             render: (imageUrl) => (
-                <AvatarField 
+                <AvatarField
                     style={{ width: '100%', height: '60px' }}
                     size="large"
                     shape="square"

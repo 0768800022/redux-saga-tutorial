@@ -14,22 +14,24 @@ import useFetch from '@hooks/useFetch';
 import BaseTable from '@components/common/table/BaseTable';
 import useDragDrop from '@hooks/useDragDrop';
 import styles from './AsignAll.module.scss';
+import { commonMessage } from '@locales/intl';
+import { useLocation } from 'react-router';
 const message = defineMessages({
     objectName: 'Bài giảng',
-    home: 'Trang chủ',
-    student: 'Học viên',
-    course: 'Khoá học',
-    lectureName: 'Tên bài giảng',
-    asignAll: 'Tạo task',
-    task:'Task',
     asignAllModal: 'Tạo task',
 });
 const LectureListPage = ({ breadcrumbName }) => {
     const translate = useTranslate();
+    const location = useLocation();
+    const state = location.state.prevPath;
+    const paramHead = routes.courseListPage.path;
     const queryParameters = new URLSearchParams(window.location.search);
+
     const courseId = queryParameters.get("courseId");
     const courseName = queryParameters.get("courseName");
     const subjectId = queryParameters.get("subjectId");
+
+
     const [ showPreviewModal, setShowPreviewModal ] = useState(false);
     const [hasError, setHasError] = useState(false);
     const [lectureid, setLectureId] = useState(null);
@@ -134,7 +136,7 @@ const LectureListPage = ({ breadcrumbName }) => {
             },
         },
         {
-            title: translate.formatMessage(message.lectureName),
+            title: translate.formatMessage(commonMessage.lectureName),
             dataIndex: 'lectureName',
             render: (lectureName, record) => {
                 let styles;
@@ -210,8 +212,6 @@ const LectureListPage = ({ breadcrumbName }) => {
         }   
         return '';
     };
-
-
     return (
         
         <PageWrapper 
@@ -235,7 +235,7 @@ const LectureListPage = ({ breadcrumbName }) => {
                             type="primary" 
                             disabled={hasError ? true : disabledSubmit}   
                             onClick={() => setShowPreviewModal(true)} >
-                            {translate.formatMessage(message.asignAll)}
+                            {translate.formatMessage(commonMessage.asignAll)}
                         </Button>
                     </div>
                 }

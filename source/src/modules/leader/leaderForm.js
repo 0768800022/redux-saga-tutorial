@@ -12,13 +12,8 @@ import { FormattedMessage } from 'react-intl';
 import { AppConstants } from '@constants';
 import { statusOptions } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
-const message = defineMessages({
-    fullName: 'Họ Và Tên',
-    mssv: 'MSSV',
-    phone: 'Số Điện Thoại',
-    email: 'Email',
-    password: 'Mật Khẩu',
-});
+import { commonMessage } from '@locales/intl';
+
 
 const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
@@ -84,16 +79,16 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
                 </Row>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.fullName)} name="leaderName" required />
+                        <TextField label={translate.formatMessage(commonMessage.fullName)} name="leaderName" required />
                     </Col>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.phone)} type="number" name="phone" required />
+                        <TextField label={translate.formatMessage(commonMessage.phone)} type="number" name="phone" required />
                     </Col>
                 </Row>
 
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.password)} name="password" type="password"
+                        <TextField label={translate.formatMessage(commonMessage.password)} name="password" type="password"
                             rules={[
                                 {
                                     min: 6,
@@ -102,7 +97,7 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
                             ]} required={isEditing ? false : true} />
                     </Col>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(message.email)} type="email" name="email" required />
+                        <TextField label={translate.formatMessage(commonMessage.email)} type="email" name="email" required />
                     </Col>
                     <Col span={12}>
                         <SelectField

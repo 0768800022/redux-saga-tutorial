@@ -10,7 +10,6 @@ import routes from './routes';
 import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
-    home: 'Trang chủ',
     subject: 'Môn học',
     objectName: 'môn học',
 });
@@ -45,7 +44,6 @@ const SubjectSavePage = () => {
         <PageWrapper
             loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(messages.home) },
                 {
                     breadcrumbName: translate.formatMessage(messages.subject),
                     path: generatePath(routes.subjectListPage.path, { subjectId }),
