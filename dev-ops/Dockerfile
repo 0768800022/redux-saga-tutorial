@@ -10,7 +10,7 @@ COPY ./appServer.js .
 
 COPY ./package.json .
 
-RUN npm ci --production --force 
+RUN npm install --production --force 
 
 EXPOSE {PORT}
 
