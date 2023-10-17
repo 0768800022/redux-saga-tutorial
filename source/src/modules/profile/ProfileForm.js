@@ -44,7 +44,7 @@ const ProfileForm = (props) => {
         onSubmit,
         setIsChangedFormValues,
     });
-    console.log(dataDetail);
+
     const uploadFile = (file, onSuccess, onError) => {
         executeUpFile({
             data: {
@@ -103,15 +103,10 @@ const ProfileForm = (props) => {
     };
 
     useEffect(() => {
-        dataDetail.username = dataDetail?.accountDto ? dataDetail.accountDto.username : dataDetail.phone;
-
-        dataDetail.fullName = dataDetail?.accountDto ? dataDetail.accountDto.fullName : dataDetail.fullName;
-        dataDetail.email = dataDetail?.accountDto ? dataDetail.accountDto.email : dataDetail.email;
-
         form.setFieldsValue({
             ...dataDetail,
         });
-        setImageUrl(dataDetail?.accountDto ? dataDetail.accountDto.avatar : dataDetail.avatar);
+        setImageUrl(dataDetail.accountDto?.avatar);
         setLogoUrl(dataDetail.logoPath);
         setBannerUrl(dataDetail.bannerPath);
     }, [dataDetail]);
@@ -120,7 +115,7 @@ const ProfileForm = (props) => {
         (values.accountDto.avatar = imageUrl),
         mixinFuncs.handleSubmit({
             ...values,
-            fullName: values?.accountDto ? values.accountDto.fullName : values.fullName,
+            fullName: values.accountDto.fullName,
             oldPassword: values.oldPassword,
             password: values.password,
             logo: logoUrl,
@@ -177,11 +172,11 @@ const ProfileForm = (props) => {
                 <TextField
                     readOnly
                     label={translate.formatMessage(messages.username)}
-                    name="username"
+                    name={['accountDto', 'username']}
                 />
                 <TextField label={translate.formatMessage(messages.career)} name={['careerName']} />
-                <TextField label={translate.formatMessage(messages.email)} name="email" />
-                <TextField label={translate.formatMessage(messages.fullName)} name="fullName" />
+                <TextField label={translate.formatMessage(messages.email)} name={['accountDto', 'email']} />
+                <TextField label={translate.formatMessage(messages.fullName)} name={['accountDto', 'fullName']} />
                 <TextField label={translate.formatMessage(messages.hotline)} name="hotline" />
                 {/* {!isAdmin && (
                     <Fragment>
