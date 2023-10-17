@@ -55,5 +55,7 @@ export const commonMessage = defineMessages({
     teamName: "Tên nhóm",
     username: 'Tài khoản đăng nhập',
     valueable: 'Số ngày sử dụng',
-
+    taskLog: 'Nhật ký',
+    message: 'Lời nhắn',
+    totalTime: 'Tổng thời gian',
 });

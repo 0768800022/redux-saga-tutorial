@@ -129,3 +129,8 @@ export const stateCourseRequestMessage = defineMessages({
     processed: 'Đã xử lý',
     cancel: 'Đã huỷ',
 });
+
+export const taskLog = defineMessages({
+    working: 'Làm việc',
+    off: 'Nghỉ phép',
+});
