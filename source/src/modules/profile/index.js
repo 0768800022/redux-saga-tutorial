@@ -7,6 +7,9 @@ import { accountActions } from '@store/actions';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import ProfileForm from './ProfileForm';
+import LeaderForm from './LeaderForm';
+import StudentForm from './StudentForm';
+import CompanyForm from './CompanyForm';
 import useAuth from '@hooks/useAuth';
 import { UserTypes, storageKeys } from '@constants';
 import { defineMessages } from 'react-intl';
@@ -21,6 +24,7 @@ const userProfileType = {
     [UserTypes.MANAGER]: 'organize',
     [UserTypes.LEADER]: 'leader',
     [UserTypes.STUDENT]: 'student',
+    [UserTypes.COMPANY]: 'company',
 };
 
 const ProfilePage = () => {
@@ -50,6 +54,7 @@ const ProfilePage = () => {
             };
         },
     });
+    console.log(userProfileType[useKind]);
 
     return (
         <PageWrapper
@@ -58,15 +63,47 @@ const ProfilePage = () => {
                 { breadcrumbName: translate.formatMessage(messages.profile) },
             ]}
         >
-            <ProfileForm
-                setIsChangedFormValues={setIsChangedFormValues}
-                dataDetail={data ? data : {}}
-                formId={mixinFuncs.getFormId()}
-                isEditing={isEditing}
-                actions={mixinFuncs.renderActions()}
-                onSubmit={onSave}
-                // isAdmin={isAdmin}
-            />
+            {userProfileType[useKind] === 'organize' &&(
+                <ProfileForm
+                    setIsChangedFormValues={setIsChangedFormValues}
+                    dataDetail={data ? data : {}}
+                    formId={mixinFuncs.getFormId()}
+                    isEditing={isEditing}
+                    actions={mixinFuncs.renderActions()}
+                    onSubmit={onSave}
+                    // isAdmin={isAdmin}
+                />
+            )}
+            {userProfileType[useKind] === 'leader' &&(
+                <LeaderForm
+                    setIsChangedFormValues={setIsChangedFormValues}
+                    dataDetail={data ? data : {}}
+                    formId={mixinFuncs.getFormId()}
+                    isEditing={isEditing}
+                    actions={mixinFuncs.renderActions()}
+                    onSubmit={onSave}
+                />
+            )}
+            {userProfileType[useKind] === 'student' &&(
+                <StudentForm
+                    setIsChangedFormValues={setIsChangedFormValues}
+                    dataDetail={data ? data : {}}
+                    formId={mixinFuncs.getFormId()}
+                    isEditing={isEditing}
+                    actions={mixinFuncs.renderActions()}
+                    onSubmit={onSave}
+                />
+            )}
+            {userProfileType[useKind] === 'company' &&(
+                <CompanyForm
+                    setIsChangedFormValues={setIsChangedFormValues}
+                    dataDetail={data ? data : {}}
+                    formId={mixinFuncs.getFormId()}
+                    isEditing={isEditing}
+                    actions={mixinFuncs.renderActions()}
+                    onSubmit={onSave}
+                />
+            )}
         </PageWrapper>
     );
 };

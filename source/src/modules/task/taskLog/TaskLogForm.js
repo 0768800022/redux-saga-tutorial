@@ -66,6 +66,7 @@ const TaskLogForm = (props) => {
                     <Col span={12}>
                         <SelectField
                             required
+                            disabled={isEditing}
                             name="kind"
                             label={<FormattedMessage defaultMessage="Loại" />}
                             allowClear={false}

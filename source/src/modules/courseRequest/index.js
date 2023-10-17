@@ -42,11 +42,13 @@ const CourseRequestListPage = () => {
                     <BaseTooltip title={translate.formatMessage(message.registration)}>
                         <Button
                             type="link"
+                            disabled={item.state === 1}
                             style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                const id = 'create';
-                                navigate(`/course-request/registration/${id}`, { state: { data: item } });
+                                navigate(`/course-request/registration/create`, {
+                                    state: { data: item },
+                                });
                             }}
                         >
                             <TeamOutlined />
@@ -98,7 +100,7 @@ const CourseRequestListPage = () => {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '170px' }),
     ];
     const searchFields = [
         {

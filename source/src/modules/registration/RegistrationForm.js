@@ -3,7 +3,7 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import CheckboxField from '@components/common/form/CheckboxField';
 import SelectField from '@components/common/form/SelectField';
 import TimePickerField from '@components/common/form/TimePickerField';
-import { DATE_FORMAT_VALUE, TIME_FORMAT_DISPLAY } from '@constants';
+import { AppConstants, DATE_FORMAT_VALUE, DEFAULT_FORMAT, TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import {
     daysOfWeekSchedule as daysOfWeekScheduleOptions,
@@ -13,7 +13,7 @@ import {
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
-import { Button, Card, Col, Form, Row, Space } from 'antd';
+import { Button, Card, Col, Form, Row, Space, message } from 'antd';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -24,25 +24,38 @@ import { commonMessage } from '@locales/intl';
 import { useLocation } from 'react-router-dom';
 import TextField from '@components/common/form/TextField';
 import DatePickerField from '@components/common/form/DatePickerField';
+import { copyToClipboard, formatDateString, generatePassword, generateRandomPassword } from '@utils';
+import CropImageField from '@components/common/form/CropImageField';
+import PasswordGeneratorField from '@components/common/form/PasswordGeneratorField';
+import { KeyOutlined, CopyOutlined } from '@ant-design/icons';
+import useNotification from '@hooks/useNotification';
 
 const messages = defineMessages({
     student: 'Tên sinh viên',
     isIntern: 'Đăng kí thực tập',
     schedule: 'Thời khoá biểu',
+    copyPasswordSuccess: 'Sao chép mật khẩu thành công',
+    copyPasswordWarning: 'Không có mật khẩu để sao chép',
 });
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const location = useLocation();
     const { data: dataLocation } = location.state;
     const translate = useTranslate();
+    const [imageUrl, setImageUrl] = useState(null);
+    const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
-    //const stateResgistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
+    const notification = useNotification();
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
+    });
+    const { data: dataStudentByPhone } = useFetch(apiConfig.student.getDetailByPhone, {
+        immediate: true,
+        params: { phone: dataLocation?.phone },
     });
     const [isChecked, setIsChecked] = useState(false);
 
@@ -76,6 +89,18 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             .join('|');
     }
     const handleSubmit = (values) => {
+        if (dataLocation) {
+            values.student.avatar = imageUrl;
+            values.student.birthday = formatDateString(values?.student.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
+            values.student.studyClass = values.student.studyClass.id;
+            values.student.universityId = values?.student?.university.id;
+            values.student.id = null;
+            delete values?.student?.university;
+            if (dataStudentByPhone) {
+                values.student.id = dataStudentByPhone?.data?.id;
+                values.student.password = null;
+            }
+        }
         values.isIntern = isChecked ? 1 : 0;
         for (const day in values.schedule) {
             for (const timeRange of values.schedule[day]) {
@@ -249,187 +274,253 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         });
     }, [dataDetail]);
     useEffect(() => {
-        if (dataLocation) {
+        if (dataStudentByPhone) {
+            const dataStudentFilter = dataStudentByPhone?.data;
+            dataStudentFilter.birthday =
+                dataStudentFilter?.birthday && dayjs(dataStudentFilter?.birthday, DATE_FORMAT_VALUE);
             form.setFieldsValue({
-                studentInfo: { fullName: dataLocation.fullName, id: dataLocation.fullName },
+                student: { ...dataStudentFilter },
+            });
+            setImageUrl(dataStudentFilter.avatar);
+        } else if (dataLocation) {
+            form.setFieldsValue({
+                student: { ...dataLocation },
             });
         }
-    }, [dataLocation]);
-
+    }, [dataStudentByPhone]);
+    const validateDate = (_, value) => {
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+        if (date && value && value.isAfter(date)) {
+            return Promise.reject('Ngày sinh phải nhỏ hơn ngày hiện tại');
+        }
+        return Promise.resolve();
+    };
+    const uploadFile = (file, onSuccess, onError) => {
+        executeUpFile({
+            data: {
+                type: 'AVATAR',
+                file: file,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    onSuccess();
+                    setImageUrl(response.data.filePath);
+                    setIsChangedFormValues(true);
+                }
+            },
+            onError: (error) => {
+                onError();
+            },
+        });
+    };
+    const copyToClipboardAlert = () => {
+        const password = form.getFieldValue('password');
+        if (password != undefined) {
+            notification({ type: 'success', message: translate.formatMessage(messages.copyPasswordSuccess) });
+        } else {
+            notification({ type: 'warning', message: translate.formatMessage(messages.copyPasswordWarning) });
+        }
+    };
     return (
-        <>
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             {dataLocation && (
                 <div style={{ marginBottom: '20px' }}>
-                    <BaseForm
-                        formId={formId}
-                        onFinish={handleSubmit}
-                        form={form}
-                        onValuesChange={onValuesChange}
-                        size="1100px"
-                    >
-                        <Card className="card-form" bordered={false}>
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <TextField
-                                        label={translate.formatMessage(commonMessage.name)}
-                                        required={isEditing ? false : true}
-                                        disabled={isEditing}
-                                        name="fullName"
-                                    />
-                                </Col>
-                                <Col span={12}>
-                                    <DatePickerField
-                                        name="birthday"
-                                        label="Ngày sinh"
-                                        placeholder="Ngày sinh"
-                                        format={DATE_FORMAT_VALUE}
-                                        style={{ width: '100%' }}
-                                        required={isEditing ? false : true}
-                                        // rules={[
-                                        //     {
-                                        //         validator: validateDate,
-                                        //     },
-                                        // ]}
-                                    />
-                                </Col>
-                            </Row>
+                    <Card className="card-form" bordered={false}>
+                        <Col span={12}>
+                            <CropImageField
+                                label={<FormattedMessage defaultMessage="Avatar" />}
+                                name="avatar"
+                                imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
+                                aspect={1 / 1}
+                                uploadFile={uploadFile}
+                            />
+                        </Col>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <TextField
+                                    label={translate.formatMessage(commonMessage.name)}
+                                    required
+                                    disabled={dataStudentByPhone}
+                                    name={['student', 'fullName']}
+                                />
+                            </Col>
+                            <Col span={12}>
+                                <DatePickerField
+                                    disabled={dataStudentByPhone}
+                                    name={['student', 'birthday']}
+                                    label="Ngày sinh"
+                                    placeholder="Ngày sinh"
+                                    format={DATE_FORMAT_VALUE}
+                                    style={{ width: '100%' }}
+                                    required
+                                    rules={[
+                                        {
+                                            validator: validateDate,
+                                        },
+                                    ]}
+                                />
+                            </Col>
+                        </Row>
 
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <TextField
-                                        label={translate.formatMessage(commonMessage.mssv)}
-                                        disabled={isEditing}
-                                        required={isEditing ? false : true}
-                                        name="mssv"
-                                    />
-                                </Col>
-                                <Col span={12}>
-                                    <TextField
-                                        label={translate.formatMessage(commonMessage.phone)}
-                                        type="number"
-                                        name="phone"
-                                        required={isEditing ? false : true}
-                                    />
-                                </Col>
-                            </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <TextField
+                                    disabled={dataStudentByPhone}
+                                    label={translate.formatMessage(commonMessage.mssv)}
+                                    required
+                                    name={['student', 'mssv']}
+                                />
+                            </Col>
+                            <Col span={12}>
+                                <TextField
+                                    disabled={dataStudentByPhone}
+                                    label={translate.formatMessage(commonMessage.phone)}
+                                    type="number"
+                                    name={['student', 'phone']}
+                                    required
+                                />
+                            </Col>
+                        </Row>
 
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <TextField
-                                        label={translate.formatMessage(commonMessage.password)}
-                                        rules={[
-                                            {
-                                                min: 6,
-                                                message: 'Mật khẩu phải có ít nhất 6 kí tự!',
-                                            },
-                                        ]}
-                                        required={isEditing ? false : true}
-                                        name="password"
-                                        type="password"
-                                    />
-                                </Col>
-                                <Col span={12}>
-                                    <TextField
-                                        label={translate.formatMessage(commonMessage.email)}
-                                        type="email"
-                                        name="email"
-                                        required={isEditing ? false : true}
-                                        disabled={isEditing}
-                                    />
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col span={12}>
-                                    <AutoCompleteField
-                                        label={<FormattedMessage defaultMessage="Trường" />}
-                                        name="universityId"
-                                        disabled={isEditing}
-                                        apiConfig={apiConfig.category.autocomplete}
-                                        mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
-                                        // initialSearchParams={{
-                                        //     kind: kindOfEdu,
-                                        // }}
-                                        searchParams={(text) => ({ name: text })}
-                                        // onFocus={handleFocus}
-                                        required
-                                    />
-                                </Col>
-                                <Col span={12}>
-                                    <AutoCompleteField
-                                        label={<FormattedMessage defaultMessage="Hệ" />}
-                                        name="studyClass"
-                                        disabled={isEditing}
-                                        apiConfig={apiConfig.category.autocomplete}
-                                        mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
-                                        // initialSearchParams={{
-                                        //     kind: kindOfGen,
-                                        // }}
-                                        searchParams={(text) => ({ name: text })}
-                                        required
-                                    />
-                                </Col>
-                                <Col span={12}>
-                                    <SelectField
-                                        required
-                                        label={<FormattedMessage defaultMessage="Trạng thái" />}
-                                        name="status"
-                                        options={statusValues}
-                                    />
-                                </Col>
-                            </Row>
-                        </Card>
-                    </BaseForm>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <PasswordGeneratorField
+                                    disabled={dataStudentByPhone}
+                                    label={translate.formatMessage(commonMessage.password)}
+                                    minLength={6}
+                                    fieldName={['student', 'password']}
+                                    type="password"
+                                    suffix={
+                                        <>
+                                            <Button
+                                                onClick={() => {
+                                                    const curPass = generatePassword({
+                                                        length: 8,
+                                                        numbers: true,
+                                                        uppercase: true,
+                                                        lowercase: true,
+                                                    });
+                                                    form.setFieldValue('password', curPass);
+                                                }}
+                                            >
+                                                <KeyOutlined style={{ alignSelf: 'center' }} />
+                                            </Button>
+                                            <Button
+                                                onClick={() => {
+                                                    copyToClipboard(form.getFieldValue('password'));
+                                                    copyToClipboardAlert();
+                                                }}
+                                            >
+                                                <CopyOutlined style={{ alignSelf: 'center' }} />
+                                            </Button>
+                                        </>
+                                    }
+                                />
+                            </Col>
+                            <Col span={12}>
+                                <TextField
+                                    label={translate.formatMessage(commonMessage.email)}
+                                    type="email"
+                                    name={['student', 'email']}
+                                    required
+                                    disabled={dataStudentByPhone}
+                                />
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={12}>
+                                <AutoCompleteField
+                                    label={<FormattedMessage defaultMessage="Trường" />}
+                                    name={['student', 'university', 'id']}
+                                    disabled={dataStudentByPhone}
+                                    apiConfig={apiConfig.category.autocomplete}
+                                    mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                                    // initialSearchParams={{
+                                    //     kind: kindOfEdu,
+                                    // }}
+                                    searchParams={(text) => ({ name: text })}
+                                    // onFocus={handleFocus}
+                                    required
+                                />
+                            </Col>
+                            <Col span={12}>
+                                <AutoCompleteField
+                                    label={<FormattedMessage defaultMessage="Hệ" />}
+                                    name={['student', 'studyClass', 'id']}
+                                    disabled={dataStudentByPhone}
+                                    apiConfig={apiConfig.category.autocomplete}
+                                    mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                                    // initialSearchParams={{
+                                    //     kind: kindOfGen,
+                                    // }}
+                                    searchParams={(text) => ({ name: text })}
+                                    required
+                                />
+                            </Col>
+                            <Col span={12}>
+                                <SelectField
+                                    required
+                                    label={<FormattedMessage defaultMessage="Trạng thái" />}
+                                    name={['student', 'status']}
+                                    options={statusValues}
+                                    disabled={dataStudentByPhone}
+                                />
+                            </Col>
+                        </Row>
+                    </Card>
                 </div>
             )}
-            <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
-                <Card className="card-form" bordered={false}>
-                    <div style={{ width: '980px' }}>
-                        <Row gutter={16}>
+            <Card className="card-form" bordered={false}>
+                <div style={{ width: '980px' }}>
+                    <Row gutter={16}>
+                        {!dataLocation && (
                             <Col span={12}>
                                 <AutoCompleteField
                                     disabled={isEditing}
                                     required
                                     label={translate.formatMessage(commonMessage.studentName)}
-                                    name={['studentInfo', 'id']}
+                                    name={['studentInfo', 'fullName']}
                                     apiConfig={apiConfig.student.autocomplete}
-                                    mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
+                                    mappingOptions={(item) => {
+                                        return { value: item.id, label: item.fullName };
+                                    }}
                                     initialSearchParams={{ pageNumber: 0 }}
                                     searchParams={(text) => ({ fullName: text })}
                                 />
                             </Col>
-                            <Col span={12}>
-                                <SelectField
-                                    disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
-                                    defaultValue={registrationStateFilter[0]}
-                                    label={<FormattedMessage defaultMessage="Tình trạng" />}
-                                    name="state"
-                                    options={registrationStateFilter}
-                                />
-                            </Col>
-                            <Col span={12}>
-                                <CheckboxField
-                                    className={styles.customCheckbox}
-                                    required
-                                    label={translate.formatMessage(commonMessage.isIntern)}
-                                    name="isIntern"
-                                    checked={isChecked}
-                                    onChange={handleOnChangeCheckBox}
-                                />
-                            </Col>
-                        </Row>
-                    </div>
-                    <ScheduleTable
-                        label={translate.formatMessage(commonMessage.schedule)}
-                        onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
-                        translate={translate}
-                        daysOfWeekSchedule={daysOfWeekSchedule}
-                    />
-                    <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
-                        {actions}
-                    </div>
-                </Card>
-            </BaseForm>
-        </>
+                        )}
+                        <Col span={dataLocation ? 13 : 12} style={dataLocation && { paddingRight: '14px' }}>
+                            <SelectField
+                                disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
+                                defaultValue={registrationStateFilter[0]}
+                                label={<FormattedMessage defaultMessage="Tình trạng" />}
+                                name="state"
+                                options={registrationStateFilter}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <CheckboxField
+                                className={styles.customCheckbox}
+                                required
+                                label={translate.formatMessage(commonMessage.isIntern)}
+                                name="isIntern"
+                                checked={isChecked}
+                                onChange={handleOnChangeCheckBox}
+                            />
+                        </Col>
+                    </Row>
+                </div>
+                <ScheduleTable
+                    label={translate.formatMessage(commonMessage.schedule)}
+                    onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
+                    translate={translate}
+                    daysOfWeekSchedule={daysOfWeekSchedule}
+                />
+                <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
+                    {actions}
+                </div>
+            </Card>
+        </BaseForm>
     );
 }
 

@@ -162,7 +162,9 @@ export const validatePermission = (
     } else {
         permissionsSavePage = requiredPermissions;
     }
-    return removePathParams(permissionsSavePage).every((item) => userPermissions?.includes(item?.replace(apiTenantUrl, '/')));
+    return removePathParams(permissionsSavePage).every((item) =>
+        userPermissions?.includes(item?.replace(apiTenantUrl, '/')),
+    );
 };
 
 export const randomString = (length = 4) => {
@@ -323,3 +325,63 @@ export const getDisabledMinutes = (selectedHour, minValue) => {
     }
     return minutes;
 };
+export function generatePassword(options) {
+    const { length, numbers, uppercase, lowercase, symbols, strict } = options;
+
+    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+    const numberChars = '0123456789';
+    const symbolChars = '!@#$%^&*()_+[]{}|;:,.<>?';
+
+    let validChars = '';
+
+    if (uppercase) {
+        validChars += uppercaseChars;
+    }
+    if (lowercase) {
+        validChars += lowercaseChars;
+    }
+    if (numbers) {
+        validChars += numberChars;
+    }
+    if (symbols) {
+        validChars += symbolChars;
+    }
+
+    if (validChars.length === 0) {
+        throw new Error('At least one character type should be selected.');
+    }
+
+    let password = '';
+
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * validChars.length);
+        password += validChars.charAt(randomIndex);
+    }
+
+    if (strict) {
+        // Ensure at least one character of each type is present
+        if (uppercase && !/[A-Z]/.test(password)) {
+            return generatePassword(options);
+        }
+        if (lowercase && !/[a-z]/.test(password)) {
+            return generatePassword(options);
+        }
+        if (numbers && !/\d/.test(password)) {
+            return generatePassword(options);
+        }
+        if (symbols && !/[!@#$%^&*()_+[\]{}|;:,.<>?]/.test(password)) {
+            return generatePassword(options);
+        }
+    }
+
+    return password;
+}
+export function copyToClipboard(text) {
+    var textField = document.createElement('textarea');
+    textField.innerText = text;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
+}
