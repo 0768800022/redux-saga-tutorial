@@ -59,7 +59,7 @@ function RegistrationLeaderListPage() {
                     return [];
                 }
             };
-            
+
         },
     });
     const setColumns = () => {
@@ -111,19 +111,19 @@ function RegistrationLeaderListPage() {
                 },
             },
         ];
-       
+
         return columns;
     };
 
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(message.home) },
+                { breadcrumbName: translate.formatMessage(commonMessage.home) },
                 {
-                    breadcrumbName: translate.formatMessage(message.course),
+                    breadcrumbName: translate.formatMessage(commonMessage.course),
                     path: routes.courseLeaderListPage.path,
                 },
-                { breadcrumbName: translate.formatMessage(message.registration) },
+                { breadcrumbName: translate.formatMessage(commonMessage.registration) },
             ]}
         >
             <ListPage

@@ -50,8 +50,8 @@ function TaskSavePage({ getListUrl, breadcrumbName }) {
     return (
         <PageWrapper
             loading={loading}
-            routes={breadcrumbName ? breadcrumbName : 
-                routes.taskSavePage.breadcrumbs(commonMessage,paramHead,state,search,title)
+            routes={breadcrumbName ? breadcrumbName :
+                routes.taskSavePage.breadcrumbs(commonMessage, paramHead, state, search, title)
             }
         >
             <TaskForm
