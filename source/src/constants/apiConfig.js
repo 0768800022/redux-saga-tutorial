@@ -155,7 +155,7 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
-    zzzprojectRole: {
+    projectRole: {
         getList: {
             baseURL: `${apiTenantUrl}v1/project-role/list`,
             method: 'GET',

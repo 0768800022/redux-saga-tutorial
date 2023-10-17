@@ -22,9 +22,10 @@ import { commonMessage } from '@locales/intl';
 import ListPage from '@components/common/layout/ListPage';
 import { Button, Modal, Radio } from 'antd';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import ListDetailsForm from './ListDetailsForm';
+import ListDetailsForm from './ListDetails/ListDetailsForm';
 import { useLocation } from 'react-router-dom';
 import useDisclosure from '@hooks/useDisclosure';
+import BaseTable from '@components/common/table/BaseTable';
 
 
 const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
@@ -38,17 +39,11 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
     const location = useLocation();
     const { data: dataListDetails } = location.state;
     const [openedDetailsModal, handlerDetailsModal] = useDisclosure(false);
-    // console.log(dataListDetails);
 
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
-    const lyrics = {
-        // amount: dataListDetails.amount,
-        // projectRoleId: dataListDetails.projectRoleId,
-        // requirement: dataListDetails.requirement,
-    };
 
     const uploadLogoFile = (file, onSuccess, onError) => {
         executeUpFile({
@@ -69,18 +64,7 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
         });
     };
 
-    const dataListDetails1 = () => {
-        if (isEditing) {
-            const data1 = dataListDetails;
-            // console.log(data1);
-            return data1;
-        }
-        return dataListDetails;
-        // console.log(data1);
-    };
-
     const handleSubmit = (values) => {
-        console.log(dataDetail);
         values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
         // const dataListDetails = dataListDetails1();
@@ -159,6 +143,26 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
     const handleCancel = () => {
         setShowPreviewModal(false);
     };
+    const columnsDetails = [
+        {
+            title: <FormattedMessage defaultMessage="Vai trò" />,
+            dataIndex: ['projectRoleInfo', 'projectRoleName'],
+            width: '400px',
+        },
+
+        {
+            title: <FormattedMessage defaultMessage="Số lượng" />,
+            dataIndex: 'amount',
+            width: '400px',
+        },
+
+        {
+            title: <FormattedMessage defaultMessage="Yêu cầu" />,
+            dataIndex: 'requirement',
+            width: '400px',
+        },
+
+    ];
     return (
         <div>
             <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} >
@@ -226,7 +230,6 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
                         </Col>
                         <Col span={12}>
                             <DatePickerField
-                                showTime={true}
                                 name="startDate"
                                 label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                                 placeholder="Ngày bắt đầu"
@@ -245,7 +248,6 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
                         </Col>
                         <Col span={12}>
                             <DatePickerField
-                                showTime={true}
                                 label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                                 name="dueDate"
                                 placeholder="Ngày kết thúc"
@@ -277,9 +279,40 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
                         name="shortDescription"
                         type="textarea"
                     />
-                    <div className="footer-card-form">{actions}</div>
                 </Card>
             </BaseForm>
+            <Card style={{ marginTop: '16px' }}>
+                <Col span={24}>
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '16px',
+                        }}
+                    >
+                        <span style={{ fontSize: '20px' }}>{<FormattedMessage defaultMessage="Danh sách mô tả" />}</span>
+                        <Button
+                            type="primary"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                // setIsEditing(false);
+                                handlerDetailsModal.open();
+                            }}
+                        >
+                            {<FormattedMessage defaultMessage="Danh sách mô tả" />}
+                        </Button>
+                    </div>
+                    <BaseTable
+                        // onChange={mixinFuncs.changePagination}
+                        columns={columnsDetails}
+                        dataSource={dataDetail.length > 0 ? dataDetail : []}
+                    // loading={loading}
+                    // pagination={pagination}
+                    />
+                </Col>
+                <div className="footer-card-form">{actions}</div>
+            </Card>
         </div>
     );
 };
