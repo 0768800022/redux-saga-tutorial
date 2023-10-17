@@ -12,6 +12,7 @@ import ProjectLeaderTeamListPage from './projectLeader/projectLeaderGroup';
 import ProjectStudentListPage from './projectStudent';
 import ProjectStudentTaskListPage from './projectStudent/projectStudentTask';
 import ProjectStudentMemberListPage from './projectStudent/projectStudentMember';
+import projectLeaderTaskLogListPage from './projectLeader/projectLeaderTaskLog';
 export default {
     projectListPage: {
         path: '/project',
@@ -103,5 +104,12 @@ export default {
         auth: true,
         component: ProjectStudentMemberListPage,
         permission: [apiConfig.project.getListStudent.baseURL],
+    },
+    projectLeaderTaskLogListPage: {
+        path: '/project-leader/task/task-log',
+        title: 'Project Leader Page',
+        auth: true,
+        component: projectLeaderTaskLogListPage,
+        permission: [apiConfig.projectTaskLog.getList.baseURL],
     },
 };

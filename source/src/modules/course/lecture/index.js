@@ -26,7 +26,7 @@ const LectureListPage = ({ breadcrumbName }) => {
     const state = location.state.prevPath;
     const paramHead = routes.courseListPage.path;
     const queryParameters = new URLSearchParams(window.location.search);
-
+    const search = location.search;
     const courseId = queryParameters.get("courseId");
     const courseName = queryParameters.get("courseName");
     const subjectId = queryParameters.get("subjectId");
@@ -220,7 +220,7 @@ const LectureListPage = ({ breadcrumbName }) => {
                         path: routes.courseListPage.path,
                     },
                     { breadcrumbName: translate.formatMessage(commonMessage.task),
-                        path: routes.courseListPage.path + `/task?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=2`,
+                        path: routes.courseListPage.path + `/task${search}`,
                     },
                     { breadcrumbName: translate.formatMessage(message.objectName) },
                 ]}

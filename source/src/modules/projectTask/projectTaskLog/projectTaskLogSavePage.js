@@ -14,13 +14,14 @@ const messages = defineMessages({
     objectName: 'Nhật ký',
 });
 
-function ProjectTaskLogSavePage() {
+function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
     const translate = useTranslate();
     const location = useLocation();
     const state = location.state.prevPath;
     const search = location.search;
     const paramHead = routes.projectListPage.path;
-    const taskParam = routes.ProjectTaskLogListPage.path;
+    const taskParam = routes.ProjectTaskListPage.path;
+    const taskLogParam = routes.ProjectTaskLogListPage.path;
     const taskLogId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -47,11 +48,13 @@ function ProjectTaskLogSavePage() {
             };
         },
     });
+    console.log(title);
+
     return (
         <PageWrapper
             loading={loading}
             routes={
-                routes.ProjectTaskLogSavePage.breadcrumbs(commonMessage,paramHead,taskParam,state,title)
+                routes.ProjectTaskLogSavePage.breadcrumbs(commonMessage,paramHead,taskParam,taskLogParam,search,title)
             }
         >
             <ProjectTaskLogForm
