@@ -199,6 +199,21 @@ const navMenuConfig = [
             },
         ],
     },
+    ///////////////////// COMPANY MENU /////////////////////////////
+    {
+        label: <FormattedMessage defaultMessage="Quản lý công ty" />,
+        key: 'quan-ly-cong-ty-company',
+        icon: <IconBuildingCommunity size={16} />,
+        permission: apiConfig.companyRequest.getList.baseURL,
+        children: [
+            {
+                label: <FormattedMessage defaultMessage="Quản lý yêu cầu công ty" />,
+                key: 'company-request',
+                path: generatePath(routes.companyRequestListPage.path, {}),
+                permission: apiConfig.companyRequest.getList.baseURL,
+            },
+        ],
+    },
 ];
 
 export default navMenuConfig;

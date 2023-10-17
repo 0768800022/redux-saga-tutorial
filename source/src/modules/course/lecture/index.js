@@ -5,10 +5,10 @@ import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { CheckCircleOutlined,ExclamationCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import routes from '../routes';
-import { Button,Modal,Radio }  from 'antd';
+import { Button, Modal, Radio } from 'antd';
 import AsignAllForm from './asignAllForm';
 import useFetch from '@hooks/useFetch';
 import BaseTable from '@components/common/table/BaseTable';
@@ -32,7 +32,7 @@ const LectureListPage = ({ breadcrumbName }) => {
     const subjectId = queryParameters.get("subjectId");
 
 
-    const [ showPreviewModal, setShowPreviewModal ] = useState(false);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
     const [hasError, setHasError] = useState(false);
     const [lectureid, setLectureId] = useState(null);
     const [checkAsign, SetCheckAsign] = useState([]);
@@ -53,14 +53,14 @@ const LectureListPage = ({ breadcrumbName }) => {
                     subjectId: subjectId,
                 };
             };
-            funcs.mappingData = (response) => {                
+            funcs.mappingData = (response) => {
                 try {
                     if (response.result === true) {
                         SetAsignAll(response.data.content);
                         return {
                             data: response.data.content,
                             total: response.data.totalElements,
-                            
+
                         };
                     }
                 } catch (error) {
@@ -82,16 +82,15 @@ const LectureListPage = ({ breadcrumbName }) => {
         return item1;
     });
 
-    for(var i = 0 ; i<mergedArray.length ; i++)
-    {
-        if(mergedArray[i].lectureKind == 1 ) {
-            for(var j = i+1 ;j<mergedArray.length;j++){
-                if(mergedArray[j].lectureKind != 1) {
+    for (var i = 0; i < mergedArray.length; i++) {
+        if (mergedArray[i].lectureKind == 1) {
+            for (var j = i + 1; j < mergedArray.length; j++) {
+                if (mergedArray[j].lectureKind != 1) {
                     mergedArray[i].status = true;
-                    if(mergedArray[j].status !== false){
+                    if (mergedArray[j].status !== false) {
                         continue;
                     }
-                    else{
+                    else {
                         mergedArray[i].status = false;
                         break;
                     }
@@ -108,7 +107,7 @@ const LectureListPage = ({ breadcrumbName }) => {
     const { sortedData } = useDragDrop({
         data,
         apiConfig: apiConfig.lecture.updateSort,
-        setTableLoading: () => {},
+        setTableLoading: () => { },
         indexField: 'ordering',
     });
 
@@ -117,14 +116,14 @@ const LectureListPage = ({ breadcrumbName }) => {
             title: '',
             dataIndex: 'id',
             key: 'id',
-            width : '30px',
+            width: '30px',
             render: (text, record, index) => {
                 const checkAsignItem = mergedArray.find(item => item.id === record.id);
                 const isDisabled = checkAsignItem ? checkAsignItem.status : false;
                 if (record.lectureKind === 1 || isDisabled) {
-                    return null; 
+                    return null;
                 }
-                else{
+                else {
                     return (
                         <Radio
                             checked={lectureid && lectureid === record.id}
@@ -132,7 +131,7 @@ const LectureListPage = ({ breadcrumbName }) => {
                         />
                     );
                 }
-                
+
             },
         },
         {
@@ -158,21 +157,21 @@ const LectureListPage = ({ breadcrumbName }) => {
             title: '',
             dataIndex: 'id',
             key: 'id',
-            width : '30px',
+            width: '30px',
             render: (text, record, index) => {
                 const checkAsignItem = mergedArray.find(item => item.id === record.id);
                 const isDisabled = checkAsignItem ? checkAsignItem.status : false;
                 if (record.lectureKind === 1 && isDisabled) {
                     return (
-                        <CheckCircleOutlined className={styles.greenCheckIcon}/>
+                        <CheckCircleOutlined className={styles.greenCheckIcon} />
                     );
                 }
-                else if(isDisabled){
+                else if (isDisabled) {
                     return (
-                        <CheckCircleOutlined className={styles.greenCheckIcon}/>
+                        <CheckCircleOutlined className={styles.greenCheckIcon} />
                     );
                 }
-        
+
             },
         },
     ];
@@ -182,7 +181,7 @@ const LectureListPage = ({ breadcrumbName }) => {
 
     const disabledSubmit = lectureid === null;
 
-    const { execute: executeCheckAsign } = useFetch(apiConfig.task.checkAsign,{ immediate: false });
+    const { execute: executeCheckAsign } = useFetch(apiConfig.task.checkAsign, { immediate: false });
     useEffect(() => {
         if (data?.length > 0) {
             const ids = data?.map(item => item.id);
@@ -203,13 +202,13 @@ const LectureListPage = ({ breadcrumbName }) => {
             }
         }
     }, [data, executeCheckAsign]);
-    
+
     const rowClassName = (record) => {
         const checkAsignItem = checkAsign.find(item => item.id === record.id);
         const isDisabled = checkAsignItem ? checkAsignItem.status : false;
         if (isDisabled) {
             return styles.customRow;
-        }   
+        }
         return '';
     };
     return (
@@ -227,13 +226,13 @@ const LectureListPage = ({ breadcrumbName }) => {
                 ]}
         >
             <ListPage
-                
+
                 style={{ width: '50vw' }}
                 actionBar={
                     <div style={{ float: 'right', margin: '0 0 32px 0' }}>
-                        <Button 
-                            type="primary" 
-                            disabled={hasError ? true : disabledSubmit}   
+                        <Button
+                            type="primary"
+                            disabled={hasError ? true : disabledSubmit}
                             onClick={() => setShowPreviewModal(true)} >
                             {translate.formatMessage(commonMessage.asignAll)}
                         </Button>
@@ -265,25 +264,25 @@ const LectureListPage = ({ breadcrumbName }) => {
                 open={showPreviewModal && !hasError}
                 footer={null}
                 centered
-                lectureId = {lectureid}
+                lectureId={lectureid}
                 onCancel={() => setShowPreviewModal(false)}
                 maskClosable={false}
             >
                 <AsignAllForm
-                    courseId = {courseId}
-                    lectureId = {lectureid}
+                    courseId={courseId}
+                    lectureId={lectureid}
                     setHasError={setHasError}
                 />
             </Modal>
 
-            {hasError && 
-                <Modal 
+            {hasError &&
+                <Modal
                     title={
                         <span>
                             <ExclamationCircleOutlined style={{ color: 'red' }} /> Lỗi
                         </span>
                     }
-                    open={visible} 
+                    open={visible}
                     onOk={() => setVisible(false)}
                     onCancel={() => setVisible(false)}>
                     <p>Chưa có sinh viên hoặc có sinh viên chưa hoàn tất thủ tục, vui lòng kiểm tra lại</p>
