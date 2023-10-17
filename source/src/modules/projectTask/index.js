@@ -150,7 +150,9 @@ function ProjectTaskListPage() {
                 );
             },
         },
-        !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
+        
+        
+        
         active && mixinFuncs.renderActionColumn({ edit: true, delete: true,taskLog: true }, { width: '120px' }),
     ].filter(Boolean);
 
