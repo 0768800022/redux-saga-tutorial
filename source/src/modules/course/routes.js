@@ -93,7 +93,7 @@ export default {
         title: 'Task Log Leader Save Page',
         auth: true,
         component: TaskLogLeaderSavePage,
-        // permissions: [apiConfig.taskLog.getList.baseURL],
+        permissions: [apiConfig.taskLog.create.baseURL,apiConfig.taskLog.update.baseURL],
     },
 
 
