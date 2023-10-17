@@ -9,7 +9,9 @@ import AsignAllListPage from './leader/asignAll';
 import CourseStudentListPage from './student/courseStudent';
 import TaskStudentListPage from './student/taskStudent';
 import RegistrationLeaderListPage from './leader/registrationLeader';
+import TaskLogLeaderSavePage from './leader/taskLog/TaskLogLeaderSavePage';
 import routes from '@routes';
+import TaskLogLeaderListPage from './leader/taskLog';
 export default {
     courseListPage: {
         path: '/course',
@@ -78,6 +80,22 @@ export default {
         component: RegistrationLeaderListPage,
         permissions: [apiConfig.registration.getList.baseURL],
     },
+
+    taskLogLeaderListPage: {
+        path: '/course-leader/task/:courseId/task-log',
+        title: 'Task Log Leader List Page',
+        auth: true,
+        component: TaskLogLeaderListPage,
+        permissions: [apiConfig.taskLog.getList.baseURL],
+    },
+    taskLogLeaderSavePage: {
+        path: '/course-leader/task/:courseId/task-log/:id',
+        title: 'Task Log Leader Save Page',
+        auth: true,
+        component: TaskLogLeaderSavePage,
+        permissions: [apiConfig.taskLog.create.baseURL,apiConfig.taskLog.update.baseURL],
+    },
+
 
     // STUDENT
     courseStudentListPage: {

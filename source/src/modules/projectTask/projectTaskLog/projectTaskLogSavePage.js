@@ -51,7 +51,7 @@ function ProjectTaskLogSavePage() {
         <PageWrapper
             loading={loading}
             routes={
-                routes.ProjectTaskLogSavePage.breadcrumbs(commonMessage,paramHead,taskParam,state,search,title)
+                routes.ProjectTaskLogSavePage.breadcrumbs(commonMessage,paramHead,taskParam,state,title)
             }
         >
             <ProjectTaskLogForm
