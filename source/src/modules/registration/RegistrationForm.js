@@ -284,7 +284,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             });
             setImageUrl(dataStudentFilter.avatar);
         } else if (dataLocation) {
-            console.log(dataLocation);
             dataLocation.password = password;
             form.setFieldsValue({
                 student: { ...dataLocation },

@@ -41,7 +41,6 @@ const StudentForm = (props) => {
         onSubmit,
         setIsChangedFormValues,
     });
-    console.log(dataDetail);
     const uploadFile = (file, onSuccess, onError) => {
         executeUpFile({
             data: {
