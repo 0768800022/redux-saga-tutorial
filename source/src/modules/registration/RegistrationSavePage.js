@@ -11,6 +11,7 @@ import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
 import { formatDateString } from '@utils';
 import { DATE_FORMAT_VALUE } from '@constants';
+import { showErrorMessage } from '@services/notifyService';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
@@ -62,6 +63,17 @@ function RegistrationSavePage() {
                     studentId: data.studentInfo.fullName,
                     moneyState: 1,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-REGISTRATION-ERROR-0002') {
+                    showErrorMessage('Khoá học này không ở trạng thái chiêu sinh');
+                    mixinFuncs.setSubmit(false);
+                } else if (err.code === 'ERROR-REGISTRATION-ERROR-0003') {
+                    showErrorMessage('Sinh viên đã đăng ký khoá học này');
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                }
+                mixinFuncs.setSubmit(false);
             };
         },
     });

@@ -42,11 +42,10 @@ const CourseSavePage = () => {
             funcs.onSaveError = (err) => {
                 if (err.code === 'ERROR-COURSE-ERROR-0001') {
                     showErrorMessage('Khoá học đã tồn tại');
-                    mixinFuncs.setSubmit(false);
                 } else {
                     mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
-                    mixinFuncs.setSubmit(false);
                 }
+                mixinFuncs.setSubmit(false);
             };
         },
     });
