@@ -1,6 +1,5 @@
 import routes from '@routes';
 import {
-    IconCategory2,
     IconUserBolt,
     IconSchool,
     IconClipboardText,
@@ -19,22 +18,28 @@ const navMenuConfig = [
         icon: <IconUserBolt size={16} />,
         children: [
             {
-                label: <FormattedMessage defaultMessage="Quản lý sinh viên" />,
+                label: <FormattedMessage defaultMessage="Tài khoản sinh viên" />,
                 key: 'student-management',
                 path: routes.studentListPage.path,
                 permission: apiConfig.student.getList.baseURL,
             },
             {
-                label: <FormattedMessage defaultMessage="Quản lý leader" />,
+                label: <FormattedMessage defaultMessage="Tài khoản leader" />,
                 key: 'leader-management',
                 path: generatePath(routes.leaderListPage.path, {}),
                 permission: apiConfig.leader.getList.baseURL,
             },
             {
-                label: <FormattedMessage defaultMessage="Quản lý lập trình viên" />,
+                label: <FormattedMessage defaultMessage="Tài khoản lập trình viên" />,
                 key: 'developer-management',
                 path: generatePath(routes.developerListPage.path, {}),
                 permission: apiConfig.developer.getList.baseURL,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Tài khoản công ty" />,
+                key: 'company-management',
+                path: generatePath(routes.companyListPage.path, {}),
+                permission: apiConfig.company.getList.baseURL,
             },
         ],
     },
@@ -88,11 +93,6 @@ const navMenuConfig = [
         icon: <IconBuildingCommunity size={16} />,
         permission: apiConfig.company.getList.baseURL,
         children: [
-            {
-                label: <FormattedMessage defaultMessage="Quản lý công ty" />,
-                key: 'company-management',
-                path: generatePath(routes.companyListPage.path, {}),
-            },
             {
                 label: <FormattedMessage defaultMessage="Quản lý gói dịch vụ" />,
                 key: 'service-company-subscription',

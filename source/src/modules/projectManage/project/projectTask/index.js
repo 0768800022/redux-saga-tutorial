@@ -167,13 +167,13 @@ function ProjectTaskListPage() {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        !leaderName &&
-            !developerName && {
-            key: 'status',
-            placeholder: translate.formatMessage(commonMessage.status),
-            type: FieldTypes.SELECT,
-            options: statusValues,
-        },
+        // !leaderName &&
+        //     !developerName && {
+        //     key: 'status',
+        //     placeholder: translate.formatMessage(commonMessage.status),
+        //     type: FieldTypes.SELECT,
+        //     options: statusValues,
+        // },
     ].filter(Boolean);
     
 
