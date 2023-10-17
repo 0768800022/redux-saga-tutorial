@@ -13,6 +13,8 @@ import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { CalendarOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -39,7 +41,7 @@ function ProjectTaskListPage() {
             apiConfig: apiConfig.projectTask,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
-                objectName: translate.formatMessage(message.objectName),
+                objectName: translate.formatMessage(commonMessage.task),
             },
             override: (funcs) => {
                 funcs.mappingData = (response) => {
@@ -86,6 +88,28 @@ function ProjectTaskListPage() {
                         );
                     }
                 };
+                funcs.additionalActionColumnButtons = () => ({
+                    taskLog: ({ id, taskName }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        routes.ProjectTaskListPage.path +
+                                        `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&taskName=${taskName}&active=${active}`,
+                                        {
+                                            state: { action: 'projectTaskLog', prevPath: location.pathname },
+                                        },
+                                    );
+                                }}
+                            >
+                                <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                });
             },
         });
     const columns = [
@@ -127,7 +151,7 @@ function ProjectTaskListPage() {
             },
         },
         !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
-        active && mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        active && mixinFuncs.renderActionColumn({ edit: true, delete: true,taskLog: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const searchFields = [
