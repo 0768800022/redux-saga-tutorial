@@ -21,6 +21,8 @@ import {
     STATE_PROJECT_TASK_CANCEL,
     REGISTRATION_MONEY_RECEIVED,
     REGISTRATION_MONEY_RETURN,
+    TASK_LOG_WORKING,
+    TASK_LOG_OFF,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -40,6 +42,7 @@ import {
     registrationMoneyKindMessage,
     actionMessage,
     stateCourseRequestMessage,
+    taskLog,
 } from './intl';
 
 export const languageOptions = [
@@ -301,4 +304,16 @@ export const stateCourseRequestOptions = [
         color: 'green',
     },
     { value: 2, label: stateCourseRequestMessage.cancel, color: 'red' },
+];
+export const TaskLogKindOptions = [
+    {
+        value: TASK_LOG_WORKING,
+        label: taskLog.working,
+        color: 'green',
+    },
+    {
+        value: TASK_LOG_OFF,
+        label: taskLog.off,
+        color: 'red',
+    },
 ];

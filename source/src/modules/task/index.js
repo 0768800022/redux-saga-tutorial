@@ -18,7 +18,7 @@ import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Avatar, Button, Tag } from 'antd';
 import React from 'react';
-import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
+import { Link, generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
@@ -26,7 +26,8 @@ import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { commonMessage } from '@locales/intl';
-
+import { CalendarOutlined } from '@ant-design/icons';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 const message = defineMessages({
     objectName: 'Task',
 });
@@ -42,6 +43,7 @@ function TaskListPage() {
     const subjectId = queryParameters.get('subjectId');
     const state = queryParameters.get('state');
     const location = useLocation();
+    const navigate = useNavigate();
 
     const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
@@ -67,8 +69,30 @@ function TaskListPage() {
                 return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`;
             };
+            funcs.additionalActionColumnButtons = () => ({
+                taskLog: ({ id, lecture, state, status,name }) => (
+                    <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    routes.taskListPage.path +
+                                    `/task-log?courseId=${courseId}&courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`,
+                                    {
+                                        state: { action: 'taskLog', prevPath: location.pathname },
+                                    },
+                                );
+                            }}
+                        >
+                            <CalendarOutlined />
+                        </Button>
+                    </BaseTooltip>
+                ),
+            });
         },
     });
 
@@ -117,7 +141,7 @@ function TaskListPage() {
                 );
             },
         },
-        !leaderName && courseStatus == 1 && mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }),
+        !leaderName && courseStatus == 1 && mixinFuncs.renderActionColumn({ edit: true, delete: false,taskLog: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const setBreadRoutes = () => {
