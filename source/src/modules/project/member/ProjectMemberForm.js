@@ -230,7 +230,6 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                     <Row gutter={16}>
                         <Col span={6}>
                             <AutoCompleteField
-                                maxOptions={1000}
                                 disabled={isEditing}
                                 required
                                 label={translate.formatMessage(commonMessage.developer)}
@@ -245,7 +244,6 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                         </Col>
                         <Col span={6}>
                             <AutoCompleteField
-                                maxOptions={1000}
                                 disabled={isEditing}
                                 label={translate.formatMessage(commonMessage.role)}
                                 name={['projectRole', 'projectRoleName']}
@@ -259,7 +257,6 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                         </Col>
                         <Col span={6}>
                             <AutoCompleteField
-                                maxOptions={1000}
                                 label={<FormattedMessage defaultMessage="Nhóm" />}
                                 name="teamId"
                                 apiConfig={apiConfig.team.autocomplete}
