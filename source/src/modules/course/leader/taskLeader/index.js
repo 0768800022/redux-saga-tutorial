@@ -11,7 +11,7 @@ import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag, Modal } from 'antd';
 import React, { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useParams, useNavigate,generatePath } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
@@ -23,6 +23,7 @@ import useFetch from '@hooks/useFetch';
 import useNotification from '@hooks/useNotification';
 import { useIntl } from 'react-intl';
 import { commonMessage } from '@locales/intl';
+import { CalendarOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -35,11 +36,14 @@ function TaskListPage() {
     const { pathname: pagePath } = useLocation();
     const notification = useNotification();
     const intl = useIntl();
+    const navigate = useNavigate();
+
     const queryParameters = new URLSearchParams(window.location.search);
     const courseName = queryParameters.get('courseName');
     const subjectId = queryParameters.get('subjectId');
     const state = queryParameters.get('state');
     const paramid = useParams();
+    const courseId = paramid.courseId;
     const [detail, setDetail] = useState();
     const statusValues = translate.formatKeys(taskState, ['label']);
     const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
@@ -92,6 +96,26 @@ function TaskListPage() {
                             }}
                         >
                             <ExclamationCircleOutlined />
+                        </Button>
+                    </BaseTooltip>
+                ),
+                taskLog: ({ id, lecture, state, status,name }) => (
+                    <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    generatePath(routes.taskLeaderListPage.path, { courseId }) +
+                                    `/task-log?courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
+                                    {
+                                        state: { action: 'taskLog', prevPath: location.pathname },
+                                    },
+                                );
+                            }}
+                        >
+                            <CalendarOutlined />
                         </Button>
                     </BaseTooltip>
                 ),
@@ -151,7 +175,7 @@ function TaskListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false, state: true }, { width: '120px' }));
+        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false, state: true,taskLog: true }, { width: '120px' }));
         return columns;
     };
 

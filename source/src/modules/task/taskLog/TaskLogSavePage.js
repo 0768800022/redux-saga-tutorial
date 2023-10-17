@@ -13,7 +13,7 @@ const messages = defineMessages({
     objectName: 'Nhật ký',
 });
 
-function TaskLogSavePage() {
+function TaskLogSavePage({ getListUrl,breadcrumbName }) {
     const translate = useTranslate();
     const location = useLocation();
     const state = location.state.prevPath;
@@ -28,7 +28,7 @@ function TaskLogSavePage() {
             update: apiConfig.taskLog.update,
         },
         options: {
-            getListUrl: generatePath(routes.taskLogListPage.path, { taskLogId }),
+            getListUrl: getListUrl ? getListUrl :generatePath(routes.taskLogListPage.path, { taskLogId }),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -51,7 +51,8 @@ function TaskLogSavePage() {
         <PageWrapper
             loading={loading}
             routes={
-                routes.taskLogSavePage.breadcrumbs(commonMessage,paramHead,taskParam,state,search,title)
+                breadcrumbName?breadcrumbName:
+                    routes.taskLogSavePage.breadcrumbs(commonMessage,paramHead,taskParam,state,search,title)
             }
         >
             <TaskLogForm

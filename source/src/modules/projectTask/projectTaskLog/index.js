@@ -26,6 +26,7 @@ function ProjectTaskLogListPage() {
     const taskName = queryParameters.get('taskName');
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const state = location?.state?.prevPath;
+    const taskParam = routes.ProjectTaskListPage.path;
     const search = location.search;
     const paramHead = routes.projectListPage.path;
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -83,7 +84,6 @@ function ProjectTaskLogListPage() {
             width: 120,
             render(dataRow) {
                 const kindLog = KindTaskLog.find((item) => item.value == dataRow);
-                console.log(kindLog);
                 return (
                     <Tag color={kindLog.color}>
                         <div style={{ padding: '0 4px', fontSize: 14 }}>{kindLog.label}</div>
@@ -93,10 +93,10 @@ function ProjectTaskLogListPage() {
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
-    
+    console.log();
     return (
         <PageWrapper routes={
-            routes.ProjectTaskLogListPage.breadcrumbs(commonMessage,paramHead,state,search)
+            routes.ProjectTaskLogListPage.breadcrumbs(commonMessage,paramHead,taskParam,search)
         }>
             <div>
                 <ListPage

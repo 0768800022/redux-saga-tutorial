@@ -24,10 +24,10 @@ export default {
         auth: true,
         component: ProjectTaskLogListPage,
         permissions: [apiConfig.projectTaskLog.getList.baseURL],
-        breadcrumbs: (message,paramHead, state, location) => {
+        breadcrumbs: (message,paramHead, state,taskParam, search) => {
             return [
                 { breadcrumbName: message.project.defaultMessage, path: paramHead },
-                { breadcrumbName: message.task.defaultMessage, path: state + location },
+                { breadcrumbName: message.task.defaultMessage, path: taskParam + search },
                 { breadcrumbName: message.taskLog.defaultMessage },
             ];
         },

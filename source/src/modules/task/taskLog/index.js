@@ -18,13 +18,14 @@ const message = defineMessages({
     objectName: 'Task',
 });
 
-function TaskLogListPage() {
+function TaskLogListPage({ breadcrumbName }) {
     const translate = useTranslate();
     const location = useLocation();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const taskName = queryParameters.get('taskName');
     const state = location?.state?.prevPath;
+    const taskParam = routes.taskListPage.path;
     const search = location.search;
     const paramHead = routes.courseListPage.path;
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
@@ -90,8 +91,8 @@ function TaskLogListPage() {
     ].filter(Boolean);
 
     return (
-        <PageWrapper routes={
-            routes.taskLogListPage.breadcrumbs(commonMessage,paramHead,state,search)
+        <PageWrapper routes={ breadcrumbName? breadcrumbName:
+            routes.taskLogListPage.breadcrumbs(commonMessage,paramHead,taskParam,search)
         }>
             <div>
                 <ListPage

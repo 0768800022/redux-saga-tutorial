@@ -17,10 +17,10 @@ export default {
         auth: true,
         component: TaskSavePage,
         permissions: [apiConfig.task.create.baseURL, apiConfig.task.update.baseURL],
-        breadcrumbs: (message,paramHead, state, location,title) => {
+        breadcrumbs: (message,paramHead, taskParam, location,title) => {
             return [
                 { breadcrumbName: message.course.defaultMessage, path: paramHead },
-                { breadcrumbName: message.task.defaultMessage, path: state + location },
+                { breadcrumbName: message.task.defaultMessage, path: taskParam + location },
                 { breadcrumbName: title ? title : message.objectName.defaultMessage },
             ];
         },
@@ -45,12 +45,12 @@ export default {
         auth: true,
         component: TaskLogSavePage,
         permissions: [apiConfig.taskLog.create.baseURL, apiConfig.taskLog.update.baseURL],
-        breadcrumbs: (message,paramHead,taskParam, state, location,title) => {
+        breadcrumbs: (message,paramHead,taskParam, state, search,title) => {
             return [
                 { breadcrumbName: message.course.defaultMessage, path: paramHead },
-                { breadcrumbName: message.task.defaultMessage, path: taskParam + location },
-                { breadcrumbName: message.taskLog.defaultMessage, path: state + location },
-                { breadcrumbName: title ? title : message.objectName.defaultMessage },
+                { breadcrumbName: message.task.defaultMessage, path: taskParam + search },
+                { breadcrumbName: message.taskLog.defaultMessage, path: state + search },
+                { breadcrumbName: title },
             ];
         },
     },
