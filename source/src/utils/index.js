@@ -162,7 +162,9 @@ export const validatePermission = (
     } else {
         permissionsSavePage = requiredPermissions;
     }
-    return removePathParams(permissionsSavePage).every((item) => userPermissions?.includes(item?.replace(apiTenantUrl, '/')));
+    return removePathParams(permissionsSavePage).every((item) =>
+        userPermissions?.includes(item?.replace(apiTenantUrl, '/')),
+    );
 };
 
 export const randomString = (length = 4) => {
@@ -323,3 +325,24 @@ export const getDisabledMinutes = (selectedHour, minValue) => {
     }
     return minutes;
 };
+export function generateRandomPassword(length, strict, isNumber, isNotUpperCase, isNotLowerCase, isSymbols) {
+    var generator = require('generate-password');
+    var passwords = generator.generate({
+        length: length,
+        numbers: isNumber,
+        uppercase: !isNotUpperCase,
+        lowercase: !isNotLowerCase,
+        symbols: isSymbols,
+        strict: strict,
+    });
+    return passwords;
+}
+export function copyToClipboard(text) {
+    var textField = document.createElement('textarea');
+    textField.innerText = text;
+    document.body.appendChild(textField);
+    textField.select();
+    document.execCommand('copy');
+    textField.remove();
+}
+

@@ -3,12 +3,14 @@ import apiConfig from '@constants/apiConfig';
 import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
-import { generatePath, useLocation, useParams } from 'react-router-dom';
+import { generatePath, useLocation, useNavigate, useParams } from 'react-router-dom';
 import routes from '@routes';
 import RegistrationForm from './RegistrationForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
+import { formatDateString } from '@utils';
+import { DATE_FORMAT_VALUE } from '@constants';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
@@ -22,16 +24,17 @@ function RegistrationSavePage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const courseRequestId = queryParameters.get('courseRequestId');
     const location = useLocation();
     const { data: dataLocation } = location.state;
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.registration.getById,
-            create: apiConfig.registration.create,
+            create: dataLocation ? apiConfig.registration.acceptRequest : apiConfig.registration.create,
             update: apiConfig.registration.update,
         },
         options: {
-            getListUrl: routes.registrationListPage.path,
+            getListUrl: dataLocation ? routes.courseRequestListPage.path : routes.registrationListPage.path,
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -46,6 +49,13 @@ function RegistrationSavePage() {
                 };
             };
             funcs.prepareCreateData = (data) => {
+                if (dataLocation) {
+                    data.courseRequestId = dataLocation.id;
+                    console.log(data);
+                    return {
+                        ...data,
+                    };
+                }
                 return {
                     ...data,
                     courseId: courseId,
