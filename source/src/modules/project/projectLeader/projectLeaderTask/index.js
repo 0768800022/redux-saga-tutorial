@@ -17,6 +17,10 @@ import ChangeStateModal from './ChangeStateModal';
 import useDisclosure from '@hooks/useDisclosure';
 import { useState } from 'react';
 import useFetch from '@hooks/useFetch';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { CalendarOutlined } from '@ant-design/icons';
+import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
     objectName: 'Task',
     developer: 'Lập trình viên',
@@ -117,6 +121,26 @@ function ProjectLeaderTaskListPage() {
                             </Button>
                         );
                     },
+                    taskLog: () => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        routes.projectLeaderTaskListPage.path +
+                                        `/task-log?projectId=${projectId}&projectName=${projectName}`,
+                                        {
+                                            state: { action: 'projectTaskLog', prevPath: location.pathname },
+                                        },
+                                    );
+                                }}
+                            >
+                                <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                 });
             },
         });
@@ -159,7 +183,7 @@ function ProjectLeaderTaskListPage() {
             },
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ editSetting: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ editSetting: true,taskLog: true }, { width: '120px' }),
     ].filter(Boolean);
     const params = mixinFuncs.prepareGetListParams(queryFilter);
     const {
