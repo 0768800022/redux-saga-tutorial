@@ -9,6 +9,7 @@ import { AppConstants } from '@constants';
 import { Fragment } from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
     banner: 'Banner',
@@ -92,7 +93,7 @@ const LeaderForm = (props) => {
                 <Row style={{ marginLeft: '8rem' }} gutter={16}>
                     <Col span={8}>
                         <CropImageField
-                            label={translate.formatMessage(messages.avatarPath)}
+                            label={translate.formatMessage(commonMessage.avatar)}
                             name="avatarPath"
                             imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                             aspect={1 / 1}
@@ -101,18 +102,18 @@ const LeaderForm = (props) => {
                         />
                     </Col>
                 </Row>
-                <TextField label={translate.formatMessage(messages.email)} disabled name="email" />
-                <TextField label={translate.formatMessage(messages.fullName)} name="leaderName" />
-                <TextField label={translate.formatMessage(messages.phoneNumber)} disabled name="phone" />
+                <TextField label={translate.formatMessage(commonMessage.email)} disabled name="email" />
+                <TextField label={translate.formatMessage(commonMessage.fullName)} name="leaderName" />
+                <TextField label={translate.formatMessage(commonMessage.phone)} disabled name="phone" />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.currentPassword)}
+                    label={translate.formatMessage(commonMessage.currentPassword)}
                     required
                     name="oldPassword"
                 />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.newPassword)}
+                    label={translate.formatMessage(commonMessage.newPassword)}
                     name="password"
                     rules={[
                         {
@@ -130,7 +131,7 @@ const LeaderForm = (props) => {
                 />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.confirmPassword)}
+                    label={translate.formatMessage(commonMessage.confirmPassword)}
                     rules={[
                         {
                             validator: async () => {

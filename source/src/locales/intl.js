@@ -58,4 +58,11 @@ export const commonMessage = defineMessages({
     taskLog: 'Nhật ký',
     message: 'Lời nhắn',
     totalTime: 'Tổng thời gian',
+    currentPassword: 'Mật khẩu cũ',
+    newPassword: 'Mật khẩu mới',
+    confirmPassword: 'Xác nhận mật khẩu mới',
+    birthday: 'Ngày sinh',
+    university: 'Trường',
+    studyClass: 'Hệ',
+    hotline: 'Đường dây nóng',
 });
