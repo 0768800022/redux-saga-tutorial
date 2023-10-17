@@ -45,6 +45,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     const [imageUrl, setImageUrl] = useState(null);
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
+    const [password, setPassword] = useState();
     const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
@@ -283,11 +284,13 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             });
             setImageUrl(dataStudentFilter.avatar);
         } else if (dataLocation) {
+            console.log(dataLocation);
+            dataLocation.password = password;
             form.setFieldsValue({
                 student: { ...dataLocation },
             });
         }
-    }, [dataStudentByPhone]);
+    }, [dataStudentByPhone, password]);
     const validateDate = (_, value) => {
         const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
         if (date && value && value.isAfter(date)) {
@@ -314,7 +317,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         });
     };
     const copyToClipboardAlert = () => {
-        const password = form.getFieldValue('password');
         if (password != undefined) {
             notification({ type: 'success', message: translate.formatMessage(messages.copyPasswordSuccess) });
         } else {
@@ -385,35 +387,39 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                         <Row gutter={16}>
                             <Col span={12}>
                                 <PasswordGeneratorField
-                                    disabled={dataStudentByPhone}
+                                    disabled
                                     label={translate.formatMessage(commonMessage.password)}
                                     minLength={6}
                                     fieldName={['student', 'password']}
+                                    value={form.getFieldValue('password')}
                                     type="password"
                                     suffix={
-                                        <>
-                                            <Button
-                                                onClick={() => {
-                                                    const curPass = generatePassword({
-                                                        length: 8,
-                                                        numbers: true,
-                                                        uppercase: true,
-                                                        lowercase: true,
-                                                    });
-                                                    form.setFieldValue('password', curPass);
-                                                }}
-                                            >
-                                                <KeyOutlined style={{ alignSelf: 'center' }} />
-                                            </Button>
-                                            <Button
-                                                onClick={() => {
-                                                    copyToClipboard(form.getFieldValue('password'));
-                                                    copyToClipboardAlert();
-                                                }}
-                                            >
-                                                <CopyOutlined style={{ alignSelf: 'center' }} />
-                                            </Button>
-                                        </>
+                                        !dataStudentByPhone && (
+                                            <>
+                                                <Button
+                                                    onClick={() => {
+                                                        const curPass = generatePassword({
+                                                            length: 8,
+                                                            numbers: true,
+                                                            uppercase: true,
+                                                            lowercase: true,
+                                                        });
+                                                        setPassword(curPass);
+                                                        form.setFieldValue('password', curPass);
+                                                    }}
+                                                >
+                                                    <KeyOutlined style={{ alignSelf: 'center' }} />
+                                                </Button>
+                                                <Button
+                                                    onClick={() => {
+                                                        copyToClipboard(password);
+                                                        copyToClipboardAlert();
+                                                    }}
+                                                >
+                                                    <CopyOutlined style={{ alignSelf: 'center' }} />
+                                                </Button>
+                                            </>
+                                        )
                                     }
                                 />
                             </Col>
