@@ -6,27 +6,14 @@ import CropImageField from '@components/common/form/CropImageField';
 import useFetch from '@hooks/useFetch';
 import apiConfig from '@constants/apiConfig';
 import { AppConstants } from '@constants';
-import { Fragment } from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
+import { convertUtcToLocalTime } from '@utils/index';
+import { DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants/index';
 
 const messages = defineMessages({
-    banner: 'Banner',
     avatarPath: 'Avatar',
-    username: 'Username',
-    career: 'Career Name',
-    fullName: 'Leader',
-    email: 'Email',
-    hotline: 'Hot line',
-    phoneNumber: 'Phone Number',
-    taxNumber: 'Tax Number',
-    zipCode: 'Zip Code',
-    city: 'City',
-    address: 'Address',
-    logo: 'Logo',
-    currentPassword: 'Current password',
-    newPassword: 'New password',
-    confirmPassword: 'Confirm password',
     passwordLengthError: 'Password must be at least 6 characters',
     passwordMatchError: 'Password does not match',
 });
@@ -64,6 +51,7 @@ const StudentForm = (props) => {
     
 
     useEffect(() => {
+        dataDetail.birthday = convertUtcToLocalTime(dataDetail.birthday, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
         });
@@ -92,7 +80,7 @@ const StudentForm = (props) => {
                 <Row style={{ marginLeft: '8rem' }} gutter={16}>
                     <Col span={8}>
                         <CropImageField
-                            label={translate.formatMessage(messages.avatarPath)}
+                            label={translate.formatMessage(commonMessage.avatar)}
                             name="avatarPath"
                             imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                             aspect={1 / 1}
@@ -101,18 +89,23 @@ const StudentForm = (props) => {
                         />
                     </Col>
                 </Row>
-                <TextField label={translate.formatMessage(messages.email)} disabled name="email" />
-                <TextField label={translate.formatMessage(messages.fullName)} disabled name="fullName" />
-                <TextField label={translate.formatMessage(messages.phoneNumber)} disabled name="phone" />
+                <TextField label={translate.formatMessage(commonMessage.fullName)} disabled name="fullName" />
+                <TextField label={translate.formatMessage(commonMessage.email)} disabled name="email" />
+                <TextField label={translate.formatMessage(commonMessage.mssv)} disabled name="mssv" />
+                <TextField label={translate.formatMessage(commonMessage.birthday)} disabled name="birthday" />
+                <TextField label={translate.formatMessage(commonMessage.university)} disabled name={['university', 'categoryName']} />
+                <TextField label={translate.formatMessage(commonMessage.studyClass)} disabled name={['studyClass', 'categoryName']} />
+
+                <TextField label={translate.formatMessage(commonMessage.phone)} disabled name="phone" />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.currentPassword)}
+                    label={translate.formatMessage(commonMessage.currentPassword)}
                     required
                     name="oldPassword"
                 />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.newPassword)}
+                    label={translate.formatMessage(commonMessage.newPassword)}
                     name="password"
                     rules={[
                         {
@@ -130,7 +123,7 @@ const StudentForm = (props) => {
                 />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.confirmPassword)}
+                    label={translate.formatMessage(commonMessage.confirmPassword)}
                     rules={[
                         {
                             validator: async () => {
