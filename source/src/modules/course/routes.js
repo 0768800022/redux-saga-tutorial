@@ -43,7 +43,6 @@ export default {
         permissions: [apiConfig.lecture.getList.baseURL],
         breadcrumbs: (message, paramHead, state, location) => {
             return [
-                { breadcrumbName: message.home.defaultMessage },
                 { breadcrumbName: message.course.defaultMessage, path: paramHead },
                 { breadcrumbName: message.task.defaultMessage, path: state + location },
                 { breadcrumbName: message.objectName.defaultMessage },
