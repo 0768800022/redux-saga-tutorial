@@ -40,7 +40,6 @@
         "env-cmd": "^10.1.0",
         "eslint-plugin-prettier": "^4.2.1",
         "extract-react-intl-messages": "^4.1.1",
-        "generate-password": "^1.7.0",
         "husky": "^8.0.2",
         "immer": "^9.0.16",
         "lint-staged": "^13.1.0",
