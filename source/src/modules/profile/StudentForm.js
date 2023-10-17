@@ -31,12 +31,9 @@ const messages = defineMessages({
     passwordMatchError: 'Password does not match',
 });
 
-const ProfileForm = (props) => {
+const StudentForm = (props) => {
     const { formId, dataDetail, onSubmit, setIsChangedFormValues, actions, isAdmin } = props;
     const [imageUrl, setImageUrl] = useState(null);
-    const [logoUrl, setLogoUrl] = useState(null);
-    const [bannerUrl, setBannerUrl] = useState(null);
-
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const translate = useTranslate();
 
@@ -64,70 +61,20 @@ const ProfileForm = (props) => {
         });
     };
 
-    const uploadBannerFile = (file, onSuccess, onError) => {
-        executeUpFile({
-            data: {
-                type: 'AVATAR',
-                file: file,
-            },
-            onCompleted: (response) => {
-                if (response.result === true) {
-                    onSuccess();
-                    setBannerUrl(response.data.filePath);
-                    setIsChangedFormValues(true);
-                }
-            },
-            onError: (error) => {
-                onError();
-            },
-        });
-    };
-
-    const uploadLogoFile = (file, onSuccess, onError) => {
-        executeUpFile({
-            data: {
-                type: 'LOGO',
-                file: file,
-            },
-            onCompleted: (response) => {
-                if (response.result === true) {
-                    onSuccess();
-                    setLogoUrl(response.data.filePath);
-                    setIsChangedFormValues(true);
-                }
-            },
-            onError: (error) => {
-                onError();
-            },
-        });
-    };
+    
 
     useEffect(() => {
-        dataDetail.username = dataDetail?.accountDto ? dataDetail.accountDto.username : dataDetail.phone;
-
-        dataDetail.fullName = dataDetail?.accountDto ? dataDetail.accountDto.fullName : dataDetail.fullName;
-        dataDetail.email = dataDetail?.accountDto ? dataDetail.accountDto.email : dataDetail.email;
-
         form.setFieldsValue({
             ...dataDetail,
         });
-        setImageUrl(dataDetail?.accountDto ? dataDetail.accountDto.avatar : dataDetail.avatar);
-        setLogoUrl(dataDetail.logoPath);
-        setBannerUrl(dataDetail.bannerPath);
+        setImageUrl(dataDetail?.avatar);
     }, [dataDetail]);
 
     const handleFinish = (values) => {
-        (values.accountDto.avatar = imageUrl),
+        (values.avatar = imageUrl),
         mixinFuncs.handleSubmit({
             ...values,
-            fullName: values?.accountDto ? values.accountDto.fullName : values.fullName,
-            oldPassword: values.oldPassword,
-            password: values.password,
-            logo: logoUrl,
-            avatarPath: values.accountDto.avatar,
-            bannerPath: bannerUrl,
-            phone: values.accountDto.phone,
-            email: values.accountDto.email,
+            avatarPath: values.avatar,
         });
     };
 
@@ -145,16 +92,6 @@ const ProfileForm = (props) => {
                 <Row style={{ marginLeft: '8rem' }} gutter={16}>
                     <Col span={8}>
                         <CropImageField
-                            label={translate.formatMessage(messages.logo)}
-                            name="logoPath"
-                            imageUrl={logoUrl && `${AppConstants.contentRootUrl}${logoUrl}`}
-                            aspect={1 / 1}
-                            required
-                            uploadFile={uploadLogoFile}
-                        />
-                    </Col>
-                    <Col span={8}>
-                        <CropImageField
                             label={translate.formatMessage(messages.avatarPath)}
                             name="avatarPath"
                             imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
@@ -163,35 +100,10 @@ const ProfileForm = (props) => {
                             uploadFile={uploadFile}
                         />
                     </Col>
-                    <Col span={8}>
-                        <CropImageField
-                            label={translate.formatMessage(messages.banner)}
-                            name="bannerPath"
-                            imageUrl={bannerUrl && `${AppConstants.contentRootUrl}${bannerUrl}`}
-                            aspect={16 / 9}
-                            uploadFile={uploadBannerFile}
-                        />
-                    </Col>
                 </Row>
-
-                <TextField
-                    readOnly
-                    label={translate.formatMessage(messages.username)}
-                    name="username"
-                />
-                <TextField label={translate.formatMessage(messages.career)} name={['careerName']} />
-                <TextField label={translate.formatMessage(messages.email)} name="email" />
-                <TextField label={translate.formatMessage(messages.fullName)} name="fullName" />
-                <TextField label={translate.formatMessage(messages.hotline)} name="hotline" />
-                {/* {!isAdmin && (
-                    <Fragment>
-                        <TextField
-                            name={['accountDto', 'phone']}
-                            label={translate.formatMessage(messages.phoneNumber)}
-                            required
-                        />
-                    </Fragment>
-                )} */}
+                <TextField label={translate.formatMessage(messages.email)} disabled name="email" />
+                <TextField label={translate.formatMessage(messages.fullName)} disabled name="fullName" />
+                <TextField label={translate.formatMessage(messages.phoneNumber)} disabled name="phone" />
                 <TextField
                     type="password"
                     label={translate.formatMessage(messages.currentPassword)}
@@ -238,4 +150,4 @@ const ProfileForm = (props) => {
     );
 };
 
-export default ProfileForm;
+export default StudentForm;

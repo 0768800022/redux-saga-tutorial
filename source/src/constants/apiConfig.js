@@ -409,6 +409,12 @@ const apiConfig = {
             method: 'GET',
             headers: baseHeader,
         },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/student/update-profile`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     leader: {
         getList: {
@@ -431,6 +437,12 @@ const apiConfig = {
         },
         update: {
             baseURL: `${apiTenantUrl}v1/leader/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/leader/update_profile`,
             method: 'PUT',
             headers: baseHeader,
             isRequiredTenantId: true,
@@ -806,6 +818,12 @@ const apiConfig = {
             method: 'POST',
             headers: baseHeader,
             isLogin: true,
+            isRequiredTenantId: true,
+        },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/company/update-profile`,
+            method: 'PUT',
+            headers: baseHeader,
             isRequiredTenantId: true,
         },
     },
