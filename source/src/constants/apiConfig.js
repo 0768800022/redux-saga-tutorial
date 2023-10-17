@@ -155,7 +155,7 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
-    zzzprojectRole: {
+    projectRole: {
         getList: {
             baseURL: `${apiTenantUrl}v1/project-role/list`,
             method: 'GET',
@@ -415,6 +415,12 @@ const apiConfig = {
             method: 'GET',
             headers: baseHeader,
         },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/student/update-profile`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
         getDetailByPhone: {
             baseURL: `${apiTenantUrl}v1/student/detail-by-phone`,
             method: 'GET',
@@ -442,6 +448,12 @@ const apiConfig = {
         },
         update: {
             baseURL: `${apiTenantUrl}v1/leader/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/leader/update_profile`,
             method: 'PUT',
             headers: baseHeader,
             isRequiredTenantId: true,
@@ -817,6 +829,12 @@ const apiConfig = {
             method: 'POST',
             headers: baseHeader,
             isLogin: true,
+            isRequiredTenantId: true,
+        },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/company/update-profile`,
+            method: 'PUT',
+            headers: baseHeader,
             isRequiredTenantId: true,
         },
     },

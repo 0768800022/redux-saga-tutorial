@@ -59,6 +59,7 @@ const ProjectTaskLogForm = (props) => {
                     <Col span={12}>
                         <SelectField
                             required
+                            disabled={isEditing}
                             name="kind"
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
@@ -70,6 +71,7 @@ const ProjectTaskLogForm = (props) => {
                             label={<FormattedMessage defaultMessage="Tổng thời gian" />}
                             name="totalTime"
                             type="number"
+                            min={0}
                             required
                         />
                     </Col>
