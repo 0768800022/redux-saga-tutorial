@@ -8,6 +8,7 @@ export const commonMessage = defineMessages({
     company: 'Công ty',
     companyName: 'Tên công ty',
     companySubscription: 'Gói dịch vụ',
+    companyRequest: 'Yêu cầu công ty',
     course: 'Khóa học',
     courseName: 'Tên khoá học',
     createdDate: 'Ngày tạo',
