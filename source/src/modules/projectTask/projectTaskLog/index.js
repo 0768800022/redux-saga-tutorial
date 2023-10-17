@@ -18,7 +18,7 @@ const message = defineMessages({
     gitCommitUrl: 'Đường dẫn commit git',
 });
 
-function ProjectTaskLogListPage() {
+function ProjectTaskLogListPage({ breadcrumbName,renderAction }) {
     const translate = useTranslate();
     const location = useLocation();
     const { pathname: pagePath } = useLocation();
@@ -91,11 +91,10 @@ function ProjectTaskLogListPage() {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        renderAction === false ? '' : mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
-    console.log();
     return (
-        <PageWrapper routes={
+        <PageWrapper routes={ breadcrumbName?breadcrumbName:
             routes.ProjectTaskLogListPage.breadcrumbs(commonMessage,paramHead,taskParam,search)
         }>
             <div>

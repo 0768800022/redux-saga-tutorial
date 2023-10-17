@@ -14,7 +14,7 @@ const messages = defineMessages({
     objectName: 'Nhật ký',
 });
 
-function ProjectTaskLogSavePage() {
+function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
     const translate = useTranslate();
     const location = useLocation();
     const state = location.state.prevPath;
