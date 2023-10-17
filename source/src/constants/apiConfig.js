@@ -274,6 +274,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        acceptRequest: {
+            baseURL: `${apiTenantUrl}v1/registration/accept-request`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     registrationMoney: {
         getList: {
@@ -406,6 +412,11 @@ const apiConfig = {
         },
         getProfile: {
             baseURL: `${apiTenantUrl}v1/student/get-myprofile`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getDetailByPhone: {
+            baseURL: `${apiTenantUrl}v1/student/detail-by-phone`,
             method: 'GET',
             headers: baseHeader,
         },
