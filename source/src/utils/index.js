@@ -325,17 +325,57 @@ export const getDisabledMinutes = (selectedHour, minValue) => {
     }
     return minutes;
 };
-export function generateRandomPassword(length, strict, isNumber, isNotUpperCase, isNotLowerCase, isSymbols) {
-    var generator = require('generate-password');
-    var passwords = generator.generate({
-        length: length,
-        numbers: isNumber,
-        uppercase: !isNotUpperCase,
-        lowercase: !isNotLowerCase,
-        symbols: isSymbols,
-        strict: strict,
-    });
-    return passwords;
+export function generatePassword(options) {
+    const { length, numbers, uppercase, lowercase, symbols, strict } = options;
+
+    const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+    const numberChars = '0123456789';
+    const symbolChars = '!@#$%^&*()_+[]{}|;:,.<>?';
+
+    let validChars = '';
+
+    if (uppercase) {
+        validChars += uppercaseChars;
+    }
+    if (lowercase) {
+        validChars += lowercaseChars;
+    }
+    if (numbers) {
+        validChars += numberChars;
+    }
+    if (symbols) {
+        validChars += symbolChars;
+    }
+
+    if (validChars.length === 0) {
+        throw new Error('At least one character type should be selected.');
+    }
+
+    let password = '';
+
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * validChars.length);
+        password += validChars.charAt(randomIndex);
+    }
+
+    if (strict) {
+        // Ensure at least one character of each type is present
+        if (uppercase && !/[A-Z]/.test(password)) {
+            return generatePassword(options);
+        }
+        if (lowercase && !/[a-z]/.test(password)) {
+            return generatePassword(options);
+        }
+        if (numbers && !/\d/.test(password)) {
+            return generatePassword(options);
+        }
+        if (symbols && !/[!@#$%^&*()_+[\]{}|;:,.<>?]/.test(password)) {
+            return generatePassword(options);
+        }
+    }
+
+    return password;
 }
 export function copyToClipboard(text) {
     var textField = document.createElement('textarea');
@@ -345,4 +385,3 @@ export function copyToClipboard(text) {
     document.execCommand('copy');
     textField.remove();
 }
-

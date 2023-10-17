@@ -24,15 +24,18 @@ import { commonMessage } from '@locales/intl';
 import { useLocation } from 'react-router-dom';
 import TextField from '@components/common/form/TextField';
 import DatePickerField from '@components/common/form/DatePickerField';
-import { copyToClipboard, formatDateString, generateRandomPassword } from '@utils';
+import { copyToClipboard, formatDateString, generatePassword, generateRandomPassword } from '@utils';
 import CropImageField from '@components/common/form/CropImageField';
 import PasswordGeneratorField from '@components/common/form/PasswordGeneratorField';
 import { KeyOutlined, CopyOutlined } from '@ant-design/icons';
+import useNotification from '@hooks/useNotification';
 
 const messages = defineMessages({
     student: 'Tên sinh viên',
     isIntern: 'Đăng kí thực tập',
     schedule: 'Thời khoá biểu',
+    copyPasswordSuccess: 'Sao chép mật khẩu thành công',
+    copyPasswordWarning: 'Không có mật khẩu để sao chép',
 });
 
 function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
@@ -45,6 +48,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
+    const notification = useNotification();
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -310,8 +314,12 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         });
     };
     const copyToClipboardAlert = () => {
-        const { t } = this.props;
-        message.success(t('constants:successMessage.copied'));
+        const password = form.getFieldValue('password');
+        if (password != undefined) {
+            notification({ type: 'success', message: translate.formatMessage(messages.copyPasswordSuccess) });
+        } else {
+            notification({ type: 'warning', message: translate.formatMessage(messages.copyPasswordWarning) });
+        }
     };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
@@ -386,23 +394,20 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                         <>
                                             <Button
                                                 onClick={() => {
-                                                    const curPass = generateRandomPassword(
-                                                        8,
-                                                        true,
-                                                        true,
-                                                        false,
-                                                        false,
-                                                        true,
-                                                    );
-                                                    this.setState({ curPassword: curPass });
-                                                    this.setFieldValue('password', curPass);
+                                                    const curPass = generatePassword({
+                                                        length: 8,
+                                                        numbers: true,
+                                                        uppercase: true,
+                                                        lowercase: true,
+                                                    });
+                                                    form.setFieldValue('password', curPass);
                                                 }}
                                             >
                                                 <KeyOutlined style={{ alignSelf: 'center' }} />
                                             </Button>
                                             <Button
                                                 onClick={() => {
-                                                    copyToClipboard(this.getFieldValue('password'));
+                                                    copyToClipboard(form.getFieldValue('password'));
                                                     copyToClipboardAlert();
                                                 }}
                                             >
@@ -476,7 +481,9 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                     label={translate.formatMessage(commonMessage.studentName)}
                                     name={['studentInfo', 'fullName']}
                                     apiConfig={apiConfig.student.autocomplete}
-                                    mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
+                                    mappingOptions={(item) => {
+                                        return { value: item.id, label: item.fullName };
+                                    }}
                                     initialSearchParams={{ pageNumber: 0 }}
                                     searchParams={(text) => ({ fullName: text })}
                                 />

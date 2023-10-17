@@ -51,7 +51,6 @@ function RegistrationSavePage() {
             funcs.prepareCreateData = (data) => {
                 if (dataLocation) {
                     data.courseRequestId = dataLocation.id;
-                    console.log(data);
                     return {
                         ...data,
                     };
@@ -60,7 +59,7 @@ function RegistrationSavePage() {
                     ...data,
                     courseId: courseId,
                     isIssuedCertify: 1,
-                    studentId: data.studentInfo.id,
+                    studentId: data.studentInfo.fullName,
                     moneyState: 1,
                 };
             };
