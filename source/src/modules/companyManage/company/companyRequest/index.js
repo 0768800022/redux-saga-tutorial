@@ -78,7 +78,6 @@ const CompanyRequestListPage = () => {
                 ),
             });
         },
-
     });
     const {
         data: companyRequests,
@@ -89,29 +88,14 @@ const CompanyRequestListPage = () => {
     });
     const columns = [
         {
-            title: <FormattedMessage defaultMessage="Tên công ty" />,
-            dataIndex: ['company', 'companyName'],
+            title: <FormattedMessage defaultMessage="Tiêu đề" />,
+            dataIndex: ['title'],
         },
         {
-            title: <FormattedMessage defaultMessage="Số lượng công việc" />,
+            title: <FormattedMessage defaultMessage="Số lượng" />,
             dataIndex: ['numberCv'],
             align: 'center',
-        },
-        {
-            title: <FormattedMessage defaultMessage="Mô tả ngắn" />,
-            dataIndex: ['shortDescription'],
-        },
-        {
-            title: 'Ngày bắt đầu',
-            dataIndex: 'startDate',
             width: 140,
-            align: 'center',
-        },
-        {
-            title: 'Ngày kết thúc',
-            dataIndex: 'dueDate',
-            width: 140,
-            align: 'center',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
@@ -119,11 +103,8 @@ const CompanyRequestListPage = () => {
 
     const searchFields = [
         {
-            key: 'companyId',
+            key: 'title',
             placeholder: translate.formatMessage(commonMessage.companyRequest),
-            type: FieldTypes.SELECT,
-            options: companyOptions,
-
         },
         {
             key: 'status',
@@ -138,26 +119,24 @@ const CompanyRequestListPage = () => {
         execute: executescompanys,
     } = useFetch(apiConfig.company.autocomplete, {
         immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({
-            value: item.id,
-            label: item.companyName,
-        })),
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item.id,
+                label: item.companyName,
+            })),
     });
 
     useEffect(() => {
         // Kiểm tra xem có dữ liệu trong companys không và không phải là trạng thái loading
         if (companys) {
             setCompanyOptions(companys);
+        } else {
+            console.log('No data');
         }
-        else { console.log("No data"); }
     }, [companys]);
 
     return (
-        <PageWrapper
-            routes={[
-                { breadcrumbName: translate.formatMessage(commonMessage.companyRequest) },
-            ]}
-        >
+        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.companyRequest) }]}>
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
                 actionBar={mixinFuncs.renderActionBar()}

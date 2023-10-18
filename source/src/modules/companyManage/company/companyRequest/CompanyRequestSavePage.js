@@ -11,6 +11,7 @@ import { commonMessage } from '@locales/intl';
 import { useState } from 'react';
 import { Button } from 'antd';
 import ListPage from '@components/common/layout/ListPage';
+import useAuth from '@hooks/useAuth';
 
 const message = defineMessages({
     objectName: 'Yêu cầu công ty',
@@ -19,10 +20,7 @@ const message = defineMessages({
 const CompanyRequestSavePage = () => {
     const CompanyRequestId = useParams();
     const translate = useTranslate();
-    const queryParameters = new URLSearchParams(window.location.search);
-    const companyId = queryParameters.get('companyId');
-    const projectName = queryParameters.get('projectName');
-    const [showPreviewModal, setShowPreviewModal] = useState(false);
+    const { profile } = useAuth();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.companyRequest.getById,
@@ -38,19 +36,13 @@ const CompanyRequestSavePage = () => {
                 return {
                     ...data,
                     id: detail.id,
+                    companyId: profile?.id,
                 };
             };
             funcs.prepareCreateData = (data) => {
-                if (companyId !== null) {
-                    return {
-                        ...data,
-                        companyId: companyId,
-                    };
-                }
-                return { ...data };
+                return { ...data, companyId: profile?.id };
             };
         },
-
     });
     return (
         <PageWrapper

@@ -1,143 +1,94 @@
-import { Card, Col, Row, Input } from 'antd';
-import React, { useEffect } from 'react';
-import SelectField from '@components/common/form/SelectField';
-import useBasicForm from '@hooks/useBasicForm';
-import useTranslate from '@hooks/useTranslate';
-import TextField from '@components/common/form/TextField';
-import { defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
-import useFetch from '@hooks/useFetch';
-import { FormattedMessage } from 'react-intl';
-import apiConfig from '@constants/apiConfig';
-import { useState } from 'react';
-import CropImageField from '@components/common/form/CropImageField';
-import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
-import { statusOptions } from '@constants/masterData';
-import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import DatePickerField from '@components/common/form/DatePickerField';
-import dayjs from 'dayjs';
-import { formatDateString } from '@utils';
 import NumericField from '@components/common/form/NumericField';
-import { commonMessage } from '@locales/intl';
-import ListPage from '@components/common/layout/ListPage';
-import { Button, Modal, Radio } from 'antd';
-import PageWrapper from '@components/common/layout/PageWrapper';
-import ListDetailsForm from './ListDetailsForm';
-import { useLocation } from 'react-router-dom';
+import SelectField from '@components/common/form/SelectField';
+import TextField from '@components/common/form/TextField';
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { statusOptions } from '@constants/masterData';
+import useBasicForm from '@hooks/useBasicForm';
 import useDisclosure from '@hooks/useDisclosure';
+import useTranslate from '@hooks/useTranslate';
+import { formatDateString } from '@utils';
+import { Button, Card, Col, Row, Flex, Modal, Form } from 'antd';
+import dayjs from 'dayjs';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { useLocation } from 'react-router-dom';
+import ListDetailsForm from './ListDetailsForm';
+import { setData } from '@utils/localStorage';
+import ListDetailsTable from './ListDetailsTable';
+import { PlusOutlined } from '@ant-design/icons';
+import Title from 'antd/es/typography/Title';
+import { defineMessages } from 'react-intl';
+import RichTextField from '@components/common/form/RichTextField';
 
-
-const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
+const messages = defineMessages({
+    objectName: 'Yêu cầu',
+    title: 'Bạn có xác nhận xoá yêu cầu này?',
+    ok: 'Đồng ý',
+    cancel: 'Huỷ',
+});
+const CompanyRequestForm = ({
+    isEditing,
+    formId,
+    actions,
+    dataDetail,
+    onSubmit,
+    setIsChangedFormValues,
+    handleFocus,
+}) => {
     const translate = useTranslate();
-    const [logoUrl, setLogoUrl] = useState(null);
-    const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const [showPreviewModal, setShowPreviewModal] = useState(false);
-    const [hasError, setHasError] = useState(false);
-    const { pathname: pagePath } = useLocation();
-    const location = useLocation();
-    const { data: dataListDetails } = location.state;
+    const [listData, setListData] = useState([]);
+    const [item, setItem] = useState(null);
     const [openedDetailsModal, handlerDetailsModal] = useDisclosure(false);
-    // console.log(dataListDetails);
-
-    const { form, mixinFuncs, onValuesChange } = useBasicForm({
+    const [form] = Form.useForm();
+    const {
+        form: formRequest,
+        mixinFuncs,
+        onValuesChange,
+    } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
-    const lyrics = {
-        // amount: dataListDetails.amount,
-        // projectRoleId: dataListDetails.projectRoleId,
-        // requirement: dataListDetails.requirement,
-    };
 
-    const uploadLogoFile = (file, onSuccess, onError) => {
-        executeUpFile({
-            data: {
-                type: 'LOGO',
-                file: file,
-            },
-            onCompleted: (response) => {
-                if (response.result === true) {
-                    onSuccess();
-                    setLogoUrl(response.data.filePath);
-                    setIsChangedFormValues(true);
-                }
-            },
-            onError: (error) => {
-                onError();
-            },
+    const handleSubmit = (values) => {
+        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
+        values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
+        return mixinFuncs.handleSubmit({
+            ...values,
+            listDetails: listData.map((item) => ({ ...item, projectRoleId: item.projectRoleId.value })),
         });
     };
 
-    const dataListDetails1 = () => {
-        if (isEditing) {
-            const data1 = dataListDetails;
-            // console.log(data1);
-            return data1;
-        }
-        return dataListDetails;
-        // console.log(data1);
-    };
-
-    const handleSubmit = (values) => {
-        console.log(dataDetail);
-        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
-        values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
-        // const dataListDetails = dataListDetails1();
-        if (isEditing) {
-            const listDetails = [{
-                amount: dataDetail?.listDetails[0]?.amount,
-                projectRoleId: dataDetail?.listDetails[0]?.projectRoleId,
-                requirement: dataDetail?.listDetails[0]?.requirement,
-                status: dataDetail?.listDetails[0]?.status,
-                id: dataDetail?.listDetails[0]?.id,
-            }];
-            return mixinFuncs.handleSubmit({ ...values, listDetails });
-        }
-        const listDetails = [{
-            amount: dataListDetails.amount,
-            projectRoleId: dataListDetails.projectRoleId,
-            requirement: dataListDetails.requirement,
-            status: dataListDetails.status,
-            id: dataListDetails.id,
-        }];
-        return mixinFuncs.handleSubmit({ ...values, listDetails });
-    };
-
-    useEffect(() => {
-        if (!isEditing > 0) {
-            form.setFieldsValue({
-                status: statusValues[0].value,
-            });
-        }
-    }, [isEditing]);
-
-    const {
-        data: companys,
-        loading: getcompanyLoading,
-        execute: executescompanys,
-    } = useFetch(apiConfig.company.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.companyName })),
-    });
-    const {
-        data: serviceCompanySubscription,
-        loading: getserviceCompanySubscriptionLoading,
-        execute: executesserviceCompanySubscription,
-    } = useFetch(apiConfig.serviceCompanySubscription.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.name })),
-    });
     useEffect(() => {
         dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
         dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
-        form.setFieldsValue({
+        console.log({
             ...dataDetail,
-            companyId: dataDetail?.company?.companyName,
+            serviceCompanySubscriptionId: dataDetail?.subscription?.name,
+            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
+        });
+        if (dataDetail?.listDetails)
+            setListData(
+                dataDetail?.listDetails.map((item, index) => ({
+                    ...item,
+                    index,
+                    projectRoleId: item.projectRoleId
+                        ? item.projectRoleId
+                        : {
+                            ...item.projectRoleInfo,
+                            label: item.projectRoleInfo.projectRoleName,
+                        },
+                })),
+            );
+        formRequest.setFieldsValue({
+            ...dataDetail,
             serviceCompanySubscriptionId: dataDetail?.subscription?.name,
             startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
         });
     }, [dataDetail]);
+
     const validateDueDate = (_, value) => {
         const { startDate } = form.getFieldValue();
         if (startDate && value && value.isBefore(startDate)) {
@@ -153,38 +104,57 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
         }
         return Promise.resolve();
     };
-    const handleOk = () => {
-        setShowPreviewModal(false);
-    };
-    const handleCancel = () => {
-        setShowPreviewModal(false);
-    };
+
+    const handleAddList = useCallback((item) => {
+        setListData((pre) => {
+            return [...pre, { ...item, index: pre.length + 1 }];
+        });
+        setIsChangedFormValues(true);
+    }, []);
+
+    const handleEditItemList = useCallback((item) => {
+        setListData((pre) => {
+            return pre.map((_item) => {
+                if (_item.index === item.index) return item;
+                return _item;
+            });
+        });
+        setIsChangedFormValues(true);
+    }, []);
+
+    const handleEditList = useCallback((item) => {
+        console.log(item);
+        setItem(item);
+        handlerDetailsModal.open();
+        setIsChangedFormValues(true);
+    }, []);
+
+    const handleDeleteList = useCallback((index) => {
+        Modal.confirm({
+            title: translate.formatMessage(messages.title),
+            content: '',
+            okText: translate.formatMessage(messages.ok),
+            cancelText: translate.formatMessage(messages.cancel),
+            onOk: () => {
+                setListData((pre) => pre.filter((_) => _.index !== index));
+                setIsChangedFormValues(true);
+            },
+        });
+    }, []);
+
     return (
         <div>
-            <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} >
+            <BaseForm formId={formId} onFinish={handleSubmit} form={formRequest} onValuesChange={onValuesChange}>
                 <Card>
                     <Col span={24} style={{ textAlign: 'right' }}>
-                        <Button
-                            type="primary"
-                            // disabled={hasError ? true : disabledSubmit}
-                            // onClick={() => setShowPreviewModal(true)}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handlerDetailsModal.open();
-                            }}
-                        >
-                            {<FormattedMessage defaultMessage="Danh sách mô tả" />}
-                        </Button>
-
                         <ListDetailsForm
-                            // courseId={courseId}
-                            // lectureId={lectureid}
-                            setHasError={setHasError}
-                            // showPreview={showPreviewModal}
                             open={openedDetailsModal}
                             onCancel={() => handlerDetailsModal.close()}
-                            data={dataDetail.listDetails || {}}
-                            isEditing={isEditing}
+                            data={item}
+                            isEditing={!!item}
+                            handleAddList={handleAddList}
+                            form={form}
+                            handleEditItemList={handleEditItemList}
                         />
                     </Col>
                     <Row gutter={16}>
@@ -197,20 +167,8 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
                             />
                         </Col>
                         <Col span={12}>
-                            <AutoCompleteField
-                                label={<FormattedMessage defaultMessage="Công ty" />}
-                                name="companyId"
-                                apiConfig={apiConfig.company.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.companyName })}
-                                initialSearchParams={{}}
-                                searchParams={(text) => ({ companyName: text })}
-                                required
-                                disabled={isEditing}
-                            />
-                        </Col>
-                        <Col span={12}>
                             <NumericField
-                                label={<FormattedMessage defaultMessage="Số lượng công việc" />}
+                                label={<FormattedMessage defaultMessage="Số lượng CV" />}
                                 name="numberCv"
                                 min={0}
                                 max={100}
@@ -226,11 +184,10 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
                         </Col>
                         <Col span={12}>
                             <DatePickerField
-                                showTime={true}
                                 name="startDate"
                                 label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                                 placeholder="Ngày bắt đầu"
-                                format={DEFAULT_FORMAT}
+                                format={DATE_FORMAT_DISPLAY}
                                 style={{ width: '100%' }}
                                 rules={[
                                     {
@@ -245,7 +202,6 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
                         </Col>
                         <Col span={12}>
                             <DatePickerField
-                                showTime={true}
                                 label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                                 name="dueDate"
                                 placeholder="Ngày kết thúc"
@@ -258,25 +214,48 @@ const CompanyRequestForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
                                         validator: validateDueDate,
                                     },
                                 ]}
-                                format={DEFAULT_FORMAT}
+                                format={DATE_FORMAT_DISPLAY}
                                 style={{ width: '100%' }}
                             />
                         </Col>
                     </Row>
                     <TextField
                         width={'100%'}
-                        required
-                        label={<FormattedMessage defaultMessage="Mô tả" />}
-                        name="description"
-                        type="textarea"
-                    />
-                    <TextField
-                        width={'100%'}
-                        required
                         label={<FormattedMessage defaultMessage="Mô tả ngắn" />}
                         name="shortDescription"
                         type="textarea"
                     />
+                    <RichTextField
+                        style={{ height: 200, marginBottom: 70 }}
+                        label={<FormattedMessage defaultMessage="Mô tả" />}
+                        name="description"
+                    />
+
+                    <Card bordered style={{ marginBottom: '1rem' }}>
+                        <Flex align="center" justify="space-between" style={{ marginBottom: '1rem' }}>
+                            <Title level={4}>
+                                <FormattedMessage defaultMessage="Danh sách yêu cầu" />
+                            </Title>
+                            <Button
+                                type="primary"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handlerDetailsModal.open();
+                                    setItem(null);
+                                    form.resetFields();
+                                }}
+                                style={{ width: '150px' }}
+                            >
+                                <PlusOutlined /> <FormattedMessage defaultMessage="Thêm yêu cầu" />
+                            </Button>
+                        </Flex>
+
+                        <ListDetailsTable
+                            data={listData}
+                            handleEditList={handleEditList}
+                            handleDeleteList={handleDeleteList}
+                        />
+                    </Card>
                     <div className="footer-card-form">{actions}</div>
                 </Card>
             </BaseForm>
