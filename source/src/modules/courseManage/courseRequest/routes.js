@@ -1,7 +1,7 @@
 import apiConfig from '@constants/apiConfig';
 import CourseRequestListPage from '.';
 import CourseRequestSavePage from './CourseRequestSavePage';
-import RegistrationSavePage from '@modules/courseManage/course/registration/index';
+import RegistrationSavePage from '../course/registration/RegistrationSavePage';
 export default {
     courseRequestListPage: {
         path: '/course-request',
@@ -19,7 +19,7 @@ export default {
     },
     courseRequestRegistrationSavePage: {
         path: '/course-request/registration/:id',
-        title: 'Course Save Page',
+        title: 'Registration Save Page',
         auth: true,
         component: RegistrationSavePage,
         permissions: [apiConfig.registration.create.baseURL],
