@@ -72,6 +72,7 @@ const ProjectTaskLogForm = (props) => {
                             name="totalTime"
                             type="number"
                             min={0}
+                            addonAfter={<FormattedMessage defaultMessage="Phút" />}
                             required
                         />
                     </Col>

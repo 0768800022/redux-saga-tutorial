@@ -77,6 +77,7 @@ const TaskLogForm = (props) => {
                         <NumericField
                             label={<FormattedMessage defaultMessage="Tổng thời gian" />}
                             name="totalTime"
+                            addonAfter={<FormattedMessage defaultMessage="Phút" />}
                             min={0}
                         />
                     </Col>
