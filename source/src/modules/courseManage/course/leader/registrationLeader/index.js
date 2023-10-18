@@ -118,7 +118,6 @@ function RegistrationLeaderListPage() {
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(commonMessage.home) },
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.course),
                     path: routes.courseLeaderListPage.path,
