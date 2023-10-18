@@ -24,6 +24,7 @@ function AutoCompleteField({
     debounceTime = 600,
     onChange,
     disabled,
+    renderCustomOption,
 }) {
     const { placeholder: _placeholder, rules: _rules } = useFormField({
         placeholder,
@@ -34,9 +35,7 @@ function AutoCompleteField({
     const [_options, setOptions] = useState();
     const { execute } = useFetch(apiConfig);
     const form = useFormInstance();
-    const haveInitialValue = useRef(false);
     const [initialOpts, setInitialOpts] = useState();
-    const [shouldFetchOnFocus, setShouldFetchOnFocus] = useState(false);
 
     const handleFetchOptions = useCallback(
         ({ searchText, onCompleted, onError }) => {
@@ -118,6 +117,7 @@ function AutoCompleteField({
             notFoundContent={fetching ? <Spin size="small" /> : undefined}
             onSearch={handleOnSearch}
             placeholder={_placeholder}
+            renderCustomOption={renderCustomOption}
             onChange={onChange}
             onFocus={handleFocus}
             onClear={() => handleOnSearch('')}

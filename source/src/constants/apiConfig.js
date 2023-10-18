@@ -274,6 +274,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        acceptRequest: {
+            baseURL: `${apiTenantUrl}v1/registration/accept-request`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     registrationMoney: {
         getList: {
@@ -409,6 +415,17 @@ const apiConfig = {
             method: 'GET',
             headers: baseHeader,
         },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/student/update-profile`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getDetailByPhone: {
+            baseURL: `${apiTenantUrl}v1/student/detail-by-phone`,
+            method: 'GET',
+            headers: baseHeader,
+        },
     },
     leader: {
         getList: {
@@ -431,6 +448,12 @@ const apiConfig = {
         },
         update: {
             baseURL: `${apiTenantUrl}v1/leader/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/leader/update_profile`,
             method: 'PUT',
             headers: baseHeader,
             isRequiredTenantId: true,
@@ -808,6 +831,12 @@ const apiConfig = {
             isLogin: true,
             isRequiredTenantId: true,
         },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/company/update-profile`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     companySubscription: {
         getList: {
@@ -994,6 +1023,120 @@ const apiConfig = {
         },
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/course-request/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    companyRequest: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/company-request/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/company-request/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/company-request/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/company-request/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/company-request/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/company-request/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    taskLog: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/task-log/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/task-log/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/task-log/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/task-log/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/task-log/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/task-log/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    projectTaskLog: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/auto-complete`,
             method: 'GET',
             headers: baseHeader,
             isRequiredTenantId: true,

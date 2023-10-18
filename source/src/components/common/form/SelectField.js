@@ -33,6 +33,7 @@ function SelectField({
     value,
     onClear,
     onFocus,
+    onChangeOption,
     ...props
 }) {
     const { placeholder, rules } = useFormField(props);
@@ -50,7 +51,7 @@ function SelectField({
                 className={isSafari ? styles.field : null}
                 onDropdownVisibleChange={(open) => {
                     // remove blink cursor when user selected an option
-                    if(!open) selectRef.current.blur();
+                    if (!open) selectRef.current.blur();
                 }}
                 value={value}
                 notFoundContent={notFoundContent}

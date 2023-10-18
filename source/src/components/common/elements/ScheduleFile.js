@@ -1,5 +1,5 @@
 import React from "react";
-
+import { BaseTooltip } from "../form/BaseTooltip";
 
 const ScheduleFile = ({ schedule }) => {
     let check = JSON.parse(schedule);
@@ -12,7 +12,6 @@ const ScheduleFile = ({ schedule }) => {
         { key: 'S', value: check.t7 },
         { key: 'S', value: check.cn },
     ];
-
     let dateString = '';
     newCheck.map((item) => {
         if (item.value) {
@@ -69,7 +68,7 @@ const ScheduleFile = ({ schedule }) => {
             textAlign: 'center',
             marginRight: '5px',
         }}>
-            {index === dayOfWeek - 1 ? (
+            <BaseTooltip title={newCheck[index].value}>{index === dayOfWeek - 1 ? (
                 <span
                     style={{
                         display: 'block',
@@ -86,7 +85,8 @@ const ScheduleFile = ({ schedule }) => {
                 width: '100%',
                 height: '100%',
                 border: '1px solid #000',
-            }}>{item}</span>}
+            }}>{item}</span>}</BaseTooltip>
+
         </div>
     ));
     return (

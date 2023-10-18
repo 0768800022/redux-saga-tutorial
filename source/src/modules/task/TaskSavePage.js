@@ -17,6 +17,7 @@ const messages = defineMessages({
 function TaskSavePage({ getListUrl, breadcrumbName }) {
     const translate = useTranslate();
     const location = useLocation();
+    console.log(location);
     const state = location.state.prevPath;
     const search = location.search;
     const paramHead = routes.courseListPage.path;
@@ -49,8 +50,8 @@ function TaskSavePage({ getListUrl, breadcrumbName }) {
     return (
         <PageWrapper
             loading={loading}
-            routes={breadcrumbName ? breadcrumbName : 
-                routes.taskSavePage.breadcrumbs(messages,paramHead,state,search,title)
+            routes={breadcrumbName ? breadcrumbName :
+                routes.taskSavePage.breadcrumbs(commonMessage, paramHead, state, search, title)
             }
         >
             <TaskForm

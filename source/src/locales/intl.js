@@ -8,6 +8,7 @@ export const commonMessage = defineMessages({
     company: 'Công ty',
     companyName: 'Tên công ty',
     companySubscription: 'Gói dịch vụ',
+    companyRequest: 'Yêu cầu công ty',
     course: 'Khóa học',
     courseName: 'Tên khoá học',
     createdDate: 'Ngày tạo',
@@ -54,5 +55,14 @@ export const commonMessage = defineMessages({
     teamName: "Tên nhóm",
     username: 'Tài khoản đăng nhập',
     valueable: 'Số ngày sử dụng',
-
+    taskLog: 'Nhật ký',
+    message: 'Lời nhắn',
+    totalTime: 'Tổng thời gian',
+    currentPassword: 'Mật khẩu cũ',
+    newPassword: 'Mật khẩu mới',
+    confirmPassword: 'Xác nhận mật khẩu mới',
+    birthday: 'Ngày sinh',
+    university: 'Trường',
+    studyClass: 'Hệ',
+    hotline: 'Đường dây nóng',
 });
