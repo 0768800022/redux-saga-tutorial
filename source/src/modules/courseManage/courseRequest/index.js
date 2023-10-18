@@ -46,8 +46,9 @@ const CourseRequestListPage = () => {
                             style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
+                                const { status: status, ...newItem } = item;
                                 navigate(`/course-request/registration/create`, {
-                                    state: { data: item },
+                                    state: { data: newItem },
                                 });
                             }}
                         >
@@ -107,7 +108,7 @@ const CourseRequestListPage = () => {
             key: 'state',
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
-            options: stateValues,
+            options: [stateValues[0]],
         },
     ];
     return (
