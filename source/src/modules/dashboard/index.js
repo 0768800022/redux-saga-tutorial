@@ -25,7 +25,7 @@ const Dashboard = () => {
         } else if (userKind == UserTypes.STUDENT) {
             navigate(routes.courseStudentListPage.path);
         } else if (userKind == UserTypes.LEADER) {
-            navigate(routes.courseLeaderListPage.path);
+            navigate(routes.courseListPage.path);
         } else if (userKind == UserTypes.COMPANY) {
             navigate(routes.companyRequestListPage.path);
         } else {

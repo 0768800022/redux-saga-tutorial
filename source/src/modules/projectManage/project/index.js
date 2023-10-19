@@ -21,6 +21,8 @@ import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
 // import icon_team_1 from '@assets/images/team-Members-Icon.png';
+import { UserTypes, storageKeys } from '@constants';
+import { getData } from '@utils/localStorage';
 
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -37,6 +39,8 @@ const ProjectListPage = () => {
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
+    const useKind = getData(storageKeys.USER_KIND);
+
     const [dataApply, setDataApply] = useState([]);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
@@ -265,8 +269,8 @@ const ProjectListPage = () => {
                 );
             },
         },
-        !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn(
+        !leaderName && !developerName && useKind === UserTypes.MANAGER && mixinFuncs.renderStatusColumn({ width: '120px' }),
+        useKind === UserTypes.MANAGER && mixinFuncs.renderActionColumn(
             {
                 team: true,
                 member: !leaderName && !developerName && true,
@@ -282,7 +286,7 @@ const ProjectListPage = () => {
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
+                actionBar={!leaderName && !developerName  && useKind === UserTypes.MANAGER && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

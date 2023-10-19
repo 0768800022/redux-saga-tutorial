@@ -172,7 +172,7 @@ const CourseLeaderListPage = () => {
                 edit: true,
                 delete: true,
             },
-            { width: '80px' },
+            { width: '100px' },
         ),
     ].filter(Boolean);
     return (
