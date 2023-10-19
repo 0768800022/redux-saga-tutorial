@@ -53,7 +53,7 @@ const navMenuConfig = [
                 label: <FormattedMessage defaultMessage="Khoá học" />,
                 key: 'khoa-hoc',
                 path: generatePath(routes.courseListPage.path, {}),
-                permission: [apiConfig.course.getList.baseURL],
+                permission: apiConfig.course.getList.baseURL,
             },
             {
                 label: <FormattedMessage defaultMessage="Môn học" />,
