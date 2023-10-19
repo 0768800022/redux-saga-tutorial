@@ -10,7 +10,7 @@ export default {
         title: 'Subject List Page',
         auth: true,
         component: SubjectListPage,
-        permissions: apiConfig.subject.getList.baseURL,
+        permissions: [apiConfig.subject.getList.baseURL],
     },
     subjectSavePage: {
         path: '/subject/:id',
@@ -24,7 +24,7 @@ export default {
         title: 'lecture List Page',
         auth: true,
         component: LectureListPage,
-        permissions: [apiConfig.lecture.update.baseURL, apiConfig.lecture.create.baseURL],
+        permissions: [apiConfig.lecture.getBySubject.baseURL],
     },
 
     lectureSavePage: {

@@ -21,8 +21,9 @@ import AvatarField from '@components/common/form/AvatarField';
 import { IconBrandTeams } from '@tabler/icons-react';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
+
 const message = defineMessages({
-    objectName: 'dự án',
+    objectName: 'Dự án',
     code: 'Mã dự án',
     id: 'Id',
     group: 'Nhóm',
@@ -36,6 +37,7 @@ const ProjectLeaderListPage = () => {
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
+
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: {
@@ -75,7 +77,7 @@ const ProjectLeaderListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
-                    task: ({ id, name, state }) => (
+                    task: ({ id, name, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
                                 type="link"
@@ -83,34 +85,49 @@ const ProjectLeaderListPage = () => {
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-
-                                    navigate(
-                                        routes.projectLeaderTaskListPage.path + `?projectId=${id}&projectName=${name}`,
-                                    );
+                                    if (status == 1) {
+                                        navigate(
+                                            routes.projectLeaderTaskListPage.path +
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                        );
+                                    } else {
+                                        navigate(
+                                            routes.projectLeaderTaskListPage.path +
+                                                `?projectId=${id}&projectName=${name}`,
+                                        );
+                                    }
                                 }}
                             >
                                 <BookOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
-                    member: ({ id, name }) => (
+                    member: ({ id, name, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.member)}>
                             <Button
                                 type="link"
                                 style={{ padding: '0' }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    navigate(
-                                        routes.projectLeaderMemberListPage.path +
-                                            `?projectId=${id}&projectName=${name}`,
-                                    );
+
+                                    if (status == 1) {
+                                        navigate(
+                                            routes.projectLeaderMemberListPage.path +
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                        );
+                                    } else {
+                                        navigate(
+                                            routes.projectLeaderMemberListPage.path +
+                                                `?projectId=${id}&projectName=${name}`,
+                                        );
+                                    }
                                 }}
                             >
                                 <UserOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
-                    team: ({ id, name }) => (
+                    team: ({ id, name, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
                                 type="link"
@@ -118,9 +135,17 @@ const ProjectLeaderListPage = () => {
                                 onClick={(e) => {
                                     e.stopPropagation();
 
-                                    navigate(
-                                        routes.projectLeaderTeamListPage.path + `?projectId=${id}&projectName=${name}`,
-                                    );
+                                    if (status == 1) {
+                                        navigate(
+                                            routes.projectLeaderTeamListPage.path +
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                        );
+                                    } else {
+                                        navigate(
+                                            routes.projectLeaderTeamListPage.path +
+                                                `?projectId=${id}&projectName=${name}`,
+                                        );
+                                    }
                                 }}
                             >
                                 <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
@@ -192,14 +217,13 @@ const ProjectLeaderListPage = () => {
             },
         },
 
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
-
-        mixinFuncs.renderActionColumn({ team: true, member: true, task: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ team: true, member: true, task: true, edit: true }, { width: '120px' }),
     ];
 
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.project) }]}>
             <ListPage
+                actionBar={mixinFuncs.renderActionBar()}
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
                 baseTable={
                     <BaseTable

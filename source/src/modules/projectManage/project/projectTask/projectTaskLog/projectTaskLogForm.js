@@ -22,6 +22,7 @@ const ProjectTaskLogForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
+        values.status =  statusValues[1].value;
         values.projectTaskId = projectTaskId;
         return mixinFuncs.handleSubmit({ ...values });
     };
@@ -35,7 +36,6 @@ const ProjectTaskLogForm = (props) => {
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
                 kind: KindTaskLog[0].value,
                 projectTaskId: projectTaskId,
                 task: taskName,

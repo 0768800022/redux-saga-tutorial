@@ -25,7 +25,7 @@ const ListDetailsForm = ({ handleAddList, open, onCancel, data, isEditing, id, f
             title={<FormattedMessage defaultMessage="Danh sách yêu cầu" />}
             open={open}
             onCancel={onCancel}
-            footer={false}
+            onOk={() => form.submit()}
         >
             <BaseForm form={form} onFinish={handleFinish} size="100%">
                 <Card>
@@ -62,11 +62,6 @@ const ListDetailsForm = ({ handleAddList, open, onCancel, data, isEditing, id, f
                             />
                         </Col>
                     </Row>
-                    <div style={{ float: 'right' }}>
-                        <Button key="submit" type="primary" htmlType="submit">
-                            {<FormattedMessage defaultMessage="Xác nhận" />}
-                        </Button>
-                    </div>
                 </Card>
             </BaseForm>
         </Modal>

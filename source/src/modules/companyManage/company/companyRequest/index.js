@@ -1,28 +1,21 @@
-import PageWrapper from '@components/common/layout/PageWrapper';
+import { EditOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
+import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
-import React from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
-import { DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants/index';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Avatar, Tag, Button } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import dayjs from 'dayjs';
-import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY } from '@constants';
-import { formatMoney } from '@utils/index';
-import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
+import { statusOptions } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
-import { render } from '@testing-library/react';
-import AutoCompleteField from '@components/common/form/AutoCompleteField';
-import AvatarField from '@components/common/form/AvatarField';
+import useListBase from '@hooks/useListBase';
+import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
+import useAuth from '@hooks/useAuth';
+import routes from '@routes';
 
 const message = defineMessages({
     objectName: 'Yêu cầu công ty',
@@ -33,9 +26,11 @@ const CompanyRequestListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const companyId = queryParameters.get('companyId');
     const [companyOptions, setCompanyOptions] = useState([]);
     const navigate = useNavigate();
+    const { profile } = useAuth();
+    const companyId = profile.id;
+
     // const companyOptions =[];
     // const companyValues = translate.formatKeys(companyOptions, ['label']);
     // console.log(companyOptions);
@@ -55,11 +50,17 @@ const CompanyRequestListPage = () => {
                     };
                 }
             };
+            funcs.prepareGetListParams = () => {
+                return navigate(routes.companyRequestListPage.path + `?companyId=${profile.id}`);
+            };
             funcs.getCreateLink = () => {
-                if (companyId !== null) {
-                    return `${pagePath}/create?companyId=${companyId}`;
+                if (profile?.id !== null) {
+                    return `${pagePath}/create?companyId=${profile.id}`;
                 }
                 return `${pagePath}/create`;
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?companyId=${profile.id}`;
             };
             funcs.additionalActionColumnButtons = () => ({
                 edit: (item) => (
@@ -69,7 +70,7 @@ const CompanyRequestListPage = () => {
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(mixinFuncs.getItemDetailLink(item), {
-                                state: { action: 'edit', prevPath: location.pathname, data: companyRequests },
+                                state: { action: 'edit', prevPath: location.pathname },
                             });
                         }}
                     >
@@ -79,13 +80,7 @@ const CompanyRequestListPage = () => {
             });
         },
     });
-    const {
-        data: companyRequests,
-        // loading: getcompanyRequestLoading,
-        execute: executescompanyRequests,
-    } = useFetch(apiConfig.companyRequest.autocomplete, {
-        immediate: true,
-    });
+
     const columns = [
         {
             title: <FormattedMessage defaultMessage="Tiêu đề" />,
@@ -97,7 +92,7 @@ const CompanyRequestListPage = () => {
             align: 'center',
             width: 140,
         },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        // mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 

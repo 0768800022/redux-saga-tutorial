@@ -26,6 +26,8 @@ import { formatMoney } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import { UserTypes, storageKeys } from '@constants';
+import { getData } from '@utils/localStorage';
 
 const message = defineMessages({
     objectName: 'Khoá học',
@@ -37,6 +39,8 @@ const CourseListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const leaderName = queryParameters.get('leaderName');
+    const useKind = getData(storageKeys.USER_KIND);
+
     const location = useLocation();
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -122,7 +126,7 @@ const CourseListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        !leaderName && {
+        !leaderName && useKind === UserTypes.MANAGER && {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
@@ -222,15 +226,16 @@ const CourseListPage = () => {
                 );
             },
         },
-        !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn(
+        !leaderName && useKind === UserTypes.MANAGER && mixinFuncs.renderStatusColumn({ width: '120px' }),
+        
+        useKind !== UserTypes.STUDENT && mixinFuncs.renderActionColumn(
             {
                 task: true,
                 registration: !leaderName && true,
                 edit: !leaderName && true,
                 delete: !leaderName && true,
             },
-            { width: '180px' },
+            { width: '150px' },
         ),
     ].filter(Boolean);
 

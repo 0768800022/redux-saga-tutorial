@@ -1,34 +1,30 @@
 import React from 'react';
 import apiConfig from '@constants/apiConfig';
-import routes from '@routes';
+import routes from './routes';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import CompanyRequestForm from './CompanyRequestForm';
+import CompanyForm from './CompanyForm';
 import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
-import { useState } from 'react';
-import { Button } from 'antd';
-import ListPage from '@components/common/layout/ListPage';
-import useAuth from '@hooks/useAuth';
 
 const message = defineMessages({
-    objectName: 'Yêu cầu công ty',
+    objectName: 'Công ty',
 });
 
-const CompanyRequestSavePage = () => {
-    const CompanyRequestId = useParams();
+const CompanySavePage = () => {
+    const companyId = useParams();
     const translate = useTranslate();
-    const { profile } = useAuth();
+
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.companyRequest.getById,
-            create: apiConfig.companyRequest.create,
-            update: apiConfig.companyRequest.update,
+            getById: apiConfig.companySeek.getById,
+            create: apiConfig.companySeek.create,
+            update: apiConfig.companySeek.update,
         },
         options: {
-            getListUrl: routes.companyRequestListPage.path,
+            getListUrl: routes.companyListPage.path,
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
@@ -36,28 +32,29 @@ const CompanyRequestSavePage = () => {
                 return {
                     ...data,
                     id: detail.id,
-                    companyId: profile?.id,
-                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
-                return { ...data, status: 1, companyId: profile?.id };
+                return {
+                    ...data,
+                };
             };
         },
+
     });
     return (
         <PageWrapper
             loading={loading}
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(commonMessage.companyRequest),
-                    path: generatePath(routes.companyRequestListPage.path + `?companyId=${profile.id}`),
+                    breadcrumbName: translate.formatMessage(commonMessage.company),
+                    path: generatePath(routes.companyListPage.path, { companyId }),
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <CompanyRequestForm
+            <CompanyForm
                 formId={mixinFuncs.getFormId()}
                 actions={mixinFuncs.renderActions()}
                 dataDetail={detail ? detail : {}}
@@ -69,4 +66,4 @@ const CompanyRequestSavePage = () => {
         </PageWrapper>
     );
 };
-export default CompanyRequestSavePage;
+export default CompanySavePage;
