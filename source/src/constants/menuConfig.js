@@ -1,11 +1,5 @@
 import routes from '@routes';
-import {
-    IconUserBolt,
-    IconSchool,
-    IconClipboardText,
-    IconBuildingCommunity,
-    IconSettings,
-} from '@tabler/icons-react';
+import { IconUserBolt, IconSchool, IconClipboardText, IconBuildingCommunity, IconSettings } from '@tabler/icons-react';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
@@ -236,6 +230,12 @@ const navMenuConfig = [
                 key: 'company-request',
                 path: generatePath(routes.companyRequestListPage.path, {}),
                 permission: apiConfig.companyRequest.getList.baseURL,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Tìm kiếm ứng viên" />,
+                key: 'company-seek-management',
+                path: routes.companySeekListPage.path,
+                permission: apiConfig.companySeek.getList.baseURL,
             },
         ],
     },
