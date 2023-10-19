@@ -22,6 +22,7 @@ const TaskLogForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
+        values.status = statusValues[1].value;
         values.taskId = taskId;
         return mixinFuncs.handleSubmit({ ...values });
     };
@@ -34,7 +35,6 @@ const TaskLogForm = (props) => {
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
                 kind: KindTaskLog[0].value,
                 taskId: taskId,
                 task: taskName,
@@ -45,14 +45,14 @@ const TaskLogForm = (props) => {
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={24}>
                         <TextField
                             disabled
                             label={<FormattedMessage defaultMessage="Task" />}
                             name="task"
                         />
                     </Col>
-                    <Col span={12}>
+                    {/* <Col span={12}>
                         <SelectField
                             required
                             name="status"
@@ -60,7 +60,7 @@ const TaskLogForm = (props) => {
                             allowClear={false}
                             options={statusValues}
                         />
-                    </Col>
+                    </Col> */}
                 </Row>
                 <Row gutter={16}>
                     <Col span={12}>
@@ -77,7 +77,9 @@ const TaskLogForm = (props) => {
                         <NumericField
                             label={<FormattedMessage defaultMessage="Tổng thời gian" />}
                             name="totalTime"
+                            addonAfter={<FormattedMessage defaultMessage="Phút" />}
                             min={0}
+                            required
                         />
                     </Col>
                 </Row>

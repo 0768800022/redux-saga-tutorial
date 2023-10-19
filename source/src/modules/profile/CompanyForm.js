@@ -9,25 +9,9 @@ import { AppConstants } from '@constants';
 import { Fragment } from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
-    banner: 'Banner',
-    avatarPath: 'Avatar',
-    username: 'Username',
-    career: 'Career Name',
-    fullName: 'Leader',
-    email: 'Email',
-    hotline: 'Hot line',
-    phoneNumber: 'Phone Number',
-    taxNumber: 'Tax Number',
-    zipCode: 'Zip Code',
-    city: 'City',
-    address: 'Address',
-    logo: 'Logo',
-    currentPassword: 'Current password',
-    newPassword: 'New password',
-    confirmPassword: 'Confirm password',
-    passwordLengthError: 'Password must be at least 6 characters',
     passwordMatchError: 'Password does not match',
     companyName: 'Company Name',
 });
@@ -42,7 +26,6 @@ const CompanyForm = (props) => {
         onSubmit,
         setIsChangedFormValues,
     });
-    console.log(dataDetail);
     const uploadFile = (file, onSuccess, onError) => {
         executeUpFile({
             data: {
@@ -93,28 +76,29 @@ const CompanyForm = (props) => {
                 <Row style={{ marginLeft: '8rem' }} gutter={16}>
                     <Col span={8}>
                         <CropImageField
-                            label={translate.formatMessage(messages.avatarPath)}
+                            label={translate.formatMessage(commonMessage.logo)}
                             name="avatarPath"
                             imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                             aspect={1 / 1}
-                            required
                             uploadFile={uploadFile}
                         />
                     </Col>
                 </Row>
-                <TextField label={translate.formatMessage(messages.email)} disabled name="email" />
-                <TextField label={translate.formatMessage(messages.companyName)} name="companyName" />
-                <TextField label={translate.formatMessage(messages.address)} name="address" />
-                <TextField label={translate.formatMessage(messages.hotline)} name="hotline" />
+                <TextField label={translate.formatMessage(commonMessage.email)} disabled name="email" />
+                <TextField label={translate.formatMessage(commonMessage.companyName)} required name="companyName" />
+                <TextField label={translate.formatMessage(commonMessage.address)} required name="address" />
+                <TextField label={translate.formatMessage(commonMessage.hotline)} required name="hotline" />
+                <TextField label={translate.formatMessage(commonMessage.username)} disabled name="username" />
+
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.currentPassword)}
+                    label={translate.formatMessage(commonMessage.currentPassword)}
                     required
                     name="oldPassword"
                 />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.newPassword)}
+                    label={translate.formatMessage(commonMessage.newPassword)}
                     name="password"
                     rules={[
                         {
@@ -132,7 +116,7 @@ const CompanyForm = (props) => {
                 />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.confirmPassword)}
+                    label={translate.formatMessage(commonMessage.confirmPassword)}
                     rules={[
                         {
                             validator: async () => {

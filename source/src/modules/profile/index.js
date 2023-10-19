@@ -54,7 +54,6 @@ const ProfilePage = () => {
             };
         },
     });
-    console.log(userProfileType[useKind]);
 
     return (
         <PageWrapper
@@ -63,7 +62,7 @@ const ProfilePage = () => {
                 { breadcrumbName: translate.formatMessage(messages.profile) },
             ]}
         >
-            {userProfileType[useKind] === 'organize' &&(
+            {useKind === UserTypes.MANAGER &&(
                 <ProfileForm
                     setIsChangedFormValues={setIsChangedFormValues}
                     dataDetail={data ? data : {}}
@@ -74,7 +73,7 @@ const ProfilePage = () => {
                     // isAdmin={isAdmin}
                 />
             )}
-            {userProfileType[useKind] === 'leader' &&(
+            {useKind === UserTypes.LEADER &&(
                 <LeaderForm
                     setIsChangedFormValues={setIsChangedFormValues}
                     dataDetail={data ? data : {}}
@@ -84,7 +83,7 @@ const ProfilePage = () => {
                     onSubmit={onSave}
                 />
             )}
-            {userProfileType[useKind] === 'student' &&(
+            {useKind === UserTypes.STUDENT &&(
                 <StudentForm
                     setIsChangedFormValues={setIsChangedFormValues}
                     dataDetail={data ? data : {}}
@@ -94,7 +93,7 @@ const ProfilePage = () => {
                     onSubmit={onSave}
                 />
             )}
-            {userProfileType[useKind] === 'company' &&(
+            {useKind === UserTypes.COMPANY &&(
                 <CompanyForm
                     setIsChangedFormValues={setIsChangedFormValues}
                     dataDetail={data ? data : {}}

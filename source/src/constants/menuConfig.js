@@ -1,6 +1,5 @@
 import routes from '@routes';
 import {
-    IconCategory2,
     IconUserBolt,
     IconSchool,
     IconClipboardText,
@@ -12,6 +11,7 @@ import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
 import { FormattedMessage } from 'react-intl';
 import apiConfig from './apiConfig';
+
 const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Quản lý tài khoản" />,
@@ -19,27 +19,33 @@ const navMenuConfig = [
         icon: <IconUserBolt size={16} />,
         children: [
             {
-                label: <FormattedMessage defaultMessage="Quản lý sinh viên" />,
+                label: <FormattedMessage defaultMessage="Tài khoản sinh viên" />,
                 key: 'student-management',
                 path: routes.studentListPage.path,
                 permission: apiConfig.student.getList.baseURL,
             },
             {
-                label: <FormattedMessage defaultMessage="Quản lý leader" />,
+                label: <FormattedMessage defaultMessage="Tài khoản leader" />,
                 key: 'leader-management',
                 path: generatePath(routes.leaderListPage.path, {}),
                 permission: apiConfig.leader.getList.baseURL,
             },
             {
-                label: <FormattedMessage defaultMessage="Quản lý lập trình viên" />,
+                label: <FormattedMessage defaultMessage="Tài khoản lập trình viên" />,
                 key: 'developer-management',
                 path: generatePath(routes.developerListPage.path, {}),
                 permission: apiConfig.developer.getList.baseURL,
             },
+            {
+                label: <FormattedMessage defaultMessage="Tài khoản công ty" />,
+                key: 'company-management',
+                path: generatePath(routes.companyListPage.path, {}),
+                permission: apiConfig.company.getList.baseURL,
+            },
         ],
     },
     {
-        label: <FormattedMessage defaultMessage="Quản lý môn học" />,
+        label: <FormattedMessage defaultMessage="Quản lý Khoá học" />,
         key: 'quan-ly-mon-hoc',
         icon: <IconSchool size={16} />,
         children: [
@@ -47,7 +53,7 @@ const navMenuConfig = [
                 label: <FormattedMessage defaultMessage="Khoá học" />,
                 key: 'khoa-hoc',
                 path: generatePath(routes.courseListPage.path, {}),
-                permission: apiConfig.course.getList.baseURL,
+                permission: [apiConfig.course.getList.baseURL],
             },
             {
                 label: <FormattedMessage defaultMessage="Môn học" />,
@@ -61,6 +67,18 @@ const navMenuConfig = [
                 path: generatePath(routes.courseRequestListPage.path, {}),
                 permission: apiConfig.subject.getList.baseURL,
             },
+            {
+                label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
+                key: 'my-course-leader',
+                path: routes.courseLeaderListPage.path,
+                permission: apiConfig.course.getListLeaderCourse.baseURL,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
+                key: 'my-course-student',
+                path: routes.courseStudentListPage.path,
+                permission: apiConfig.course.getListStudentCourse.baseURL,
+            },
         ],
     },
     {
@@ -69,7 +87,7 @@ const navMenuConfig = [
         icon: <IconClipboardText size={16} />,
         children: [
             {
-                label: <FormattedMessage defaultMessage="Quản lý dự án" />,
+                label: <FormattedMessage defaultMessage="Dự án" />,
                 key: 'project-management',
                 path: generatePath(routes.projectListPage.path, {}),
                 permission: apiConfig.project.getList.baseURL,
@@ -80,6 +98,18 @@ const navMenuConfig = [
                 path: generatePath(routes.projectRoleListPage.path, {}),
                 permission: apiConfig.projectRole.getList.baseURL,
             },
+            {
+                label: <FormattedMessage defaultMessage="Dự án của tôi" />,
+                key: 'my-project-leader',
+                path: generatePath(routes.projectLeaderListPage.path, {}),
+                permission: apiConfig.course.getListLeaderCourse.baseURL,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Dự án của tôi" />,
+                key: 'my-project-student',
+                path: routes.projectStudentListPage.path,
+                permission: apiConfig.course.getListStudentCourse.baseURL,
+            },
         ],
     },
     {
@@ -88,11 +118,6 @@ const navMenuConfig = [
         icon: <IconBuildingCommunity size={16} />,
         permission: apiConfig.company.getList.baseURL,
         children: [
-            {
-                label: <FormattedMessage defaultMessage="Quản lý công ty" />,
-                key: 'company-management',
-                path: generatePath(routes.companyListPage.path, {}),
-            },
             {
                 label: <FormattedMessage defaultMessage="Quản lý gói dịch vụ" />,
                 key: 'service-company-subscription',
@@ -141,64 +166,64 @@ const navMenuConfig = [
     },
 
     ///////////////////// LEADER MENU /////////////////////////////
-    {
-        label: <FormattedMessage defaultMessage="Khoá học" />,
-        key: 'course-leader',
-        icon: <IconSchool size={16} />,
-        permission: apiConfig.course.getListLeaderCourse.baseURL,
-        children: [
-            {
-                label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
-                key: 'my-course-leader',
-                path: routes.courseLeaderListPage.path,
-                permission: apiConfig.course.getListLeaderCourse.baseURL,
-            },
-        ],
-    },
-    {
-        label: <FormattedMessage defaultMessage="Dự án" />,
-        key: 'project-leader',
-        icon: <IconSchool size={16} />,
-        permission: apiConfig.course.getListLeaderCourse.baseURL,
-        children: [
-            {
-                label: <FormattedMessage defaultMessage="Dự án của tôi" />,
-                key: 'my-project-leader',
-                path: generatePath(routes.projectLeaderListPage.path, {}),
-                permission: apiConfig.course.getListLeaderCourse.baseURL,
-            },
-        ],
-    },
+    // {
+    //     label: <FormattedMessage defaultMessage="Khoá học" />,
+    //     key: 'course-leader',
+    //     icon: <IconSchool size={16} />,
+    //     permission: apiConfig.course.getListLeaderCourse.baseURL,
+    //     children: [
+    //         {
+    //             label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
+    //             key: 'my-course-leader',
+    //             path: routes.courseLeaderListPage.path,
+    //             permission: apiConfig.course.getListLeaderCourse.baseURL,
+    //         },
+    //     ],
+    // },
+    // {
+    //     label: <FormattedMessage defaultMessage="Dự án" />,
+    //     key: 'project-leader',
+    //     icon: <IconSchool size={16} />,
+    //     permission: apiConfig.course.getListLeaderCourse.baseURL,
+    //     children: [
+    //         {
+    //             label: <FormattedMessage defaultMessage="Dự án của tôi" />,
+    //             key: 'my-project-leader',
+    //             path: generatePath(routes.projectLeaderListPage.path, {}),
+    //             permission: apiConfig.course.getListLeaderCourse.baseURL,
+    //         },
+    //     ],
+    // },
 
     ///////////////////// STUDENT MENU /////////////////////////////
-    {
-        label: <FormattedMessage defaultMessage="Khoá học" />,
-        key: 'course-student',
-        icon: <IconSchool size={16} />,
-        permission: apiConfig.course.getListStudentCourse.baseURL,
-        children: [
-            {
-                label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
-                key: 'my-course-student',
-                path: routes.courseStudentListPage.path,
-                permission: apiConfig.course.getListStudentCourse.baseURL,
-            },
-        ],
-    },
-    {
-        label: <FormattedMessage defaultMessage="Dự án" />,
-        key: 'project-student',
-        icon: <IconSchool size={16} />,
-        permission: apiConfig.course.getListStudentCourse.baseURL,
-        children: [
-            {
-                label: <FormattedMessage defaultMessage="Dự án của tôi" />,
-                key: 'my-project-student',
-                path: routes.projectStudentListPage.path,
-                permission: apiConfig.course.getListStudentCourse.baseURL,
-            },
-        ],
-    },
+    // {
+    //     label: <FormattedMessage defaultMessage="Khoá học" />,
+    //     key: 'course-student',
+    //     icon: <IconSchool size={16} />,
+    //     permission: apiConfig.course.getListStudentCourse.baseURL,
+    //     children: [
+    //         {
+    //             label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
+    //             key: 'my-course-student',
+    //             path: routes.courseStudentListPage.path,
+    //             permission: apiConfig.course.getListStudentCourse.baseURL,
+    //         },
+    //     ],
+    // },
+    // {
+    //     label: <FormattedMessage defaultMessage="Dự án" />,
+    //     key: 'project-student',
+    //     icon: <IconSchool size={16} />,
+    //     permission: apiConfig.course.getListStudentCourse.baseURL,
+    //     children: [
+    //         {
+    //             label: <FormattedMessage defaultMessage="Dự án của tôi" />,
+    //             key: 'my-project-student',
+    //             path: routes.projectStudentListPage.path,
+    //             permission: apiConfig.course.getListStudentCourse.baseURL,
+    //         },
+    //     ],
+    // },
     ///////////////////// COMPANY MENU /////////////////////////////
     {
         label: <FormattedMessage defaultMessage="Quản lý công ty" />,
