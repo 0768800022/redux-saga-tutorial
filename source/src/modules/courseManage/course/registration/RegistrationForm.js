@@ -50,6 +50,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
     const notification = useNotification();
+    const [canApplyAll, setCanApplyAll] = useState(true);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -328,16 +329,16 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         if (schedule) {
             const { monday } = schedule;
             if (!monday) {
-                return false;
+                return setCanApplyAll(false);
             }
-            // for (const frame of monday) {
-            //     if (frame.from === null || frame.to === null) {
-            //         return false;
-            //     }
-            // }
-            return true;
+            for (const frame of monday) {
+                if (frame.from === null || frame.to === null) {
+                    return setCanApplyAll(false);
+                }
+            }
+            return setCanApplyAll(true);
         }
-        return false;
+        return setCanApplyAll(false);
     };
 
     const handleApplyAll = (e) => {
@@ -353,12 +354,18 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         }
         // form.resetFields();
         setFieldValue('schedule', schedule);
-        checkCanApplyAll();
         onValuesChange();
     };
 
+    const onFieldsChange = () => {
+        onValuesChange();
+        checkCanApplyAll();
+    };
+    const handleOk = () => {
+        document.activeElement.blur();
+    };
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
+        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onFieldsChange={onFieldsChange} size="1100px">
             {dataLocation && (
                 <div style={{ marginBottom: '20px' }}>
                     <Card className="card-form" bordered={false}>
@@ -554,10 +561,11 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     </Row>
                 </div>
                 <ScheduleTable
+                    handleOk={handleOk}
                     label={translate.formatMessage(commonMessage.schedule)}
                     onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
                     translate={translate}
-                    checkCanApplyAll={checkCanApplyAll}
+                    canApplyAll={canApplyAll}
                     handleApplyAll={handleApplyAll}
                     daysOfWeekSchedule={daysOfWeekSchedule}
                 />

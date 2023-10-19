@@ -5,6 +5,7 @@ import ServiceCompanySubListPage from '../serviceCompanySubscription';
 import ServiceCompanySubscriptionSavePage from '../serviceCompanySubscription/ServiceCompanySubscriptionSavePage';
 import CompanySubscriptionIdListPage from '../company/CompanySubscriptionID/index';
 import CompanySubscriptionIdSavePage from './CompanySubscriptionID/CompanySubscriptionIDSavePage';
+import CompanySeekListPage from "./companySeek";
 export default {
     companyListPage: {
         path: '/company',
@@ -52,5 +53,12 @@ export default {
         component: CompanySubscriptionIdSavePage,
         separateCheck: true,
         permissions: [apiConfig.companySubscription.create.baseURL,apiConfig.companySubscription.update.baseURL],
+    },
+    companySeekListPage: {
+        path: '/company-seek',
+        title: 'Company seek',
+        auth: true,
+        component: CompanySeekListPage,
+        permissions: [apiConfig.companySeek.getList.baseURL],
     },
 };
