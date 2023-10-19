@@ -51,7 +51,7 @@ const CompanyRequestSavePage = () => {
             routes={[
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.companyRequest),
-                    path: generatePath(routes.companyRequestListPage.path, { CompanyRequestId }),
+                    path: generatePath(routes.companyRequestListPage.path + `?companyId=${profile.id}`),
                 },
                 { breadcrumbName: title },
             ]}
