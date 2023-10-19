@@ -60,13 +60,13 @@ const CompanySeekListPage = () => {
     const searchFields = [
         {
             key: 'name',
-            placeholder: translate.formatMessage(commonMessage.companyName),
+            placeholder: translate.formatMessage(commonMessage.companySeek),
         },
     ];
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.companySeek) }]}>
             <ListPage
-                //searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
                 //actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
