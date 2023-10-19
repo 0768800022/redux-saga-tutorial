@@ -93,16 +93,6 @@ const CompanyListPage = () => {
             title: <FormattedMessage defaultMessage="Email" />,
             dataIndex: 'email',
         },
-        // {
-        //     title: translate.formatMessage(commonMessage.status),
-        //     dataIndex: 'status',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const status = statusValues.find((item) => item.value == dataRow);
-        //         return <Tag color={status.color}>{status.label}</Tag>;
-        //     },
-        // },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '150px' }),
     ];

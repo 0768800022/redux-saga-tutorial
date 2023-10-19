@@ -59,9 +59,6 @@ function TaskStudentListPage() {
                     return [];
                 }
             };
-            // funcs.getItemDetailLink = (dataRow) => {
-            //     return `${pagePath}/${dataRow.id}?courseName=${courseName}&subjectId=${subjectId}`;
-            // };
         },
     });
 
@@ -108,7 +105,6 @@ function TaskStudentListPage() {
                 },
             },
         ];
-        // columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false }, { width: '120px' }));
         return columns;
     };
 

@@ -21,8 +21,6 @@ function TeamSavePage() {
     const active = queryParameters.get('active');
     // const projectName = queryParameters.get('projectName');
     const teamId = useParams();
-    // console.log(projectId);
-    console.log("projectId " + projectId);
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.team.getById,
