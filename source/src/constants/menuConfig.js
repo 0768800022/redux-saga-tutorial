@@ -47,7 +47,7 @@ const navMenuConfig = [
                 label: <FormattedMessage defaultMessage="Khoá học" />,
                 key: 'khoa-hoc',
                 path: generatePath(routes.courseListPage.path, {}),
-                permission: [apiConfig.course.getList.baseURL],
+                permission: apiConfig.course.getList.baseURL,
             },
             {
                 label: <FormattedMessage defaultMessage="Môn học" />,
@@ -232,7 +232,7 @@ const navMenuConfig = [
                 permission: apiConfig.companyRequest.getList.baseURL,
             },
             {
-                label: <FormattedMessage defaultMessage="Tìm kiếm ứng viên" />,
+                label: <FormattedMessage defaultMessage="Ứng viên đã lưu" />,
                 key: 'company-seek-management',
                 path: routes.companySeekListPage.path,
                 permission: apiConfig.companySeek.getList.baseURL,

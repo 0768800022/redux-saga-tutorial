@@ -12,7 +12,7 @@ import { Tag, Button } from 'antd';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 import ChangeStateModal from './ChangeStateModal';
 import useDisclosure from '@hooks/useDisclosure';
 import { useState } from 'react';
@@ -20,7 +20,8 @@ import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { CalendarOutlined } from '@ant-design/icons';
 import { commonMessage } from '@locales/intl';
-
+import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, AppConstants } from '@constants';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 const message = defineMessages({
     objectName: 'Task',
     developer: 'Lập trình viên',
@@ -31,6 +32,7 @@ const message = defineMessages({
     leader: 'Leader',
     name: 'Tên task',
     status: 'Trạng thái',
+    startDate: 'Ngày bắt đầu',
 });
 
 function ProjectLeaderTaskListPage() {
@@ -117,7 +119,7 @@ function ProjectLeaderTaskListPage() {
                                     handlersIntroduceModal.open();
                                 }}
                             >
-                                <EditOutlined />
+                                <CheckOutlined />
                             </Button>
                         );
                     },
@@ -130,7 +132,7 @@ function ProjectLeaderTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectLeaderTaskListPage.path +
-                                        `/task-log?projectId=${projectId}&projectName=${projectName}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -144,6 +146,11 @@ function ProjectLeaderTaskListPage() {
                 });
             },
         });
+
+    const convertDate = (date) => {
+        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
+        return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
+    };
     const columns = [
         {
             title: translate.formatMessage(message.projectTask),
@@ -158,15 +165,21 @@ function ProjectLeaderTaskListPage() {
             dataIndex: ['project', 'leaderInfo', 'leaderName'],
         },
         {
-            title: 'Ngày bắt đầu',
+            title: translate.formatMessage(message.startDate),
             dataIndex: 'startDate',
+            render: (startDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
+            },
             width: 200,
-            align: 'center',
         },
         {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
+            render: (dueDate) => {
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(dueDate)}</div>;
+            },
             width: 200,
+            align: 'center',
         },
         {
             title: 'Tình trạng',
@@ -182,8 +195,8 @@ function ProjectLeaderTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ editSetting: true,taskLog: true }, { width: '120px' }),
+
+        mixinFuncs.renderActionColumn({ taskLog: true, editSetting: true }, { width: '120px' }),
     ].filter(Boolean);
     const params = mixinFuncs.prepareGetListParams(queryFilter);
     const {

@@ -1,21 +1,19 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import apiConfig from '@constants/apiConfig';
-import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
-import React from 'react';
-import { generatePath, useParams } from 'react-router-dom';
-import routes from '@routes';
-import ProjectMemberForm from './ProjectMemberForm';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import React from 'react';
+import { defineMessages } from 'react-intl';
+import ProjectLeaderMemberForm from './ProjectLeaderMemberForm';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
     objectName: 'Thành viên',
 });
 
-function ProjectMemberSavePage() {
+function ProjectLeaderMemberSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
 
@@ -57,19 +55,19 @@ function ProjectMemberSavePage() {
         const breadRoutes = [
             {
                 breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.projectListPage.path,
+                path: routes.projectLeaderListPage.path,
             },
         ];
 
         if (active) {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.member),
-                path: routes.projectMemberListPage.path + pathDefault + `&active=${active}`,
+                path: routes.projectLeaderMemberListPage.path + pathDefault + `&active=${active}`,
             });
         } else {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.member),
-                path: routes.projectMemberListPage.path + pathDefault,
+                path: routes.projectLeaderMemberListPage.path + pathDefault,
             });
         }
         breadRoutes.push({ breadcrumbName: title });
@@ -79,7 +77,7 @@ function ProjectMemberSavePage() {
 
     return (
         <PageWrapper loading={loading} routes={setBreadRoutes()} title={title}>
-            <ProjectMemberForm
+            <ProjectLeaderMemberForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -92,4 +90,4 @@ function ProjectMemberSavePage() {
     );
 }
 
-export default ProjectMemberSavePage;
+export default ProjectLeaderMemberSavePage;

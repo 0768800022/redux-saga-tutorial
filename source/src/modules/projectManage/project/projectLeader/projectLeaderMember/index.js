@@ -34,6 +34,7 @@ const message = defineMessages({
     name: 'Họ và tên ',
     developer: 'Lập trình viên',
     member: 'Thành viên',
+    team: 'Nhóm',
 });
 
 const ProjectLeaderMemberListPage = () => {
@@ -87,6 +88,11 @@ const ProjectLeaderMemberListPage = () => {
             dataIndex: ['developer', 'studentInfo', 'fullName'],
         },
         {
+            title: translate.formatMessage(message.team),
+            dataIndex: ['team', 'teamName'],
+            width: 150,
+        },
+        {
             title: translate.formatMessage(message.role),
             dataIndex: ['projectRole', 'projectRoleName'],
             width: 150,
@@ -101,6 +107,15 @@ const ProjectLeaderMemberListPage = () => {
             },
             width: 180,
         },
+
+        active &&
+            mixinFuncs.renderActionColumn(
+                {
+                    edit: true,
+                    delete: true,
+                },
+                { width: '150px' },
+            ),
     ].filter(Boolean);
 
     // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
