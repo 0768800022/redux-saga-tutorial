@@ -270,7 +270,7 @@ const ProjectListPage = () => {
             },
         },
         !leaderName && !developerName && useKind === UserTypes.MANAGER && mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn(
+        useKind !== UserTypes.STUDENT && mixinFuncs.renderActionColumn(
             {
                 team: true,
                 member: !leaderName && !developerName && true,

@@ -228,7 +228,7 @@ const CourseListPage = () => {
         },
         !leaderName && useKind === UserTypes.MANAGER && mixinFuncs.renderStatusColumn({ width: '120px' }),
         
-        mixinFuncs.renderActionColumn(
+        useKind !== UserTypes.STUDENT && mixinFuncs.renderActionColumn(
             {
                 task: true,
                 registration: !leaderName && true,
