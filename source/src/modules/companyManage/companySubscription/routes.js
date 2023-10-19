@@ -15,7 +15,6 @@ export default {
         title: 'Company Subscription Save Page',
         auth: true,
         component: CompanySubscriptionSavePage,
-        separateCheck: true,
-        permission: [apiConfig.companySubscription.create.baseURL, apiConfig.companySubscription.update.baseURL],
+        permissions: [apiConfig.companySubscription.create.baseURL, apiConfig.companySubscription.update.baseURL],
     },
 };

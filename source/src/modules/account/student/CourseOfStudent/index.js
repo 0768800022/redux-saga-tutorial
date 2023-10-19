@@ -129,12 +129,12 @@ const CourseListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        {
-            key: 'status',
-            placeholder: translate.formatMessage(commonMessage.status),
-            type: FieldTypes.SELECT,
-            options: statusValues,
-        },
+        // {
+        //     key: 'status',
+        //     placeholder: translate.formatMessage(commonMessage.status),
+        //     type: FieldTypes.SELECT,
+        //     options: statusValues,
+        // },
     ];
     const columns = [
         {
