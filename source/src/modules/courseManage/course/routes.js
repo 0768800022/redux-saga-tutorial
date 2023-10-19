@@ -18,21 +18,21 @@ export default {
         title: 'Course List Page',
         auth: true,
         component: CourseListPage,
-        permission: apiConfig.course.getList.baseURL,
+        permissions: apiConfig.course.getList.baseURL,
     },
     courseLeaderListPage: {
         path: '/course-leader',
         title: 'Course List Page',
         auth: true,
         component: CourseLeaderListPage,
-        permission: apiConfig.course.getListLeaderCourse.baseURL,
+        permissions: apiConfig.course.getListLeaderCourse.baseURL,
     },
     courseSavePage: {
         path: '/course/:id',
         title: 'Course Save Page',
         auth: true,
         component: CourseSavePage,
-        permission: [apiConfig.course.create.baseURL,apiConfig.course.update.baseURL],
+        permissions: [apiConfig.course.create.baseURL,apiConfig.course.update.baseURL],
     },
     lectureTaskListPage: {
         path: '/course/task/lecture',
@@ -40,7 +40,6 @@ export default {
         auth: true,
         component: LectureListPage,
         separateCheck: true,
-        permission: [apiConfig.lecture.getList.baseURL],
         breadcrumbs: (message, paramHead, state, location) => {
             return [
                 { breadcrumbName: message.course.defaultMessage, path: paramHead },
@@ -55,14 +54,14 @@ export default {
         title: 'Task List Page',
         auth: true,
         component: TaskListPage,
-        permission: [apiConfig.task.courseTask.baseURL],
+        permissions: [apiConfig.task.courseTask.baseURL],
     },
     taskLeaderSavePage: {
         path: '/course-leader/task/:courseId/:id',
         title: 'Task Save Page',
         auth: true,
         component: TaskLeaderSavePage,
-        permission: [apiConfig.task.update.baseURL],
+        permissions: [apiConfig.task.update.baseURL],
     },
     lectureTaskLeaderListPage: {
         path: '/course-leader/task/:courseId/lecture',
@@ -70,14 +69,14 @@ export default {
         auth: true,
         component: AsignAllListPage,
         separateCheck: true,
-        permission: [apiConfig.lecture.getList.baseURL],
+        permissions: [apiConfig.lecture.getList.baseURL],
     },
     registrationLeaderListPage: {
         path: '/course-leader/registration',
         title: 'Registration',
         auth: true,
         component: RegistrationLeaderListPage,
-        permission: [apiConfig.registration.getList.baseURL],
+        permissions: [apiConfig.registration.getList.baseURL],
     },
 
     taskLogLeaderListPage: {
@@ -85,14 +84,14 @@ export default {
         title: 'Task Log Leader List Page',
         auth: true,
         component: TaskLogLeaderListPage,
-        permission: [apiConfig.taskLog.getList.baseURL],
+        permissions: [apiConfig.taskLog.getList.baseURL],
     },
     taskLogLeaderSavePage: {
         path: '/course-leader/task/:courseId/task-log/:id',
         title: 'Task Log Leader Save Page',
         auth: true,
         component: TaskLogLeaderSavePage,
-        permission: [apiConfig.taskLog.create.baseURL,apiConfig.taskLog.update.baseURL],
+        permissions: [apiConfig.taskLog.create.baseURL,apiConfig.taskLog.update.baseURL],
     },
 
 
@@ -102,13 +101,13 @@ export default {
         title: 'Course Student List Page',
         auth: true,
         component: CourseStudentListPage,
-        permission: apiConfig.course.getListStudentCourse.baseURL,
+        permissions: [apiConfig.course.getListStudentCourse.baseURL],
     },
     taskStudentListPage: {
         path: '/course-student/task',
         title: 'Task List Page',
         auth: true,
         component: TaskStudentListPage,
-        permission: [apiConfig.task.courseTask.baseURL],
+        permissions: [apiConfig.task.studentTask.baseURL],
     },
 };
