@@ -61,8 +61,15 @@ const ScheduleFile = ({ schedule }) => {
         // const secondTime = secondPart ? timeStringToNumber(secondPart) : 0;
         // const thirdTime = thirdPart ? timeStringToNumber(thirdPart) : 0;
         for (let i = 0; i < 6; i++) {
-            if (hours[i] <= currentHour && currentHour <= hours[i+1]) {
+            if (hours[i] < currentHour && currentHour < hours[i+1]) {
                 return checkTime = true; // Khi i bằng 5, thoát khỏi vòng lặp
+            } 
+            else {
+                if (hours[i] == currentHour || currentHour == hours[i+1]){
+                    if (minutes[i] < currentMinute && currentMinute < minutes[i+1]){
+                        return checkTime = true;
+                    }
+                }
             }
             if(i === 5 )
                 return checkTime = false;
