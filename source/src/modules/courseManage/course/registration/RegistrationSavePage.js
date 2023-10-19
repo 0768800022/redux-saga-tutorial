@@ -25,6 +25,8 @@ function RegistrationSavePage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const courseState = queryParameters.get('courseState');
+    const courseStatus = queryParameters.get('courseStatus');
     const courseRequestId = queryParameters.get('courseRequestId');
     const location = useLocation();
     const { data: dataLocation } = location.state;
@@ -87,7 +89,7 @@ function RegistrationSavePage() {
                 },
                 !dataLocation && {
                     breadcrumbName: translate.formatMessage(messages.registration),
-                    path: routes.registrationListPage.path + `?courseId=${courseId}&courseName=${courseName}`,
+                    path: routes.registrationListPage.path + `?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                 },
                 dataLocation && {
                     breadcrumbName: translate.formatMessage(messages.courseRequest),
