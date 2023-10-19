@@ -11,13 +11,13 @@ import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag, Modal } from 'antd';
 import React, { useState } from 'react';
-import { useLocation, useParams, useNavigate,generatePath } from 'react-router-dom';
+import { useLocation, useParams, useNavigate, generatePath } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { Button } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { CheckOutlined } from '@ant-design/icons';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import useNotification from '@hooks/useNotification';
@@ -29,6 +29,7 @@ const message = defineMessages({
     objectName: 'Task',
     updateSuccess: 'Cập nhật {objectName} thành công',
     updateTaskSuccess: 'Cập nhật tình trạng thành công',
+    done: 'Hoàn thành',
 });
 
 function TaskListPage() {
@@ -84,7 +85,7 @@ function TaskListPage() {
             };
             funcs.additionalActionColumnButtons = () => ({
                 state: (item) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.state)}>
+                    <BaseTooltip title={translate.formatMessage(message.done)}>
                         <Button
                             type="link"
                             disabled={item.state === 2}
@@ -95,11 +96,11 @@ function TaskListPage() {
                                 handlersStateTaskModal.open();
                             }}
                         >
-                            <ExclamationCircleOutlined />
+                            <CheckOutlined />
                         </Button>
                     </BaseTooltip>
                 ),
-                taskLog: ({ id, lecture, state, status,name }) => (
+                taskLog: ({ id, lecture, state, status, name }) => (
                     <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
                         <Button
                             type="link"
@@ -175,7 +176,7 @@ function TaskListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false, state: true,taskLog: true }, { width: '120px' }));
+        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: false, taskLog: true, state: true }, { width: '120px' }));
         return columns;
     };
 
@@ -234,16 +235,7 @@ function TaskListPage() {
                         />
                     }
                 />
-                {/* <Modal
-                    open={openedStateTaskModal}
-                    onCancel={() => handlersStateTaskModal.close()}
-                    data={detail || {}}
-                    executeUpdate={executeUpdate}
-                    width={400}
-
-                /> */}
-                <Modal title="Thay đổi tình trạng" open={openedStateTaskModal} onOk={handleOk} onCancel={() => handlersStateTaskModal.close()} data={detail || {}}>
-                    <p>Bạn có muốn thay đổi tình trạng không???</p>
+                <Modal title="Thay đổi tình trạng hoàn thành" open={openedStateTaskModal} onOk={handleOk} onCancel={() => handlersStateTaskModal.close()} data={detail || {}}>
                 </Modal>
             </div>
         </PageWrapper>

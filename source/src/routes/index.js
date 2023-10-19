@@ -3,7 +3,7 @@ import categoryRoutesEdu from '@modules/category/categoryEdu/routes';
 import categoryRoutesGen from '@modules/category/categoryGen/routes';
 import categoryRoutesMajor from '@modules/category/categoryMajor/routes';
 import studentRoutes from '@modules/account/student/routes';
-import Dashboard from '@modules/dashboard';
+import Dashboard from '@modules/entry';
 import LoginPage from '@modules/login/index';
 import ProfilePage from '@modules/profile/index';
 import PageNotAllowed from '@components/common/page/PageNotAllowed';

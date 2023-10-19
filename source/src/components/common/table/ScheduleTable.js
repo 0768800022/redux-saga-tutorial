@@ -1,14 +1,21 @@
-import { Form, Space } from 'antd';
+import { Button, Form, Space } from 'antd';
 import React from 'react';
 import TimePickerField from '../form/TimePickerField';
 import { defineMessages } from 'react-intl';
 const messages = defineMessages({
     dayOfWeek: 'Thứ',
     timeFrame: 'Khung giờ',
-    applyAll: 'Áp dụng cho tất cả',
+    applyAll: 'Áp dụng tất cả',
     frame: 'Khung',
 });
-function ScheduleTable({ label, onSelectScheduleTabletRandom, translate, daysOfWeekSchedule }) {
+function ScheduleTable({
+    label,
+    onSelectScheduleTabletRandom,
+    translate,
+    daysOfWeekSchedule,
+    checkCanApplyAll,
+    handleApplyAll,
+}) {
     return (
         <div>
             <div style={{ padding: '10px' }}>{label}</div>
@@ -36,7 +43,7 @@ function ScheduleTable({ label, onSelectScheduleTabletRandom, translate, daysOfW
                                                             </div>
                                                             <Space className="box-flex">
                                                                 <TimePickerField
-                                                                    style={{ width: '100px' }}
+                                                                    style={{ width: '90px' }}
                                                                     size="small"
                                                                     name={[field.name, 'from']}
                                                                     onSelect={(value) =>
@@ -60,7 +67,7 @@ function ScheduleTable({ label, onSelectScheduleTabletRandom, translate, daysOfW
                                                                     // }}
                                                                 />
                                                                 <TimePickerField
-                                                                    style={{ width: '100px' }}
+                                                                    style={{ width: '90px' }}
                                                                     size="small"
                                                                     name={[field.name, 'to']}
                                                                     onSelect={(value) =>
@@ -90,7 +97,7 @@ function ScheduleTable({ label, onSelectScheduleTabletRandom, translate, daysOfW
                                                             </Space>
                                                         </div>
                                                     ))}
-                                                    {/* {!dayIndex && (
+                                                    {!dayIndex && (
                                                         <div className="wrap-btn-apply-all">
                                                             <Button
                                                                 disabled={!checkCanApplyAll()}
@@ -101,7 +108,7 @@ function ScheduleTable({ label, onSelectScheduleTabletRandom, translate, daysOfW
                                                                 {translate.formatMessage(messages.applyAll)}
                                                             </Button>
                                                         </div>
-                                                    )} */}
+                                                    )}
                                                 </Space>
 
                                                 {/* <Form.Item style={{ width: '170px', textAlign: 'left' }}>

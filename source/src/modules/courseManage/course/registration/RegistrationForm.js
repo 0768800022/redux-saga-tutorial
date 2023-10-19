@@ -91,6 +91,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     }
     const handleSubmit = (values) => {
         if (dataLocation) {
+            values.status = values.status || 1;
             values.student.avatar = imageUrl;
             values.student.birthday = formatDateString(values?.student.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
             values.student.studyClass = values.student.studyClass.id;
@@ -322,11 +323,46 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             notification({ type: 'warning', message: translate.formatMessage(messages.copyPasswordWarning) });
         }
     };
+    const checkCanApplyAll = () => {
+        const schedule = getFieldValue('schedule');
+        if (schedule) {
+            const { monday } = schedule;
+            if (!monday) {
+                return false;
+            }
+            // for (const frame of monday) {
+            //     if (frame.from === null || frame.to === null) {
+            //         return false;
+            //     }
+            // }
+            return true;
+        }
+        return false;
+    };
+
+    const handleApplyAll = (e) => {
+        e.preventDefault();
+        const schedule = getFieldValue('schedule');
+        const { monday = [] } = schedule;
+
+        for (let { value } of daysOfWeekSchedule) {
+            schedule[value] = monday.map((frame) => ({
+                from: dayjs(frame.from, TIME_FORMAT_DISPLAY),
+                to: dayjs(frame.to, TIME_FORMAT_DISPLAY),
+            }));
+        }
+        // form.resetFields();
+        setFieldValue('schedule', schedule);
+        checkCanApplyAll();
+        onValuesChange();
+    };
+
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             {dataLocation && (
                 <div style={{ marginBottom: '20px' }}>
                     <Card className="card-form" bordered={false}>
+                        <div style={{ margin: '10px 0', fontWeight: 600 }}>THÔNG TIN SINH VIÊN</div>
                         <Col span={12}>
                             <CropImageField
                                 label={<FormattedMessage defaultMessage="Avatar" />}
@@ -465,6 +501,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                             <Col span={12}>
                                 <SelectField
                                     required
+                                    defaultValue={statusValues[1]}
                                     label={<FormattedMessage defaultMessage="Trạng thái" />}
                                     name={['student', 'status']}
                                     options={statusValues}
@@ -476,6 +513,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                 </div>
             )}
             <Card className="card-form" bordered={false}>
+                <div style={{ margin: '10px 0', fontWeight: 600 }}>ĐĂNG KÝ KHOÁ HỌC</div>
                 <div style={{ width: '980px' }}>
                     <Row gutter={16}>
                         {!dataLocation && (
@@ -519,6 +557,8 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     label={translate.formatMessage(commonMessage.schedule)}
                     onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
                     translate={translate}
+                    checkCanApplyAll={checkCanApplyAll}
+                    handleApplyAll={handleApplyAll}
                     daysOfWeekSchedule={daysOfWeekSchedule}
                 />
                 <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
