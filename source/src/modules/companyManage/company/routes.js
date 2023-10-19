@@ -19,7 +19,6 @@ export default {
         title: 'Company Save Page',
         auth: true,
         component: CompanySavePage,
-        separateCheck: true,
         permission: [apiConfig.company.create.baseURL, apiConfig.company.update.baseURL],
     },
     serviceCompanySubListPage: {
@@ -27,7 +26,6 @@ export default {
         title: 'Service Company Subscription',
         auth: true,
         component: ServiceCompanySubListPage,
-        separateCheck: true,
         permissions: [apiConfig.serviceCompanySubscription.getList.baseURL],
     },
     serviceCompanySubSavePage: {
@@ -35,7 +33,6 @@ export default {
         title: 'Service Company Subscription Save page',
         auth: true,
         component: ServiceCompanySubscriptionSavePage,
-        separateCheck: true,
         permissions: [apiConfig.serviceCompanySubscription.create.baseURL, apiConfig.serviceCompanySubscription.update.baseURL],
     },
     companySubscriptionIdListPage: {
@@ -43,7 +40,6 @@ export default {
         title: 'Company Subscription By Id ',
         auth: true,
         component: CompanySubscriptionIdListPage,
-        separateCheck: true,
         permissions: [apiConfig.companySubscription.getList.baseURL],
     },
     companySubscriptionIdSavePage: {
@@ -51,7 +47,6 @@ export default {
         title: 'Company Subscription Save page By Id ',
         auth: true,
         component: CompanySubscriptionIdSavePage,
-        separateCheck: true,
         permissions: [apiConfig.companySubscription.create.baseURL, apiConfig.companySubscription.update.baseURL],
     },
     companySeekListPage: {

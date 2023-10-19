@@ -126,7 +126,7 @@ const CourseListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        !leaderName && {
+        !leaderName && useKind === UserTypes.MANAGER && {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
@@ -235,7 +235,7 @@ const CourseListPage = () => {
                 edit: !leaderName && true,
                 delete: !leaderName && true,
             },
-            { width: '180px' },
+            { width: '150px' },
         ),
     ].filter(Boolean);
 

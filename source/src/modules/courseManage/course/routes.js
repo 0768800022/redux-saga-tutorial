@@ -18,14 +18,14 @@ export default {
         title: 'Course List Page',
         auth: true,
         component: CourseListPage,
-        permissions: apiConfig.course.getList.baseURL,
+        permissions: [apiConfig.course.getList.baseURL],
     },
     courseLeaderListPage: {
         path: '/course-leader',
         title: 'Course List Page',
         auth: true,
         component: CourseLeaderListPage,
-        permissions: apiConfig.course.getListLeaderCourse.baseURL,
+        permissions: [apiConfig.course.getListLeaderCourse.baseURL],
     },
     courseSavePage: {
         path: '/course/:id',
@@ -39,7 +39,7 @@ export default {
         title: 'Lecture List Page',
         auth: true,
         component: LectureListPage,
-        separateCheck: true,
+        permissions: [apiConfig.lecture.getBySubject.baseURL],
         breadcrumbs: (message, paramHead, state, location) => {
             return [
                 { breadcrumbName: message.course.defaultMessage, path: paramHead },
@@ -61,15 +61,14 @@ export default {
         title: 'Task Save Page',
         auth: true,
         component: TaskLeaderSavePage,
-        permissions: [apiConfig.task.update.baseURL],
+        permissions: [apiConfig.task.create.baseURL,apiConfig.task.update.baseURL],
     },
     lectureTaskLeaderListPage: {
         path: '/course-leader/task/:courseId/lecture',
         title: 'Lecture Leader List Page',
         auth: true,
         component: AsignAllListPage,
-        separateCheck: true,
-        permissions: [apiConfig.lecture.getList.baseURL],
+        permissions: [apiConfig.lecture.getBySubject.baseURL],
     },
     registrationLeaderListPage: {
         path: '/course-leader/registration',

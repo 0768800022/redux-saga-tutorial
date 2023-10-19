@@ -22,6 +22,6 @@ export default {
         title: 'Registration Save Page',
         auth: true,
         component: RegistrationSavePage,
-        permissions: [apiConfig.registration.create.baseURL],
+        permissions: [apiConfig.registration.create.baseURL,apiConfig.registration.update.baseURL],
     },
 };
