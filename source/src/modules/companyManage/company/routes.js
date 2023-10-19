@@ -19,7 +19,7 @@ export default {
         title: 'Company Save Page',
         auth: true,
         component: CompanySavePage,
-        permission: [apiConfig.company.create.baseURL, apiConfig.company.update.baseURL],
+        permissions: [apiConfig.company.create.baseURL, apiConfig.company.update.baseURL],
     },
     serviceCompanySubListPage: {
         path: '/service-company-subscription',

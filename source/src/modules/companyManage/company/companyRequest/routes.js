@@ -17,6 +17,6 @@ export default {
         title: 'Company Request Save Page',
         auth: true,
         component: CompanyRequestSavePage,
-        permission: [apiConfig.companyRequest.create.baseURL, apiConfig.companyRequest.update.baseURL],
+        permissions: [apiConfig.companyRequest.create.baseURL, apiConfig.companyRequest.update.baseURL],
     },
 };

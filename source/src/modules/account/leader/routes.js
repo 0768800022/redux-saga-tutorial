@@ -19,7 +19,7 @@ export default {
         title: 'Leader Save Page',
         auth: true,
         component: LeaderSavePage,
-        permission: [apiConfig.leader.create.baseURL, apiConfig.leader.update.baseURL],
+        permissions: [apiConfig.leader.create.baseURL, apiConfig.leader.update.baseURL],
     },
     leaderCourseListPage: {
         path: '/leader/course',

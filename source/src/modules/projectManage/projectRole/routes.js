@@ -15,6 +15,6 @@ export default {
         title: 'Project Role Save Page',
         auth: true,
         component: ProjectRoleSavePage,
-        permission: [apiConfig.projectRole.create.baseURL, apiConfig.projectRole.update.baseURL],
+        permissions: [apiConfig.projectRole.create.baseURL, apiConfig.projectRole.update.baseURL],
     },
 };
