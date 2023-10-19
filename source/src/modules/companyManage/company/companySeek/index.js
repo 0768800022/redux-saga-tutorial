@@ -19,7 +19,7 @@ import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 
 const message = defineMessages({
-    objectName: 'tìm kiếm ứng viên',
+    objectName: 'ứng viên đã lưu',
 });
 
 const CompanySeekListPage = () => {
@@ -41,59 +41,20 @@ const CompanySeekListPage = () => {
                     };
                 }
             };
-            funcs.additionalActionColumnButtons = () => ({
-                registration: ({ id, companyName }) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
-                        <Button
-                            type="link"
-                            style={{ padding: 0 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(
-                                    routes.companyListPage.path +
-                                        `/company-subscription?companyId=${id}&companyName=${companyName}`,
-                                );
-                            }}
-                        >
-                            <ShoppingCartOutlined />
-                        </Button>
-                    </BaseTooltip>
-                ),
-            });
+
         },
     });
 
     const columns = [
         {
-            title: '#',
-            dataIndex: 'logo',
-            align: 'center',
-            width: 80,
-            render: (logo) => (
-                <AvatarField
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={logo ? `${AppConstants.contentRootUrl}${logo}` : null}
-                />
-            ),
+            title: <FormattedMessage defaultMessage="Tên lập trình viên" />,
+            dataIndex: ["developer", "studentInfo", "fullName"],
         },
         {
-            title: <FormattedMessage defaultMessage="Tên công ty" />,
-            dataIndex: 'companyName',
+            title: <FormattedMessage defaultMessage="Vai trò" />,
+            dataIndex: ["role", "projectRoleName"],
         },
-        {
-            title: <FormattedMessage defaultMessage="Địa chỉ" />,
-            dataIndex: 'address',
-        },
-        {
-            title: <FormattedMessage defaultMessage="Hotline" />,
-            dataIndex: 'hotline',
-        },
-        {
-            title: <FormattedMessage defaultMessage="Email" />,
-            dataIndex: 'email',
-        },
-        mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ edit: false, delete: true }, { width: '150px' }),
     ];
 
     const searchFields = [
@@ -105,8 +66,8 @@ const CompanySeekListPage = () => {
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.companySeek) }]}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
-                actionBar={mixinFuncs.renderActionBar()}
+                //searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                //actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={mixinFuncs.changePagination}

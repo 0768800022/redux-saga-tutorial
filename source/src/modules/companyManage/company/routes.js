@@ -36,7 +36,7 @@ export default {
         auth: true,
         component: ServiceCompanySubscriptionSavePage,
         separateCheck: true,
-        permissions: [apiConfig.serviceCompanySubscription.create.baseURL,apiConfig.serviceCompanySubscription.update.baseURL],
+        permissions: [apiConfig.serviceCompanySubscription.create.baseURL, apiConfig.serviceCompanySubscription.update.baseURL],
     },
     companySubscriptionIdListPage: {
         path: '/company/company-subscription',
@@ -52,7 +52,7 @@ export default {
         auth: true,
         component: CompanySubscriptionIdSavePage,
         separateCheck: true,
-        permissions: [apiConfig.companySubscription.create.baseURL,apiConfig.companySubscription.update.baseURL],
+        permissions: [apiConfig.companySubscription.create.baseURL, apiConfig.companySubscription.update.baseURL],
     },
     companySeekListPage: {
         path: '/company-seek',

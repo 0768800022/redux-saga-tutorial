@@ -10,20 +10,20 @@ import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    objectName:'Công ty',
+    objectName: 'Công ty',
 });
 
 const CompanySavePage = () => {
     const companyId = useParams();
     const translate = useTranslate();
-    
-    const { detail, onSave, mixinFuncs,setIsChangedFormValues,isEditing,errors, loading, title } = useSaveBase({
+
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.company.getById,
-            create: apiConfig.company.create,
-            update: apiConfig.company.update,
+            getById: apiConfig.companySeek.getById,
+            create: apiConfig.companySeek.create,
+            update: apiConfig.companySeek.update,
         },
-        options:{
+        options: {
             getListUrl: routes.companyListPage.path,
             objectName: translate.formatMessage(message.objectName),
         },
@@ -42,24 +42,26 @@ const CompanySavePage = () => {
         },
 
     });
-    return(
+    return (
         <PageWrapper
-            loading = {loading}
+            loading={loading}
             routes={[
-                { breadcrumbName: translate.formatMessage(commonMessage.company),
-                    path: generatePath(routes.companyListPage.path, { companyId } ) },
+                {
+                    breadcrumbName: translate.formatMessage(commonMessage.company),
+                    path: generatePath(routes.companyListPage.path, { companyId }),
+                },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
             <CompanyForm
                 formId={mixinFuncs.getFormId()}
-                actions = {mixinFuncs.renderActions()}
-                dataDetail = {detail ? detail : {}}
-                onSubmit = {onSave}
-                setIsChangedFormValues = {setIsChangedFormValues}
-                isError = {errors}
-                isEditing = {isEditing}
+                actions={mixinFuncs.renderActions()}
+                dataDetail={detail ? detail : {}}
+                onSubmit={onSave}
+                setIsChangedFormValues={setIsChangedFormValues}
+                isError={errors}
+                isEditing={isEditing}
             />
         </PageWrapper>
     );
