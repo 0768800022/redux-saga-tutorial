@@ -1,23 +1,19 @@
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import { BaseForm } from '@components/common/form/BaseForm';
-import CheckboxField from '@components/common/form/CheckboxField';
-import SelectField from '@components/common/form/SelectField';
-import TimePickerField from '@components/common/form/TimePickerField';
+import ScheduleTable from '@components/common/table/ScheduleTable';
 import { TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { daysOfWeekSchedule as daysOfWeekScheduleOptions, stateResgistrationOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
-import { Button, Card, Col, Form, Row, Space } from 'antd';
-import dayjs from 'dayjs';
-import moment from 'moment';
-import React, { useEffect, useState } from 'react';
-import { FormattedMessage, defineMessages } from 'react-intl';
-import ScheduleTable from '@components/common/table/ScheduleTable';
 import { commonMessage } from '@locales/intl';
+import { Card, Col, Row } from 'antd';
+import dayjs from 'dayjs';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
-function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
+function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
@@ -206,24 +202,25 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
     });
-
+    const handleOk = () => {
+        document.activeElement.blur();
+    };
     const checkCanApplyAll = () => {
         const schedule = getFieldValue('schedule');
         if (schedule) {
             const { monday } = schedule;
             if (!monday) {
-                return setCanApplyAll(false);
+                return false;
             }
-            for (const frame of monday) {
-                if (frame.from === null || frame.to === null) {
-                    return setCanApplyAll(false);
-                }
-            }
-            return setCanApplyAll(true);
+            // for (const frame of monday) {
+            //     if (frame.from === null || frame.to === null) {
+            //         return false;
+            //     }
+            // }
+            return true;
         }
-        return setCanApplyAll(false);
+        return false;
     };
-
     const handleApplyAll = (e) => {
         e.preventDefault();
         const schedule = getFieldValue('schedule');
@@ -237,10 +234,8 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         }
         // form.resetFields();
         setFieldValue('schedule', schedule);
+        checkCanApplyAll();
         onValuesChange();
-    };
-    const handleOk = () => {
-        document.activeElement.blur();
     };
 
     useEffect(() => {
@@ -326,4 +321,4 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
     );
 }
 
-export default ProjectMemberForm;
+export default ProjectLeaderMemberForm;
