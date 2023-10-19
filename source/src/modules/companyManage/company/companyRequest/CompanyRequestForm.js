@@ -163,7 +163,6 @@ const CompanyRequestForm = ({
                                 label={<FormattedMessage defaultMessage="Tiêu đề" />}
                                 name="title"
                                 required
-                                disabled={isEditing}
                             />
                         </Col>
                         <Col span={12}>
@@ -175,13 +174,13 @@ const CompanyRequestForm = ({
                                 required
                             />
                         </Col>
-                        <Col span={12}>
+                        {/* <Col span={12}>
                             <SelectField
                                 label={<FormattedMessage defaultMessage="Trạng thái" />}
                                 name="status"
                                 options={statusValues}
                             />
-                        </Col>
+                        </Col> */}
                         <Col span={12}>
                             <DatePickerField
                                 name="startDate"

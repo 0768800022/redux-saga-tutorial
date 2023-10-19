@@ -13,8 +13,9 @@ function ScheduleTable({
     onSelectScheduleTabletRandom,
     translate,
     daysOfWeekSchedule,
-    checkCanApplyAll,
+    canApplyAll,
     handleApplyAll,
+    handleOk,
 }) {
     return (
         <div>
@@ -43,6 +44,7 @@ function ScheduleTable({
                                                             </div>
                                                             <Space className="box-flex">
                                                                 <TimePickerField
+                                                                    onOk={handleOk}
                                                                     style={{ width: '90px' }}
                                                                     size="small"
                                                                     name={[field.name, 'from']}
@@ -67,6 +69,7 @@ function ScheduleTable({
                                                                     // }}
                                                                 />
                                                                 <TimePickerField
+                                                                    onOk={handleOk}
                                                                     style={{ width: '90px' }}
                                                                     size="small"
                                                                     name={[field.name, 'to']}
@@ -100,7 +103,7 @@ function ScheduleTable({
                                                     {!dayIndex && (
                                                         <div className="wrap-btn-apply-all">
                                                             <Button
-                                                                disabled={!checkCanApplyAll()}
+                                                                disabled={!canApplyAll}
                                                                 type="primary"
                                                                 size="middle"
                                                                 onClick={handleApplyAll}
