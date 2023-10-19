@@ -13,6 +13,11 @@ import ProjectStudentListPage from './projectStudent';
 import ProjectStudentTaskListPage from './projectStudent/projectStudentTask';
 import ProjectStudentMemberListPage from './projectStudent/projectStudentMember';
 import projectLeaderTaskLogListPage from './projectLeader/projectLeaderTaskLog';
+import ProjectLeaderSavePage from './projectLeader/projectLeaderSavePage';
+import ProjectLeaderTaskSavePage from './projectLeader/projectLeaderTask/ProjectLeaderTaskSavePage';
+import ProjectLeaderMemberForm from './projectLeader/projectLeaderMember/ProjectLeaderMemberForm';
+import ProjectLeaderMemberSavePage from './projectLeader/projectLeaderMember/ProjectLeaderMemberSavePage';
+import ProjectLeaderTeamSavePage from './projectLeader/projectLeaderGroup/ProjectLeaderTeamSavePage';
 export default {
     projectListPage: {
         path: '/project',
@@ -47,6 +52,13 @@ export default {
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderListPage,
+        permission: [apiConfig.project.getListLeader.baseURL, apiConfig.project.update.baseURL],
+    },
+    projectLeaderSavePage: {
+        path: '/project-leader/:id',
+        title: 'Project Leader Page',
+        auth: true,
+        component: ProjectLeaderSavePage,
         permission: [apiConfig.project.getListLeader.baseURL],
     },
     projectLeaderMemberListPage: {
@@ -56,6 +68,13 @@ export default {
         component: ProjectLeaderMemberListPage,
         permission: [apiConfig.project.getListLeader.baseURL],
     },
+    projectLeaderMemberSavePage: {
+        path: '/project-leader/member/:id',
+        title: 'Project Leader Page',
+        auth: true,
+        component: ProjectLeaderMemberSavePage,
+        permission: [apiConfig.project.getListLeader.baseURL],
+    },
     projectLeaderTaskListPage: {
         path: '/project-leader/task',
         title: 'Project Leader Page',
@@ -63,11 +82,25 @@ export default {
         component: ProjectLeaderTaskListPage,
         permission: [apiConfig.project.getListLeader.baseURL],
     },
+    projectLeaderTaskSavePage: {
+        path: '/project-leader/task/:id',
+        title: 'Project Leader Page',
+        auth: true,
+        component: ProjectLeaderTaskSavePage,
+        permission: [apiConfig.project.getListLeader.baseURL],
+    },
     projectLeaderTeamListPage: {
         path: '/project-leader/team',
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderTeamListPage,
+        permission: [apiConfig.project.getListLeader.baseURL],
+    },
+    projectLeaderTeamSavePage: {
+        path: '/project-leader/team/:id',
+        title: 'Project Leader Page',
+        auth: true,
+        component: ProjectLeaderTeamSavePage,
         permission: [apiConfig.project.getListLeader.baseURL],
     },
     teamListPage: {
