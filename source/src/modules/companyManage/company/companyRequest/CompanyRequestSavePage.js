@@ -37,10 +37,11 @@ const CompanyRequestSavePage = () => {
                     ...data,
                     id: detail.id,
                     companyId: profile?.id,
+                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
-                return { ...data, companyId: profile?.id };
+                return { ...data, status: 1, companyId: profile?.id };
             };
         },
     });
