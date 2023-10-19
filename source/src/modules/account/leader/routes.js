@@ -2,9 +2,9 @@ import apiConfig from '@constants/apiConfig';
 import LeaderListPage from '.';
 import LeaderSavePage from './leaderSavePage';
 import ProjectListPage from '@modules/projectManage/project';
-import ProjectTaskListPage from '@modules/projectManage/project/projectTask/routes';
 import CourseListPage from '@modules/courseManage/course';
 import TaskListPage from '@modules/task';
+import ProjectTaskListPage from '@modules/projectManage/project/projectTask';
 
 export default {
     leaderListPage: {
