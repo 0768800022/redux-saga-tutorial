@@ -68,7 +68,7 @@ const ScheduleFile = ({ schedule }) => {
             textAlign: 'center',
             marginRight: '5px',
         }}>
-            <BaseTooltip title={newCheck[index].value}>{index === dayOfWeek - 1 ? (
+            <BaseTooltip title={(newCheck[index].value || "Không có lịch").split("|").join(" | ")}>{index === dayOfWeek - 1 ? (
                 <span
                     style={{
                         display: 'block',
