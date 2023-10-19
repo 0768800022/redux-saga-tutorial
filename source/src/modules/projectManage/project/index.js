@@ -270,7 +270,7 @@ const ProjectListPage = () => {
             },
         },
         !leaderName && !developerName && useKind === UserTypes.MANAGER && mixinFuncs.renderStatusColumn({ width: '120px' }),
-        useKind === UserTypes.MANAGER && mixinFuncs.renderActionColumn(
+        mixinFuncs.renderActionColumn(
             {
                 team: true,
                 member: !leaderName && !developerName && true,
@@ -286,7 +286,7 @@ const ProjectListPage = () => {
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={!leaderName && !developerName  && useKind === UserTypes.MANAGER && mixinFuncs.renderActionBar()}
+                actionBar={!leaderName && !developerName  && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

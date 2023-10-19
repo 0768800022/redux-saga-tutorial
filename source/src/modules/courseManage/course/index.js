@@ -228,7 +228,7 @@ const CourseListPage = () => {
         },
         !leaderName && useKind === UserTypes.MANAGER && mixinFuncs.renderStatusColumn({ width: '120px' }),
         
-        useKind === UserTypes.MANAGER && mixinFuncs.renderActionColumn(
+        mixinFuncs.renderActionColumn(
             {
                 task: true,
                 registration: !leaderName && true,
@@ -239,13 +239,12 @@ const CourseListPage = () => {
         ),
     ].filter(Boolean);
 
-    console.log(useKind === UserTypes.MANAGER);
     return (
         <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
                 title={leaderName && <span style={{ fontWeight: 'normal' }}>{leaderName}</span>}
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                actionBar={!leaderName && useKind === UserTypes.MANAGER && mixinFuncs.renderActionBar()}
+                actionBar={!leaderName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
