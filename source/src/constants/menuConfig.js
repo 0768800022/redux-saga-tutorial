@@ -11,6 +11,7 @@ import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
 import { FormattedMessage } from 'react-intl';
 import apiConfig from './apiConfig';
+
 const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Quản lý tài khoản" />,
@@ -44,7 +45,7 @@ const navMenuConfig = [
         ],
     },
     {
-        label: <FormattedMessage defaultMessage="Quản lý môn học" />,
+        label: <FormattedMessage defaultMessage="Quản lý Khoá học" />,
         key: 'quan-ly-mon-hoc',
         icon: <IconSchool size={16} />,
         children: [
@@ -80,7 +81,7 @@ const navMenuConfig = [
         icon: <IconClipboardText size={16} />,
         children: [
             {
-                label: <FormattedMessage defaultMessage="Quản lý dự án" />,
+                label: <FormattedMessage defaultMessage="Dự án" />,
                 key: 'project-management',
                 path: generatePath(routes.projectListPage.path, {}),
                 permission: apiConfig.project.getList.baseURL,
