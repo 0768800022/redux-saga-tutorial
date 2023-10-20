@@ -178,7 +178,7 @@ const ProjectLeaderListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(commonMessage.fullName),
+            title: translate.formatMessage(commonMessage.projectName),
             dataIndex: 'name',
         },
         {
