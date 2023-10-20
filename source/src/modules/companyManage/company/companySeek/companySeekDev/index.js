@@ -89,11 +89,6 @@ const CompanySeekDevListPage = () => {
         {
             key: 'expYear',
             placeholder: translate.formatMessage(message.expYear),
-            fieldProps: {
-                onChange: (value) => {
-                    value ? setIsHasValueSearch(true) : setIsHasValueSearch(false);
-                },
-            },
         },
     ];
     const columns = [
