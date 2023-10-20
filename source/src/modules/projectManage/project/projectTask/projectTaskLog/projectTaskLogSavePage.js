@@ -48,7 +48,6 @@ function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
             };
         },
     });
-    console.log(title);
 
     return (
         <PageWrapper
