@@ -28,7 +28,7 @@ function ProjectLeaderTaskSavePage() {
             update: apiConfig.projectTask.update,
         },
         options: {
-            getListUrl: generatePath(routes.ProjectTaskListPage.path, { projectTaskId }),
+            getListUrl: `${routes.projectLeaderTaskListPage.path}?projectId=${projectId}&projectName=${projectName}&active=${active}`,
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -43,6 +43,7 @@ function ProjectLeaderTaskSavePage() {
                 return {
                     ...data,
                     projectId: projectId,
+                    status: 1,
                 };
             };
         },
