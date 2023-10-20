@@ -134,3 +134,8 @@ export const taskLog = defineMessages({
     working: 'Làm việc',
     off: 'Nghỉ phép',
 });
+
+export const companySeek = defineMessages({
+    looking: 'Tìm kiếm',
+    accept: 'Chấp nhận',
+});

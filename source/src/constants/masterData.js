@@ -23,6 +23,8 @@ import {
     REGISTRATION_MONEY_RETURN,
     TASK_LOG_WORKING,
     TASK_LOG_OFF,
+    COMPANY_SEEK_STATE_LOOKING,
+    COMPANY_SEEK_STATE_ACCEPT,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -43,6 +45,7 @@ import {
     actionMessage,
     stateCourseRequestMessage,
     taskLog,
+    companySeek,
 } from './intl';
 
 export const languageOptions = [
@@ -315,5 +318,17 @@ export const TaskLogKindOptions = [
         value: TASK_LOG_OFF,
         label: taskLog.off,
         color: 'red',
+    },
+];
+export const companySeekOptions = [
+    {
+        value: COMPANY_SEEK_STATE_LOOKING,
+        label: companySeek.looking,
+        color: 'warning',
+    },
+    {
+        value: COMPANY_SEEK_STATE_ACCEPT,
+        label: companySeek.accept,
+        color: 'green',
     },
 ];
