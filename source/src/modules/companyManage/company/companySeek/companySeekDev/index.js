@@ -17,11 +17,12 @@ import React, { useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import styles from './index.module.scss';
+import { expYearOptions } from '@constants/masterData';
 
 const message = defineMessages({
     objectName: 'Tìm kiếm ứng viên',
     preview: 'Xem chi tiết ứng viên',
-    reminderMessage: 'Vui lòng nhập giá trị cần tìm !',
+    reminderMessage: 'Vui lòng chọn vai trò cần tìm !',
     expYear: 'Năm kinh nghiệm',
 });
 
@@ -30,6 +31,7 @@ const CompanySeekDevListPage = () => {
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const roleId = queryParameters.get('roleId');
+    const expYearValues = translate.formatKeys(expYearOptions, ['label']);
     const [isHasValueSearch, setIsHasValueSearch] = useState(roleId && true);
     const { data, mixinFuncs, loading, pagination, queryFilter, serializeParams } = useListBase({
         apiConfig: {
@@ -88,7 +90,9 @@ const CompanySeekDevListPage = () => {
         },
         {
             key: 'expYear',
+            type: FieldTypes.SELECT,
             placeholder: translate.formatMessage(message.expYear),
+            options: expYearValues,
         },
     ];
     const columns = [
@@ -138,7 +142,7 @@ const CompanySeekDevListPage = () => {
                 })}
                 baseTable={
                     <div>
-                        {!roleId && (
+                        {!roleId && !isHasValueSearch && (
                             <div style={{ color: 'red' }}>{translate.formatMessage(message.reminderMessage)}</div>
                         )}
                         <BaseTable

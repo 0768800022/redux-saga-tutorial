@@ -46,6 +46,7 @@ import {
     stateCourseRequestMessage,
     taskLog,
     companySeek,
+    expYearMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -331,4 +332,15 @@ export const companySeekOptions = [
         label: companySeek.accept,
         color: 'green',
     },
+];
+export const expYearOptions = [
+    { value: 0, label: expYearMessage.noExperience },
+    {
+        value: 1,
+        label: expYearMessage.oneYear,
+    },
+    { value: 2, label: expYearMessage.twoYear },
+    { value: 3, label: expYearMessage.threeYear },
+    { value: 4, label: expYearMessage.fourYear },
+    { value: 5, label: expYearMessage.fiveYear },
 ];
