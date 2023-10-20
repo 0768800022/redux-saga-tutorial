@@ -112,6 +112,12 @@ function ProjectStudentMyTaskListPage() {
             type: FieldTypes.SELECT,
             options: projects,
         },
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(commonMessage.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
     ];
     return (
         <PageWrapper

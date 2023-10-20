@@ -16,6 +16,7 @@ import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelp
 import { commonMessage } from '@locales/intl';
 import { FieldTypes } from '@constants/formConfig';
 import useFetch from '@hooks/useFetch';
+import { lectureState } from '@constants/masterData';
 
 const message = defineMessages({
     objectName: 'My Task',
@@ -24,7 +25,8 @@ const message = defineMessages({
 
 function MyTaskStudentListPage() {
     const translate = useTranslate();
-    const statusValues = translate.formatKeys(taskState, ['label']);
+    const stateValues = translate.formatKeys(taskState, ['label']);
+
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             getList: apiConfig.task.studentTask,
@@ -90,7 +92,7 @@ function MyTaskStudentListPage() {
                 align: 'center',
                 width: 120,
                 render(dataRow) {
-                    const state = statusValues.find((item) => item.value == dataRow);
+                    const state = stateValues.find((item) => item.value == dataRow);
                     return (
                         <Tag color={state.color}>
                             <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
@@ -119,7 +121,12 @@ function MyTaskStudentListPage() {
             placeholder: translate.formatMessage(commonMessage.courseName),
             type: FieldTypes.SELECT,
             options: courses,
-
+        },
+        {
+            key: 'taskState',
+            placeholder: translate.formatMessage(commonMessage.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
         },
     ];
 
