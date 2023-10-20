@@ -7,6 +7,7 @@ import routes from '@routes';
 import React from 'react';
 import { defineMessages } from 'react-intl';
 import ProjectLeaderMemberForm from './ProjectLeaderMemberForm';
+import { generatePath } from 'react-router-dom';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
@@ -27,7 +28,7 @@ function ProjectLeaderMemberSavePage() {
             update: apiConfig.memberProject.update,
         },
         options: {
-            getListUrl: routes.projectMemberListPage.path,
+            getListUrl: generatePath(routes.projectLeaderMemberListPage.path),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
