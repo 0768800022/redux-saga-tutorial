@@ -237,6 +237,12 @@ const navMenuConfig = [
                 path: routes.companySeekListPage.path,
                 permission: apiConfig.companySeek.getList.baseURL,
             },
+            {
+                label: <FormattedMessage defaultMessage="Tìm kiếm ứng viên" />,
+                key: 'company-seek',
+                path: routes.companySeekDevListPage.path,
+                permission: apiConfig.companySeek.getListDev.baseURL,
+            },
         ],
     },
 ];

@@ -1,11 +1,12 @@
-import apiConfig from "@constants/apiConfig";
-import CompanyListPage from ".";
-import CompanySavePage from "./CompanySavePage";
+import apiConfig from '@constants/apiConfig';
+import CompanyListPage from '.';
+import CompanySavePage from './CompanySavePage';
 import ServiceCompanySubListPage from '../serviceCompanySubscription';
 import ServiceCompanySubscriptionSavePage from '../serviceCompanySubscription/ServiceCompanySubscriptionSavePage';
 import CompanySubscriptionIdListPage from '../company/CompanySubscriptionID/index';
 import CompanySubscriptionIdSavePage from './CompanySubscriptionID/CompanySubscriptionIDSavePage';
-import CompanySeekListPage from "./companySeek";
+import CompanySeekListPage from './companySeek';
+import CompanySeekDevListPage from './companySeek/companySeekDev';
 export default {
     companyListPage: {
         path: '/company',
@@ -55,5 +56,12 @@ export default {
         auth: true,
         component: CompanySeekListPage,
         permissions: [apiConfig.companySeek.getList.baseURL],
+    },
+    companySeekDevListPage: {
+        path: '/company-seek-dev',
+        title: 'Company seek dev',
+        auth: true,
+        component: CompanySeekDevListPage,
+        permissions: [apiConfig.companySeek.getListDev.baseURL],
     },
 };
