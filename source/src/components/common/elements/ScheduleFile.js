@@ -1,6 +1,6 @@
 import React from "react";
 import { BaseTooltip } from "../form/BaseTooltip";
-import { number } from "yup";
+import { boolean, number } from "yup";
 
 const ScheduleFile = ({ schedule }) => {
     let check = JSON.parse(schedule);
@@ -13,6 +13,7 @@ const ScheduleFile = ({ schedule }) => {
         { key: 'S', value: check.t7 },
         { key: 'S', value: check.cn },
     ];
+
     let dateString = '';
     newCheck.map((item) => {
         if (item.value) {
@@ -27,8 +28,6 @@ const ScheduleFile = ({ schedule }) => {
     var dayOfWeek = today.getDay();
     const currentHour = today.getHours();
     const currentMinute = today.getMinutes();
-    const hours = [];
-    const minutes = [];
     if (dayOfWeek - 1 < 0) {
         dayOfWeek = 7;
     }
@@ -36,43 +35,57 @@ const ScheduleFile = ({ schedule }) => {
         if (index === dayOfWeek - 1) {
             const inputString = item.value;
             if (inputString) {
-                var parts = inputString.split("|");
-                // console.log(parts);
-            }
-            parts.forEach((item) => {
-                const [start, end] = item.split("-"); // Tách thành mảng start và end
-                const [startHours, startMinutes] = start.split("H").map(Number); // Tách giờ và phút bắt đầu
-                const [endHours, endMinutes] = end.split("H").map(Number); // Tách giờ và phút kết thúc
-
-                hours.push(startHours, endHours); // Thêm giờ vào mảng hours
-                minutes.push(startMinutes, endMinutes); // Thêm phút vào mảng minutes
-            });
-        }
-
-        // const firstPart = parts ? parts[0] : 0;
-        // const secondPart = parts ? parts[1] : 0;
-        // const thirdPart = parts ? parts[2] : 0;
-        // // console.log("firstPart " + firstPart + " secondPart " + secondPart + " && " + thirdPart);
-        // function timeStringToNumber(timeString) {
-        //     const [hour, minute] = timeString.split("H").map(Number);
-        //     return { hour, minute };
-        // }
-        // const firstTime = firstPart ? timeStringToNumber(firstPart) : 0;
-        // const secondTime = secondPart ? timeStringToNumber(secondPart) : 0;
-        // const thirdTime = thirdPart ? timeStringToNumber(thirdPart) : 0;
-        for (let i = 0; i < 6; i++) {
-            if (hours[i] < currentHour && currentHour < hours[i+1]) {
-                return checkTime = true; // Khi i bằng 5, thoát khỏi vòng lặp
-            } 
-            else {
-                if (hours[i] == currentHour || currentHour == hours[i+1]){
-                    if (minutes[i] < currentMinute && currentMinute < minutes[i+1]){
-                        return checkTime = true;
+                var parts = [];
+                var parts1 = [];
+                var parts2 = [];
+                if (item.value.includes('|')) {
+                    var array = inputString.split("|");
+                    parts = array[0].split("-");
+                    parts1 = array[1].split("-");
+                    if (array[2]) {
+                        parts2 = array[2].split("-");
                     }
                 }
+                else
+                    parts = inputString.split("-");
             }
-            if(i === 5 )
+
+        }
+
+        function timeStringToNumber(timeString) {
+            const [hour, minute] = timeString.split("H").map(Number);
+            return { hour, minute };
+        }
+       
+        let shouldContinue = true;
+        if (parts !== null) {
+            nct(parts);
+            if ( checkTime == true) {
+                shouldContinue = false;
+                return checkTime;
+            }
+            console.log(shouldContinue);
+        }
+
+        function nct(parts) {
+            const firstPart = parts ? parts[0] : 0;
+            const secondPart = parts ? parts[1] : 0;
+            const firstTime = firstPart ? timeStringToNumber(firstPart) : 0;
+            const secondTime = secondPart ? timeStringToNumber(secondPart) : 0;
+
+            if (currentHour < firstTime.hour || currentHour > secondTime.hour) {
                 return checkTime = false;
+            }
+            else if (currentHour == firstTime.hour) {
+                if (currentMinute < firstTime.minute) {
+                    return checkTime = false;
+                }
+            }
+            else if (currentHour == secondTime.hour) {
+                if (currentMinute > secondTime.minute) {
+                    return checkTime = false;
+                }
+            }
         }
     });
     const arrayFromInput = dateString.split('');

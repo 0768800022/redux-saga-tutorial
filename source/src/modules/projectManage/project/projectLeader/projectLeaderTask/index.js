@@ -196,7 +196,10 @@ function ProjectLeaderTaskListPage() {
             },
         },
 
-        mixinFuncs.renderActionColumn({ taskLog: true, editSetting: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn(
+            { taskLog: true, editSetting: true, edit: active && true, delete: active && true },
+            { width: '150px' },
+        ),
     ].filter(Boolean);
     const params = mixinFuncs.prepareGetListParams(queryFilter);
     const {

@@ -1,8 +1,8 @@
 import React from 'react';
 import apiConfig from '@constants/apiConfig';
-import routes from './routes';
+import routes from '../routes';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import CompanyForm from './CompanyForm';
+import CompanySeekForm from './CompanySeekForm';
 import useTranslate from '@hooks/useTranslate';
 import useSaveBase from '@hooks/useSaveBase';
 import { generatePath, useParams } from 'react-router-dom';
@@ -10,10 +10,10 @@ import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
-    objectName: 'Công ty',
+    objectName: 'Ứng viên đã lưu',
 });
 
-const CompanySavePage = () => {
+const CompanySeekSavePage = () => {
     const companyId = useParams();
     const translate = useTranslate();
 
@@ -24,7 +24,7 @@ const CompanySavePage = () => {
             update: apiConfig.companySeek.update,
         },
         options: {
-            getListUrl: routes.companyListPage.path,
+            getListUrl: routes.companySeekListPage.path,
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
@@ -32,6 +32,7 @@ const CompanySavePage = () => {
                 return {
                     ...data,
                     id: detail.id,
+                    status: detail.status,
                 };
             };
             funcs.prepareCreateData = (data) => {
@@ -47,14 +48,14 @@ const CompanySavePage = () => {
             loading={loading}
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(commonMessage.company),
-                    path: generatePath(routes.companyListPage.path, { companyId }),
+                    breadcrumbName: translate.formatMessage(message.objectName),
+                    path: generatePath(routes.companySeekListPage.path),
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <CompanyForm
+            <CompanySeekForm
                 formId={mixinFuncs.getFormId()}
                 actions={mixinFuncs.renderActions()}
                 dataDetail={detail ? detail : {}}
@@ -66,4 +67,4 @@ const CompanySavePage = () => {
         </PageWrapper>
     );
 };
-export default CompanySavePage;
+export default CompanySeekSavePage;

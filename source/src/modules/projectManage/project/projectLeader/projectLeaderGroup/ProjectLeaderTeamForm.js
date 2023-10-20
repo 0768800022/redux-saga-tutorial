@@ -80,7 +80,6 @@ const ProjectLeaderTeamForm = (props) => {
                 status: statusValues[0].value,
                 projectId: projectId,
             });
-            console.log('projectId form ' + projectId);
         }
     }, [isEditing]);
 
