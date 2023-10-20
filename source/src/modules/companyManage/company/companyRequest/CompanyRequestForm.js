@@ -174,13 +174,6 @@ const CompanyRequestForm = ({
                                 required
                             />
                         </Col>
-                        {/* <Col span={12}>
-                            <SelectField
-                                label={<FormattedMessage defaultMessage="Trạng thái" />}
-                                name="status"
-                                options={statusValues}
-                            />
-                        </Col> */}
                         <Col span={12}>
                             <DatePickerField
                                 name="startDate"
