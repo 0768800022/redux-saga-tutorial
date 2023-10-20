@@ -22,6 +22,8 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
     const [canApplyAll, setCanApplyAll] = useState(true);
+    const queryParameters = new URLSearchParams(window.location.search);
+    const projectId = queryParameters.get('projectId');
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
@@ -302,7 +304,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 name="teamId"
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                                initialSearchParams={{}}
+                                initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
                                 disabled={isEditing}
                             />
