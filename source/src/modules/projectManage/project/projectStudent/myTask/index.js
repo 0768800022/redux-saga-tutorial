@@ -25,12 +25,20 @@ function ProjectStudentMyTaskListPage() {
     const { profile } = useAuth();
     const {
         data: projects,
-    } = useFetch(apiConfig.project.autocomplete, {
+    } = useFetch(apiConfig.project.getListStudent, {
         immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({
-            value: item.id,
-            label: item.name,
-        })),
+        mappingData: ({ data }) => {
+            return data.content.map((item) => {
+                if (item.state !== 1) {
+                    return {
+                        value: item.id,
+                        label: item.name,
+                    };
+                } else {
+                    return null;
+                }
+            }).filter(item => item !== null);
+        },
     });
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
@@ -60,6 +68,10 @@ function ProjectStudentMyTaskListPage() {
         {
             title: translate.formatMessage(commonMessage.task),
             dataIndex: 'taskName',
+        },
+        {
+            title: translate.formatMessage(commonMessage.projectName),
+            dataIndex: ['project', 'name'],
         },
         {
             title: <FormattedMessage defaultMessage="Quản lý" />,

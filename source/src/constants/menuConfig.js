@@ -1,11 +1,11 @@
 import routes from '@routes';
-import { IconUserBolt, IconSchool, IconClipboardText, IconBuildingCommunity, IconSettings } from '@tabler/icons-react';
+import { IconUserBolt, IconSchool, IconClipboardText, IconBuildingCommunity, IconSettings,IconHighlight } from '@tabler/icons-react';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
 import { FormattedMessage } from 'react-intl';
 import apiConfig from './apiConfig';
-
+import { BulbOutlined } from '@ant-design/icons';
 const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Quản lý tài khoản" />,
@@ -145,7 +145,7 @@ const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Dự án" />,
         key: 'project-leader',
-        icon: <IconSchool size={16} />,
+        icon:  <BulbOutlined />,
         permission: apiConfig.course.getListLeaderCourse.baseURL,
         children: [
             {
@@ -179,7 +179,7 @@ const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Dự án" />,
         key: 'project-student',
-        icon: <IconSchool size={16} />,
+        icon:  <BulbOutlined />,
         permission: apiConfig.course.getListStudentCourse.baseURL,
         children: [
             {

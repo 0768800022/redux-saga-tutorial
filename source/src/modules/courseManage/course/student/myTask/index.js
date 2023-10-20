@@ -105,7 +105,7 @@ function MyTaskStudentListPage() {
     const {
         data: courses,
         execute: executescourses,
-    } = useFetch(apiConfig.course.autocomplete, {
+    } = useFetch(apiConfig.course.getListStudentCourse, {
         immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({
             value: item.id,
