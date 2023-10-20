@@ -51,11 +51,6 @@ const CourseForm = (props) => {
         immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.subjectName })),
     });
-    // useEffect(() => {
-    //     executeGetSubjects({
-    //         params: {},
-    //     });
-    // }, []);
     useEffect(() => {
         lectureStateOptions.map((state, index) => {
             if (dataDetail?.state == state.value) {
@@ -87,11 +82,6 @@ const CourseForm = (props) => {
         immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.leaderName })),
     });
-    // useEffect(() => {
-    //     executeGetLeaders({
-    //         params: {},
-    //     });
-    // }, []);
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,

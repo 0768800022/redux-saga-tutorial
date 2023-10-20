@@ -1,5 +1,6 @@
 import React from "react";
 import { BaseTooltip } from "../form/BaseTooltip";
+import { boolean, number } from "yup";
 
 const ScheduleFile = ({ schedule }) => {
     let check = JSON.parse(schedule);
@@ -12,6 +13,7 @@ const ScheduleFile = ({ schedule }) => {
         { key: 'S', value: check.t7 },
         { key: 'S', value: check.cn },
     ];
+
     let dateString = '';
     newCheck.map((item) => {
         if (item.value) {
@@ -33,30 +35,56 @@ const ScheduleFile = ({ schedule }) => {
         if (index === dayOfWeek - 1) {
             const inputString = item.value;
             if (inputString) {
-                var parts = inputString.split("-");
+                var parts = [];
+                var parts1 = [];
+                var parts2 = [];
+                if (item.value.includes('|')) {
+                    var array = inputString.split("|");
+                    parts = array[0].split("-");
+                    parts1 = array[1].split("-");
+                    if (array[2]) {
+                        parts2 = array[2].split("-");
+                    }
+                }
+                else
+                    parts = inputString.split("-");
             }
+
         }
-        const firstPart = parts ? parts[0] : 0;
-        const secondPart = parts ? parts[1] : 0;
+
         function timeStringToNumber(timeString) {
             const [hour, minute] = timeString.split("H").map(Number);
             return { hour, minute };
         }
-
-        const firstTime = firstPart ? timeStringToNumber(firstPart) : 0;
-        const secondTime = secondPart ? timeStringToNumber(secondPart) : 0;
-
-        if (currentHour < firstTime.hour || currentHour > secondTime.hour) {
-            checkTime = false;
-        }
-        else if (currentHour === firstTime.hour) {
-            if (currentMinute < firstTime.minute) {
-                checkTime = false;
+       
+        let shouldContinue = true;
+        if (parts !== null) {
+            nct(parts);
+            if ( checkTime == true) {
+                shouldContinue = false;
+                return checkTime;
             }
+            console.log(shouldContinue);
         }
-        else if (currentHour === secondTime.hour) {
-            if (currentMinute > secondTime.minute) {
-                checkTime = false;
+
+        function nct(parts) {
+            const firstPart = parts ? parts[0] : 0;
+            const secondPart = parts ? parts[1] : 0;
+            const firstTime = firstPart ? timeStringToNumber(firstPart) : 0;
+            const secondTime = secondPart ? timeStringToNumber(secondPart) : 0;
+
+            if (currentHour < firstTime.hour || currentHour > secondTime.hour) {
+                return checkTime = false;
+            }
+            else if (currentHour == firstTime.hour) {
+                if (currentMinute < firstTime.minute) {
+                    return checkTime = false;
+                }
+            }
+            else if (currentHour == secondTime.hour) {
+                if (currentMinute > secondTime.minute) {
+                    return checkTime = false;
+                }
             }
         }
     });
