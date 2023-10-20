@@ -139,3 +139,12 @@ export const companySeek = defineMessages({
     looking: 'Tìm kiếm',
     accept: 'Chấp nhận',
 });
+
+export const expYearMessage = defineMessages({
+    noExperience: 'Chưa có kinh nghiệm',
+    oneYear: '1 năm',
+    twoYear: '2 năm',
+    threeYear: '3 năm',
+    fourYear: '4 năm',
+    fiveYear: '5 năm',
+});
