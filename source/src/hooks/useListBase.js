@@ -144,6 +144,7 @@ const useListBase = ({
     };
 
     const handleFetchList = (params) => {
+        console.log(params);
         if (!apiConfig.getList) throw new Error('apiConfig.getList is not defined');
         setLoading(true);
         executeGetList({

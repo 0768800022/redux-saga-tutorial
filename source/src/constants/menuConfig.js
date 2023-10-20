@@ -139,7 +139,6 @@ const navMenuConfig = [
                 label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
                 key: 'my-course-leader',
                 path: routes.courseLeaderListPage.path,
-                permission: apiConfig.course.getListLeaderCourse.baseURL,
             },
         ],
     },
@@ -153,7 +152,6 @@ const navMenuConfig = [
                 label: <FormattedMessage defaultMessage="Dự án của tôi" />,
                 key: 'my-project-leader',
                 path: generatePath(routes.projectLeaderListPage.path, {}),
-                permission: apiConfig.course.getListLeaderCourse.baseURL,
             },
         ],
     },
@@ -163,14 +161,19 @@ const navMenuConfig = [
         label: <FormattedMessage defaultMessage="Khoá học" />,
         key: 'course-student',
         icon: <IconSchool size={16} />,
-        permission: apiConfig.course.getListStudentCourse.baseURL,
+        permission: [apiConfig.course.getListStudentCourse.baseURL],
         children: [
             {
                 label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
                 key: 'my-course-student',
-                path: routes.courseStudentListPage.path,
-                permission: apiConfig.course.getListStudentCourse.baseURL,
+                path: generatePath(routes.courseStudentListPage.path, {}),
             },
+            {
+                label: <FormattedMessage defaultMessage="Task của tôi" />,
+                key: 'my-task-student',
+                path: generatePath(routes.myTaskStudentListPage.path, {}),
+            },
+            
         ],
     },
     {
@@ -183,7 +186,11 @@ const navMenuConfig = [
                 label: <FormattedMessage defaultMessage="Dự án của tôi" />,
                 key: 'my-project-student',
                 path: routes.projectStudentListPage.path,
-                permission: apiConfig.course.getListStudentCourse.baseURL,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Task của tôi" />,
+                key: 'my-task-project-student',
+                path: routes.projectStudentMyTaskListPage.path,
             },
         ],
     },
