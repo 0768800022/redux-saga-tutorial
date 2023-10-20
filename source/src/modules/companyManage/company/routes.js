@@ -7,6 +7,7 @@ import CompanySubscriptionIdListPage from '../company/CompanySubscriptionID/inde
 import CompanySubscriptionIdSavePage from './CompanySubscriptionID/CompanySubscriptionIDSavePage';
 import CompanySeekListPage from './companySeek';
 import CompanySeekDevListPage from './companySeek/companySeekDev';
+import CompanySeekSavePage from "./companySeek/CompanySeekSavePage";
 export default {
     companyListPage: {
         path: '/company',
@@ -63,5 +64,12 @@ export default {
         auth: true,
         component: CompanySeekDevListPage,
         permissions: [apiConfig.companySeek.getListDev.baseURL],
+    },
+    companySeekSavePage: {
+        path: '/company-seek/:id',
+        title: 'Company Seek Save Page',
+        auth: true,
+        component: CompanySeekSavePage,
+        permissions: [apiConfig.companySeek.create.baseURL, apiConfig.companySeek.update.baseURL],
     },
 };
