@@ -1,58 +1,37 @@
+import { EyeOutlined, UserOutlined } from '@ant-design/icons';
+import AvatarField from '@components/common/form/AvatarField';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import {
-    AppConstants,
-    DATE_FORMAT_DISPLAY,
-    DEFAULT_FORMAT,
-    DEFAULT_TABLE_ITEM_SIZE,
-    TIME_FORMAT_DISPLAY,
-} from '@constants';
+import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { levelOptionSelect, statusOptions } from '@constants/masterData';
+import { FieldTypes } from '@constants/formConfig';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import routes from '@routes';
-import { convertGlobImportToArray, convertUtcToLocalTime } from '@utils';
-import { Avatar, Button, Modal, Row, Tag } from 'antd';
-import { EyeOutlined, UserOutlined, CaretRightOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
-import { FormattedMessage, defineMessages } from 'react-intl';
-import { useNavigate } from 'react-router-dom';
-import FolderIcon from '@assets/icons';
-import { FieldTypes } from '@constants/formConfig';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
-import useNotification from '@hooks/useNotification';
+import routes from '@routes';
+import { Button } from 'antd';
+import React, { useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 import styles from './index.module.scss';
-import useAuth from '@hooks/useAuth';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 
 const message = defineMessages({
     objectName: 'Tìm kiếm ứng viên',
-    createSuccess: 'Lưu ứng viên thành công',
     preview: 'Xem chi tiết ứng viên',
-    saveCandidate: 'Lưu ứng viên',
-    description: 'Mô tả',
-    position: 'Vị trí',
-    teamSize: 'Số lượng nhóm',
-    projectDone: 'Dự án đã thực hiện',
-    team: 'nhóm',
     reminderMessage: 'Vui lòng nhập giá trị cần tìm !',
+    expYear: 'Năm kinh nghiệm',
 });
 
 const CompanySeekDevListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
-    const [hasError, setHasError] = useState(false);
-    const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const notification = useNotification();
     const queryParameters = new URLSearchParams(window.location.search);
     const roleId = queryParameters.get('roleId');
-    const [showPreviewModal, setShowPreviewModal] = useState(false);
-    const { data, mixinFuncs, loading, pagination, queryFiter, serializeParams } = useListBase({
+    const [isHasValueSearch, setIsHasValueSearch] = useState(roleId && true);
+    const { data, mixinFuncs, loading, pagination, queryFilter, serializeParams } = useListBase({
         apiConfig: {
             getList: apiConfig.companySeek.getListDev,
         },
@@ -79,17 +58,7 @@ const CompanySeekDevListPage = () => {
                             type="link"
                             style={{ padding: 0 }}
                             onClick={(e) => {
-                                executeGetDev({
-                                    pathParams: {
-                                        id,
-                                    },
-                                    onCompleted: () => setShowPreviewModal(true),
-                                    onError: () =>
-                                        notification({
-                                            type: 'error',
-                                            title: 'Error',
-                                        }),
-                                });
+                                navigate(routes.companySeekDevPreviewPage.path + `?id=${id}&roleId=${roleId}`);
                             }}
                         >
                             <EyeOutlined />
@@ -99,18 +68,7 @@ const CompanySeekDevListPage = () => {
             });
         },
     });
-    const {
-        execute: executeGetDev,
-        loading: getdetailDevLoading,
-        data: detailDevPreview,
-    } = useFetch(apiConfig.companySeek.getByIdDev, {
-        immediate: false,
-    });
-    const {
-        data: projectRoles,
-        // loading: getcompanyLoading,
-        execute: executesProjectRoles,
-    } = useFetch(apiConfig.projectRole.autocomplete, {
+    const { data: projectRoles } = useFetch(apiConfig.projectRole.autocomplete, {
         immediate: true,
         mappingData: ({ data }) =>
             data.content.map((item) => ({
@@ -118,15 +76,24 @@ const CompanySeekDevListPage = () => {
                 label: item.projectRoleName,
             })),
     });
-    const { execute: executeCreateCompanySeek } = useFetch(apiConfig.companySeek.create, {
-        immediate: false,
-    });
     const searchFields = [
         {
             key: 'roleId',
             placeholder: translate.formatMessage(commonMessage.role),
             type: FieldTypes.SELECT,
+            onChange: (value) => {
+                value ? setIsHasValueSearch(true) : setIsHasValueSearch(false);
+            },
             options: projectRoles,
+        },
+        {
+            key: 'expYear',
+            placeholder: translate.formatMessage(message.expYear),
+            fieldProps: {
+                onChange: (value) => {
+                    value ? setIsHasValueSearch(true) : setIsHasValueSearch(false);
+                },
+            },
         },
     ];
     const columns = [
@@ -164,15 +131,21 @@ const CompanySeekDevListPage = () => {
         },
         mixinFuncs.renderActionColumn({ preview: true }, { width: 160 }),
     ];
-    const { profile } = useAuth();
 
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(message.objectName) }]}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    initialValues: queryFilter,
+                    className: !isHasValueSearch && styles.disableSearch,
+                    onReset: () => setIsHasValueSearch(false),
+                })}
                 baseTable={
                     <div>
-                        {!roleId && <div style={{ color: 'red' }}>{translate.formatMessage(message.reminderMessage)}</div>}
+                        {!roleId && (
+                            <div style={{ color: 'red' }}>{translate.formatMessage(message.reminderMessage)}</div>
+                        )}
                         <BaseTable
                             onChange={mixinFuncs.changePagination}
                             columns={columns}
@@ -183,94 +156,6 @@ const CompanySeekDevListPage = () => {
                     </div>
                 }
             ></ListPage>
-            <Modal
-                // title={<FormattedMessage defaultMessage="{title}" values={{ title: newsPreview?.newsTitle }} />}
-                width={800}
-                open={showPreviewModal}
-                centered
-                onCancel={() => setShowPreviewModal(false)}
-                footer={[
-                    <Button
-                        key="submit"
-                        type="primary"
-                        onClick={() =>
-                            executeCreateCompanySeek({
-                                data: {
-                                    companyId: profile?.id,
-                                    developerId: detailDevPreview?.data.id,
-                                    roleId: roleId || detailDevPreview?.data?.projectRoleList[0]?.id,
-                                },
-                                onCompleted: () => {
-                                    notification({
-                                        message: translate.formatMessage(message.createSuccess),
-                                    });
-                                    setShowPreviewModal(false);
-                                },
-                                onError: (err) => {
-                                    notification({
-                                        message: err.message,
-                                    });
-                                },
-                            })
-                        }
-                    >
-                        {translate.formatMessage(message.saveCandidate)}
-                    </Button>,
-                ]}
-            >
-                <Row style={{ alignItems: 'center' }}>
-                    <AvatarField
-                        size={64}
-                        icon={<UserOutlined />}
-                        src={
-                            detailDevPreview?.data?.avatar
-                                ? `${AppConstants.contentRootUrl}${detailDevPreview?.data?.avatar}`
-                                : null
-                        }
-                    />
-                    <div className={styles.title}>{detailDevPreview?.data?.name}</div>
-                </Row>
-                <div className={styles.titleProject}>{translate.formatMessage(message.projectDone)} :</div>
-                {detailDevPreview?.data?.projectList &&
-                    detailDevPreview?.data?.projectList.map((project) => {
-                        const startDateConvert = convertStringToDateTime(
-                            project?.startDate,
-                            DEFAULT_FORMAT,
-                            DATE_FORMAT_DISPLAY,
-                        );
-                        const startDate = convertDateTimeToString(startDateConvert, DATE_FORMAT_DISPLAY);
-                        const endDateConvert = convertStringToDateTime(
-                            project?.endDate,
-                            DEFAULT_FORMAT,
-                            DATE_FORMAT_DISPLAY,
-                        );
-                        const endDate = convertDateTimeToString(endDateConvert, DATE_FORMAT_DISPLAY);
-                        return (
-                            <div key={project?.id}>
-                                <Row>
-                                    <CaretRightOutlined />
-                                    <div className={styles.name}>
-                                        {project?.name} ({startDate} - {endDate})
-                                    </div>
-                                </Row>
-                                <div className={styles.detail}>
-                                    • {translate.formatMessage(message.description)}:{' '}
-                                    <span className={styles.item}>{project?.description}</span>
-                                </div>
-                                <div className={styles.detail}>
-                                    • {translate.formatMessage(message.teamSize)}:{' '}
-                                    <span className={styles.item}>
-                                        {project?.teamSize} {translate.formatMessage(message.team)}
-                                    </span>
-                                </div>
-                                <div className={styles.detail}>
-                                    • {translate.formatMessage(message.position)}:{' '}
-                                    <span className={styles.item}>{project?.projectRole?.projectRoleName}</span>
-                                </div>
-                            </div>
-                        );
-                    })}
-            </Modal>
         </PageWrapper>
     );
 };
