@@ -128,7 +128,7 @@ function ProjectStudentTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        // mixinFuncs.renderStatusColumn({ width: '120px' }),
     ].filter(Boolean);
 
     return (

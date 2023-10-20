@@ -14,6 +14,8 @@ import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
+import useAuth from '@hooks/useAuth';
+import routes from '@routes';
 
 const message = defineMessages({
     objectName: 'Yêu cầu công ty',
@@ -24,9 +26,11 @@ const CompanyRequestListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const companyId = queryParameters.get('companyId');
     const [companyOptions, setCompanyOptions] = useState([]);
     const navigate = useNavigate();
+    const { profile } = useAuth();
+    const companyId = profile.id;
+
     // const companyOptions =[];
     // const companyValues = translate.formatKeys(companyOptions, ['label']);
     // console.log(companyOptions);
@@ -46,11 +50,17 @@ const CompanyRequestListPage = () => {
                     };
                 }
             };
+            funcs.prepareGetListParams = () => {
+                return navigate(routes.companyRequestListPage.path + `?companyId=${profile.id}`);
+            };
             funcs.getCreateLink = () => {
-                if (companyId !== null) {
-                    return `${pagePath}/create?companyId=${companyId}`;
+                if (profile?.id !== null) {
+                    return `${pagePath}/create?companyId=${profile.id}`;
                 }
                 return `${pagePath}/create`;
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?companyId=${profile.id}`;
             };
             funcs.additionalActionColumnButtons = () => ({
                 edit: (item) => (
@@ -60,7 +70,7 @@ const CompanyRequestListPage = () => {
                         onClick={(e) => {
                             e.stopPropagation();
                             navigate(mixinFuncs.getItemDetailLink(item), {
-                                state: { action: 'edit', prevPath: location.pathname, data: companyRequests },
+                                state: { action: 'edit', prevPath: location.pathname },
                             });
                         }}
                     >
@@ -70,13 +80,7 @@ const CompanyRequestListPage = () => {
             });
         },
     });
-    const {
-        data: companyRequests,
-        // loading: getcompanyRequestLoading,
-        execute: executescompanyRequests,
-    } = useFetch(apiConfig.companyRequest.autocomplete, {
-        immediate: true,
-    });
+
     const columns = [
         {
             title: <FormattedMessage defaultMessage="Tiêu đề" />,

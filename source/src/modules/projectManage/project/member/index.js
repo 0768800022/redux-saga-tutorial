@@ -33,6 +33,7 @@ const message = defineMessages({
     name: 'Họ và tên ',
     developer: 'Lập trình viên',
     member: 'Thành viên',
+    team: 'Nhóm',
 });
 
 const ProjectMemberListPage = () => {
@@ -67,12 +68,9 @@ const ProjectMemberListPage = () => {
                 return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                if (active)
-                    return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
-                else 
-                    return `${pagePath}/${dataRow.id}` + pathDefault ;
+                if (active) return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
+                else return `${pagePath}/${dataRow.id}` + pathDefault;
             };
-            
         },
     });
 
@@ -105,6 +103,11 @@ const ProjectMemberListPage = () => {
         {
             title: translate.formatMessage(commonMessage.name),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
+        },
+        {
+            title: translate.formatMessage(message.team),
+            dataIndex: ['team', 'teamName'],
+            width: 150,
         },
         {
             title: translate.formatMessage(commonMessage.role),

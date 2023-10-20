@@ -89,6 +89,7 @@ const TaskLogForm = (props) => {
                             label={<FormattedMessage defaultMessage="Lời nhắn" />}
                             name="message"
                             type="textarea"
+                            required
                         />
                     </Col>       
                 </Row>
