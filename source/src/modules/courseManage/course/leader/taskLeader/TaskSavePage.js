@@ -36,7 +36,6 @@ function TaskLeaderSavePage() {
 
     const breadcrumbName= routes.taskSavePage.breadcrumbs(commonMessage,paramHead,state,search,title);
     const getListUrl = generatePath(routes.taskLeaderListPage.path, { courseId });
-    console.log(breadcrumbName);
 
     return (
         <TaskSavePage getListUrl={getListUrl} breadcrumbName={breadcrumbName}/>

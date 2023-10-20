@@ -23,9 +23,9 @@ const Dashboard = () => {
             dispatch(accountActions.logout());
             notification({ type: 'error', message: 'Loại tài khoản không phù hợp để đăng nhập vô trang này !!!' });
         } else if (userKind == UserTypes.STUDENT) {
-            navigate(routes.courseListPage.path);
+            navigate(routes.courseStudentListPage.path);
         } else if (userKind == UserTypes.LEADER) {
-            navigate(routes.courseListPage.path);
+            navigate(routes.courseLeaderListPage.path);
         } else if (userKind == UserTypes.COMPANY) {
             navigate(routes.companyRequestListPage.path);
         } else {

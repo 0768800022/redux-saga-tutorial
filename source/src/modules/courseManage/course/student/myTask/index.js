@@ -8,27 +8,22 @@ import apiConfig from '@constants/apiConfig';
 import { taskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import routes from '@routes';
 import {  Tag } from 'antd';
 import React from 'react';
-import { useLocation,useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { commonMessage } from '@locales/intl';
+import { FieldTypes } from '@constants/formConfig';
+import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
-    objectName: 'Task',
+    objectName: 'My Task',
+    myTask: 'Task của tôi',
 });
 
-function TaskStudentListPage() {
+function MyTaskStudentListPage() {
     const translate = useTranslate();
-    const { pathname: pagePath } = useLocation();
-    const queryParameters = new URLSearchParams(window.location.search);
-    const courseName = queryParameters.get('courseName');
-    const subjectId = queryParameters.get('subjectId');
-    const state = queryParameters.get('state');
-    const paramid = useParams();
     const statusValues = translate.formatKeys(taskState, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
@@ -42,11 +37,6 @@ function TaskStudentListPage() {
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
-            funcs.prepareGetListPathParams = () => {
-                return {
-                    courseId: paramid.courseId,
-                };
-            };
             funcs.mappingData = (response) => {
                 try {
                     if (response.result === true) {
@@ -67,6 +57,10 @@ function TaskStudentListPage() {
             {
                 title: translate.formatMessage(commonMessage.task),
                 dataIndex: ['lecture', 'lectureName'],
+            },
+            {
+                title: translate.formatMessage(commonMessage.courseName),
+                dataIndex: ['course', 'name'],
             },
             {
                 title: 'Ngày bắt đầu',
@@ -108,25 +102,36 @@ function TaskStudentListPage() {
         return columns;
     };
 
+    const {
+        data: courses,
+        execute: executescourses,
+    } = useFetch(apiConfig.course.autocomplete, {
+        immediate: true,
+        mappingData: ({ data }) => data.content.map((item) => ({
+            value: item.id,
+            label: item.name,
+        })),
+    });
+
+    const searchFields = [
+        {
+            key: 'courseId',
+            placeholder: translate.formatMessage(commonMessage.courseName),
+            type: FieldTypes.SELECT,
+            options: courses,
+
+        },
+    ];
 
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(commonMessage.course), path: routes.courseStudentListPage.path },
-                { breadcrumbName: translate.formatMessage(commonMessage.task) },
+                { breadcrumbName: translate.formatMessage(message.myTask) },
             ]}
         >
             <div>
                 <ListPage
-                    title={
-                        <span
-                            style={
-                                state != 2 ? { fontWeight: 'normal' } : { fontWeight: 'normal', position: 'absolute' }
-                            }
-                        >
-                            {courseName}
-                        </span>
-                    }
+                    searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}
@@ -142,4 +147,4 @@ function TaskStudentListPage() {
     );
 }
 
-export default TaskStudentListPage;
+export default MyTaskStudentListPage;

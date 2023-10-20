@@ -36,7 +36,6 @@ const CompanySubscriptionListPage = () => {
     const [companyOptions, setCompanyOptions] = useState([]);
     // const companyOptions =[];
     // const companyValues = translate.formatKeys(companyOptions, ['label']);
-    // console.log(companyOptions);
 
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.companySubscription,
