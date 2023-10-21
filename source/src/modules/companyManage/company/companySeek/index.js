@@ -17,7 +17,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
 import routes from '@routes';
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, EyeOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
@@ -89,11 +89,11 @@ const CompanySeekListPage = () => {
     const columns = [
         {
             title: <FormattedMessage defaultMessage="Tên lập trình viên" />,
-            dataIndex: ["developer", "studentInfo", "fullName"],
+            dataIndex: ['developer', 'studentInfo', 'fullName'],
         },
         {
             title: <FormattedMessage defaultMessage="Vai trò" />,
-            dataIndex: ["role", "projectRoleName"],
+            dataIndex: ['role', 'projectRoleName'],
             align: 'center',
             width: 200,
             render(role) {
@@ -110,12 +110,8 @@ const CompanySeekListPage = () => {
             align: 'center',
             width: 60,
             render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
-                return (
-                    <Tag color={state?.color}>
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
-                    </Tag>
-                );
+                console.log(dataRow);
+                return <div>{dataRow === 1 ? <EyeOutlined style={{ color: 'orange' }}/> : <CheckCircleOutlined style={{ color: 'green' }} />}</div>;
             },
         },
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
