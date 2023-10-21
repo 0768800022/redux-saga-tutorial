@@ -61,10 +61,16 @@ const ProjectLeaderMemberListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}`;
+                if (active) {
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                }
+                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?projectId=${projectId}`;
+                if (active) {
+                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                }
+                return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
             };
         },
     });

@@ -53,24 +53,28 @@ function ProjectLeaderMemberSavePage() {
 
     const setBreadRoutes = () => {
         const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
-        const breadRoutes = [
-            {
-                breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.projectLeaderListPage.path,
-            },
-        ];
+        const breadRoutes = [];
 
         if (active) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.project),
+                path: routes.projectLeaderListPage.path + pathDefault + `&active=${active}`,
+            });
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.member),
                 path: routes.projectLeaderMemberListPage.path + pathDefault + `&active=${active}`,
             });
         } else {
             breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.project),
+                path: routes.projectLeaderListPage.path + pathDefault,
+            });
+            breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.member),
                 path: routes.projectLeaderMemberListPage.path + pathDefault,
             });
         }
+
         breadRoutes.push({ breadcrumbName: title });
 
         return breadRoutes;
