@@ -49,7 +49,7 @@ const DeveloperForm = (props) => {
                             disabled={isEditing}
                             required
                             label={translate.formatMessage(commonMessage.studentName)}
-                            name={['studentInfo', 'id']}
+                            name={['studentInfo', 'fullName']}
                             apiConfig={apiConfig.student.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
                             initialSearchParams={{ pageNumber: 0 }}
