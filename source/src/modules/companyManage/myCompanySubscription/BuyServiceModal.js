@@ -15,9 +15,9 @@ import NumericField from '@components/common/form/NumericField';
 import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
-    objectName: 'setting',
-    update: 'Cập nhật',
-    updateSuccess: 'Cập nhật {objectName} thành công',
+    objectName: 'gói dịch vụ',
+    update: 'Mua',
+    updateSuccess: 'Mua {objectName} thành công',
 });
 const BuyServiceModal = ({
     open,
