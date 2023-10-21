@@ -91,7 +91,7 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction }) {
                 );
             },
         },
-        renderAction === false ? '' : mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
     return (
         <PageWrapper routes={ breadcrumbName?breadcrumbName:
