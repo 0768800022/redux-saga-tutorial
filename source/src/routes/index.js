@@ -21,6 +21,7 @@ import companySubscriptionRoutes from '@modules/companyManage/companySubscriptio
 import settingsRoutes from '@modules/settings/routes';
 import courseRequestRoutes from '@modules/courseManage/courseRequest/routes';
 import CompanyRequestRoutes from '@modules/companyManage/company/companyRequest/routes';
+import MyCompanySubscriptionRoutes from '@modules/companyManage/myCompanySubscription/routes';
 /*
     auth
         + null: access login and not login
@@ -71,6 +72,7 @@ const routes = {
     ...settingsRoutes,
     ...courseRequestRoutes,
     ...CompanyRequestRoutes,
+    ...MyCompanySubscriptionRoutes,
 
     // keep this at last
     //
