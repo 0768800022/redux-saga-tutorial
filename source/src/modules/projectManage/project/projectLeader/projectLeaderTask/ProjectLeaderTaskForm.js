@@ -95,24 +95,7 @@ const ProjectLeaderTaskForm = (props) => {
                             disabled={isEditing}
                         />
                     </Col>
-                    <Col span={12}>
-                        <SelectField
-                            required
-                            name="state"
-                            label={<FormattedMessage defaultMessage="Tình trạng" />}
-                            allowClear={false}
-                            options={stateValues}
-                        />
-                    </Col>
-                    <Col span={12}>
-                        <SelectField
-                            required
-                            name="status"
-                            label={<FormattedMessage defaultMessage="Trạng thái" />}
-                            allowClear={false}
-                            options={statusValues}
-                        />
-                    </Col>
+
                     <Col span={12}>
                         <DatePickerField
                             showTime={true}
@@ -149,6 +132,15 @@ const ProjectLeaderTaskForm = (props) => {
                             ]}
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            required
+                            name="state"
+                            label={<FormattedMessage defaultMessage="Tình trạng" />}
+                            allowClear={false}
+                            options={stateValues}
                         />
                     </Col>
                 </Row>
