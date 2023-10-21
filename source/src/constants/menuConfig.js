@@ -1,11 +1,11 @@
 import routes from '@routes';
-import { IconUserBolt, IconSchool, IconClipboardText, IconBuildingCommunity, IconSettings } from '@tabler/icons-react';
+import { IconUserBolt, IconSchool, IconClipboardText, IconBuildingCommunity, IconSettings,IconHighlight } from '@tabler/icons-react';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
 import { FormattedMessage } from 'react-intl';
 import apiConfig from './apiConfig';
-
+import { BulbOutlined } from '@ant-design/icons';
 const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Quản lý tài khoản" />,
@@ -145,7 +145,7 @@ const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Dự án" />,
         key: 'project-leader',
-        icon: <IconSchool size={16} />,
+        icon:  <BulbOutlined />,
         permission: apiConfig.course.getListLeaderCourse.baseURL,
         children: [
             {
@@ -179,7 +179,7 @@ const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Dự án" />,
         key: 'project-student',
-        icon: <IconSchool size={16} />,
+        icon:  <BulbOutlined />,
         permission: apiConfig.course.getListStudentCourse.baseURL,
         children: [
             {
@@ -212,6 +212,12 @@ const navMenuConfig = [
                 key: 'company-seek-management',
                 path: routes.companySeekListPage.path,
                 permission: apiConfig.companySeek.getList.baseURL,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Quản lý đăng ký gói dịch vụ" />,
+                key: 'my-company-subscription-management',
+                path: generatePath(routes.myCompanySubscriptionListPage.path, {}),
+                permission: apiConfig.serviceCompanySubscription.getList.baseURL,
             },
             {
                 label: <FormattedMessage defaultMessage="Tìm kiếm ứng viên" />,

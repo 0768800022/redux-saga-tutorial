@@ -9,7 +9,7 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag, Button } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
@@ -98,7 +98,7 @@ function ProjectTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.ProjectTaskListPage.path +
-                                        `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&taskName=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&taskName=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -150,16 +150,14 @@ function ProjectTaskListPage() {
                 );
             },
         },
-        
-        
-        
-        active && mixinFuncs.renderActionColumn({ edit: true, delete: true,taskLog: true }, { width: '120px' }),
+
+        active && mixinFuncs.renderActionColumn({ edit: true, delete: true, taskLog: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const searchFields = [
         {
             key: 'taskName',
-            placeholder: translate.formatMessage(commonMessage.name),
+            placeholder: translate.formatMessage(commonMessage.task),
         },
         {
             key: 'state',
@@ -175,8 +173,7 @@ function ProjectTaskListPage() {
         //     options: statusValues,
         // },
     ].filter(Boolean);
-    
-
+    const pathPrev = localStorage.getItem('pathPrev');
     const setBreadRoutes = () => {
         const breadRoutes = [];
         if (leaderName) {
@@ -186,7 +183,7 @@ function ProjectTaskListPage() {
             });
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: generatePath(routes.leaderProjectListPage.path + location?.state?.pathPrev),
+                path: generatePath(routes.leaderProjectListPage.path + pathPrev),
             });
         } else if (developerName) {
             breadRoutes.push({
@@ -195,7 +192,7 @@ function ProjectTaskListPage() {
             });
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: generatePath(routes.developerProjectListPage.path + location?.state?.pathPrev),
+                path: generatePath(routes.developerProjectListPage.path + pathPrev),
             });
         } else {
             breadRoutes.push({

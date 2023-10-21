@@ -325,12 +325,10 @@ export const companySeekOptions = [
     {
         value: COMPANY_SEEK_STATE_LOOKING,
         label: companySeek.looking,
-        color: 'warning',
     },
     {
         value: COMPANY_SEEK_STATE_ACCEPT,
         label: companySeek.accept,
-        color: 'green',
     },
 ];
 export const expYearOptions = [

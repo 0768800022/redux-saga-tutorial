@@ -47,13 +47,13 @@ const ProjectLeaderTaskForm = (props) => {
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.studentInfo.fullName })),
     });
     useEffect(() => {
-        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
+        dataDetail.startDate = dataDetail.startDate
+            ? dayjs(dataDetail.startDate, DEFAULT_FORMAT)
+            : dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT);
         dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
 
         form.setFieldsValue({
             ...dataDetail,
-            developerId: dataDetail?.developer?.studentInfo?.id,
-            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
@@ -95,24 +95,7 @@ const ProjectLeaderTaskForm = (props) => {
                             disabled={isEditing}
                         />
                     </Col>
-                    <Col span={12}>
-                        <SelectField
-                            required
-                            name="state"
-                            label={<FormattedMessage defaultMessage="Tình trạng" />}
-                            allowClear={false}
-                            options={stateValues}
-                        />
-                    </Col>
-                    <Col span={12}>
-                        <SelectField
-                            required
-                            name="status"
-                            label={<FormattedMessage defaultMessage="Trạng thái" />}
-                            allowClear={false}
-                            options={statusValues}
-                        />
-                    </Col>
+
                     <Col span={12}>
                         <DatePickerField
                             showTime={true}
@@ -149,6 +132,15 @@ const ProjectLeaderTaskForm = (props) => {
                             ]}
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            required
+                            name="state"
+                            label={<FormattedMessage defaultMessage="Tình trạng" />}
+                            allowClear={false}
+                            options={stateValues}
                         />
                     </Col>
                 </Row>

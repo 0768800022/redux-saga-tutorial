@@ -875,6 +875,13 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+
+        buyService: {
+            baseURL: `${apiTenantUrl}v1/company-subscription/buy-service`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     serviceCompanySubscription: {
         getList: {
@@ -885,6 +892,18 @@ const apiConfig = {
         },
         getById: {
             baseURL: `${apiTenantUrl}v1/service-company-subscription/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getListServiceActive: {
+            baseURL: `${apiTenantUrl}v1/service-company-subscription/list-service-active`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getMyService: {
+            baseURL: `${apiTenantUrl}v1/service-company-subscription/my-service`,
             method: 'GET',
             headers: baseHeader,
             isRequiredTenantId: true,
