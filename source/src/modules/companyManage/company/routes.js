@@ -7,6 +7,8 @@ import CompanySubscriptionIdListPage from '../company/CompanySubscriptionID/inde
 import CompanySubscriptionIdSavePage from './CompanySubscriptionID/CompanySubscriptionIDSavePage';
 import CompanySeekListPage from './companySeek';
 import CompanySeekDevListPage from './companySeek/companySeekDev';
+import CompanySeekSavePage from "./companySeek/CompanySeekSavePage";
+import CompanySeekDevPreviewPage from './companySeek/companySeekDev/CompanySeekDevPreviewPage';
 export default {
     companyListPage: {
         path: '/company',
@@ -34,7 +36,10 @@ export default {
         title: 'Service Company Subscription Save page',
         auth: true,
         component: ServiceCompanySubscriptionSavePage,
-        permissions: [apiConfig.serviceCompanySubscription.create.baseURL, apiConfig.serviceCompanySubscription.update.baseURL],
+        permissions: [
+            apiConfig.serviceCompanySubscription.create.baseURL,
+            apiConfig.serviceCompanySubscription.update.baseURL,
+        ],
     },
     companySubscriptionIdListPage: {
         path: '/company/company-subscription',
@@ -62,6 +67,20 @@ export default {
         title: 'Company seek dev',
         auth: true,
         component: CompanySeekDevListPage,
+        permissions: [apiConfig.companySeek.getListDev.baseURL],
+    },
+    companySeekSavePage: {
+        path: '/company-seek/:id',
+        title: 'Company Seek Save Page',
+        auth: true,
+        component: CompanySeekSavePage,
+        permissions: [apiConfig.companySeek.create.baseURL, apiConfig.companySeek.update.baseURL],
+    },
+    companySeekDevPreviewPage: {
+        path: '/company-seek-dev/preview',
+        title: 'Company seek dev',
+        auth: true,
+        component: CompanySeekDevPreviewPage,
         permissions: [apiConfig.companySeek.getListDev.baseURL],
     },
 };

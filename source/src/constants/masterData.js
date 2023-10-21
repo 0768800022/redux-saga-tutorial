@@ -23,6 +23,8 @@ import {
     REGISTRATION_MONEY_RETURN,
     TASK_LOG_WORKING,
     TASK_LOG_OFF,
+    COMPANY_SEEK_STATE_LOOKING,
+    COMPANY_SEEK_STATE_ACCEPT,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -43,6 +45,8 @@ import {
     actionMessage,
     stateCourseRequestMessage,
     taskLog,
+    companySeek,
+    expYearMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -316,4 +320,25 @@ export const TaskLogKindOptions = [
         label: taskLog.off,
         color: 'red',
     },
+];
+export const companySeekOptions = [
+    {
+        value: COMPANY_SEEK_STATE_LOOKING,
+        label: companySeek.looking,
+    },
+    {
+        value: COMPANY_SEEK_STATE_ACCEPT,
+        label: companySeek.accept,
+    },
+];
+export const expYearOptions = [
+    { value: 0, label: expYearMessage.noExperience },
+    {
+        value: 1,
+        label: expYearMessage.oneYear,
+    },
+    { value: 2, label: expYearMessage.twoYear },
+    { value: 3, label: expYearMessage.threeYear },
+    { value: 4, label: expYearMessage.fourYear },
+    { value: 5, label: expYearMessage.fiveYear },
 ];
