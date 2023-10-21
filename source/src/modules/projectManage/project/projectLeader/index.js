@@ -127,7 +127,7 @@ const ProjectLeaderListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    team: ({ id, name, status }) => (
+                    team: ({ id, name, status, leaderInfo }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
                                 type="link"
@@ -138,12 +138,14 @@ const ProjectLeaderListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectLeaderTeamListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                                `?projectId=${id}&projectName=${name}&leaderId=${
+                                                    leaderInfo.id
+                                                }&active=${true}`,
                                         );
                                     } else {
                                         navigate(
                                             routes.projectLeaderTeamListPage.path +
-                                                `?projectId=${id}&projectName=${name}`,
+                                                `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
                                         );
                                     }
                                 }}
@@ -176,7 +178,7 @@ const ProjectLeaderListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(commonMessage.fullName),
+            title: translate.formatMessage(commonMessage.projectName),
             dataIndex: 'name',
         },
         {

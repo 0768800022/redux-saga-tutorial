@@ -7,6 +7,7 @@ import routes from '@routes';
 import React from 'react';
 import { defineMessages } from 'react-intl';
 import ProjectLeaderMemberForm from './ProjectLeaderMemberForm';
+import { generatePath } from 'react-router-dom';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
@@ -19,6 +20,7 @@ function ProjectLeaderMemberSavePage() {
 
     const projectName = queryParameters.get('projectName');
     const projectId = queryParameters.get('projectId');
+    const leaderId = queryParameters.get('leaderId');
     const active = queryParameters.get('active');
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -27,7 +29,7 @@ function ProjectLeaderMemberSavePage() {
             update: apiConfig.memberProject.update,
         },
         options: {
-            getListUrl: routes.projectLeaderMemberListPage.path,
+            getListUrl: generatePath(routes.projectLeaderMemberListPage.path),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -51,25 +53,29 @@ function ProjectLeaderMemberSavePage() {
     });
 
     const setBreadRoutes = () => {
-        const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
-        const breadRoutes = [
-            {
-                breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.projectLeaderListPage.path,
-            },
-        ];
+        const pathDefault = `?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
+        const breadRoutes = [];
 
         if (active) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.project),
+                path: routes.projectLeaderListPage.path + pathDefault + `&active=${active}`,
+            });
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.member),
                 path: routes.projectLeaderMemberListPage.path + pathDefault + `&active=${active}`,
             });
         } else {
             breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.project),
+                path: routes.projectLeaderListPage.path + pathDefault,
+            });
+            breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.member),
                 path: routes.projectLeaderMemberListPage.path + pathDefault,
             });
         }
+
         breadRoutes.push({ breadcrumbName: title });
 
         return breadRoutes;

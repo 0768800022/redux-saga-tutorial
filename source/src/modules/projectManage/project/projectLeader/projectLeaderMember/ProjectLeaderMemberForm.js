@@ -12,7 +12,7 @@ import { Card, Col, Row } from 'antd';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-
+import useAuth from '@hooks/useAuth';
 function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
@@ -20,6 +20,8 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
     const [canApplyAll, setCanApplyAll] = useState(true);
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
+    const leaderId = queryParameters.get('leaderId');
+    const { profile } = useAuth();
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
@@ -299,7 +301,7 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
                                 name="teamId"
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                                initialSearchParams={{ projectId: projectId }}
+                                initialSearchParams={{ projectId: projectId, leaderId: profile.id }}
                                 searchParams={(text) => ({ name: text })}
                                 disabled={isEditing}
                             />
