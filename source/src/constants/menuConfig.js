@@ -237,6 +237,12 @@ const navMenuConfig = [
                 path: routes.companySeekListPage.path,
                 permission: apiConfig.companySeek.getList.baseURL,
             },
+            {
+                label: <FormattedMessage defaultMessage="Quản lý đăng ký gói dịch vụ" />,
+                key: 'my-company-subscription-management',
+                path: generatePath(routes.myCompanySubscriptionListPage.path, {}),
+                permission: apiConfig.serviceCompanySubscription.getList.baseURL,
+            },
         ],
     },
 ];
