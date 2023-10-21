@@ -2,7 +2,7 @@ import apiConfig from '@constants/apiConfig';
 import DeveloperSavePage from './DeveloperSavePage';
 import DeveloperListPage from '.';
 import ProjectListPage from '@modules/projectManage/project';
-import ProjectTaskListPage from '@modules/projectManage/project/projectTask/routes';
+import ProjectTaskListPage from '@modules/projectManage/project/projectTask';
 
 export default {
     developerListPage: {
