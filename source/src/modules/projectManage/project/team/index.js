@@ -28,8 +28,12 @@ const TeamListPage = () => {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
+    const leaderId = queryParameters.get('leaderId');
+    const developerId = queryParameters.get('developerId');
+    const leaderName = queryParameters.get('leaderName');
+    const developerName = queryParameters.get('developerName');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter,queryParams,serializeParams } = useListBase({
         apiConfig: apiConfig.team,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -53,6 +57,34 @@ const TeamListPage = () => {
                     return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
                 else 
                     return `${pagePath}/${dataRow.id}` + pathDefault ;
+            };
+            funcs.changeFilter = (filter) => {
+                const projectId = queryParams.get('projectId');
+                const projectName = queryParams.get('projectName');
+                const developerId = queryParams.get('developerId');
+                const developerName = queryParams.get('developerName');
+                const leaderId = queryParams.get('leaderId');
+                const leaderName = queryParams.get('leaderName');
+                let filterAdd;
+                if (developerName) {
+                    filterAdd = { developerId,developerName };
+                } else if (leaderName) {
+                    filterAdd = { leaderId,leaderName };
+                }
+                if (filterAdd) {
+                    mixinFuncs.setQueryParams(
+                        serializeParams({
+                            projectId: projectId,
+                            projectName: projectName,
+                            ...filterAdd,
+                            ...filter,
+                        }),
+                    );
+                } else {
+                    mixinFuncs.setQueryParams(
+                        serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                    );
+                }
             };
         },
     });
@@ -113,19 +145,44 @@ const TeamListPage = () => {
             options: statusValues,
         },
     ];
+
+    const setBreadRoutes = () => {
+        const breadRoutes = [];
+        if (leaderName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.leader),
+                path: routes.leaderListPage.path,
+            });
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.project),
+                path: routes.leaderProjectListPage.path +`?leaderId=${leaderId}&leaderName=${leaderName}`,
+            });
+        } else if (developerName) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.developer),
+                path: routes.developerListPage.path,
+            });
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.project),
+                path: routes.developerProjectListPage.path +`?developerId=${developerId}&developerName=${developerName}`,
+            });
+        }
+        else{
+            breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.project),
+                path:routes.projectListPage.path,
+            });
+        }
+        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.team) });
+
+        return breadRoutes;
+    };
     return (
         <PageWrapper
-            routes={[
-                {
-                    breadcrumbName: translate.formatMessage(commonMessage.project),
-                    path: generatePath(routes.projectListPage.path),
-                },
-                { breadcrumbName: translate.formatMessage(commonMessage.team) },
-            ]}
+            routes={setBreadRoutes()}
         >
             <ListPage
                 title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

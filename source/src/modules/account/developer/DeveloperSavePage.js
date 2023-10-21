@@ -40,7 +40,7 @@ const DeveloperSavePage = () => {
                     ...data,
                     totalCancelProject: 1,
                     roleId: data.roleInfo.id,
-                    studentId: data.studentInfo.id,
+                    studentId: data.studentInfo.fullName,
                     totalProject: 1,
                 };
             };

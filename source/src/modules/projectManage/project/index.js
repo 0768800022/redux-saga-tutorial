@@ -14,7 +14,7 @@ import { IconBrandTeams } from '@tabler/icons-react';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
-import route from  '@modules/projectManage/project/projectTask/routes';
+import route from '@modules/projectManage/project/projectTask/routes';
 import { BookOutlined, TeamOutlined, WomanOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
@@ -32,12 +32,14 @@ const ProjectListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
+    const leaderId = queryParameters.get('leaderId');
     const developerId = queryParameters.get('developerId');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const [dataApply, setDataApply] = useState([]);
+    localStorage.setItem('pathPrev', location.search);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.project,
@@ -81,7 +83,7 @@ const ProjectListPage = () => {
                                             path = route.ProjectTaskListPage.path + pathDefault + `&active=${true}`;
                                         } else path = route.ProjectTaskListPage.path + pathDefault;
                                     }
-                                    navigate(path, { state: { pathPrev: location.search } });
+                                    navigate(path);
                                 }}
                             >
                                 <BookOutlined />
@@ -117,17 +119,26 @@ const ProjectListPage = () => {
                             <Button
                                 type="link"
                                 style={{ padding: '0' }}
-                                // disabled={status === -1}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    if (status === 1) {
-                                        navigate(
+                                    const pathDefault = `?projectId=${id}&projectName=${name}`;
+                                    let path;
+                                    if (leaderName) {
+                                        path =
                                             routes.teamListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
-                                        );
+                                            pathDefault +
+                                            `&leaderId=${leaderId}&leaderName=${leaderName}`;
+                                    } else if (developerName) {
+                                        path =
+                                            routes.teamListPage.path +
+                                            pathDefault +
+                                            `&developerId=${developerId}&developerName=${developerName}`;
                                     } else {
-                                        navigate(routes.teamListPage.path + `?projectId=${id}&projectName=${name}`);
+                                        if (status == 1) {
+                                            path = routes.teamListPage.path + pathDefault + `&active=${true}`;
+                                        } else path = routes.teamListPage.path + pathDefault;
                                     }
+                                    navigate(path);
                                 }}
                             >
                                 <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
@@ -202,7 +213,7 @@ const ProjectListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        {
+        !leaderName && !developerName &&{
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
