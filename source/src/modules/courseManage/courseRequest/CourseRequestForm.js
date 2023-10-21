@@ -1,4 +1,5 @@
 import { BaseForm } from '@components/common/form/BaseForm';
+import NumericField from '@components/common/form/NumericField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { stateCourseRequestOptions, statusOptions } from '@constants/masterData';
@@ -39,7 +40,7 @@ const CourseRequestForm = (props) => {
                         />
                     </Col>
                     <Col span={12}>
-                        <TextField disabled label={<FormattedMessage defaultMessage="Số điện thoại" />} name="phone" />
+                        <NumericField min={0} disabled label={<FormattedMessage defaultMessage="Số điện thoại" />} name="phone" />
                     </Col>
                     <Col span={12}>
                         <TextField disabled label={<FormattedMessage defaultMessage="Email" />} name="email" />

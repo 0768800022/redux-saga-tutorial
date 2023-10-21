@@ -10,6 +10,7 @@ import CourseStudentListPage from './student/courseStudent';
 import TaskStudentListPage from './student/taskStudent';
 import RegistrationLeaderListPage from './leader/registrationLeader';
 import TaskLogLeaderSavePage from './leader/taskLog/TaskLogLeaderSavePage';
+import MyTaskStudentListPage from './student/myTask';
 import routes from '@routes';
 import TaskLogLeaderListPage from './leader/taskLog';
 export default {
@@ -92,8 +93,6 @@ export default {
         component: TaskLogLeaderSavePage,
         permissions: [apiConfig.taskLog.create.baseURL,apiConfig.taskLog.update.baseURL],
     },
-
-
     // STUDENT
     courseStudentListPage: {
         path: '/course-student',
@@ -107,6 +106,13 @@ export default {
         title: 'Task List Page',
         auth: true,
         component: TaskStudentListPage,
+        permissions: [apiConfig.task.studentTask.baseURL],
+    },
+    myTaskStudentListPage: {
+        path: '/my-task',
+        title: 'My Task List Page',
+        auth: true,
+        component: MyTaskStudentListPage,
         permissions: [apiConfig.task.studentTask.baseURL],
     },
 };

@@ -18,6 +18,8 @@ import ProjectLeaderTaskSavePage from './projectLeader/projectLeaderTask/Project
 import ProjectLeaderMemberForm from './projectLeader/projectLeaderMember/ProjectLeaderMemberForm';
 import ProjectLeaderMemberSavePage from './projectLeader/projectLeaderMember/ProjectLeaderMemberSavePage';
 import ProjectLeaderTeamSavePage from './projectLeader/projectLeaderGroup/ProjectLeaderTeamSavePage';
+import ProjectStudentMyTaskListPage from './projectStudent/myTask';
+import ProjectLeaderTaskLogSavePage from './projectLeader/projectLeaderTaskLog/ProjectLeaderTaskLogSavePage';
 export default {
     projectListPage: {
         path: '/project',
@@ -144,5 +146,19 @@ export default {
         auth: true,
         component: projectLeaderTaskLogListPage,
         permissions: [apiConfig.projectTaskLog.getList.baseURL],
+    },
+    projectLeaderTaskLogSavePage: {
+        path: '/project-leader/task/task-log/:id',
+        title: 'Project Leader Page',
+        auth: true,
+        component: ProjectLeaderTaskLogSavePage,
+        permissions: [apiConfig.projectTaskLog.getList.baseURL],
+    },
+    projectStudentMyTaskListPage: {
+        path: '/my-project-task',
+        title: 'Project Student Task Page',
+        auth: true,
+        component: ProjectStudentMyTaskListPage,
+        permissions: [apiConfig.projectTask.getList.baseURL],
     },
 };

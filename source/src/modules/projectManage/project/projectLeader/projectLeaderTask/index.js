@@ -123,7 +123,7 @@ function ProjectLeaderTaskListPage() {
                             </Button>
                         );
                     },
-                    taskLog: () => (
+                    taskLog: ({ id,taskName }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
                             <Button
                                 type="link"
@@ -132,7 +132,7 @@ function ProjectLeaderTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectLeaderTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&taskName=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -196,7 +196,10 @@ function ProjectLeaderTaskListPage() {
             },
         },
 
-        mixinFuncs.renderActionColumn({ taskLog: true, editSetting: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn(
+            { taskLog: true, editSetting: true, edit: active && true, delete: active && true },
+            { width: '150px' },
+        ),
     ].filter(Boolean);
     const params = mixinFuncs.prepareGetListParams(queryFilter);
     const {
