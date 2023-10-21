@@ -14,7 +14,7 @@ import { IconBrandTeams } from '@tabler/icons-react';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
-import route from  '@modules/projectManage/project/projectTask/routes';
+import route from '@modules/projectManage/project/projectTask/routes';
 import { BookOutlined, TeamOutlined, WomanOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
@@ -38,6 +38,7 @@ const ProjectListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const [dataApply, setDataApply] = useState([]);
+    localStorage.setItem('pathPrev', location.search);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.project,
@@ -81,7 +82,7 @@ const ProjectListPage = () => {
                                             path = route.ProjectTaskListPage.path + pathDefault + `&active=${true}`;
                                         } else path = route.ProjectTaskListPage.path + pathDefault;
                                     }
-                                    navigate(path, { state: { pathPrev: location.search } });
+                                    navigate(path);
                                 }}
                             >
                                 <BookOutlined />
@@ -202,7 +203,7 @@ const ProjectListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        {
+        !leaderName && !developerName &&{
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
