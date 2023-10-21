@@ -86,17 +86,16 @@ const CourseStudentListPage = () => {
         {
             title: translate.formatMessage(commonMessage.courseName),
             dataIndex: 'name',
-            width: 200,
         },
         {
             title: translate.formatMessage(commonMessage.subject),
             dataIndex: ['subject', 'subjectName'],
-            width: 150,
         },
         {
             title: <FormattedMessage defaultMessage="Học phí" />,
             dataIndex: 'fee',
-            width: '120px',
+            width: 150,
+            align: 'right',
             render: (fee) => {
                 const formattedValue = formatMoney(fee, {
                     currentcy: 'đ',
@@ -109,7 +108,8 @@ const CourseStudentListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
             dataIndex: 'returnFee',
-            width: '120px',
+            width: 150,
+            align: 'right',
             render: (returnFee) => {
                 const formattedValue = formatMoney(returnFee, {
                     currentcy: 'đ',
@@ -151,7 +151,7 @@ const CourseStudentListPage = () => {
                 edit:  true,
                 delete: true,
             },
-            { width: '100px' },
+            { width: '130px' },
         ),
     ].filter(Boolean);
 

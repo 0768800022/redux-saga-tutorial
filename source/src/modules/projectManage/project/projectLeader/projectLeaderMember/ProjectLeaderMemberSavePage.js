@@ -27,7 +27,7 @@ function ProjectLeaderMemberSavePage() {
             update: apiConfig.memberProject.update,
         },
         options: {
-            getListUrl: routes.projectMemberListPage.path,
+            getListUrl: routes.projectLeaderMemberListPage.path,
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
