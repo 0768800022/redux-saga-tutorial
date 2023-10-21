@@ -30,7 +30,7 @@ function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
             update: apiConfig.projectTaskLog.update,
         },
         options: {
-            getListUrl: generatePath(routes.ProjectTaskLogListPage.path, { taskLogId }),
+            getListUrl: getListUrl? getListUrl : generatePath(routes.ProjectTaskLogListPage.path, { taskLogId }),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -52,7 +52,7 @@ function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
     return (
         <PageWrapper
             loading={loading}
-            routes={
+            routes={ breadcrumbName ? breadcrumbName: 
                 routes.ProjectTaskLogSavePage.breadcrumbs(commonMessage,paramHead,taskParam,taskLogParam,search,title)
             }
         >

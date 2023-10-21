@@ -11,6 +11,7 @@ import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import { convertUtcToLocalTime } from '@utils/index';
 import { DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants/index';
+import NumericField from '@components/common/form/NumericField';
 
 const messages = defineMessages({
     avatarPath: 'Avatar',
@@ -95,7 +96,7 @@ const StudentForm = (props) => {
                 <TextField label={translate.formatMessage(commonMessage.university)} disabled name={['university', 'categoryName']} />
                 <TextField label={translate.formatMessage(commonMessage.studyClass)} disabled name={['studyClass', 'categoryName']} />
 
-                <TextField label={translate.formatMessage(commonMessage.phone)} disabled name="phone" />
+                <NumericField label={translate.formatMessage(commonMessage.phone)} min={0} disabled name="phone" />
                 <TextField
                     type="password"
                     label={translate.formatMessage(commonMessage.currentPassword)}
