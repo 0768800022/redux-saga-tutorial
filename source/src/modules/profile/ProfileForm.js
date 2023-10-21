@@ -9,6 +9,7 @@ import { AppConstants } from '@constants';
 import { Fragment } from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
+import NumericField from '@components/common/form/NumericField';
 
 const messages = defineMessages({
     banner: 'Banner',
@@ -178,7 +179,7 @@ const ProfileForm = (props) => {
                 <TextField label={translate.formatMessage(messages.email)} name={['accountDto', 'email']} />
                 <TextField label={translate.formatMessage(messages.fullName)} name={['accountDto', 'fullName']} />
                 <TextField label={translate.formatMessage(messages.phoneNumber)} name={['accountDto', 'phone']} />
-                <TextField label={translate.formatMessage(messages.hotline)} name="hotline" />
+                <NumericField label={translate.formatMessage(messages.hotline)} min={0} name="hotline" />
                 {/* {!isAdmin && (
                     <Fragment>
                         <TextField

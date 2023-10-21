@@ -17,6 +17,7 @@ import SelectField from '@components/common/form/SelectField';
 import CropImageField from '@components/common/form/CropImageField';
 import { AppConstants, categoryKinds } from '@constants';
 import { commonMessage } from '@locales/intl';
+import NumericField from '@components/common/form/NumericField';
 
 const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
     const translate = useTranslate();
@@ -145,10 +146,11 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         />
                     </Col>
                     <Col span={12}>
-                        <TextField
+                        <NumericField
                             label={translate.formatMessage(commonMessage.phone)}
                             type="number"
                             name="phone"
+                            min={0}
                             required={isEditing ? false : true}
                         />
                     </Col>

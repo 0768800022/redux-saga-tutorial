@@ -14,6 +14,7 @@ import CropImageField from '@components/common/form/CropImageField';
 import { AppConstants } from '@constants';
 import { statusOptions } from '@constants/masterData';
 import { commonMessage } from '@locales/intl';
+import NumericField from '@components/common/form/NumericField';
 
 const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, handleFocus }) => {
     const translate = useTranslate();
@@ -112,7 +113,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         <TextField label={translate.formatMessage(commonMessage.email)} type='email' name="email" />
                     </Col>
                     <Col span={12}>
-                        <TextField
+                        <NumericField
                             label={translate.formatMessage(commonMessage.holine)}
                             type="number"
                             min={0}
