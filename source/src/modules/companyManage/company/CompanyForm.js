@@ -115,6 +115,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         <TextField
                             label={translate.formatMessage(commonMessage.holine)}
                             type="number"
+                            min={0}
                             rules={[
                                 {
                                     required: true,

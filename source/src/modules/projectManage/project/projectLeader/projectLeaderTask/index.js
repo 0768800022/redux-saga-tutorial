@@ -123,7 +123,7 @@ function ProjectLeaderTaskListPage() {
                             </Button>
                         );
                     },
-                    taskLog: () => (
+                    taskLog: ({ id,taskName }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
                             <Button
                                 type="link"
@@ -132,7 +132,7 @@ function ProjectLeaderTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectLeaderTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&taskName=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
