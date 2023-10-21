@@ -20,6 +20,7 @@ function ProjectLeaderMemberSavePage() {
 
     const projectName = queryParameters.get('projectName');
     const projectId = queryParameters.get('projectId');
+    const leaderId = queryParameters.get('leaderId');
     const active = queryParameters.get('active');
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -52,7 +53,7 @@ function ProjectLeaderMemberSavePage() {
     });
 
     const setBreadRoutes = () => {
-        const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+        const pathDefault = `?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
         const breadRoutes = [];
 
         if (active) {
