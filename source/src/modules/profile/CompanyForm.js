@@ -10,6 +10,7 @@ import { Fragment } from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
+import NumericField from '@components/common/form/NumericField';
 
 const messages = defineMessages({
     passwordMatchError: 'Password does not match',
@@ -87,7 +88,7 @@ const CompanyForm = (props) => {
                 <TextField label={translate.formatMessage(commonMessage.email)} disabled name="email" />
                 <TextField label={translate.formatMessage(commonMessage.companyName)} required name="companyName" />
                 <TextField label={translate.formatMessage(commonMessage.address)} required name="address" />
-                <TextField label={translate.formatMessage(commonMessage.hotline)} required name="hotline" />
+                <NumericField label={translate.formatMessage(commonMessage.hotline)} min={0} required name="hotline" />
                 <TextField label={translate.formatMessage(commonMessage.username)} disabled name="username" />
 
                 <TextField

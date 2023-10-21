@@ -45,6 +45,7 @@ const ProjectLeaderMemberListPage = () => {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
+    const leaderId = queryParameters.get('leaderId');
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.memberProject,
         options: {
@@ -61,10 +62,16 @@ const ProjectLeaderMemberListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}`;
+                if (active) {
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
+                }
+                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?projectId=${projectId}`;
+                if (active) {
+                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
+                }
+                return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
             };
         },
     });

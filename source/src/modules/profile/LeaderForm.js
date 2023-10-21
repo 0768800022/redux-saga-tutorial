@@ -10,6 +10,7 @@ import { Fragment } from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
+import NumericField from '@components/common/form/NumericField';
 
 const messages = defineMessages({
     banner: 'Banner',
@@ -103,7 +104,7 @@ const LeaderForm = (props) => {
                 </Row>
                 <TextField label={translate.formatMessage(commonMessage.email)} disabled name="email" />
                 <TextField label={translate.formatMessage(commonMessage.fullName)} name="leaderName" />
-                <TextField label={translate.formatMessage(commonMessage.phone)} disabled name="phone" />
+                <NumericField label={translate.formatMessage(commonMessage.phone)} min={0} disabled name="phone" />
                 <TextField
                     type="password"
                     label={translate.formatMessage(commonMessage.currentPassword)}

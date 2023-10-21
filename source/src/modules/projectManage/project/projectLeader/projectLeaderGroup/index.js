@@ -37,6 +37,7 @@ const ProjectLeaderTeamListPage = () => {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
+    const leaderId = queryParameters.get('leaderId');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.team,
@@ -54,10 +55,10 @@ const ProjectLeaderTeamListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+                const pathDefault = `?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
                 if (active) return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
                 else return `${pagePath}/${dataRow.id}` + pathDefault;
             };
