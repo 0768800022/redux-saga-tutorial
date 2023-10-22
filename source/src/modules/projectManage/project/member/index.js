@@ -89,7 +89,7 @@ const ProjectMemberListPage = () => {
     const columns = [
         {
             title: '#',
-            dataIndex: 'avatar',
+            dataIndex: ['developer', 'studentInfo', 'avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (

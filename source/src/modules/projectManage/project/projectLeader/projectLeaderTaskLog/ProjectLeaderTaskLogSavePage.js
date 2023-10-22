@@ -22,7 +22,7 @@ function ProjectLeaderTaskLogSavePage() {
     const taskParam = routes.projectLeaderTaskListPage.path;
     const taskLogParam = routes.projectLeaderTaskLogListPage.path;
     const taskLogId = useParams();
-    const getListUrl = generatePath(routes.ProjectTaskLogListPage.path, { taskLogId });
+    const getListUrl = generatePath(routes.projectLeaderTaskLogListPage.path, { taskLogId });
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.projectTaskLog.getById,
@@ -30,7 +30,7 @@ function ProjectLeaderTaskLogSavePage() {
             update: apiConfig.projectTaskLog.update,
         },
         options: {
-            getListUrl: generatePath(routes.ProjectTaskLogListPage.path, { taskLogId }),
+            getListUrl: generatePath(routes.projectLeaderTaskLogListPage.path, { taskLogId }),
             objectName: translate.formatMessage(messages.objectName),
         },
     });

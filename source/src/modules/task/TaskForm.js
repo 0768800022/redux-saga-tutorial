@@ -89,6 +89,7 @@ const TaskForm = (props) => {
                             name="startDate"
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             placeholder="Ngày bắt đầu"
+                            disabled={dataDetail?.state === 2}
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
                             rules={[

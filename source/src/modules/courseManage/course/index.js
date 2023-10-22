@@ -147,17 +147,16 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(commonMessage.name),
             dataIndex: 'name',
-            width: 200,
         },
         {
             title: translate.formatMessage(commonMessage.leader),
             dataIndex: ['leader', 'leaderName'],
-            width: 80,
+            width: 200,
         },
         {
             title: <FormattedMessage defaultMessage="Học phí" />,
             dataIndex: 'fee',
-            width: '120px',
+            width: 150,
             align: 'right',
             render: (fee) => {
                 const formattedValue = formatMoney(fee, {
@@ -171,7 +170,7 @@ const CourseListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
             dataIndex: 'returnFee',
-            width: '120px',
+            width: 150,
             align: 'right',
             render: (returnFee) => {
                 const formattedValue = formatMoney(returnFee, {
