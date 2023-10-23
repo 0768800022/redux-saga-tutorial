@@ -100,7 +100,7 @@ const CourseForm = (props) => {
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leader?.leaderName,
+            leaderId: dataDetail?.leader?.id,
         });
         setBannerUrl(dataDetail.banner);
         setImageUrl(dataDetail.avatar);
