@@ -96,7 +96,6 @@ const ProjectLeaderTeamListPage = () => {
             width: '150px',
         },
 
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
         // active &&
         //     mixinFuncs.renderActionColumn(
         //         {

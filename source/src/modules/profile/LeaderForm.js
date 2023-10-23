@@ -104,7 +104,7 @@ const LeaderForm = (props) => {
                 </Row>
                 <TextField label={translate.formatMessage(commonMessage.email)} disabled name="email" />
                 <TextField label={translate.formatMessage(commonMessage.fullName)} name="leaderName" />
-                <NumericField label={translate.formatMessage(commonMessage.phone)} min={0} disabled name="phone" />
+                <TextField label={translate.formatMessage(commonMessage.phone)} disabled name="phone" />
                 <TextField
                     type="password"
                     label={translate.formatMessage(commonMessage.currentPassword)}

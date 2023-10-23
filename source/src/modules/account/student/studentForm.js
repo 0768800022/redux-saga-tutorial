@@ -146,11 +146,10 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         />
                     </Col>
                     <Col span={12}>
-                        <NumericField
+                        <TextField
                             label={translate.formatMessage(commonMessage.phone)}
                             type="number"
                             name="phone"
-                            min={0}
                             required={isEditing ? false : true}
                         />
                     </Col>
