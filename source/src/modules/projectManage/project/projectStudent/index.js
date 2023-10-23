@@ -110,6 +110,31 @@ const ProjectStudentListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
+                    team: ({ id, name, status }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+
+                                    if (status == 1) {
+                                        navigate(
+                                            routes.projectStudentTeamListPage.path +
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                        );
+                                    } else {
+                                        navigate(
+                                            routes.projectStudentTeamListPage.path +
+                                                `?projectId=${id}&projectName=${name}`,
+                                        );
+                                    }
+                                }}
+                            >
+                                <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                 });
             },
         });
@@ -177,7 +202,7 @@ const ProjectStudentListPage = () => {
 
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
 
-        mixinFuncs.renderActionColumn({ member: true, task: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ team: true, member: true, task: true }, { width: '120px' }),
     ];
 
     return (
