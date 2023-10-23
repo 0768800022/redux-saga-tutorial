@@ -20,6 +20,7 @@ import ProjectLeaderMemberSavePage from './projectLeader/projectLeaderMember/Pro
 import ProjectLeaderTeamSavePage from './projectLeader/projectLeaderGroup/ProjectLeaderTeamSavePage';
 import ProjectStudentMyTaskListPage from './projectStudent/myTask';
 import ProjectLeaderTaskLogSavePage from './projectLeader/projectLeaderTaskLog/ProjectLeaderTaskLogSavePage';
+import ProjectStudentTeamListPage from './projectStudent/projectStudentGroup';
 export default {
     projectListPage: {
         path: '/project',
@@ -160,5 +161,12 @@ export default {
         auth: true,
         component: ProjectStudentMyTaskListPage,
         permissions: [apiConfig.projectTask.getList.baseURL],
+    },
+    projectStudentTeamListPage: {
+        path: '/project-student/team',
+        title: 'Project Leader Page',
+        auth: true,
+        component: ProjectStudentTeamListPage,
+        permissions: [apiConfig.team.getList.baseURL],
     },
 };
