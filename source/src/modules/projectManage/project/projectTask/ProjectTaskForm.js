@@ -54,7 +54,7 @@ const ProjectTaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
-            developerId: dataDetail?.developer?.studentInfo?.fullName,
+            developerId: dataDetail?.developer?.studentInfo?.id,
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
