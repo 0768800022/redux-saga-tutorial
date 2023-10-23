@@ -1,5 +1,5 @@
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import {
     AppConstants,
@@ -14,7 +14,7 @@ import useTranslate from '@hooks/useTranslate';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { TeamOutlined, BookOutlined, UserOutlined } from '@ant-design/icons';
+import { TeamOutlined, BookOutlined, UserOutlined,CommentOutlined } from '@ant-design/icons';
 import { Avatar, Button, Tag } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
@@ -26,7 +26,10 @@ import { formatMoney } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
-
+import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
+import ReviewListModal from '@modules/review/student/ReviewListModal';
+import styles from './course.module.scss';
 const message = defineMessages({
     objectName: 'Khoá học',
 });
@@ -37,6 +40,11 @@ const CourseListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const leaderName = queryParameters.get('leaderName');
+    const [checkReivew,setCheckReview] = useState(true);
+    const [courseId, setCourseId] = useState();
+
+    const [openReviewModal, handlersReviewModal] = useDisclosure(false);
+
     const location = useLocation();
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -70,7 +78,7 @@ const CourseListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationListPage.path +
-                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
                             >
@@ -100,12 +108,28 @@ const CourseListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
+                    review: ({ id, name, subject, state, status,item }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
+                            <Button
+                                type="link"
+                                disabled={state !== 3}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    setCourseId(id);
+                                    getListReview(id);
+                                    getStarReview(id);
+                                    e.stopPropagation();
+                                    handlersReviewModal.open();
+                                }}
+                            >
+                                <CommentOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                 });
             },
         });
-    const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(commonMessage.course) },
-    ];
+    const breadRoutes = [{ breadcrumbName: translate.formatMessage(commonMessage.course) }];
     const breadLeaderRoutes = [
         { breadcrumbName: translate.formatMessage(commonMessage.leader), path: routes.leaderListPage.path },
         { breadcrumbName: translate.formatMessage(commonMessage.course) },
@@ -129,6 +153,36 @@ const CourseListPage = () => {
             options: statusValues,
         },
     ].filter(Boolean);
+
+
+    const { data: dataListReview, loading:dataListLoading, execute: listReview } = useFetch(
+        apiConfig.review.listReviews, 
+        { immediate: false,
+            mappingData: ({ data }) => data.content,
+        });
+    
+    const getListReview = (id) => {
+        listReview({
+            pathParams: {
+                courseId : id,
+            },
+        });
+    };
+
+    const { data: starData,loading:starDataLoading, execute: starReview } = useFetch(
+        apiConfig.review.star, 
+        { immediate: false,
+            mappingData: ({ data }) => data.content,
+        });
+    
+    const getStarReview = (id) => {
+        starReview({
+            pathParams: {
+                courseId : id,
+            },
+        });
+    };
+    const { loading:loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
 
     const columns = [
         {
@@ -181,19 +235,19 @@ const CourseListPage = () => {
                 return <div>{formattedValue}</div>;
             },
         },
-        {
-            title: translate.formatMessage(commonMessage.startDate),
-            dataIndex: 'dateRegister',
-            render: (dateRegister) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(dateRegister, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
-            },
-            width: 130,
-            align: 'center',
-        },
+        // {
+        //     title: translate.formatMessage(commonMessage.startDate),
+        //     dataIndex: 'dateRegister',
+        //     render: (dateRegister) => {
+        //         return (
+        //             <div style={{ padding: '0 4px', fontSize: 14 }}>
+        //                 {dayjs(dateRegister, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+        //             </div>
+        //         );
+        //     },
+        //     width: 130,
+        //     align: 'center',
+        // },
         {
             title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'dateEnd',
@@ -224,12 +278,13 @@ const CourseListPage = () => {
         !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                task: true,
+                review:true,
                 registration: !leaderName && true,
+                task: true,
                 edit: !leaderName && true,
                 delete: !leaderName && true,
             },
-            { width: '150px' },
+            { width: '200px' },
         ),
     ].filter(Boolean);
 
@@ -237,7 +292,11 @@ const CourseListPage = () => {
         <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
                 title={leaderName && <span style={{ fontWeight: 'normal' }}>{leaderName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    initialValues: queryFilter,
+                    className: styles.search,
+                })}
                 actionBar={!leaderName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -248,6 +307,17 @@ const CourseListPage = () => {
                         columns={columns}
                     />
                 }
+            />
+            <ReviewListModal
+                open={openReviewModal}
+                onCancel={() => handlersReviewModal.close()}
+                data={dataListReview || {}}
+                courseId = {courseId}
+                checkReivew={checkReivew}
+                star = {starData}
+                width={800}
+                loading={dataListLoading || starDataLoading || loadingData}
+
             />
         </PageWrapper>
     );

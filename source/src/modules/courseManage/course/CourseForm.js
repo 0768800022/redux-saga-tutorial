@@ -8,7 +8,7 @@ import apiConfig from '@constants/apiConfig';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import { formatDateString } from '@utils';
-import { Card, Col, Form, Row } from 'antd';
+import { Card, Col, Form, Row, notification } from 'antd';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -19,7 +19,7 @@ import NumericField from '@components/common/form/NumericField';
 import CropImageField from '@components/common/form/CropImageField';
 
 const CourseForm = (props) => {
-    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
+    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, executeUpdateLeader, isEditing } = props;
     const translate = useTranslate();
     const [isDisableStartDate, setIsDisableStartDate] = useState(false);
     const lectureStateOptions = translate.formatKeys(lectureState, ['label']);
@@ -32,12 +32,27 @@ const CourseForm = (props) => {
         onSubmit,
         setIsChangedFormValues,
     });
+    console.log(dataDetail);
     const handleSubmit = (values) => {
         if (!values?.state) {
             values.state = 1;
         }
         if (!values?.status) {
             values.status = 0;
+        }
+        if (isEditing) {
+            executeUpdateLeader({
+                data: {
+                    id: dataDetail?.id,
+                    leaderId: values?.leaderId,
+                },
+                onCompleted:(response) => {
+                    notification({
+                        message: <FormattedMessage defaultMessage="Cập nhật leader được" />,
+                    });
+                },
+                onError: (err) => { },
+            });
         }
         values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
@@ -85,7 +100,7 @@ const CourseForm = (props) => {
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leader?.leaderName,
+            leaderId: dataDetail?.leader?.id,
         });
         setBannerUrl(dataDetail.banner);
         setImageUrl(dataDetail.avatar);
@@ -251,7 +266,7 @@ const CourseForm = (props) => {
                 <Row gutter={10}>
                     <Col span={12}>
                         <AutoCompleteField
-                            disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
+                            // disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             required
                             label={<FormattedMessage defaultMessage="Người hướng dẫn" />}
                             name="leaderId"

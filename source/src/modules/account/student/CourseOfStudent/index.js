@@ -19,7 +19,7 @@ import routes from '@routes';
 import { DATE_FORMAT_DISPLAY } from '@constants';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
-
+import styles from '../student.module.scss';
 const message = defineMessages({
     objectName: 'course',
 });
@@ -176,7 +176,11 @@ const CourseListPage = () => {
             <div>
                 <ListPage
                     title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{studentName}</span>}
-                    searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                    searchForm={mixinFuncs.renderSearchForm({
+                        fields: searchFields,
+                        initialValues: queryFilter,
+                        className: styles.search,
+                    })}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}

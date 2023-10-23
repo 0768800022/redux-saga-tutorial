@@ -1,4 +1,4 @@
-import { Card, Col, Row, DatePicker } from 'antd';
+import { Card, Col, Row, DatePicker, notification } from 'antd';
 import React, { useEffect, useState } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
@@ -26,7 +26,7 @@ const message = defineMessages({
     startDate: "Ngày bắt đầu",
 });
 
-const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
+const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, executeUpdateLeader }) => {
     const translate = useTranslate();
     const [imageUrl, setImageUrl] = useState(null);
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
@@ -57,6 +57,20 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     };
 
     const handleSubmit = (values) => {
+        if (isEditing) {
+            executeUpdateLeader({
+                data: {
+                    id: dataDetail?.id,
+                    leaderId: values?.leaderId,
+                },
+                onCompleted:(response) => {
+                    notification({
+                        message: <FormattedMessage defaultMessage="Cập nhật leader được" />,
+                    });
+                },
+                onError: (err) => { },
+            });
+        }
         values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT) ;
         values.endDate = formatDateString(values.endDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
@@ -101,7 +115,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leaderInfo?.leaderName,
+            leaderId: dataDetail?.leaderInfo?.id,
             startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DEFAULT_FORMAT),
         });
     }, [dataDetail]);
@@ -147,8 +161,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
                             initialSearchParams={{}}
                             searchParams={(text) => ({ name: text })}
-                            required 
-                            disabled={isEditing}/>
+                            required />
                     </Col>
                 </Row>
 
