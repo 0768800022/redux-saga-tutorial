@@ -40,14 +40,7 @@ const ProjectLeaderTaskForm = (props) => {
             });
         }
     }, [isEditing]);
-    // const {
-    //     data: developers,
-    //     loading: getdevelopersLoading,
-    //     execute: executesdevelopers,
-    // } = useFetch(apiConfig.developer.autocomplete, {
-    //     immediate: true,
-    //     mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.studentInfo.fullName })),
-    // });
+
     useEffect(() => {
         dataDetail.startDate = dataDetail.startDate
             ? dayjs(dataDetail.startDate, DEFAULT_FORMAT)
