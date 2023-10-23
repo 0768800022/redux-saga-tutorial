@@ -41,16 +41,13 @@ const CompanySubscriptionListPage = () => {
     const { profile } = useAuth();
     const companyId = profile.id;
 
-    // const companyOptions =[];
-    // const companyValues = translate.formatKeys(companyOptions, ['label']);
-    // console.log(companyOptions);
 
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: {
             getList: apiConfig.serviceCompanySubscription.getMyService,
             create: apiConfig.serviceCompanySubscription.create,
             update: apiConfig.serviceCompanySubscription.update,
-            delete: apiConfig.companySubscription.delete,
+            delete: apiConfig.serviceCompanySubscription.delete,
         },
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -65,9 +62,9 @@ const CompanySubscriptionListPage = () => {
                     };
                 }
             };
-            funcs.prepareGetListParams = () => {
-                return navigate(routes.myCompanySubscriptionListPage.path + `?companyId=${profile.id}`);
-            };
+            // funcs.prepareGetListParams = () => {
+            //     return navigate(routes.myCompanySubscriptionListPage.path + `?companyId=${profile.id}`);
+            // };
             funcs.getCreateLink = () => {
                 if (profile?.id !== null) {
                     return `${pagePath}/create?companyId=${profile.id}`;
@@ -138,9 +135,14 @@ const CompanySubscriptionListPage = () => {
             width: 150,
             align: 'center',
         },
+        mixinFuncs.renderActionColumn({ delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
+        {
+            key: 'serviceName',
+            placeholder: translate.formatMessage(commonMessage.ServiceCompanySubscriptionName),
+        },
         {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
@@ -165,8 +167,6 @@ const CompanySubscriptionListPage = () => {
         // Kiểm tra xem có dữ liệu trong companys không và không phải là trạng thái loading
         if (companys) {
             setCompanyOptions(companys);
-        } else {
-            console.log('No data');
         }
     }, [companys]);
 
