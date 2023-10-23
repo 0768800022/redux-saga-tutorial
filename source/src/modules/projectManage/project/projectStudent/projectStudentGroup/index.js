@@ -96,7 +96,6 @@ const ProjectStudentTeamListPage = () => {
             width: '150px',
         },
 
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
     ].filter(Boolean);
 
     return (
