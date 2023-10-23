@@ -1,4 +1,4 @@
-import { BookOutlined, UserOutlined, TeamOutlined } from '@ant-design/icons';
+import { BookOutlined, UserOutlined, TeamOutlined,CommentOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
@@ -13,10 +13,13 @@ import routes from '@routes';
 import { formatMoney } from '@utils';
 import { Button, Tag } from 'antd';
 import dayjs from 'dayjs';
-import React from 'react';
+import React,{ useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
+import ReviewListModal from '@modules/review/student/ReviewListModal';
+import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
     objectName: 'course',
@@ -26,6 +29,10 @@ const CourseLeaderListPage = () => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(lectureState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const [openReviewModal, handlersReviewModal] = useDisclosure(false);
+    const [courseId, setCourseId] = useState();
+    const [checkReivew,setCheckReview] = useState(true);
+
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
@@ -84,6 +91,23 @@ const CourseLeaderListPage = () => {
                                 }}
                             >
                                 <BookOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    review: ({ id, name, subject, state, status,item }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    setCourseId(id);
+                                    getListReview(id);
+                                    getStarReview(id);
+                                    e.stopPropagation();
+                                    handlersReviewModal.open();
+                                }}
+                            >
+                                <CommentOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -181,6 +205,7 @@ const CourseLeaderListPage = () => {
         },
         mixinFuncs.renderActionColumn(
             {
+                review: true,
                 registration: true,
                 task: true,
                 edit: true,
@@ -189,6 +214,36 @@ const CourseLeaderListPage = () => {
             { width: '130px' },
         ),
     ].filter(Boolean);
+
+    const { data: dataListReview, loading:dataListLoading, execute: listReview } = useFetch(
+        apiConfig.review.listReviews, 
+        { immediate: false,
+            mappingData: ({ data }) => data.content,
+        });
+    
+    const getListReview = (id) => {
+        listReview({
+            pathParams: {
+                courseId : id,
+            },
+        });
+    };
+
+    const { data: starData,loading:starDataLoading, execute: starReview } = useFetch(
+        apiConfig.review.star, 
+        { immediate: false,
+            mappingData: ({ data }) => data.content,
+        });
+    
+    const getStarReview = (id) => {
+        starReview({
+            pathParams: {
+                courseId : id,
+            },
+        });
+    };
+    const { loading:loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
+
     return (
         <PageWrapper routes={breadRoutes}>
             <ListPage
@@ -202,6 +257,16 @@ const CourseLeaderListPage = () => {
                         columns={columns}
                     />
                 }
+            />
+            <ReviewListModal
+                open={openReviewModal}
+                onCancel={() => handlersReviewModal.close()}
+                data={dataListReview || {}}
+                courseId = {courseId}
+                checkReivew={checkReivew}
+                star = {starData}
+                width={800}
+                loading={dataListLoading || starDataLoading || loadingData}
             />
         </PageWrapper>
     );
