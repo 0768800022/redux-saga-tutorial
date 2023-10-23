@@ -21,6 +21,8 @@ const ProjectTaskForm = (props) => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const queryParameters = new URLSearchParams(window.location.search);
+    const projectId = queryParameters.get('projectId');
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -52,7 +54,7 @@ const ProjectTaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
-            developerId: dataDetail?.developer?.studentInfo?.id,
+            developerId: dataDetail?.developer?.studentInfo?.fullName,
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
@@ -88,10 +90,10 @@ const ProjectTaskForm = (props) => {
                             name="developerId"
                             apiConfig={apiConfig.developer.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.studentInfo.fullName })}
-                            initialSearchParams={{}}
                             searchParams={(text) => ({ fullName: text })}
+                            optionsParams={{ projectId : projectId }} 
+                            initialSearchParams={{ projectId: projectId }}
                             required
-                            disabled={isEditing}
                         />
                     </Col>
                     <Col span={12}>

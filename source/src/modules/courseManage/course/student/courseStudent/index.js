@@ -1,4 +1,5 @@
 import { BookOutlined, UserOutlined,CommentOutlined } from '@ant-design/icons';
+import { TeamOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
@@ -11,7 +12,7 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { formatMoney } from '@utils';
-import { Button } from 'antd';
+import { Button, Tag } from 'antd';
 import dayjs from 'dayjs';
 import React,{ useState,useEffect } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -59,6 +60,25 @@ const CourseStudentListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
+                    registration: ({ id, name, state, status }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
+                            <Button
+                                type="link"
+                                disabled={state === 1}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    state !== 1 &&
+                                        navigate(
+                                            routes.registrationStudentListPage.path +
+                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                        );
+                                }}
+                            >
+                                <TeamOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                     task: ({ id, name, subject, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
@@ -173,9 +193,24 @@ const CourseStudentListPage = () => {
             width: 130,
             align: 'center',
         },
+        {
+            title: translate.formatMessage(commonMessage.state),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
+            },
+        },
         mixinFuncs.renderActionColumn(
             {
                 review:true,
+                registration: true,
                 task: true,
                 edit:  true,
                 delete: true,

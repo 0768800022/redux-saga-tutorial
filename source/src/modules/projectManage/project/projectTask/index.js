@@ -15,6 +15,7 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { CalendarOutlined } from '@ant-design/icons';
+import styles from '../project.module.scss';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -209,18 +210,12 @@ function ProjectTaskListPage() {
         <PageWrapper routes={setBreadRoutes()}>
             <div>
                 <ListPage
-                    title={
-                        <span
-                            style={
-                                leaderName || developerName
-                                    ? { fontWeight: 'normal', fontSize: '16px' }
-                                    : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
-                            }
-                        >
-                            {projectName}
-                        </span>
-                    }
-                    searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                    title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{projectName}</span>}
+                    searchForm={mixinFuncs.renderSearchForm({
+                        fields: searchFields,
+                        initialValues: queryFilter,
+                        className: styles.search,
+                    })}
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable

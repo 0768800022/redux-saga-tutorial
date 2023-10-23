@@ -15,6 +15,7 @@ import { useNavigate, generatePath, useLocation } from 'react-router-dom';
 import routes from '@routes';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import styles from '../project.module.scss';
 
 const message = defineMessages({
     objectName: 'Nhóm',
@@ -33,7 +34,7 @@ const TeamListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFilter,queryParams,serializeParams } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter, queryParams, serializeParams } = useListBase({
         apiConfig: apiConfig.team,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -181,8 +182,12 @@ const TeamListPage = () => {
             routes={setBreadRoutes()}
         >
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
-                title={<span style={{ fontWeight: 'normal', fontSize: '18px',position: 'absolute', top: '45px' }}>{projectName}</span>}
+                title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    initialValues: queryFilter,
+                    className: styles.search,
+                })}
                 actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
