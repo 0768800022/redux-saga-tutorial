@@ -1,6 +1,7 @@
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
+import RichTextField from '@components/common/form/RichTextField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
@@ -143,13 +144,17 @@ const ProjectLeaderTaskForm = (props) => {
                         />
                     </Col>
                 </Row>
-                <TextField
-                    width={'100%'}
+                <RichTextField
                     label={<FormattedMessage defaultMessage="Mô tả" />}
+                    labelAlign="left"
                     name="description"
-                    type="textarea"
+                    style={{
+                        height: 300,
+                        marginBottom: 70,
+                    }}
                     required
                 />
+             
 
                 <div className="footer-card-form">{actions}</div>
             </Card>
