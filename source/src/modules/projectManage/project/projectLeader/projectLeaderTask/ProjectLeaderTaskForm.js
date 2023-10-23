@@ -21,6 +21,8 @@ const ProjectLeaderTaskForm = (props) => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const queryParameters = new URLSearchParams(window.location.search);
+    const projectId = queryParameters.get('projectId');
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -38,14 +40,14 @@ const ProjectLeaderTaskForm = (props) => {
             });
         }
     }, [isEditing]);
-    const {
-        data: developers,
-        loading: getdevelopersLoading,
-        execute: executesdevelopers,
-    } = useFetch(apiConfig.developer.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.studentInfo.fullName })),
-    });
+    // const {
+    //     data: developers,
+    //     loading: getdevelopersLoading,
+    //     execute: executesdevelopers,
+    // } = useFetch(apiConfig.developer.autocomplete, {
+    //     immediate: true,
+    //     mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.studentInfo.fullName })),
+    // });
     useEffect(() => {
         dataDetail.startDate = dataDetail.startDate
             ? dayjs(dataDetail.startDate, DEFAULT_FORMAT)
@@ -55,7 +57,6 @@ const ProjectLeaderTaskForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
             developerId: dataDetail?.developer?.studentInfo?.id,
-
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
@@ -89,9 +90,12 @@ const ProjectLeaderTaskForm = (props) => {
                         <AutoCompleteField
                             label={<FormattedMessage defaultMessage="Lập trình viên" />}
                             name="developerId"
-                            apiConfig={apiConfig.developer.autocomplete}
-                            mappingOptions={(item) => ({ value: item.id, label: item.studentInfo.fullName })}
-                            initialSearchParams={{}}
+                            apiConfig={apiConfig.memberProject.autocomplete}
+                            mappingOptions={(item) => ({
+                                value: item.developer.id,
+                                label: item.developer.studentInfo.fullName,
+                            })}
+                            initialSearchParams={{ projectId: projectId }}
                             searchParams={(text) => ({ fullName: text })}
                             required
                             disabled={isEditing}
