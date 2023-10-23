@@ -115,7 +115,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leaderInfo?.leaderName,
+            leaderId: dataDetail?.leaderInfo?.id,
             startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DEFAULT_FORMAT),
         });
     }, [dataDetail]);
