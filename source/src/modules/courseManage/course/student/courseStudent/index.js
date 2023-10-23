@@ -99,8 +99,6 @@ const CourseStudentListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                });
-                funcs.additionalActionColumnButtons = () => ({
                     review: ({ id, name, subject, state, status,item }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
                             <Button
@@ -123,6 +121,7 @@ const CourseStudentListPage = () => {
                         </BaseTooltip>
                     ),
                 });
+               
             },
         });
     const breadRoutes = [
