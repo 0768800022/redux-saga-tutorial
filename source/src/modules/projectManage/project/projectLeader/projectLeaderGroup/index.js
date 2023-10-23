@@ -80,14 +80,14 @@ const ProjectLeaderTeamListPage = () => {
             ),
         },
         {
-            title: <FormattedMessage defaultMessage="Dự án" />,
-            dataIndex: ['projectInfo', 'name'],
-            width: '500px',
-        },
-        {
             title: <FormattedMessage defaultMessage="Tên nhóm" />,
             dataIndex: 'teamName',
             width: '150px',
+        },
+        {
+            title: <FormattedMessage defaultMessage="Dự án" />,
+            dataIndex: ['projectInfo', 'name'],
+            width: '500px',
         },
 
         {
