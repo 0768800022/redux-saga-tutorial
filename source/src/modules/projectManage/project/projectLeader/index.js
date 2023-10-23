@@ -220,7 +220,6 @@ const ProjectLeaderListPage = () => {
                 );
             },
         },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, team: true, member: true, task: true }, { width: '120px' }),
     ];
 
