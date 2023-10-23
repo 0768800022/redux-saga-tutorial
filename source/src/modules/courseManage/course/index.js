@@ -112,6 +112,7 @@ const CourseListPage = () => {
                         <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
                             <Button
                                 type="link"
+                                disabled={state !== 3}
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     setCourseId(id);
