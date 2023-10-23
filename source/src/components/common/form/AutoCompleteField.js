@@ -20,7 +20,7 @@ function AutoCompleteField({
     initialSearchParams,
     searchParams,
     optionsParams = {},
-    maxOptions = 5,
+    maxOptions = 10,
     debounceTime = 600,
     onChange,
     disabled,
