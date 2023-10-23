@@ -96,7 +96,7 @@ const StudentForm = (props) => {
                 <TextField label={translate.formatMessage(commonMessage.university)} disabled name={['university', 'categoryName']} />
                 <TextField label={translate.formatMessage(commonMessage.studyClass)} disabled name={['studyClass', 'categoryName']} />
 
-                <NumericField label={translate.formatMessage(commonMessage.phone)} min={0} disabled name="phone" />
+                <TextField label={translate.formatMessage(commonMessage.phone)} disabled name="phone" />
                 <TextField
                     type="password"
                     label={translate.formatMessage(commonMessage.currentPassword)}

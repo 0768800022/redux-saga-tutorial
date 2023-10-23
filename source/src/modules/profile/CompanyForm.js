@@ -88,7 +88,7 @@ const CompanyForm = (props) => {
                 <TextField label={translate.formatMessage(commonMessage.email)} disabled name="email" />
                 <TextField label={translate.formatMessage(commonMessage.companyName)} required name="companyName" />
                 <TextField label={translate.formatMessage(commonMessage.address)} required name="address" />
-                <NumericField label={translate.formatMessage(commonMessage.hotline)} min={0} required name="hotline" />
+                <TextField label={translate.formatMessage(commonMessage.hotline)} min={0} required name="hotline" />
                 <TextField label={translate.formatMessage(commonMessage.username)} disabled name="username" />
 
                 <TextField

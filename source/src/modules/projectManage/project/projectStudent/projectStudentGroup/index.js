@@ -29,7 +29,7 @@ const message = defineMessages({
     teamName: 'Tên nhóm',
 });
 
-const ProjectLeaderTeamListPage = () => {
+const ProjectStudentTeamListPage = () => {
     const navigate = useNavigate();
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
@@ -95,14 +95,7 @@ const ProjectLeaderTeamListPage = () => {
             dataIndex: ['leaderInfo', 'leaderName'],
             width: '150px',
         },
-        // active &&
-        //     mixinFuncs.renderActionColumn(
-        //         {
-        //             edit: true,
-        //             delete: true,
-        //         },
-        //         { width: '150px' },
-        //     ),
+
     ].filter(Boolean);
 
     return (
@@ -110,7 +103,7 @@ const ProjectLeaderTeamListPage = () => {
             routes={[
                 {
                     breadcrumbName: translate.formatMessage(message.project),
-                    path: generatePath(routes.projectLeaderListPage.path),
+                    path: generatePath(routes.projectStudentListPage.path),
                 },
                 { breadcrumbName: translate.formatMessage(message.team) },
             ]}
@@ -131,4 +124,4 @@ const ProjectLeaderTeamListPage = () => {
         </PageWrapper>
     );
 };
-export default ProjectLeaderTeamListPage;
+export default ProjectStudentTeamListPage;

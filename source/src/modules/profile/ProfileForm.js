@@ -179,7 +179,7 @@ const ProfileForm = (props) => {
                 <TextField label={translate.formatMessage(messages.email)} name={['accountDto', 'email']} />
                 <TextField label={translate.formatMessage(messages.fullName)} name={['accountDto', 'fullName']} />
                 <TextField label={translate.formatMessage(messages.phoneNumber)} name={['accountDto', 'phone']} />
-                <NumericField label={translate.formatMessage(messages.hotline)} min={0} name="hotline" />
+                <TextField label={translate.formatMessage(messages.hotline)} name="hotline" />
                 {/* {!isAdmin && (
                     <Fragment>
                         <TextField
