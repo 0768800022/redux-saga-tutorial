@@ -18,7 +18,7 @@ const message = defineMessages({
     gitCommitUrl: 'Đường dẫn commit git',
 });
 
-function ProjectTaskLogListPage({ breadcrumbName,renderAction }) {
+function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }) {
     const translate = useTranslate();
     const location = useLocation();
     const { pathname: pagePath } = useLocation();
@@ -102,7 +102,7 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction }) {
                     title={
                         <span
                             style={
-                                { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
+                                { fontWeight: 'normal', fontSize: '16px', position: createPermission === false ? 'relative' : 'absolute' }
                             }
                         >
                             {taskName}

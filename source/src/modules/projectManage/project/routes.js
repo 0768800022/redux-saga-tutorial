@@ -152,7 +152,7 @@ export default {
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderTaskLogSavePage,
-        permissions: [apiConfig.projectTaskLog.getList.baseURL],
+        permissions: [apiConfig.projectTaskLog.create.baseURL,apiConfig.projectTaskLog.update.baseURL],
     },
     projectStudentMyTaskListPage: {
         path: '/my-project-task',

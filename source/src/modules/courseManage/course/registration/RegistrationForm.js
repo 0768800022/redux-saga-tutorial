@@ -29,6 +29,7 @@ import CropImageField from '@components/common/form/CropImageField';
 import PasswordGeneratorField from '@components/common/form/PasswordGeneratorField';
 import { KeyOutlined, CopyOutlined } from '@ant-design/icons';
 import useNotification from '@hooks/useNotification';
+import NumericField from '@components/common/form/NumericField';
 
 const messages = defineMessages({
     student: 'Tên sinh viên',
@@ -416,7 +417,8 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                 />
                             </Col>
                             <Col span={12}>
-                                <TextField
+                                <NumericField
+                                    min={0}
                                     disabled={dataStudentByPhone}
                                     label={translate.formatMessage(commonMessage.phone)}
                                     type="number"
