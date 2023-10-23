@@ -141,7 +141,7 @@ function TaskListPage() {
                 );
             },
         },
-        !leaderName && courseStatus == 1 && mixinFuncs.renderActionColumn({ edit: true, delete: false,taskLog: true }, { width: '120px' }),
+        !leaderName && courseStatus == 1 && mixinFuncs.renderActionColumn({ edit: true, delete: true,taskLog: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const setBreadRoutes = () => {
