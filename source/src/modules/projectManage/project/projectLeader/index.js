@@ -227,7 +227,7 @@ const ProjectLeaderListPage = () => {
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.project) }]}>
             <ListPage
-                actionBar={mixinFuncs.renderActionBar()}
+                // actionBar={mixinFuncs.renderActionBar()}
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
                 baseTable={
                     <BaseTable
