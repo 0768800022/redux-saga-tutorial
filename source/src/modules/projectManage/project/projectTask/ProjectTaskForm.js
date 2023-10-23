@@ -66,7 +66,7 @@ const ProjectTaskForm = (props) => {
     };
 
     const validateStartDate = (_, value) => {
-        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DATE_FORMAT_VALUE);
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
         if (date && value && value.isBefore(date) && !isEditing) {
             return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
         }
@@ -78,7 +78,7 @@ const ProjectTaskForm = (props) => {
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            width='100%'
+                            width="100%"
                             label={<FormattedMessage defaultMessage="Tên task" />}
                             name="taskName"
                             required
@@ -89,9 +89,12 @@ const ProjectTaskForm = (props) => {
                             label={<FormattedMessage defaultMessage="Lập trình viên" />}
                             name="developerId"
                             apiConfig={apiConfig.memberProject.autocomplete}
-                            mappingOptions={(item) => ({ value: item.developer.id, label: item.developer.studentInfo.fullName })}
+                            mappingOptions={(item) => ({
+                                value: item.developer.id,
+                                label: item.developer.studentInfo.fullName,
+                            })}
                             searchParams={(text) => ({ fullName: text })}
-                            optionsParams={{ projectId : projectId }} 
+                            optionsParams={{ projectId: projectId }}
                             initialSearchParams={{ projectId: projectId }}
                             required
                         />

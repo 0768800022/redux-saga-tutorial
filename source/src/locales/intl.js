@@ -66,4 +66,5 @@ export const commonMessage = defineMessages({
     university: 'Trường',
     studyClass: 'Hệ',
     hotline: 'Đường dây nóng',
+    review:'Đánh giá',
 });
