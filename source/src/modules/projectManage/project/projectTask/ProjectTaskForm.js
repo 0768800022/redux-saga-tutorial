@@ -21,6 +21,8 @@ const ProjectTaskForm = (props) => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const queryParameters = new URLSearchParams(window.location.search);
+    const projectId = queryParameters.get('projectId');
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -86,10 +88,11 @@ const ProjectTaskForm = (props) => {
                         <AutoCompleteField
                             label={<FormattedMessage defaultMessage="Lập trình viên" />}
                             name="developerId"
-                            apiConfig={apiConfig.developer.autocomplete}
-                            mappingOptions={(item) => ({ value: item.id, label: item.studentInfo.fullName })}
-                            initialSearchParams={{}}
+                            apiConfig={apiConfig.memberProject.getList}
+                            mappingOptions={(item) => ({ value: item.id, label: item.developer.studentInfo.fullName })}
                             searchParams={(text) => ({ fullName: text })}
+                            optionsParams={{ projectId : projectId }} 
+                            initialSearchParams={{ projectId: projectId }}
                             required
                             disabled={isEditing}
                         />
