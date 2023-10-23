@@ -271,7 +271,7 @@ const CourseStudentListPage = () => {
     }));
 
     let stateRegistration = 0;
-    newData.forEach(item => {
+    newData?.forEach(item => {
         if (item.studentId === profile.id) {
             stateRegistration = item.stateRegis; 
         }
