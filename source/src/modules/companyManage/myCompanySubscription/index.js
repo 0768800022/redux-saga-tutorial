@@ -50,7 +50,7 @@ const CompanySubscriptionListPage = () => {
             getList: apiConfig.serviceCompanySubscription.getMyService,
             create: apiConfig.serviceCompanySubscription.create,
             update: apiConfig.serviceCompanySubscription.update,
-            delete: apiConfig.companySubscription.delete,
+            delete: apiConfig.serviceCompanySubscription.delete,
         },
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -65,9 +65,9 @@ const CompanySubscriptionListPage = () => {
                     };
                 }
             };
-            funcs.prepareGetListParams = () => {
-                return navigate(routes.myCompanySubscriptionListPage.path + `?companyId=${profile.id}`);
-            };
+            // funcs.prepareGetListParams = () => {
+            //     return navigate(routes.myCompanySubscriptionListPage.path + `?companyId=${profile.id}`);
+            // };
             funcs.getCreateLink = () => {
                 if (profile?.id !== null) {
                     return `${pagePath}/create?companyId=${profile.id}`;
@@ -138,9 +138,14 @@ const CompanySubscriptionListPage = () => {
             width: 150,
             align: 'center',
         },
+        mixinFuncs.renderActionColumn({ delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [
+        {
+            key: 'serviceName',
+            placeholder: translate.formatMessage(commonMessage.ServiceCompanySubscriptionName),
+        },
         {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
