@@ -12,7 +12,7 @@ import AvatarField from '@components/common/form/AvatarField';
 import { UserOutlined } from '@ant-design/icons';
 
 const messages = defineMessages({
-    objectName: 'Đánh giá',
+    objectName: 'Thêm đánh giá',
     update: 'Cập nhật',
     create: 'Thêm mới',
     createSuccess: 'Tạo {objectName} thành công',
