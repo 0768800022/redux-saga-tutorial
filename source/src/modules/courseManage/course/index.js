@@ -155,7 +155,7 @@ const CourseListPage = () => {
     ].filter(Boolean);
 
 
-    const { data: dataListReview, execute: listReview } = useFetch(
+    const { data: dataListReview, loading:dataListLoading, execute: listReview } = useFetch(
         apiConfig.review.listReviews, 
         { immediate: false,
             mappingData: ({ data }) => data.content,
@@ -169,7 +169,7 @@ const CourseListPage = () => {
         });
     };
 
-    const { data: starData, execute: starReview } = useFetch(
+    const { data: starData,loading:starDataLoading, execute: starReview } = useFetch(
         apiConfig.review.star, 
         { immediate: false,
             mappingData: ({ data }) => data.content,
@@ -182,7 +182,7 @@ const CourseListPage = () => {
             },
         });
     };
-    const { execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
+    const { loading:loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
  
     const getMyListReview = (id) => {
         myListReview({
@@ -335,6 +335,8 @@ const CourseListPage = () => {
                 checkReivew={checkReivew}
                 star = {starData}
                 width={800}
+                loading={dataListLoading || starDataLoading || loadingData}
+
             />
         </PageWrapper>
     );
