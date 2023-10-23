@@ -95,16 +95,6 @@ const ProjectLeaderTeamListPage = () => {
             dataIndex: ['leaderInfo', 'leaderName'],
             width: '150px',
         },
-
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
-        // active &&
-        //     mixinFuncs.renderActionColumn(
-        //         {
-        //             edit: true,
-        //             delete: true,
-        //         },
-        //         { width: '150px' },
-        //     ),
     ].filter(Boolean);
 
     return (
