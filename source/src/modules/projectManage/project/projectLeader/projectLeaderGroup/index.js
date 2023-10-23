@@ -24,7 +24,7 @@ const message = defineMessages({
     course: 'Khoá học',
     project: 'Dự án',
     description: 'Mô tả',
-    leaderId: 'Người hướng dẫn',
+    leaderId: 'Leader',
     projectId: 'Dự án',
     teamName: 'Tên nhóm',
 });
@@ -91,7 +91,7 @@ const ProjectLeaderTeamListPage = () => {
         },
 
         {
-            title: <FormattedMessage defaultMessage="Người hướng dẫn" />,
+            title: <FormattedMessage defaultMessage="Leader" />,
             dataIndex: ['leaderInfo', 'leaderName'],
             width: '150px',
         },
