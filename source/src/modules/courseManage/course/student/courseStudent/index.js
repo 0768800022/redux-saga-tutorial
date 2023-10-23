@@ -33,7 +33,7 @@ const CourseStudentListPage = () => {
     const [openReviewModal, handlersReviewModal] = useDisclosure(false);
     const [detail, setDetail] = useState();
     const [courseId, setCourseId] = useState();
-
+    const [courseState, setCourseState] = useState();
     const [checkReivew,setCheckReview] = useState(false);
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -106,6 +106,7 @@ const CourseStudentListPage = () => {
                                     setCourseId(id);
                                     getListReview(id);
                                     getMyListReview(id);
+                                    setCourseState(state);
                                     getStarReview(id);
                                     e.stopPropagation();
                                     handlersReviewModal.open();
@@ -287,6 +288,7 @@ const CourseStudentListPage = () => {
                 checkReivew={checkReivew}
                 star = {starData}
                 width={800}
+                courseState={courseState}
                 loading={dataListLoading || starDataLoading || loadingData}
             />
         </PageWrapper>

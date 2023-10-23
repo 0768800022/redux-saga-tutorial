@@ -40,7 +40,7 @@ const CourseListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const leaderName = queryParameters.get('leaderName');
-    const [checkReivew,setCheckReview] = useState(false);
+    const [checkReivew,setCheckReview] = useState(true);
     const [courseId, setCourseId] = useState();
 
     const [openReviewModal, handlersReviewModal] = useDisclosure(false);
@@ -116,7 +116,6 @@ const CourseListPage = () => {
                                 onClick={(e) => {
                                     setCourseId(id);
                                     getListReview(id);
-                                    getMyListReview(id);
                                     getStarReview(id);
                                     e.stopPropagation();
                                     handlersReviewModal.open();
@@ -183,25 +182,6 @@ const CourseListPage = () => {
         });
     };
     const { loading:loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
- 
-    const getMyListReview = (id) => {
-        myListReview({
-            pathParams: {
-                courseId : id,
-            },
-            onCompleted: (response) => {
-                if (response.result === true) {
-                    setCheckReview(true);
-                }
-                else{
-                    setCheckReview(false);
-                }
-            },
-            onError: (err) => {
-                setCheckReview(false);
-            },
-        });
-    };
 
     const columns = [
         {
