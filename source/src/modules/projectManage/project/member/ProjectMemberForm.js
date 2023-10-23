@@ -306,6 +306,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
                                 initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
+                                optionsParams={{ projectId: projectId }}
                                 disabled={isEditing}
                             />
                         </Col>

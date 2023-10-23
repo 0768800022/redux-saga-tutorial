@@ -1,5 +1,12 @@
 import routes from '@routes';
-import { IconUserBolt, IconSchool, IconClipboardText, IconBuildingCommunity, IconSettings,IconHighlight } from '@tabler/icons-react';
+import {
+    IconUserBolt,
+    IconSchool,
+    IconClipboardText,
+    IconBuildingCommunity,
+    IconSettings,
+    IconHighlight,
+} from '@tabler/icons-react';
 import React from 'react';
 import { generatePath } from 'react-router-dom';
 import { categoryKind } from './masterData';
@@ -8,9 +15,15 @@ import apiConfig from './apiConfig';
 import { BulbOutlined } from '@ant-design/icons';
 const navMenuConfig = [
     {
-        label: <FormattedMessage defaultMessage="Quản lý tài khoản" />,
+        label: <FormattedMessage defaultMessage="Quản lý admin" />,
         key: 'account-management',
         icon: <IconUserBolt size={16} />,
+        children: [],
+    },
+    {
+        label: <FormattedMessage defaultMessage="Quản lý Khoá học" />,
+        key: 'quan-ly-mon-hoc',
+        icon: <IconSchool size={16} />,
         children: [
             {
                 label: <FormattedMessage defaultMessage="Tài khoản sinh viên" />,
@@ -18,31 +31,6 @@ const navMenuConfig = [
                 path: routes.studentListPage.path,
                 permission: apiConfig.student.getList.baseURL,
             },
-            {
-                label: <FormattedMessage defaultMessage="Tài khoản leader" />,
-                key: 'leader-management',
-                path: generatePath(routes.leaderListPage.path, {}),
-                permission: apiConfig.leader.getList.baseURL,
-            },
-            {
-                label: <FormattedMessage defaultMessage="Tài khoản lập trình viên" />,
-                key: 'developer-management',
-                path: generatePath(routes.developerListPage.path, {}),
-                permission: apiConfig.developer.getList.baseURL,
-            },
-            {
-                label: <FormattedMessage defaultMessage="Tài khoản công ty" />,
-                key: 'company-management',
-                path: generatePath(routes.companyListPage.path, {}),
-                permission: apiConfig.company.getList.baseURL,
-            },
-        ],
-    },
-    {
-        label: <FormattedMessage defaultMessage="Quản lý Khoá học" />,
-        key: 'quan-ly-mon-hoc',
-        icon: <IconSchool size={16} />,
-        children: [
             {
                 label: <FormattedMessage defaultMessage="Khoá học" />,
                 key: 'khoa-hoc',
@@ -69,6 +57,19 @@ const navMenuConfig = [
         icon: <IconClipboardText size={16} />,
         children: [
             {
+                label: <FormattedMessage defaultMessage="Tài khoản leader" />,
+                key: 'leader-management',
+                path: generatePath(routes.leaderListPage.path, {}),
+                permission: apiConfig.leader.getList.baseURL,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Tài khoản lập trình viên" />,
+                key: 'developer-management',
+                path: generatePath(routes.developerListPage.path, {}),
+                permission: apiConfig.developer.getList.baseURL,
+            },
+
+            {
                 label: <FormattedMessage defaultMessage="Dự án" />,
                 key: 'project-management',
                 path: generatePath(routes.projectListPage.path, {}),
@@ -88,6 +89,12 @@ const navMenuConfig = [
         icon: <IconBuildingCommunity size={16} />,
         permission: apiConfig.company.getList.baseURL,
         children: [
+            {
+                label: <FormattedMessage defaultMessage="Tài khoản công ty" />,
+                key: 'company-management',
+                path: generatePath(routes.companyListPage.path, {}),
+                permission: apiConfig.company.getList.baseURL,
+            },
             {
                 label: <FormattedMessage defaultMessage="Quản lý gói dịch vụ" />,
                 key: 'service-company-subscription',
@@ -145,7 +152,7 @@ const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Dự án" />,
         key: 'project-leader',
-        icon:  <BulbOutlined />,
+        icon: <BulbOutlined />,
         permission: apiConfig.course.getListLeaderCourse.baseURL,
         children: [
             {
@@ -173,13 +180,12 @@ const navMenuConfig = [
                 key: 'my-task-student',
                 path: generatePath(routes.myTaskStudentListPage.path, {}),
             },
-            
         ],
     },
     {
         label: <FormattedMessage defaultMessage="Dự án" />,
         key: 'project-student',
-        icon:  <BulbOutlined />,
+        icon: <BulbOutlined />,
         permission: apiConfig.course.getListStudentCourse.baseURL,
         children: [
             {
