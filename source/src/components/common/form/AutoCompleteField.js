@@ -20,7 +20,7 @@ function AutoCompleteField({
     initialSearchParams,
     searchParams,
     optionsParams = {},
-    maxOptions = 5,
+    maxOptions = 10,
     debounceTime = 600,
     onChange,
     disabled,
@@ -36,7 +36,6 @@ function AutoCompleteField({
     const { execute } = useFetch(apiConfig);
     const form = useFormInstance();
     const [initialOpts, setInitialOpts] = useState();
-
     const handleFetchOptions = useCallback(
         ({ searchText, onCompleted, onError }) => {
             execute({

@@ -55,7 +55,6 @@ const ProjectTaskForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
             developerId: dataDetail?.developer?.studentInfo?.id,
-            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DEFAULT_FORMAT),
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
@@ -68,7 +67,7 @@ const ProjectTaskForm = (props) => {
 
     const validateStartDate = (_, value) => {
         const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DATE_FORMAT_VALUE);
-        if (date && value && value.isBefore(date)) {
+        if (date && value && value.isBefore(date) && !isEditing) {
             return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
         }
         return Promise.resolve();

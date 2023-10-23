@@ -151,7 +151,7 @@ function ProjectTaskListPage() {
             },
         },
 
-        active && mixinFuncs.renderActionColumn({ edit: true, delete: true, taskLog: true }, { width: '120px' }),
+        active && mixinFuncs.renderActionColumn({ taskLog: true, edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const searchFields = [

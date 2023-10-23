@@ -190,7 +190,6 @@ const CompanySubscriptionListPage = () => {
         if (companys) {
             setCompanyOptions(companys);
         }
-        else { console.log("No data"); }
     }, [companys]);
 
     return (

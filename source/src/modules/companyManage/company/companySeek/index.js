@@ -108,9 +108,8 @@ const CompanySeekListPage = () => {
             title: <FormattedMessage defaultMessage="Tình trạng" />,
             dataIndex: 'state',
             align: 'center',
-            width: 60,
+            width: 120,
             render(dataRow) {
-                console.log(dataRow);
                 return <div>{dataRow === 1 ? <EyeOutlined style={{ color: 'orange' }}/> : <CheckCircleOutlined style={{ color: 'green' }} />}</div>;
             },
         },

@@ -307,6 +307,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 optionsParams={{ projectId : projectId }} 
                                 initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
+                                optionsParams={{ projectId: projectId }}
                                 disabled={isEditing}
                             />
                         </Col>
