@@ -13,6 +13,8 @@ import apiConfig from '@constants/apiConfig';
 import { useNavigate } from 'react-router-dom';
 import NumericField from '@components/common/form/NumericField';
 import { showErrorMessage } from '@services/notifyService';
+import { validateUsernameForm } from '@utils';
+import { values } from 'lodash';
 
 const messages = defineMessages({
     objectName: 'gói dịch vụ',
@@ -27,6 +29,7 @@ const BuyServiceModal = ({
     data,
     executeUpdate,
     executeLoading,
+    isEditing,
     ...props
 }) => {
     const [form] = Form.useForm();
@@ -35,11 +38,12 @@ const BuyServiceModal = ({
     const intl = useIntl();
     const translate = useTranslate();
     const navigate = useNavigate();
-    const updateSetting = () => {
+    const updateSetting = (values) => {
+        console.log(values),
         executeUpdate({
             data: {
-                serviceCompanySubscriptionId: data?.id,
-                valueable: data?.valueable,
+                serviceCompanySubscriptionId: values?.serviceCompanySubscriptionId,
+                valueable: values?.valueable,
             },
             onCompleted: (response) => {
                 if (response.result === true) {
@@ -97,6 +101,7 @@ const BuyServiceModal = ({
                                 mappingOptions={(item) => ({ value: item.id, label: item.name })}
                                 initialSearchParams={{}}
                                 searchParams={(text) => ({ name: text })}
+                                disabled={isEditing}
                             />
                         </Col>
                     </Row>
@@ -105,6 +110,7 @@ const BuyServiceModal = ({
                             <NumericField
                                 label={<FormattedMessage defaultMessage="Số ngày sử dụng" />}
                                 name="valueable"
+                                disabled={isEditing}
                             // onChange={handleInputChange}
                             />
                         </Col>
