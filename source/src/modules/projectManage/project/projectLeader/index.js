@@ -33,6 +33,7 @@ const message = defineMessages({
 const ProjectLeaderListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const leaderName = queryParameters.get('leaderName');
@@ -75,6 +76,9 @@ const ProjectLeaderListPage = () => {
                     } else {
                         mixinFuncs.setQueryParams(serializeParams(filter));
                     }
+                };
+                funcs.getItemDetailLink = (dataRow) => {
+                    return `${pagePath}/${dataRow.id}?projectId=${dataRow.id}`;
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     task: ({ id, name, state, status }) => (
@@ -127,7 +131,7 @@ const ProjectLeaderListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    team: ({ id, name, status, leaderInfo }) => (
+                    team: ({ id, name, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
                                 type="link"
@@ -138,14 +142,12 @@ const ProjectLeaderListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectLeaderTeamListPage.path +
-                                                `?projectId=${id}&projectName=${name}&leaderId=${
-                                                    leaderInfo.id
-                                                }&active=${true}`,
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
                                         );
                                     } else {
                                         navigate(
                                             routes.projectLeaderTeamListPage.path +
-                                                `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`,
+                                                `?projectId=${id}&projectName=${name}`,
                                         );
                                     }
                                 }}
@@ -218,8 +220,8 @@ const ProjectLeaderListPage = () => {
                 );
             },
         },
-
-        mixinFuncs.renderActionColumn({ team: true, member: true, task: true, edit: true }, { width: '120px' }),
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderActionColumn({ edit: true, team: true, member: true, task: true }, { width: '120px' }),
     ];
 
     return (
