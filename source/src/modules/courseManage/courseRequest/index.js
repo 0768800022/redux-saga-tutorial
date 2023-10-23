@@ -91,7 +91,7 @@ const CourseRequestListPage = () => {
             title: translate.formatMessage(message.state),
             dataIndex: 'state',
             align: 'center',
-            width: 60,
+            width: 120,
             render(dataRow) {
                 const state = stateValues.find((item) => item.value == dataRow);
                 return (
