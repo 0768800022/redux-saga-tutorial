@@ -64,11 +64,6 @@ const CompanyRequestForm = ({
     useEffect(() => {
         dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
         dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
-        console.log({
-            ...dataDetail,
-            serviceCompanySubscriptionId: dataDetail?.subscription?.name,
-            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
-        });
         if (dataDetail?.listDetails)
             setListData(
                 dataDetail?.listDetails.map((item, index) => ({
@@ -123,7 +118,6 @@ const CompanyRequestForm = ({
     }, []);
 
     const handleEditList = useCallback((item) => {
-        console.log(item);
         setItem(item);
         handlerDetailsModal.open();
         setIsChangedFormValues(true);

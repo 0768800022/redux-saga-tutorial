@@ -57,7 +57,6 @@ const BuyServiceModal = ({
                 if (err.code === 'ERROR-COMPANY-SUBSCRIPTION-ERROR-0001') {
                     showErrorMessage('Gói dịch vụ đã tồn tại');
                     onCancel();
-                    console.log("khong tao duoc");
                 }
             },
         });
