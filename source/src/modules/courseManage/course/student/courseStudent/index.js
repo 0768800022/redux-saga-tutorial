@@ -1,4 +1,4 @@
-import { BookOutlined, UserOutlined } from '@ant-design/icons';
+import { BookOutlined, UserOutlined,TeamOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
@@ -51,6 +51,25 @@ const CourseStudentListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
+                    registration: ({ id, name, state, status }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
+                            <Button
+                                type="link"
+                                disabled={state === 1}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    state !== 1 &&
+                                        navigate(
+                                            routes.registrationStudentListPage.path +
+                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                        );
+                                }}
+                            >
+                                <TeamOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                     task: ({ id, name, subject, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
@@ -147,6 +166,7 @@ const CourseStudentListPage = () => {
         },
         mixinFuncs.renderActionColumn(
             {
+                registration: true,
                 task: true,
                 edit:  true,
                 delete: true,

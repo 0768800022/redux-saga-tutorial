@@ -26,6 +26,7 @@ import { formatMoney } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import styles from './course.module.scss';
 
 const message = defineMessages({
     objectName: 'Khoá học',
@@ -70,7 +71,7 @@ const CourseListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationListPage.path +
-                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
                             >
@@ -103,9 +104,7 @@ const CourseListPage = () => {
                 });
             },
         });
-    const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(commonMessage.course) },
-    ];
+    const breadRoutes = [{ breadcrumbName: translate.formatMessage(commonMessage.course) }];
     const breadLeaderRoutes = [
         { breadcrumbName: translate.formatMessage(commonMessage.leader), path: routes.leaderListPage.path },
         { breadcrumbName: translate.formatMessage(commonMessage.course) },
@@ -224,8 +223,8 @@ const CourseListPage = () => {
         !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                task: true,
                 registration: !leaderName && true,
+                task: true,
                 edit: !leaderName && true,
                 delete: !leaderName && true,
             },
@@ -237,7 +236,11 @@ const CourseListPage = () => {
         <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
                 title={leaderName && <span style={{ fontWeight: 'normal' }}>{leaderName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    initialValues: queryFilter,
+                    className: styles.search,
+                })}
                 actionBar={!leaderName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
