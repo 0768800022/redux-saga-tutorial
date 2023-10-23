@@ -31,9 +31,6 @@ const CompanyRequestListPage = () => {
     const { profile } = useAuth();
     const companyId = profile.id;
 
-    // const companyOptions =[];
-    // const companyValues = translate.formatKeys(companyOptions, ['label']);
-    // console.log(companyOptions);
 
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.companyRequest,
@@ -125,8 +122,6 @@ const CompanyRequestListPage = () => {
         // Kiểm tra xem có dữ liệu trong companys không và không phải là trạng thái loading
         if (companys) {
             setCompanyOptions(companys);
-        } else {
-            console.log('No data');
         }
     }, [companys]);
 
