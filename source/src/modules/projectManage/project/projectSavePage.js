@@ -7,6 +7,7 @@ import ProjectForm from './projectForm';
 import { generatePath, useParams } from 'react-router-dom';
 import routes from './routes';
 import apiConfig from '@constants/apiConfig';
+import useFetch from '@hooks/useFetch';
 
 const messages = defineMessages({
     project: 'Dự án',
@@ -41,6 +42,9 @@ const ProjectSavePage = () => {
         },
     });
 
+    const { execute: executeUpdateLeader } = useFetch(apiConfig.project.updateLeaderProject, { immediate: false });
+
+
     return (
         <PageWrapper
             loading={loading}
@@ -60,6 +64,7 @@ const ProjectSavePage = () => {
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
                 onSubmit={mixinFuncs.onSave}
+                executeUpdateLeader={executeUpdateLeader}
             />
         </PageWrapper>
     );

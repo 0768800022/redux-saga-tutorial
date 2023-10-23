@@ -54,7 +54,7 @@ const ProjectTaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
-            developerId: dataDetail?.developer?.studentInfo?.id,
+            developerId: dataDetail?.developer?.studentInfo?.fullName,
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
@@ -88,13 +88,12 @@ const ProjectTaskForm = (props) => {
                         <AutoCompleteField
                             label={<FormattedMessage defaultMessage="Lập trình viên" />}
                             name="developerId"
-                            apiConfig={apiConfig.memberProject.getList}
-                            mappingOptions={(item) => ({ value: item.id, label: item.developer.studentInfo.fullName })}
+                            apiConfig={apiConfig.developer.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item.studentInfo.fullName })}
                             searchParams={(text) => ({ fullName: text })}
                             optionsParams={{ projectId : projectId }} 
                             initialSearchParams={{ projectId: projectId }}
                             required
-                            disabled={isEditing}
                         />
                     </Col>
                     <Col span={12}>

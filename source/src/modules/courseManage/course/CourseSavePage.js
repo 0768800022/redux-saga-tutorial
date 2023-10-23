@@ -9,6 +9,7 @@ import routes from './routes';
 import { generatePath, useParams } from 'react-router-dom';
 import { showErrorMessage } from '@services/notifyService';
 import { commonMessage } from '@locales/intl';
+import useFetch from '@hooks/useFetch';
 
 const messages = defineMessages({
     objectName: 'khoá học',
@@ -50,6 +51,8 @@ const CourseSavePage = () => {
         },
     });
 
+    const { execute: executeUpdateLeader } = useFetch(apiConfig.course.updateLeaderCourse, { immediate: false });
+
     return (
         <PageWrapper
             loading={loading}
@@ -69,6 +72,7 @@ const CourseSavePage = () => {
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
                 onSubmit={mixinFuncs.onSave}
+                executeUpdateLeader={executeUpdateLeader}
             />
         </PageWrapper>
     );
