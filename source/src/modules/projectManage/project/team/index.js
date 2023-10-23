@@ -110,7 +110,7 @@ const TeamListPage = () => {
             },
 
             {
-                title: <FormattedMessage defaultMessage="Người hướng dẫn" />,
+                title: <FormattedMessage defaultMessage="Leader" />,
                 dataIndex: ['leaderInfo', 'leaderName'],
                 width: '150px',
             },
