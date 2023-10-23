@@ -46,7 +46,7 @@ function TaskStudentListPage() {
         override: (funcs) => {
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params, courseName: null });
+                mixinFuncs.handleFetchList({ ...params, courseName: null,subjectId: null });
             };
             funcs.mappingData = (response) => {
                 try {
