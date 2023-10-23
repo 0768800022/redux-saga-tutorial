@@ -7,7 +7,7 @@ import useTranslate from '@hooks/useTranslate';
 import AvatarField from '@components/common/form/AvatarField';
 import useDisclosure from '@hooks/useDisclosure';
 import { convertUtcToLocalTime } from '@utils/index';
-import { StarOutlined, UserOutlined } from '@ant-design/icons';
+import { StarFilled, UserOutlined } from '@ant-design/icons';
 import { AppConstants, DEFAULT_FORMAT,DATE_FORMAT_VALUE } from '@constants';
 import ReviewModal from './ReviewModal';
 import useAuth from '@hooks/useAuth';
@@ -62,7 +62,7 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                                 <Row>
                                     <Col span={24} style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ marginRight: '8px' }}>5</span>
-                                        <StarOutlined style={{ color: '#FFD700', marginRight: '8px' }} />
+                                        <StarFilled style={{ color: '#FFD700', marginRight: '8px' }} />
                                         <Progress
                                             strokeColor={'#FFD700'}
                                             percent={ratingPercentages[4]}
@@ -71,7 +71,7 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                                     </Col>
                                     <Col span={24} style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ marginRight: '8px' }}>4</span>
-                                        <StarOutlined style={{ color: '#FFD700', marginRight: '8px' }} />
+                                        <StarFilled style={{ color: '#FFD700', marginRight: '8px' }} />
                                         <Progress
                                             strokeColor={'#FFD700'}
                                             percent={ratingPercentages[3]}
@@ -80,7 +80,7 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                                     </Col>
                                     <Col span={24} style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ marginRight: '8px' }}>3</span>
-                                        <StarOutlined style={{ color: '#FFD700', marginRight: '8px' }} />
+                                        <StarFilled style={{ color: '#FFD700', marginRight: '8px' }} />
                                         <Progress
                                             strokeColor={'#FFD700'}
                                             percent={ratingPercentages[2]}
@@ -89,7 +89,7 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                                     </Col>
                                     <Col span={24} style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ marginRight: '8px' }}>2</span>
-                                        <StarOutlined style={{ color: '#FFD700', marginRight: '8px' }} />
+                                        <StarFilled style={{ color: '#FFD700', marginRight: '8px' }} />
                                         <Progress
                                             strokeColor={'#FFD700'}
                                             percent={ratingPercentages[1]}
@@ -98,7 +98,7 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                                     </Col>
                                     <Col span={24} style={{ display: 'flex', alignItems: 'center' }}>
                                         <span style={{ marginRight: '8px' }}>1</span>
-                                        <StarOutlined style={{ color: '#FFD700', marginRight: '8px' }} />
+                                        <StarFilled style={{ color: '#FFD700', marginRight: '8px' }} />
                                         <Progress
                                             strokeColor={'#FFD700'}
                                             percent={ratingPercentages[0]}
@@ -121,7 +121,7 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                 </div>
                 <>
                     <Row>
-                        <span style={{ color: '#1890FF', fontSize:'16px',marginLeft:'-8px',marginBottom:'10px' }}>Đánh giá {averageRating} ({totalRatings} Review)</span>
+                        <span style={{ color: '#1890FF', fontSize:'16px',marginLeft:'8px',marginBottom:'10px' }}>Đánh giá {averageRating} ({totalRatings} Review)</span>
                     </Row>
                     {data.length>0 ? data?.map((item, index) => (
                         <Row gutter={16} key={index} style={{ border: '1px solid #ddd', borderRadius: '6px', padding: '6px', margin:'0px 8px 14px 8px' }}>
