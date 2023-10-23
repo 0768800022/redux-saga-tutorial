@@ -17,7 +17,7 @@ const messages = defineMessages({
     update: 'Cập nhật',
     updateSuccess: 'Cập nhật {objectName} thành công',
 });
-const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, data,courseState, ...props }) => {
+const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, data,courseState,regisState, ...props }) => {
     const translate = useTranslate();
     const { profile } = useAuth();
 
@@ -110,7 +110,7 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                             </>
                         </Col>
                     </Row>
-                    {!checkReivew && courseState ===3 && (
+                    {!checkReivew && courseState === 3 && regisState === 3 && (
                         
                         <Row style={{ marginTop:'20px' }}>
                             <Col span={12} align="center">

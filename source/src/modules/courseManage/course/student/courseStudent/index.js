@@ -21,13 +21,17 @@ import { commonMessage } from '@locales/intl';
 import ReviewListModal from '@modules/review/student/ReviewListModal';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
+import useAuth from '@hooks/useAuth';
 
 const message = defineMessages({
     objectName: 'Khóa học',
 });
 
 const CourseStudentListPage = () => {
+
     const translate = useTranslate();
+    const { profile } = useAuth();
+
     const stateValues = translate.formatKeys(lectureState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [openReviewModal, handlersReviewModal] = useDisclosure(false);
@@ -107,6 +111,7 @@ const CourseStudentListPage = () => {
                                     getListReview(id);
                                     getMyListReview(id);
                                     setCourseState(state);
+                                    getListRegis(id);
                                     getStarReview(id);
                                     e.stopPropagation();
                                     handlersReviewModal.open();
@@ -246,6 +251,32 @@ const CourseStudentListPage = () => {
             },
         });
     };
+
+    const { data: regisData, execute: regisExecute } = useFetch(
+        apiConfig.registration.getList, 
+        { immediate: false,
+            mappingData: ({ data }) => data.content,
+        });
+    
+    const getListRegis = (id) => {
+        regisExecute({
+            params: {
+                courseId : id,
+            },
+        });
+    };
+    const newData = regisData?.map(item => ({
+        stateRegis: item.state,
+        studentId: item.studentInfo.id,
+    }));
+
+    let stateRegistration = 0;
+    newData.forEach(item => {
+        if (item.studentId === profile.id) {
+            stateRegistration = item.stateRegis; 
+        }
+    });
+
     const { loading: loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
  
     const getMyListReview = (id) => {
@@ -289,6 +320,7 @@ const CourseStudentListPage = () => {
                 star = {starData}
                 width={800}
                 courseState={courseState}
+                regisState = {stateRegistration}
                 loading={dataListLoading || starDataLoading || loadingData}
             />
         </PageWrapper>
