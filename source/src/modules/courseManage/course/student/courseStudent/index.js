@@ -11,7 +11,7 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { formatMoney } from '@utils';
-import { Button } from 'antd';
+import { Button, Tag } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
@@ -163,6 +163,20 @@ const CourseStudentListPage = () => {
             },
             width: 130,
             align: 'center',
+        },
+        {
+            title: translate.formatMessage(commonMessage.state),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
+            },
         },
         mixinFuncs.renderActionColumn(
             {
