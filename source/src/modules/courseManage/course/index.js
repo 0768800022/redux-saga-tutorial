@@ -221,20 +221,20 @@ const CourseListPage = () => {
                 return <div>{formattedValue}</div>;
             },
         },
-        {
-            title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
-            dataIndex: 'returnFee',
-            width: 150,
-            align: 'right',
-            render: (returnFee) => {
-                const formattedValue = formatMoney(returnFee, {
-                    currentcy: 'đ',
-                    currentDecimal: '0',
-                    groupSeparator: ',',
-                });
-                return <div>{formattedValue}</div>;
-            },
-        },
+        // {
+        //     title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
+        //     dataIndex: 'returnFee',
+        //     width: 150,
+        //     align: 'right',
+        //     render: (returnFee) => {
+        //         const formattedValue = formatMoney(returnFee, {
+        //             currentcy: 'đ',
+        //             currentDecimal: '0',
+        //             groupSeparator: ',',
+        //         });
+        //         return <div>{formattedValue}</div>;
+        //     },
+        // },
         // {
         //     title: translate.formatMessage(commonMessage.startDate),
         //     dataIndex: 'dateRegister',
@@ -284,7 +284,7 @@ const CourseListPage = () => {
                 edit: !leaderName && true,
                 delete: !leaderName && true,
             },
-            { width: '200px' },
+            { width: '180px' },
         ),
     ].filter(Boolean);
 

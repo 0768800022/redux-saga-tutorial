@@ -120,7 +120,7 @@ function RegistrationStudentListPage() {
             routes={[
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.course),
-                    path: routes.courseLeaderListPage.path,
+                    path: routes.courseStudentListPage.path,
                 },
                 { breadcrumbName: translate.formatMessage(commonMessage.registration) },
             ]}

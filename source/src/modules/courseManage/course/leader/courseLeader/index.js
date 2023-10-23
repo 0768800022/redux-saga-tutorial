@@ -137,34 +137,6 @@ const CourseLeaderListPage = () => {
             dataIndex: ['subject', 'subjectName'],
         },
         {
-            title: <FormattedMessage defaultMessage="Học phí" />,
-            dataIndex: 'fee',
-            width: 150,
-            align: 'right',
-            render: (fee) => {
-                const formattedValue = formatMoney(fee, {
-                    currentcy: 'đ',
-                    currentDecimal: '0',
-                    groupSeparator: ',',
-                });
-                return <div>{formattedValue}</div>;
-            },
-        },
-        {
-            title: <FormattedMessage defaultMessage="Phí hoàn trả" />,
-            dataIndex: 'returnFee',
-            width: 150,
-            align: 'right',
-            render: (returnFee) => {
-                const formattedValue = formatMoney(returnFee, {
-                    currentcy: 'đ',
-                    currentDecimal: '0',
-                    groupSeparator: ',',
-                });
-                return <div>{formattedValue}</div>;
-            },
-        },
-        {
             title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'dateRegister',
             render: (dateRegister) => {
