@@ -138,7 +138,6 @@ const CompanySubscriptionListPage = () => {
             width: 150,
             align: 'center',
         },
-        mixinFuncs.renderActionColumn({ delete: true }, { width: '120px' }),
     ];
 
     const searchFields = [

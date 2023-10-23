@@ -65,6 +65,7 @@ const BuyServiceListPage = () => {
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setDetail(item);
+                                setIsEditing(true);
                                 handlerModal.open();
 
                             }}
@@ -203,6 +204,7 @@ const BuyServiceListPage = () => {
                 executeUpdate={executeUpdate}
                 executeLoading={executeLoading}
                 width={800}
+                isEditing={isEditing}
             />
         </div>
     );
