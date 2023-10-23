@@ -13,6 +13,7 @@ import TaskLogLeaderSavePage from './leader/taskLog/TaskLogLeaderSavePage';
 import MyTaskStudentListPage from './student/myTask';
 import routes from '@routes';
 import TaskLogLeaderListPage from './leader/taskLog';
+import RegistrationStudentListPage from './student/registrationStudent';
 export default {
     courseListPage: {
         path: '/course',
@@ -33,7 +34,7 @@ export default {
         title: 'Course Save Page',
         auth: true,
         component: CourseSavePage,
-        permissions: [apiConfig.course.create.baseURL,apiConfig.course.update.baseURL],
+        permissions: [apiConfig.course.create.baseURL, apiConfig.course.update.baseURL],
     },
     lectureTaskListPage: {
         path: '/course/task/lecture',
@@ -62,7 +63,7 @@ export default {
         title: 'Task Save Page',
         auth: true,
         component: TaskLeaderSavePage,
-        permissions: [apiConfig.task.create.baseURL,apiConfig.task.update.baseURL],
+        permissions: [apiConfig.task.create.baseURL, apiConfig.task.update.baseURL],
     },
     lectureTaskLeaderListPage: {
         path: '/course-leader/task/:courseId/lecture',
@@ -91,7 +92,7 @@ export default {
         title: 'Task Log Leader Save Page',
         auth: true,
         component: TaskLogLeaderSavePage,
-        permissions: [apiConfig.taskLog.create.baseURL,apiConfig.taskLog.update.baseURL],
+        permissions: [apiConfig.taskLog.create.baseURL, apiConfig.taskLog.update.baseURL],
     },
     // STUDENT
     courseStudentListPage: {
@@ -114,5 +115,12 @@ export default {
         auth: true,
         component: MyTaskStudentListPage,
         permissions: [apiConfig.task.studentTask.baseURL],
+    },
+    registrationStudentListPage: {
+        path: '/course-student/registration',
+        title: 'Registration',
+        auth: true,
+        component: RegistrationStudentListPage,
+        permissions: [apiConfig.registration.getList.baseURL],
     },
 };
