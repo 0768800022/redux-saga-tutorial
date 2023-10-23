@@ -234,19 +234,19 @@ const CourseListPage = () => {
                 return <div>{formattedValue}</div>;
             },
         },
-        {
-            title: translate.formatMessage(commonMessage.startDate),
-            dataIndex: 'dateRegister',
-            render: (dateRegister) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(dateRegister, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
-            },
-            width: 130,
-            align: 'center',
-        },
+        // {
+        //     title: translate.formatMessage(commonMessage.startDate),
+        //     dataIndex: 'dateRegister',
+        //     render: (dateRegister) => {
+        //         return (
+        //             <div style={{ padding: '0 4px', fontSize: 14 }}>
+        //                 {dayjs(dateRegister, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+        //             </div>
+        //         );
+        //     },
+        //     width: 130,
+        //     align: 'center',
+        // },
         {
             title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'dateEnd',
@@ -283,7 +283,7 @@ const CourseListPage = () => {
                 edit: !leaderName && true,
                 delete: !leaderName && true,
             },
-            { width: '150px' },
+            { width: '200px' },
         ),
     ].filter(Boolean);
 
