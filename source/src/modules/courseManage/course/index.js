@@ -224,8 +224,8 @@ const CourseListPage = () => {
         !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                task: true,
                 registration: !leaderName && true,
+                task: true,
                 edit: !leaderName && true,
                 delete: !leaderName && true,
             },
