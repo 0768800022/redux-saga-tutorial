@@ -135,7 +135,7 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                             <Col span={17}>
                                 <div style={{ fontWeight: '500', fontSize: '16px' }}>{item?.studentInfo?.fullName}</div>
                                 <Row><span>{item.message}</span></Row>
-                                <Row><span>{convertUtcToLocalTime(item.createdDate, DEFAULT_FORMAT, DATE_FORMAT_VALUE)}</span></Row>
+                                <Row><span>{convertUtcToLocalTime(item.createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT)}</span></Row>
                             </Col>
                             <Col span={5}>
                                 <Rate disabled defaultValue={item?.star} style={{ fontSize: '18px' }} />
