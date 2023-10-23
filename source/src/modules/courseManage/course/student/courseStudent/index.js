@@ -1,4 +1,4 @@
-import { BookOutlined, UserOutlined } from '@ant-design/icons';
+import { BookOutlined, UserOutlined,CommentOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
@@ -13,10 +13,13 @@ import routes from '@routes';
 import { formatMoney } from '@utils';
 import { Button } from 'antd';
 import dayjs from 'dayjs';
-import React from 'react';
+import React,{ useState,useEffect } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
+import ReviewListModal from '@modules/review/student/ReviewListModal';
+import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
     objectName: 'Khóa học',
@@ -26,6 +29,11 @@ const CourseStudentListPage = () => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(lectureState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const [openReviewModal, handlersReviewModal] = useDisclosure(false);
+    const [detail, setDetail] = useState();
+    const [courseId, setCourseId] = useState();
+
+    const [checkReivew,setCheckReview] = useState(false);
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
@@ -64,6 +72,26 @@ const CourseStudentListPage = () => {
                                 }}
                             >
                                 <BookOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                });
+                funcs.additionalActionColumnButtons = () => ({
+                    review: ({ id, name, subject, state, status,item }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    setCourseId(id);
+                                    getListReview(id);
+                                    getMyListReview(id);
+                                    getStarReview(id);
+                                    e.stopPropagation();
+                                    handlersReviewModal.open();
+                                }}
+                            >
+                                <CommentOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -147,6 +175,7 @@ const CourseStudentListPage = () => {
         },
         mixinFuncs.renderActionColumn(
             {
+                review:true,
                 task: true,
                 edit:  true,
                 delete: true,
@@ -154,7 +183,53 @@ const CourseStudentListPage = () => {
             { width: '130px' },
         ),
     ].filter(Boolean);
+    const { data: dataListReview, execute: listReview } = useFetch(
+        apiConfig.review.listReviews, 
+        { immediate: false,
+            mappingData: ({ data }) => data.content,
+        });
+    
+    const getListReview = (id) => {
+        listReview({
+            pathParams: {
+                courseId : id,
+            },
+        });
+    };
 
+    const { data: starData, execute: starReview } = useFetch(
+        apiConfig.review.star, 
+        { immediate: false,
+            mappingData: ({ data }) => data.content,
+        });
+    
+    const getStarReview = (id) => {
+        starReview({
+            pathParams: {
+                courseId : id,
+            },
+        });
+    };
+    const { execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
+ 
+    const getMyListReview = (id) => {
+        myListReview({
+            pathParams: {
+                courseId : id,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    setCheckReview(true);
+                }
+                else{
+                    setCheckReview(false);
+                }
+            },
+            onError: (err) => {
+                setCheckReview(false);
+            },
+        });
+    };
     return (
         <PageWrapper routes={ breadRoutes}>
             <ListPage
@@ -168,6 +243,15 @@ const CourseStudentListPage = () => {
                         columns={columns}
                     />
                 }
+            />
+            <ReviewListModal
+                open={openReviewModal}
+                onCancel={() => handlersReviewModal.close()}
+                data={dataListReview || {}}
+                courseId = {courseId}
+                checkReivew={checkReivew}
+                star = {starData}
+                width={800}
             />
         </PageWrapper>
     );

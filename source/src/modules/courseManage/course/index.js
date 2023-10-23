@@ -1,5 +1,5 @@
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import {
     AppConstants,
@@ -14,7 +14,7 @@ import useTranslate from '@hooks/useTranslate';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { TeamOutlined, BookOutlined, UserOutlined } from '@ant-design/icons';
+import { TeamOutlined, BookOutlined, UserOutlined,CommentOutlined } from '@ant-design/icons';
 import { Avatar, Button, Tag } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
@@ -26,6 +26,10 @@ import { formatMoney } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
+
+import ReviewListModal from '@modules/review/student/ReviewListModal';
 
 const message = defineMessages({
     objectName: 'Khoá học',
@@ -37,6 +41,11 @@ const CourseListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const leaderName = queryParameters.get('leaderName');
+    const [checkReivew,setCheckReview] = useState(false);
+    const [courseId, setCourseId] = useState();
+
+    const [openReviewModal, handlersReviewModal] = useDisclosure(false);
+
     const location = useLocation();
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -100,6 +109,24 @@ const CourseListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
+                    review: ({ id, name, subject, state, status,item }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    setCourseId(id);
+                                    getListReview(id);
+                                    getMyListReview(id);
+                                    getStarReview(id);
+                                    e.stopPropagation();
+                                    handlersReviewModal.open();
+                                }}
+                            >
+                                <CommentOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                 });
             },
         });
@@ -129,6 +156,55 @@ const CourseListPage = () => {
             options: statusValues,
         },
     ].filter(Boolean);
+
+
+    const { data: dataListReview, execute: listReview } = useFetch(
+        apiConfig.review.listReviews, 
+        { immediate: false,
+            mappingData: ({ data }) => data.content,
+        });
+    
+    const getListReview = (id) => {
+        listReview({
+            pathParams: {
+                courseId : id,
+            },
+        });
+    };
+
+    const { data: starData, execute: starReview } = useFetch(
+        apiConfig.review.star, 
+        { immediate: false,
+            mappingData: ({ data }) => data.content,
+        });
+    
+    const getStarReview = (id) => {
+        starReview({
+            pathParams: {
+                courseId : id,
+            },
+        });
+    };
+    const { execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
+ 
+    const getMyListReview = (id) => {
+        myListReview({
+            pathParams: {
+                courseId : id,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    setCheckReview(true);
+                }
+                else{
+                    setCheckReview(false);
+                }
+            },
+            onError: (err) => {
+                setCheckReview(false);
+            },
+        });
+    };
 
     const columns = [
         {
@@ -224,6 +300,7 @@ const CourseListPage = () => {
         !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
+                review:true,
                 task: true,
                 registration: !leaderName && true,
                 edit: !leaderName && true,
@@ -248,6 +325,15 @@ const CourseListPage = () => {
                         columns={columns}
                     />
                 }
+            />
+            <ReviewListModal
+                open={openReviewModal}
+                onCancel={() => handlersReviewModal.close()}
+                data={dataListReview || {}}
+                courseId = {courseId}
+                checkReivew={checkReivew}
+                star = {starData}
+                width={800}
             />
         </PageWrapper>
     );
