@@ -1,4 +1,4 @@
-import { Card, Col, Row, DatePicker } from 'antd';
+import { Card, Col, Row, DatePicker, notification } from 'antd';
 import React, { useEffect, useState } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
@@ -18,15 +18,15 @@ import dayjs from 'dayjs';
 import { formatDateString } from '@utils';
 
 const message = defineMessages({
-    avatar: 'Avater',
-    description: 'Mô tả',
-    leader: 'Người hướng dẫn',
-    name: 'Tên dự án',
-    endDate: 'Ngày kết thúc',
-    startDate: 'Ngày bắt đầu',
+    avatar: "Avater",
+    description: "Mô tả",
+    leader: "Người hướng dẫn",
+    name: "Tên dự án",
+    endDate: "Ngày kết thúc",
+    startDate: "Ngày bắt đầu",
 });
 
-const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
+const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues, executeUpdateLeader }) => {
     const translate = useTranslate();
     const [imageUrl, setImageUrl] = useState(null);
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
@@ -57,7 +57,21 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     };
 
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
+        if (isEditing) {
+            executeUpdateLeader({
+                data: {
+                    id: dataDetail?.id,
+                    leaderId: values?.leaderId,
+                },
+                onCompleted:(response) => {
+                    notification({
+                        message: <FormattedMessage defaultMessage="Cập nhật leader được" />,
+                    });
+                },
+                onError: (err) => { },
+            });
+        }
+        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT) ;
         values.endDate = formatDateString(values.endDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
@@ -101,8 +115,8 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leaderInfo?.id,
-            // startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
+            leaderId: dataDetail?.leaderInfo?.leaderName,
+            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DEFAULT_FORMAT),
         });
     }, [dataDetail]);
 
@@ -115,7 +129,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     };
 
     const validateStartDate = (_, value) => {
-        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DATE_FORMAT_VALUE);
         if (date && value && value.isBefore(date)) {
             return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
         }
@@ -147,9 +161,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
                             initialSearchParams={{}}
                             searchParams={(text) => ({ name: text })}
-                            required
-                            disabled={isEditing}
-                        />
+                            required />
                     </Col>
                 </Row>
 
@@ -216,8 +228,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     required
                     label={<FormattedMessage defaultMessage="Mô tả" />}
                     name="description"
-                    type="textarea"
-                />
+                    type="textarea" />
                 <div className="footer-card-form">{actions}</div>
             </Card>
         </BaseForm>

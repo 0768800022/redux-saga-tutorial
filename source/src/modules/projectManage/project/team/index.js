@@ -183,7 +183,11 @@ const TeamListPage = () => {
         >
             <ListPage
                 title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter, className:styles.searchOfTeam })}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    initialValues: queryFilter,
+                    className: styles.search,
+                })}
                 actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

@@ -138,7 +138,9 @@ const ProjectLeaderListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectLeaderTeamListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                                `?projectId=${id}&projectName=${name}&leaderId=${
+                                                    leaderInfo.id
+                                                }&active=${true}`,
                                         );
                                     } else {
                                         navigate(

@@ -26,7 +26,7 @@ const navMenuConfig = [
         icon: <IconSchool size={16} />,
         children: [
             {
-                label: <FormattedMessage defaultMessage="Tài khoản sinh viên" />,
+                label: <FormattedMessage defaultMessage="Quản lý sinh viên" />,
                 key: 'student-management',
                 path: routes.studentListPage.path,
                 permission: apiConfig.student.getList.baseURL,
@@ -57,13 +57,13 @@ const navMenuConfig = [
         icon: <IconClipboardText size={16} />,
         children: [
             {
-                label: <FormattedMessage defaultMessage="Tài khoản leader" />,
+                label: <FormattedMessage defaultMessage="Quản lý leader" />,
                 key: 'leader-management',
                 path: generatePath(routes.leaderListPage.path, {}),
                 permission: apiConfig.leader.getList.baseURL,
             },
             {
-                label: <FormattedMessage defaultMessage="Tài khoản lập trình viên" />,
+                label: <FormattedMessage defaultMessage="Quản lý lập trình viên" />,
                 key: 'developer-management',
                 path: generatePath(routes.developerListPage.path, {}),
                 permission: apiConfig.developer.getList.baseURL,
@@ -90,7 +90,7 @@ const navMenuConfig = [
         permission: apiConfig.company.getList.baseURL,
         children: [
             {
-                label: <FormattedMessage defaultMessage="Tài khoản công ty" />,
+                label: <FormattedMessage defaultMessage="Quản lý công ty" />,
                 key: 'company-management',
                 path: generatePath(routes.companyListPage.path, {}),
                 permission: apiConfig.company.getList.baseURL,

@@ -20,6 +20,7 @@ import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import styles from './project.module.scss';
 // import icon_team_1 from '@assets/images/team-Members-Icon.png';
 
 import useFetch from '@hooks/useFetch';
@@ -213,13 +214,12 @@ const ProjectListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        // !leaderName &&
-        //     !developerName && {
-        //         key: 'status',
-        //         placeholder: translate.formatMessage(commonMessage.status),
-        //         type: FieldTypes.SELECT,
-        //         options: statusValues,
-        //     },
+        !leaderName && !developerName &&{
+            key: 'status',
+            placeholder: translate.formatMessage(commonMessage.status),
+            type: FieldTypes.SELECT,
+            options: statusValues,
+        },
     ].filter(Boolean);
 
     const columns = [
@@ -293,7 +293,7 @@ const ProjectListPage = () => {
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter,  className: styles.search })}
                 actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
