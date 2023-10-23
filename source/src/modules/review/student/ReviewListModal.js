@@ -121,10 +121,10 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                 </div>
                 <>
                     <Row>
-                        <span style={{ color: '#1890FF', fontSize:'16px',marginLeft:'-8px',marginBottom:'10px' }}>Đánh giá {averageRating}({totalRatings} Review)</span>
+                        <span style={{ color: '#1890FF', fontSize:'16px',marginLeft:'-8px',marginBottom:'10px' }}>Đánh giá {averageRating} ({totalRatings} Review)</span>
                     </Row>
                     {data.length>0 ? data?.map((item, index) => (
-                        <Row gutter={16} key={index} style={{ border: '1px solid #ddd', borderRadius: '3px', padding: '6px',marginBottom:'20px' }}>
+                        <Row gutter={16} key={index} style={{ border: '1px solid #ddd', borderRadius: '6px', padding: '6px', margin:'0px 8px 14px 8px' }}>
                             <Col span={2} align='center' justify="center">
                                 <AvatarField
                                     size="large"
@@ -137,8 +137,8 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
                                 <Row><span>{item.message}</span></Row>
                                 <Row><span>{convertUtcToLocalTime(item.createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT)}</span></Row>
                             </Col>
-                            <Col span={5}>
-                                <Rate disabled defaultValue={item?.star} style={{ fontSize: '18px' }} />
+                            <Col span={5} style={{ textAlign:'right' }}>
+                                <Rate disabled defaultValue={item?.star} style={{ fontSize: '14px' }} />
                             </Col>
                         </Row>
                     )):''}
