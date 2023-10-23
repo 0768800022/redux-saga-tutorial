@@ -21,6 +21,8 @@ const ProjectLeaderTaskForm = (props) => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const queryParameters = new URLSearchParams(window.location.search);
+    const projectId = queryParameters.get('projectId');
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -55,7 +57,6 @@ const ProjectLeaderTaskForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
             developerId: dataDetail?.developer?.studentInfo?.id,
-
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
@@ -89,9 +90,9 @@ const ProjectLeaderTaskForm = (props) => {
                         <AutoCompleteField
                             label={<FormattedMessage defaultMessage="Lập trình viên" />}
                             name="developerId"
-                            apiConfig={apiConfig.developer.autocomplete}
+                            apiConfig={apiConfig.memberProject.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.studentInfo.fullName })}
-                            initialSearchParams={{}}
+                            initialSearchParams={{ projectId: projectId }}
                             searchParams={(text) => ({ fullName: text })}
                             required
                             disabled={isEditing}

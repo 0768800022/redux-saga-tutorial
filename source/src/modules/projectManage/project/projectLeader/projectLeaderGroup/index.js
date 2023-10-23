@@ -82,6 +82,12 @@ const ProjectLeaderTeamListPage = () => {
         {
             title: <FormattedMessage defaultMessage="Tên nhóm" />,
             dataIndex: 'teamName',
+            width: '150px',
+        },
+        {
+            title: <FormattedMessage defaultMessage="Dự án" />,
+            dataIndex: ['projectInfo', 'name'],
+            width: '500px',
         },
 
         {
@@ -89,20 +95,16 @@ const ProjectLeaderTeamListPage = () => {
             dataIndex: ['leaderInfo', 'leaderName'],
             width: '150px',
         },
-        {
-            title: <FormattedMessage defaultMessage="Dự án" />,
-            dataIndex: ['projectInfo', 'name'],
-            width: '200px',
-        },
+
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        active &&
-            mixinFuncs.renderActionColumn(
-                {
-                    edit: true,
-                    delete: true,
-                },
-                { width: '150px' },
-            ),
+        // active &&
+        //     mixinFuncs.renderActionColumn(
+        //         {
+        //             edit: true,
+        //             delete: true,
+        //         },
+        //         { width: '150px' },
+        //     ),
     ].filter(Boolean);
 
     return (
@@ -117,7 +119,7 @@ const ProjectLeaderTeamListPage = () => {
         >
             <ListPage
                 title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
-                actionBar={active && mixinFuncs.renderActionBar()}
+                // actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={mixinFuncs.changePagination}
