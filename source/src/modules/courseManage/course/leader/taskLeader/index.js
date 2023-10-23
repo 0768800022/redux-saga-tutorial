@@ -176,7 +176,7 @@ function TaskListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ edit: true, delete: true, taskLog: true, state: true }, { width: '150px' }));
+        columns.push(mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '150px' }));
         return columns;
     };
 
