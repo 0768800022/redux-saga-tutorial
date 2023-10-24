@@ -102,7 +102,7 @@ const ProjectListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectMemberListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                            `?projectId=${id}&projectName=${name}&active=${true}`,
                                         );
                                     } else {
                                         navigate(
@@ -170,7 +170,7 @@ const ProjectListPage = () => {
 
     const { data: dataDeveloperProject, execute: executeGetList } = useFetch(apiConfig.developer.getProject, {
         immediate: true,
-        pathParams: { id: developerId },
+        params: { developerId: developerId },
     });
 
     useEffect(() => {
@@ -214,7 +214,7 @@ const ProjectListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        !leaderName && !developerName &&{
+        !leaderName && !developerName && {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
@@ -293,7 +293,7 @@ const ProjectListPage = () => {
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter,  className: styles.search })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter, className: styles.search })}
                 actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
