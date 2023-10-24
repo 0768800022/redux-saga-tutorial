@@ -47,12 +47,11 @@ function ScheduleTable({
                                                             </div>
                                                             <Space className="box-flex">
                                                                 <TimePickerField
-                                                                    onChange={(e) =>
-                                                                        handleTimeChange([
-                                                                            day.value,
-                                                                            field.name,
-                                                                            'from',
-                                                                        ])
+                                                                    onChange={(value) =>
+                                                                        handleTimeChange(
+                                                                            [day.value, field.name, 'from'],
+                                                                            value,
+                                                                        )
                                                                     }
                                                                     onOk={handleOk}
                                                                     style={{ width: '70px' }}
