@@ -5,6 +5,7 @@ import ProjectListPage from '@modules/projectManage/project';
 import CourseListPage from '@modules/courseManage/course';
 import TaskListPage from '@modules/task';
 import ProjectTaskListPage from '@modules/projectManage/project/projectTask';
+import TeamListPage from '@modules/projectManage/project/team';
 
 export default {
     leaderListPage: {
@@ -41,6 +42,13 @@ export default {
         auth: true,
         component: ProjectTaskListPage,
         permissions: [apiConfig.projectTask.getList.baseURL],
+    },
+    learderProjectTeamListPage: {
+        path: '/leader/project/team',
+        title: 'Leader Project Team Page',
+        auth: true,
+        component: TeamListPage,
+        permissions: [apiConfig.team.getList.baseURL],
     },
     leaderCourseTaskListPage: {
         path: '/leader/course/task',

@@ -56,8 +56,8 @@ const TeamListPage = () => {
                 const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
                 if (active)
                     return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
-                else 
-                    return `${pagePath}/${dataRow.id}` + pathDefault ;
+                else
+                    return `${pagePath}/${dataRow.id}` + pathDefault;
             };
             funcs.changeFilter = (filter) => {
                 const projectId = queryParams.get('projectId');
@@ -68,9 +68,9 @@ const TeamListPage = () => {
                 const leaderName = queryParams.get('leaderName');
                 let filterAdd;
                 if (developerName) {
-                    filterAdd = { developerId,developerName };
+                    filterAdd = { developerId, developerName };
                 } else if (leaderName) {
-                    filterAdd = { leaderId,leaderName };
+                    filterAdd = { leaderId, leaderName };
                 }
                 if (filterAdd) {
                     mixinFuncs.setQueryParams(
@@ -124,7 +124,6 @@ const TeamListPage = () => {
         active && columns.push(
             mixinFuncs.renderActionColumn(
                 {
-                    
                     edit: true,
                     delete: true,
                 },
@@ -156,7 +155,7 @@ const TeamListPage = () => {
             });
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.leaderProjectListPage.path +`?leaderId=${leaderId}&leaderName=${leaderName}`,
+                path: routes.leaderProjectListPage.path + `?leaderId=${leaderId}&leaderName=${leaderName}`,
             });
         } else if (developerName) {
             breadRoutes.push({
@@ -165,12 +164,13 @@ const TeamListPage = () => {
             });
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.developerProjectListPage.path +`?developerId=${developerId}&developerName=${developerName}`,
+                path: routes.developerProjectListPage.path + `?developerId=${developerId}&developerName=${developerName}`,
             });
         }
-        else{
-            breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.project),
-                path:routes.projectListPage.path,
+        else {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.project),
+                path: routes.projectListPage.path,
             });
         }
         breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.team) });

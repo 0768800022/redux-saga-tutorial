@@ -115,25 +115,25 @@ const ProjectListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    team: ({ id, name, status }) => (
+                    team: ({ id, name, status, leaderInfo }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
                                 type="link"
                                 style={{ padding: '0' }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const pathDefault = `?projectId=${id}&projectName=${name}`;
+                                    const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
                                     let path;
                                     if (leaderName) {
                                         path =
-                                            routes.teamListPage.path +
+                                            routes.learderProjectTeamListPage.path +
                                             pathDefault +
-                                            `&leaderId=${leaderId}&leaderName=${leaderName}`;
+                                            `&leaderName=${leaderName}`;
                                     } else if (developerName) {
                                         path =
-                                            routes.teamListPage.path +
+                                            routes.developerProjectTeamListPage.path +
                                             pathDefault +
-                                            `&developerId=${developerId}&developerName=${developerName}`;
+                                            `&developerName=${developerName}`;
                                     } else {
                                         if (status == 1) {
                                             path = routes.teamListPage.path + pathDefault + `&active=${true}`;
