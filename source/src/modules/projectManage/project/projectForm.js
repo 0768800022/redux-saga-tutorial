@@ -20,7 +20,7 @@ import { formatDateString } from '@utils';
 const message = defineMessages({
     avatar: "Avater",
     description: "Mô tả",
-    leader: "Người hướng dẫn",
+    leader: "Leader",
     name: "Tên dự án",
     endDate: "Ngày kết thúc",
     startDate: "Ngày bắt đầu",

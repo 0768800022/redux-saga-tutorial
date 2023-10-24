@@ -268,7 +268,7 @@ const CourseForm = (props) => {
                         <AutoCompleteField
                             // disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             required
-                            label={<FormattedMessage defaultMessage="Người hướng dẫn" />}
+                            label={<FormattedMessage defaultMessage="Leader" />}
                             name="leaderId"
                             apiConfig={apiConfig.leader.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}

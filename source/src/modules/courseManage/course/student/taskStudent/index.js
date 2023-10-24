@@ -30,6 +30,8 @@ function TaskStudentListPage() {
     const state = queryParameters.get('state');
     const paramid = useParams();
     const statusValues = translate.formatKeys(taskState, ['label']);
+    console.log(paramid.courseId);
+
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             getList: apiConfig.task.studentTask,
@@ -42,10 +44,9 @@ function TaskStudentListPage() {
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
-            funcs.prepareGetListPathParams = () => {
-                return {
-                    courseId: paramid.courseId,
-                };
+            funcs.getList = () => {
+                const params = mixinFuncs.prepareGetListParams(queryFilter);
+                mixinFuncs.handleFetchList({ ...params, courseName: null,subjectId: null });
             };
             funcs.mappingData = (response) => {
                 try {
