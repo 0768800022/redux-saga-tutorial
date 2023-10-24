@@ -422,8 +422,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                 />
                             </Col>
                             <Col span={12}>
-                                <NumericField
-                                    min={0}
+                                <TextField
                                     disabled={dataStudentByPhone}
                                     label={translate.formatMessage(commonMessage.phone)}
                                     type="number"
