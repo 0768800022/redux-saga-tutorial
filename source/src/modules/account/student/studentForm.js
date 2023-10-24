@@ -177,7 +177,6 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             type="email"
                             name="email"
                             required={isEditing ? false : true}
-                            disabled={isEditing}
                         />
                     </Col>
                 </Row>
