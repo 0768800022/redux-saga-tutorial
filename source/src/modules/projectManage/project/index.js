@@ -122,18 +122,18 @@ const ProjectListPage = () => {
                                 style={{ padding: '0' }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
+                                    const pathDefault = `?projectId=${id}&projectName=${name}`;
                                     let path;
                                     if (leaderName) {
                                         path =
                                             routes.learderProjectTeamListPage.path +
                                             pathDefault +
-                                            `&leaderName=${leaderName}`;
+                                            `&leaderId=${leaderInfo.id}&leaderName=${leaderName}`;
                                     } else if (developerName) {
                                         path =
                                             routes.developerProjectTeamListPage.path +
                                             pathDefault +
-                                            `&developerName=${developerName}`;
+                                            `&developerId=${developerId}&developerName=${developerName}`;
                                     } else {
                                         if (status == 1) {
                                             path = routes.teamListPage.path + pathDefault + `&active=${true}`;
