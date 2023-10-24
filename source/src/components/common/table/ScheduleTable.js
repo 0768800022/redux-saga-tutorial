@@ -14,7 +14,7 @@ function ScheduleTable({
     onSelectScheduleTabletRandom,
     translate,
     daysOfWeekSchedule,
-    canApplyAll,
+    canApplyAll = true,
     handleApplyAll,
     handleOk,
     handleTimeChange,
