@@ -10,6 +10,8 @@ import useTranslate from '@hooks/useTranslate';
 import SelectField from '@components/common/form/SelectField';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import RichTextField from '@components/common/form/RichTextField';
+import { Image } from 'antd';
+import { AppConstants } from '@constants';
 const messages = defineMessages({
     objectName: 'Trang thái',
     update: 'Cập nhật',
@@ -72,55 +74,59 @@ const DetailProjectModal = ({
         <Modal centered open={open} onCancel={onCancel} footer={null} title={'Chi tiết dự án'} {...props}>
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} size="100%">
-                    <TextField
-                        readOnly="true"
-                        width="100%"
-                        label={<FormattedMessage defaultMessage="Tên Dự án" />}
-                        name="name"
-                    />
-                    <TextField
-                        readOnly="true"
-                        width="100%"
-                        label={<FormattedMessage defaultMessage="Tên Leader" />}
-                        name={['leaderInfo', 'leaderName']}
-                    />
-                    <Row gutter={16}>
+                    <Row gutter={12}>
                         <Col span={12}>
                             <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
-                                name={'startDate'}
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Tên Dự án" />}
+                                name={['name']}
+                                // initialValue={detail.name}
                             />
                         </Col>
                         <Col span={12}>
                             <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Ngày Kết thúc" />}
-                                name={'endDate'}
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Leader" />}
+                                name={['leaderInfo', 'leaderName']}
+                                // initialValue={detail.name}
                             />
                         </Col>
                     </Row>
-                    <Col span={12}>
-                        <SelectField
-                            name="state"
-                            label={<FormattedMessage defaultMessage="Tình trạng" />}
-                            allowClear={false}
-                            options={projectTaskStateValues}
-                            disabled
-                        />
-                    </Col>
-
-                    <RichTextField
+                    <Row gutter={12}>
+                        <Col span={12}>
+                            <TextField
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                                name={['startDate']}
+                                // initialValue={detail.name}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <TextField
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Ngày Kết thúc" />}
+                                name={['endDate']}
+                                // initialValue={detail.name}
+                            />
+                        </Col>
+                    </Row>
+                    <Row gutter={12}>
+                        <Col span={12}>
+                            <SelectField
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Trạng thái" />}
+                                name={['state']}
+                                options={projectTaskStateValues}
+                                disabled
+                                // initialValue={detail.name}
+                            />
+                        </Col>
+                    </Row>
+                    <TextField
+                        readOnly
                         label={<FormattedMessage defaultMessage="Mô tả" />}
-                        labelAlign="left"
-                        name="description"
-                        style={{
-                            height: 300,
-                            marginBottom: 70,
-                        }}
-                        required
+                        name={['description']}
+                        type="textarea"
                     />
                 </BaseForm>
             </Card>
