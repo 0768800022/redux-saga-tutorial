@@ -3,8 +3,8 @@ import ListPage from '@components/common/layout/ListPage';
 import BaseTable from '@components/common/table/BaseTable';
 import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
-import React from 'react';
-import { Avatar, Button, Tag } from 'antd';
+import React, { useEffect } from 'react';
+import { Avatar, Button, Tag, notification } from 'antd';
 import { UserOutlined, ContainerOutlined, ProjectOutlined } from '@ant-design/icons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
@@ -16,6 +16,7 @@ import routes from '@routes';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
 import styles from '../project.module.scss';
+import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
     objectName: 'Nhóm',
@@ -107,17 +108,17 @@ const TeamListPage = () => {
             {
                 title: <FormattedMessage defaultMessage="Tên nhóm" />,
                 dataIndex: 'teamName',
-            },
-
-            {
-                title: <FormattedMessage defaultMessage="Leader" />,
-                dataIndex: ['leaderInfo', 'leaderName'],
-                width: '150px',
+                width: 150,
             },
             {
                 title: <FormattedMessage defaultMessage="Dự án" />,
                 dataIndex: ['projectInfo', 'name'],
-                width: '200px',
+                width: 170,
+            },
+            {
+                title: <FormattedMessage defaultMessage="Người hướng dẫn" />,
+                dataIndex: ['leaderInfo', 'leaderName'],
+                width: 170,
             },
             mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
@@ -177,6 +178,22 @@ const TeamListPage = () => {
 
         return breadRoutes;
     };
+
+    const { execute: executeUpdateLeader } = useFetch(apiConfig.memberProject.autocomplete, { immediate: false });
+
+    useEffect(() => {
+        executeUpdateLeader({
+            params: {
+                projectId,
+            },
+            onError: () =>
+                notification({
+                    type: 'error',
+                    title: 'Error',
+                }),
+        });
+    }, [projectId]);
+
     return (
         <PageWrapper
             routes={setBreadRoutes()}

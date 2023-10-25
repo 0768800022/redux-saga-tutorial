@@ -88,6 +88,10 @@ function ProjectStudentTaskListPage() {
                         );
                     }
                 };
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, projectName:null });
+                };
             },
         });
     const columns = [
