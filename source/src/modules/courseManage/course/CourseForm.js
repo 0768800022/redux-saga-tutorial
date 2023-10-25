@@ -19,7 +19,7 @@ import NumericField from '@components/common/form/NumericField';
 import CropImageField from '@components/common/form/CropImageField';
 
 const CourseForm = (props) => {
-    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, executeUpdateLeader, isEditing } = props;
+    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const translate = useTranslate();
     const [isDisableStartDate, setIsDisableStartDate] = useState(false);
     const lectureStateOptions = translate.formatKeys(lectureState, ['label']);
@@ -39,20 +39,6 @@ const CourseForm = (props) => {
         }
         if (!values?.status) {
             values.status = 1;
-        }
-        if (isEditing) {
-            executeUpdateLeader({
-                data: {
-                    id: dataDetail?.id,
-                    leaderId: values?.leaderId,
-                },
-                onCompleted: (response) => {
-                    notification({
-                        message: <FormattedMessage defaultMessage="Cập nhật leader được" />,
-                    });
-                },
-                onError: (err) => { },
-            });
         }
         values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';

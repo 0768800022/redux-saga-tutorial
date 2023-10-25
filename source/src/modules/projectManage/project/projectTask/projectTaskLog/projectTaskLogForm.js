@@ -14,7 +14,7 @@ const ProjectTaskLogForm = (props) => {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectTaskId = queryParameters.get('taskId');
-    const taskName = queryParameters.get('taskName');
+    const taskName = queryParameters.get('task');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
