@@ -1,4 +1,4 @@
-import { BookOutlined, UserOutlined,CommentOutlined,EyeOutlined } from '@ant-design/icons';
+import { BookOutlined, UserOutlined, CommentOutlined, EyeOutlined } from '@ant-design/icons';
 import { TeamOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -14,7 +14,7 @@ import routes from '@routes';
 import { formatMoney } from '@utils';
 import { Button, Tag } from 'antd';
 import dayjs from 'dayjs';
-import React,{ useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
@@ -26,11 +26,9 @@ import PreviewModal from './PreviewModal';
 
 const message = defineMessages({
     objectName: 'Khóa học',
-
 });
 
 const CourseStudentListPage = () => {
-
     const translate = useTranslate();
     const { profile } = useAuth();
 
@@ -42,8 +40,7 @@ const CourseStudentListPage = () => {
     const [detail, setDetail] = useState();
     const [courseId, setCourseId] = useState();
     const [courseState, setCourseState] = useState();
-    const [checkReivew,setCheckReview] = useState(false);
-
+    const [checkReivew, setCheckReview] = useState(false);
 
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -81,7 +78,7 @@ const CourseStudentListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationStudentListPage.path +
-                                            `?courseId=${id}&courseName=${name}`,
+                                                `?courseId=${id}&courseName=${name}`,
                                         );
                                 }}
                             >
@@ -97,7 +94,9 @@ const CourseStudentListPage = () => {
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const path = routes.courseStudentListPage.path + `/task?courseId=${id}&courseName=${name}&subjectId=${subject.id}`;
+                                    const path =
+                                        routes.courseStudentListPage.path +
+                                        `/task?courseId=${id}&courseName=${name}&subjectId=${subject.id}`;
                                     navigate(path);
                                 }}
                             >
@@ -105,7 +104,7 @@ const CourseStudentListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    review: ({ id, name, subject, state, status,item }) => (
+                    review: ({ id, name, subject, state, status, item }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
                             <Button
                                 type="link"
@@ -126,28 +125,22 @@ const CourseStudentListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    detail: (item) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.detail)}>
-                            <Button
-                                type="link"
-                                style={{ padding: 0 }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setDetail(item);
-                                    handlersPreviewModal.open();
-                                }}
-                            >
-                                <EyeOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
                 });
-               
             },
         });
-    const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(commonMessage.course) },
-    ];
+
+    const { execute: executeGet } = useFetch(apiConfig.course.getById, {
+        immediate: false,
+    });
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+        });
+    };
+    const breadRoutes = [{ breadcrumbName: translate.formatMessage(commonMessage.course) }];
     const columns = [
         {
             title: '#',
@@ -236,81 +229,78 @@ const CourseStudentListPage = () => {
         },
         mixinFuncs.renderActionColumn(
             {
-                detail: true,
-                review:true,
+                review: true,
                 registration: true,
                 task: true,
-                edit:  true,
+                edit: true,
                 delete: true,
             },
             { width: '160px' },
         ),
     ].filter(Boolean);
-    const { data: dataListReview, execute: listReview, loading: dataListLoading } = useFetch(
-        apiConfig.review.listReviews, 
-        { immediate: false,
-            mappingData: ({ data }) => data.content,
-        });
-    
+    const {
+        data: dataListReview,
+        execute: listReview,
+        loading: dataListLoading,
+    } = useFetch(apiConfig.review.listReviews, { immediate: false, mappingData: ({ data }) => data.content });
+
     const getListReview = (id) => {
         listReview({
             pathParams: {
-                courseId : id,
+                courseId: id,
             },
         });
     };
 
-    const { data: starData, execute: starReview, loading: starDataLoading } = useFetch(
-        apiConfig.review.star, 
-        { immediate: false,
-            mappingData: ({ data }) => data.content,
-        });
-    
+    const {
+        data: starData,
+        execute: starReview,
+        loading: starDataLoading,
+    } = useFetch(apiConfig.review.star, { immediate: false, mappingData: ({ data }) => data.content });
+
     const getStarReview = (id) => {
         starReview({
             pathParams: {
-                courseId : id,
+                courseId: id,
             },
         });
     };
 
-    const { data: regisData, execute: regisExecute } = useFetch(
-        apiConfig.registration.getList, 
-        { immediate: false,
-            mappingData: ({ data }) => data.content,
-        });
-    
+    const { data: regisData, execute: regisExecute } = useFetch(apiConfig.registration.getList, {
+        immediate: false,
+        mappingData: ({ data }) => data.content,
+    });
+
     const getListRegis = (id) => {
         regisExecute({
             params: {
-                courseId : id,
+                courseId: id,
             },
         });
     };
-    const newData = regisData?.map(item => ({
+    const newData = regisData?.map((item) => ({
         stateRegis: item.state,
         studentId: item.studentInfo.id,
     }));
 
     let stateRegistration = 0;
-    newData?.forEach(item => {
+    newData?.forEach((item) => {
         if (item.studentId === profile.id) {
-            stateRegistration = item.stateRegis; 
+            stateRegistration = item.stateRegis;
         }
     });
 
-    const { loading: loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
- 
+    const { loading: loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview, { immediate: false });
+
     const getMyListReview = (id) => {
         myListReview({
             pathParams: {
-                courseId : id,
+                courseId: id,
             },
             onCompleted: (response) => {
                 if (response.result === true) {
                     setCheckReview(true);
-                }
-                else{
+                } else {
                     setCheckReview(false);
                 }
             },
@@ -320,11 +310,19 @@ const CourseStudentListPage = () => {
         });
     };
     return (
-        <PageWrapper routes={ breadRoutes}>
+        <PageWrapper routes={breadRoutes}>
             <ListPage
                 // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
+                        onRow={(record, rowIndex) => ({
+                            onClick: (e) => {
+                                e.stopPropagation();
+                                handleFetchDetail(record.id);
+
+                                handlersPreviewModal.open();
+                            },
+                        })}
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
@@ -337,12 +335,12 @@ const CourseStudentListPage = () => {
                 open={openReviewModal}
                 onCancel={() => handlersReviewModal.close()}
                 data={dataListReview || {}}
-                courseId = {courseId}
+                courseId={courseId}
                 checkReivew={checkReivew}
-                star = {starData}
+                star={starData}
                 width={800}
                 courseState={courseState}
-                regisState = {stateRegistration}
+                regisState={stateRegistration}
                 loading={dataListLoading || starDataLoading || loadingData}
             />
             <PreviewModal

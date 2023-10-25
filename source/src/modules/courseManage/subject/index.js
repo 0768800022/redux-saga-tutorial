@@ -51,9 +51,7 @@ const SubjectListPage = () => {
             };
         },
     });
-    const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(commonMessage.subject) },
-    ];
+    const breadRoutes = [{ breadcrumbName: translate.formatMessage(commonMessage.subject) }];
     const searchFields = [
         {
             key: 'name',
