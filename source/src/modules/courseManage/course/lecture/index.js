@@ -243,7 +243,6 @@ const LectureListPage = ({ breadcrumbName }) => {
                         <BaseTable
                             rowClassName={rowClassName}
                             onChange={changePagination}
-                            pagination={pagination}
                             loading={loading}
                             dataSource={sortedData}
                             columns={columns}

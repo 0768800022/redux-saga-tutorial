@@ -40,7 +40,7 @@ function ScheduleTable({
                                 <Form.List name={['schedule', day.value]}>
                                     {(fields) => {
                                         return (
-                                            <div className="no-margin-form-item">
+                                            <div className="no-margin-form-item" style={{ display: 'flex', alignItems: 'end' }}>
                                                 <Space className="box-flex" size={24}>
                                                     {fields.map((field, index) => (
                                                         <div key={field.key}>
@@ -94,29 +94,29 @@ function ScheduleTable({
                                                             </Space>
                                                         </div>
                                                     ))}
-                                                    <div className="wrap-btn-apply-all">
-                                                        <BaseTooltip title={translate.formatMessage(messages.reset)}>
-                                                            <Button
-                                                                type="default"
-                                                                size="middle"
-                                                                style={{ marginRight: '30px' }}
-                                                                onClick={() => handleReset(day.value)}
-                                                            >
-                                                                <ReloadOutlined />
-                                                            </Button>
-                                                        </BaseTooltip>
-                                                        {!dayIndex && (
-                                                            <Button
-                                                                disabled={!canApplyAll}
-                                                                type="primary"
-                                                                size="middle"
-                                                                onClick={handleApplyAll}
-                                                            >
-                                                                {translate.formatMessage(messages.applyAll)}
-                                                            </Button>
-                                                        )}
-                                                    </div>
                                                 </Space>
+                                                <div className="wrap-btn-apply-all">
+                                                    <BaseTooltip title={translate.formatMessage(messages.reset)}>
+                                                        <Button
+                                                            type="default"
+                                                            size="middle"
+                                                            style={{ marginRight: '30px' }}
+                                                            onClick={() => handleReset(day.value)}
+                                                        >
+                                                            <ReloadOutlined />
+                                                        </Button>
+                                                    </BaseTooltip>
+                                                    {!dayIndex && (
+                                                        <Button
+                                                            disabled={!canApplyAll}
+                                                            type="primary"
+                                                            size="middle"
+                                                            onClick={handleApplyAll}
+                                                        >
+                                                            {translate.formatMessage(messages.applyAll)}
+                                                        </Button>
+                                                    )}
+                                                </div>
                                             </div>
                                         );
                                     }}
