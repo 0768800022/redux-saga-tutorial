@@ -9,7 +9,7 @@ import { Card, Col, Row } from 'antd';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 const CourseRequestForm = (props) => {
-    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
+    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const translate = useTranslate();
     const stateValues = translate.formatKeys(stateCourseRequestOptions, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
@@ -25,6 +25,13 @@ const CourseRequestForm = (props) => {
             ...dataDetail,
         });
     }, [dataDetail]);
+    useEffect(() => {
+        if (!isEditing > 0) {
+            form.setFieldsValue({
+                status: statusValues[1].value,
+            });
+        }
+    }, [isEditing]);
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
@@ -57,7 +64,6 @@ const CourseRequestForm = (props) => {
                     <Col span={12}>
                         <SelectField
                             name="status"
-                            defaultValue={statusValues[0]}
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             allowClear={false}
                             options={statusValues}

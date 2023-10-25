@@ -34,7 +34,7 @@ const CategoryForm = (props) => {
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
             });
         }
     }, [isEditing]);
@@ -45,7 +45,7 @@ const CategoryForm = (props) => {
             // status: statusValues[0].value,
         });
     }, [dataDetail]);
-    
+
     return (
         <BaseForm
             id={formId}

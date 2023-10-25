@@ -39,6 +39,13 @@ const DeveloperForm = (props) => {
             ...dataDetail,
         });
     }, [dataDetail]);
+    useEffect(() => {
+        if (!isEditing > 0) {
+            form.setFieldsValue({
+                status: statusValues[1].value,
+            });
+        }
+    }, [isEditing]);
 
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
