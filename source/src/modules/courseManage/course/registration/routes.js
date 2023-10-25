@@ -3,6 +3,8 @@ import RegistrationListPage from '.';
 import RegistrationSavePage from './RegistrationSavePage';
 import RegistrationMoneyListPage from './registrationMoney';
 import RegistrationMoneySavePage from './registrationMoney/RegistrationMoneySavePage';
+import StudentActivityCourseListPage from './activity';
+import StudentActivityCourseLeaderListPage from '../leader/registrationLeader/studentActivity';
 export default {
     registrationListPage: {
         path: '/course/registration',
@@ -31,5 +33,19 @@ export default {
         auth: true,
         component: RegistrationMoneySavePage,
         permissions: [apiConfig.registration.create.baseURL, apiConfig.registration.update.baseURL],
+    },
+    studentActivityCourseListPage: {
+        path: '/course/registration/student-activity-course',
+        title: 'Student Activity Course List Page',
+        auth: true,
+        component: StudentActivityCourseListPage,
+        permissions: [apiConfig.taskLog.getList.baseURL],
+    },
+    studentActivityCourseLeaderListPage: {
+        path: '/course-leader/registration/student-activity-course',
+        title: 'Student Activity Course Leader List Page',
+        auth: true,
+        component: StudentActivityCourseLeaderListPage,
+        permissions: [apiConfig.taskLog.getList.baseURL],
     },
 };

@@ -14,6 +14,9 @@ import MyTaskStudentListPage from './student/myTask';
 import routes from '@routes';
 import TaskLogLeaderListPage from './leader/taskLog';
 import RegistrationStudentListPage from './student/registrationStudent';
+import MyActivityCourseListPage from './student/activityCourseStudent';
+import MyActivityProjectListPage from './student/activityProjectStudent';
+
 import TaskLogStudentListPage from './student/taskLog';
 import TaskLogStudentSavePage from './student/taskLog/TaskLogStudentSavePage';
 export default {
@@ -138,5 +141,19 @@ export default {
         auth: true,
         component: TaskLogStudentSavePage,
         permissions: [apiConfig.taskLog.getList.baseURL],
+    },
+    myActivityCourseStudentListPage: {
+        path: '/my-activity-course',
+        title: 'My Activity Course List Page',
+        auth: true,
+        component: MyActivityCourseListPage,
+        permissions: [apiConfig.taskLog.getList.baseURL],
+    },
+    myActivityProjectStudentListPage: {
+        path: '/my-activity-project',
+        title: 'My Activity Project List Page',
+        auth: true,
+        component: MyActivityProjectListPage,
+        permissions: [apiConfig.projectTaskLog.getList.baseURL],
     },
 };
