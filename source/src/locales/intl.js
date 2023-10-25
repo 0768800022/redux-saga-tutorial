@@ -53,7 +53,7 @@ export const commonMessage = defineMessages({
     subjectName: 'Tên môn học',
     task: 'Task',
     team: 'Nhóm',
-    teamName: "Tên nhóm",
+    teamName: 'Tên nhóm',
     username: 'Tài khoản đăng nhập',
     valueable: 'Số ngày sử dụng',
     taskLog: 'Nhật ký',
@@ -66,5 +66,6 @@ export const commonMessage = defineMessages({
     university: 'Trường',
     studyClass: 'Hệ',
     hotline: 'Đường dây nóng',
-    review:'Đánh giá',
+    review: 'Đánh giá',
+    viewDetail: 'Xem chi tiết',
 });

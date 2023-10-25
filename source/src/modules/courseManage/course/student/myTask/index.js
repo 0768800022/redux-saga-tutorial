@@ -1,14 +1,11 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import {
-    DEFAULT_TABLE_ITEM_SIZE,
-    DEFAULT_FORMAT,
-} from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { taskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import {  Tag } from 'antd';
+import { Tag } from 'antd';
 import React from 'react';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
@@ -16,8 +13,13 @@ import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelp
 import { commonMessage } from '@locales/intl';
 import { FieldTypes } from '@constants/formConfig';
 import useFetch from '@hooks/useFetch';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { Button } from 'antd';
+import useDisclosure from '@hooks/useDisclosure';
+import { useState } from 'react';
+import DetailMyTaskModal from './DetailMyTaskModal';
 import { lectureState } from '@constants/masterData';
-
+import { EyeOutlined } from '@ant-design/icons';
 const message = defineMessages({
     objectName: 'My Task',
     myTask: 'Task của tôi',
@@ -26,7 +28,20 @@ const message = defineMessages({
 function MyTaskStudentListPage() {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(taskState, ['label']);
-
+    const [openedModal, handlersModal] = useDisclosure(false);
+    const [detail, setDetail] = useState({});
+    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.task.getById, {
+        immediate: false,
+    });
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             getList: apiConfig.task.studentTask,
@@ -51,6 +66,24 @@ function MyTaskStudentListPage() {
                     return [];
                 }
             };
+            funcs.additionalActionColumnButtons = () => ({
+                viewDetail: ({ id }) => (
+                    <BaseTooltip title={translate.formatMessage(commonMessage.viewDetail)}>
+                        <Button
+                            type="link"
+                            style={{ padding: '0' }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleFetchDetail(id);
+
+                                handlersModal.open();
+                            }}
+                        >
+                            <EyeOutlined color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
+                        </Button>
+                    </BaseTooltip>
+                ),
+            });
         },
     });
 
@@ -100,19 +133,18 @@ function MyTaskStudentListPage() {
                     );
                 },
             },
+            mixinFuncs.renderActionColumn({ viewDetail: true }, { width: '150px' }),
         ];
         return columns;
     };
 
-    const {
-        data: courses,
-        execute: executescourses,
-    } = useFetch(apiConfig.course.getListStudentCourse, {
+    const { data: courses, execute: executescourses } = useFetch(apiConfig.course.getListStudentCourse, {
         immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({
-            value: item.id,
-            label: item.name,
-        })),
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item.id,
+                label: item.name,
+            })),
     });
 
     const searchFields = [
@@ -131,11 +163,7 @@ function MyTaskStudentListPage() {
     ];
 
     return (
-        <PageWrapper
-            routes={[
-                { breadcrumbName: translate.formatMessage(message.myTask) },
-            ]}
-        >
+        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(message.myTask) }]}>
             <div>
                 <ListPage
                     searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
@@ -148,6 +176,12 @@ function MyTaskStudentListPage() {
                             columns={setColumns()}
                         />
                     }
+                />
+                <DetailMyTaskModal
+                    open={openedModal}
+                    onCancel={() => handlersModal.close()}
+                    width={600}
+                    DetailData={detail}
                 />
             </div>
         </PageWrapper>

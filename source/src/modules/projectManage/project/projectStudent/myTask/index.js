@@ -12,8 +12,13 @@ import useFetch from '@hooks/useFetch';
 import { FieldTypes } from '@constants/formConfig';
 import { commonMessage } from '@locales/intl';
 import useAuth from '@hooks/useAuth';
-
+import { EyeOutlined } from '@ant-design/icons';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { Button } from 'antd';
 import { FormattedMessage, defineMessages } from 'react-intl';
+import useDisclosure from '@hooks/useDisclosure';
+import { useState } from 'react';
+import DetailMyTaskProjectModal from './DetailMyTaskProjectModal';
 const message = defineMessages({
     objectName: 'Task',
     myTask: 'Task của tôi',
@@ -22,24 +27,38 @@ const message = defineMessages({
 function ProjectStudentMyTaskListPage() {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
+    const [openedModal, handlersModal] = useDisclosure(false);
+    const [detail, setDetail] = useState({});
     const { profile } = useAuth();
-    const {
-        data: projects,
-    } = useFetch(apiConfig.project.getListStudent, {
+    const { data: projects } = useFetch(apiConfig.project.getListStudent, {
         immediate: true,
         mappingData: ({ data }) => {
-            return data.content.map((item) => {
-                if (item.state !== 1) {
-                    return {
-                        value: item.id,
-                        label: item.name,
-                    };
-                } else {
-                    return null;
-                }
-            }).filter(item => item !== null);
+            return data.content
+                .map((item) => {
+                    if (item.state !== 1) {
+                        return {
+                            value: item.id,
+                            label: item.name,
+                        };
+                    } else {
+                        return null;
+                    }
+                })
+                .filter((item) => item !== null);
         },
     });
+    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
+        immediate: false,
+    });
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.projectTask,
@@ -58,10 +77,28 @@ function ProjectStudentMyTaskListPage() {
                 };
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    if(profile){
+                    if (profile) {
                         mixinFuncs.handleFetchList({ ...params, developerId: profile?.id });
                     }
                 };
+                funcs.additionalActionColumnButtons = () => ({
+                    viewDetail: ({ id }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.viewDetail)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleFetchDetail(id);
+
+                                    handlersModal.open();
+                                }}
+                            >
+                                <EyeOutlined color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                });
             },
         });
     const columns = [
@@ -103,6 +140,7 @@ function ProjectStudentMyTaskListPage() {
                 );
             },
         },
+        mixinFuncs.renderActionColumn({ viewDetail: true }, { width: '150px' }),
     ].filter(Boolean);
 
     const searchFields = [
@@ -120,11 +158,7 @@ function ProjectStudentMyTaskListPage() {
         },
     ];
     return (
-        <PageWrapper
-            routes={[
-                { breadcrumbName: translate.formatMessage(message.myTask) },
-            ]}
-        >
+        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(message.myTask) }]}>
             <div>
                 <ListPage
                     searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
@@ -137,6 +171,12 @@ function ProjectStudentMyTaskListPage() {
                             columns={columns}
                         />
                     }
+                />
+                <DetailMyTaskProjectModal
+                    open={openedModal}
+                    onCancel={() => handlersModal.close()}
+                    width={600}
+                    DetailData={detail}
                 />
             </div>
         </PageWrapper>

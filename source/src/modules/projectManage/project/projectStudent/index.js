@@ -14,13 +14,16 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
 import route from '@modules/projectManage/project/projectTask/routes';
-import { BookOutlined, TeamOutlined, EditOutlined } from '@ant-design/icons';
+import { BookOutlined, TeamOutlined, EditOutlined, EyeOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
 import { IconBrandTeams } from '@tabler/icons-react';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
+import DetailProjectModal from './DetailProjectModal';
+import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
 const message = defineMessages({
     objectName: 'dự án',
     code: 'Mã dự án',
@@ -36,6 +39,12 @@ const ProjectStudentListPage = () => {
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
+    const [detail, setDetail] = useState({});
+    const [openedModal, handlersModal] = useDisclosure(false);
+    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.project.getById, {
+        immediate: false,
+    });
+
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: {
@@ -135,6 +144,22 @@ const ProjectStudentListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
+                    viewDetail: ({ id }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.viewDetail)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleFetchDetail(id);
+
+                                    handlersModal.open();
+                                }}
+                            >
+                                <EyeOutlined color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                 });
             },
         });
@@ -144,6 +169,15 @@ const ProjectStudentListPage = () => {
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
     };
 
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
     const columns = [
         {
             title: '#',
@@ -202,7 +236,7 @@ const ProjectStudentListPage = () => {
 
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
 
-        mixinFuncs.renderActionColumn({ team: true, member: true, task: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ team: true, member: true, task: true, viewDetail: true }, { width: '150px' }),
     ];
 
     return (
@@ -218,6 +252,12 @@ const ProjectStudentListPage = () => {
                         columns={columns}
                     />
                 }
+            />
+            <DetailProjectModal
+                open={openedModal}
+                onCancel={() => handlersModal.close()}
+                width={600}
+                DetailData={detail}
             />
         </PageWrapper>
     );
