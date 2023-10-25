@@ -47,7 +47,7 @@ function ProjectTaskListPage() {
             override: (funcs) => {
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, projectName: null,taskName: null,projectTaskId:null });
+                    mixinFuncs.handleFetchList({ ...params, projectName: null,projectTaskId:null });
                 };
                 funcs.mappingData = (response) => {
                     try {
