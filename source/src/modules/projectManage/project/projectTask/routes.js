@@ -50,7 +50,7 @@ export default {
         },
     },
     memberActivityProjectListPage: {
-        path: '/project/member/member-activity-course',
+        path: '/project/member/member-activity-project',
         title: 'Member Activity Project List Page',
         auth: true,
         component: MemberActivityProjectListPage,
