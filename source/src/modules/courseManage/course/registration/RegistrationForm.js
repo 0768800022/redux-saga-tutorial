@@ -51,7 +51,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
     const notification = useNotification();
-    const [canApplyAll, setCanApplyAll] = useState(true);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -244,7 +243,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             if (frameKey === 'from') {
                 const to = schedule[dayKey][dayIndexKey].to;
                 if (to && to.format(TIME_FORMAT_DISPLAY) < value.format(TIME_FORMAT_DISPLAY)) {
-                    schedule[dayKey][dayIndexKey].to = null;
+                    schedule[dayKey][dayIndexKey].to = value;
                 }
             } else if (frameKey === 'to') {
                 const from = schedule[dayKey][dayIndexKey].from;
@@ -255,7 +254,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             schedule[dayKey][dayIndexKey][frameKey] = value;
             setFieldValue('schedule', schedule);
             onValuesChange();
-            // checkCanApplyAll();
         } catch (error) {
             console.log(error);
         }
@@ -325,22 +323,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             notification({ type: 'warning', message: translate.formatMessage(messages.copyPasswordWarning) });
         }
     };
-    const checkCanApplyAll = () => {
-        const schedule = getFieldValue('schedule');
-        if (schedule) {
-            const { monday } = schedule;
-            if (!monday) {
-                return setCanApplyAll(false);
-            }
-            for (const frame of monday) {
-                if (frame.from === null || frame.to === null) {
-                    return setCanApplyAll(false);
-                }
-            }
-            return setCanApplyAll(true);
-        }
-        return setCanApplyAll(false);
-    };
 
     const handleApplyAll = (e) => {
         e.preventDefault();
@@ -360,10 +342,34 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
 
     const onFieldsChange = () => {
         onValuesChange();
-        checkCanApplyAll();
     };
     const handleOk = () => {
         document.activeElement.blur();
+    };
+    const handleTimeChange = (fieldName, value) => {
+        if (!value) {
+            try {
+                const schedule = getFieldValue('schedule');
+                const [dayKey, dayIndexKey, frameKey] = fieldName;
+                if (frameKey === 'from') {
+                    schedule[dayKey][dayIndexKey].from = dayjs('00:00', 'HH:mm');
+                } else if (frameKey === 'to') {
+                    schedule[dayKey][dayIndexKey].to = schedule[dayKey][dayIndexKey].from;
+                }
+                setFieldValue('schedule', schedule);
+                onValuesChange();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+    const handleReset = (day) => {
+        const schedule = getFieldValue('schedule');
+        for (let dayIndexKey = 0; dayIndexKey < 3; dayIndexKey++) {
+            schedule[day][dayIndexKey].from = dayjs('00:00', 'HH:mm');
+            schedule[day][dayIndexKey].to = dayjs('00:00', 'HH:mm');
+        }
+        setFieldValue('schedule', schedule);
     };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onFieldsChange={onFieldsChange} size="1100px">
@@ -566,9 +572,10 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                     label={translate.formatMessage(commonMessage.schedule)}
                     onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
                     translate={translate}
-                    canApplyAll={canApplyAll}
                     handleApplyAll={handleApplyAll}
                     daysOfWeekSchedule={daysOfWeekSchedule}
+                    handleTimeChange={handleTimeChange}
+                    handleReset={handleReset}
                 />
                 <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
                     {actions}
