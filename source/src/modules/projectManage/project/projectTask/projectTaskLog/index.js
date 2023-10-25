@@ -57,7 +57,7 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
                 };
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, projectName: null, taskId: null });
+                    mixinFuncs.handleFetchList({ ...params, projectName: null,taskName: null });
                 };
             },
         });

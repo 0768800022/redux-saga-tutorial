@@ -1,5 +1,5 @@
 import TextField from '@components/common/form/TextField';
-import { Col, Form, Modal, Row, Button } from 'antd';
+import { Col, Form, Modal, Row, Button, Image, Avatar } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { BaseForm } from '@components/common/form/BaseForm';
 import { defineMessages } from 'react-intl';
@@ -10,6 +10,7 @@ import CropImageField from '@components/common/form/CropImageField';
 import { FormattedMessage } from 'react-intl';
 import NumericField from '@components/common/form/NumericField';
 import { lectureState } from '@constants/masterData';
+import ImageField from '@components/common/form/ImageField';
 
 const messages = defineMessages({
     objectName: 'Chi tiết khoá học',
@@ -44,20 +45,29 @@ const PreviewModal = ({
                 <Card className="card-form" bordered={false}>
                     <Row>
                         <Col span={12}>
-                            <CropImageField
+                            <Form.Item
                                 label={<FormattedMessage defaultMessage="Avatar" />}
-                                name="avatar"
-                                imageUrl={detail && `${AppConstants.contentRootUrl}${detail.avatar}`}
-                                aspect={1 / 1}
-                            />
+                            >
+                                <Image
+                                    width={100}
+                                    height={100}
+                                    name="avatar"
+                                    src={detail && `${AppConstants.contentRootUrl}${detail.avatar}`}
+                                />
+                            </Form.Item>
+                            
                         </Col>
                         <Col span={12}>
-                            <CropImageField
+                            <Form.Item
                                 label={<FormattedMessage defaultMessage="Banner" />}
-                                name="banner"
-                                imageUrl={detail && `${AppConstants.contentRootUrl}${detail?.banner}`}
-                                aspect={4 / 3}
-                            />
+                            >
+                                <Image
+                                    name="banner"
+                                    src={detail && `${AppConstants.contentRootUrl}${detail?.banner}`}
+                                    height={100}
+                                    width={130}
+                                />
+                            </Form.Item>
                         </Col>
                     </Row>
                     <Row gutter={12}>
