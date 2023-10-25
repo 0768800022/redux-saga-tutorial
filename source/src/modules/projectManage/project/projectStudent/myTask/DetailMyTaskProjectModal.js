@@ -103,7 +103,6 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                             height: 300,
                             marginBottom: 70,
                         }}
-                        required
                     />
                 </Card>
             </BaseForm>
