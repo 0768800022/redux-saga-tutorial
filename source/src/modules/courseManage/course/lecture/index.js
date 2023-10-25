@@ -281,6 +281,7 @@ const LectureListPage = ({ breadcrumbName }) => {
                 maskClosable={false}
             >
                 <AsignAllForm
+                    onCancel={() => setShowPreviewModal(false)}
                     courseId={courseId}
                     lectureId={lectureid}
                     setHasError={setHasError}

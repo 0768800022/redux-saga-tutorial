@@ -123,7 +123,7 @@ const ProjectListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    team: ({ id, name, status }) => (
+                    team: ({ id, name, status, leaderInfo }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
                                 type="link"
@@ -134,12 +134,12 @@ const ProjectListPage = () => {
                                     let path;
                                     if (leaderName) {
                                         path =
-                                            routes.teamListPage.path +
+                                            routes.learderProjectTeamListPage.path +
                                             pathDefault +
-                                            `&leaderId=${leaderId}&leaderName=${leaderName}`;
+                                            `&leaderId=${leaderInfo.id}&leaderName=${leaderName}`;
                                     } else if (developerName) {
                                         path =
-                                            routes.teamListPage.path +
+                                            routes.developerProjectTeamListPage.path +
                                             pathDefault +
                                             `&developerId=${developerId}&developerName=${developerName}`;
                                     } else {
@@ -205,7 +205,7 @@ const ProjectListPage = () => {
 
     const { data: dataDeveloperProject, execute: executeGetList } = useFetch(apiConfig.developer.getProject, {
         immediate: true,
-        pathParams: { id: developerId },
+        params: { developerId: developerId },
     });
 
     useEffect(() => {

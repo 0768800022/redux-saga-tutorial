@@ -46,6 +46,10 @@ function ProjectTaskListPage() {
                 objectName: translate.formatMessage(commonMessage.task),
             },
             override: (funcs) => {
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, projectName: null,taskName: null,projectTaskId:null });
+                };
                 funcs.mappingData = (response) => {
                     try {
                         if (response.result === true) {
@@ -100,7 +104,7 @@ function ProjectTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.ProjectTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&taskName=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&taskName=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },

@@ -35,7 +35,13 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>
-                <NumericField label={<FormattedMessage defaultMessage="Số tiền" />} name={['money']} />
+                <NumericField 
+                    label={<FormattedMessage defaultMessage="Số tiền" />} 
+                    name={['money']}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    addonAfter="₫"
+                    min={0}
+                />
                 <SelectField
                     required
                     name={['kind']}

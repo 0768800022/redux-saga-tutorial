@@ -77,7 +77,7 @@ const ProjectLeaderTeamForm = (props) => {
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
                 projectId: projectId,
             });
         }

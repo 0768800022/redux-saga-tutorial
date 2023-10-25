@@ -54,6 +54,10 @@ function TaskLogListPage({ breadcrumbName }) {
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}${search}`;
             };
+            funcs.getList = () => {
+                const params = mixinFuncs.prepareGetListParams(queryFilter);
+                mixinFuncs.handleFetchList({ ...params, courseName: null,taskName: null, subjectId: null });
+            };
         },
     });
 

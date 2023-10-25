@@ -11,11 +11,14 @@ import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import {  Tag } from 'antd';
 import React from 'react';
-import { useLocation,useParams } from 'react-router-dom';
+import { useLocation,useParams,useNavigate,generatePath } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { commonMessage } from '@locales/intl';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { Button } from 'antd';
+import { CalendarOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -24,11 +27,15 @@ const message = defineMessages({
 function TaskStudentListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
+    const navigate = useNavigate();
+
     const queryParameters = new URLSearchParams(window.location.search);
     const courseName = queryParameters.get('courseName');
     const subjectId = queryParameters.get('subjectId');
     const state = queryParameters.get('state');
     const paramid = useParams();
+    const courseId = queryParameters.get('courseId');
+
     const statusValues = translate.formatKeys(taskState, ['label']);
     console.log(paramid.courseId);
 
@@ -60,6 +67,28 @@ function TaskStudentListPage() {
                     return [];
                 }
             };
+            funcs.additionalActionColumnButtons = () => ({
+                taskLog: ({ id, lecture, state, status, name }) => (
+                    <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    generatePath(routes.taskStudentListPage.path, { courseId }) +
+                                    `/task-log?courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
+                                    {
+                                        state: { action: 'taskLog', prevPath: location.pathname },
+                                    },
+                                );
+                            }}
+                        >
+                            <CalendarOutlined />
+                        </Button>
+                    </BaseTooltip>
+                ),
+            });
         },
     });
 
@@ -106,6 +135,7 @@ function TaskStudentListPage() {
                 },
             },
         ];
+        columns.push(mixinFuncs.renderActionColumn({ taskLog: true }, { width: '100px' }));
         return columns;
     };
 

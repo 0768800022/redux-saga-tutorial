@@ -14,13 +14,16 @@ import { useNavigate } from 'react-router-dom';
 import useNotification from '@hooks/useNotification';
 import { useIntl } from 'react-intl';
 import { commonMessage } from '@locales/intl';
+import styles from './AsignAll.module.scss';
 
 const messages = defineMessages({
     objectName: 'Bài giảng',
     asignAllSuccess:'Áp dụng {objectName} thành công',
+    cancel: 'Huỷ',
+    save: 'Tạo',
 });
 
-const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
+const AsignAllForm = ({ onCancel,courseId, lectureId,setHasError }) => {
     const translate = useTranslate();
 
     const [form] = Form.useForm();
@@ -85,7 +88,7 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
             size = "100%"
             initialValues={initialValues}
         >
-            <Card>
+            <div className={styles.modalAsign}>
                 <Row gutter={16}>
                     <Col span={12}>
                         <DatePickerField
@@ -136,12 +139,15 @@ const AsignAllForm = ({ courseId, lectureId,setHasError }) => {
                     </Col>
                 </Row>
                 <div style={{ float: 'right' }}>
-                    <Button key="submit" type="primary" htmlType="submit">
-                        {translate.formatMessage(commonMessage.asignAll)}
+                    <Button className={styles.btnModal} onClick={onCancel} >
+                        {translate.formatMessage(messages.cancel)}
+                    </Button>
+                    <Button key="submit" type="primary" htmlType="submit" className={styles.btnModal} >
+                        {translate.formatMessage(messages.save)}
                     </Button>
                 </div>
                 
-            </Card>
+            </div>
         </BaseForm>
     );
 };

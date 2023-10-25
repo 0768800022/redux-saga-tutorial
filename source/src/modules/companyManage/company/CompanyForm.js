@@ -53,7 +53,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
             });
         }
     }, [isEditing]);
@@ -105,7 +105,7 @@ const CompanyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             name="username"
                         />
                     </Col>
-                    
+
                 </Row>
 
                 <Row gutter={16}>

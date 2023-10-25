@@ -3,6 +3,8 @@ import ProjectTaskListPage from '.';
 import ProjectTaskSavePage from './ProjectTaskSavePage';
 import ProjectTaskLogListPage from './projectTaskLog';
 import ProjectTaskLogSavePage from './projectTaskLog/projectTaskLogSavePage';
+import MemberActivityProjectListPage from '../member/memberActivity';
+import MemberActivityProjectLeaderListPage from '../projectLeader/projectLeaderMember/memberActivity';
 export default {
     ProjectTaskListPage: {
         path: '/project/task',
@@ -46,5 +48,19 @@ export default {
                 { breadcrumbName: title },
             ];
         },
+    },
+    memberActivityProjectListPage: {
+        path: '/project/member/member-activity-course',
+        title: 'Member Activity Project List Page',
+        auth: true,
+        component: MemberActivityProjectListPage,
+        permissions: [apiConfig.projectTaskLog.getList.baseURL],
+    },
+    memberActivityProjectLeaderListPage: {
+        path: '/project-leader/member/member-activity-project',
+        title: 'Member Activity Project Leader List Page',
+        auth: true,
+        component: MemberActivityProjectLeaderListPage,
+        permissions: [apiConfig.projectTaskLog.getList.baseURL],
     },
 };
