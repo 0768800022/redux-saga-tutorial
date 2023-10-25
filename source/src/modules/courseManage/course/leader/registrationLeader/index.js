@@ -133,7 +133,7 @@ function RegistrationLeaderListPage() {
                     breadcrumbName: translate.formatMessage(commonMessage.course),
                     path: routes.courseLeaderListPage.path,
                 },
-                { breadcrumbName: translate.formatMessage(commonMessage.registration) },
+                { breadcrumbName: translate.formatMessage(commonMessage.member) },
             ]}
         >
             <ListPage
