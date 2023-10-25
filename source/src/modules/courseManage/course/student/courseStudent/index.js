@@ -75,7 +75,7 @@ const CourseStudentListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationStudentListPage.path +
-                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                            `?courseId=${id}&courseName=${name}`,
                                         );
                                 }}
                             >
