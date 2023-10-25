@@ -15,11 +15,7 @@ import ImageField from '@components/common/form/ImageField';
 const messages = defineMessages({
     objectName: 'Chi tiết khoá học',
 });
-const PreviewModal = ({
-    open,
-    onCancel,
-    detail,
-}) => {
+const PreviewModal = ({ open, onCancel, detail }) => {
     const translate = useTranslate();
     const [form] = Form.useForm();
     const lectureStateOptions = translate.formatKeys(lectureState, ['label']);
@@ -30,24 +26,22 @@ const PreviewModal = ({
     return (
         <Modal
             centered
-            open={open} 
+            open={open}
             onCancel={handleOnCancel}
             onOk={handleOnCancel}
             width={800}
             footer={[
                 <Button key="ok" type="primary" onClick={handleOnCancel}>
-                  OK
+                    OK
                 </Button>,
             ]}
             title={translate.formatMessage(messages.objectName)}
         >
-            <BaseForm form={form} style={{ width: "100%" }}>
+            <BaseForm form={form} style={{ width: '100%' }}>
                 <Card className="card-form" bordered={false}>
                     <Row>
                         <Col span={12}>
-                            <Form.Item
-                                label={<FormattedMessage defaultMessage="Avatar" />}
-                            >
+                            <Form.Item label={<FormattedMessage defaultMessage="Avatar" />}>
                                 <Image
                                     width={100}
                                     height={100}
@@ -55,12 +49,9 @@ const PreviewModal = ({
                                     src={detail && `${AppConstants.contentRootUrl}${detail.avatar}`}
                                 />
                             </Form.Item>
-                            
                         </Col>
                         <Col span={12}>
-                            <Form.Item
-                                label={<FormattedMessage defaultMessage="Banner" />}
-                            >
+                            <Form.Item label={<FormattedMessage defaultMessage="Banner" />}>
                                 <Image
                                     name="banner"
                                     src={detail && `${AppConstants.contentRootUrl}${detail?.banner}`}
@@ -94,7 +85,6 @@ const PreviewModal = ({
                                 label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                                 name="dateRegister"
                                 initialValue={detail.dateRegister}
-
                             />
                         </Col>
                         <Col span={12}>
@@ -119,7 +109,6 @@ const PreviewModal = ({
                                 label={<FormattedMessage defaultMessage="Leader" />}
                                 name="leaderId"
                                 initialValue={detail?.leader?.leaderName}
-
                             />
                         </Col>
                         <Col span={12}>
@@ -139,7 +128,7 @@ const PreviewModal = ({
                                 readOnly
                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 addonAfter="₫"
-                                defaultValue= {detail?.fee}
+                                defaultValue={detail?.fee}
                             />
                         </Col>
                         <Col span={12}>

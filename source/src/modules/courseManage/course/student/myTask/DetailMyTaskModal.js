@@ -112,7 +112,6 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
                             options={stateValues}
-                            autoFocus="false"
                         />
                     </Col>
                 </BaseForm>
