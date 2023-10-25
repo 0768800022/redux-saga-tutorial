@@ -11,7 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import NumericField from '@components/common/form/NumericField';
 import { lectureState } from '@constants/masterData';
 import ImageField from '@components/common/form/ImageField';
-
+import SelectField from '@components/common/form/SelectField';
 const messages = defineMessages({
     objectName: 'Chi tiết khoá học',
 });
@@ -23,6 +23,12 @@ const PreviewModal = ({ open, onCancel, detail }) => {
     const handleOnCancel = () => {
         onCancel();
     };
+    useEffect(() => {
+        // form.setFields(data);
+        form.setFieldsValue({
+            ...detail,
+        });
+    }, [detail]);
     return (
         <Modal
             centered
@@ -30,11 +36,7 @@ const PreviewModal = ({ open, onCancel, detail }) => {
             onCancel={handleOnCancel}
             onOk={handleOnCancel}
             width={800}
-            footer={[
-                <Button key="ok" type="primary" onClick={handleOnCancel}>
-                    OK
-                </Button>,
-            ]}
+            footer={[]}
             title={translate.formatMessage(messages.objectName)}
         >
             <BaseForm form={form} style={{ width: '100%' }}>
@@ -112,11 +114,13 @@ const PreviewModal = ({ open, onCancel, detail }) => {
                             />
                         </Col>
                         <Col span={12}>
-                            <TextField
-                                label={<FormattedMessage defaultMessage="Tình trạng" />}
-                                readOnly
+                            <SelectField
+                                required
                                 name="state"
-                                initialValue={lectureStateFilter[0].label}
+                                label={<FormattedMessage defaultMessage="Tình trạng" />}
+                                allowClear={false}
+                                options={lectureStateOptions}
+                                disabled
                             />
                         </Col>
                     </Row>
