@@ -3,6 +3,7 @@ import DeveloperSavePage from './DeveloperSavePage';
 import DeveloperListPage from '.';
 import ProjectListPage from '@modules/projectManage/project';
 import ProjectTaskListPage from '@modules/projectManage/project/projectTask';
+import TeamListPage from '@modules/projectManage/project/team';
 
 export default {
     developerListPage: {
@@ -25,6 +26,13 @@ export default {
         auth: true,
         component: ProjectListPage,
         permissions: [apiConfig.project.getList.baseURL],
+    },
+    developerProjectTeamListPage: {
+        path: '/developer/project/team',
+        title: 'Developer Team',
+        auth: true,
+        component: TeamListPage,
+        permissions: [apiConfig.team.getList.baseURL],
     },
     developerProjectTaskListPage: {
         path: '/developer/project/task',

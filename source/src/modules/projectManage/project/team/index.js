@@ -125,7 +125,6 @@ const TeamListPage = () => {
         active && columns.push(
             mixinFuncs.renderActionColumn(
                 {
-
                     edit: true,
                     delete: true,
                 },

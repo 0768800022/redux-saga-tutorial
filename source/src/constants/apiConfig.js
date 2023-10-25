@@ -241,7 +241,7 @@ const apiConfig = {
             method: 'GET',
             headers: baseHeader,
             isRequiredTenantId: true,
-        },      
+        },
         updateLeaderCourse: {
             baseURL: `${apiTenantUrl}v1/course/update-leader`,
             method: 'PUT',
@@ -528,7 +528,7 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
         getProject: {
-            baseURL: `${apiTenantUrl}v1/developer/project/:id`,
+            baseURL: `${apiTenantUrl}v1/developer/project`,
             method: 'GET',
             headers: baseHeader,
             isRequiredTenantId: true,
@@ -697,7 +697,7 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        
+
         update: {
             baseURL: `${apiTenantUrl}v1/project/update`,
             method: 'PUT',
