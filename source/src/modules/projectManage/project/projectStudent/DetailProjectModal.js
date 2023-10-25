@@ -77,14 +77,12 @@ const DetailProjectModal = ({
                         width="100%"
                         label={<FormattedMessage defaultMessage="Tên Dự án" />}
                         name="name"
-                        required
                     />
                     <TextField
                         readOnly="true"
                         width="100%"
                         label={<FormattedMessage defaultMessage="Tên Leader" />}
                         name={['leaderInfo', 'leaderName']}
-                        required
                     />
                     <Row gutter={16}>
                         <Col span={12}>
@@ -93,7 +91,6 @@ const DetailProjectModal = ({
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                                 name={'startDate'}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -102,13 +99,11 @@ const DetailProjectModal = ({
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Ngày Kết thúc" />}
                                 name={'endDate'}
-                                required
                             />
                         </Col>
                     </Row>
                     <Col span={12}>
                         <SelectField
-                            required
                             name="state"
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
@@ -122,7 +117,6 @@ const DetailProjectModal = ({
                         width="100%"
                         label={<FormattedMessage defaultMessage="Mô tả dự án" />}
                         name={'description'}
-                        required
                         type="textarea"
                     />
                 </BaseForm>

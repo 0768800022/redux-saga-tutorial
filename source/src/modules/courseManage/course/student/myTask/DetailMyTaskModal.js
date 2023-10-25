@@ -39,7 +39,6 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Tên Bài học " />}
                                 name={['lecture', 'lectureName']}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -48,7 +47,6 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Tên Môn học" />}
                                 name={['lecture', 'subject', 'subjectName']}
-                                required
                             />
                         </Col>
                     </Row>
@@ -59,7 +57,6 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Tên leader" />}
                                 name={['course', 'leader', 'leaderName']}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -68,7 +65,6 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Tên khóa học" />}
                                 name={['course', 'name']}
-                                required
                             />
                         </Col>
                     </Row>
@@ -79,7 +75,6 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Tên sinh viên" />}
                                 name={['student', 'fullName']}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -88,7 +83,6 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Số điện thoại" />}
                                 name={['student', 'phone']}
-                                required
                             />
                         </Col>
                     </Row>
@@ -100,7 +94,6 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                                 name={'startDate'}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -109,7 +102,6 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Ngày Kết thúc" />}
                                 name={'dueDate'}
-                                required
                             />
                         </Col>
                     </Row>

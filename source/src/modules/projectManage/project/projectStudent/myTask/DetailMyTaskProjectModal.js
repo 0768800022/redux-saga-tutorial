@@ -31,7 +31,7 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
         });
     }, [DetailData]);
     return (
-        <Modal centered open={open} onCancel={onCancel} footer={null} title={'Chi tiết task dự án'} {...props}>
+        <Modal centered open={open} onCancel={onCancel} footer={null} title={'Chi tiết task của dự án'} {...props}>
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} size="100%">
                     <TextField
@@ -39,7 +39,6 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                         width="100%"
                         label={<FormattedMessage defaultMessage="Tên Task " />}
                         name="taskName"
-                        required
                     />
                     <Row gutter={16}>
                         <Col span={12}>
@@ -48,7 +47,6 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Tên dự án" />}
                                 name={['project', 'name']}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -57,7 +55,6 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Tên leader" />}
                                 name={['project', 'leaderInfo', 'leaderName']}
-                                required
                             />
                         </Col>
                     </Row>
@@ -68,7 +65,6 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Tên lập trình viên" />}
                                 name={['developer', 'studentInfo', 'fullName']}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -77,7 +73,6 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Vai trò" />}
                                 name={['developer', 'roleInfo', 'projectRoleName']}
-                                required
                             />
                         </Col>
                     </Row>
@@ -88,7 +83,6 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                                 name={'startDate'}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -97,7 +91,6 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                                 width="100%"
                                 label={<FormattedMessage defaultMessage="Ngày Kết thúc" />}
                                 name={'dueDate'}
-                                required
                             />
                         </Col>
                     </Row>
