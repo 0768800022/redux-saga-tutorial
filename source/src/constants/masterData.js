@@ -70,8 +70,8 @@ export const commonStatus = [
 export const lectureState = [
     { value: STATE_COURSE_PREPARED, label: lectureStateMessage.prepared, color: 'yellow' },
     { value: STATE_COURSE_RECRUITED, label: lectureStateMessage.recruit, color: 'blue' },
-    { value: STATE_COURSE_STARTED, label: lectureStateMessage.started, color: 'green' },
-    { value: STATE_COURSE_FINISHED, label: lectureStateMessage.finished, color: 'warning' },
+    { value: STATE_COURSE_STARTED, label: lectureStateMessage.started, color: 'warning' },
+    { value: STATE_COURSE_FINISHED, label: lectureStateMessage.finished, color: 'green' },
     { value: STATE_COURSE_CANCELED, label: lectureStateMessage.canceled, color: 'red' },
 ];
 
@@ -120,10 +120,10 @@ export const stateResgistrationOptions = [
     {
         value: 1,
         label: stateResgistrationMessage.register,
-        color: 'green',
+        color: 'warning',
     },
-    { value: 2, label: stateResgistrationMessage.learning, color: 'warning' },
-    { value: 3, label: stateResgistrationMessage.finished, color: 'yellow' },
+    { value: 2, label: stateResgistrationMessage.learning, color: 'yellow' },
+    { value: 3, label: stateResgistrationMessage.finished, color: 'green' },
     { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
 ];
 
