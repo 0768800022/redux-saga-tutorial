@@ -34,9 +34,9 @@ function ProjectTaskListPage() {
     const developerName = queryParameters.get('developerName');
     const active = queryParameters.get('active');
     const state = queryParameters.get('state');
-
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const location = useLocation();
+    localStorage.setItem('pathPrev', location.search);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
@@ -48,7 +48,7 @@ function ProjectTaskListPage() {
             override: (funcs) => {
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, projectName: null,taskName: null,projectTaskId:null });
+                    mixinFuncs.handleFetchList({ ...params, projectName: null,projectTaskId:null });
                 };
                 funcs.mappingData = (response) => {
                     try {
@@ -73,6 +73,8 @@ function ProjectTaskListPage() {
                     const projectName = queryParams.get('projectName');
                     const developerName = queryParams.get('developerName');
                     const leaderName = queryParams.get('leaderName');
+                    const leaderId = queryParams.get('leaderId');
+                    const active = queryParams.get('active');
                     let filterAdd;
                     if (developerName) {
                         filterAdd = { developerName };
@@ -90,7 +92,13 @@ function ProjectTaskListPage() {
                         );
                     } else {
                         mixinFuncs.setQueryParams(
-                            serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                            serializeParams({
+                                projectId: projectId,
+                                projectName: projectName,
+                                leaderId,
+                                active,
+                                ...filter,
+                            }),
                         );
                     }
                 };
@@ -104,7 +112,7 @@ function ProjectTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.ProjectTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&taskName=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -235,7 +243,6 @@ function ProjectTaskListPage() {
                     title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{projectName}</span>}
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
-                        initialValues: queryFilter,
                         className: styles.search,
                     })}
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}

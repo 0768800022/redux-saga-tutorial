@@ -143,7 +143,11 @@ const CompanySeekDevListPage = () => {
                 baseTable={
                     <div>
                         {!roleId && !isHasValueSearch && (
-                            <div style={{ color: 'red' }}>{translate.formatMessage(message.reminderMessage)}</div>
+                            <div style={{ color: 'red', position: 'relative', padding: '12px 0' }}>
+                                <span style={{ position: 'absolute', top: '-9px', left: '3px' }}>
+                                    {translate.formatMessage(message.reminderMessage)}
+                                </span>
+                            </div>
                         )}
                         <BaseTable
                             onChange={mixinFuncs.changePagination}

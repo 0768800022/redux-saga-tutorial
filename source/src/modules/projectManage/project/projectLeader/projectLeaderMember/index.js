@@ -81,7 +81,7 @@ const ProjectLeaderMemberListPage = () => {
         event.preventDefault();
         navigate(
             routes.memberActivityProjectLeaderListPage.path +
-                `?courseId=${record?.project?.id}&studentId=${record?.developer.studentInfo?.id}&studentName=${record?.developer.studentInfo?.fullName}`,
+                `?projectId=${record?.project?.id}&studentId=${record?.developer.studentInfo?.id}&studentName=${record?.developer.studentInfo?.fullName}`,
         );
     };
     const columns = [
