@@ -3,8 +3,8 @@ import ListPage from '@components/common/layout/ListPage';
 import BaseTable from '@components/common/table/BaseTable';
 import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
-import React from 'react';
-import { Avatar, Button, Tag } from 'antd';
+import React, { useEffect } from 'react';
+import { Avatar, Button, Tag, notification } from 'antd';
 import { UserOutlined, ContainerOutlined, ProjectOutlined } from '@ant-design/icons';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
@@ -16,6 +16,7 @@ import routes from '@routes';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
 import styles from '../project.module.scss';
+import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
     objectName: 'Nhóm',
@@ -56,8 +57,8 @@ const TeamListPage = () => {
                 const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
                 if (active)
                     return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
-                else 
-                    return `${pagePath}/${dataRow.id}` + pathDefault ;
+                else
+                    return `${pagePath}/${dataRow.id}` + pathDefault;
             };
             funcs.changeFilter = (filter) => {
                 const projectId = queryParams.get('projectId');
@@ -68,9 +69,9 @@ const TeamListPage = () => {
                 const leaderName = queryParams.get('leaderName');
                 let filterAdd;
                 if (developerName) {
-                    filterAdd = { developerId,developerName };
+                    filterAdd = { developerId, developerName };
                 } else if (leaderName) {
-                    filterAdd = { leaderId,leaderName };
+                    filterAdd = { leaderId, leaderName };
                 }
                 if (filterAdd) {
                     mixinFuncs.setQueryParams(
@@ -107,24 +108,24 @@ const TeamListPage = () => {
             {
                 title: <FormattedMessage defaultMessage="Tên nhóm" />,
                 dataIndex: 'teamName',
-            },
-
-            {
-                title: <FormattedMessage defaultMessage="Leader" />,
-                dataIndex: ['leaderInfo', 'leaderName'],
-                width: '150px',
+                width: 150,
             },
             {
                 title: <FormattedMessage defaultMessage="Dự án" />,
                 dataIndex: ['projectInfo', 'name'],
-                width: '200px',
+                width: 170,
+            },
+            {
+                title: <FormattedMessage defaultMessage="Người hướng dẫn" />,
+                dataIndex: ['leaderInfo', 'leaderName'],
+                width: 170,
             },
             mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
         active && columns.push(
             mixinFuncs.renderActionColumn(
                 {
-                    
+
                     edit: true,
                     delete: true,
                 },
@@ -156,7 +157,7 @@ const TeamListPage = () => {
             });
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.leaderProjectListPage.path +`?leaderId=${leaderId}&leaderName=${leaderName}`,
+                path: routes.leaderProjectListPage.path + `?leaderId=${leaderId}&leaderName=${leaderName}`,
             });
         } else if (developerName) {
             breadRoutes.push({
@@ -165,18 +166,35 @@ const TeamListPage = () => {
             });
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.developerProjectListPage.path +`?developerId=${developerId}&developerName=${developerName}`,
+                path: routes.developerProjectListPage.path + `?developerId=${developerId}&developerName=${developerName}`,
             });
         }
-        else{
-            breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.project),
-                path:routes.projectListPage.path,
+        else {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.project),
+                path: routes.projectListPage.path,
             });
         }
         breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.team) });
 
         return breadRoutes;
     };
+
+    const { execute: executeUpdateLeader } = useFetch(apiConfig.memberProject.autocomplete, { immediate: false });
+
+    useEffect(() => {
+        executeUpdateLeader({
+            params: {
+                projectId,
+            },
+            onError: () =>
+                notification({
+                    type: 'error',
+                    title: 'Error',
+                }),
+        });
+    }, [projectId]);
+
     return (
         <PageWrapper
             routes={setBreadRoutes()}

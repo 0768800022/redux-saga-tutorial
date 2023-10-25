@@ -9,22 +9,24 @@ import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Avatar, Tag } from 'antd';
+import { Button, Avatar, Tag, Modal } from 'antd';
 import { IconBrandTeams } from '@tabler/icons-react';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
 import route from '@modules/projectManage/project/projectTask/routes';
-import { BookOutlined, TeamOutlined, WomanOutlined } from '@ant-design/icons';
+import { BookOutlined, TeamOutlined, WomanOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
 import styles from './project.module.scss';
+
 // import icon_team_1 from '@assets/images/team-Members-Icon.png';
 
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import useNotification from '@hooks/useNotification';
 const message = defineMessages({
     objectName: 'Dự án',
 });
@@ -41,6 +43,11 @@ const ProjectListPage = () => {
     const developerName = queryParameters.get('developerName');
     const [dataApply, setDataApply] = useState([]);
     localStorage.setItem('pathPrev', location.search);
+    const [parentData, setParentData] = useState({});
+    const notification = useNotification();
+    const [hasError, setHasError] = useState(false);
+    const [visible, setVisible] = useState(true);
+
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.project,
@@ -63,7 +70,7 @@ const ProjectListPage = () => {
                         <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
                                 type="link"
-                                disabled={state === 1}
+                                disabled={state === 1 }
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -84,7 +91,8 @@ const ProjectListPage = () => {
                                             path = route.ProjectTaskListPage.path + pathDefault + `&active=${true}`;
                                         } else path = route.ProjectTaskListPage.path + pathDefault;
                                     }
-                                    navigate(path);
+                                    // navigate(path);
+                                    checkMember(id,path);
                                 }}
                             >
                                 <BookOutlined />
@@ -102,7 +110,7 @@ const ProjectListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectMemberListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                            `?projectId=${id}&projectName=${name}&active=${true}`,
                                         );
                                     } else {
                                         navigate(
@@ -168,6 +176,33 @@ const ProjectListPage = () => {
             },
         });
 
+    const checkMember = (projectId,path) => {
+        executeUpdateLeader({
+            params: {
+                projectId: projectId,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    if (response.data.totalElements == 0){
+                        setHasError(true);
+                        setVisible(true);
+                    }
+                    else{
+                        navigate(path);
+                    }
+                }
+            },
+            onError: () =>
+                notification({
+                    type: 'error',
+                    title: 'Error',
+                }),
+        });
+    };
+
+    const { execute: executeUpdateLeader } = useFetch(apiConfig.memberProject.autocomplete, { immediate: true });
+    const { execute: executeLoading } = useFetch(apiConfig.project.getList, { immediate: false });
+
     const { data: dataDeveloperProject, execute: executeGetList } = useFetch(apiConfig.developer.getProject, {
         immediate: true,
         pathParams: { id: developerId },
@@ -214,7 +249,7 @@ const ProjectListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        !leaderName && !developerName &&{
+        !leaderName && !developerName && {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
@@ -293,7 +328,7 @@ const ProjectListPage = () => {
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter,  className: styles.search })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter, className: styles.search })}
                 actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -305,6 +340,19 @@ const ProjectListPage = () => {
                     />
                 }
             />
+            {hasError &&
+                <Modal
+                    title={
+                        <span>
+                            <ExclamationCircleOutlined style={{ color: 'red' }} /> Lỗi
+                        </span>
+                    }
+                    open={visible}
+                    onOk={() => setVisible(false)}
+                    onCancel={() => setVisible(false)}>
+                    <p>Chưa có sinh viên nào trong dự án, vui lòng kiểm tra lại</p>
+                </Modal>
+            }
         </PageWrapper>
     );
 };
