@@ -58,7 +58,7 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
             });
         }
     }, [isEditing]);

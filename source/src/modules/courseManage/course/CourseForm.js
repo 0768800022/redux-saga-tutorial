@@ -46,7 +46,7 @@ const CourseForm = (props) => {
                     id: dataDetail?.id,
                     leaderId: values?.leaderId,
                 },
-                onCompleted:(response) => {
+                onCompleted: (response) => {
                     notification({
                         message: <FormattedMessage defaultMessage="Cập nhật leader được" />,
                     });

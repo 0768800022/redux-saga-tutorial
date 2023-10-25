@@ -120,9 +120,9 @@ export const stateResgistrationOptions = [
     {
         value: 1,
         label: stateResgistrationMessage.register,
-        color: 'warning',
+        color: 'yellow',
     },
-    { value: 2, label: stateResgistrationMessage.learning, color: 'yellow' },
+    { value: 2, label: stateResgistrationMessage.learning, color: 'blue' },
     { value: 3, label: stateResgistrationMessage.finished, color: 'green' },
     { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
 ];

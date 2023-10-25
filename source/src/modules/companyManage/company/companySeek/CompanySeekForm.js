@@ -54,7 +54,7 @@ const CompanySeekForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
             });
         }
     }, [isEditing]);
@@ -87,7 +87,6 @@ const CompanySeekForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
                     <Col span={12}>
                         <SelectField
                             name="state"
-                            defaultValue={stateValues[0]}
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
                             options={stateValues}
