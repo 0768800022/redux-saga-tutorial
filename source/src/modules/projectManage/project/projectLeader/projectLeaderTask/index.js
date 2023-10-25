@@ -8,18 +8,20 @@ import { projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Tag, Button } from 'antd';
+import { Tag, Button,Modal } from 'antd';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
-import ChangeStateModal from './ChangeStateModal';
 import useDisclosure from '@hooks/useDisclosure';
 import { useState } from 'react';
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { CalendarOutlined } from '@ant-design/icons';
 import { commonMessage } from '@locales/intl';
+import useNotification from '@hooks/useNotification';
+import { useIntl } from 'react-intl';
+
 import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, AppConstants } from '@constants';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 const message = defineMessages({
@@ -33,11 +35,14 @@ const message = defineMessages({
     name: 'Tên task',
     status: 'Trạng thái',
     startDate: 'Ngày bắt đầu',
+    updateTaskSuccess: 'Cập nhật tình trạng thành công',
+    done: 'Hoàn thành',
 });
 
 function ProjectLeaderTaskListPage() {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const intl = useIntl();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const [introduceData, setIntroduceData] = useState({});
@@ -48,14 +53,15 @@ function ProjectLeaderTaskListPage() {
     const developerName = queryParameters.get('developerName');
     const active = queryParameters.get('active');
     const state = queryParameters.get('state');
+    const notification = useNotification();
+
+    const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
+
     const [openedIntroduceModal, handlersIntroduceModal] = useDisclosure(false);
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const location = useLocation();
     const [detail, setDetail] = useState();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-
-    const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
-
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.projectTask,
@@ -106,23 +112,6 @@ function ProjectLeaderTaskListPage() {
                 };
 
                 funcs.additionalActionColumnButtons = () => ({
-                    editSetting: (item) => {
-                        return (
-                            <Button
-                                type="link"
-                                disabled={item.status !== 1}
-                                style={{ padding: 0 }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setDetail(item);
-                                    setIntroduceData(item);
-                                    handlersIntroduceModal.open();
-                                }}
-                            >
-                                <CheckOutlined />
-                            </Button>
-                        );
-                    },
                     taskLog: ({ id,taskName }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
                             <Button
@@ -140,6 +129,22 @@ function ProjectLeaderTaskListPage() {
                                 }}
                             >
                                 <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    state: (item) => (
+                        <BaseTooltip title={translate.formatMessage(message.done)}>
+                            <Button
+                                type="link"
+                                disabled={item.state === 3}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDetail(item);
+                                    handlersStateTaskModal.open();
+                                }}
+                            >
+                                <CheckOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -197,7 +202,7 @@ function ProjectLeaderTaskListPage() {
         },
 
         mixinFuncs.renderActionColumn(
-            { taskLog: true, editSetting: true, edit: active && true, delete: active && true },
+            { taskLog: true, state: true, edit: active && true, delete: active && true },
             { width: '150px' },
         ),
     ].filter(Boolean);
@@ -217,6 +222,30 @@ function ProjectLeaderTaskListPage() {
             }
         },
     });
+    const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
+
+    const handleOk = () => {
+        handlersStateTaskModal.close();
+        updateState(detail);
+    };
+    const updateState = (values) => {
+        executeUpdate({
+            data: {
+                id: values.id,
+                state: 3,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    mixinFuncs.getList();
+                    notification({
+                        message: intl.formatMessage(message.updateTaskSuccess),
+                    });
+                    handlersStateTaskModal.close();
+                }
+            },
+            onError: (err) => { },
+        });
+    };
 
     return (
         <PageWrapper
@@ -252,15 +281,8 @@ function ProjectLeaderTaskListPage() {
                         />
                     }
                 />
-                <ChangeStateModal
-                    open={openedIntroduceModal}
-                    onCancel={() => handlersIntroduceModal.close()}
-                    introduceData={introduceData}
-                    data={detail || {}}
-                    executeUpdate={executeUpdate}
-                    executeLoading={executeLoading}
-                    width={200}
-                />
+                <Modal title="Thay đổi tình trạng hoàn thành" open={openedStateTaskModal} onOk={handleOk} onCancel={() => handlersStateTaskModal.close()} data={detail || {}}>
+                </Modal>
             </div>
         </PageWrapper>
     );

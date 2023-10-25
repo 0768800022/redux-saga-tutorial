@@ -127,7 +127,6 @@ const TeamForm = (props) => {
                 <TextField
                     disabled={dataDetail.state >= 3}
                     width={'100%'}
-                    required
                     label={<FormattedMessage defaultMessage="Mô tả" />}
                     name="description"
                     type="textarea"
