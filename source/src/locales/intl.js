@@ -67,4 +67,5 @@ export const commonMessage = defineMessages({
     studyClass: 'Hệ',
     hotline: 'Đường dây nóng',
     review:'Đánh giá',
+    detail: 'Chi tiết',
 });
