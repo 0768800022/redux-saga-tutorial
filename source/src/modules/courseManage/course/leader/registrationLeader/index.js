@@ -22,7 +22,7 @@ import style from '@modules/courseManage/course/registration/Registration.module
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
-
+import styles from './registrationLeader.module.scss';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
@@ -32,13 +32,14 @@ const message = defineMessages({
 
 function RegistrationLeaderListPage() {
     const translate = useTranslate();
-    const { pathname: pagePath } = useLocation();
+    const location = useLocation();
     const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
+    localStorage.setItem('pathPrev', location.search);
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
@@ -59,21 +60,31 @@ function RegistrationLeaderListPage() {
                     return [];
                 }
             };
-
         },
     });
+    const handleOnClick = (event, record) => {
+        event.preventDefault();
+        navigate(
+            routes.studentActivityCourseLeaderListPage.path +
+                `?courseId=${record?.courseInfo?.id}&studentId=${record?.studentInfo?.id}&studentName=${record?.studentInfo?.fullName}`,
+        );
+    };
     const setColumns = () => {
         const columns = [
             {
                 title: translate.formatMessage(commonMessage.studentName),
                 dataIndex: ['studentInfo', 'fullName'],
+                render: (fullName, record) => (
+                    <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
+                        {fullName}
+                    </div>
+                ),
             },
             {
                 title: 'Lịch trình',
                 dataIndex: 'schedule',
                 render: (schedule) => {
                     return <ScheduleFile schedule={schedule} />;
-
                 },
                 width: 140,
             },

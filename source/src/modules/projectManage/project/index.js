@@ -34,6 +34,7 @@ const message = defineMessages({
 const ProjectListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const location = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const leaderId = queryParameters.get('leaderId');
     const developerId = queryParameters.get('developerId');
@@ -70,7 +71,7 @@ const ProjectListPage = () => {
                         <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
                             <Button
                                 type="link"
-                                disabled={state === 1 }
+                                disabled={state === 1}
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -92,7 +93,7 @@ const ProjectListPage = () => {
                                         } else path = route.ProjectTaskListPage.path + pathDefault;
                                     }
                                     // navigate(path);
-                                    checkMember(id,path);
+                                    checkMember(id, path);
                                 }}
                             >
                                 <BookOutlined />
@@ -110,7 +111,7 @@ const ProjectListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectMemberListPage.path +
-                                            `?projectId=${id}&projectName=${name}&active=${true}`,
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
                                         );
                                     } else {
                                         navigate(
@@ -176,18 +177,17 @@ const ProjectListPage = () => {
             },
         });
 
-    const checkMember = (projectId,path) => {
+    const checkMember = (projectId, path) => {
         executeUpdateLeader({
             params: {
                 projectId: projectId,
             },
             onCompleted: (response) => {
                 if (response.result === true) {
-                    if (response.data.totalElements == 0){
+                    if (response.data.totalElements == 0) {
                         setHasError(true);
                         setVisible(true);
-                    }
-                    else{
+                    } else {
                         navigate(path);
                     }
                 }
@@ -249,7 +249,8 @@ const ProjectListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        !leaderName && !developerName && {
+        !leaderName &&
+            !developerName && {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
@@ -328,7 +329,11 @@ const ProjectListPage = () => {
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter, className: styles.search })}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    initialValues: queryFilter,
+                    className: styles.search,
+                })}
                 actionBar={!leaderName && !developerName && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -340,7 +345,7 @@ const ProjectListPage = () => {
                     />
                 }
             />
-            {hasError &&
+            {hasError && (
                 <Modal
                     title={
                         <span>
@@ -349,10 +354,11 @@ const ProjectListPage = () => {
                     }
                     open={visible}
                     onOk={() => setVisible(false)}
-                    onCancel={() => setVisible(false)}>
+                    onCancel={() => setVisible(false)}
+                >
                     <p>Chưa có sinh viên nào trong dự án, vui lòng kiểm tra lại</p>
                 </Modal>
-            }
+            )}
         </PageWrapper>
     );
 };

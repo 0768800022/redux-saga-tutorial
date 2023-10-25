@@ -59,7 +59,7 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
             });
         }
     }, [isEditing]);
@@ -87,7 +87,7 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
             ...dataDetail,
             companyId: dataDetail?.company?.companyName,
             serviceCompanySubscriptionId: dataDetail?.subscription?.name,
-            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DEFAULT_FORMAT),
+            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
@@ -135,9 +135,9 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime = {true}
+                            showTime={true}
                             name="startDate"
-                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}                            
+                            label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
@@ -150,11 +150,11 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
                                     validator: validateStartDate,
                                 },
                             ]}
-                        />  
+                        />
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime = {true}
+                            showTime={true}
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="endDate"
                             placeholder="Ngày kết thúc"

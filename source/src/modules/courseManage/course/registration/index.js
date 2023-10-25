@@ -34,12 +34,14 @@ const message = defineMessages({
 function RegistrationListPage() {
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
+    const location = useLocation();
     const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
+    localStorage.setItem('pathPrev', location.search);
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
@@ -78,7 +80,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.registrationMoneyListPage.path +
-                                    `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
+                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                                 );
                             }}
                         >
@@ -89,11 +91,23 @@ function RegistrationListPage() {
             });
         },
     });
+    const handleOnClick = (event, record) => {
+        event.preventDefault();
+        navigate(
+            routes.studentActivityCourseListPage.path +
+                `?courseId=${record?.courseInfo?.id}&studentId=${record?.studentInfo?.id}&studentName=${record?.studentInfo?.fullName}`,
+        );
+    };
 
     const columns = [
         {
             title: translate.formatMessage(commonMessage.studentName),
             dataIndex: ['studentInfo', 'fullName'],
+            render: (fullName, record) => (
+                <div onClick={(event) => handleOnClick(event, record)} className={style.customDiv}>
+                    {fullName}
+                </div>
+            ),
         },
         {
             title: 'Lịch trình',

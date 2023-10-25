@@ -211,15 +211,27 @@ const LectureListPage = ({ breadcrumbName }) => {
         }
         return '';
     };
+
+    useEffect(() => {
+        if (hasError) {
+            setShowPreviewModal(false); // Đóng modal
+            // setHasError(false); // Đặt lại hasError sau một khoảng thời gian (ví dụ: sau 1 giây)
+            setTimeout(() => {
+                setHasError(false); // Đặt lại hasError sau một khoảng thời gian (ví dụ: sau 1 giây)
+            }, 2500); // Đặt thời gian dựa trên nhu cầu của bạn
+        }
+    }, [hasError]);
     return (
-        
-        <PageWrapper 
-            routes={breadcrumbName ? breadcrumbName : 
+
+        <PageWrapper
+            routes={breadcrumbName ? breadcrumbName :
                 [
-                    { breadcrumbName: translate.formatMessage(commonMessage.course),
+                    {
+                        breadcrumbName: translate.formatMessage(commonMessage.course),
                         path: routes.courseListPage.path,
                     },
-                    { breadcrumbName: translate.formatMessage(commonMessage.task),
+                    {
+                        breadcrumbName: translate.formatMessage(commonMessage.task),
                         path: routes.courseListPage.path + `/task${search}`,
                     },
                     { breadcrumbName: translate.formatMessage(message.objectName) },
@@ -232,7 +244,7 @@ const LectureListPage = ({ breadcrumbName }) => {
                     <div style={{ float: 'right', margin: '0 0 32px 0' }}>
                         <Button
                             type="primary"
-                            disabled={hasError ? true : disabledSubmit}
+                            disabled={disabledSubmit}
                             onClick={() => setShowPreviewModal(true)} >
                             {translate.formatMessage(commonMessage.asignAll)}
                         </Button>
@@ -243,7 +255,6 @@ const LectureListPage = ({ breadcrumbName }) => {
                         <BaseTable
                             rowClassName={rowClassName}
                             onChange={changePagination}
-                            pagination={pagination}
                             loading={loading}
                             dataSource={sortedData}
                             columns={columns}
@@ -269,6 +280,7 @@ const LectureListPage = ({ breadcrumbName }) => {
                 maskClosable={false}
             >
                 <AsignAllForm
+                    onCancel={() => setShowPreviewModal(false)}
                     courseId={courseId}
                     lectureId={lectureid}
                     setHasError={setHasError}

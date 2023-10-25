@@ -51,6 +51,10 @@ const ProjectStudentMemberListPage = () => {
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
+            funcs.getList = () => {
+                const params = mixinFuncs.prepareGetListParams(queryFilter);
+                mixinFuncs.handleFetchList({ ...params, projectName: null });
+            };
             funcs.mappingData = (response) => {
                 if (response.result === true) {
                     return {

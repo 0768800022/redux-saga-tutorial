@@ -25,6 +25,7 @@ import route from '@modules/projectManage/project/routes';
 import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
+import styles from './projectLeaderMember.module.scss';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -46,6 +47,7 @@ const ProjectLeaderMemberListPage = () => {
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
     const leaderId = queryParameters.get('leaderId');
+    localStorage.setItem('pathPrev', location.search);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.memberProject,
         options: {
@@ -75,7 +77,13 @@ const ProjectLeaderMemberListPage = () => {
             };
         },
     });
-
+    const handleOnClick = (event, record) => {
+        event.preventDefault();
+        navigate(
+            routes.memberActivityProjectLeaderListPage.path +
+                `?projectId=${record?.project?.id}&studentId=${record?.developer.studentInfo?.id}&studentName=${record?.developer.studentInfo?.fullName}`,
+        );
+    };
     const columns = [
         {
             title: '#',
@@ -93,6 +101,11 @@ const ProjectLeaderMemberListPage = () => {
         {
             title: translate.formatMessage(message.name),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
+            render: (fullName, record) => (
+                <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
+                    {fullName}
+                </div>
+            ),
         },
         {
             title: translate.formatMessage(message.team),

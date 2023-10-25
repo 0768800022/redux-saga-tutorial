@@ -27,14 +27,14 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
         form.setFieldsValue({
             ...dataDetail,
         });
-        
+
     }, [dataDetail]);
-    
+
 
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
             });
         }
     }, [isEditing]);
@@ -43,16 +43,16 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField 
-                            label={translate.formatMessage(commonMessage.ServiceCompanySubscriptionName)} 
+                        <TextField
+                            label={translate.formatMessage(commonMessage.ServiceCompanySubscriptionName)}
                             name="name"
                             required
                         />
                     </Col>
                     <Col span={12}>
-                        <NumericField 
+                        <NumericField
                             label={translate.formatMessage(commonMessage.price)}
-                            name= 'price' 
+                            name='price'
                             min={0}
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             addonAfter="₫"
@@ -64,23 +64,23 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
                     <Col span={12}>
                         <NumericField
                             label={<FormattedMessage defaultMessage="Số ngày sử dụng" />}
-                            name= 'valueable'
+                            name='valueable'
                             required
                             min={0}
-                            type = 'number'
+                            type='number'
                         />
                     </Col>
                     <Col span={12}>
                         <NumericField
                             label={<FormattedMessage defaultMessage="Giảm giá" />}
-                            name="saleOff"                          
+                            name="saleOff"
                             min={0}
                             max={100}
                             formatter={(value) => `${value}%`}
                             parser={(value) => value.replace('%', '')}
                         />
                     </Col>
-                    
+
                 </Row>
                 <Row gutter={16}>
                     <Col span={12}>
@@ -91,7 +91,7 @@ const ServiceCompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail
                             options={statusValues}
                         />
                     </Col>
-                    
+
                 </Row>
                 <div className="footer-card-form">{actions}</div>
             </Card>

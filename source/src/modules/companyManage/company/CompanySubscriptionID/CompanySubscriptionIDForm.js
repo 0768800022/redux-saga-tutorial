@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import apiConfig from '@constants/apiConfig';
 import TextField from '@components/common/form/TextField';
 import NumericField from '@components/common/form/NumericField';
-import { DATE_FORMAT_VALUE,DEFAULT_FORMAT } from '@constants';
+import { DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import { statusOptions } from '@constants/masterData';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import DatePickerField from '@components/common/form/DatePickerField';
@@ -41,7 +41,7 @@ const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onS
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
             });
         }
     }, [isEditing]);
@@ -51,9 +51,9 @@ const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onS
         dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DEFAULT_FORMAT);
         form.setFieldsValue({
             ...dataDetail,
-            companyName: companyName ? companyName :dataDetail?.company?.companyName,
+            companyName: companyName ? companyName : dataDetail?.company?.companyName,
             serviceCompanySubscriptionId: dataDetail?.subscription?.name,
-            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DEFAULT_FORMAT),
+            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
 
         });
     }, [dataDetail]);
@@ -67,17 +67,17 @@ const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onS
     };
 
     const validateStartDate = (_, value) => {
-        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DATE_FORMAT_VALUE);
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
         if (date && value && value.isBefore(date)) {
             return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
         }
         return Promise.resolve();
     };
     return (
-        <BaseForm 
-            formId={formId} 
-            onFinish={handleSubmit} 
-            form={form} onValuesChange={onValuesChange} 
+        <BaseForm
+            formId={formId}
+            onFinish={handleSubmit}
+            form={form} onValuesChange={onValuesChange}
         >
             <Card>
                 <Row gutter={16}>
@@ -91,7 +91,7 @@ const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onS
                             searchParams={(text) => ({ name: text })}
                             required
                             disabled={isEditing}
-                            
+
                         />
                     </Col>
                     <Col span={12}>
@@ -103,9 +103,9 @@ const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onS
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime = {true}
+                            showTime={true}
                             name="startDate"
-                            label={translate.formatMessage(commonMessage.startDate)}                            
+                            label={translate.formatMessage(commonMessage.startDate)}
                             placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
@@ -118,11 +118,11 @@ const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onS
                                     validator: validateStartDate,
                                 },
                             ]}
-                        />  
+                        />
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime = {true}
+                            showTime={true}
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="endDate"
                             placeholder="Ngày kết thúc"
@@ -152,7 +152,7 @@ const CompanySubscriptionIdForm = ({ isEditing, formId, actions, dataDetail, onS
                     <Col span={12}>
                         <NumericField
                             label={<FormattedMessage defaultMessage="Giảm giá" />}
-                            name="saleOff"                          
+                            name="saleOff"
                             min={0}
                             max={100}
                             formatter={(value) => `${value}%`}
