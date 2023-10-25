@@ -2,20 +2,25 @@ import { Button, Form, Space } from 'antd';
 import React from 'react';
 import TimePickerField from '../form/TimePickerField';
 import { defineMessages } from 'react-intl';
+import { ReloadOutlined } from '@ant-design/icons';
+import { BaseTooltip } from '../form/BaseTooltip';
 const messages = defineMessages({
     dayOfWeek: 'Thứ',
     timeFrame: 'Khung giờ',
     applyAll: 'Áp dụng tất cả',
     frame: 'Khung',
+    reset: 'Đặt lại khung giờ',
 });
 function ScheduleTable({
     label,
     onSelectScheduleTabletRandom,
     translate,
     daysOfWeekSchedule,
-    canApplyAll,
+    canApplyAll = true,
     handleApplyAll,
     handleOk,
+    handleTimeChange,
+    handleReset,
 }) {
     return (
         <div>
@@ -33,7 +38,7 @@ function ScheduleTable({
                             <td>{day.label}</td>
                             <td style={{ padding: '10px' }}>
                                 <Form.List name={['schedule', day.value]}>
-                                    {(fields, { add, remove }) => {
+                                    {(fields) => {
                                         return (
                                             <div className="no-margin-form-item">
                                                 <Space className="box-flex" size={24}>
@@ -44,8 +49,14 @@ function ScheduleTable({
                                                             </div>
                                                             <Space className="box-flex">
                                                                 <TimePickerField
+                                                                    onChange={(value) =>
+                                                                        handleTimeChange(
+                                                                            [day.value, field.name, 'from'],
+                                                                            value,
+                                                                        )
+                                                                    }
                                                                     onOk={handleOk}
-                                                                    style={{ width: '90px' }}
+                                                                    style={{ width: '76px' }}
                                                                     size="small"
                                                                     name={[field.name, 'from']}
                                                                     onSelect={(value) =>
@@ -55,22 +66,11 @@ function ScheduleTable({
                                                                         )
                                                                     }
                                                                     width="100%"
-                                                                    required
                                                                     placeholder="From"
-                                                                    requiredMsg="Enter from"
-                                                                    validateTrigger={['onChange', 'onBlur']}
-                                                                    // disabledHours={() => {
-                                                                    //     const tabletRandom = getFieldValue('tablet_random');
-                                                                    //     let to = null;
-                                                                    //     if(index > 0) {
-                                                                    //         to = tabletRandom.schedule[day.value][index - 1].to;
-                                                                    //     }
-                                                                    //     return getDisabledHours(to);
-                                                                    // }}
                                                                 />
                                                                 <TimePickerField
                                                                     onOk={handleOk}
-                                                                    style={{ width: '90px' }}
+                                                                    style={{ width: '76px' }}
                                                                     size="small"
                                                                     name={[field.name, 'to']}
                                                                     onSelect={(value) =>
@@ -79,29 +79,33 @@ function ScheduleTable({
                                                                             value,
                                                                         )
                                                                     }
+                                                                    onChange={(value) =>
+                                                                        handleTimeChange(
+                                                                            [day.value, field.name, 'to'],
+                                                                            value,
+                                                                        )
+                                                                    }
                                                                     width="100%"
                                                                     required
                                                                     placeholder="to"
                                                                     requiredMsg="Enter to"
-                                                                    validateTrigger={['onChange', 'onBlur']}
-                                                                    // disabledHours={() => {
-                                                                    //     const timeWork = getFieldValue('time_work');
-                                                                    //     const from =
-                                                                    //         timeWork[day.value][field.name].from;
-                                                                    //     return getDisabledHours(from);
-                                                                    // }}
-                                                                    // disabledMinutes={(hour) => {
-                                                                    //     const timeWork = getFieldValue('time_work');
-                                                                    //     const from =
-                                                                    //         timeWork[day.value][field.name].from;
-                                                                    //     return getDisabledMinutes(hour, from);
-                                                                    // }}
+                                                                    validateTrigger={['onBlur']}
                                                                 />
                                                             </Space>
                                                         </div>
                                                     ))}
-                                                    {!dayIndex && (
-                                                        <div className="wrap-btn-apply-all">
+                                                    <div className="wrap-btn-apply-all">
+                                                        <BaseTooltip title={translate.formatMessage(messages.reset)}>
+                                                            <Button
+                                                                type="default"
+                                                                size="middle"
+                                                                style={{ marginRight: '30px' }}
+                                                                onClick={() => handleReset(day.value)}
+                                                            >
+                                                                <ReloadOutlined />
+                                                            </Button>
+                                                        </BaseTooltip>
+                                                        {!dayIndex && (
                                                             <Button
                                                                 disabled={!canApplyAll}
                                                                 type="primary"
@@ -110,15 +114,9 @@ function ScheduleTable({
                                                             >
                                                                 {translate.formatMessage(messages.applyAll)}
                                                             </Button>
-                                                        </div>
-                                                    )}
+                                                        )}
+                                                    </div>
                                                 </Space>
-
-                                                {/* <Form.Item style={{ width: '170px', textAlign: 'left' }}>
-                                                <Button type="dashed" onClick={add}>
-                                                <PlusOutlined />Add Frame
-                                        </Button>
-                                            </Form.Item> */}
                                             </div>
                                         );
                                     }}

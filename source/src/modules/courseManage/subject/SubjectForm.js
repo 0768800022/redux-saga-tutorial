@@ -10,7 +10,7 @@ import { FormattedMessage } from 'react-intl';
 
 const SubjectForm = (props) => {
     const translate = useTranslate();
-    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues } = props;
+    const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const statusValue = translate.formatKeys(statusOptions, ['label']);
     //const statusSubject = translate.formatKeys(statusSubjectOptions, ['label']);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
@@ -29,6 +29,14 @@ const SubjectForm = (props) => {
             ...dataDetail,
         });
     }, [dataDetail]);
+
+    useEffect(() => {
+        if (!isEditing > 0) {
+            form.setFieldsValue({
+                status: statusValue[1].value,
+            });
+        }
+    }, [isEditing]);
 
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
@@ -50,7 +58,6 @@ const SubjectForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <SelectField
-                            defaultValue={statusValue[0]}
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             name="status"
                             options={statusValue}

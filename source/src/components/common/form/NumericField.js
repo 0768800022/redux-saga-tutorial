@@ -20,6 +20,7 @@ const NumericField = (props) => {
         defaultValue,
         required,
         isCurrency,
+        readOnly,
         addonAfter,
     } = props;
     const currency = useCurrency();
@@ -48,6 +49,7 @@ const NumericField = (props) => {
                 parser={parser || fieldParser}
                 onChange={onChange}
                 onBlur={onBlur}
+                readOnly={readOnly}
                 defaultValue={defaultValue}
                 {...props}
             />

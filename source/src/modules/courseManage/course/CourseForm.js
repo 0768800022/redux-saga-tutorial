@@ -38,7 +38,7 @@ const CourseForm = (props) => {
             values.state = 1;
         }
         if (!values?.status) {
-            values.status = 0;
+            values.status = 1;
         }
         if (isEditing) {
             executeUpdateLeader({
@@ -46,7 +46,7 @@ const CourseForm = (props) => {
                     id: dataDetail?.id,
                     leaderId: values?.leaderId,
                 },
-                onCompleted:(response) => {
+                onCompleted: (response) => {
                     notification({
                         message: <FormattedMessage defaultMessage="Cập nhật leader được" />,
                     });
@@ -294,7 +294,8 @@ const CourseForm = (props) => {
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Học phí" />}
                             name="fee"
-                            type="number"
+                            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            addonAfter="₫"
                             min={0}
                         />
                     </Col>
@@ -304,7 +305,8 @@ const CourseForm = (props) => {
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"
-                            type="number"
+                            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            addonAfter="₫"
                             min={0}
                         />
                     </Col>
@@ -312,7 +314,7 @@ const CourseForm = (props) => {
                         <SelectField
                             disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
                             name="status"
-                            defaultValue={statusValues[0]}
+                            defaultValue={statusValues[1]}
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             allowClear={false}
                             options={statusValues}

@@ -133,10 +133,6 @@ const CourseLeaderListPage = () => {
             dataIndex: 'name',
         },
         {
-            title: translate.formatMessage(commonMessage.subject),
-            dataIndex: ['subject', 'subjectName'],
-        },
-        {
             title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'dateRegister',
             render: (dateRegister) => {

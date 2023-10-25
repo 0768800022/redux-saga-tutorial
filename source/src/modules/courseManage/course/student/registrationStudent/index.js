@@ -59,6 +59,10 @@ function RegistrationStudentListPage() {
                     return [];
                 }
             };
+            funcs.getList = () => {
+                const params = mixinFuncs.prepareGetListParams(queryFilter);
+                mixinFuncs.handleFetchList({ ...params, courseName: null });
+            };
 
         },
     });

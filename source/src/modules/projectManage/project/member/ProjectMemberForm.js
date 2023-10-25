@@ -21,7 +21,6 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
-    const [canApplyAll, setCanApplyAll] = useState(true);
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
@@ -182,8 +181,9 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
             const [dayKey, dayIndexKey, frameKey] = fieldName;
             if (frameKey === 'from') {
                 const to = schedule[dayKey][dayIndexKey].to;
+                const from = schedule[dayKey][dayIndexKey].from;
                 if (to && to.format(TIME_FORMAT_DISPLAY) < value.format(TIME_FORMAT_DISPLAY)) {
-                    schedule[dayKey][dayIndexKey].to = null;
+                    // schedule[dayKey][dayIndexKey].to = value;
                 }
             } else if (frameKey === 'to') {
                 const from = schedule[dayKey][dayIndexKey].from;
@@ -208,23 +208,6 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         immediate: true,
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
     });
-
-    const checkCanApplyAll = () => {
-        const schedule = getFieldValue('schedule');
-        if (schedule) {
-            const { monday } = schedule;
-            if (!monday) {
-                return setCanApplyAll(false);
-            }
-            for (const frame of monday) {
-                if (frame.from === null || frame.to === null) {
-                    return setCanApplyAll(false);
-                }
-            }
-            return setCanApplyAll(true);
-        }
-        return setCanApplyAll(false);
-    };
 
     const handleApplyAll = (e) => {
         e.preventDefault();
@@ -261,7 +244,33 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
             }
         });
     }, [dataDetail]);
-
+    const handleTimeChange = (fieldName, value) => {
+        if (!value) {
+            try {
+                const schedule = getFieldValue('schedule');
+                const [dayKey, dayIndexKey, frameKey] = fieldName;
+                if (frameKey === 'from') {
+                    schedule[dayKey][dayIndexKey].from = dayjs('00:00', 'HH:mm');
+                } else if (frameKey === 'to') {
+                    schedule[dayKey][dayIndexKey].to = dayjs('00:00', 'HH:mm');
+                    // schedule[dayKey][dayIndexKey].to = schedule[dayKey][dayIndexKey].from;
+                }
+                setFieldValue('schedule', schedule);
+                onValuesChange();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+    const handleReset = (day) => {
+        const schedule = getFieldValue('schedule');
+        for (let dayIndexKey = 0; dayIndexKey < 3; dayIndexKey++) {
+            schedule[day][dayIndexKey].from = dayjs('00:00', 'HH:mm');
+            schedule[day][dayIndexKey].to = dayjs('00:00', 'HH:mm');
+        }
+        setFieldValue('schedule', schedule);
+        onValuesChange();
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             <Card className="card-form" bordered={false}>
@@ -317,9 +326,10 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                     label={translate.formatMessage(commonMessage.schedule)}
                     onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
                     translate={translate}
-                    canApplyAll={canApplyAll}
                     handleApplyAll={handleApplyAll}
                     daysOfWeekSchedule={daysOfWeekSchedule}
+                    handleTimeChange={handleTimeChange}
+                    handleReset={handleReset}
                 />
                 <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
                     {actions}

@@ -1,6 +1,6 @@
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import {  statusOptions } from '@constants/masterData';
+import { statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
 import { Card, Col, Row } from 'antd';
@@ -35,7 +35,7 @@ const CategoryForm = (props) => {
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
             });
         }
     }, [isEditing]);

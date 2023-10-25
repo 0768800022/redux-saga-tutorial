@@ -11,8 +11,8 @@ function ProjectLeaderTaskLogListPage() {
     const search = location.search;
     const paramHead = routes.projectLeaderListPage.path;
     const breadcrumbName= routes.taskLogListPage.breadcrumbs(commonMessage,paramHead,taskParam,search);
-    const renderAction = false;
-    const createPermission = false;
+    const renderAction = true;
+    const createPermission = true;
     return (
         <ProjectTaskLogListPage breadcrumbName={breadcrumbName} renderAction = {renderAction} createPermission = {createPermission}/>
     );

@@ -68,4 +68,8 @@ export const commonMessage = defineMessages({
     hotline: 'Đường dây nóng',
     review: 'Đánh giá',
     viewDetail: 'Xem chi tiết',
+    myActivity: 'Hoạt động của tôi',
+    studentActivity: 'Hoạt động của sinh viên',
+    memberActivity: 'Hoạt động của thành viên',
+    detail: 'Chi tiết',
 });
