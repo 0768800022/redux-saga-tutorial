@@ -183,7 +183,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                 const to = schedule[dayKey][dayIndexKey].to;
                 const from = schedule[dayKey][dayIndexKey].from;
                 if (to && to.format(TIME_FORMAT_DISPLAY) < value.format(TIME_FORMAT_DISPLAY)) {
-                    schedule[dayKey][dayIndexKey].to = value;
+                    // schedule[dayKey][dayIndexKey].to = value;
                 }
             } else if (frameKey === 'to') {
                 const from = schedule[dayKey][dayIndexKey].from;
@@ -252,7 +252,8 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                 if (frameKey === 'from') {
                     schedule[dayKey][dayIndexKey].from = dayjs('00:00', 'HH:mm');
                 } else if (frameKey === 'to') {
-                    schedule[dayKey][dayIndexKey].to = schedule[dayKey][dayIndexKey].from;
+                    schedule[dayKey][dayIndexKey].to = dayjs('00:00', 'HH:mm');
+                    // schedule[dayKey][dayIndexKey].to = schedule[dayKey][dayIndexKey].from;
                 }
                 setFieldValue('schedule', schedule);
                 onValuesChange();

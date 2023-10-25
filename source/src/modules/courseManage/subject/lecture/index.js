@@ -144,7 +144,6 @@ const LectureListPage = () => {
                         <DragDropTableV2
                             onDragEnd={onDragEnd}
                             onChange={changePagination}
-                            pagination={pagination}
                             loading={loading}
                             dataSource={sortedData}
                             columns={columns}
