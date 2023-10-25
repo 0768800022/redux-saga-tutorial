@@ -51,7 +51,7 @@ const CourseSavePage = () => {
         },
     });
 
-    const { execute: executeUpdateLeader } = useFetch(apiConfig.course.updateLeaderCourse, { immediate: false });
+    // const { execute: executeUpdateLeader } = useFetch(apiConfig.course.updateLeaderCourse, { immediate: false });
 
     return (
         <PageWrapper
@@ -72,7 +72,6 @@ const CourseSavePage = () => {
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
                 onSubmit={mixinFuncs.onSave}
-                executeUpdateLeader={executeUpdateLeader}
             />
         </PageWrapper>
     );
