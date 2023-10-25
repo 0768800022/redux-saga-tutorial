@@ -2,12 +2,14 @@ import { Button, Form, Space } from 'antd';
 import React from 'react';
 import TimePickerField from '../form/TimePickerField';
 import { defineMessages } from 'react-intl';
+import { ReloadOutlined } from '@ant-design/icons';
+import { BaseTooltip } from '../form/BaseTooltip';
 const messages = defineMessages({
     dayOfWeek: 'Thứ',
     timeFrame: 'Khung giờ',
     applyAll: 'Áp dụng tất cả',
     frame: 'Khung',
-    reset: 'Làm mới',
+    reset: 'Đặt lại khung giờ',
 });
 function ScheduleTable({
     label,
@@ -39,7 +41,7 @@ function ScheduleTable({
                                     {(fields) => {
                                         return (
                                             <div className="no-margin-form-item">
-                                                <Space className="box-flex" size={33}>
+                                                <Space className="box-flex" size={24}>
                                                     {fields.map((field, index) => (
                                                         <div key={field.key}>
                                                             <div className="frame-label">
@@ -54,7 +56,7 @@ function ScheduleTable({
                                                                         )
                                                                     }
                                                                     onOk={handleOk}
-                                                                    style={{ width: '70px' }}
+                                                                    style={{ width: '76px' }}
                                                                     size="small"
                                                                     name={[field.name, 'from']}
                                                                     onSelect={(value) =>
@@ -68,7 +70,7 @@ function ScheduleTable({
                                                                 />
                                                                 <TimePickerField
                                                                     onOk={handleOk}
-                                                                    style={{ width: '70px' }}
+                                                                    style={{ width: '76px' }}
                                                                     size="small"
                                                                     name={[field.name, 'to']}
                                                                     onSelect={(value) =>
@@ -93,14 +95,16 @@ function ScheduleTable({
                                                         </div>
                                                     ))}
                                                     <div className="wrap-btn-apply-all">
-                                                        <Button
-                                                            type="primary"
-                                                            size="middle"
-                                                            style={{ marginRight: '10px' }}
-                                                            onClick={() => handleReset(day.value)}
-                                                        >
-                                                            {translate.formatMessage(messages.reset)}
-                                                        </Button>
+                                                        <BaseTooltip title={translate.formatMessage(messages.reset)}>
+                                                            <Button
+                                                                type="default"
+                                                                size="middle"
+                                                                style={{ marginRight: '30px' }}
+                                                                onClick={() => handleReset(day.value)}
+                                                            >
+                                                                <ReloadOutlined />
+                                                            </Button>
+                                                        </BaseTooltip>
                                                         {!dayIndex && (
                                                             <Button
                                                                 disabled={!canApplyAll}

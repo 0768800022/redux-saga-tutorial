@@ -268,6 +268,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
             schedule[day][dayIndexKey].to = dayjs('00:00', 'HH:mm');
         }
         setFieldValue('schedule', schedule);
+        onValuesChange();
     };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
