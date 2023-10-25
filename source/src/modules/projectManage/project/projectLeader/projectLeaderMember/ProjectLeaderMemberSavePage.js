@@ -9,6 +9,7 @@ import { defineMessages } from 'react-intl';
 import ProjectLeaderMemberForm from './ProjectLeaderMemberForm';
 import { generatePath } from 'react-router-dom';
 // import routes from '@modules/course/routes';
+import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
     objectName: 'Thành viên',
@@ -48,6 +49,15 @@ function ProjectLeaderMemberSavePage() {
                     schedule: data.schedule,
                     teamId: data.teamId,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-MEMBER-PROJECT-ERROR-0001') {
+                    showErrorMessage('Thành viên trong dự án đã tồn tại');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });
