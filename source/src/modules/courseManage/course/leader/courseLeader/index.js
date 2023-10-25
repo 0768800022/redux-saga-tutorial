@@ -86,7 +86,7 @@ const CourseLeaderListPage = () => {
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const path = routes.courseLeaderListPage.path + `/task/${id}?courseName=${name}&subjectId=${subject.id}`;
+                                    const path = routes.courseLeaderListPage.path + `/task/${id}?courseName=${name}&state=${state}&subjectId=${subject.id}`;
                                     navigate(path);
                                 }}
                             >
