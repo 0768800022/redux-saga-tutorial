@@ -370,6 +370,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             schedule[day][dayIndexKey].to = dayjs('00:00', 'HH:mm');
         }
         setFieldValue('schedule', schedule);
+        onValuesChange();
     };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onFieldsChange={onFieldsChange} size="1100px">
