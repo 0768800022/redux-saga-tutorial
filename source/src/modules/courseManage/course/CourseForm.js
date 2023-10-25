@@ -38,7 +38,7 @@ const CourseForm = (props) => {
             values.state = 1;
         }
         if (!values?.status) {
-            values.status = 0;
+            values.status = 1;
         }
         if (isEditing) {
             executeUpdateLeader({
@@ -312,7 +312,7 @@ const CourseForm = (props) => {
                         <SelectField
                             disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
                             name="status"
-                            defaultValue={statusValues[0]}
+                            defaultValue={statusValues[1]}
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             allowClear={false}
                             options={statusValues}
