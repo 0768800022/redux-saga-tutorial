@@ -26,6 +26,7 @@ import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
+import styles from './member.module.scss';
 
 const message = defineMessages({
     objectName: 'Thành viên',
@@ -40,10 +41,12 @@ const ProjectMemberListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const { pathname: pagePath } = useLocation();
+    const location = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
+    localStorage.setItem('pathPrev', location.search);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.memberProject,
         options: {
@@ -85,6 +88,13 @@ const ProjectMemberListPage = () => {
 
         return breadRoutes;
     };
+    const handleOnClick = (event, record) => {
+        event.preventDefault();
+        navigate(
+            routes.memberActivityProjectListPage.path +
+                `?courseId=${record?.project?.id}&studentId=${record?.developer.studentInfo?.id}&studentName=${record?.developer.studentInfo?.fullName}`,
+        );
+    };
 
     const columns = [
         {
@@ -103,6 +113,11 @@ const ProjectMemberListPage = () => {
         {
             title: translate.formatMessage(commonMessage.name),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
+            render: (fullName, record) => (
+                <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
+                    {fullName}
+                </div>
+            ),
         },
         {
             title: translate.formatMessage(message.team),

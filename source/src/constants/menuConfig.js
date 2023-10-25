@@ -180,6 +180,11 @@ const navMenuConfig = [
                 key: 'my-task-student',
                 path: generatePath(routes.myTaskStudentListPage.path, {}),
             },
+            {
+                label: <FormattedMessage defaultMessage="Hoạt động của tôi" />,
+                key: 'my-activity-course-student',
+                path: generatePath(routes.myActivityCourseStudentListPage.path, {}),
+            },
         ],
     },
     {
@@ -197,6 +202,11 @@ const navMenuConfig = [
                 label: <FormattedMessage defaultMessage="Task của tôi" />,
                 key: 'my-task-project-student',
                 path: routes.projectStudentMyTaskListPage.path,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Hoạt động của tôi" />,
+                key: 'my-activity-project-student',
+                path: generatePath(routes.myActivityProjectStudentListPage.path, {}),
             },
         ],
     },

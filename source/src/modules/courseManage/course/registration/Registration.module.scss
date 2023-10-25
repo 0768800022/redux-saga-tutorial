@@ -14,3 +14,11 @@
     color: green;
     font-size: 18px;
 }
+.custom-div {
+    cursor: pointer;
+    text-decoration: none;
+  
+    &:hover {
+      text-decoration: underline;
+    }
+  }

@@ -142,8 +142,8 @@ const CourseStudentListPage = () => {
             dataIndex: 'name',
         },
         {
-            title: translate.formatMessage(commonMessage.subject),
-            dataIndex: ['subject', 'subjectName'],
+            title: translate.formatMessage(commonMessage.leader),
+            dataIndex: ['leader', 'leaderName'],
         },
         {
             title: <FormattedMessage defaultMessage="Học phí" />,
