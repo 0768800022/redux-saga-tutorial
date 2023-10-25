@@ -343,12 +343,12 @@ const CourseStudentListPage = () => {
                 regisState={stateRegistration}
                 loading={dataListLoading || starDataLoading || loadingData}
             />
-            <PreviewModal
+            {/* <PreviewModal
                 open={openPreviewModal}
                 onCancel={() => handlersPreviewModal.close()}
                 detail={detail || {}}
                 loading={loading}
-            />
+            /> */}
         </PageWrapper>
     );
 };

@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import SelectField from '@components/common/form/SelectField';
 import { statusOptions, projectTaskState } from '@constants/masterData';
-
+import RichTextField from '@components/common/form/RichTextField';
 const messages = defineMessages({
     objectName: 'Trang thái',
     update: 'Cập nhật',
@@ -112,12 +112,15 @@ const DetailProjectModal = ({
                         />
                     </Col>
 
-                    <TextField
-                        readOnly="true"
-                        width="100%"
-                        label={<FormattedMessage defaultMessage="Mô tả dự án" />}
-                        name={'description'}
-                        type="textarea"
+                    <RichTextField
+                        label={<FormattedMessage defaultMessage="Mô tả" />}
+                        labelAlign="left"
+                        name="description"
+                        style={{
+                            height: 300,
+                            marginBottom: 70,
+                        }}
+                        required
                     />
                 </BaseForm>
             </Card>
