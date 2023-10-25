@@ -16,6 +16,7 @@ import { commonMessage } from '@locales/intl';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { CalendarOutlined } from '@ant-design/icons';
 import styles from '../project.module.scss';
+import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -155,10 +156,26 @@ function ProjectTaskListPage() {
         active && mixinFuncs.renderActionColumn({ taskLog: true, edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
 
+    const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
+        immediate: true,
+        params:{ projectId:projectId },
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item?.developer?.id,
+                label: item?.developer?.studentInfo?.fullName,
+            })),
+    });
+
     const searchFields = [
         {
             key: 'taskName',
             placeholder: translate.formatMessage(commonMessage.task),
+        },
+        {
+            key: 'developerId',
+            placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
+            type: FieldTypes.SELECT,
+            options:  memberProject,
         },
         {
             key: 'state',
@@ -205,6 +222,7 @@ function ProjectTaskListPage() {
 
         return breadRoutes;
     };
+
 
     return (
         <PageWrapper routes={setBreadRoutes()}>
