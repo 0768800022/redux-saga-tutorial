@@ -23,7 +23,7 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
     const location = useLocation();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const taskName = queryParameters.get('taskName');
+    const taskName = queryParameters.get('task');
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const state = location?.state?.prevPath;
     const taskParam = routes.ProjectTaskListPage.path;
@@ -57,7 +57,7 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
                 };
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, projectName: null,taskName: null, taskId: null });
+                    mixinFuncs.handleFetchList({ ...params, projectName: null, taskId: null });
                 };
             },
         });
