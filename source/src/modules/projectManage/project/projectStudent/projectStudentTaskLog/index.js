@@ -5,11 +5,11 @@ import { useLocation } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
 import ProjectTaskLogListPage from '@modules/projectManage/project/projectTask/projectTaskLog';
 
-function ProjectLeaderTaskLogListPage() {
+function ProjectStudentTaskLogListPage() {
     const location = useLocation();
-    const taskParam = routes.projectLeaderTaskListPage.path;
+    const taskParam = routes.projectStudentTaskListPage.path;
     const search = location.search;
-    const paramHead = routes.projectLeaderListPage.path;
+    const paramHead = routes.projectStudentListPage.path;
     const breadcrumbName= routes.taskLogListPage.breadcrumbs(commonMessage,paramHead,taskParam,search);
     const renderAction = true;
     const createPermission = true;
@@ -18,4 +18,4 @@ function ProjectLeaderTaskLogListPage() {
     );
 }
 
-export default ProjectLeaderTaskLogListPage;
+export default ProjectStudentTaskLogListPage;

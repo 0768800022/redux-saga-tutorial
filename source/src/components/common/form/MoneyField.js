@@ -20,7 +20,6 @@ const NumericField = (props) => {
         defaultValue,
         required,
         isCurrency,
-        readOnly,
         addonAfter,
     } = props;
     const currency = useCurrency();
@@ -41,15 +40,14 @@ const NumericField = (props) => {
             <InputNumber
                 addonAfter={isCurrency ? currency.symbol : addonAfter}
                 placeholder={placeholder}
+                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 max={max}
                 min={min}
                 disabled={disabled}
                 style={{ width: width || '100%' }}
-                formatter={formatter || fieldFormatter}
                 parser={parser || fieldParser}
                 onChange={onChange}
                 onBlur={onBlur}
-                readOnly={readOnly}
                 defaultValue={defaultValue}
                 {...props}
             />

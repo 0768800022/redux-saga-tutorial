@@ -55,6 +55,10 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
                 funcs.getItemDetailLink = (dataRow) => {
                     return `${pagePath}/${dataRow.id}${search}`;
                 };
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, projectName: null,taskName: null, taskId: null });
+                };
             },
         });
     const columns = [

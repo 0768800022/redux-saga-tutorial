@@ -70,4 +70,5 @@ export const commonMessage = defineMessages({
     myActivity: 'Hoạt động của tôi',
     studentActivity: 'Hoạt động của sinh viên',
     memberActivity: 'Hoạt động của thành viên',
+    detail: 'Chi tiết',
 });

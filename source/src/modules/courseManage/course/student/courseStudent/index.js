@@ -1,4 +1,4 @@
-import { BookOutlined, UserOutlined,CommentOutlined } from '@ant-design/icons';
+import { BookOutlined, UserOutlined,CommentOutlined,EyeOutlined } from '@ant-design/icons';
 import { TeamOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -22,9 +22,11 @@ import ReviewListModal from '@modules/review/student/ReviewListModal';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import useAuth from '@hooks/useAuth';
+import PreviewModal from './PreviewModal';
 
 const message = defineMessages({
     objectName: 'Khóa học',
+
 });
 
 const CourseStudentListPage = () => {
@@ -35,10 +37,14 @@ const CourseStudentListPage = () => {
     const stateValues = translate.formatKeys(lectureState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [openReviewModal, handlersReviewModal] = useDisclosure(false);
+    const [openPreviewModal, handlersPreviewModal] = useDisclosure(false);
+
     const [detail, setDetail] = useState();
     const [courseId, setCourseId] = useState();
     const [courseState, setCourseState] = useState();
     const [checkReivew,setCheckReview] = useState(false);
+
+
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
@@ -75,7 +81,7 @@ const CourseStudentListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationStudentListPage.path +
-                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                            `?courseId=${id}&courseName=${name}`,
                                         );
                                 }}
                             >
@@ -117,6 +123,21 @@ const CourseStudentListPage = () => {
                                 }}
                             >
                                 <CommentOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    detail: (item) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.detail)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDetail(item);
+                                    handlersPreviewModal.open();
+                                }}
+                            >
+                                <EyeOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -215,13 +236,14 @@ const CourseStudentListPage = () => {
         },
         mixinFuncs.renderActionColumn(
             {
+                detail: true,
                 review:true,
                 registration: true,
                 task: true,
                 edit:  true,
                 delete: true,
             },
-            { width: '130px' },
+            { width: '160px' },
         ),
     ].filter(Boolean);
     const { data: dataListReview, execute: listReview, loading: dataListLoading } = useFetch(
@@ -322,6 +344,12 @@ const CourseStudentListPage = () => {
                 courseState={courseState}
                 regisState = {stateRegistration}
                 loading={dataListLoading || starDataLoading || loadingData}
+            />
+            <PreviewModal
+                open={openPreviewModal}
+                onCancel={() => handlersPreviewModal.close()}
+                detail={detail || {}}
+                loading={loading}
             />
         </PageWrapper>
     );

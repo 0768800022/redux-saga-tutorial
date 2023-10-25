@@ -63,7 +63,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     id: dataDetail?.id,
                     leaderId: values?.leaderId,
                 },
-                onCompleted:(response) => {
+                onCompleted: (response) => {
                     notification({
                         message: <FormattedMessage defaultMessage="Cập nhật leader được" />,
                     });
@@ -71,7 +71,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 onError: (err) => { },
             });
         }
-        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT) ;
+        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
         values.endDate = formatDateString(values.endDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
@@ -86,7 +86,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
                 state: stateValues[0].value,
             });
         }
@@ -116,7 +116,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         form.setFieldsValue({
             ...dataDetail,
             leaderId: dataDetail?.leaderInfo?.id,
-            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DEFAULT_FORMAT),
+            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
         });
     }, [dataDetail]);
 
@@ -129,7 +129,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     };
 
     const validateStartDate = (_, value) => {
-        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT),DATE_FORMAT_VALUE);
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
         if (date && value && value.isBefore(date)) {
             return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
         }

@@ -11,6 +11,10 @@ import { Tag } from 'antd';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { commonMessage } from '@locales/intl';
+import { Button } from 'antd';
+import { CalendarOutlined } from '@ant-design/icons';
 
 import useFetch from '@hooks/useFetch';
 const message = defineMessages({
@@ -27,6 +31,7 @@ const message = defineMessages({
 
 function ProjectStudentTaskListPage() {
     const translate = useTranslate();
+    const navigate = useNavigate();
 
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
@@ -88,6 +93,32 @@ function ProjectStudentTaskListPage() {
                         );
                     }
                 };
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, projectName:null });
+                };
+                funcs.additionalActionColumnButtons = () => ({
+                    taskLog: ({ id,taskName }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        routes.projectStudentTaskListPage.path +
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&taskName=${taskName}&active=${active}`,
+                                        {
+                                            state: { action: 'projectTaskLog', prevPath: location.pathname },
+                                        },
+                                    );
+                                }}
+                            >
+                                <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                });
             },
         });
     const columns = [
@@ -128,7 +159,10 @@ function ProjectStudentTaskListPage() {
                 );
             },
         },
-        // mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderActionColumn(
+            { taskLog: true },
+            { width: '80px' },
+        ),
     ].filter(Boolean);
 
     return (

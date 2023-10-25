@@ -69,7 +69,7 @@ const TeamForm = (props) => {
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
-            leaderId : dataDetail?.leaderInfo?.leaderName,
+            leaderId: dataDetail?.leaderInfo?.leaderName,
         });
         setImageUrl(dataDetail.avatar);
     }, [dataDetail]);
@@ -77,7 +77,7 @@ const TeamForm = (props) => {
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
-                status: statusValues[0].value,
+                status: statusValues[1].value,
                 projectId: projectId,
             });
         }
@@ -127,7 +127,6 @@ const TeamForm = (props) => {
                 <TextField
                     disabled={dataDetail.state >= 3}
                     width={'100%'}
-                    required
                     label={<FormattedMessage defaultMessage="Mô tả" />}
                     name="description"
                     type="textarea"
