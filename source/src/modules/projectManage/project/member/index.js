@@ -92,7 +92,7 @@ const ProjectMemberListPage = () => {
         event.preventDefault();
         navigate(
             routes.memberActivityProjectListPage.path +
-                `?courseId=${record?.project?.id}&studentId=${record?.developer.studentInfo?.id}&studentName=${record?.developer.studentInfo?.fullName}`,
+                `?projectId=${record?.project?.id}&studentId=${record?.developer.studentInfo?.id}&studentName=${record?.developer.studentInfo?.fullName}`,
         );
     };
 
