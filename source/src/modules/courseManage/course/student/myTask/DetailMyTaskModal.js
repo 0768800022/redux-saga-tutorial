@@ -80,16 +80,18 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                         </Col>
                     </Row>
 
-                    {/* <Row gutter={16}>
+                    <Row gutter={12}>
                         <Col span={12}>
                             <SelectField
                                 readOnly
-                                label={<FormattedMessage defaultMessage="Tình trạng" />}
+                                label={<FormattedMessage defaultMessage="Tình Trạng" />}
                                 name="state"
-                                // initialValue={detail?.leader?.leaderName}
+                                options={stateValues}
+                                disabled
+                                // initialValue={detail?.subject?.subjectName}
                             />
                         </Col>
-                    </Row> */}
+                    </Row>
                     <TextField
                         readOnly
                         label={<FormattedMessage defaultMessage="Note" />}
