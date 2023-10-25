@@ -236,7 +236,7 @@ const ProjectStudentListPage = () => {
 
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
 
-        mixinFuncs.renderActionColumn({ team: true, member: true, task: true, viewDetail: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ team: true, member: true, task: true }, { width: '150px' }),
     ];
 
     return (
@@ -245,6 +245,14 @@ const ProjectStudentListPage = () => {
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
                 baseTable={
                     <BaseTable
+                        onRow={(record, rowIndex) => ({
+                            onClick: (e) => {
+                                e.stopPropagation();
+                                handleFetchDetail(record.id);
+
+                                handlersModal.open();
+                            },
+                        })}
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}

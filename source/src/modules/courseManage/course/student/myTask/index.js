@@ -66,24 +66,6 @@ function MyTaskStudentListPage() {
                     return [];
                 }
             };
-            funcs.additionalActionColumnButtons = () => ({
-                viewDetail: ({ id }) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.viewDetail)}>
-                        <Button
-                            type="link"
-                            style={{ padding: '0' }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleFetchDetail(id);
-
-                                handlersModal.open();
-                            }}
-                        >
-                            <EyeOutlined color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
-                        </Button>
-                    </BaseTooltip>
-                ),
-            });
         },
     });
 
@@ -133,7 +115,6 @@ function MyTaskStudentListPage() {
                     );
                 },
             },
-            mixinFuncs.renderActionColumn({ viewDetail: true }, { width: '150px' }),
         ];
         return columns;
     };
@@ -169,6 +150,14 @@ function MyTaskStudentListPage() {
                     searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                     baseTable={
                         <BaseTable
+                            onRow={(record, rowIndex) => ({
+                                onClick: (e) => {
+                                    e.stopPropagation();
+                                    handleFetchDetail(record.id);
+
+                                    handlersModal.open();
+                                },
+                            })}
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
