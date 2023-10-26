@@ -175,7 +175,7 @@ function ProjectStudentTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ taskLog: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ taskLog: true, edit: true, delete: true }, { width: '150px' }),
     ].filter(Boolean);
 
     return (
@@ -191,7 +191,7 @@ function ProjectStudentTaskListPage() {
             <div>
                 <ListPage
                     title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
-                    actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
+                    actionBar={mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onRow={(record) => ({
