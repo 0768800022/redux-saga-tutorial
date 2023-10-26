@@ -223,7 +223,7 @@ function TaskListPage() {
                             {courseName}
                         </span>
                     }
-                    actionBar={mixinFuncs.renderActionBar()}
+                    actionBar={state != 3 ? mixinFuncs.renderActionBar():''}
 
                     baseTable={
                         <BaseTable

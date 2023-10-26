@@ -161,7 +161,7 @@ function ProjectStudentTaskListPage() {
         },
         mixinFuncs.renderActionColumn(
             { taskLog: true },
-            { width: '80px' },
+            { width: '150px' },
         ),
     ].filter(Boolean);
 
