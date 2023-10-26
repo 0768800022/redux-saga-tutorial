@@ -83,7 +83,7 @@ const ProjectStudentListPage = () => {
                             serializeParams({ developerId: developerId, developerName: developerName, ...filter }),
                         );
                     } else {
-                        mixinFuncs.setQueryParams(serializeParams(filter));
+                        mixinFuncs.setQueryParams(serializeParams({ filter }));
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
@@ -97,7 +97,8 @@ const ProjectStudentListPage = () => {
                                     e.stopPropagation();
 
                                     navigate(
-                                        routes.projectStudentTaskListPage.path + `?projectId=${id}&projectName=${name}`,
+                                        routes.projectStudentTaskListPage.path +
+                                            `?projectId=${id}&projectName=${name}&stateProject=${state}`,
                                     );
                                 }}
                             >
@@ -114,7 +115,7 @@ const ProjectStudentListPage = () => {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectStudentMemberListPage.path +
-                                        `?projectId=${id}&projectName=${name}`,
+                                            `?projectId=${id}&projectName=${name}`,
                                     );
                                 }}
                             >
@@ -133,12 +134,12 @@ const ProjectStudentListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectStudentTeamListPage.path +
-                                            `?projectId=${id}&projectName=${name}&active=${true}`,
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
                                         );
                                     } else {
                                         navigate(
                                             routes.projectStudentTeamListPage.path +
-                                            `?projectId=${id}&projectName=${name}`,
+                                                `?projectId=${id}&projectName=${name}`,
                                         );
                                     }
                                 }}
@@ -238,7 +239,10 @@ const ProjectStudentListPage = () => {
 
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
 
-        mixinFuncs.renderActionColumn({ team: true, member: true, task: true, edit: true, delete: true }, { width: '220px' }),
+        mixinFuncs.renderActionColumn(
+            { team: true, member: true, task: true, edit: true, delete: true },
+            { width: '220px' },
+        ),
     ];
 
     return (
