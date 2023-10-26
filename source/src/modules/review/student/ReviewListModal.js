@@ -48,7 +48,7 @@ const ReviewListModal = ({ loading,star,checkReivew,courseId,open, onCancel, dat
     const handleShowMore = () => {
         setIsLoadingMore(true);
         setTimeout(() => {
-            setVisibleItems(visibleItems + 5);
+            setVisibleItems(visibleItems + 10);
             setIsLoadingMore(false);
         }, 150);
     };
