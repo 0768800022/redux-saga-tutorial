@@ -15,8 +15,10 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
 import { Button } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
-
+import DetailMyTaskProjectModal from '../myTask/DetailMyTaskProjectModal';
 import useFetch from '@hooks/useFetch';
+import useDisclosure from '@hooks/useDisclosure';
+import { useState } from 'react';
 const message = defineMessages({
     objectName: 'Task',
     developer: 'Lập trình viên',
@@ -44,7 +46,21 @@ function ProjectStudentTaskListPage() {
     const active = queryParameters.get('active');
 
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
+    const [openedModal, handlersModal] = useDisclosure(false);
+    const [detail, setDetail] = useState({});
 
+    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
+        immediate: false,
+    });
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.projectTask,
@@ -95,10 +111,10 @@ function ProjectStudentTaskListPage() {
                 };
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, projectName:null });
+                    mixinFuncs.handleFetchList({ ...params, projectName: null });
                 };
                 funcs.additionalActionColumnButtons = () => ({
-                    taskLog: ({ id,taskName }) => (
+                    taskLog: ({ id, taskName }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
                             <Button
                                 type="link"
@@ -159,10 +175,7 @@ function ProjectStudentTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderActionColumn(
-            { taskLog: true },
-            { width: '150px' },
-        ),
+        mixinFuncs.renderActionColumn({ taskLog: true }, { width: '150px' }),
     ].filter(Boolean);
 
     return (
@@ -181,6 +194,14 @@ function ProjectStudentTaskListPage() {
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
+                            onRow={(record) => ({
+                                onClick: (e) => {
+                                    e.stopPropagation();
+                                    handleFetchDetail(record.id);
+
+                                    handlersModal.open();
+                                },
+                            })}
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
@@ -188,6 +209,11 @@ function ProjectStudentTaskListPage() {
                             columns={columns}
                         />
                     }
+                />
+                <DetailMyTaskProjectModal
+                    open={openedModal}
+                    onCancel={() => handlersModal.close()}
+                    DetailData={detail}
                 />
             </div>
         </PageWrapper>
