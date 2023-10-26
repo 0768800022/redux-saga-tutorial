@@ -17,11 +17,8 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
     const translate = useTranslate();
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     const registrationStateOption = translate.formatKeys(stateResgistrationOptions, ['label']);
-    const [canApplyAll, setCanApplyAll] = useState(true);
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
-    const leaderId = queryParameters.get('leaderId');
-    const { profile } = useAuth();
     const [registrationStateFilter, setRegistrationStateFilter] = useState([registrationStateOption[0]]);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
@@ -180,8 +177,9 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
             const [dayKey, dayIndexKey, frameKey] = fieldName;
             if (frameKey === 'from') {
                 const to = schedule[dayKey][dayIndexKey].to;
+                const from = schedule[dayKey][dayIndexKey].from;
                 if (to && to.format(TIME_FORMAT_DISPLAY) < value.format(TIME_FORMAT_DISPLAY)) {
-                    schedule[dayKey][dayIndexKey].to = null;
+                    // schedule[dayKey][dayIndexKey].to = value;
                 }
             } else if (frameKey === 'to') {
                 const from = schedule[dayKey][dayIndexKey].from;
@@ -198,33 +196,6 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
         }
     };
 
-    const {
-        data: teams,
-        loading: getTeamsLoading,
-        execute: executeGetTeams,
-    } = useFetch(apiConfig.team.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
-    });
-    const handleOk = () => {
-        document.activeElement.blur();
-    };
-    const checkCanApplyAll = () => {
-        const schedule = getFieldValue('schedule');
-        if (schedule) {
-            const { monday } = schedule;
-            if (!monday) {
-                return false;
-            }
-            // for (const frame of monday) {
-            //     if (frame.from === null || frame.to === null) {
-            //         return false;
-            //     }
-            // }
-            return true;
-        }
-        return false;
-    };
     const handleApplyAll = (e) => {
         e.preventDefault();
         const schedule = getFieldValue('schedule');
@@ -238,9 +209,12 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
         }
         // form.resetFields();
         setFieldValue('schedule', schedule);
-        checkCanApplyAll();
         onValuesChange();
     };
+    const handleOk = () => {
+        document.activeElement.blur();
+    };
+    
 
     useEffect(() => {
         registrationStateOption.map((state, index) => {
@@ -258,7 +232,33 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
             }
         });
     }, [dataDetail]);
-
+    const handleTimeChange = (fieldName, value) => {
+        if (!value) {
+            try {
+                const schedule = getFieldValue('schedule');
+                const [dayKey, dayIndexKey, frameKey] = fieldName;
+                if (frameKey === 'from') {
+                    schedule[dayKey][dayIndexKey].from = dayjs('00:00', 'HH:mm');
+                } else if (frameKey === 'to') {
+                    schedule[dayKey][dayIndexKey].to = dayjs('00:00', 'HH:mm');
+                    // schedule[dayKey][dayIndexKey].to = schedule[dayKey][dayIndexKey].from;
+                }
+                setFieldValue('schedule', schedule);
+                onValuesChange();
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    };
+    const handleReset = (day) => {
+        const schedule = getFieldValue('schedule');
+        for (let dayIndexKey = 0; dayIndexKey < 3; dayIndexKey++) {
+            schedule[day][dayIndexKey].from = dayjs('00:00', 'HH:mm');
+            schedule[day][dayIndexKey].to = dayjs('00:00', 'HH:mm');
+        }
+        setFieldValue('schedule', schedule);
+        onValuesChange();
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             <Card className="card-form" bordered={false}>
@@ -314,9 +314,10 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
                     label={translate.formatMessage(commonMessage.schedule)}
                     onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
                     translate={translate}
-                    canApplyAll={canApplyAll}
                     handleApplyAll={handleApplyAll}
                     daysOfWeekSchedule={daysOfWeekSchedule}
+                    handleTimeChange={handleTimeChange}
+                    handleReset={handleReset}
                 />
                 <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
                     {actions}

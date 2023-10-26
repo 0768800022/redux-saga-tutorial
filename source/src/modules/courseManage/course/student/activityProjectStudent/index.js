@@ -32,7 +32,7 @@ function MyActivityProjectListPage() {
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const [isHasValueSearch, setIsHasValueSearch] = useState(projectId && true);
     const { profile } = useAuth();
-    const notification = useNotification;
+    const notification = useNotification();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.projectTaskLog,
         options: {
@@ -61,7 +61,7 @@ function MyActivityProjectListPage() {
     const handleOnClickReview = (url) => {
         const pattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
         if (pattern.test(url)) {
-            window.location.href = url;
+            window.open(url, '_blank');
         } else {
             notification({
                 type: 'warning',

@@ -200,14 +200,6 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         }
     };
 
-    const {
-        data: teams,
-        loading: getTeamsLoading,
-        execute: executeGetTeams,
-    } = useFetch(apiConfig.team.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
-    });
 
     const handleApplyAll = (e) => {
         e.preventDefault();
