@@ -123,7 +123,7 @@ function ProjectLeaderTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectLeaderTaskListPage.path +
-                                        `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&task=${taskName}&active=${active}`,
+                                        `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },

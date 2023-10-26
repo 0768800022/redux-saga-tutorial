@@ -109,6 +109,7 @@ function MyActivityProjectListPage() {
                 );
             },
         },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
     const { data: myProject } = useFetch(apiConfig.project.getListStudent, {
         immediate: true,

@@ -103,7 +103,7 @@ function RegistrationStudentListPage() {
             title: translate.formatMessage(message.createDate),
             dataIndex: 'createdDate',
             align: 'center',
-            width: 170,
+            width: 200,
         },
         {
             title: translate.formatMessage(commonMessage.state),
