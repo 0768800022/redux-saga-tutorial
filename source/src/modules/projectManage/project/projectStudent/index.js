@@ -97,7 +97,7 @@ const ProjectStudentListPage = () => {
                                     e.stopPropagation();
 
                                     navigate(
-                                        routes.projectStudentTaskListPage.path + `?projectId=${id}&projectName=${name}&state=${state}`,
+                                        routes.projectStudentTaskListPage.path + `?projectId=${id}&projectName=${name}`,
                                     );
                                 }}
                             >
