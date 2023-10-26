@@ -17,7 +17,7 @@ const messages = defineMessages({
 function TaskSavePage({ getListUrl, breadcrumbName }) {
     const translate = useTranslate();
     const location = useLocation();
-    const state = location.state.prevPath;
+    const state = location?.state?.prevPath;
     const search = location.search;
     const paramHead = routes.courseListPage.path;
     const taskId = useParams();

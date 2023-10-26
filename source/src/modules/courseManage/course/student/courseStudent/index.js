@@ -78,7 +78,7 @@ const CourseStudentListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationStudentListPage.path +
-                                                `?courseId=${id}&courseName=${name}`,
+                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
                             >
@@ -96,7 +96,7 @@ const CourseStudentListPage = () => {
                                     e.stopPropagation();
                                     const path =
                                         routes.courseStudentListPage.path +
-                                        `/task?courseId=${id}&courseName=${name}&subjectId=${subject.id}`;
+                                        `/task/${id}?courseId=${id}&courseName=${name}&state=${state}&subjectId=${subject.id}`;
                                     navigate(path);
                                 }}
                             >
