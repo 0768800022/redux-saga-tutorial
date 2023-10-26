@@ -15,6 +15,9 @@ import { commonMessage } from '@locales/intl';
 import { FieldTypes } from '@constants/formConfig';
 import useFetch from '@hooks/useFetch';
 import useAuth from '@hooks/useAuth';
+import useNotification from '@hooks/useNotification';
+import style from '../member.module.scss';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
     reminderMessage: 'Vui lòng chọn dự án !',
@@ -27,6 +30,7 @@ function MemberActivityProjectListPage() {
     const projectId = queryParameters.get('projectId');
     const studentId = queryParameters.get('studentId');
     const studentName = queryParameters.get('studentName');
+    const notification = useNotification();
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const pathPrev = localStorage.getItem('pathPrev');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
@@ -50,10 +54,21 @@ function MemberActivityProjectListPage() {
             };
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params, studentId, projectId,studentName: null });
+                mixinFuncs.handleFetchList({ ...params, studentId, projectId, studentName: null });
             };
         },
     });
+    const handleOnClickReview = (url) => {
+        const pattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
+        if (pattern.test(url)) {
+            window.location.href = url;
+        } else {
+            notification({
+                type: 'warning',
+                message: translate.formatMessage(commonMessage.warningUrl),
+            });
+        }
+    };
 
     const columns = [
         {
@@ -63,6 +78,13 @@ function MemberActivityProjectListPage() {
         {
             title: translate.formatMessage(message.gitCommitUrl),
             dataIndex: 'gitCommitUrl',
+            render: (gitUrl) => {
+                return (
+                    <div className={style.customDiv} onClick={() => handleOnClickReview(gitUrl)}>
+                        <BaseTooltip title={gitUrl}>Review</BaseTooltip>
+                    </div>
+                );
+            },
         },
         {
             title: translate.formatMessage(commonMessage.totalTime),
@@ -88,7 +110,11 @@ function MemberActivityProjectListPage() {
             },
         },
     ].filter(Boolean);
-
+    const { data: timeSum } = useFetch(apiConfig.projectTaskLog.getSum, {
+        immediate: true,
+        params: { projectId, studentId },
+        mappingData: ({ data }) => data.content,
+    });
     return (
         <PageWrapper
             routes={[
@@ -104,7 +130,17 @@ function MemberActivityProjectListPage() {
             ]}
         >
             <ListPage
-                title={<span style={{ fontWeight: 'normal' }}>{studentName}</span>}
+                title={
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+                        <span style={{ fontWeight: 'normal' }}>{studentName}</span>
+                        <span style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                            {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
+                            {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h |{' '}
+                            {translate.formatMessage(commonMessage.totalTimeOff)}:{' '}
+                            {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                        </span>
+                    </div>
+                }
                 baseTable={
                     <div>
                         <BaseTable

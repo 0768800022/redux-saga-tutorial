@@ -15,8 +15,12 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
 import { Button } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
-import DetailMyTaskProjectModal from '../myTask/DetailMyTaskProjectModal';
+import styles from '@modules/projectManage/project/project.module.scss';
+
+
 import useFetch from '@hooks/useFetch';
+import { FieldTypes } from '@constants/formConfig';
+import DetailMyTaskProjectModal from '../myTask/DetailMyTaskProjectModal';
 import useDisclosure from '@hooks/useDisclosure';
 import { useState } from 'react';
 const message = defineMessages({
@@ -175,7 +179,42 @@ function ProjectStudentTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ taskLog: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn(
+            { taskLog: true, edit:true, delete:true },
+            { width: '150px' },
+        ),
+    ].filter(Boolean);
+
+    const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
+        immediate: true,
+        params:{ projectId:projectId },
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item?.developer?.id,
+                label: item?.developer?.studentInfo?.fullName,
+            })),
+    });
+
+    const searchFields = [
+        {
+            key: 'developerId',
+            placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
+            type: FieldTypes.SELECT,
+            options:  memberProject,
+        },
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(commonMessage.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
+        // !leaderName &&
+        //     !developerName && {
+        //     key: 'status',
+        //     placeholder: translate.formatMessage(commonMessage.status),
+        //     type: FieldTypes.SELECT,
+        //     options: statusValues,
+        // },
     ].filter(Boolean);
 
     return (
@@ -191,6 +230,10 @@ function ProjectStudentTaskListPage() {
             <div>
                 <ListPage
                     title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
+                    searchForm={mixinFuncs.renderSearchForm({
+                        fields: searchFields,
+                        className: styles.search,
+                    })}
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable

@@ -7,7 +7,7 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
@@ -17,6 +17,7 @@ import useFetch from '@hooks/useFetch';
 import styles from './activityCourseStudent.module.scss';
 import useAuth from '@hooks/useAuth';
 const message = defineMessages({
+    selectCourse: 'Chọn khoá học',
     objectName: 'Hoạt động của tôi',
     reminderMessage: 'Vui lòng chọn khoá học !',
 });
@@ -95,7 +96,7 @@ function MyActivityCourseListPage() {
     const searchFields = [
         {
             key: 'courseId',
-            placeholder: translate.formatMessage(commonMessage.course),
+            placeholder: translate.formatMessage(message.selectCourse),
             type: FieldTypes.SELECT,
             onChange: (value) => {
                 value ? setIsHasValueSearch(true) : setIsHasValueSearch(false);
@@ -103,7 +104,16 @@ function MyActivityCourseListPage() {
             options: myCourse,
         },
     ];
-
+    const { data: timeSum, execute: executeTimeSum } = useFetch(apiConfig.taskLog.getSum, {
+        immediate: false,
+        params: { courseId: queryFilter?.courseId, studentId: profile.id },
+        mappingData: ({ data }) => data.content,
+    });
+    useEffect(() => {
+        executeTimeSum({
+            params: { courseId, studentId: profile.id },
+        });
+    }, [courseId]);
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.myActivity) }]}>
             <ListPage
@@ -118,6 +128,21 @@ function MyActivityCourseListPage() {
                             <div style={{ color: 'red', position: 'relative', padding: '12px 0' }}>
                                 <span style={{ position: 'absolute', top: '-9px', left: '3px' }}>
                                     {translate.formatMessage(message.reminderMessage)}
+                                </span>
+                            </div>
+                        )}
+                        {courseId && (
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
+                                <span style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                                    {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
+                                    {timeSum && timeSum[0]?.timeWorking
+                                        ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
+                                        : 0}
+                                    h | {translate.formatMessage(commonMessage.totalTimeOff)}:{' '}
+                                    {timeSum && timeSum[0]?.timeOff
+                                        ? Math.ceil((timeSum[0]?.timeOff / 60) * 10) / 10
+                                        : 0}
+                                    h
                                 </span>
                             </div>
                         )}

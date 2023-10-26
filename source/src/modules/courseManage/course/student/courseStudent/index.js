@@ -313,7 +313,7 @@ const CourseStudentListPage = () => {
     return (
         <PageWrapper routes={breadRoutes}>
             <ListPage
-                // actionBar={mixinFuncs.renderActionBar()}
+                actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onRow={(record, rowIndex) => ({
