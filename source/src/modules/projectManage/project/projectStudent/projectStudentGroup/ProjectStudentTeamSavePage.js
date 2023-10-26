@@ -1,54 +1,53 @@
-import PageWrapper from '@components/common/layout/PageWrapper';
-import apiConfig from '@constants/apiConfig';
-import { categoryKind } from '@constants/masterData';
-import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import apiConfig from '@constants/apiConfig';
 import routes from '@routes';
-import ProjectStudentTaskForm from './ProjectStudentTaskForm';
+import PageWrapper from '@components/common/layout/PageWrapper';
 import useTranslate from '@hooks/useTranslate';
+import useSaveBase from '@hooks/useSaveBase';
+import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
+import TeamForm from '../../team/TeamForm';
 import { commonMessage } from '@locales/intl';
-
-const messages = defineMessages({
-    objectName: 'Task',
+const message = defineMessages({
+    objectName: 'Nhóm',
 });
 
-function ProjectStudentTaskSavePage() {
+function ProjectStudentTeamSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
-    const projectTaskId = useParams();
+    // const projectName = queryParameters.get('projectName');
+    const teamId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.projectTask.getById,
-            create: apiConfig.projectTask.create,
-            update: apiConfig.projectTask.update,
+            getById: apiConfig.team.getById,
+            create: apiConfig.team.create,
+            update: apiConfig.team.update,
         },
         options: {
-            getListUrl: generatePath(routes.projectStudentTaskListPage.path),
-            objectName: translate.formatMessage(messages.objectName),
+            getListUrl: generatePath(routes.projectStudentTeamListPage.path, { teamId }),
+            objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
                     id: detail.id,
-                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
                     projectId: projectId,
-                    status: 1,
                 };
             };
         },
     });
     const setBreadRoutes = () => {
+        const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+
         const breadRoutes = [
             {
                 breadcrumbName: translate.formatMessage(commonMessage.project),
@@ -58,15 +57,13 @@ function ProjectStudentTaskSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.task),
-                path:
-                    routes.projectStudentTaskListPage.path +
-                    `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
+                breadcrumbName: translate.formatMessage(commonMessage.team),
+                path: routes.projectStudentTeamListPage.path + pathDefault + `&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.task),
-                path: routes.projectStudentTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
+                breadcrumbName: translate.formatMessage(commonMessage.team),
+                path: routes.projectStudentTeamListPage.path + pathDefault,
             });
         }
         breadRoutes.push({ breadcrumbName: title });
@@ -75,7 +72,7 @@ function ProjectStudentTaskSavePage() {
     };
     return (
         <PageWrapper loading={loading} routes={setBreadRoutes()} title={title}>
-            <ProjectStudentTaskForm
+            <TeamForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -87,4 +84,4 @@ function ProjectStudentTaskSavePage() {
     );
 }
 
-export default ProjectStudentTaskSavePage;
+export default ProjectStudentTeamSavePage;

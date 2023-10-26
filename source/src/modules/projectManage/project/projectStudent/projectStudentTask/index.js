@@ -44,6 +44,7 @@ function ProjectStudentTaskListPage() {
 
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
+    const state = queryParameters.get('state');
 
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
@@ -127,7 +128,7 @@ function ProjectStudentTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectStudentTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&taskName=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -234,7 +235,7 @@ function ProjectStudentTaskListPage() {
                         fields: searchFields,
                         className: styles.search,
                     })}
-                    actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
+                    actionBar={ state !=3 && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onRow={(record) => ({

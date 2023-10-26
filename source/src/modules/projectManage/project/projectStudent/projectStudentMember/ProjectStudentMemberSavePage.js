@@ -57,7 +57,7 @@ function ProjectStudentMemberSavePage() {
         const breadRoutes = [
             {
                 breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.projectListPage.path,
+                path: routes.projectStudentListPage.path,
             },
         ];
 

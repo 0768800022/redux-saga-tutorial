@@ -59,65 +59,68 @@ function RegistrationStudentListPage() {
                     return [];
                 }
             };
+            funcs.getCreateLink = () => {
+                return `${pagePath}/create?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
+            };
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params, courseName: null });
+                mixinFuncs.handleFetchList({ ...params });
             };
 
         },
     });
-    const setColumns = () => {
-        const columns = [
-            {
-                title: translate.formatMessage(commonMessage.studentName),
-                dataIndex: ['studentInfo', 'fullName'],
-            },
-            {
-                title: 'Lịch trình',
-                dataIndex: 'schedule',
-                render: (schedule) => {
-                    return <ScheduleFile schedule={schedule} />;
+    const columns = [
+        {
+            title: translate.formatMessage(commonMessage.studentName),
+            dataIndex: ['studentInfo', 'fullName'],
+        },
+        {
+            title: 'Lịch trình',
+            dataIndex: 'schedule',
+            render: (schedule) => {
+                return <ScheduleFile schedule={schedule} />;
 
-                },
-                width: 140,
             },
-            {
-                title: translate.formatMessage(message.isIntern),
-                dataIndex: 'isIntern',
-                align: 'center',
-                width: 150,
-                render: (item) => {
-                    if (item == 0) {
-                        return null;
-                    } else {
-                        return <CheckCircleOutlined className={style.greenCheckIcon} />;
-                    }
-                },
+            width: 140,
+        },
+        {
+            title: translate.formatMessage(message.isIntern),
+            dataIndex: 'isIntern',
+            align: 'center',
+            width: 150,
+            render: (item) => {
+                if (item == 0) {
+                    return null;
+                } else {
+                    return <CheckCircleOutlined className={style.greenCheckIcon} />;
+                }
             },
-            {
-                title: translate.formatMessage(message.createDate),
-                dataIndex: 'createdDate',
-                align: 'center',
-                width: 170,
+        },
+        {
+            title: translate.formatMessage(message.createDate),
+            dataIndex: 'createdDate',
+            align: 'center',
+            width: 170,
+        },
+        {
+            title: translate.formatMessage(commonMessage.state),
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateRegistration.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
             },
-            {
-                title: translate.formatMessage(commonMessage.state),
-                dataIndex: 'state',
-                align: 'center',
-                width: 120,
-                render(dataRow) {
-                    const state = stateRegistration.find((item) => item.value == dataRow);
-                    return (
-                        <Tag color={state.color}>
-                            <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                        </Tag>
-                    );
-                },
-            },
-        ];
-
-        return columns;
-    };
+        },
+        courseStatus == 1 && mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 180 }),
+    ].filter(Boolean);
 
     return (
         <PageWrapper
@@ -130,6 +133,7 @@ function RegistrationStudentListPage() {
             ]}
         >
             <ListPage
+                actionBar={courseState == 5 && courseStatus == 1 && mixinFuncs.renderActionBar()}
                 title={
                     <span
                         style={
@@ -147,7 +151,7 @@ function RegistrationStudentListPage() {
                         pagination={pagination}
                         loading={loading}
                         dataSource={data}
-                        columns={setColumns()}
+                        columns={columns}
                     />
                 }
             />

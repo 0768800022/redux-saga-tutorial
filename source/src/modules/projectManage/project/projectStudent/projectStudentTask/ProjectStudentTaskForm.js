@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-
+import useAuth from '@hooks/useAuth';
 const ProjectStudentTaskForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const translate = useTranslate();
@@ -24,6 +24,7 @@ const ProjectStudentTaskForm = (props) => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
+    const { profile } = useAuth();
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -33,14 +34,6 @@ const ProjectStudentTaskForm = (props) => {
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values });
     };
-    useEffect(() => {
-        if (!isEditing > 0) {
-            form.setFieldsValue({
-                status: statusValues[1].value,
-                state: stateValues[0].value,
-            });
-        }
-    }, [isEditing]);
 
     useEffect(() => {
         dataDetail.startDate = dataDetail.startDate
@@ -53,9 +46,19 @@ const ProjectStudentTaskForm = (props) => {
             developerId: dataDetail?.developer?.studentInfo?.id,
         });
     }, [dataDetail]);
+
+    useEffect(() => {
+        if (!isEditing > 0) {
+            form.setFieldsValue({
+                status: statusValues[1].value,
+                state: stateValues[0].value,
+                developerId: profile.id,
+            });
+        }
+    }, [isEditing]);
     const validateDueDate = (_, value) => {
         const { startDate } = form.getFieldValue();
-        if (startDate && value && value.isBefore(startDate)) {
+        if (startDate && value && value.isBefore(startDate) && !isEditing) {
             return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
         }
         return Promise.resolve();
@@ -92,7 +95,7 @@ const ProjectStudentTaskForm = (props) => {
                             initialSearchParams={{ projectId: projectId }}
                             searchParams={(text) => ({ fullName: text })}
                             required
-                            disabled={isEditing}
+                            disabled
                         />
                     </Col>
 

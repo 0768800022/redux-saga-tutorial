@@ -73,7 +73,7 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
     const handleOnClickReview = (url) => {
         const pattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
         if (pattern.test(url)) {
-            window.location.href = url;
+            window.open(url, '_blank');
         } else {
             notification({
                 type: 'warning',
@@ -137,7 +137,6 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                             style={{
                                 fontWeight: 'normal',
                                 fontSize: '16px',
-                                position: createPermission === false ? 'relative' : 'absolute',
                             }}
                         >
                             {projectName} <RightOutlined /> {taskName}

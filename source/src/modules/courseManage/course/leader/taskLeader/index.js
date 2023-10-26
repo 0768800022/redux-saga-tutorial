@@ -24,6 +24,9 @@ import useNotification from '@hooks/useNotification';
 import { useIntl } from 'react-intl';
 import { commonMessage } from '@locales/intl';
 import { CalendarOutlined } from '@ant-design/icons';
+import { FormattedMessage } from 'react-intl';
+import { FieldTypes } from '@constants/formConfig';
+
 
 const message = defineMessages({
     objectName: 'Task',
@@ -180,6 +183,33 @@ function TaskListPage() {
         return columns;
     };
 
+    const { data: memberCourse } = useFetch(apiConfig.task.autocomplete, {
+        immediate: true,
+        params: { courseId: courseId },
+        mappingData: ({ data }) =>
+            data.content
+                .map((item) => ({
+                    value: item?.student?.id,
+                    label: item?.student?.fullName,
+                }))
+                .filter((item, index, self) => {
+                    // Lọc ra các phần tử duy nhất bằng cách so sánh value
+                    return (
+                        index ===
+                        self.findIndex((t) => t.value === item.value)
+                    );
+                }),
+    });
+
+    const searchFields = [
+        {
+            key: 'studentId',
+            placeholder: <FormattedMessage defaultMessage={"Sinh viên"} />,
+            type: FieldTypes.SELECT,
+            options: memberCourse,
+        },
+    ].filter(Boolean);
+
 
     const { execute: executeUpdate } = useFetch(apiConfig.task.updateState, { immediate: false });
     const handleOk = () => {
@@ -223,8 +253,10 @@ function TaskListPage() {
                             {courseName}
                         </span>
                     }
-                    actionBar={state != 3 ? mixinFuncs.renderActionBar():''}
-
+                    actionBar={state != 3 ? mixinFuncs.renderActionBar() : ''}
+                    searchForm={mixinFuncs.renderSearchForm({
+                        fields: searchFields,
+                    })}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}

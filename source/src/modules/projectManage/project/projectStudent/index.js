@@ -51,6 +51,8 @@ const ProjectStudentListPage = () => {
             apiConfig: {
                 getList: apiConfig.project.getListStudent,
                 getById: apiConfig.project.getById,
+                create: apiConfig.project.create,
+                update: apiConfig.project.update,
                 delete: apiConfig.project.delete,
             },
             options: {
@@ -95,7 +97,7 @@ const ProjectStudentListPage = () => {
                                     e.stopPropagation();
 
                                     navigate(
-                                        routes.projectStudentTaskListPage.path + `?projectId=${id}&projectName=${name}`,
+                                        routes.projectStudentTaskListPage.path + `?projectId=${id}&projectName=${name}&state=${state}`,
                                     );
                                 }}
                             >
@@ -145,26 +147,6 @@ const ProjectStudentListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    edit: ({ id, name, status }) => (
-                        <BaseTooltip title={<FormattedMessage defaultMessage="Sửa dự án" />
-                        }>
-                            <Button
-                                type="link"
-                                style={{ padding: '0' }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    // navigate(
-                                    //     routes.projectStudentSavePage.path +
-                                    //     `?projectId=${id}&projectName=${name}`,
-                                    // );
-                                    const path = generatePath(routes.projectStudentSavePage.path, { id });
-                                    navigate(path+`?projectId=${id}&projectName=${name}`);
-                                }}
-                            >
-                                <EditOutlined color="red" />
-                            </Button>
-                        </BaseTooltip>
-                    ),
                     viewDetail: ({ id }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.viewDetail)}>
                             <Button
@@ -184,7 +166,6 @@ const ProjectStudentListPage = () => {
                 });
             },
         });
-
     const convertDate = (date) => {
         const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);

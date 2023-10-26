@@ -32,7 +32,7 @@ function MyActivityProjectListPage() {
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const [isHasValueSearch, setIsHasValueSearch] = useState(projectId && true);
     const { profile } = useAuth();
-    const notification = useNotification;
+    const notification = useNotification();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.projectTaskLog,
         options: {
@@ -61,7 +61,7 @@ function MyActivityProjectListPage() {
     const handleOnClickReview = (url) => {
         const pattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
         if (pattern.test(url)) {
-            window.location.href = url;
+            window.open(url, '_blank');
         } else {
             notification({
                 type: 'warning',
@@ -158,7 +158,7 @@ function MyActivityProjectListPage() {
                         )}
                         {projectId && (
                             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
-                                <span style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                                <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                     {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
                                     {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h |{' '}
                                     {translate.formatMessage(commonMessage.totalTimeOff)}:{' '}

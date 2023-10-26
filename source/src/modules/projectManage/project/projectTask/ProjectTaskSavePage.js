@@ -9,6 +9,7 @@ import ProjectTaskForm from './ProjectTaskForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
+import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
     objectName: 'Task',
@@ -44,6 +45,15 @@ function ProjectTaskSavePage() {
                     ...data,
                     projectId: projectId,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-PROJECT-ERROR-0001') {
+                    showErrorMessage('Dự án đã hoàn thành không thể tạo thêm task');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });
