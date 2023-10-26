@@ -8,7 +8,7 @@ import { projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Tag, Button,Modal } from 'antd';
+import { Tag, Button, Modal } from 'antd';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
@@ -114,7 +114,7 @@ function ProjectLeaderTaskListPage() {
                 };
 
                 funcs.additionalActionColumnButtons = () => ({
-                    taskLog: ({ id,taskName }) => (
+                    taskLog: ({ id, taskName }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
                             <Button
                                 type="link"
@@ -123,7 +123,7 @@ function ProjectLeaderTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectLeaderTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&task=${taskName}&active=${active}`,
+                                        `/task-log?projectId=${projectId}&projectName=${projectName}&taskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -247,7 +247,7 @@ function ProjectLeaderTaskListPage() {
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
         immediate: true,
-        params:{ projectId:projectId },
+        params: { projectId: projectId },
         mappingData: ({ data }) =>
             data.content.map((item) => ({
                 value: item?.developer?.id,
@@ -256,15 +256,15 @@ function ProjectLeaderTaskListPage() {
     });
 
     const searchFields = [
-        {
-            key: 'taskName',
-            placeholder: translate.formatMessage(commonMessage.task),
-        },
+        // {
+        //     key: 'taskName',
+        //     placeholder: translate.formatMessage(commonMessage.task),
+        // },
         {
             key: 'developerId',
             placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
             type: FieldTypes.SELECT,
-            options:  memberProject,
+            options: memberProject,
         },
         // !leaderName &&
         //     !developerName && {
