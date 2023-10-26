@@ -137,7 +137,6 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                             style={{
                                 fontWeight: 'normal',
                                 fontSize: '16px',
-                                position: createPermission === false ? 'relative' : 'absolute',
                             }}
                         >
                             {projectName} <RightOutlined /> {taskName}

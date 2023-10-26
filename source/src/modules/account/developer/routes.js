@@ -18,7 +18,7 @@ export default {
         title: 'Developer Save Page',
         auth: true,
         component: DeveloperSavePage,
-        permission: [apiConfig.developer.create.baseURL, apiConfig.developer.update.baseURL],
+        permissions: [apiConfig.developer.create.baseURL, apiConfig.developer.update.baseURL],
     },
     developerProjectListPage: {
         path: '/developer/project',

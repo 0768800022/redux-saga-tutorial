@@ -48,6 +48,8 @@ const CourseStudentListPage = () => {
             apiConfig: {
                 getList: apiConfig.course.getListStudentCourse,
                 getById: apiConfig.course.getById,
+                create: apiConfig.course.create,
+                update: apiConfig.course.update,
                 delete: apiConfig.course.delete,
             },
             options: {
