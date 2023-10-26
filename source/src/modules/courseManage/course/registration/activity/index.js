@@ -87,6 +87,11 @@ function StudentActivityCourseListPage() {
             },
         },
     ].filter(Boolean);
+    const { data: timeSum } = useFetch(apiConfig.taskLog.getSum, {
+        immediate: true,
+        params: { courseId, studentId },
+        mappingData: ({ data }) => data.content,
+    });
 
     return (
         <PageWrapper
@@ -103,7 +108,18 @@ function StudentActivityCourseListPage() {
             ]}
         >
             <ListPage
-                title={<span style={{ fontWeight: 'normal' }}>{studentName}</span>}
+                title={
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+                        <span style={{ fontWeight: 'normal' }}>{studentName}</span>
+                        <span style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                            {timeSum && timeSum[0]?.timeWorking
+                                ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
+                                : 0}
+                            h | {translate.formatMessage(commonMessage.totalTimeOff)}:{' '}
+                            {timeSum && timeSum[0]?.timeOff ? Math.ceil((timeSum[0]?.timeOff / 60) * 10) / 10 : 0}h
+                        </span>
+                    </div>
+                }
                 baseTable={
                     <div>
                         <BaseTable
