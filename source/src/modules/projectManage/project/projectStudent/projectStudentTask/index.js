@@ -17,7 +17,6 @@ import { Button } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
 import styles from '@modules/projectManage/project/project.module.scss';
 
-
 import useFetch from '@hooks/useFetch';
 import { FieldTypes } from '@constants/formConfig';
 import DetailMyTaskProjectModal from '../myTask/DetailMyTaskProjectModal';
@@ -44,7 +43,7 @@ function ProjectStudentTaskListPage() {
 
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
-    const state = queryParameters.get('state');
+    const stateProject = queryParameters.get('stateProject');
 
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
@@ -93,6 +92,7 @@ function ProjectStudentTaskListPage() {
                     const projectName = queryParams.get('projectName');
                     const developerName = queryParams.get('developerName');
                     const leaderName = queryParams.get('leaderName');
+                    const stateProject = queryParams.get('stateProject');
                     let filterAdd;
                     if (developerName) {
                         filterAdd = { developerName };
@@ -104,13 +104,14 @@ function ProjectStudentTaskListPage() {
                             serializeParams({
                                 projectId: projectId,
                                 projectName: projectName,
+                                stateProject,
                                 ...filterAdd,
                                 ...filter,
                             }),
                         );
                     } else {
                         mixinFuncs.setQueryParams(
-                            serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                            serializeParams({ projectId: projectId, projectName: projectName,stateProject, ...filter }),
                         );
                     }
                 };
@@ -180,15 +181,12 @@ function ProjectStudentTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderActionColumn(
-            { taskLog: true, edit:true, delete:true },
-            { width: '150px' },
-        ),
+        mixinFuncs.renderActionColumn({ taskLog: true, edit: true, delete: true }, { width: '150px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
         immediate: true,
-        params:{ projectId:projectId },
+        params: { projectId: projectId },
         mappingData: ({ data }) =>
             data.content.map((item) => ({
                 value: item?.developer?.id,
@@ -199,9 +197,9 @@ function ProjectStudentTaskListPage() {
     const searchFields = [
         {
             key: 'developerId',
-            placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
+            placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
-            options:  memberProject,
+            options: memberProject,
         },
         {
             key: 'state',
@@ -235,7 +233,7 @@ function ProjectStudentTaskListPage() {
                         fields: searchFields,
                         className: styles.search,
                     })}
-                    actionBar={ state !=3 && mixinFuncs.renderActionBar()}
+                    actionBar={stateProject != 3 && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onRow={(record) => ({

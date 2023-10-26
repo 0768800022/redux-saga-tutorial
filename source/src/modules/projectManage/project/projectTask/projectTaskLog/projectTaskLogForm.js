@@ -13,7 +13,7 @@ const ProjectTaskLogForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues,isEditing } = props;
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
-    const projectTaskId = queryParameters.get('taskId');
+    const projectTaskId = queryParameters.get('projectTaskId');
     const taskName = queryParameters.get('task');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);

@@ -111,7 +111,7 @@ const ProjectListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectMemberListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                            `?projectId=${id}&projectName=${name}&active=${true}`,
                                         );
                                     } else {
                                         navigate(
@@ -250,7 +250,7 @@ const ProjectListPage = () => {
             options: stateValues,
         },
         !leaderName &&
-            !developerName && {
+        !developerName && {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
