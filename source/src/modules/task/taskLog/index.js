@@ -107,7 +107,7 @@ function TaskLogListPage({ breadcrumbName }) {
                     title={
                         <span
                             style={
-                                { fontWeight: 'normal', position: 'absolute' }
+                                { fontWeight: 'normal' }
                             }
                         >
                             <span>{courseName} <RightOutlined /> {taskName}</span>
