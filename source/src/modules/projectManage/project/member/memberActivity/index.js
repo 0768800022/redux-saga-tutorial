@@ -61,7 +61,7 @@ function MemberActivityProjectListPage() {
     const handleOnClickReview = (url) => {
         const pattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
         if (pattern.test(url)) {
-            window.location.href = url;
+            window.open(url, '_blank');
         } else {
             notification({
                 type: 'warning',
@@ -133,7 +133,7 @@ function MemberActivityProjectListPage() {
                 title={
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
                         <span style={{ fontWeight: 'normal' }}>{studentName}</span>
-                        <span style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                             {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
                             {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h |{' '}
                             {translate.formatMessage(commonMessage.totalTimeOff)}:{' '}

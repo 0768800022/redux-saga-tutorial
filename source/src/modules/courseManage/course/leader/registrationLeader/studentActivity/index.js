@@ -109,7 +109,7 @@ function StudentActivityCourseLeaderListPage() {
                 title={
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
                         <span style={{ fontWeight: 'normal' }}>{studentName}</span>
-                        <span style={{ fontWeight: 'normal', fontSize: '14px' }}>
+                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                             {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
                             {timeSum && timeSum[0]?.timeWorking
                                 ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
