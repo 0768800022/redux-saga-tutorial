@@ -105,6 +105,10 @@ const ProjectStudentMemberListPage = () => {
             },
             width: 180,
         },
+        mixinFuncs.renderActionColumn(
+            { edit:true, delete:true },
+            { width: '100px' },
+        ),
     ].filter(Boolean);
 
     // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
@@ -121,7 +125,7 @@ const ProjectStudentMemberListPage = () => {
         >
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
-                actionBar={active && mixinFuncs.renderActionBar()}
+                actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
