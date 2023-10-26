@@ -25,6 +25,7 @@ import projectStudentTaskLogListPage from './projectStudent/projectStudentTaskLo
 import ProjectStudentTaskLogSavePage from './projectStudent/projectStudentTaskLog/ProjectStudentTaskLogSavePage';
 import ProjectStudentSavePage from './projectStudent/projectStudentSavePage';
 import ProjectStudentTaskSavePage from './projectStudent/projectStudentTask/ProjectStudentTaskSavePage';
+import ProjectStudentMemberSavePage from './projectStudent/projectStudentMember/ProjectStudentMemberSavePage';
 export default {
     projectListPage: {
         path: '/project',
@@ -163,7 +164,7 @@ export default {
         path: '/project-student/member/:id',
         title: 'Project Member Student Save Page',
         auth: true,
-        component: ProjectMemberSavePage,
+        component: ProjectStudentMemberSavePage,
         permissions: [apiConfig.memberProject.create.baseURL, apiConfig.memberProject.update.baseURL],
     },
     projectLeaderTaskLogListPage: {
