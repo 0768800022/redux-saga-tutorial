@@ -95,6 +95,10 @@ const ProjectStudentTeamListPage = () => {
             dataIndex: ['leaderInfo', 'leaderName'],
             width: '150px',
         },
+        mixinFuncs.renderActionColumn(
+            { edit:true, delete:true },
+            { width: '100px' },
+        ),
 
     ].filter(Boolean);
 
@@ -110,7 +114,7 @@ const ProjectStudentTeamListPage = () => {
         >
             <ListPage
                 title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
-                // actionBar={active && mixinFuncs.renderActionBar()}
+                actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={mixinFuncs.changePagination}

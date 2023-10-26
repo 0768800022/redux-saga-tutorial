@@ -197,10 +197,6 @@ function ProjectStudentTaskListPage() {
 
     const searchFields = [
         {
-            key: 'taskName',
-            placeholder: translate.formatMessage(commonMessage.task),
-        },
-        {
             key: 'developerId',
             placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
             type: FieldTypes.SELECT,
