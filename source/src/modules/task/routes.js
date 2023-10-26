@@ -31,9 +31,9 @@ export default {
         auth: true,
         component: TaskLogListPage,
         permissions: [apiConfig.taskLog.getList.baseURL],
-        breadcrumbs: (message,paramHead, state, location) => {
+        breadcrumbs: (message,paramHead, state, location, isProject) => {
             return [
-                { breadcrumbName: message.course.defaultMessage, path: paramHead },
+                { breadcrumbName: isProject ? message.project.defaultMessage :message.course.defaultMessage, path: paramHead },
                 { breadcrumbName: message.task.defaultMessage, path: state + location },
                 { breadcrumbName: message.taskLog.defaultMessage },
             ];
@@ -45,9 +45,9 @@ export default {
         auth: true,
         component: TaskLogSavePage,
         permissions: [apiConfig.taskLog.create.baseURL, apiConfig.taskLog.update.baseURL],
-        breadcrumbs: (message,paramHead,taskParam, state, search,title) => {
+        breadcrumbs: (message,paramHead,taskParam, state, search,title,isProject) => {
             return [
-                { breadcrumbName: message.course.defaultMessage, path: paramHead },
+                { breadcrumbName: isProject ? message.project.defaultMessage :message.course.defaultMessage, path: paramHead },
                 { breadcrumbName: message.task.defaultMessage, path: taskParam + search },
                 { breadcrumbName: message.taskLog.defaultMessage, path: state + search },
                 { breadcrumbName: title },
