@@ -81,13 +81,12 @@ const CompanySubscriptionForm = ({ isEditing, formId, actions, dataDetail, onSub
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.name })),
     });
     useEffect(() => {
-        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
+        dataDetail.startDate = dataDetail.startDate ? dayjs(dataDetail.startDate, DEFAULT_FORMAT):dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT);
         dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DEFAULT_FORMAT);
         form.setFieldsValue({
             ...dataDetail,
             companyId: dataDetail?.company?.companyName,
             serviceCompanySubscriptionId: dataDetail?.subscription?.name,
-            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
