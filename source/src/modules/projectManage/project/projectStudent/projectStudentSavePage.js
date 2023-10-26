@@ -37,7 +37,6 @@ const ProjectStudentSavePage = () => {
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    leaderId: profile.id,
                 };
             };
         },

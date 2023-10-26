@@ -100,7 +100,7 @@ const ProjectStudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
 
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leaderInfo?.leaderName,
+            leaderId: dataDetail?.leaderInfo?.id,
             startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
         });
     }, [dataDetail]);
@@ -135,7 +135,21 @@ const ProjectStudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
                     </Col>
                 </Row>
 
-                <TextField label={translate.formatMessage(message.name)} name="name" required />
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <TextField label={translate.formatMessage(message.name)} name="name" required />
+                    </Col>
+                    <Col span={12}>
+                        <AutoCompleteField
+                            label={translate.formatMessage(message.leader)}
+                            name="leaderId"
+                            apiConfig={apiConfig.leader.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
+                            initialSearchParams={{}}
+                            searchParams={(text) => ({ name: text })}
+                            required />
+                    </Col>
+                </Row>
 
                 <Row gutter={16}>
                     <Col span={12}>
