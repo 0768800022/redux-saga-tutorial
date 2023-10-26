@@ -49,6 +49,7 @@ const CourseStudentListPage = () => {
                 getList: apiConfig.course.getListStudentCourse,
                 getById: apiConfig.course.getById,
                 create: apiConfig.course.create,
+                update: apiConfig.course.update,
                 delete: apiConfig.course.delete,
             },
             options: {
@@ -133,7 +134,6 @@ const CourseStudentListPage = () => {
     const { execute: executeGet } = useFetch(apiConfig.course.getById, {
         immediate: false,
     });
-    console.log(mixinFuncs.hasPermission(apiConfig.getListStudentCourse));
     const handleFetchDetail = (id) => {
         executeGet({
             pathParams: { id: id },

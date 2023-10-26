@@ -101,7 +101,8 @@ const ProjectStudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
         form.setFieldsValue({
             ...dataDetail,
             leaderId: dataDetail?.leaderInfo?.id,
-            startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
+            // startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
+            // endDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
         });
     }, [dataDetail]);
 
@@ -115,7 +116,7 @@ const ProjectStudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, 
 
     const validateStartDate = (_, value) => {
         const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
-        if (date && value && value.isBefore(date)) {
+        if (date && value && value.isBefore(date) && !isEditing) {
             return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
         }
         return Promise.resolve();

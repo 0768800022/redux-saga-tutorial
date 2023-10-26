@@ -44,6 +44,7 @@ function ProjectStudentTaskListPage() {
 
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
+    const state = queryParameters.get('state');
 
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
@@ -234,7 +235,7 @@ function ProjectStudentTaskListPage() {
                         fields: searchFields,
                         className: styles.search,
                     })}
-                    actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
+                    actionBar={ state !=3 && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onRow={(record) => ({

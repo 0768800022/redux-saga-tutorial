@@ -52,6 +52,7 @@ const ProjectStudentListPage = () => {
                 getList: apiConfig.project.getListStudent,
                 getById: apiConfig.project.getById,
                 create: apiConfig.project.create,
+                update: apiConfig.project.update,
                 delete: apiConfig.project.delete,
             },
             options: {
@@ -96,7 +97,7 @@ const ProjectStudentListPage = () => {
                                     e.stopPropagation();
 
                                     navigate(
-                                        routes.projectStudentTaskListPage.path + `?projectId=${id}&projectName=${name}`,
+                                        routes.projectStudentTaskListPage.path + `?projectId=${id}&projectName=${name}&state=${state}`,
                                     );
                                 }}
                             >
@@ -165,8 +166,6 @@ const ProjectStudentListPage = () => {
                 });
             },
         });
-
-    console.log(mixinFuncs.hasPermission(apiConfig.create));
     const convertDate = (date) => {
         const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
