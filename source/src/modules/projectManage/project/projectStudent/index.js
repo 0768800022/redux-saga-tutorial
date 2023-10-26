@@ -262,12 +262,12 @@ const ProjectStudentListPage = () => {
                     />
                 }
             />
-            <DetailProjectModal
+            {/* <DetailProjectModal
                 open={openedModal}
                 onCancel={() => handlersModal.close()}
                 width={600}
                 DetailData={detail}
-            />
+            /> */}
         </PageWrapper>
     );
 };

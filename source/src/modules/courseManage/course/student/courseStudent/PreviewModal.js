@@ -77,7 +77,7 @@ const PreviewModal = ({ open, onCancel, detail }) => {
                             <TextField
                                 readOnly
                                 label={<FormattedMessage defaultMessage="Môn học" />}
-                                name="subjectId"
+                                name={['subject', 'subjectName']}
                                 initialValue={detail?.subject?.subjectName}
                             />
                         </Col>
@@ -98,18 +98,13 @@ const PreviewModal = ({ open, onCancel, detail }) => {
                             />
                         </Col>
                     </Row>
-                    {/* <TextField
-                        width={'100%'}
-                        label={<FormattedMessage defaultMessage="Mô tả" />}
-                        name="description"
-                        type="textarea"
-                    /> */}
+
                     <Row gutter={10}>
                         <Col span={12}>
                             <TextField
                                 readOnly
                                 label={<FormattedMessage defaultMessage="Leader" />}
-                                name="leaderId"
+                                name={['leader', 'leaderName']}
                                 initialValue={detail?.leader?.leaderName}
                             />
                         </Col>

@@ -14,6 +14,8 @@ import { useLocation } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { commonMessage } from '@locales/intl';
+import { RightOutlined } from '@ant-design/icons';
+
 const message = defineMessages({
     objectName: 'Task',
 });
@@ -24,6 +26,8 @@ function TaskLogListPage({ breadcrumbName }) {
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const taskName = queryParameters.get('taskName');
+    const courseName = queryParameters.get('courseName');
+
     const state = location?.state?.prevPath;
     const taskParam = routes.taskListPage.path;
     const search = location.search;
@@ -106,7 +110,7 @@ function TaskLogListPage({ breadcrumbName }) {
                                 { fontWeight: 'normal', position: 'absolute' }
                             }
                         >
-                            {taskName}
+                            <span>{courseName} <RightOutlined /> {taskName}</span>
                         </span>
                     }
                     actionBar={mixinFuncs.renderActionBar()}

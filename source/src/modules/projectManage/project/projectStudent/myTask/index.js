@@ -164,7 +164,6 @@ function ProjectStudentMyTaskListPage() {
                 <DetailMyTaskProjectModal
                     open={openedModal}
                     onCancel={() => handlersModal.close()}
-                    width={600}
                     DetailData={detail}
                 />
             </div>

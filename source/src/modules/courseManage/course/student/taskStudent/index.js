@@ -1,17 +1,14 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import {
-    DEFAULT_TABLE_ITEM_SIZE,
-    DEFAULT_FORMAT,
-} from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { taskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import {  Tag } from 'antd';
+import { Tag } from 'antd';
 import React from 'react';
-import { useLocation,useParams,useNavigate,generatePath } from 'react-router-dom';
+import { useLocation, useParams, useNavigate, generatePath } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
@@ -19,7 +16,10 @@ import { commonMessage } from '@locales/intl';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { Button } from 'antd';
 import { CalendarOutlined } from '@ant-design/icons';
-
+import DetailMyTaskModal from '../myTask/DetailMyTaskModal';
+import useDisclosure from '@hooks/useDisclosure';
+import { useState } from 'react';
+import useFetch from '@hooks/useFetch';
 const message = defineMessages({
     objectName: 'Task',
 });
@@ -37,8 +37,20 @@ function TaskStudentListPage() {
     const courseId = queryParameters.get('courseId');
 
     const statusValues = translate.formatKeys(taskState, ['label']);
-    console.log(paramid.courseId);
-
+    const [openedModal, handlersModal] = useDisclosure(false);
+    const [detail, setDetail] = useState({});
+    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.task.getById, {
+        immediate: false,
+    });
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             getList: apiConfig.task.studentTask,
@@ -53,7 +65,7 @@ function TaskStudentListPage() {
         override: (funcs) => {
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params, courseName: null,subjectId: null });
+                mixinFuncs.handleFetchList({ ...params, courseName: null, subjectId: null });
             };
             funcs.mappingData = (response) => {
                 try {
@@ -77,7 +89,7 @@ function TaskStudentListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     generatePath(routes.taskStudentListPage.path, { courseId }) +
-                                    `/task-log?courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
+                                        `/task-log?courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
                                     {
                                         state: { action: 'taskLog', prevPath: location.pathname },
                                     },
@@ -139,11 +151,13 @@ function TaskStudentListPage() {
         return columns;
     };
 
-
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(commonMessage.course), path: routes.courseStudentListPage.path },
+                {
+                    breadcrumbName: translate.formatMessage(commonMessage.course),
+                    path: routes.courseStudentListPage.path,
+                },
                 { breadcrumbName: translate.formatMessage(commonMessage.task) },
             ]}
         >
@@ -160,6 +174,14 @@ function TaskStudentListPage() {
                     }
                     baseTable={
                         <BaseTable
+                            onRow={(record, rowIndex) => ({
+                                onClick: (e) => {
+                                    e.stopPropagation();
+                                    handleFetchDetail(record.id);
+
+                                    handlersModal.open();
+                                },
+                            })}
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
@@ -169,6 +191,12 @@ function TaskStudentListPage() {
                     }
                 />
             </div>
+            <DetailMyTaskModal
+                open={openedModal}
+                onCancel={() => handlersModal.close()}
+                width={600}
+                DetailData={detail}
+            />
         </PageWrapper>
     );
 }

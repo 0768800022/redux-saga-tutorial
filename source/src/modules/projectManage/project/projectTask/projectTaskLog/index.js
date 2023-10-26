@@ -12,6 +12,7 @@ import { defineMessages } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
 import { TaskLogKindOptions } from '@constants/masterData';
+import { RightOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
     objectName: 'Nhật ký',
@@ -24,6 +25,8 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const taskName = queryParameters.get('task');
+    const projectName = queryParameters.get('projectName');
+
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const state = location?.state?.prevPath;
     const taskParam = routes.ProjectTaskListPage.path;
@@ -109,7 +112,7 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
                                 { fontWeight: 'normal', fontSize: '16px', position: createPermission === false ? 'relative' : 'absolute' }
                             }
                         >
-                            {taskName}
+                            {projectName} <RightOutlined /> {taskName}
                         </span>
                     }
                     actionBar={mixinFuncs.renderActionBar()}
