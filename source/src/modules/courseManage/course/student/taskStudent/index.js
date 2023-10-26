@@ -135,7 +135,7 @@ function TaskStudentListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ taskLog: true }, { width: '100px' }));
+        columns.push(mixinFuncs.renderActionColumn({ taskLog: true, edit:true, delete:true }, { width: '100px' }));
         return columns;
     };
 

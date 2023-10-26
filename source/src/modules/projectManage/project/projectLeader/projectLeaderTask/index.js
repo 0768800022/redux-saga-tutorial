@@ -21,9 +21,11 @@ import { CalendarOutlined } from '@ant-design/icons';
 import { commonMessage } from '@locales/intl';
 import useNotification from '@hooks/useNotification';
 import { useIntl } from 'react-intl';
+import styles from '@modules/projectManage/project/project.module.scss';
 
 import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, AppConstants } from '@constants';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+
 const message = defineMessages({
     objectName: 'Task',
     developer: 'Lập trình viên',
@@ -166,10 +168,6 @@ function ProjectLeaderTaskListPage() {
             dataIndex: ['developer', 'studentInfo', 'fullName'],
         },
         {
-            title: <FormattedMessage defaultMessage="Quản lý" />,
-            dataIndex: ['project', 'leaderInfo', 'leaderName'],
-        },
-        {
             title: translate.formatMessage(message.startDate),
             dataIndex: 'startDate',
             render: (startDate) => {
@@ -247,6 +245,36 @@ function ProjectLeaderTaskListPage() {
         });
     };
 
+    const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
+        immediate: true,
+        params:{ projectId:projectId },
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item?.developer?.id,
+                label: item?.developer?.studentInfo?.fullName,
+            })),
+    });
+
+    const searchFields = [
+        {
+            key: 'taskName',
+            placeholder: translate.formatMessage(commonMessage.task),
+        },
+        {
+            key: 'developerId',
+            placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
+            type: FieldTypes.SELECT,
+            options:  memberProject,
+        },
+        // !leaderName &&
+        //     !developerName && {
+        //     key: 'status',
+        //     placeholder: translate.formatMessage(commonMessage.status),
+        //     type: FieldTypes.SELECT,
+        //     options: statusValues,
+        // },
+    ].filter(Boolean);
+
     return (
         <PageWrapper
             routes={[
@@ -270,6 +298,10 @@ function ProjectLeaderTaskListPage() {
                             {projectName}
                         </span>
                     }
+                    searchForm={mixinFuncs.renderSearchForm({
+                        fields: searchFields,
+                        className: styles.search,
+                    })}
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable

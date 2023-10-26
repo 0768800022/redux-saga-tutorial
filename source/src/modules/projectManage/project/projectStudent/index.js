@@ -236,13 +236,14 @@ const ProjectStudentListPage = () => {
 
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
 
-        mixinFuncs.renderActionColumn({ team: true, member: true, task: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ team: true, member: true, task: true, eidt: true, delete:true }, { width: '220px' }),
     ];
 
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.project) }]}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
+                actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onRow={(record, rowIndex) => ({

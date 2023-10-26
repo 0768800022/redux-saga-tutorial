@@ -19,6 +19,7 @@ import MyActivityProjectListPage from './student/activityProjectStudent';
 
 import TaskLogStudentListPage from './student/taskLog';
 import TaskLogStudentSavePage from './student/taskLog/TaskLogStudentSavePage';
+import CourseStudentSavePage from './student/courseStudent/CourseStudentSavePage';
 export default {
     courseListPage: {
         path: '/course',
@@ -106,6 +107,13 @@ export default {
         auth: true,
         component: CourseStudentListPage,
         permissions: [apiConfig.course.getListStudentCourse.baseURL],
+    },
+    courseStudentSavePage: {
+        path: '/course-student/:id',
+        title: 'Course Student Save Page',
+        auth: true,
+        component: CourseStudentSavePage,
+        permissions: [apiConfig.course.create.baseURL, apiConfig.course.update.baseURL],
     },
     taskStudentListPage: {
         path: '/course-student/task',
