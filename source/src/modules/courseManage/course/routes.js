@@ -19,6 +19,9 @@ import MyActivityProjectListPage from './student/activityProjectStudent';
 
 import TaskLogStudentListPage from './student/taskLog';
 import TaskLogStudentSavePage from './student/taskLog/TaskLogStudentSavePage';
+import TaskStudentSavePage from './student/taskStudent/TaskSavePage';
+import RegistrationStudentSavePage from './student/registrationStudent/RegistrationSavePage';
+import AsignAllStudentListPage from './student/asignAll';
 export default {
     courseListPage: {
         path: '/course',
@@ -108,18 +111,32 @@ export default {
         permissions: [apiConfig.course.getListStudentCourse.baseURL],
     },
     taskStudentListPage: {
-        path: '/course-student/task',
+        path: '/course-student/task/:courseId',
         title: 'Task List Page',
         auth: true,
         component: TaskStudentListPage,
         permissions: [apiConfig.task.studentTask.baseURL],
+    },
+    taskStudentSavePage: {
+        path: '/course-student/task/:courseId/:id',
+        title: 'Task Student Save Page',
+        auth: true,
+        component: TaskStudentSavePage,
+        permissions: [apiConfig.task.create.baseURL, apiConfig.task.update.baseURL],
+    },
+    lectureTaskStudentListPage: {
+        path: '/course-student/task/:courseId/lecture',
+        title: 'Lecture Leader List Page',
+        auth: true,
+        component: AsignAllStudentListPage,
+        permissions: [apiConfig.lecture.getBySubject.baseURL],
     },
     myTaskStudentListPage: {
         path: '/my-task',
         title: 'My Task List Page',
         auth: true,
         component: MyTaskStudentListPage,
-        permissions: [apiConfig.task.studentTask.baseURL],
+        permissions: [apiConfig.task.getList.baseURL],
     },
     registrationStudentListPage: {
         path: '/course-student/registration',
@@ -128,19 +145,26 @@ export default {
         component: RegistrationStudentListPage,
         permissions: [apiConfig.registration.getList.baseURL],
     },
+    registrationStudentSavePage: {
+        path: '/course-student/registration/:id',
+        title: 'Registration Student Save Page',
+        auth: true,
+        component: RegistrationStudentSavePage,
+        permissions: [apiConfig.registration.create.baseURL,apiConfig.registration.update.baseURL],
+    },
     taskLogStudentListPage: {
-        path: '/course-student/task/task-log',
+        path: '/course-student/task/:courseId/task-log',
         title: 'Task Log Student List Page',
         auth: true,
         component: TaskLogStudentListPage,
         permissions: [apiConfig.taskLog.getList.baseURL],
     },
     taskLogStudentSavePage: {
-        path: '/course-student/task/task-log/:id',
+        path: '/course-student/task/:courseId/task-log/:id',
         title: 'Task Log Student List Page',
         auth: true,
         component: TaskLogStudentSavePage,
-        permissions: [apiConfig.taskLog.getList.baseURL],
+        permissions: [apiConfig.taskLog.create.baseURL, apiConfig.taskLog.update.baseURL],
     },
     myActivityCourseStudentListPage: {
         path: '/my-activity-course',

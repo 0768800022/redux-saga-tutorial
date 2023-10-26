@@ -12,15 +12,16 @@ const messages = defineMessages({
     objectName: 'Task',
 });
 
-function TaskLeaderSavePage() {
+function TaskStudentSavePage() {
     const translate = useTranslate();
     const location =useLocation();
-    const state = location?.state?.prevPath;
+    const state = location.state.prevPath;
+    console.log(location);
     const search = location.search;
-    const paramHead = routes.courseLeaderListPage.path;
+    const paramHead = routes.courseStudentListPage.path;
     const paramid = useParams();
     const courseId = paramid.courseId;
-    console.log(state);
+    console.log(courseId);
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.task.getById,
@@ -28,18 +29,18 @@ function TaskLeaderSavePage() {
             update: apiConfig.task.update,
         },
         options: {
-            getListUrl: generatePath(routes.taskLeaderListPage.path, { courseId }),
+            getListUrl: generatePath(routes.taskStudentListPage.path, { courseId }),
             objectName: translate.formatMessage(messages.objectName),
         },
     },
     );
 
     const breadcrumbName= routes.taskSavePage.breadcrumbs(commonMessage,paramHead,state,search,title);
-    const getListUrl = generatePath(routes.taskLeaderListPage.path, { courseId });
+    const getListUrl = generatePath(routes.taskStudentListPage.path, { courseId });
 
     return (
         <TaskSavePage getListUrl={getListUrl} breadcrumbName={breadcrumbName}/>
     );
 }
 
-export default TaskLeaderSavePage;
+export default TaskStudentSavePage;
