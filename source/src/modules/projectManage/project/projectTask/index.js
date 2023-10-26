@@ -48,7 +48,7 @@ function ProjectTaskListPage() {
             override: (funcs) => {
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, projectName: null,projectTaskId:null });
+                    mixinFuncs.handleFetchList({ ...params, projectName: null, projectTaskId: null });
                 };
                 funcs.mappingData = (response) => {
                     try {
@@ -112,7 +112,7 @@ function ProjectTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.ProjectTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                        `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -170,7 +170,7 @@ function ProjectTaskListPage() {
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
         immediate: true,
-        params:{ projectId:projectId },
+        params: { projectId: projectId },
         mappingData: ({ data }) =>
             data.content.map((item) => ({
                 value: item?.developer?.id,
@@ -179,15 +179,15 @@ function ProjectTaskListPage() {
     });
 
     const searchFields = [
-        {
-            key: 'taskName',
-            placeholder: translate.formatMessage(commonMessage.task),
-        },
+        // {
+        //     key: 'taskName',
+        //     placeholder: translate.formatMessage(commonMessage.task),
+        // },
         {
             key: 'developerId',
             placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
             type: FieldTypes.SELECT,
-            options:  memberProject,
+            options: memberProject,
         },
         {
             key: 'state',
