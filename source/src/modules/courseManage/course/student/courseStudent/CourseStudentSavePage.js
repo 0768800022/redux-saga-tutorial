@@ -25,7 +25,7 @@ const CourseStudentSavePage = () => {
             update: apiConfig.course.update,
         },
         options: {
-            getListUrl: generatePath(routes.courseListPage.path, { courseId }),
+            getListUrl: generatePath(routes.courseStudentListPage.path, { courseId }),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -59,7 +59,7 @@ const CourseStudentSavePage = () => {
             routes={[
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.course),
-                    path: generatePath(routes.courseListPage.path, { courseId }),
+                    path: generatePath(routes.courseStudentListPage.path, { courseId }),
                 },
                 { breadcrumbName: title },
             ]}

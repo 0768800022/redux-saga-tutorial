@@ -15,7 +15,7 @@ const messages = defineMessages({
 function TaskStudentSavePage() {
     const translate = useTranslate();
     const location =useLocation();
-    const state = location.state.prevPath;
+    const state = location?.state?.prevPath;
     const search = location.search;
     const paramHead = routes.courseStudentListPage.path;
     const paramid = useParams();
