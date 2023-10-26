@@ -147,7 +147,7 @@ function TaskStudentListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ taskLog: true }, { width: '100px' }));
+        columns.push(mixinFuncs.renderActionColumn({ taskLog: true }, { width: '120px' }));
         return columns;
     };
 

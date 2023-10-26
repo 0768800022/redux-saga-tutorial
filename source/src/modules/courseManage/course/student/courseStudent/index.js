@@ -309,6 +309,7 @@ const CourseStudentListPage = () => {
             },
         });
     };
+
     return (
         <PageWrapper routes={breadRoutes}>
             <ListPage
