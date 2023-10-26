@@ -20,7 +20,6 @@ function TaskLeaderSavePage() {
     const paramHead = routes.courseLeaderListPage.path;
     const paramid = useParams();
     const courseId = paramid.courseId;
-    console.log(state);
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.task.getById,

@@ -16,12 +16,10 @@ function TaskStudentSavePage() {
     const translate = useTranslate();
     const location =useLocation();
     const state = location.state.prevPath;
-    console.log(location);
     const search = location.search;
     const paramHead = routes.courseStudentListPage.path;
     const paramid = useParams();
     const courseId = paramid.courseId;
-    console.log(courseId);
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.task.getById,

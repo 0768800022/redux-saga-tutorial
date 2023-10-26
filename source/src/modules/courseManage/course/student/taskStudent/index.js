@@ -36,7 +36,6 @@ function TaskStudentListPage() {
     const paramid = useParams();
     const courseId = queryParameters.get('courseId');
 
-    console.log(courseId);
     const statusValues = translate.formatKeys(taskState, ['label']);
     const [openedModal, handlersModal] = useDisclosure(false);
     const [detail, setDetail] = useState({});
