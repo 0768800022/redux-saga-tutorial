@@ -72,4 +72,7 @@ export const commonMessage = defineMessages({
     studentActivity: 'Hoạt động của sinh viên',
     memberActivity: 'Hoạt động của thành viên',
     detail: 'Chi tiết',
+    totalTimeWorking: 'Tổng thời gian làm việc',
+    totalTimeOff: 'Tổng thời gian nghỉ',
+    warningUrl: 'Đường dẫn không hợp lệ',
 });
