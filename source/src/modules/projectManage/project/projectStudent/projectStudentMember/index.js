@@ -64,10 +64,10 @@ const ProjectStudentMemberListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}`;
+                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?projectId=${projectId}`;
+                return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
             };
         },
     });
@@ -105,6 +105,7 @@ const ProjectStudentMemberListPage = () => {
             },
             width: 180,
         },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '100px' }),
     ].filter(Boolean);
 
     // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
@@ -121,7 +122,7 @@ const ProjectStudentMemberListPage = () => {
         >
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
-                actionBar={active && mixinFuncs.renderActionBar()}
+                actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

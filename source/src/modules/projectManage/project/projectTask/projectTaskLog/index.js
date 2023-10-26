@@ -9,17 +9,21 @@ import routes from '@routes';
 import { Tag } from 'antd';
 import React from 'react';
 import { defineMessages } from 'react-intl';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
 import { TaskLogKindOptions } from '@constants/masterData';
+import style from './projectTaskLog.module.scss';
+import useNotification from '@hooks/useNotification';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { RightOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
     objectName: 'Nhật ký',
     gitCommitUrl: 'Đường dẫn commit git',
+    warningUrl: `Đường dẫn không hợp lệ !`,
 });
 
-function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }) {
+function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission }) {
     const translate = useTranslate();
     const location = useLocation();
     const { pathname: pagePath } = useLocation();
@@ -31,6 +35,8 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
     const state = location?.state?.prevPath;
     const taskParam = routes.ProjectTaskListPage.path;
     const search = location.search;
+    const notification = useNotification();
+    const navigate = useNavigate();
     const paramHead = routes.projectListPage.path;
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
@@ -60,10 +66,21 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
                 };
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, projectName: null,taskName: null });
+                    mixinFuncs.handleFetchList({ ...params, projectName: null, taskName: null });
                 };
             },
         });
+    const handleOnClickReview = (url) => {
+        const pattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
+        if (pattern.test(url)) {
+            window.location.href = url;
+        } else {
+            notification({
+                type: 'warning',
+                message: translate.formatMessage(commonMessage.warningUrl),
+            });
+        }
+    };
     const columns = [
         {
             title: translate.formatMessage(commonMessage.message),
@@ -72,16 +89,21 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
         {
             title: translate.formatMessage(message.gitCommitUrl),
             dataIndex: 'gitCommitUrl',
+            render: (gitUrl) => {
+                return (
+                    <div className={style.customDiv} onClick={() => handleOnClickReview(gitUrl)}>
+                        <BaseTooltip title={gitUrl}>Review</BaseTooltip>
+                    </div>
+                );
+            },
         },
         {
             title: translate.formatMessage(commonMessage.totalTime),
             dataIndex: 'totalTime',
             align: 'center',
             width: 150,
-            render (totalTime) {
-                return (
-                    <div>{Math.ceil((totalTime / 60) * 10) / 10} h</div>
-                );
+            render(totalTime) {
+                return <div>{Math.ceil((totalTime / 60) * 10) / 10} h</div>;
             },
         },
         {
@@ -101,16 +123,22 @@ function ProjectTaskLogListPage({ breadcrumbName,renderAction,createPermission }
         renderAction === false ? '' : mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
     return (
-        <PageWrapper routes={ breadcrumbName?breadcrumbName:
-            routes.ProjectTaskLogListPage.breadcrumbs(commonMessage,paramHead,taskParam,search)
-        }>
+        <PageWrapper
+            routes={
+                breadcrumbName
+                    ? breadcrumbName
+                    : routes.ProjectTaskLogListPage.breadcrumbs(commonMessage, paramHead, taskParam, search)
+            }
+        >
             <div>
                 <ListPage
                     title={
                         <span
-                            style={
-                                { fontWeight: 'normal', fontSize: '16px', position: createPermission === false ? 'relative' : 'absolute' }
-                            }
+                            style={{
+                                fontWeight: 'normal',
+                                fontSize: '16px',
+                                position: createPermission === false ? 'relative' : 'absolute',
+                            }}
                         >
                             {projectName} <RightOutlined /> {taskName}
                         </span>

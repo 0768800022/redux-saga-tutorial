@@ -65,7 +65,13 @@ function TaskStudentListPage() {
         override: (funcs) => {
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params, courseName: null, subjectId: null });
+                mixinFuncs.handleFetchList({ ...params });
+            };
+            funcs.getCreateLink = () => {
+                return routes.courseStudentListPage.path + `/task/${courseId}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
             };
             funcs.mappingData = (response) => {
                 try {
@@ -89,7 +95,7 @@ function TaskStudentListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     generatePath(routes.taskStudentListPage.path, { courseId }) +
-                                        `/task-log?courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
+                                        `/task-log?courseId=${courseId}&courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
                                     {
                                         state: { action: 'taskLog', prevPath: location.pathname },
                                     },
@@ -147,7 +153,7 @@ function TaskStudentListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ taskLog: true }, { width: '120px' }));
+        columns.push(mixinFuncs.renderActionColumn({ taskLog: true,edit: true, delete: true }, { width: '120px' }));
         return columns;
     };
 
@@ -163,6 +169,7 @@ function TaskStudentListPage() {
         >
             <div>
                 <ListPage
+                    actionBar={state != 3 ? mixinFuncs.renderActionBar():''}
                     title={
                         <span
                             style={

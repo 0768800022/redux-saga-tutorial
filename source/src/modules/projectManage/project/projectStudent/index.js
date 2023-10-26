@@ -24,6 +24,7 @@ import { commonMessage } from '@locales/intl';
 import DetailProjectModal from './DetailProjectModal';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
+import { FormattedMessage } from 'react-intl';
 const message = defineMessages({
     objectName: 'dự án',
     code: 'Mã dự án',
@@ -111,7 +112,7 @@ const ProjectStudentListPage = () => {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectStudentMemberListPage.path +
-                                            `?projectId=${id}&projectName=${name}`,
+                                        `?projectId=${id}&projectName=${name}`,
                                     );
                                 }}
                             >
@@ -130,17 +131,37 @@ const ProjectStudentListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectStudentTeamListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
+                                            `?projectId=${id}&projectName=${name}&active=${true}`,
                                         );
                                     } else {
                                         navigate(
                                             routes.projectStudentTeamListPage.path +
-                                                `?projectId=${id}&projectName=${name}`,
+                                            `?projectId=${id}&projectName=${name}`,
                                         );
                                     }
                                 }}
                             >
                                 <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    edit: ({ id, name, status }) => (
+                        <BaseTooltip title={<FormattedMessage defaultMessage="Sửa dự án" />
+                        }>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    // navigate(
+                                    //     routes.projectStudentSavePage.path +
+                                    //     `?projectId=${id}&projectName=${name}`,
+                                    // );
+                                    const path = generatePath(routes.projectStudentSavePage.path, { id });
+                                    navigate(path+`?projectId=${id}&projectName=${name}`);
+                                }}
+                            >
+                                <EditOutlined color="red" />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -236,13 +257,14 @@ const ProjectStudentListPage = () => {
 
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
 
-        mixinFuncs.renderActionColumn({ team: true, member: true, task: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ team: true, member: true, task: true, edit: true, delete: true }, { width: '220px' }),
     ];
 
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.project) }]}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{leaderName || developerName}</span>}
+                actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onRow={(record, rowIndex) => ({

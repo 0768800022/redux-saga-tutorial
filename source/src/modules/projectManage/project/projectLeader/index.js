@@ -184,11 +184,6 @@ const ProjectLeaderListPage = () => {
             dataIndex: 'name',
         },
         {
-            title: translate.formatMessage(commonMessage.leader),
-            dataIndex: ['leaderInfo', 'leaderName'],
-            width: 150,
-        },
-        {
             title: translate.formatMessage(message.startDate),
             dataIndex: 'startDate',
             render: (startDate) => {

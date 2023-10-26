@@ -1111,6 +1111,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getSum: {
+            baseURL: `${apiTenantUrl}v1/task-log/get-sum`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
         create: {
             baseURL: `${apiTenantUrl}v1/task-log/create`,
             method: 'POST',
@@ -1145,6 +1151,12 @@ const apiConfig = {
         },
         getById: {
             baseURL: `${apiTenantUrl}v1/project-task-log/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getSum: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/get-sum`,
             method: 'GET',
             headers: baseHeader,
             isRequiredTenantId: true,
