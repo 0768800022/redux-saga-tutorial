@@ -301,7 +301,8 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
                                 name="teamId"
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                                initialSearchParams={{ projectId: projectId, leaderId: profile.id }}
+                                optionsParams={{ projectId: projectId }}
+                                initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
                                 disabled={isEditing}
                             />

@@ -11,9 +11,9 @@ import SelectField from '@components/common/form/SelectField';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { taskState } from '@constants/masterData';
 const messages = defineMessages({
-    objectName: 'Trang thái',
-    update: 'Cập nhật',
-    updateSuccess: 'Cập nhật {objectName} thành công',
+    objectName: 'Chi tiết task',
+    // update: 'Cập nhật',
+    // updateSuccess: 'Cập nhật {objectName} thành công',
 });
 const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
     const [form] = Form.useForm();
@@ -28,94 +28,79 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
             ...DetailData,
         });
     }, [DetailData]);
+    const handleOnCancel = () => {
+        onCancel();
+    };
     return (
-        <Modal centered open={open} onCancel={onCancel} footer={null} title={'Chi Tiết Bài học'} {...props}>
-            <Card className="card-form" bordered={false}>
-                <BaseForm form={form} size="100%">
-                    <Row gutter={16}>
+        <Modal
+            centered
+            open={open}
+            onCancel={handleOnCancel}
+            width={800}
+            footer={[]}
+            title={translate.formatMessage(messages.objectName)}
+        >
+            <BaseForm form={form} style={{ width: '100%' }}>
+                <Card className="card-form" bordered={false}>
+                    <Row gutter={12}>
                         <Col span={12}>
                             <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Tên Bài học " />}
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Tên task" />}
                                 name={['lecture', 'lectureName']}
+                                // initialValue={detail.name}
                             />
                         </Col>
                         <Col span={12}>
                             <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Tên Môn học" />}
-                                name={['lecture', 'subject', 'subjectName']}
-                            />
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Tên leader" />}
-                                name={['course', 'leader', 'leaderName']}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Tên khóa học" />}
-                                name={['course', 'name']}
-                            />
-                        </Col>
-                    </Row>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Tên sinh viên" />}
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Lập trình viên" />}
                                 name={['student', 'fullName']}
+                                // initialValue={detail.name}
                             />
                         </Col>
+                    </Row>
+                    <Row gutter={12}>
                         <Col span={12}>
                             <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Số điện thoại" />}
-                                name={['student', 'phone']}
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
+                                name="startDate"
+                                // initialValue={detail.name}
+                            />
+                        </Col>
+
+                        <Col span={12}>
+                            <TextField
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                                name="dueDate"
+                                // initialValue={detail?.subject?.subjectName}
                             />
                         </Col>
                     </Row>
 
-                    <Row gutter={16}>
+                    <Row gutter={12}>
                         <Col span={12}>
-                            <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
-                                name={'startDate'}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <TextField
-                                readOnly="true"
-                                width="100%"
-                                label={<FormattedMessage defaultMessage="Ngày Kết thúc" />}
-                                name={'dueDate'}
+                            <SelectField
+                                readOnly
+                                label={<FormattedMessage defaultMessage="Tình Trạng" />}
+                                name="state"
+                                options={stateValues}
+                                disabled
+                                // initialValue={detail?.subject?.subjectName}
                             />
                         </Col>
                     </Row>
-                    <Col span={12}>
-                        <SelectField
-                            required
-                            name="state"
-                            label={<FormattedMessage defaultMessage="Tình trạng" />}
-                            allowClear={false}
-                            options={stateValues}
-                        />
-                    </Col>
-                </BaseForm>
-            </Card>
+                    <TextField
+                        readOnly
+                        label={<FormattedMessage defaultMessage="Note" />}
+                        name="note"
+                        type="textarea"
+                        // initialValue={detail?.subject?.subjectName}
+                    />
+                </Card>
+            </BaseForm>
         </Modal>
     );
 };

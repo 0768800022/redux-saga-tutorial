@@ -15,6 +15,8 @@ import { TaskLogKindOptions } from '@constants/masterData';
 import style from './projectTaskLog.module.scss';
 import useNotification from '@hooks/useNotification';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { RightOutlined } from '@ant-design/icons';
+
 const message = defineMessages({
     objectName: 'Nhật ký',
     gitCommitUrl: 'Đường dẫn commit git',
@@ -27,6 +29,8 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const taskName = queryParameters.get('task');
+    const projectName = queryParameters.get('projectName');
+
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const state = location?.state?.prevPath;
     const taskParam = routes.ProjectTaskListPage.path;
@@ -136,7 +140,7 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                                 position: createPermission === false ? 'relative' : 'absolute',
                             }}
                         >
-                            {taskName}
+                            {projectName} <RightOutlined /> {taskName}
                         </span>
                     }
                     actionBar={mixinFuncs.renderActionBar()}

@@ -59,7 +59,7 @@ const CourseLeaderListPage = () => {
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     registration: ({ id, name, state, status }) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.member)}>
                             <Button
                                 type="link"
                                 disabled={state === 1}
@@ -73,7 +73,7 @@ const CourseLeaderListPage = () => {
                                         );
                                 }}
                             >
-                                <TeamOutlined />
+                                <UserOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -86,7 +86,7 @@ const CourseLeaderListPage = () => {
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const path = routes.courseLeaderListPage.path + `/task/${id}?courseName=${name}&subjectId=${subject.id}`;
+                                    const path = routes.courseLeaderListPage.path + `/task/${id}?courseName=${name}&state=${state}&subjectId=${subject.id}`;
                                     navigate(path);
                                 }}
                             >
