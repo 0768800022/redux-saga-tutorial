@@ -283,7 +283,7 @@ const useListBase = ({
                         }}
                         style={{ padding: 0 }}
                     >
-                        <DeleteOutlined color='red'/>
+                        <DeleteOutlined style={{ color: 'red' }} />
                     </Button>
                 </BaseTooltip>
             );
@@ -358,6 +358,7 @@ const useListBase = ({
                                     break;
                                 default:
                                     // if (mixinFuncs.hasPermission(value?.permissions)) isShow = true;
+                                    isShow = true;
                                     break;
                 }
                 return;
@@ -372,7 +373,7 @@ const useListBase = ({
         buttonProps,
     ) => {
         const isRender = checkPermission(action);
-        if (isRender) return {};
+        if (!isRender) return {};
         return {
             align: 'center',
             ...columnsProps,
