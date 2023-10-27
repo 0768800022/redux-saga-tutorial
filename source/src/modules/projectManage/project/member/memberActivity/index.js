@@ -26,7 +26,7 @@ const message = defineMessages({
     ok: 'Đồng ý',
     cancel: 'Huỷ',
     resetSuccess: 'Đặt lại thời gian thành công!',
-    reset: 'Đặt lại thời gian',
+    reset: 'Đặt lại thời gian thành công',
 });
 
 function MemberActivityProjectListPage() {
@@ -139,7 +139,6 @@ function MemberActivityProjectListPage() {
             },
         });
     };
-
     return (
         <PageWrapper
             routes={[
@@ -159,11 +158,14 @@ function MemberActivityProjectListPage() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
                         <span style={{ fontWeight: 'normal' }}>{studentName}</span>
                         <span>
-                            <Button onClick={handleAchiveAll} style={{ marginRight: '1rem' }}>
-                                <BaseTooltip title={translate.formatMessage(message.reset)}>
-                                    <ReloadOutlined />
-                                </BaseTooltip>
-                            </Button>
+                            {mixinFuncs.hasPermission(apiConfig.projectTaskLog.archiveAll.baseURL) && (
+                                <Button onClick={handleAchiveAll} style={{ marginRight: '1rem' }}>
+                                    <BaseTooltip title={translate.formatMessage(message.reset)}>
+                                        <ReloadOutlined />
+                                    </BaseTooltip>
+                                </Button>
+                            )}
+
                             <span>
                                 <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
