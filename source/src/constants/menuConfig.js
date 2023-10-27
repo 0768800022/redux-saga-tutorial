@@ -1,18 +1,11 @@
-import routes from '@routes';
-import {
-    IconUserBolt,
-    IconSchool,
-    IconClipboardText,
-    IconBuildingCommunity,
-    IconSettings,
-    IconHighlight,
-} from '@tabler/icons-react';
-import React from 'react';
-import { generatePath } from 'react-router-dom';
-import { categoryKind } from './masterData';
-import { FormattedMessage } from 'react-intl';
-import apiConfig from './apiConfig';
 import { BulbOutlined } from '@ant-design/icons';
+import routes from '@routes';
+import { IconBuildingCommunity, IconClipboardText, IconSchool, IconSettings, IconUserBolt } from '@tabler/icons-react';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
+import { generatePath } from 'react-router-dom';
+import apiConfig from './apiConfig';
+import { categoryKind } from './masterData';
 const navMenuConfig = [
     {
         label: <FormattedMessage defaultMessage="Quản lý admin" />,
