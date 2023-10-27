@@ -148,3 +148,9 @@ export const expYearMessage = defineMessages({
     fourYear: '4 năm',
     fiveYear: '5 năm',
 });
+
+export const archivedMessage = defineMessages({
+    NotReset: 'Chưa reset',
+    Reset: 'Đã reset',
+    All: 'Tất cả',
+});
