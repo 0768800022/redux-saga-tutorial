@@ -283,7 +283,7 @@ const useListBase = ({
                         }}
                         style={{ padding: 0 }}
                     >
-                        <DeleteOutlined />
+                        <DeleteOutlined style={{ color: 'red' }} />
                     </Button>
                 </BaseTooltip>
             );
@@ -344,11 +344,36 @@ const useListBase = ({
         return actionButtons;
     };
 
+    const checkPermission = (actions) => {
+        let isShow = false;
+        Object.entries(actions).forEach(([type, value]) => {
+            if (value || value.show) {
+                switch (type) {
+                                case 'delete':
+                                    if (mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) isShow = true;
+                                    break;
+                                case 'edit':
+                                    if (mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]))
+                                        isShow = true;
+                                    break;
+                                default:
+                                    // if (mixinFuncs.hasPermission(value?.permissions)) isShow = true;
+                                    isShow = true;
+                                    break;
+                }
+                return;
+            }
+        });
+        return isShow;
+    };
+
     const renderActionColumn = (
         action = { edit: false, delete: false, changeStatus: false },
         columnsProps,
         buttonProps,
     ) => {
+        const isRender = checkPermission(action);
+        if (!isRender) return {};
         return {
             align: 'center',
             ...columnsProps,

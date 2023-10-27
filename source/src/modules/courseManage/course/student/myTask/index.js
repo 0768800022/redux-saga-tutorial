@@ -1,25 +1,20 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
+import BaseTable from '@components/common/table/BaseTable';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
+import { FieldTypes } from '@constants/formConfig';
 import { taskState } from '@constants/masterData';
+import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { Tag } from 'antd';
-import React from 'react';
-import { defineMessages } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { commonMessage } from '@locales/intl';
-import { FieldTypes } from '@constants/formConfig';
-import useFetch from '@hooks/useFetch';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { Button } from 'antd';
-import useDisclosure from '@hooks/useDisclosure';
-import { useState } from 'react';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import { Tag } from 'antd';
+import React, { useState } from 'react';
+import { defineMessages } from 'react-intl';
 import DetailMyTaskModal from './DetailMyTaskModal';
-import { lectureState } from '@constants/masterData';
-import { EyeOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
     objectName: 'My Task',
