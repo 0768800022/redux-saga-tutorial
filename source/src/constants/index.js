@@ -2,6 +2,7 @@ export const apiUrl = process.env.REACT_APP_API;
 export const apiTenantUrl = process.env.REACT_APP_API_TENANT;
 export const apiTenantId = process.env.REACT_APP_TENANT_ID;
 export const enableExposure = process.env.REACT_APP_ENABLE_EXPOSURE === 'true';
+export const envType = process.env.REACT_APP_ENV;
 
 export const fixedPath = {
     privacy: `${apiUrl}${process.env.REACT_APP_PRIVACY_PATH}`,
