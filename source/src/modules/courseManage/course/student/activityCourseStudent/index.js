@@ -18,13 +18,14 @@ import styles from './activityCourseStudent.module.scss';
 import useAuth from '@hooks/useAuth';
 const message = defineMessages({
     selectCourse: 'Chọn khoá học',
-    objectName: 'Hoạt động của tôi',
+    objectName: 'Nhật ký',
     reminderMessage: 'Vui lòng chọn khoá học !',
 });
 
 function MyActivityCourseListPage() {
     const translate = useTranslate();
     const location = useLocation();
+    const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
@@ -52,6 +53,9 @@ function MyActivityCourseListPage() {
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
                 mixinFuncs.handleFetchList({ ...params, studentId: profile.id });
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?courseId=${courseId}&taskId=${dataRow?.task?.id}&taskName=${dataRow?.task?.lecture?.lectureName}`;
             };
         },
     });
@@ -84,6 +88,7 @@ function MyActivityCourseListPage() {
                 );
             },
         },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
     const { data: myCourse } = useFetch(apiConfig.course.getListStudentCourse, {
         immediate: true,
@@ -120,6 +125,7 @@ function MyActivityCourseListPage() {
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
                     className: !isHasValueSearch && styles.disableSearch,
+                    initialValues: queryFilter,
                     onReset: () => setIsHasValueSearch(false),
                 })}
                 baseTable={

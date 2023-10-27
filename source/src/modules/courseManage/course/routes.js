@@ -22,6 +22,8 @@ import TaskStudentSavePage from './student/taskStudent/TaskSavePage';
 import RegistrationStudentSavePage from './student/registrationStudent/RegistrationSavePage';
 import AsignAllStudentListPage from './student/asignAll';
 import CourseStudentSavePage from './student/courseStudent/CourseStudentSavePage';
+import ActivityProjectStudentSavePage from './student/activityProjectStudent/ActivityProjectStudentSavePage';
+import ActivityCourseStudentSavePage from './student/activityCourseStudent/ActivityCourseStudentSavePage';
 export default {
     courseListPage: {
         path: '/course',
@@ -157,7 +159,7 @@ export default {
         title: 'Registration Student Save Page',
         auth: true,
         component: RegistrationStudentSavePage,
-        permissions: [apiConfig.registration.create.baseURL,apiConfig.registration.update.baseURL],
+        permissions: [apiConfig.registration.create.baseURL, apiConfig.registration.update.baseURL],
     },
     taskLogStudentListPage: {
         path: '/course-student/task/:courseId/task-log',
@@ -180,11 +182,25 @@ export default {
         component: MyActivityCourseListPage,
         permissions: [apiConfig.taskLog.getList.baseURL],
     },
+    myActivityCourseStudentSavePage: {
+        path: '/my-activity-course/:id',
+        title: 'My Activity Course Save Page',
+        auth: true,
+        component: ActivityCourseStudentSavePage,
+        permissions: [apiConfig.taskLog.create.baseURL, apiConfig.taskLog.update.baseURL],
+    },
     myActivityProjectStudentListPage: {
         path: '/my-activity-project',
         title: 'My Activity Project List Page',
         auth: true,
         component: MyActivityProjectListPage,
         permissions: [apiConfig.projectTaskLog.getList.baseURL],
+    },
+    myActivityProjectStudentSavePage: {
+        path: '/my-activity-project/:id',
+        title: 'My Activity Project Save Page',
+        auth: true,
+        component: ActivityProjectStudentSavePage,
+        permissions: [apiConfig.projectTaskLog.create.baseURL, apiConfig.projectTaskLog.update.baseURL],
     },
 };

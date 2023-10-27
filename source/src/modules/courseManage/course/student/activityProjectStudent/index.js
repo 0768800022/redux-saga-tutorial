@@ -20,13 +20,14 @@ import useNotification from '@hooks/useNotification';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 const message = defineMessages({
     selectProject: 'Chọn dự án',
-    objectName: 'Hoạt động của tôi',
+    objectName: 'Nhật ký',
     reminderMessage: 'Vui lòng chọn dự án !',
     gitCommitUrl: 'Đường dẫn commit git',
 });
 
 function MyActivityProjectListPage() {
     const translate = useTranslate();
+    const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
@@ -55,6 +56,9 @@ function MyActivityProjectListPage() {
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
                 mixinFuncs.handleFetchList({ ...params, studentId: profile.id });
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?projectId=${projectId}&task=${dataRow?.projectTaskInfo?.taskName}`;
             };
         },
     });
@@ -146,6 +150,7 @@ function MyActivityProjectListPage() {
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
                     className: !isHasValueSearch && styles.disableSearch,
+                    initialValues: queryFilter,
                     onReset: () => setIsHasValueSearch(false),
                 })}
                 baseTable={
