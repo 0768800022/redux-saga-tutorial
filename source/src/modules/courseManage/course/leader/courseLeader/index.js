@@ -1,4 +1,4 @@
-import { BookOutlined, UserOutlined, TeamOutlined,CommentOutlined } from '@ant-design/icons';
+import { BookOutlined, UserOutlined, TeamOutlined, CommentOutlined } from '@ant-design/icons';
 import AvatarField from '@components/common/form/AvatarField';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
@@ -13,7 +13,7 @@ import routes from '@routes';
 import { formatMoney } from '@utils';
 import { Button, Tag } from 'antd';
 import dayjs from 'dayjs';
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
@@ -31,7 +31,7 @@ const CourseLeaderListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [openReviewModal, handlersReviewModal] = useDisclosure(false);
     const [courseId, setCourseId] = useState();
-    const [checkReivew,setCheckReview] = useState(true);
+    const [checkReivew, setCheckReview] = useState(true);
 
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -69,7 +69,7 @@ const CourseLeaderListPage = () => {
                                     state !== 1 &&
                                         navigate(
                                             routes.registrationLeaderListPage.path +
-                                            `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
+                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}`,
                                         );
                                 }}
                             >
@@ -86,7 +86,9 @@ const CourseLeaderListPage = () => {
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    const path = routes.courseLeaderListPage.path + `/task/${id}?courseName=${name}&state=${state}&subjectId=${subject.id}`;
+                                    const path =
+                                        routes.courseLeaderListPage.path +
+                                        `/task/${id}?courseName=${name}&state=${state}&subjectId=${subject.id}`;
                                     navigate(path);
                                 }}
                             >
@@ -94,7 +96,7 @@ const CourseLeaderListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    review: ({ id, name, subject, state, status,item }) => (
+                    review: ({ id, name, subject, state, status, item }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
                             <Button
                                 type="link"
@@ -115,9 +117,7 @@ const CourseLeaderListPage = () => {
                 });
             },
         });
-    const breadRoutes = [
-        { breadcrumbName: translate.formatMessage(commonMessage.course) },
-    ];
+    const breadRoutes = [{ breadcrumbName: translate.formatMessage(commonMessage.course) }];
     const columns = [
         {
             title: '#',
@@ -175,7 +175,7 @@ const CourseLeaderListPage = () => {
         mixinFuncs.renderActionColumn(
             {
                 review: true,
-                registration: true,
+                registration: { show: true, permissions: [] },
                 task: true,
                 edit: true,
                 delete: true,
@@ -184,34 +184,34 @@ const CourseLeaderListPage = () => {
         ),
     ].filter(Boolean);
 
-    const { data: dataListReview, loading:dataListLoading, execute: listReview } = useFetch(
-        apiConfig.review.listReviews, 
-        { immediate: false,
-            mappingData: ({ data }) => data.content,
-        });
-    
+    const {
+        data: dataListReview,
+        loading: dataListLoading,
+        execute: listReview,
+    } = useFetch(apiConfig.review.listReviews, { immediate: false, mappingData: ({ data }) => data.content });
+
     const getListReview = (id) => {
         listReview({
             pathParams: {
-                courseId : id,
+                courseId: id,
             },
         });
     };
 
-    const { data: starData,loading:starDataLoading, execute: starReview } = useFetch(
-        apiConfig.review.star, 
-        { immediate: false,
-            mappingData: ({ data }) => data.content,
-        });
-    
+    const {
+        data: starData,
+        loading: starDataLoading,
+        execute: starReview,
+    } = useFetch(apiConfig.review.star, { immediate: false, mappingData: ({ data }) => data.content });
+
     const getStarReview = (id) => {
         starReview({
             pathParams: {
-                courseId : id,
+                courseId: id,
             },
         });
     };
-    const { loading:loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
+    const { loading: loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview, { immediate: false });
 
     return (
         <PageWrapper routes={breadRoutes}>
@@ -231,9 +231,9 @@ const CourseLeaderListPage = () => {
                 open={openReviewModal}
                 onCancel={() => handlersReviewModal.close()}
                 data={dataListReview || {}}
-                courseId = {courseId}
+                courseId={courseId}
                 checkReivew={checkReivew}
-                star = {starData}
+                star={starData}
                 width={800}
                 loading={dataListLoading || starDataLoading || loadingData}
             />

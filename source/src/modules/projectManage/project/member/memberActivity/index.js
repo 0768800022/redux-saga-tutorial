@@ -1,27 +1,32 @@
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
+import BaseTable from '@components/common/table/BaseTable';
 import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { TaskLogKindOptions } from '@constants/masterData';
-import useListBase from '@hooks/useListBase';
-import useTranslate from '@hooks/useTranslate';
-import routes from '@routes';
-import { Tag } from 'antd';
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { defineMessages } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import { commonMessage } from '@locales/intl';
-import { FieldTypes } from '@constants/formConfig';
 import useFetch from '@hooks/useFetch';
-import useAuth from '@hooks/useAuth';
+import useListBase from '@hooks/useListBase';
 import useNotification from '@hooks/useNotification';
+import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import { Button, Modal, Tag } from 'antd';
+import React from 'react';
+import { defineMessages } from 'react-intl';
 import style from '../member.module.scss';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
+import { ReloadOutlined } from '@ant-design/icons';
+import { showSucsessMessage } from '@services/notifyService';
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
     reminderMessage: 'Vui lòng chọn dự án !',
     gitCommitUrl: 'Đường dẫn commit git',
+    title: 'Bạn có xác nhận đặt lại thời gian?',
+    ok: 'Đồng ý',
+    cancel: 'Huỷ',
+    resetSuccess: 'Đặt lại thời gian thành công!',
+    reset: 'Đặt lại thời gian thành công',
 });
 
 function MemberActivityProjectListPage() {
@@ -33,6 +38,7 @@ function MemberActivityProjectListPage() {
     const notification = useNotification();
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const pathPrev = localStorage.getItem('pathPrev');
+    const { execute } = useFetch(apiConfig.projectTaskLog.archiveAll);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.projectTaskLog,
         options: {
@@ -110,11 +116,29 @@ function MemberActivityProjectListPage() {
             },
         },
     ].filter(Boolean);
-    const { data: timeSum } = useFetch(apiConfig.projectTaskLog.getSum, {
+    const { data: timeSum, execute: executeGetTime } = useFetch(apiConfig.projectTaskLog.getSum, {
         immediate: true,
         params: { projectId, studentId },
         mappingData: ({ data }) => data.content,
     });
+
+    const handleAchiveAll = () => {
+        Modal.confirm({
+            title: translate.formatMessage(message.title),
+            content: '',
+            okText: translate.formatMessage(message.ok),
+            cancelText: translate.formatMessage(message.cancel),
+            onOk: () => {
+                execute({
+                    data: { projectId, devId: studentId },
+                    onCompleted: () => {
+                        showSucsessMessage(translate.formatMessage(message.reset));
+                        executeGetTime();
+                    },
+                });
+            },
+        });
+    };
     return (
         <PageWrapper
             routes={[
@@ -133,11 +157,27 @@ function MemberActivityProjectListPage() {
                 title={
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
                         <span style={{ fontWeight: 'normal' }}>{studentName}</span>
-                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                            {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
-                            {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h |{' '}
-                            {translate.formatMessage(commonMessage.totalTimeOff)}:{' '}
-                            {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                        <span>
+                            {mixinFuncs.hasPermission(apiConfig.projectTaskLog.archiveAll.baseURL) && (
+                                <Button onClick={handleAchiveAll} style={{ marginRight: '1rem' }}>
+                                    <BaseTooltip title={translate.formatMessage(message.reset)}>
+                                        <ReloadOutlined />
+                                    </BaseTooltip>
+                                </Button>
+                            )}
+
+                            <span>
+                                <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
+                                <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h |{' '}
+                                </span>
+                            </span>
+                            <span>
+                                <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
+                                <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                                </span>
+                            </span>
                         </span>
                     </div>
                 }

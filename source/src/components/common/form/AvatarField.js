@@ -6,7 +6,9 @@ const AvatarField = ({ size, icon, src, ...props }) => {
     const [selectedAvatar, setSelectedAvatar] = useState(null);
     const handleAvatarClick = (avatarURL) => {
         setSelectedAvatar(avatarURL);
-        setIsModalVisible(true);
+        if(avatarURL ){
+            setIsModalVisible(true);
+        }
     };
     return (
         <>

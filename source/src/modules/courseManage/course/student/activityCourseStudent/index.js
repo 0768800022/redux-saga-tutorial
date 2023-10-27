@@ -16,15 +16,17 @@ import { FieldTypes } from '@constants/formConfig';
 import useFetch from '@hooks/useFetch';
 import styles from './activityCourseStudent.module.scss';
 import useAuth from '@hooks/useAuth';
+import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
 const message = defineMessages({
     selectCourse: 'Chọn khoá học',
-    objectName: 'Hoạt động của tôi',
+    objectName: 'Nhật ký',
     reminderMessage: 'Vui lòng chọn khoá học !',
 });
 
 function MyActivityCourseListPage() {
     const translate = useTranslate();
     const location = useLocation();
+    const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
@@ -52,6 +54,9 @@ function MyActivityCourseListPage() {
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
                 mixinFuncs.handleFetchList({ ...params, studentId: profile.id });
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?courseId=${courseId}&taskId=${dataRow?.task?.id}&taskName=${dataRow?.task?.lecture?.lectureName}`;
             };
         },
     });
@@ -84,6 +89,7 @@ function MyActivityCourseListPage() {
                 );
             },
         },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
     const { data: myCourse } = useFetch(apiConfig.course.getListStudentCourse, {
         immediate: true,
@@ -120,6 +126,7 @@ function MyActivityCourseListPage() {
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
                     className: !isHasValueSearch && styles.disableSearch,
+                    initialValues: queryFilter,
                     onReset: () => setIsHasValueSearch(false),
                 })}
                 baseTable={
@@ -133,16 +140,23 @@ function MyActivityCourseListPage() {
                         )}
                         {courseId && (
                             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
-                                <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                    {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
-                                    {timeSum && timeSum[0]?.timeWorking
-                                        ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
-                                        : 0}
-                                    h | {translate.formatMessage(commonMessage.totalTimeOff)}:{' '}
-                                    {timeSum && timeSum[0]?.timeOff
-                                        ? Math.ceil((timeSum[0]?.timeOff / 60) * 10) / 10
-                                        : 0}
-                                    h
+                                <span>
+                                    <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                        {timeSum && timeSum[0]?.timeWorking
+                                            ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
+                                            : 0}
+                                        h |
+                                    </span>
+                                </span>
+                                <span>
+                                    <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                        {timeSum && timeSum[0]?.timeOff
+                                            ? Math.ceil((timeSum[0]?.timeOff / 60) * 10) / 10
+                                            : 0}
+                                        h
+                                    </span>
                                 </span>
                             </div>
                         )}

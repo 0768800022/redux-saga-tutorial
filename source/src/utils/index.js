@@ -162,9 +162,10 @@ export const validatePermission = (
     } else {
         permissionsSavePage = requiredPermissions;
     }
-    return removePathParams(permissionsSavePage).every((item) =>
-        userPermissions?.includes(item?.replace(apiTenantUrl, '/')),
-    );
+
+    return removePathParams(permissionsSavePage).every((item) => {
+        return userPermissions?.includes(item?.replace(apiTenantUrl, '/'));
+    });
 };
 
 export const randomString = (length = 4) => {

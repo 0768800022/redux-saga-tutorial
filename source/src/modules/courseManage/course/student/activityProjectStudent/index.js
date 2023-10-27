@@ -18,15 +18,17 @@ import styles from './activityProjectStudent.module.scss';
 import useAuth from '@hooks/useAuth';
 import useNotification from '@hooks/useNotification';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
 const message = defineMessages({
     selectProject: 'Chọn dự án',
-    objectName: 'Hoạt động của tôi',
+    objectName: 'Nhật ký',
     reminderMessage: 'Vui lòng chọn dự án !',
     gitCommitUrl: 'Đường dẫn commit git',
 });
 
 function MyActivityProjectListPage() {
     const translate = useTranslate();
+    const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
@@ -55,6 +57,9 @@ function MyActivityProjectListPage() {
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
                 mixinFuncs.handleFetchList({ ...params, studentId: profile.id });
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}?projectId=${projectId}&task=${dataRow?.projectTaskInfo?.taskName}`;
             };
         },
     });
@@ -109,6 +114,7 @@ function MyActivityProjectListPage() {
                 );
             },
         },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
     const { data: myProject } = useFetch(apiConfig.project.getListStudent, {
         immediate: true,
@@ -145,6 +151,7 @@ function MyActivityProjectListPage() {
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
                     className: !isHasValueSearch && styles.disableSearch,
+                    initialValues: queryFilter,
                     onReset: () => setIsHasValueSearch(false),
                 })}
                 baseTable={
@@ -158,11 +165,17 @@ function MyActivityProjectListPage() {
                         )}
                         {projectId && (
                             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
-                                <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                    {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
-                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h |{' '}
-                                    {translate.formatMessage(commonMessage.totalTimeOff)}:{' '}
-                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                                <span>
+                                    <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                        {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h |{' '}
+                                    </span>
+                                </span>
+                                <span>
+                                    <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                        {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                                    </span>
                                 </span>
                             </div>
                         )}

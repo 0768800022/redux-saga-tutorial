@@ -106,7 +106,7 @@ const StudentForm = (props) => {
                 <TextField
                     type="password"
                     label={translate.formatMessage(commonMessage.newPassword)}
-                    name="password"
+                    name="newPassword"
                     rules={[
                         {
                             validator: async () => {
@@ -124,6 +124,7 @@ const StudentForm = (props) => {
                 <TextField
                     type="password"
                     label={translate.formatMessage(commonMessage.confirmPassword)}
+                    name="confirmPassword"
                     rules={[
                         {
                             validator: async () => {

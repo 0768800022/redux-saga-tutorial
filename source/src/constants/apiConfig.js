@@ -1185,6 +1185,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        archiveAll: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/archive-all-task-logs`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     companySeek: {
         getList: {

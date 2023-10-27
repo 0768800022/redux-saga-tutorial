@@ -29,6 +29,7 @@ import {
     baseHeader,
     STUDENT_LOGIN_TYPE,
     COMPANY_LOGIN_TYPE,
+    envType,
 } from '@constants';
 import { Buffer } from 'buffer';
 import { setData } from '@utils/localStorage';
@@ -45,12 +46,15 @@ const LoginPage = () => {
         ...apiConfig.account.loginBasic,
         authorization: `Basic ${base64Credentials}`,
     });
+    const tenantIdUrl =
+        envType !== 'dev' && window.location.href.split('.')[0].split('//')[1].split('-')[0];
+    const tenantId = envType === 'dev' ? apiTenantId : tenantIdUrl;
     const [loginLoading, setLoading] = useState(false);
     const { execute: executeLeaderLogin, loading: loadingLeader } = useFetch(apiConfig.leader.login);
     const { execute: executeStudentLogin, loading: loadingStudent } = useFetch(apiConfig.student.login);
     const { execute: executeCompanyLogin, loading: loadingCompany } = useFetch(apiConfig.company.login);
     const { execute: executeGetCareerDetail, loading: loadingCareer } = useFetch(apiConfig.organize.getDetail, {
-        pathParams: { id: apiTenantId },
+        pathParams: { id: tenantId },
     });
     const { execute: executeGetProfile } = useFetchAction(accountActions.getProfile, {
         loading: useFetchAction.LOADING_TYPE.APP,
@@ -87,7 +91,7 @@ const LoginPage = () => {
                 setData(storageKeys.TENANT_HEADER, res.data?.name);
                 setData(storageKeys.TENANT_ID, res?.data?.id);
                 login({
-                    data: { ...values, phone: values.username, tenantId: apiTenantId },
+                    data: { ...values, phone: values.username, tenantId: tenantId },
                     onCompleted: (res) => {
                         handleLoginSuccess(res.data);
                         setLoading(false);
