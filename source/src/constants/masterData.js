@@ -91,7 +91,6 @@ export const projectTaskState = [
 export const archivedOption = [
     { value: 0, label: archivedMessage.NotReset },
     { value: 1, label: archivedMessage.Reset },
-    { value: 100, label: archivedMessage.All },
 ];
 
 export const statusOptions = [

@@ -152,5 +152,4 @@ export const expYearMessage = defineMessages({
 export const archivedMessage = defineMessages({
     NotReset: 'Chưa reset',
     Reset: 'Đã reset',
-    All: 'Tất cả',
 });

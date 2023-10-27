@@ -66,13 +66,7 @@ function MemberActivityProjectListPage() {
             };
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
-                let archived;
-                if (valueSearch == 100) {
-                    archived = null;
-                } else {
-                    archived = valueSearch;
-                }
-                mixinFuncs.handleFetchList({ ...params, studentId, projectId, studentName: null, archived });
+                mixinFuncs.handleFetchList({ ...params, studentId, projectId, studentName: null });
             };
             funcs.changeFilter = (filter) => {
                 const projectId = queryParams.get('projectId');
