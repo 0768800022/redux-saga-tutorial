@@ -141,21 +141,26 @@ function MyActivityCourseListPage() {
                         {courseId && (
                             <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
                                 <span>
-                                    <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
-                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                        {timeSum && timeSum[0]?.timeWorking
-                                            ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
-                                            : 0}
-                                        h |
+                                    <span style={{ marginLeft: '5px' }}>
+                                        <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
+                                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                            {timeSum && timeSum[0]?.timeWorking
+                                                ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
+                                                : 0}
+                                            h{' '}
+                                            <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>
+                                                |{' '}
+                                            </span>
+                                        </span>
                                     </span>
-                                </span>
-                                <span>
-                                    <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
-                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                        {timeSum && timeSum[0]?.timeOff
-                                            ? Math.ceil((timeSum[0]?.timeOff / 60) * 10) / 10
-                                            : 0}
-                                        h
+                                    <span style={{ marginLeft: '10px' }}>
+                                        <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
+                                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                            {timeSum && timeSum[0]?.timeOff
+                                                ? Math.ceil((timeSum[0]?.timeOff / 60) * 10) / 10
+                                                : 0}
+                                            h
+                                        </span>
                                     </span>
                                 </span>
                             </div>

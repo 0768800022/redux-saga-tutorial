@@ -149,7 +149,6 @@ function ProjectStudentMyTaskListPage() {
                                 onClick: (e) => {
                                     e.stopPropagation();
                                     handleFetchDetail(record.id);
-
                                     handlersModal.open();
                                 },
                             })}

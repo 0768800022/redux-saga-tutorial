@@ -111,16 +111,17 @@ function StudentActivityCourseLeaderListPage() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
                         <span style={{ fontWeight: 'normal' }}>{studentName}</span>
                         <span>
-                            <span>
+                            <span style={{ marginLeft: '5px' }}>
                                 <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                     {timeSum && timeSum[0]?.timeWorking
                                         ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
                                         : 0}
-                                    h |{' '}
+                                    h{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
                                 </span>
                             </span>
-                            <span>
+                            <span style={{ marginLeft: '10px' }}>
                                 <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                     {timeSum && timeSum[0]?.timeOff
