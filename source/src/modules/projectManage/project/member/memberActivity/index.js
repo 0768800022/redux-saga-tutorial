@@ -117,7 +117,7 @@ function MemberActivityProjectListPage() {
             title: 'Loại',
             dataIndex: 'kind',
             align: 'center',
-            width: 120,
+            width: 150,
             render(dataRow) {
                 const kindLog = KindTaskLog.find((item) => item.value == dataRow);
                 return (
@@ -192,14 +192,17 @@ function MemberActivityProjectListPage() {
                                 </Button>
                             )}
 
-                            <span>
-                                <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
+                            <span style={{ marginLeft: '5px' }}>
+                                <IconAlarm style={{ marginBottom: '-5px' }} /> : {' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h |{' '}
+                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px',marginLeft: '15px' }}>
+                                        |{' '}
+                                    </span>
                                 </span>
                             </span>
-                            <span>
-                                <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
+                            <span style={{ marginLeft: '10px' }}>
+                                <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} /> : {' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                     {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
                                 </span>

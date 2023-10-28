@@ -119,25 +119,6 @@ function RegistrationListPage() {
             width: 180,
         },
         {
-            title: translate.formatMessage(commonMessage.isIntern),
-            dataIndex: 'isIntern',
-            align: 'center',
-            width: 150,
-            render: (item) => {
-                if (item == 0) {
-                    return null;
-                } else {
-                    return <CheckCircleOutlined className={style.greenCheckIcon} />;
-                }
-            },
-        },
-        {
-            title: translate.formatMessage(commonMessage.createdDate),
-            dataIndex: 'createdDate',
-            align: 'center',
-            width: 170,
-        },
-        {
             title: translate.formatMessage(commonMessage.state),
             dataIndex: 'state',
             align: 'center',
