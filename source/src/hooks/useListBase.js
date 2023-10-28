@@ -347,7 +347,7 @@ const useListBase = ({
     const checkPermission = (actions) => {
         let isShow = false;
         Object.entries(actions).forEach(([type, value]) => {
-            if (value || value.show) {
+            if (value || value?.show) {
                 switch (type) {
                                 case 'delete':
                                     if (mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) isShow = true;

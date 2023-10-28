@@ -4,7 +4,7 @@ import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { TaskLogKindOptions } from '@constants/masterData';
+import { TaskLogKindOptions, archivedOption } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useNotification from '@hooks/useNotification';
@@ -12,12 +12,16 @@ import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 import { Button, Modal, Tag } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import style from '../member.module.scss';
 import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
 import { ReloadOutlined } from '@ant-design/icons';
 import { showSucsessMessage } from '@services/notifyService';
+import { FormattedMessage } from 'react-intl';
+import { FieldTypes } from '@constants/formConfig';
+import styles from '@modules/projectManage/project/project.module.scss';
+
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
     reminderMessage: 'Vui lòng chọn dự án !',
@@ -37,9 +41,11 @@ function MemberActivityProjectListPage() {
     const studentName = queryParameters.get('studentName');
     const notification = useNotification();
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
+    const archivedOptions = translate.formatKeys(archivedOption, ['label']);
     const pathPrev = localStorage.getItem('pathPrev');
     const { execute } = useFetch(apiConfig.projectTaskLog.archiveAll);
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
+    const [valueSearch, setValueSearch] = useState(null);
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } = useListBase({
         apiConfig: apiConfig.projectTaskLog,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -61,6 +67,12 @@ function MemberActivityProjectListPage() {
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
                 mixinFuncs.handleFetchList({ ...params, studentId, projectId, studentName: null });
+            };
+            funcs.changeFilter = (filter) => {
+                const projectId = queryParams.get('projectId');
+                const studentId = queryParams.get('studentId');
+                const studentName = queryParams.get('studentName');
+                mixinFuncs.setQueryParams(serializeParams({ projectId, studentId, studentName, ...filter }));
             };
         },
     });
@@ -122,6 +134,20 @@ function MemberActivityProjectListPage() {
         mappingData: ({ data }) => data.content,
     });
 
+    useEffect(() => { executeGetTime({ params: { archived: valueSearch, projectId, studentId } }); }, [valueSearch]);
+
+    const searchFields = [
+        {
+            key: 'archived',
+            placeholder: <FormattedMessage defaultMessage={"Archived"} />,
+            type: FieldTypes.SELECT,
+            onChange: (value) => {
+                setValueSearch(value);
+            },
+            options: archivedOptions,
+        },
+    ].filter(Boolean);
+
     const handleAchiveAll = () => {
         Modal.confirm({
             title: translate.formatMessage(message.title),
@@ -144,7 +170,7 @@ function MemberActivityProjectListPage() {
             routes={[
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.project),
-                    path: routes.projectListPage.path,
+                    path: routes.projectLeaderListPage.path,
                 },
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.member),
@@ -181,6 +207,10 @@ function MemberActivityProjectListPage() {
                         </span>
                     </div>
                 }
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    className: styles.search,
+                })}
                 baseTable={
                     <div>
                         <BaseTable

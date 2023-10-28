@@ -47,6 +47,7 @@ import {
     taskLog,
     companySeek,
     expYearMessage,
+    archivedMessage,
 } from './intl';
 
 export const languageOptions = [
@@ -85,6 +86,11 @@ export const projectTaskState = [
     { value: STATE_PROJECT_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
     { value: STATE_PROJECT_TASK_DONE, label: projectTaskStateMessage.done, color: 'green' },
     { value: STATE_PROJECT_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
+];
+
+export const archivedOption = [
+    { value: 0, label: archivedMessage.NotReset },
+    { value: 1, label: archivedMessage.Reset },
 ];
 
 export const statusOptions = [
