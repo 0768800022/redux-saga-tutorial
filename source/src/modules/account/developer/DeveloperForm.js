@@ -59,7 +59,7 @@ const DeveloperForm = (props) => {
                             name={['studentInfo', 'fullName']}
                             apiConfig={apiConfig.student.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
-                            initialSearchParams={{ pageNumber: 0 }}
+                            initialSearchParams={{ pageNumber: 0, excludeInDeveloper: true }}
                             searchParams={(text) => ({ fullName: text })}
                         />
                     </Col>
