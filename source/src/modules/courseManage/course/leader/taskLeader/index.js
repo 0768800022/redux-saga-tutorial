@@ -1,9 +1,6 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import {
-    DEFAULT_TABLE_ITEM_SIZE,
-    DEFAULT_FORMAT,
-} from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { taskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -26,7 +23,7 @@ import { commonMessage } from '@locales/intl';
 import { CalendarOutlined } from '@ant-design/icons';
 import { FormattedMessage } from 'react-intl';
 import { FieldTypes } from '@constants/formConfig';
-
+import styles from '../../course.module.scss';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -81,7 +78,10 @@ function TaskListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return routes.courseLeaderListPage.path + `/task/${paramid.courseId}/lecture?courseId=${paramid.courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+                return (
+                    routes.courseLeaderListPage.path +
+                    `/task/${paramid.courseId}/lecture?courseId=${paramid.courseId}&courseName=${courseName}&subjectId=${subjectId}`
+                );
             };
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?courseName=${courseName}&subjectId=${subjectId}`;
@@ -112,7 +112,7 @@ function TaskListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     generatePath(routes.taskLeaderListPage.path, { courseId }) +
-                                    `/task-log?courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
+                                        `/task-log?courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
                                     {
                                         state: { action: 'taskLog', prevPath: location.pathname },
                                     },
@@ -130,7 +130,6 @@ function TaskListPage() {
             };
         },
     });
-
 
     const setColumns = () => {
         const columns = [
@@ -179,7 +178,9 @@ function TaskListPage() {
                 },
             },
         ];
-        columns.push(mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '150px' }));
+        columns.push(
+            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '150px' }),
+        );
         return columns;
     };
 
@@ -194,22 +195,18 @@ function TaskListPage() {
                 }))
                 .filter((item, index, self) => {
                     // Lọc ra các phần tử duy nhất bằng cách so sánh value
-                    return (
-                        index ===
-                        self.findIndex((t) => t.value === item.value)
-                    );
+                    return index === self.findIndex((t) => t.value === item.value);
                 }),
     });
 
     const searchFields = [
         {
             key: 'studentId',
-            placeholder: <FormattedMessage defaultMessage={"Sinh viên"} />,
+            placeholder: <FormattedMessage defaultMessage={'Sinh viên'} />,
             type: FieldTypes.SELECT,
             options: memberCourse,
         },
     ].filter(Boolean);
-
 
     const { execute: executeUpdate } = useFetch(apiConfig.task.updateState, { immediate: false });
     const handleOk = () => {
@@ -230,32 +227,27 @@ function TaskListPage() {
                     handlersStateTaskModal.close();
                 }
             },
-            onError: (err) => { },
+            onError: (err) => {},
         });
     };
-
 
     return (
         <PageWrapper
             routes={[
-                { breadcrumbName: translate.formatMessage(commonMessage.course), path: routes.courseLeaderListPage.path },
+                {
+                    breadcrumbName: translate.formatMessage(commonMessage.course),
+                    path: routes.courseLeaderListPage.path,
+                },
                 { breadcrumbName: translate.formatMessage(commonMessage.task) },
             ]}
         >
             <div>
                 <ListPage
-                    title={
-                        <span
-                            style={
-                                state != 2 ? { fontWeight: 'normal' } : { fontWeight: 'normal', position: 'absolute' }
-                            }
-                        >
-                            {courseName}
-                        </span>
-                    }
+                    title={<span style={{ fontWeight: 'normal' }}>{courseName}</span>}
                     actionBar={state != 3 ? mixinFuncs.renderActionBar() : ''}
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
+                        className: styles.search,
                     })}
                     baseTable={
                         <BaseTable
@@ -267,8 +259,13 @@ function TaskListPage() {
                         />
                     }
                 />
-                <Modal title="Thay đổi tình trạng hoàn thành" open={openedStateTaskModal} onOk={handleOk} onCancel={() => handlersStateTaskModal.close()} data={detail || {}}>
-                </Modal>
+                <Modal
+                    title="Thay đổi tình trạng hoàn thành"
+                    open={openedStateTaskModal}
+                    onOk={handleOk}
+                    onCancel={() => handlersStateTaskModal.close()}
+                    data={detail || {}}
+                ></Modal>
             </div>
         </PageWrapper>
     );

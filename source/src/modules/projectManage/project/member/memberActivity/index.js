@@ -170,7 +170,7 @@ function MemberActivityProjectListPage() {
             routes={[
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.project),
-                    path: routes.projectListPage.path,
+                    path: routes.projectLeaderListPage.path,
                 },
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.member),
