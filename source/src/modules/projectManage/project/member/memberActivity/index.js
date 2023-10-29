@@ -195,7 +195,7 @@ function MemberActivityProjectListPage() {
                             <span style={{ marginLeft: '5px' }}>
                                 <IconAlarm style={{ marginBottom: '-5px' }} /> : {' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h
+                                    {timeSum ? Math.ceil((  [0]?.totalTimeWorking / 60) * 10) / 10 : 0}h
                                     <span style={{ fontWeight: 'bold', fontSize: '17px',marginLeft: '15px' }}>
                                         |{' '}
                                     </span>
