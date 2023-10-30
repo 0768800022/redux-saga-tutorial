@@ -205,14 +205,17 @@ function MemberActivityProjectListPage() {
             routes={[
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.project),
-                    path: routes.projectListPage.path,
+                    path:
+                        getData(storageKeys.USER_KIND) === UserTypes.MANAGER
+                            ? routes.projectListPage.path
+                            : routes.projectLeaderListPage.path + pathPrev,
                 },
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.member),
                     path:
                         getData(storageKeys.USER_KIND) === UserTypes.MANAGER
                             ? routes.projectMemberListPage.path
-                            : routes.projectLeaderListPage.path + pathPrev,
+                            : routes.projectLeaderMemberListPage.path + pathPrev,
                 },
                 { breadcrumbName: translate.formatMessage(commonMessage.memberActivity) },
             ]}

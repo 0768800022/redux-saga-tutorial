@@ -4,7 +4,6 @@ import ProjectTaskSavePage from './ProjectTaskSavePage';
 import ProjectTaskLogListPage from './projectTaskLog';
 import ProjectTaskLogSavePage from './projectTaskLog/projectTaskLogSavePage';
 import MemberActivityProjectListPage from '../member/memberActivity';
-import MemberActivityProjectLeaderListPage from '../projectLeader/projectLeaderMember/memberActivity';
 export default {
     ProjectTaskListPage: {
         path: '/project/task',
@@ -60,7 +59,7 @@ export default {
         path: '/project-leader/member/member-activity-project',
         title: 'Member Activity Project Leader List Page',
         auth: true,
-        component: MemberActivityProjectLeaderListPage,
+        component: MemberActivityProjectListPage,
         permissions: [apiConfig.projectTaskLog.getList.baseURL],
     },
 };
