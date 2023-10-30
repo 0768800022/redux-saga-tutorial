@@ -26,8 +26,18 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
 
     useEffect(() => {
         // form.setFields(data);
+
         form.setFieldsValue({
-            ...DetailData,
+            ...DetailData, 
+            developer: {
+                ...DetailData?.developer,
+                studentInfo: {
+                    ...DetailData?.developer?.studentInfo,
+                    fullName: DetailData?.developer?.studentInfo?.fullName || '',
+                },
+            },
+            startDate: DetailData?.startDate || '',
+            dueDate: DetailData?.dueDate || '',
         });
     }, [DetailData]);
     const handleOnCancel = () => {

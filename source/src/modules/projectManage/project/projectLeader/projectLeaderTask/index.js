@@ -25,6 +25,7 @@ import styles from '@modules/projectManage/project/project.module.scss';
 
 import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, AppConstants } from '@constants';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import DetailMyTaskProjectModal from '../../projectStudent/myTask/DetailMyTaskProjectModal';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -48,6 +49,8 @@ function ProjectLeaderTaskListPage() {
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const [introduceData, setIntroduceData] = useState({});
+    const [openedModal, handlersModal] = useDisclosure(false);
+
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const leaderId = queryParameters.get('leaderId');
@@ -64,6 +67,9 @@ function ProjectLeaderTaskListPage() {
     const location = useLocation();
     const [detail, setDetail] = useState();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
+        immediate: false,
+    });
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.projectTask,
@@ -153,7 +159,15 @@ function ProjectLeaderTaskListPage() {
                 });
             },
         });
-
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
     const convertDate = (date) => {
         const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
@@ -305,6 +319,14 @@ function ProjectLeaderTaskListPage() {
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
+                            onRow={(record) => ({
+                                onClick: (e) => {
+                                    e.stopPropagation();
+                                    handleFetchDetail(record.id);
+
+                                    handlersModal.open();
+                                },
+                            })}
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
@@ -315,6 +337,11 @@ function ProjectLeaderTaskListPage() {
                 />
                 <Modal title="Thay đổi tình trạng hoàn thành" open={openedStateTaskModal} onOk={handleOk} onCancel={() => handlersStateTaskModal.close()} data={detail || {}}>
                 </Modal>
+                <DetailMyTaskProjectModal
+                    open={openedModal}
+                    onCancel={() => handlersModal.close()}
+                    DetailData={detail}
+                />
             </div>
         </PageWrapper>
     );
