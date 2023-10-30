@@ -38,7 +38,6 @@ function MyActivityProjectListPage() {
     const [detail, setDetail] = useState({});
     const [openedModal, handlersModal] = useDisclosure(false);
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
-    const [isHasValueSearch, setIsHasValueSearch] = useState(projectId && true);
     const { profile } = useAuth();
     const notification = useNotification();
     const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
@@ -81,7 +80,6 @@ function MyActivityProjectListPage() {
                 setDetail(response.data);
                 dispatch(hideAppLoading());
                 handlersModal.open();
-           
             },
             onError: mixinFuncs.handleGetDetailError,
         });
@@ -164,66 +162,51 @@ function MyActivityProjectListPage() {
             key: 'projectId',
             placeholder: translate.formatMessage(message.selectProject),
             type: FieldTypes.SELECT,
-            onChange: (value) => {
-                value ? setIsHasValueSearch(true) : setIsHasValueSearch(false);
-            },
             options: myProject,
         },
     ];
     const { data: timeSum, execute: executeTimeSum } = useFetch(apiConfig.projectTaskLog.getSum, {
-        immediate: false,
+        immediate: true,
         params: { projectId: queryFilter?.projectId, studentId: profile.id },
         mappingData: ({ data }) => data.content,
     });
+
     useEffect(() => {
-        executeTimeSum({
-            params: { projectId, studentId: profile.id },
-        });
+        if (projectId)
+            executeTimeSum({
+                params: { projectId, studentId: profile.id },
+            });
     }, [projectId]);
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.myActivity) }]}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                    className: !isHasValueSearch && styles.disableSearch,
-                    initialValues: queryFilter,
-                    onReset: () => setIsHasValueSearch(false),
-                })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 baseTable={
                     <div>
-                        {!projectId && !isHasValueSearch && (
-                            <div style={{ color: 'red', position: 'relative', padding: '12px 0' }}>
-                                <span style={{ position: 'absolute', top: '-9px', left: '3px' }}>
-                                    {translate.formatMessage(message.reminderMessage)}
-                                </span>
-                            </div>
-                        )}
-                        {projectId && (
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
-                                <span>
-                                    <span style={{ marginLeft: '5px' }}>
-                                        <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
-                                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                            {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h{' '}
-                                            <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>
-                                                |{' '}
-                                            </span>
-                                        </span>
-                                    </span>
-                                    <span style={{ marginLeft: '10px' }}>
-                                        <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
-                                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                            {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
+                            <span>
+                                <span style={{ marginLeft: '5px' }}>
+                                    <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                        {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h{' '}
+                                        <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>
+                                            |{' '}
                                         </span>
                                     </span>
                                 </span>
-                            </div>
-                        )}
+                                <span style={{ marginLeft: '10px' }}>
+                                    <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                        {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                                    </span>
+                                </span>
+                            </span>
+                        </div>
                         <BaseTable
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
-                            dataSource={projectId && !loading && data}
+                            dataSource={data}
                             columns={columns}
                         />
                     </div>
