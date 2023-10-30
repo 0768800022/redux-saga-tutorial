@@ -97,7 +97,6 @@ const ProjectTaskForm = (props) => {
                             searchParams={(text) => ({ fullName: text })}
                             optionsParams={{ projectId: projectId }}
                             initialSearchParams={{ projectId: projectId }}
-                            required
                         />
                     </Col>
                     <Col span={12}>
@@ -128,10 +127,6 @@ const ProjectTaskForm = (props) => {
                             style={{ width: '100%' }}
                             rules={[
                                 {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày bắt đầu',
-                                },
-                                {
                                     validator: validateStartDate,
                                 },
                             ]}
@@ -144,10 +139,6 @@ const ProjectTaskForm = (props) => {
                             name="dueDate"
                             placeholder="Ngày kết thúc"
                             rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày kết thúc',
-                                },
                                 {
                                     validator: validateDueDate,
                                 },

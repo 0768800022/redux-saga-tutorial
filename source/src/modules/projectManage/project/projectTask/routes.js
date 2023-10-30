@@ -4,7 +4,6 @@ import ProjectTaskSavePage from './ProjectTaskSavePage';
 import ProjectTaskLogListPage from './projectTaskLog';
 import ProjectTaskLogSavePage from './projectTaskLog/projectTaskLogSavePage';
 import MemberActivityProjectListPage from '../member/memberActivity';
-import MemberActivityProjectLeaderListPage from '../projectLeader/projectLeaderMember/memberActivity';
 export default {
     ProjectTaskListPage: {
         path: '/project/task',

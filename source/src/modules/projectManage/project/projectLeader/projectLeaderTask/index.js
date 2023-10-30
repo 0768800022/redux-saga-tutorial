@@ -129,7 +129,7 @@ function ProjectLeaderTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectLeaderTaskListPage.path +
-                                        `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -255,7 +255,7 @@ function ProjectLeaderTaskListPage() {
                     handlersStateTaskModal.close();
                 }
             },
-            onError: (err) => { },
+            onError: (err) => {},
         });
     };
 
@@ -276,7 +276,7 @@ function ProjectLeaderTaskListPage() {
         // },
         {
             key: 'developerId',
-            placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
+            placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
             options: memberProject,
         },
@@ -301,17 +301,7 @@ function ProjectLeaderTaskListPage() {
         >
             <div>
                 <ListPage
-                    title={
-                        <span
-                            style={
-                                leaderName || developerName
-                                    ? { fontWeight: 'normal', fontSize: '16px' }
-                                    : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
-                            }
-                        >
-                            {projectName}
-                        </span>
-                    }
+                    title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{projectName}</span>}
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
                         className: styles.search,
@@ -335,13 +325,18 @@ function ProjectLeaderTaskListPage() {
                         />
                     }
                 />
-                <Modal title="Thay đổi tình trạng hoàn thành" open={openedStateTaskModal} onOk={handleOk} onCancel={() => handlersStateTaskModal.close()} data={detail || {}}>
-                </Modal>
                 <DetailMyTaskProjectModal
                     open={openedModal}
                     onCancel={() => handlersModal.close()}
                     DetailData={detail}
                 />
+                <Modal
+                    title="Thay đổi tình trạng hoàn thành"
+                    open={openedStateTaskModal}
+                    onOk={handleOk}
+                    onCancel={() => handlersStateTaskModal.close()}
+                    data={detail || {}}
+                ></Modal>
             </div>
         </PageWrapper>
     );

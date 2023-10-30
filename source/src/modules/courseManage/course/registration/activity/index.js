@@ -16,6 +16,7 @@ import { FieldTypes } from '@constants/formConfig';
 import useFetch from '@hooks/useFetch';
 import styles from '../Registration.module.scss';
 import useAuth from '@hooks/useAuth';
+import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
     reminderMessage: 'Vui lòng chọn khoá học !',
@@ -111,12 +112,26 @@ function StudentActivityCourseListPage() {
                 title={
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
                         <span style={{ fontWeight: 'normal' }}>{studentName}</span>
-                        <span style={{ fontWeight: 'normal', fontSize: '14px' }}>
-                            {timeSum && timeSum[0]?.timeWorking
-                                ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
-                                : 0}
-                            h | {translate.formatMessage(commonMessage.totalTimeOff)}:{' '}
-                            {timeSum && timeSum[0]?.timeOff ? Math.ceil((timeSum[0]?.timeOff / 60) * 10) / 10 : 0}h
+                        <span>
+                            <span style={{ marginLeft: '5px' }}>
+                                <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
+                                <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                    {timeSum && timeSum[0]?.timeWorking
+                                        ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
+                                        : 0}
+                                    h{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
+                                </span>
+                            </span>
+                            <span style={{ marginLeft: '10px' }}>
+                                <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
+                                <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                    {timeSum && timeSum[0]?.timeOff
+                                        ? Math.ceil((timeSum[0]?.timeOff / 60) * 10) / 10
+                                        : 0}
+                                    h
+                                </span>
+                            </span>
                         </span>
                     </div>
                 }

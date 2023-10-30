@@ -51,7 +51,7 @@ const ProjectStudentTaskForm = (props) => {
         if (!isEditing > 0) {
             form.setFieldsValue({
                 status: statusValues[1].value,
-                state: stateValues[0].value,
+                state: stateValues[1].value,
                 developerId: profile.id,
             });
         }
@@ -94,7 +94,6 @@ const ProjectStudentTaskForm = (props) => {
                             })}
                             initialSearchParams={{ projectId: projectId }}
                             searchParams={(text) => ({ fullName: text })}
-                            required
                             disabled
                         />
                     </Col>
@@ -109,10 +108,6 @@ const ProjectStudentTaskForm = (props) => {
                             style={{ width: '100%' }}
                             rules={[
                                 {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày bắt đầu',
-                                },
-                                {
                                     validator: validateStartDate,
                                 },
                             ]}
@@ -125,10 +120,6 @@ const ProjectStudentTaskForm = (props) => {
                             name="dueDate"
                             placeholder="Ngày kết thúc"
                             rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày kết thúc',
-                                },
                                 {
                                     validator: validateDueDate,
                                 },
@@ -144,6 +135,7 @@ const ProjectStudentTaskForm = (props) => {
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
                             options={stateValues}
+                            disabled
                         />
                     </Col>
                 </Row>

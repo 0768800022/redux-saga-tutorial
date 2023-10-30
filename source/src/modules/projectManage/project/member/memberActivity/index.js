@@ -2,9 +2,9 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE, UserTypes, storageKeys } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { TaskLogKindOptions } from '@constants/masterData';
+import { TaskLogKindOptions, archivedOption } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useNotification from '@hooks/useNotification';
@@ -12,12 +12,21 @@ import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 import { Button, Modal, Tag } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import style from '../member.module.scss';
 import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
 import { ReloadOutlined } from '@ant-design/icons';
 import { showSucsessMessage } from '@services/notifyService';
+import { FormattedMessage } from 'react-intl';
+import { FieldTypes } from '@constants/formConfig';
+import styles from '@modules/projectManage/project/project.module.scss';
+import { useDispatch } from 'react-redux';
+import { hideAppLoading, showAppLoading } from '@store/actions/app';
+import useDisclosure from '@hooks/useDisclosure';
+import DetailMyTaskProjectModal from '../../projectStudent/myTask/DetailMyTaskProjectModal';
+import { getData } from '@utils/localStorage';
+
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
     reminderMessage: 'Vui lòng chọn dự án !',
@@ -35,35 +44,51 @@ function MemberActivityProjectListPage() {
     const projectId = queryParameters.get('projectId');
     const studentId = queryParameters.get('studentId');
     const studentName = queryParameters.get('studentName');
+    const archived =  queryParameters.get('archived');
+    const dispatch = useDispatch();
     const notification = useNotification();
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
+    const archivedOptions = translate.formatKeys(archivedOption, ['label']);
+
     const pathPrev = localStorage.getItem('pathPrev');
+    const [detail, setDetail] = useState({});
+    const [openedModal, handlersModal] = useDisclosure(false);
     const { execute } = useFetch(apiConfig.projectTaskLog.archiveAll);
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.projectTaskLog,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
-                        };
-                    }
-                } catch (error) {
-                    return [];
-                }
-            };
-            funcs.getList = () => {
-                const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params, studentId, projectId, studentName: null });
-            };
-        },
+    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
+        immediate: false,
     });
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.projectTaskLog,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.mappingData = (response) => {
+                    try {
+                        if (response.result === true) {
+                            return {
+                                data: response.data.content,
+                                total: response.data.totalElements,
+                            };
+                        }
+                    } catch (error) {
+                        return [];
+                    }
+                };
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, studentId, projectId, studentName: null });
+                };
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const studentId = queryParams.get('studentId');
+                    const studentName = queryParams.get('studentName');
+                    mixinFuncs.setQueryParams(serializeParams({ projectId, studentId, studentName, ...filter }));
+                };
+            },
+        });
     const handleOnClickReview = (url) => {
         const pattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
         if (pattern.test(url)) {
@@ -75,15 +100,39 @@ function MemberActivityProjectListPage() {
             });
         }
     };
+    const handleFetchDetail = (id) => {
+        dispatch(showAppLoading());
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+                dispatch(hideAppLoading());
+                handlersModal.open();
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
 
     const columns = [
         {
-            title: translate.formatMessage(commonMessage.message),
-            dataIndex: 'message',
+            title: translate.formatMessage(commonMessage.task),
+            dataIndex: ['projectTaskInfo', 'taskName'],
+            render: (task, dataRow) => {
+                return (
+                    <div
+                        onClick={() => handleFetchDetail(dataRow?.projectTaskInfo?.id)}
+                        style={{ cursor: 'pointer', color: 'rgb(24, 144, 255)' }}
+                    >
+                        {task}
+                    </div>
+                );
+            },
         },
         {
             title: translate.formatMessage(message.gitCommitUrl),
             dataIndex: 'gitCommitUrl',
+            align: 'center',
+            width: 200,
             render: (gitUrl) => {
                 return (
                     <div className={style.customDiv} onClick={() => handleOnClickReview(gitUrl)}>
@@ -105,7 +154,7 @@ function MemberActivityProjectListPage() {
             title: 'Loại',
             dataIndex: 'kind',
             align: 'center',
-            width: 120,
+            width: 150,
             render(dataRow) {
                 const kindLog = KindTaskLog.find((item) => item.value == dataRow);
                 return (
@@ -117,10 +166,21 @@ function MemberActivityProjectListPage() {
         },
     ].filter(Boolean);
     const { data: timeSum, execute: executeGetTime } = useFetch(apiConfig.projectTaskLog.getSum, {
-        immediate: true,
+        immediate: false,
         params: { projectId, studentId },
         mappingData: ({ data }) => data.content,
     });
+
+    useEffect(() => { executeGetTime({ params: { archived: archived, projectId, studentId } }); }, [archived]);
+
+    const searchFields = [
+        {
+            key: 'archived',
+            placeholder: <FormattedMessage defaultMessage={'Archived'} />,
+            type: FieldTypes.SELECT,
+            options: archivedOptions,
+        },
+    ].filter(Boolean);
 
     const handleAchiveAll = () => {
         Modal.confirm({
@@ -134,6 +194,7 @@ function MemberActivityProjectListPage() {
                     onCompleted: () => {
                         showSucsessMessage(translate.formatMessage(message.reset));
                         executeGetTime();
+                        mixinFuncs.getList();
                     },
                 });
             },
@@ -144,11 +205,17 @@ function MemberActivityProjectListPage() {
             routes={[
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.project),
-                    path: routes.projectListPage.path,
+                    path:
+                        getData(storageKeys.USER_KIND) === UserTypes.MANAGER
+                            ? routes.projectListPage.path
+                            : routes.projectLeaderListPage.path + pathPrev,
                 },
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.member),
-                    path: routes.projectMemberListPage.path + pathPrev,
+                    path:
+                        getData(storageKeys.USER_KIND) === UserTypes.MANAGER
+                            ? routes.projectMemberListPage.path
+                            : routes.projectLeaderMemberListPage.path + pathPrev,
                 },
                 { breadcrumbName: translate.formatMessage(commonMessage.memberActivity) },
             ]}
@@ -166,14 +233,15 @@ function MemberActivityProjectListPage() {
                                 </Button>
                             )}
 
-                            <span>
-                                <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
+                            <span style={{ marginLeft: '5px' }}>
+                                <IconAlarm style={{ marginBottom: '-5px' }} /> :{' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h |{' '}
+                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
                                 </span>
                             </span>
-                            <span>
-                                <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
+                            <span style={{ marginLeft: '10px' }}>
+                                <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} /> :{' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                     {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
                                 </span>
@@ -181,6 +249,11 @@ function MemberActivityProjectListPage() {
                         </span>
                     </div>
                 }
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    className: styles.search,
+                    initialValues: queryFilter,
+                })}
                 baseTable={
                     <div>
                         <BaseTable
@@ -193,6 +266,7 @@ function MemberActivityProjectListPage() {
                     </div>
                 }
             />
+            <DetailMyTaskProjectModal open={openedModal} onCancel={() => handlersModal.close()} DetailData={detail} />
         </PageWrapper>
     );
 }
