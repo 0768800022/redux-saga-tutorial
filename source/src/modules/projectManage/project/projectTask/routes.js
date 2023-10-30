@@ -60,7 +60,7 @@ export default {
         path: '/project-leader/member/member-activity-project',
         title: 'Member Activity Project Leader List Page',
         auth: true,
-        component: MemberActivityProjectListPage,
+        component: MemberActivityProjectLeaderListPage,
         permissions: [apiConfig.projectTaskLog.getList.baseURL],
     },
 };

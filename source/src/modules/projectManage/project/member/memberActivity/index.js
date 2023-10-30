@@ -39,12 +39,12 @@ function MemberActivityProjectListPage() {
     const projectId = queryParameters.get('projectId');
     const studentId = queryParameters.get('studentId');
     const studentName = queryParameters.get('studentName');
+    const archived =  queryParameters.get('archived');
     const notification = useNotification();
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const archivedOptions = translate.formatKeys(archivedOption, ['label']);
     const pathPrev = localStorage.getItem('pathPrev');
     const { execute } = useFetch(apiConfig.projectTaskLog.archiveAll);
-    const [valueSearch, setValueSearch] = useState(null);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } = useListBase({
         apiConfig: apiConfig.projectTaskLog,
         options: {
@@ -129,21 +129,18 @@ function MemberActivityProjectListPage() {
         },
     ].filter(Boolean);
     const { data: timeSum, execute: executeGetTime } = useFetch(apiConfig.projectTaskLog.getSum, {
-        immediate: true,
+        immediate: false,
         params: { projectId, studentId },
         mappingData: ({ data }) => data.content,
     });
 
-    useEffect(() => { executeGetTime({ params: { archived: valueSearch, projectId, studentId } }); }, [valueSearch]);
+    useEffect(() => { executeGetTime({ params: { archived: archived, projectId, studentId } }); }, [archived]);
 
     const searchFields = [
         {
             key: 'archived',
             placeholder: <FormattedMessage defaultMessage={"Archived"} />,
             type: FieldTypes.SELECT,
-            onChange: (value) => {
-                setValueSearch(value);
-            },
             options: archivedOptions,
         },
     ].filter(Boolean);
@@ -160,6 +157,7 @@ function MemberActivityProjectListPage() {
                     onCompleted: () => {
                         showSucsessMessage(translate.formatMessage(message.reset));
                         executeGetTime();
+                        mixinFuncs.getList();
                     },
                 });
             },
@@ -170,7 +168,7 @@ function MemberActivityProjectListPage() {
             routes={[
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.project),
-                    path: routes.projectLeaderListPage.path,
+                    path: routes.projectListPage.path,
                 },
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.member),
@@ -210,6 +208,7 @@ function MemberActivityProjectListPage() {
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
                     className: styles.search,
+                    initialValues: queryFilter,
                 })}
                 baseTable={
                     <div>
