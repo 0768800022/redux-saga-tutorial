@@ -51,7 +51,7 @@ const ProjectStudentTaskForm = (props) => {
         if (!isEditing > 0) {
             form.setFieldsValue({
                 status: statusValues[1].value,
-                state: stateValues[0].value,
+                state: stateValues[1].value,
                 developerId: profile.id,
             });
         }
@@ -144,6 +144,7 @@ const ProjectStudentTaskForm = (props) => {
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
                             options={stateValues}
+                            disabled
                         />
                     </Col>
                 </Row>
