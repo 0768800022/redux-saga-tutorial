@@ -1,4 +1,4 @@
-import { Form } from 'antd';
+import { Form, Modal } from 'antd';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import useFormField from '@hooks/useFormField';
 import ReactQuill from 'react-quill'; // ES6
@@ -6,6 +6,7 @@ import 'react-quill/dist/quill.snow.css'; // ES6
 import apiConfig from '@constants/apiConfig';
 import { sendRequest } from '@services/api';
 import { AppConstants } from '@constants';
+import notFoundImage from '@assets/images/avatar-default.png';
 const AlignStyle = ReactQuill.Quill.import('attributors/style/align');
 ReactQuill.Quill.register(AlignStyle, true);
 function getLoader() {
@@ -61,6 +62,14 @@ const RichTextField = (props) => {
     const { label, disabled, name, required, style, labelAlign, formItemProps, baseURL, form, setIsChangedFormValues } =
         props;
     const { rules } = useFormField(props);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedAvatar, setSelectedAvatar] = useState(null);
+    const handleAvatarClick = (avatarURL) => {
+        setSelectedAvatar(avatarURL);
+        if (avatarURL) {
+            setIsModalVisible(true);
+        }
+    };
     const reactQuill = useRef();
     const modules = useMemo(() => {
         return {
@@ -103,6 +112,17 @@ const RichTextField = (props) => {
             },
         };
     }, []);
+    useEffect(() => {
+        if (reactQuill.current) {
+            const quill = reactQuill.current.getEditor();
+            quill.root.addEventListener('click', (event) => {
+                if (event.target.tagName === 'IMG') {
+                    // Xử lý sự kiện khi click vào hình ảnh
+                    handleAvatarClick(event.target?.src);
+                }
+            });
+        }
+    }, [reactQuill]);
     if (ReactQuill) {
         return (
             <Form.Item
@@ -126,7 +146,15 @@ const RichTextField = (props) => {
                     }}
                     value={form.getFieldValue(name)}
                 />
-                <></>
+                <Modal
+                    open={isModalVisible}
+                    onCancel={() => setIsModalVisible(false)}
+                    footer={null}
+                    centered
+                    closable={false}
+                >
+                    <img alt="Avatar" src={selectedAvatar ? selectedAvatar : notFoundImage} style={{ width: '100%' }} />
+                </Modal>
             </Form.Item>
         );
     }
