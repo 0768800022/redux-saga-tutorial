@@ -111,7 +111,12 @@ function ProjectStudentTaskListPage() {
                         );
                     } else {
                         mixinFuncs.setQueryParams(
-                            serializeParams({ projectId: projectId, projectName: projectName,stateProject, ...filter }),
+                            serializeParams({
+                                projectId: projectId,
+                                projectName: projectName,
+                                stateProject,
+                                ...filter,
+                            }),
                         );
                     }
                 };
@@ -120,7 +125,7 @@ function ProjectStudentTaskListPage() {
                     mixinFuncs.handleFetchList({ ...params, projectName: null });
                 };
                 funcs.additionalActionColumnButtons = () => ({
-                    taskLog: ({ id, taskName }) => (
+                    taskLog: ({ id, taskName, project }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
                             <Button
                                 type="link"
@@ -129,7 +134,7 @@ function ProjectStudentTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectStudentTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${project.id}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },

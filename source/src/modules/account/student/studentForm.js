@@ -141,7 +141,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         <TextField
                             label={translate.formatMessage(commonMessage.mssv)}
                             disabled={isEditing}
-                            required={isEditing ? false : true}
+                            // required={isEditing ? false : true}
                             name="mssv"
                         />
                     </Col>

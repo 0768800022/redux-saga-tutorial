@@ -24,6 +24,8 @@ import AsignAllStudentListPage from './student/asignAll';
 import CourseStudentSavePage from './student/courseStudent/CourseStudentSavePage';
 import ActivityProjectStudentSavePage from './student/activityProjectStudent/ActivityProjectStudentSavePage';
 import ActivityCourseStudentSavePage from './student/activityCourseStudent/ActivityCourseStudentSavePage';
+import MyTaskLogStudentListPage from './student/myTask/taskLog';
+import TaskLogMyStudentSavePage from './student/myTask/taskLog/TaskLogStudentSavePage';
 export default {
     courseListPage: {
         path: '/course',
@@ -146,6 +148,30 @@ export default {
         auth: true,
         component: MyTaskStudentListPage,
         permissions: [apiConfig.task.getList.baseURL],
+    },
+    MyTaskLogStudentListPage: {
+        path: '/my-task/task-log',
+        title: 'Task Log Save Page',
+        auth: true,
+        component: MyTaskLogStudentListPage,
+        permissions: [apiConfig.taskLog.getList.baseURL],
+        breadcrumbs: (message, paramHead, state, location, isProject) => {
+            return [
+                {
+                    breadcrumbName: isProject ? message.project.defaultMessage : message.course.defaultMessage,
+                    path: paramHead,
+                },
+                { breadcrumbName: message.task.defaultMessage, path: state + location },
+                { breadcrumbName: message.taskLog.defaultMessage },
+            ];
+        },
+    },
+    MyTaskLogStudentSavePage: {
+        path: '/my-task/task-log/:id',
+        title: 'Task Log Save Page',
+        auth: true,
+        component: TaskLogMyStudentSavePage,
+        permissions: [apiConfig.taskLog.getList.baseURL],
     },
     registrationStudentListPage: {
         path: '/course-student/registration',
