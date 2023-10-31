@@ -3,7 +3,7 @@ import DatePickerField from '@components/common/form/DatePickerField';
 import NumericField from '@components/common/form/NumericField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import { statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useDisclosure from '@hooks/useDisclosure';
@@ -20,7 +20,7 @@ import ListDetailsTable from './ListDetailsTable';
 import { PlusOutlined } from '@ant-design/icons';
 import Title from 'antd/es/typography/Title';
 import { defineMessages } from 'react-intl';
-import RichTextField from '@components/common/form/RichTextField';
+import RichTextField, { insertBaseURL, removeBaseURL } from '@components/common/form/RichTextField';
 
 const messages = defineMessages({
     objectName: 'Yêu cầu',
@@ -57,7 +57,7 @@ const CompanyRequestForm = ({
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({
             ...values,
-            listDetails: listData.map((item) => ({ ...item, projectRoleId: item.projectRoleId.value })),
+            listDetails: listData.map((item) => ({ ...item, projectRoleId: item.projectRoleId.value, description: removeBaseURL(values?.description) })),
         });
     };
 
@@ -81,6 +81,7 @@ const CompanyRequestForm = ({
             ...dataDetail,
             serviceCompanySubscriptionId: dataDetail?.subscription?.name,
             startDate: dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT),
+            description: insertBaseURL(dataDetail?.description),
         });
     }, [dataDetail]);
 
@@ -215,6 +216,9 @@ const CompanyRequestForm = ({
                         style={{ height: 200, marginBottom: 70 }}
                         label={<FormattedMessage defaultMessage="Mô tả" />}
                         name="description"
+                        baseURL={AppConstants.contentRootUrl}
+                        setIsChangedFormValues={setIsChangedFormValues}
+                        form={form}
                     />
 
                     <Card bordered style={{ marginBottom: '1rem' }}>
