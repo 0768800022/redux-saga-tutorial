@@ -19,9 +19,13 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import useDisclosure from '@hooks/useDisclosure';
 import { useState } from 'react';
 import DetailMyTaskProjectModal from './DetailMyTaskProjectModal';
+import { CalendarOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router';
+import routes from '@routes';
 const message = defineMessages({
     objectName: 'Task',
     myTask: 'Task của tôi',
+    createTaskLog: 'Tạo task log',
 });
 
 function ProjectStudentMyTaskListPage() {
@@ -30,6 +34,7 @@ function ProjectStudentMyTaskListPage() {
     const [openedModal, handlersModal] = useDisclosure(false);
     const [detail, setDetail] = useState({});
     const { profile } = useAuth();
+    const navigate = useNavigate();
     const { data: projects } = useFetch(apiConfig.project.getListStudent, {
         immediate: true,
         mappingData: ({ data }) => {
@@ -81,6 +86,25 @@ function ProjectStudentMyTaskListPage() {
                         mixinFuncs.handleFetchList({ ...params, developerId: profile?.id });
                     }
                 };
+                funcs.additionalActionColumnButtons = () => ({
+                    taskLog: ({ id, taskName, project }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        routes.myProjectStudentTaskLogPage.path +
+                                            `?projectId=${project.id}&projectName=${project.name}&projectTaskId=${id}&task=${taskName}`,
+                                    );
+                                }}
+                            >
+                                <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                });
             },
         });
     const columns = [
@@ -122,6 +146,7 @@ function ProjectStudentMyTaskListPage() {
                 );
             },
         },
+        mixinFuncs.renderActionColumn({ taskLog: true, edit: true, delete: true }, { width: '150px' }),
     ].filter(Boolean);
 
     const searchFields = [
