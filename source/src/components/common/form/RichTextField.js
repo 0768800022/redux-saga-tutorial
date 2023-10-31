@@ -1,5 +1,5 @@
-import { Form } from 'antd';
-import React from 'react';
+import { Form, Modal } from 'antd';
+import React, { useState } from 'react';
 import useFormField from '@hooks/useFormField';
 import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css'; // ES6
@@ -35,8 +35,18 @@ const formats = [
 ];
 
 const RichTextField = (props) => {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [selectedAvatar, setSelectedAvatar] = useState(null);
     const { label, disabled, name, required, style, labelAlign, formItemProps } = props;
-
+    const handleImageClick = (event) => {
+        if (event.target.tagName === 'IMG') {
+            const imageUrl = event.target.src;
+            setSelectedAvatar(imageUrl);
+            if(imageUrl){
+                setIsModalVisible(true);
+            }
+        }
+    };
     const modules = {
         toolbar: {
             container: [
@@ -125,22 +135,41 @@ const RichTextField = (props) => {
     // };
 
     return (
-        <Form.Item
-            {...formItemProps}
-            required={required}
-            labelAlign={labelAlign}
-            name={name}
-            label={label}
-            rules={rules}
-            initialValue=""
-        >
-            <ReactQuill
-                style={style}
-                formats={formats}
-                modules={modules}
-                readOnly={disabled}
-            />
-        </Form.Item>
+        <>
+            <Form.Item
+                {...formItemProps}
+                required={required}
+                labelAlign={labelAlign}
+                name={name}
+                label={label}
+                rules={rules}
+                initialValue=""
+            >
+                <ReactQuill
+                    style={style}
+                    formats={formats}
+                    modules={modules}
+                    readOnly={disabled}
+                    onChange={() => {
+                        const quillEditor = document.querySelector('.ql-editor');
+                        quillEditor.addEventListener('click', handleImageClick);
+                    }}
+                />
+            </Form.Item>
+            <Modal
+                open={isModalVisible}
+                onCancel={() => setIsModalVisible(false)}
+                footer={null}
+                centered
+                closable={false}
+            >
+                <img
+                    alt="Avatar"
+                    src={selectedAvatar && selectedAvatar}
+                    style={{ width: '100%' }}
+                />
+            </Modal>
+        </>
     );
 };
 
