@@ -29,8 +29,8 @@ const ProjectTaskForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
-        values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
+        values.startDate = values.startDate && formatDateString(values.startDate, DEFAULT_FORMAT);
+        values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values });
     };
     useEffect(() => {
