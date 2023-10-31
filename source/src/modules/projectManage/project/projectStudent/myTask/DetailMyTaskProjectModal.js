@@ -9,7 +9,8 @@ import { useIntl } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import SelectField from '@components/common/form/SelectField';
 import { statusOptions, projectTaskState } from '@constants/masterData';
-import RichTextField from '@components/common/form/RichTextField';
+import RichTextField, { insertBaseURL } from '@components/common/form/RichTextField';
+import { AppConstants } from '@constants';
 const messages = defineMessages({
     objectName: 'Chi tiết task của dự án',
     update: 'Cập nhật',
@@ -26,8 +27,19 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
 
     useEffect(() => {
         // form.setFields(data);
+
         form.setFieldsValue({
-            ...DetailData,
+            ...DetailData, 
+            developer: {
+                ...DetailData?.developer,
+                studentInfo: {
+                    ...DetailData?.developer?.studentInfo,
+                    fullName: DetailData?.developer?.studentInfo?.fullName || '',
+                },
+            },
+            startDate: DetailData?.startDate || '',
+            dueDate: DetailData?.dueDate || '',
+            description: insertBaseURL(DetailData?.description),
         });
     }, [DetailData]);
     const handleOnCancel = () => {
@@ -103,6 +115,8 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                             height: 300,
                             marginBottom: 70,
                         }}
+                        baseURL={AppConstants.contentRootUrl}
+                        form={form}
                     />
                 </Card>
             </BaseForm>

@@ -1,14 +1,13 @@
 import { Form } from 'antd';
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import useFormField from '@hooks/useFormField';
 import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css'; // ES6
-import { showErrorMessage } from '@services/notifyService';
-import { AppConstants, LIMIT_IMAGE_SIZE, UploadFileTypes } from '@constants';
-
+import apiConfig from '@constants/apiConfig';
+import { sendRequest } from '@services/api';
+import { AppConstants } from '@constants';
 const AlignStyle = ReactQuill.Quill.import('attributors/style/align');
 ReactQuill.Quill.register(AlignStyle, true);
-
 function getLoader() {
     const div = document.createElement('div');
     div.className = 'loader-container';
@@ -16,6 +15,31 @@ function getLoader() {
     return div;
 }
 
+export const removeBaseURL = (data) => {
+    let imgArray = data?.replaceAll(AppConstants.contentRootUrl, '');
+    imgArray = imgArray?.replaceAll('src="', 'src="{{baseURL}}');
+    return imgArray;
+};
+
+export const insertBaseURL = (data) => {
+    const imgArray = data?.replaceAll('{{baseURL}}', `${AppConstants.contentRootUrl}`);
+    return imgArray;
+};
+
+const uploadFile = async (file) => {
+    try {
+        const { data } = await sendRequest(apiConfig.file.upload, {
+            data: {
+                type: 'LOGO',
+                file: file,
+            },
+        });
+        return data;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+};
 const formats = [
     'header',
     'font',
@@ -33,115 +57,79 @@ const formats = [
     'indent',
     'image',
 ];
-
 const RichTextField = (props) => {
-    const { label, disabled, name, required, style, labelAlign, formItemProps } = props;
-
-    const modules = {
-        toolbar: {
-            container: [
-                [ { header: [ 1, 2, 3, false ] } ],
-                [ { color: [] }, { background: [] } ],
-                [ 'bold', 'italic', 'underline', 'strike', 'blockquote' ],
-                [ { align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' } ],
-                [ { list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' } ],
-                [ 'image' ],
-                [ 'clean' ],
-            ],
-            // handlers: {
-            //     // handlers object will be merged with default handlers object
-            //     image: imageHandler,
-            // },
-        },
-        clipboard: {
-            // toggle to add extra line breaks when pasting HTML:
-            matchVisual: false,
-        },
-    };
-
+    const { label, disabled, name, required, style, labelAlign, formItemProps, baseURL, form, setIsChangedFormValues } =
+        props;
     const { rules } = useFormField(props);
+    const reactQuill = useRef();
+    const modules = useMemo(() => {
+        return {
+            toolbar: {
+                container: [
+                    [{ header: [1, 2, 3, false] }],
+                    [{ color: [] }, { background: [] }],
+                    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+                    [{ align: '' }, { align: 'center' }, { align: 'right' }, { align: 'justify' }],
+                    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+                    ['image'],
+                    ['clean'],
+                ],
+                handlers: {
+                    // handlers object will be merged with default handlers object
+                    image: () => {
+                        const input = document.createElement('input');
 
-    // const imageHandler = () => {
-    //     const { uploadFile, baseUrlImage, t } = props;
-    //     const _this3 = quillRef.editor;
-    //     let fileInput = _this3.container.querySelector('input.ql-image[type=file]');
-    //     if (fileInput == null) {
-    //         fileInput = document.createElement('input');
-    //         fileInput.setAttribute('type', 'file');
-    //         fileInput.setAttribute('accept', 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon');
-    //         fileInput.classList.add('ql-image');
-    //         fileInput.addEventListener('change', function () {
-    //             if (fileInput.files != null && fileInput.files[0] != null) {
-    //                 const size = fileInput.files[0].size;
-    //                 const file = fileInput.files[0];
-    //                 if (size < LIMIT_IMAGE_SIZE) {
-    //                     const loader = getLoader();
-    //                     _this3.container.appendChild(loader);
-    //                     _this3.container.classList.add('disabled');
-    //                     _this3.container.firstChild.setAttribute('contenteditable', false);
-    //                     uploadFile({
-    //                         params: { fileObjects: { file }, type: UploadFileTypes.AVATAR },
-    //                         others: baseUrlImage ? { path: baseUrlImage + '/v1/file/upload' } : null,
-    //                         onCompleted: (result) => {
-    //                             const index = _this3.getSelection(true).index;
-    //                             if (baseUrlImage) {
-    //                                 _this3.insertEmbed(
-    //                                     index,
-    //                                     'image',
-    //                                     `${baseUrlImage + '/v1/file/download'}${result.data.filePath}`,
-    //                                 );
-    //                             } else {
-    //                                 _this3.insertEmbed(
-    //                                     index,
-    //                                     'image',
-    //                                     `${AppConstants.contentRootUrl}${result.data.filePath}`,
-    //                                 );
-    //                             }
-    //                             _this3.setSelection(index + 1);
-    //                             fileInput.value = '';
-    //                             _this3.container.removeChild(loader);
-    //                             _this3.container.classList.remove('disabled');
-    //                             _this3.container.firstChild.setAttribute('contenteditable', true);
-    //                             _this3.container.firstChild.focus();
-    //                         },
-    //                         onError: (err) => {
-    //                             if (err && err.message) {
-    //                                 showErrorMessage(err.message);
-    //                             }
-    //                             _this3.container.removeChild(loader);
-    //                             _this3.container.classList.remove('disabled');
-    //                             _this3.container.firstChild.setAttribute('contenteditable', true);
-    //                             _this3.container.firstChild.focus();
-    //                         },
-    //                     });
-    //                 } else {
-    //                     showErrorMessage(t('imageTooLarge'));
-    //                 }
-    //             }
-    //         });
-    //         _this3.container.appendChild(fileInput);
-    //     }
-    //     fileInput.click();
-    // };
+                        input.setAttribute('type', 'file');
+                        input.setAttribute('accept', 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon');
+                        input.click();
 
-    return (
-        <Form.Item
-            {...formItemProps}
-            required={required}
-            labelAlign={labelAlign}
-            name={name}
-            label={label}
-            rules={rules}
-            initialValue=""
-        >
-            <ReactQuill
-                style={style}
-                formats={formats}
-                modules={modules}
-                readOnly={disabled}
-            />
-        </Form.Item>
-    );
+                        input.onchange = async () => {
+                            var file = input.files[0];
+                            var formData = new FormData();
+                            formData.append('image', file);
+                            const res = await uploadFile(file);
+
+                            const range = reactQuill.current.getEditor().selection;
+                            reactQuill.current
+                                .getEditor()
+                                .insertEmbed(range.lastRange.index, 'image', baseURL + res.data.filePath);
+                        };
+                    },
+                },
+            },
+            clipboard: {
+                // toggle to add extra line breaks when pasting HTML:
+                matchVisual: false,
+            },
+        };
+    }, []);
+    if (ReactQuill) {
+        return (
+            <Form.Item
+                {...formItemProps}
+                required={required}
+                labelAlign={labelAlign}
+                name={name}
+                label={label}
+                rules={rules}
+                initialValue=""
+            >
+                <ReactQuill
+                    ref={reactQuill}
+                    style={style}
+                    formats={formats}
+                    modules={modules}
+                    readOnly={disabled}
+                    onChange={(value) => {
+                        form.setFieldValue(name, value);
+                        setIsChangedFormValues(true);
+                    }}
+                    value={form.getFieldValue(name)}
+                />
+                <></>
+            </Form.Item>
+        );
+    }
 };
 
 export default RichTextField;
