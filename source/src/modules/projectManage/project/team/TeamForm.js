@@ -121,7 +121,7 @@ const TeamForm = (props) => {
                             initialSearchParams={{}}
                             searchParams={(text) => ({ name: text })}
                             required
-                            disabled={isEditing} />
+                        />
                     </Col>
                 </Row>
                 <TextField
