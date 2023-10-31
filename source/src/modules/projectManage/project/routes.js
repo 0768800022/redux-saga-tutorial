@@ -27,6 +27,8 @@ import ProjectStudentSavePage from './projectStudent/projectStudentSavePage';
 import ProjectStudentTaskSavePage from './projectStudent/projectStudentTask/ProjectStudentTaskSavePage';
 import ProjectStudentMemberSavePage from './projectStudent/projectStudentMember/ProjectStudentMemberSavePage';
 import ProjectStudentTeamSavePage from './projectStudent/projectStudentGroup/ProjectStudentTeamSavePage';
+import MyTaskLogSavePage from './projectStudent/myTask/tasklog/ProjectStudentTaskLogSavePage';
+import MyProjectStudentTaskLogListPage from './projectStudent/myTask/tasklog';
 export default {
     projectListPage: {
         path: '/project',
@@ -188,6 +190,34 @@ export default {
         auth: true,
         component: ProjectStudentMyTaskListPage,
         permissions: [apiConfig.projectTask.getList.baseURL],
+    },
+    myProjectStudentTaskLogPage: {
+        path: '/my-project-task/taskLog',
+        title: 'Task log',
+        auth: true,
+        component: MyProjectStudentTaskLogListPage,
+        permissions: [apiConfig.projectTaskLog.create.baseURL, apiConfig.projectTaskLog.update.baseURL],
+        breadcrumbs: (message, paramHead, taskParam, taskLogParam, search, title) => {
+            return [
+                { breadcrumbName: message.myproject.defaultMessage, path: paramHead },
+                { breadcrumbName: message.taskLog.defaultMessage },
+            ];
+        },
+    },
+    myProjectStudentTaskLogSavePage: {
+        path: '/my-project-task/taskLog/:id',
+        title: 'Task Log Save Page',
+        auth: true,
+        component: MyTaskLogSavePage,
+        permissions: [apiConfig.projectTaskLog.create.baseURL, apiConfig.projectTaskLog.update.baseURL],
+        breadcrumbs: (message, paramHead, taskParam, taskLogParam, search, title) => {
+            return [
+                { breadcrumbName: message.myproject.defaultMessage, path: paramHead },
+                // { breadcrumbName: message.task.defaultMessage, path: taskParam + search },
+                { breadcrumbName: message.taskLog.defaultMessage, path: taskLogParam + search },
+                { breadcrumbName: title },
+            ];
+        },
     },
     projectStudentTeamListPage: {
         path: '/project-student/team',
