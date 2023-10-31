@@ -9,7 +9,7 @@
         "build:dev": "env-cmd -f ./env/.dev craco build",
         "build:beta": "env-cmd -f ./env/.beta craco build",
         "prebuild:prod": "rm -rf build",
-        "build:production": "env-cmd -f ./env/.production craco build",
+        "build:prod": "env-cmd -f ./env/.prod craco build",
         "prebuild:staging": "rm -rf build",
         "build:staging": "env-cmd -f ./env/.staging craco build",
         "test": "react-scripts test",
