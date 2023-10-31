@@ -94,7 +94,6 @@ const ProjectStudentTaskForm = (props) => {
                             })}
                             initialSearchParams={{ projectId: projectId }}
                             searchParams={(text) => ({ fullName: text })}
-                            required
                             disabled
                         />
                     </Col>
@@ -109,10 +108,6 @@ const ProjectStudentTaskForm = (props) => {
                             style={{ width: '100%' }}
                             rules={[
                                 {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày bắt đầu',
-                                },
-                                {
                                     validator: validateStartDate,
                                 },
                             ]}
@@ -125,10 +120,6 @@ const ProjectStudentTaskForm = (props) => {
                             name="dueDate"
                             placeholder="Ngày kết thúc"
                             rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày kết thúc',
-                                },
                                 {
                                     validator: validateDueDate,
                                 },

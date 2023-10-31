@@ -9,7 +9,7 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag, Button } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
@@ -17,6 +17,8 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { CalendarOutlined } from '@ant-design/icons';
 import styles from '../project.module.scss';
 import useFetch from '@hooks/useFetch';
+import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
+import useDisclosure from '@hooks/useDisclosure';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -38,6 +40,20 @@ function ProjectTaskListPage() {
     const location = useLocation();
     localStorage.setItem('pathPrev', location.search);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const [openedModal, handlersModal] = useDisclosure(false);
+    const [detail, setDetail] = useState({});
+    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
+        immediate: false,
+    });
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.projectTask,
@@ -248,6 +264,14 @@ function ProjectTaskListPage() {
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
+                            onRow={(record) => ({
+                                onClick: (e) => {
+                                    e.stopPropagation();
+                                    handleFetchDetail(record.id);
+
+                                    handlersModal.open();
+                                },
+                            })}
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
@@ -257,6 +281,11 @@ function ProjectTaskListPage() {
                     }
                 />
             </div>
+            <DetailMyTaskProjectModal
+                open={openedModal}
+                onCancel={() => handlersModal.close()}
+                DetailData={detail}
+            />
         </PageWrapper>
     );
 }

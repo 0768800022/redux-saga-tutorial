@@ -29,8 +29,8 @@ const ProjectLeaderTaskForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
-        values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
+        values.startDate = values.startDate && formatDateString(values.startDate, DEFAULT_FORMAT);
+        values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
         return mixinFuncs.handleSubmit({ ...values });
     };
     useEffect(() => {
@@ -43,9 +43,7 @@ const ProjectLeaderTaskForm = (props) => {
     }, [isEditing]);
 
     useEffect(() => {
-        dataDetail.startDate = dataDetail.startDate
-            ? dayjs(dataDetail.startDate, DEFAULT_FORMAT)
-            : dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT);
+        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
         dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
 
         form.setFieldsValue({
@@ -91,8 +89,6 @@ const ProjectLeaderTaskForm = (props) => {
                             })}
                             initialSearchParams={{ projectId: projectId }}
                             searchParams={(text) => ({ fullName: text })}
-                            required
-                            disabled={isEditing}
                         />
                     </Col>
 
@@ -106,10 +102,6 @@ const ProjectLeaderTaskForm = (props) => {
                             style={{ width: '100%' }}
                             rules={[
                                 {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày bắt đầu',
-                                },
-                                {
                                     validator: validateStartDate,
                                 },
                             ]}
@@ -122,10 +114,6 @@ const ProjectLeaderTaskForm = (props) => {
                             name="dueDate"
                             placeholder="Ngày kết thúc"
                             rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày kết thúc',
-                                },
                                 {
                                     validator: validateDueDate,
                                 },
