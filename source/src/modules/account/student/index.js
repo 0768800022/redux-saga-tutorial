@@ -124,11 +124,7 @@ const StudentListPage = () => {
         },
     ];
     return (
-        <PageWrapper
-            routes={[
-                { breadcrumbName: translate.formatMessage(commonMessage.student) },
-            ]}
-        >
+        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.student) }]}>
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
                 actionBar={mixinFuncs.renderActionBar()}
