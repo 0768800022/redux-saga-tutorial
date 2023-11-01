@@ -152,6 +152,7 @@ const RichTextField = (props) => {
                     footer={null}
                     centered
                     closable={false}
+                    width={800}
                 >
                     <img alt="Avatar" src={selectedAvatar ? selectedAvatar : notFoundImage} style={{ width: '100%' }} />
                 </Modal>
