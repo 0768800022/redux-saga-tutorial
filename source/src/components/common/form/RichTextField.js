@@ -142,7 +142,9 @@ const RichTextField = (props) => {
                     readOnly={disabled}
                     onChange={(value) => {
                         form.setFieldValue(name, value);
-                        setIsChangedFormValues(true);
+                        if (typeof setIsChangedFormValues === 'function') {
+                            setIsChangedFormValues(true);
+                        }
                     }}
                     value={form.getFieldValue(name)}
                 />
@@ -152,6 +154,7 @@ const RichTextField = (props) => {
                     footer={null}
                     centered
                     closable={false}
+                    width={800}
                 >
                     <img alt="Avatar" src={selectedAvatar ? selectedAvatar : notFoundImage} style={{ width: '100%' }} />
                 </Modal>
