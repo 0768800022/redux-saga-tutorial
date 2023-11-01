@@ -142,7 +142,9 @@ const RichTextField = (props) => {
                     readOnly={disabled}
                     onChange={(value) => {
                         form.setFieldValue(name, value);
-                        setIsChangedFormValues(true);
+                        if (typeof setIsChangedFormValues === 'function') {
+                            setIsChangedFormValues(true);
+                        }
                     }}
                     value={form.getFieldValue(name)}
                 />
