@@ -19,17 +19,19 @@ import styles from '../project.module.scss';
 import useFetch from '@hooks/useFetch';
 import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
 import useDisclosure from '@hooks/useDisclosure';
-import { useIntl } from 'react-intl';
 import useNotification from '@hooks/useNotification';
+import { useIntl } from 'react-intl';
+
 const message = defineMessages({
     objectName: 'Task',
-    updateTaskSuccess: 'Cập nhật tình trạng thành công',
-    done: 'Hoàn thành',
 });
 
 function ProjectTaskListPage() {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const notification = useNotification();
+    const intl = useIntl();
+
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
@@ -44,10 +46,9 @@ function ProjectTaskListPage() {
     localStorage.setItem('pathPrev', location.search);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [openedModal, handlersModal] = useDisclosure(false);
-    const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
     const [detail, setDetail] = useState({});
-    const notification = useNotification();
-    const intl = useIntl();
+    const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
+
     const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
         immediate: false,
     });
@@ -60,7 +61,6 @@ function ProjectTaskListPage() {
             onError: mixinFuncs.handleGetDetailError,
         });
     };
-
     const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
 
     const handleOk = () => {
@@ -85,7 +85,6 @@ function ProjectTaskListPage() {
             onError: (err) => {},
         });
     };
-
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.projectTask,
@@ -172,7 +171,7 @@ function ProjectTaskListPage() {
                         </BaseTooltip>
                     ),
                     state: (item) => (
-                        <BaseTooltip title={translate.formatMessage(message.done)}>
+                        <BaseTooltip title={translate.formatMessage(commonMessage.done)}>
                             <Button
                                 type="link"
                                 disabled={item.state === 3}
@@ -230,7 +229,7 @@ function ProjectTaskListPage() {
         },
 
         active &&
-            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '150px' }),
+            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -328,15 +327,15 @@ function ProjectTaskListPage() {
                         />
                     }
                 />
+                <Modal
+                    title="Thay đổi tình trạng hoàn thành"
+                    open={openedStateTaskModal}
+                    onOk={handleOk}
+                    onCancel={() => handlersStateTaskModal.close()}
+                    data={detail || {}}
+                ></Modal>
             </div>
             <DetailMyTaskProjectModal open={openedModal} onCancel={() => handlersModal.close()} DetailData={detail} />
-            <Modal
-                title="Thay đổi tình trạng hoàn thành"
-                open={openedStateTaskModal}
-                onOk={handleOk}
-                onCancel={() => handlersStateTaskModal.close()}
-                data={detail || {}}
-            ></Modal>
         </PageWrapper>
     );
 }

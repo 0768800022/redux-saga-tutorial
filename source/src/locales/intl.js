@@ -76,4 +76,6 @@ export const commonMessage = defineMessages({
     totalTimeOff: 'Tổng thời gian nghỉ',
     warningUrl: 'Đường dẫn không hợp lệ',
     myproject: ' Task của tôi',
+    done: 'Hoàn thành',
+
 });
