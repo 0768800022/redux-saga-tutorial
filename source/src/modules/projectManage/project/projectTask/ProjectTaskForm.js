@@ -1,10 +1,10 @@
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
-import RichTextField from '@components/common/form/RichTextField';
+import RichTextField, { insertBaseURL, removeBaseURL } from '@components/common/form/RichTextField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { projectTaskState, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
@@ -29,9 +29,9 @@ const ProjectTaskForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
-        values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
-        return mixinFuncs.handleSubmit({ ...values });
+        values.startDate = values.startDate && formatDateString(values.startDate, DEFAULT_FORMAT);
+        values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
+        return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values?.description) });
     };
     useEffect(() => {
         if (!isEditing > 0) {
@@ -56,6 +56,7 @@ const ProjectTaskForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
             developerId: dataDetail?.developer?.studentInfo?.id,
+            description: insertBaseURL(dataDetail?.description),
         });
     }, [dataDetail]);
     const validateDueDate = (_, value) => {
@@ -97,7 +98,6 @@ const ProjectTaskForm = (props) => {
                             searchParams={(text) => ({ fullName: text })}
                             optionsParams={{ projectId: projectId }}
                             initialSearchParams={{ projectId: projectId }}
-                            required
                         />
                     </Col>
                     <Col span={12}>
@@ -128,10 +128,6 @@ const ProjectTaskForm = (props) => {
                             style={{ width: '100%' }}
                             rules={[
                                 {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày bắt đầu',
-                                },
-                                {
                                     validator: validateStartDate,
                                 },
                             ]}
@@ -144,10 +140,6 @@ const ProjectTaskForm = (props) => {
                             name="dueDate"
                             placeholder="Ngày kết thúc"
                             rules={[
-                                {
-                                    required: true,
-                                    message: 'Vui lòng chọn ngày kết thúc',
-                                },
                                 {
                                     validator: validateDueDate,
                                 },
@@ -166,6 +158,9 @@ const ProjectTaskForm = (props) => {
                         marginBottom: 70,
                     }}
                     required
+                    baseURL={AppConstants.contentRootUrl}
+                    setIsChangedFormValues={setIsChangedFormValues}
+                    form={form}
                 />
 
                 <div className="footer-card-form">{actions}</div>

@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import SelectField from '@components/common/form/SelectField';
 import { statusOptions, projectTaskState } from '@constants/masterData';
-import RichTextField from '@components/common/form/RichTextField';
+import RichTextField, { insertBaseURL } from '@components/common/form/RichTextField';
 import { Image } from 'antd';
 import { AppConstants } from '@constants';
 const messages = defineMessages({
@@ -68,6 +68,7 @@ const DetailProjectModal = ({
         // form.setFields(data);
         form.setFieldsValue({
             ...DetailData,
+            description: insertBaseURL(DetailData?.description),
         });
     }, [DetailData]);
     return (

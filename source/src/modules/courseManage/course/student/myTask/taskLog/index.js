@@ -7,31 +7,30 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag } from 'antd';
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
+import { Router, useLocation } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { commonMessage } from '@locales/intl';
-import { FieldTypes } from '@constants/formConfig';
-import useFetch from '@hooks/useFetch';
-import useAuth from '@hooks/useAuth';
-import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
+import { RightOutlined } from '@ant-design/icons';
+import { generatePath } from 'react-router-dom';
 const message = defineMessages({
-    objectName: 'Hoạt động của tôi',
-    reminderMessage: 'Vui lòng chọn khoá học !',
-    registration: 'Danh sách sinh viên đăng kí khóa học',
+    objectName: 'Task',
 });
 
-function StudentActivityCourseLeaderListPage() {
+function MyTaskLogListPage() {
     const translate = useTranslate();
     const location = useLocation();
+    const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const courseId = queryParameters.get('courseId');
-    const studentId = queryParameters.get('studentId');
-    const studentName = queryParameters.get('studentName');
+    const taskName = queryParameters.get('taskName');
+    const courseName = queryParameters.get('courseName');
+
+    const state = location?.state?.prevPath;
+    const taskParam = routes.taskListPage.path;
+    const search = location.search;
+    const paramHead = routes.courseListPage.path;
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
-    const { profile } = useAuth();
-    const pathPrev = localStorage.getItem('pathPrev');
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.taskLog,
         options: {
@@ -51,9 +50,15 @@ function StudentActivityCourseLeaderListPage() {
                     return [];
                 }
             };
+            funcs.getCreateLink = () => {
+                return `${pagePath}/create${search}`;
+            };
+            funcs.getItemDetailLink = (dataRow) => {
+                return `${pagePath}/${dataRow.id}${search}`;
+            };
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params, studentId, courseId, studentName: null });
+                mixinFuncs.handleFetchList({ ...params, courseName: null, taskName: null, subjectId: null });
             };
         },
     });
@@ -86,55 +91,30 @@ function StudentActivityCourseLeaderListPage() {
                 );
             },
         },
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
-    const { data: timeSum } = useFetch(apiConfig.taskLog.getSum, {
-        immediate: true,
-        params: { courseId, studentId },
-        mappingData: ({ data }) => data.content,
-    });
+
     return (
         <PageWrapper
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(commonMessage.course),
-                    path: routes.courseLeaderListPage.path,
+                    breadcrumbName: translate.formatMessage(commonMessage.myproject),
+                    path: generatePath(routes.myTaskStudentListPage.path),
                 },
-                {
-                    breadcrumbName: translate.formatMessage(commonMessage.registration),
-                    path: routes.registrationLeaderListPage.path + pathPrev,
-                },
-                { breadcrumbName: translate.formatMessage(commonMessage.studentActivity) },
+                { breadcrumbName: translate.formatMessage(commonMessage.taskLog) },
             ]}
         >
-            <ListPage
-                title={
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
-                        <span style={{ fontWeight: 'normal' }}>{studentName}</span>
-                        <span>
-                            <span style={{ marginLeft: '5px' }}>
-                                <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
-                                <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                    {timeSum && timeSum[0]?.timeWorking
-                                        ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
-                                        : 0}
-                                    h{' '}
-                                    <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
-                                </span>
-                            </span>
-                            <span style={{ marginLeft: '10px' }}>
-                                <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
-                                <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                    {timeSum && timeSum[0]?.timeOff
-                                        ? Math.ceil((timeSum[0]?.timeOff / 60) * 10) / 10
-                                        : 0}
-                                    h
-                                </span>
+            <div>
+                <ListPage
+                    title={
+                        <span style={{ fontWeight: 'normal' }}>
+                            <span>
+                                {courseName} <RightOutlined /> {taskName}
                             </span>
                         </span>
-                    </div>
-                }
-                baseTable={
-                    <div>
+                    }
+                    actionBar={mixinFuncs.renderActionBar()}
+                    baseTable={
                         <BaseTable
                             onChange={changePagination}
                             pagination={pagination}
@@ -142,11 +122,11 @@ function StudentActivityCourseLeaderListPage() {
                             dataSource={data}
                             columns={columns}
                         />
-                    </div>
-                }
-            />
+                    }
+                />
+            </div>
         </PageWrapper>
     );
 }
 
-export default StudentActivityCourseLeaderListPage;
+export default MyTaskLogListPage;

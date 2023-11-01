@@ -25,12 +25,10 @@ const message = defineMessages({
 
 function MyActivityCourseListPage() {
     const translate = useTranslate();
-    const location = useLocation();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
-    const [isHasValueSearch, setIsHasValueSearch] = useState(courseId && true);
     const { profile } = useAuth();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.taskLog,
@@ -104,52 +102,41 @@ function MyActivityCourseListPage() {
             key: 'courseId',
             placeholder: translate.formatMessage(message.selectCourse),
             type: FieldTypes.SELECT,
-            onChange: (value) => {
-                value ? setIsHasValueSearch(true) : setIsHasValueSearch(false);
-            },
             options: myCourse,
         },
     ];
     const { data: timeSum, execute: executeTimeSum } = useFetch(apiConfig.taskLog.getSum, {
-        immediate: false,
+        immediate: true,
         params: { courseId: queryFilter?.courseId, studentId: profile.id },
         mappingData: ({ data }) => data.content,
     });
     useEffect(() => {
-        executeTimeSum({
-            params: { courseId, studentId: profile.id },
-        });
+        if (courseId)
+            executeTimeSum({
+                params: { courseId, studentId: profile.id },
+            });
     }, [courseId]);
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.myActivity) }]}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                    className: !isHasValueSearch && styles.disableSearch,
-                    initialValues: queryFilter,
-                    onReset: () => setIsHasValueSearch(false),
-                })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 baseTable={
                     <div>
-                        {!courseId && !isHasValueSearch && (
-                            <div style={{ color: 'red', position: 'relative', padding: '12px 0' }}>
-                                <span style={{ position: 'absolute', top: '-9px', left: '3px' }}>
-                                    {translate.formatMessage(message.reminderMessage)}
-                                </span>
-                            </div>
-                        )}
-                        {courseId && (
-                            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
-                                <span>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'end' }}>
+                            <span>
+                                <span style={{ marginLeft: '5px' }}>
                                     <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
                                     <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                         {timeSum && timeSum[0]?.timeWorking
                                             ? Math.ceil((timeSum[0]?.timeWorking / 60) * 10) / 10
                                             : 0}
-                                        h |
+                                        h{' '}
+                                        <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>
+                                            |{' '}
+                                        </span>
                                     </span>
                                 </span>
-                                <span>
+                                <span style={{ marginLeft: '10px' }}>
                                     <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
                                     <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                         {timeSum && timeSum[0]?.timeOff
@@ -158,13 +145,13 @@ function MyActivityCourseListPage() {
                                         h
                                     </span>
                                 </span>
-                            </div>
-                        )}
+                            </span>
+                        </div>
                         <BaseTable
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
-                            dataSource={courseId && !loading && data}
+                            dataSource={data}
                             columns={columns}
                         />
                     </div>

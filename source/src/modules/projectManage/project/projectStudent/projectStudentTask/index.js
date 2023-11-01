@@ -111,7 +111,12 @@ function ProjectStudentTaskListPage() {
                         );
                     } else {
                         mixinFuncs.setQueryParams(
-                            serializeParams({ projectId: projectId, projectName: projectName,stateProject, ...filter }),
+                            serializeParams({
+                                projectId: projectId,
+                                projectName: projectName,
+                                stateProject,
+                                ...filter,
+                            }),
                         );
                     }
                 };
