@@ -22,7 +22,16 @@ function ProjectMemberSavePage() {
     const projectName = queryParameters.get('projectName');
     const projectId = queryParameters.get('projectId');
     const active = queryParameters.get('active');
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
+    const {
+        detail,
+        onSave,
+        mixinFuncs,
+        setIsChangedFormValues,
+        isEditing,
+        errors,
+        loading,
+        title,
+    } = useSaveBase({
         apiConfig: {
             getById: apiConfig.memberProject.getById,
             create: apiConfig.memberProject.create,
@@ -37,6 +46,8 @@ function ProjectMemberSavePage() {
                 return {
                     id: detail.id,
                     schedule: data.schedule,
+                    roleId: data?.projectRole?.id,
+                    teamId: data?.team?.id,
                     status: 1,
                 };
             };
@@ -44,9 +55,9 @@ function ProjectMemberSavePage() {
                 return {
                     projectId: projectId,
                     developerId: data.developer.studentInfo.fullName,
-                    projectRoleId: data.projectRole.projectRoleName,
+                    projectRoleId: data.projectRole.id,
                     schedule: data.schedule,
-                    teamId: data.teamId,
+                    teamId: data.team.id,
                 };
             };
         },

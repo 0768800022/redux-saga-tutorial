@@ -27,6 +27,7 @@ import { EditOutlined } from '@ant-design/icons';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
 import styles from './member.module.scss';
+import { FieldTypes } from '@constants/formConfig';
 
 const message = defineMessages({
     objectName: 'Thành viên',
@@ -47,35 +48,44 @@ const ProjectMemberListPage = () => {
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
     localStorage.setItem('pathPrev', location.search);
-    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.memberProject,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
-                        };
+    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.memberProject,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+                funcs.mappingData = (response) => {
+                    try {
+                        if (response.result === true) {
+                            return {
+                                data: response.data.content,
+                                total: response.data.totalElements,
+                            };
+                        }
+                    } catch (error) {
+                        return [];
                     }
-                } catch (error) {
-                    return [];
-                }
-            };
-            funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                if (active) return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
-                else return `${pagePath}/${dataRow.id}` + pathDefault;
-            };
-        },
-    });
+                };
+                funcs.getCreateLink = () => {
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                };
+                funcs.getItemDetailLink = (dataRow) => {
+                    if (active) return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
+                    else return `${pagePath}/${dataRow.id}` + pathDefault;
+                };
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const projectName = queryParams.get('projectName');
+                    const active = queryParams.get('active');
+                    mixinFuncs.setQueryParams(
+                        serializeParams({ projectId: projectId, projectName: projectName, active, ...filter }),
+                    );
+                };
+            },
+        });
 
     const setBreadRoutes = () => {
         const breadRoutes = [];
@@ -150,6 +160,19 @@ const ProjectMemberListPage = () => {
                 { width: '150px' },
             ),
     ].filter(Boolean);
+    const { data: teamData } = useFetch(apiConfig.team.autocomplete, {
+        immediate: true,
+        params: { projectId },
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
+    });
+    const searchFields = [
+        {
+            key: 'teamId',
+            placeholder: translate.formatMessage(commonMessage.team),
+            type: FieldTypes.SELECT,
+            options: teamData,
+        },
+    ];
 
     // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
 
@@ -157,6 +180,11 @@ const ProjectMemberListPage = () => {
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    initialValues: queryFilter,
+                    className: styles.search,
+                })}
                 actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
