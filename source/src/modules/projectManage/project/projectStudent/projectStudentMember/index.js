@@ -25,6 +25,9 @@ import route from '@modules/projectManage/project/routes';
 import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { commonMessage } from '@locales/intl';
+import useAuth from '@hooks/useAuth';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -39,6 +42,8 @@ const message = defineMessages({
 const ProjectStudentMemberListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const { profile } = useAuth();
+
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
@@ -69,6 +74,27 @@ const ProjectStudentMemberListPage = () => {
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
             };
+            funcs.additionalActionColumnButtons = () => ({
+                editmember: ({ id,developer }) => {
+                    return (
+                        <BaseTooltip type="edit" objectName={translate.formatMessage(commonMessage.member)}>
+                            <Button
+                                disabled={developer?.id !== profile.id}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        `${pagePath}/${id}?projectId=${projectId}&projectName=${projectName}`,
+                                    );
+                                }}
+                                type="link"
+                                style={{ padding: 0 }}
+                            >
+                                <EditOutlined color="red" />
+                            </Button>
+                        </BaseTooltip>
+                    );
+                },
+            });
         },
     });
 
@@ -105,7 +131,7 @@ const ProjectStudentMemberListPage = () => {
             },
             width: 180,
         },
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '100px' }),
+        mixinFuncs.renderActionColumn({ editmember:true,edit: true, delete: true }, { width: '100px' }),
     ].filter(Boolean);
 
     // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));

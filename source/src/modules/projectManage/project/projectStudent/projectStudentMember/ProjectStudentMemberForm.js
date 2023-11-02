@@ -43,7 +43,6 @@ function ProjectStudentMemberForm({ formId, actions, dataDetail, onSubmit, setIs
             .join('|');
     }
     const handleSubmit = (values) => {
-        values.isIntern = isChecked ? 1 : 0;
         for (const day in values.schedule) {
             for (const timeRange of values.schedule[day]) {
                 timeRange.from = timeRange.from.set({ hour: 0, minute: 0 }).format('HH[H]mm');
@@ -309,6 +308,7 @@ function ProjectStudentMemberForm({ formId, actions, dataDetail, onSubmit, setIs
                         <Col span={6}>
                             <AutoCompleteField
                                 required
+                                disabled={isEditing}
                                 label={<FormattedMessage defaultMessage="Nhóm" />}
                                 name="teamId"
                                 apiConfig={apiConfig.team.autocomplete}
