@@ -146,7 +146,7 @@ function ProjectStudentMyTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ taskLog: true, edit: true, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ taskLog: true, edit: false, delete: true }, { width: '150px' }),
     ].filter(Boolean);
 
     const searchFields = [
