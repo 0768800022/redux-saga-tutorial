@@ -170,8 +170,8 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            teamId: dataDetail?.team?.teamName,
-            studentId: dataDetail?.studentInfo?.fullName,
+            projectRoleId: dataDetail?.projectRole?.id,
+            teamId: dataDetail?.team?.id,
         });
     }, [dataDetail]);
 
@@ -199,7 +199,6 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
             console.log(error);
         }
     };
-
 
     const handleApplyAll = (e) => {
         e.preventDefault();
@@ -286,9 +285,8 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                         <Col span={6}>
                             <AutoCompleteField
                                 required
-                                disabled={isEditing}
                                 label={translate.formatMessage(commonMessage.role)}
-                                name={['projectRole', 'projectRoleName']}
+                                name={'projectRoleId'}
                                 apiConfig={apiConfig.projectRole.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
@@ -305,10 +303,9 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 name="teamId"
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                                optionsParams={{ projectId : projectId }} 
+                                optionsParams={{ projectId: projectId }}
                                 initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
-                                disabled={isEditing}
                             />
                         </Col>
                     </Row>

@@ -25,7 +25,8 @@ import route from '@modules/projectManage/project/routes';
 import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
-
+import { FieldTypes } from '@constants/formConfig';
+import { FormattedMessage } from 'react-intl';
 const message = defineMessages({
     home: 'Trang chủ',
     project: 'Dự án',
@@ -109,6 +110,23 @@ const ProjectStudentMemberListPage = () => {
     ].filter(Boolean);
 
     // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
+    const { data: team } = useFetch(apiConfig.team.autocomplete, {
+        immediate: true,
+        params: { projectId: projectId },
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item?.id,
+                label: item?.teamName,
+            })),
+    });
+    const searchFields = [
+        {
+            key: 'teamId',
+            placeholder: <FormattedMessage defaultMessage={'Nhóm '} />,
+            type: FieldTypes.SELECT,
+            options: team,
+        },
+    ].filter(Boolean);
 
     return (
         <PageWrapper
@@ -123,6 +141,9 @@ const ProjectStudentMemberListPage = () => {
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
                 actionBar={mixinFuncs.renderActionBar()}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                })}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

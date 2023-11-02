@@ -26,7 +26,8 @@ import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import styles from './projectLeaderMember.module.scss';
-
+import { FieldTypes } from '@constants/formConfig';
+import { FormattedMessage } from 'react-intl';
 const message = defineMessages({
     home: 'Trang chủ',
     project: 'Dự án',
@@ -84,6 +85,23 @@ const ProjectLeaderMemberListPage = () => {
                 `?projectId=${record?.project?.id}&studentId=${record?.developer.studentInfo?.id}&studentName=${record?.developer.studentInfo?.fullName}`,
         );
     };
+    const { data: team } = useFetch(apiConfig.team.autocomplete, {
+        immediate: true,
+        params: { projectId: projectId },
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item?.id,
+                label: item?.teamName,
+            })),
+    });
+    const searchFields = [
+        {
+            key: 'teamId',
+            placeholder: <FormattedMessage defaultMessage={'Nhóm '} />,
+            type: FieldTypes.SELECT,
+            options: team,
+        },
+    ].filter(Boolean);
     const columns = [
         {
             title: '#',
@@ -151,6 +169,10 @@ const ProjectLeaderMemberListPage = () => {
             ]}
         >
             <ListPage
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    className: styles.search,
+                })}
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
                 actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={

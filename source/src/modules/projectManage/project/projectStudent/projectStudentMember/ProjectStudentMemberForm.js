@@ -170,8 +170,8 @@ function ProjectStudentMemberForm({ formId, actions, dataDetail, onSubmit, setIs
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            teamId: dataDetail?.team?.teamName,
-            studentId: dataDetail?.studentInfo?.fullName,
+            projectRoleId: dataDetail?.projectRole?.id,
+            teamId: dataDetail?.team?.id,
         });
     }, [dataDetail]);
 
@@ -294,9 +294,8 @@ function ProjectStudentMemberForm({ formId, actions, dataDetail, onSubmit, setIs
                         <Col span={6}>
                             <AutoCompleteField
                                 required
-                                disabled={isEditing}
                                 label={translate.formatMessage(commonMessage.role)}
-                                name={['projectRole', 'projectRoleName']}
+                                name={'projectRoleId'}
                                 apiConfig={apiConfig.projectRole.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
@@ -313,7 +312,7 @@ function ProjectStudentMemberForm({ formId, actions, dataDetail, onSubmit, setIs
                                 name="teamId"
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                                optionsParams={{ projectId : projectId }} 
+                                optionsParams={{ projectId: projectId }}
                                 initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
                             />

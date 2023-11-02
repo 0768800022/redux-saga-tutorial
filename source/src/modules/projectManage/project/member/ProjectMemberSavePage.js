@@ -38,13 +38,15 @@ function ProjectMemberSavePage() {
                     id: detail.id,
                     schedule: data.schedule,
                     status: 1,
+                    roleId: data.projectRoleId,
+                    teamId: data.teamId,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     projectId: projectId,
                     developerId: data.developer.studentInfo.fullName,
-                    projectRoleId: data.projectRole.projectRoleName,
+                    projectRoleId: data.projectRoleId,
                     schedule: data.schedule,
                     teamId: data.teamId,
                 };
