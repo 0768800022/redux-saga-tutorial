@@ -286,9 +286,8 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                         <Col span={6}>
                             <AutoCompleteField
                                 required
-                                disabled={isEditing}
                                 label={translate.formatMessage(commonMessage.role)}
-                                name={['projectRole', 'projectRoleName']}
+                                name={['projectRole', 'id']}
                                 apiConfig={apiConfig.projectRole.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
@@ -302,13 +301,12 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                             <AutoCompleteField
                                 required
                                 label={<FormattedMessage defaultMessage="Nhóm" />}
-                                name="teamId"
+                                name={['team','id']}
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
                                 optionsParams={{ projectId : projectId }} 
                                 initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
-                                disabled={isEditing}
                             />
                         </Col>
                     </Row>

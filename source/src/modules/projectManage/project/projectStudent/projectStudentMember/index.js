@@ -25,6 +25,8 @@ import route from '@modules/projectManage/project/routes';
 import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
+import { FieldTypes } from '@constants/formConfig';
+import { commonMessage } from '@locales/intl';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -44,7 +46,7 @@ const ProjectStudentMemberListPage = () => {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
-    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
+    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination,queryParams,serializeParams } = useListBase({
         apiConfig: apiConfig.memberProject,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -69,6 +71,13 @@ const ProjectStudentMemberListPage = () => {
             funcs.getItemDetailLink = (dataRow) => {
                 return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}`;
             };
+            funcs.changeFilter = (filter) => {
+                const projectId = queryParams.get('projectId');
+                const projectName = queryParams.get('projectName');
+                mixinFuncs.setQueryParams(
+                    serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                );
+            };
         },
     });
 
@@ -91,6 +100,11 @@ const ProjectStudentMemberListPage = () => {
             dataIndex: ['developer', 'studentInfo', 'fullName'],
         },
         {
+            title: translate.formatMessage(commonMessage.team),
+            dataIndex: ['team', 'teamName'],
+            width: 150,
+        },
+        {
             title: translate.formatMessage(message.role),
             dataIndex: ['projectRole', 'projectRoleName'],
             width: 150,
@@ -107,6 +121,19 @@ const ProjectStudentMemberListPage = () => {
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '100px' }),
     ].filter(Boolean);
+    const { data: teamData } = useFetch(apiConfig.team.autocomplete, {
+        immediate: true,
+        params: { projectId },
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
+    });
+    const searchFields = [
+        {
+            key: 'teamId',
+            placeholder: translate.formatMessage(commonMessage.team),
+            type: FieldTypes.SELECT,
+            options: teamData,
+        },
+    ];
 
     // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
 
@@ -122,6 +149,10 @@ const ProjectStudentMemberListPage = () => {
         >
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    initialValues: queryFilter,
+                })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

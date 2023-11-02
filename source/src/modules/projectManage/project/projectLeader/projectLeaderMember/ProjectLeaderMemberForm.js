@@ -65,6 +65,7 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
         if (!values?.state) {
             values.state = 1;
         }
+        console.log(values);
         return mixinFuncs.handleSubmit({ ...values });
     };
     function addFrameTime(data) {
@@ -282,9 +283,8 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
                         <Col span={6}>
                             <AutoCompleteField
                                 required
-                                disabled={isEditing}
                                 label={translate.formatMessage(commonMessage.role)}
-                                name={['projectRole', 'projectRoleName']}
+                                name={['projectRole', 'id']}
                                 apiConfig={apiConfig.projectRole.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
@@ -298,13 +298,12 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
                             <AutoCompleteField
                                 required
                                 label={<FormattedMessage defaultMessage="Nhóm" />}
-                                name="teamId"
+                                name={['team','id']}
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
                                 optionsParams={{ projectId: projectId }}
                                 initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
-                                disabled={isEditing}
                             />
                         </Col>
                     </Row>
