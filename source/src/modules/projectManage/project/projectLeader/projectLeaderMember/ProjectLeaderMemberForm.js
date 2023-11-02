@@ -166,8 +166,8 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            projectRoleId: dataDetail?.projectRole?.id,
-            teamId: dataDetail?.team?.id,
+            teamId: dataDetail?.team?.teamName,
+            studentId: dataDetail?.studentInfo?.fullName,
         });
     }, [dataDetail]);
 
@@ -214,6 +214,7 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
     const handleOk = () => {
         document.activeElement.blur();
     };
+    
 
     useEffect(() => {
         registrationStateOption.map((state, index) => {
@@ -282,7 +283,7 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
                             <AutoCompleteField
                                 required
                                 label={translate.formatMessage(commonMessage.role)}
-                                name={'projectRoleId'}
+                                name={['projectRole', 'id']}
                                 apiConfig={apiConfig.projectRole.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
@@ -296,7 +297,7 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
                             <AutoCompleteField
                                 required
                                 label={<FormattedMessage defaultMessage="Nhóm" />}
-                                name="teamId"
+                                name={['team','id']}
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
                                 optionsParams={{ projectId: projectId }}

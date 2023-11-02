@@ -170,8 +170,8 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            projectRoleId: dataDetail?.projectRole?.id,
-            teamId: dataDetail?.team?.id,
+            teamId: dataDetail?.team?.teamName,
+            studentId: dataDetail?.studentInfo?.fullName,
         });
     }, [dataDetail]);
 
@@ -199,6 +199,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
             console.log(error);
         }
     };
+
 
     const handleApplyAll = (e) => {
         e.preventDefault();
@@ -286,7 +287,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                             <AutoCompleteField
                                 required
                                 label={translate.formatMessage(commonMessage.role)}
-                                name={'projectRoleId'}
+                                name={['projectRole', 'id']}
                                 apiConfig={apiConfig.projectRole.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
@@ -300,10 +301,10 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                             <AutoCompleteField
                                 required
                                 label={<FormattedMessage defaultMessage="Nhóm" />}
-                                name="teamId"
+                                name={['team','id']}
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                                optionsParams={{ projectId: projectId }}
+                                optionsParams={{ projectId : projectId }} 
                                 initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
                             />

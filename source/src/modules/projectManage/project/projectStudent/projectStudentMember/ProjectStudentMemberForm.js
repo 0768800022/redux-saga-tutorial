@@ -43,7 +43,6 @@ function ProjectStudentMemberForm({ formId, actions, dataDetail, onSubmit, setIs
             .join('|');
     }
     const handleSubmit = (values) => {
-        values.isIntern = isChecked ? 1 : 0;
         for (const day in values.schedule) {
             for (const timeRange of values.schedule[day]) {
                 timeRange.from = timeRange.from.set({ hour: 0, minute: 0 }).format('HH[H]mm');
@@ -170,8 +169,8 @@ function ProjectStudentMemberForm({ formId, actions, dataDetail, onSubmit, setIs
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            projectRoleId: dataDetail?.projectRole?.id,
-            teamId: dataDetail?.team?.id,
+            teamId: dataDetail?.team?.teamName,
+            studentId: dataDetail?.studentInfo?.fullName,
         });
     }, [dataDetail]);
 
@@ -294,8 +293,9 @@ function ProjectStudentMemberForm({ formId, actions, dataDetail, onSubmit, setIs
                         <Col span={6}>
                             <AutoCompleteField
                                 required
+                                disabled={isEditing}
                                 label={translate.formatMessage(commonMessage.role)}
-                                name={'projectRoleId'}
+                                name={['projectRole', 'projectRoleName']}
                                 apiConfig={apiConfig.projectRole.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
@@ -308,11 +308,12 @@ function ProjectStudentMemberForm({ formId, actions, dataDetail, onSubmit, setIs
                         <Col span={6}>
                             <AutoCompleteField
                                 required
+                                disabled={isEditing}
                                 label={<FormattedMessage defaultMessage="Nhóm" />}
                                 name="teamId"
                                 apiConfig={apiConfig.team.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                                optionsParams={{ projectId: projectId }}
+                                optionsParams={{ projectId : projectId }} 
                                 initialSearchParams={{ projectId: projectId }}
                                 searchParams={(text) => ({ name: text })}
                             />
