@@ -92,11 +92,9 @@ const useSaveBase = ({
     const onBack = () => {
         const doBack = () => {
             if (location?.state?.prevPath === options.getListUrl) {
-                console.log(location?.state?.prevPath +" : "+ options.getListUrl);
                 navigate(-1);
             } else {
-                console.log(location?.state?.prevPath +" : "+ options.getListUrl);
-                mixinFuncs.showCloseFormConfirm();
+                navigate(options.getListUrl);
             }
         };
 
