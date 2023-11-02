@@ -66,7 +66,13 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                 };
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, projectName: null, taskName: null,active:null, task:null  });
+                    mixinFuncs.handleFetchList({
+                        ...params,
+                        projectName: null,
+                        taskName: null,
+                        active: null,
+                        task: null,
+                    });
                 };
             },
         });
@@ -91,9 +97,11 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
             dataIndex: 'gitCommitUrl',
             render: (gitUrl) => {
                 return (
-                    <div className={style.customDiv} onClick={() => handleOnClickReview(gitUrl)}>
-                        <BaseTooltip title={gitUrl}>Review</BaseTooltip>
-                    </div>
+                    gitUrl && (
+                        <div className={style.customDiv} onClick={() => handleOnClickReview(gitUrl)}>
+                            <BaseTooltip title={gitUrl}>Review</BaseTooltip>
+                        </div>
+                    )
                 );
             },
         },

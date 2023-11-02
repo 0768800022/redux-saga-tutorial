@@ -32,7 +32,6 @@ const CourseStudentForm = (props) => {
         onSubmit,
         setIsChangedFormValues,
     });
-    console.log(dataDetail);
     const handleSubmit = (values) => {
         if (!values?.state) {
             values.state = 1;
