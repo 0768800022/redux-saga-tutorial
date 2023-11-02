@@ -60,11 +60,31 @@ const useSaveBase = ({
             : `${translate.formatMessage(message.edit)} ${options.objectName}`;
     const intl = useIntl();
     const notification = useNotification();
+    const [shouldShowCloseFormConfirm, setShouldShowCloseFormConfirm] = useState(false);
     // const [ filter, setFilter ] = useState({});
 
     const mappingData = (response) => {
         if (response.result === true) return response.data;
     };
+
+    // useEffect(() => {
+    //     if (shouldShowCloseFormConfirm) {
+    //         Modal.confirm({
+    //             title: intl.formatMessage(closeFormMessage.closeTitle, { objectName: options.objectName }),
+    //             content: '',
+    //             okText: intl.formatMessage(closeFormMessage.ok),
+    //             cancelText: intl.formatMessage(closeFormMessage.cancel),
+    //             onOk: () => {
+    //                 onBack();
+    //             },
+    //         });
+    //         console.log(location);
+    //         // setShouldShowCloseFormConfirm(false);
+    //     } else {
+    //         // Đánh dấu rằng lần thay đổi đầu tiên đã xảy ra
+    //         setShouldShowCloseFormConfirm(true);
+    //     }
+    // }, [location, shouldShowCloseFormConfirm]);
 
     const handleGetDetailError = (error) => {
         // console.log({ error });
@@ -94,6 +114,7 @@ const useSaveBase = ({
             if (location?.state?.prevPath === options.getListUrl) {
                 navigate(-1);
             } else {
+                console.log(location?.state?.prevPath + ' : ' + options.getListUrl);
                 navigate(options.getListUrl);
             }
         };
@@ -213,6 +234,7 @@ const useSaveBase = ({
                 content: '',
                 okText: intl.formatMessage(closeFormMessage.ok),
                 cancelText: intl.formatMessage(closeFormMessage.cancel),
+                centered:true,
                 onOk: () => {
                     onBack();
                 },
