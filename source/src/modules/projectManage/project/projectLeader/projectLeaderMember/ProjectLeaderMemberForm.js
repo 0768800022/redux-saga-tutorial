@@ -65,7 +65,6 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
         if (!values?.state) {
             values.state = 1;
         }
-        console.log(values);
         return mixinFuncs.handleSubmit({ ...values });
     };
     function addFrameTime(data) {
