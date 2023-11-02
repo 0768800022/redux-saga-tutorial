@@ -77,5 +77,5 @@ export const commonMessage = defineMessages({
     warningUrl: 'Đường dẫn không hợp lệ',
     myproject: ' Task của tôi',
     done: 'Hoàn thành',
-
+    edit: 'Sửa',
 });

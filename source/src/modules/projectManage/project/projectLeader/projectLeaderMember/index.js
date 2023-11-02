@@ -26,6 +26,8 @@ import routes from '@routes';
 import { EditOutlined } from '@ant-design/icons';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import styles from './projectLeaderMember.module.scss';
+import { commonMessage } from '@locales/intl';
+import { FieldTypes } from '@constants/formConfig';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -48,35 +50,44 @@ const ProjectLeaderMemberListPage = () => {
     const active = queryParameters.get('active');
     const leaderId = queryParameters.get('leaderId');
     localStorage.setItem('pathPrev', location.search);
-    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.memberProject,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.mappingData = (response) => {
-                if (response.result === true) {
-                    return {
-                        data: response.data.content,
-                        total: response.data.totalElements,
-                    };
-                }
-            };
-            funcs.getCreateLink = () => {
-                if (active) {
-                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
-                }
-                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                if (active) {
-                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
-                }
-                return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
-            };
-        },
-    });
+    let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.memberProject,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.mappingData = (response) => {
+                    if (response.result === true) {
+                        return {
+                            data: response.data.content,
+                            total: response.data.totalElements,
+                        };
+                    }
+                };
+                funcs.getCreateLink = () => {
+                    if (active) {
+                        return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
+                    }
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
+                };
+                funcs.getItemDetailLink = (dataRow) => {
+                    if (active) {
+                        return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
+                    }
+                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
+                };
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const projectName = queryParams.get('projectName');
+                    const active = queryParams.get('active');
+                    mixinFuncs.setQueryParams(
+                        serializeParams({ projectId: projectId, projectName: projectName, active, ...filter }),
+                    );
+                };
+            },
+        });
     const handleOnClick = (event, record) => {
         event.preventDefault();
         navigate(
@@ -137,9 +148,21 @@ const ProjectLeaderMemberListPage = () => {
                 { width: '150px' },
             ),
     ].filter(Boolean);
+    const { data: teamData } = useFetch(apiConfig.team.autocomplete, {
+        immediate: true,
+        params: { projectId },
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
+    });
 
     // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-
+    const searchFields = [
+        {
+            key: 'teamId',
+            placeholder: translate.formatMessage(commonMessage.team),
+            type: FieldTypes.SELECT,
+            options: teamData,
+        },
+    ];
     return (
         <PageWrapper
             routes={[
@@ -153,6 +176,11 @@ const ProjectLeaderMemberListPage = () => {
             <ListPage
                 title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
                 actionBar={active && mixinFuncs.renderActionBar()}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    initialValues: queryFilter,
+                    className: styles.search,
+                })}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}

@@ -32,6 +32,9 @@ const ProjectStudentTaskForm = (props) => {
     const handleSubmit = (values) => {
         values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
+        if(typeof values.developerId === 'string'){
+            values.developerId = dataDetail?.developer?.studentInfo?.id;
+        }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values.description) });
     };
 
@@ -43,7 +46,7 @@ const ProjectStudentTaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
-            developerId: dataDetail?.developer?.studentInfo?.id,
+            developerId: dataDetail?.developer?.studentInfo?.fullName,
             description: insertBaseURL(dataDetail?.description),
         });
     }, [dataDetail]);

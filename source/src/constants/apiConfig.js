@@ -793,6 +793,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        updateMyInfo: {
+            baseURL: `${apiTenantUrl}v1/member-project/update-my-info`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     company: {
         getList: {

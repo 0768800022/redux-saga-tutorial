@@ -26,18 +26,17 @@ function ProjectStudentMemberSavePage() {
         apiConfig: {
             getById: apiConfig.memberProject.getById,
             create: apiConfig.memberProject.create,
-            update: apiConfig.memberProject.update,
+            update: apiConfig.memberProject.updateMyInfo,
         },
         options: {
-            getListUrl: routes.projectStudentMemberListPage.path,
+            getListUrl: routes.projectStudentMemberListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
-                    id: detail.id,
+                    projectId: projectId,
                     schedule: data.schedule,
-                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
