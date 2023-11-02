@@ -8,15 +8,19 @@ import { projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Tag, Button } from 'antd';
-import React, { useEffect } from 'react';
+import { Tag, Button, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { CalendarOutlined } from '@ant-design/icons';
+import { CalendarOutlined, CheckOutlined } from '@ant-design/icons';
 import styles from '../project.module.scss';
 import useFetch from '@hooks/useFetch';
+import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
+import useDisclosure from '@hooks/useDisclosure';
+import useNotification from '@hooks/useNotification';
+import { useIntl } from 'react-intl';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -25,6 +29,9 @@ const message = defineMessages({
 function ProjectTaskListPage() {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const notification = useNotification();
+    const intl = useIntl();
+
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
@@ -38,6 +45,46 @@ function ProjectTaskListPage() {
     const location = useLocation();
     localStorage.setItem('pathPrev', location.search);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const [openedModal, handlersModal] = useDisclosure(false);
+    const [detail, setDetail] = useState({});
+    const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
+
+    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
+        immediate: false,
+    });
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
+    const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
+
+    const handleOk = () => {
+        handlersStateTaskModal.close();
+        updateState(detail);
+    };
+    const updateState = (values) => {
+        executeUpdate({
+            data: {
+                id: values.id,
+                state: 3,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    mixinFuncs.getList();
+                    notification({
+                        message: intl.formatMessage(message.updateTaskSuccess),
+                    });
+                    handlersStateTaskModal.close();
+                }
+            },
+            onError: (err) => {},
+        });
+    };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.projectTask,
@@ -112,7 +159,7 @@ function ProjectTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.ProjectTaskListPage.path +
-                                        `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -120,6 +167,22 @@ function ProjectTaskListPage() {
                                 }}
                             >
                                 <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    state: (item) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.done)}>
+                            <Button
+                                type="link"
+                                disabled={item.state === 3}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDetail(item);
+                                    handlersStateTaskModal.open();
+                                }}
+                            >
+                                <CheckOutlined />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -165,7 +228,8 @@ function ProjectTaskListPage() {
             },
         },
 
-        active && mixinFuncs.renderActionColumn({ taskLog: true, edit: true, delete: true }, { width: '120px' }),
+        active &&
+            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -185,7 +249,7 @@ function ProjectTaskListPage() {
         // },
         {
             key: 'developerId',
-            placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
+            placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
             options: memberProject,
         },
@@ -235,7 +299,6 @@ function ProjectTaskListPage() {
         return breadRoutes;
     };
 
-
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <div>
@@ -248,6 +311,14 @@ function ProjectTaskListPage() {
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
+                            onRow={(record) => ({
+                                onClick: (e) => {
+                                    e.stopPropagation();
+                                    handleFetchDetail(record.id);
+
+                                    handlersModal.open();
+                                },
+                            })}
                             onChange={changePagination}
                             pagination={pagination}
                             loading={loading}
@@ -256,7 +327,15 @@ function ProjectTaskListPage() {
                         />
                     }
                 />
+                <Modal
+                    title="Thay đổi tình trạng hoàn thành"
+                    open={openedStateTaskModal}
+                    onOk={handleOk}
+                    onCancel={() => handlersStateTaskModal.close()}
+                    data={detail || {}}
+                ></Modal>
             </div>
+            <DetailMyTaskProjectModal open={openedModal} onCancel={() => handlersModal.close()} DetailData={detail} />
         </PageWrapper>
     );
 }

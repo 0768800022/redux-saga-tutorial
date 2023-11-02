@@ -5,14 +5,9 @@ TIMEZONE = "GMT+7"
 APP_BOOT_TIME_SECOND = 5
 SLACK_CHANNEL_NAME = "GMQ6JQ1FT"
 
-TARGET_FOLDER="/data/deploy/ilearning"
-APP_NAME = "elms-portal"
-
-APP_DEV_PORT=6108
-
 node {
     try {
-        if (_BRANCH_NAME.matches("dev")) {
+        if (_BRANCH_NAME.matches("dev|master")) {
             notifyBuild("STARTED", SLACK_CHANNEL_NAME)
         }
 
@@ -22,58 +17,10 @@ node {
 
         if (_BRANCH_NAME.matches("dev")) {
 
-            BUILD_COMMAND = """
-                                cd ./source
-                                npm install
-                                npm run build:dev
-                                ls ./build
-                                tar -zcvf build.tar.gz ./build
-                            """
-            stage ("Build source") {
-                sh """
-                    ${BUILD_COMMAND}
-                """
-            }
-
-            stage("Upload build to remote") {
-
-                try {
-                    sh """
-                        sudo docker-compose -f ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml down
-                        sudo docker rmi -f ${APP_NAME}-dev:1.0
-                    """
-                } catch (e) {
-
-                }
-                sh """
-                    sudo rm -rf ${TARGET_FOLDER}/${APP_NAME}-dev
-                    sudo mkdir -p ${TARGET_FOLDER}/${APP_NAME}-dev
-                    sudo cp ./source/build.tar.gz ${TARGET_FOLDER}/${APP_NAME}-dev/
-                    sudo cp ./source/appServer.js ${TARGET_FOLDER}/${APP_NAME}-dev/
-                    sudo cp ./source/package.json ${TARGET_FOLDER}/${APP_NAME}-dev/
-                    sudo cp ./dev-ops/Dockerfile ${TARGET_FOLDER}/${APP_NAME}-dev/
-                    sudo cp ./dev-ops/docker-compose.yml ${TARGET_FOLDER}/${APP_NAME}-dev/
-
-                    sudo sed -i 's/{PORT}/${APP_DEV_PORT}/g' ${TARGET_FOLDER}/${APP_NAME}-dev/appServer.js
-                    sudo sed -i 's/{PORT}/${APP_DEV_PORT}/g' ${TARGET_FOLDER}/${APP_NAME}-dev/Dockerfile
-                    sudo sed -i 's/{PORT}/${APP_DEV_PORT}/g' ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml
-                    sudo sed -i 's/{CONTAINER_NAME}/${APP_NAME}-dev/g' ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml
-                    sudo sed -i 's/{CONTAINER_IMAGE}/${APP_NAME}-dev/g' ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml
-                    sudo sed -i 's/{SERVICE_NAME}/web_admin/g' ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml
-
-                    sudo tar -zxvf ${TARGET_FOLDER}/${APP_NAME}-dev/build.tar.gz -C ${TARGET_FOLDER}/${APP_NAME}-dev/
-                    sudo rm -rf ${TARGET_FOLDER}/${APP_NAME}-dev/build.tar.gz
-                    sudo docker build -t ${APP_NAME}-dev:1.0 -f ${TARGET_FOLDER}/${APP_NAME}-dev/Dockerfile ${TARGET_FOLDER}/${APP_NAME}-dev/
-
-                """
-            }
-
-            stage ("Deploy to ${_BRANCH_NAME} environment") {
-                sh """
-                    sudo docker-compose -f ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml up -d
-                """
-                sleep(0)
-            }
+           buildDev()
+        }else if (_BRANCH_NAME.matches("master")) {
+            buildMaster()
+           
         }
 
 
@@ -82,7 +29,7 @@ node {
         currentBuild.result = "FAILURE"
         throw e
     } finally {
-        if (_BRANCH_NAME.matches("dev")) {
+        if (_BRANCH_NAME.matches("dev|master")) {
             def time = formatMilisecondTime(currentBuild.timeInMillis, TIMEZONE)
             def duration = durationFormat(currentBuild.duration)
             def buildDetail = "\n————————————————————" +
@@ -93,6 +40,124 @@ node {
             sleep(APP_BOOT_TIME_SECOND)
             notifyBuild(currentBuild.result, SLACK_CHANNEL_NAME, buildDetail)
         }
+    }
+}
+
+def buildMaster(){
+    TARGET_FOLDER="/data/deploy/ilearning/ilms"
+    APP_NAME = "ilms-portal"
+    APP_DEV_PORT=6113
+
+    BUILD_COMMAND = """
+                        cd ./source
+                        npm install
+                        npm run build:prod
+                        ls ./build
+                        tar -zcvf build.tar.gz ./build
+                    """
+    stage ("Build source") {
+        sh """
+            ${BUILD_COMMAND}
+        """
+    }
+
+    stage("Upload build to remote") {
+
+        try {
+            sh """
+                sudo docker-compose -f ${TARGET_FOLDER}/${APP_NAME}/docker-compose.yml down
+                sudo docker rmi -f ${APP_NAME}:1.0
+            """
+        } catch (e) {
+
+        }
+        sh """
+            sudo rm -rf ${TARGET_FOLDER}/${APP_NAME}
+            sudo mkdir -p ${TARGET_FOLDER}/${APP_NAME}
+            sudo cp ./source/build.tar.gz ${TARGET_FOLDER}/${APP_NAME}/
+            sudo cp ./source/appServer.js ${TARGET_FOLDER}/${APP_NAME}/
+            sudo cp ./source/package.json ${TARGET_FOLDER}/${APP_NAME}/
+            sudo cp ./dev-ops/Dockerfile ${TARGET_FOLDER}/${APP_NAME}/
+            sudo cp ./dev-ops/docker-compose.yml ${TARGET_FOLDER}/${APP_NAME}/
+
+            sudo sed -i 's/{PORT}/${APP_DEV_PORT}/g' ${TARGET_FOLDER}/${APP_NAME}/appServer.js
+            sudo sed -i 's/{PORT}/${APP_DEV_PORT}/g' ${TARGET_FOLDER}/${APP_NAME}/Dockerfile
+            sudo sed -i 's/{PORT}/${APP_DEV_PORT}/g' ${TARGET_FOLDER}/${APP_NAME}/docker-compose.yml
+            sudo sed -i 's/{CONTAINER_NAME}/${APP_NAME}/g' ${TARGET_FOLDER}/${APP_NAME}/docker-compose.yml
+            sudo sed -i 's/{CONTAINER_IMAGE}/${APP_NAME}/g' ${TARGET_FOLDER}/${APP_NAME}/docker-compose.yml
+            sudo sed -i 's/{SERVICE_NAME}/web_admin/g' ${TARGET_FOLDER}/${APP_NAME}/docker-compose.yml
+
+            sudo tar -zxvf ${TARGET_FOLDER}/${APP_NAME}/build.tar.gz -C ${TARGET_FOLDER}/${APP_NAME}/
+            sudo rm -rf ${TARGET_FOLDER}/${APP_NAME}/build.tar.gz
+            sudo docker build -t ${APP_NAME}:1.0 -f ${TARGET_FOLDER}/${APP_NAME}/Dockerfile ${TARGET_FOLDER}/${APP_NAME}/
+
+        """
+    }
+
+    stage ("Deploy to ${_BRANCH_NAME} environment") {
+        sh """
+            sudo docker-compose -f ${TARGET_FOLDER}/${APP_NAME}/docker-compose.yml up -d
+        """
+        sleep(0)
+    }
+}
+
+def buildDev(){
+    TARGET_FOLDER="/data/deploy/ilearning"
+    APP_NAME = "elms-portal"
+    APP_DEV_PORT=6108
+
+    BUILD_COMMAND = """
+                        cd ./source
+                        npm install
+                        npm run build:dev
+                        ls ./build
+                        tar -zcvf build.tar.gz ./build
+                    """
+    stage ("Build source") {
+        sh """
+            ${BUILD_COMMAND}
+        """
+    }
+
+    stage("Upload build to remote") {
+
+        try {
+            sh """
+                sudo docker-compose -f ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml down
+                sudo docker rmi -f ${APP_NAME}-dev:1.0
+            """
+        } catch (e) {
+
+        }
+        sh """
+            sudo rm -rf ${TARGET_FOLDER}/${APP_NAME}-dev
+            sudo mkdir -p ${TARGET_FOLDER}/${APP_NAME}-dev
+            sudo cp ./source/build.tar.gz ${TARGET_FOLDER}/${APP_NAME}-dev/
+            sudo cp ./source/appServer.js ${TARGET_FOLDER}/${APP_NAME}-dev/
+            sudo cp ./source/package.json ${TARGET_FOLDER}/${APP_NAME}-dev/
+            sudo cp ./dev-ops/Dockerfile ${TARGET_FOLDER}/${APP_NAME}-dev/
+            sudo cp ./dev-ops/docker-compose.yml ${TARGET_FOLDER}/${APP_NAME}-dev/
+
+            sudo sed -i 's/{PORT}/${APP_DEV_PORT}/g' ${TARGET_FOLDER}/${APP_NAME}-dev/appServer.js
+            sudo sed -i 's/{PORT}/${APP_DEV_PORT}/g' ${TARGET_FOLDER}/${APP_NAME}-dev/Dockerfile
+            sudo sed -i 's/{PORT}/${APP_DEV_PORT}/g' ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml
+            sudo sed -i 's/{CONTAINER_NAME}/${APP_NAME}-dev/g' ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml
+            sudo sed -i 's/{CONTAINER_IMAGE}/${APP_NAME}-dev/g' ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml
+            sudo sed -i 's/{SERVICE_NAME}/web_admin/g' ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml
+
+            sudo tar -zxvf ${TARGET_FOLDER}/${APP_NAME}-dev/build.tar.gz -C ${TARGET_FOLDER}/${APP_NAME}-dev/
+            sudo rm -rf ${TARGET_FOLDER}/${APP_NAME}-dev/build.tar.gz
+            sudo docker build -t ${APP_NAME}-dev:1.0 -f ${TARGET_FOLDER}/${APP_NAME}-dev/Dockerfile ${TARGET_FOLDER}/${APP_NAME}-dev/
+
+        """
+    }
+
+    stage ("Deploy to ${_BRANCH_NAME} environment") {
+        sh """
+            sudo docker-compose -f ${TARGET_FOLDER}/${APP_NAME}-dev/docker-compose.yml up -d
+        """
+        sleep(0)
     }
 }
 

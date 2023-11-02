@@ -15,7 +15,11 @@ import { Tag } from 'antd';
 import React, { useState } from 'react';
 import { defineMessages } from 'react-intl';
 import DetailMyTaskModal from './DetailMyTaskModal';
-
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import routes from '@routes';
+import { CalendarOutlined } from '@ant-design/icons';
 const message = defineMessages({
     objectName: 'My Task',
     myTask: 'Task của tôi',
@@ -26,6 +30,7 @@ function MyTaskStudentListPage() {
     const stateValues = translate.formatKeys(taskState, ['label']);
     const [openedModal, handlersModal] = useDisclosure(false);
     const [detail, setDetail] = useState({});
+    const navigate = useNavigate();
     const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.task.getById, {
         immediate: false,
     });
@@ -62,6 +67,26 @@ function MyTaskStudentListPage() {
                     return [];
                 }
             };
+
+            funcs.additionalActionColumnButtons = () => ({
+                taskLog: ({ id, course, lecture }) => (
+                    <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                        <Button
+                            type="link"
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    routes.MyTaskLogStudentListPage.path +
+                                        `?courseId=${course.id}&courseName=${course.name}&taskId=${id}&taskName=${lecture.lectureName}`,
+                                );
+                            }}
+                        >
+                            <CalendarOutlined />
+                        </Button>
+                    </BaseTooltip>
+                ),
+            });
         },
     });
 
@@ -111,6 +136,7 @@ function MyTaskStudentListPage() {
                     );
                 },
             },
+            mixinFuncs.renderActionColumn({ taskLog: true }, { width: '150px' }),
         ];
         return columns;
     };

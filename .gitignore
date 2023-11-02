@@ -24,4 +24,3 @@ yarn-error.log*
 
 # env local
 /source/env/.local
-/source/env/.prod*
