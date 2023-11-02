@@ -14,7 +14,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { CalendarOutlined,CheckOutlined } from '@ant-design/icons';
+import { CalendarOutlined, CheckOutlined } from '@ant-design/icons';
 import styles from '../project.module.scss';
 import useFetch from '@hooks/useFetch';
 import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
@@ -159,7 +159,7 @@ function ProjectTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.ProjectTaskListPage.path +
-                                        `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -228,7 +228,8 @@ function ProjectTaskListPage() {
             },
         },
 
-        active && mixinFuncs.renderActionColumn({ taskLog: true,state: true, edit: true, delete: true }, { width: '180px' }),
+        active &&
+            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -248,7 +249,7 @@ function ProjectTaskListPage() {
         // },
         {
             key: 'developerId',
-            placeholder: <FormattedMessage defaultMessage={"Lập trình viên"} />,
+            placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
             options: memberProject,
         },
@@ -298,7 +299,6 @@ function ProjectTaskListPage() {
         return breadRoutes;
     };
 
-
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <div>
@@ -335,12 +335,7 @@ function ProjectTaskListPage() {
                     data={detail || {}}
                 ></Modal>
             </div>
-            <DetailMyTaskProjectModal
-                open={openedModal}
-                onCancel={() => handlersModal.close()}
-                DetailData={detail}
-            />
-           
+            <DetailMyTaskProjectModal open={openedModal} onCancel={() => handlersModal.close()} DetailData={detail} />
         </PageWrapper>
     );
 }

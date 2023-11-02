@@ -168,7 +168,7 @@ export default {
         title: 'Project Member Student Save Page',
         auth: true,
         component: ProjectStudentMemberSavePage,
-        permissions: [apiConfig.memberProject.create.baseURL, apiConfig.memberProject.update.baseURL],
+        // permissions: [apiConfig.memberProject.create.baseURL, apiConfig.memberProject.update.baseURL],
     },
     projectLeaderTaskLogListPage: {
         path: '/project-leader/task/task-log',
