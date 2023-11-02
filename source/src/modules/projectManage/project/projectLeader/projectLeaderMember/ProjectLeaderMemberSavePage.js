@@ -38,6 +38,8 @@ function ProjectLeaderMemberSavePage() {
                 return {
                     id: detail.id,
                     schedule: data.schedule,
+                    roleId: data?.projectRole?.id,
+                    teamId: data?.team?.id,
                     status: 1,
                 };
             };
@@ -45,9 +47,9 @@ function ProjectLeaderMemberSavePage() {
                 return {
                     projectId: projectId,
                     developerId: data.developer.studentInfo.fullName,
-                    projectRoleId: data.projectRole.projectRoleName,
+                    projectRoleId: data.projectRole.id,
                     schedule: data.schedule,
-                    teamId: data.teamId,
+                    teamId: data.team.id,
                 };
             };
             funcs.onSaveError = (err) => {
