@@ -88,6 +88,7 @@ const ProjectLeaderTaskForm = (props) => {
                                 value: item.developer.id,
                                 label: item.developer.studentInfo.fullName,
                             })}
+                            optionsParams={{ projectId: projectId }}
                             initialSearchParams={{ projectId: projectId }}
                             searchParams={(text) => ({ fullName: text })}
                         />
@@ -146,7 +147,6 @@ const ProjectLeaderTaskForm = (props) => {
                     setIsChangedFormValues={setIsChangedFormValues}
                     form={form}
                 />
-
 
                 <div className="footer-card-form">{actions}</div>
             </Card>
