@@ -39,7 +39,6 @@ const BuyServiceModal = ({
     const translate = useTranslate();
     const navigate = useNavigate();
     const updateSetting = (values) => {
-        console.log(values),
         executeUpdate({
             data: {
                 serviceCompanySubscriptionId: values?.serviceCompanySubscriptionId,
