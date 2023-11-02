@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import useQueryParams from './useQueryParams';
 import useFetch from './useFetch';
 import { useParams, useLocation } from 'react-router-dom';
-import { Button, Col, Row } from 'antd';
+import { Button, Col, Modal, Row } from 'antd';
 import { SaveOutlined, StopOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
 import { defineMessages, useIntl } from 'react-intl';
@@ -18,6 +18,13 @@ const message = defineMessages({
     update: 'Update',
     create: 'Create',
     cancel: 'Cancel',
+});
+
+const closeFormMessage = defineMessages({
+    closeSuccess: 'Close {objectName} successfully',
+    closeTitle: 'Bạn có muốn đóng trang này?',
+    ok: 'Có',
+    cancel: 'Không',
 });
 
 const useSaveBase = ({
@@ -85,9 +92,11 @@ const useSaveBase = ({
     const onBack = () => {
         const doBack = () => {
             if (location?.state?.prevPath === options.getListUrl) {
+                console.log(location?.state?.prevPath +" : "+ options.getListUrl);
                 navigate(-1);
             } else {
-                navigate(options.getListUrl);
+                console.log(location?.state?.prevPath +" : "+ options.getListUrl);
+                mixinFuncs.showCloseFormConfirm();
             }
         };
 
@@ -197,12 +206,38 @@ const useSaveBase = ({
         }
     };
 
+    const showCloseFormConfirm = (customDisabledSubmitValue, hiddenSubmit) => {
+        const disabledSubmit = customDisabledSubmitValue !== undefined ? customDisabledSubmitValue : !isChanged;
+
+        if (!disabledSubmit) {
+            Modal.confirm({
+                title: intl.formatMessage(closeFormMessage.closeTitle, { objectName: options.objectName }),
+                content: '',
+                okText: intl.formatMessage(closeFormMessage.ok),
+                cancelText: intl.formatMessage(closeFormMessage.cancel),
+                onOk: () => {
+                    onBack();
+                },
+            });
+        } else {
+            onBack();
+        }
+    };
+
     const renderActions = (customDisabledSubmitValue, hiddenSubmit) => {
         const disabledSubmit = customDisabledSubmitValue !== undefined ? customDisabledSubmitValue : !isChanged;
         return (
             <Row justify="end" gutter={12}>
                 <Col>
-                    <Button danger key="cancel" onClick={onBack} icon={<StopOutlined />}>
+                    <Button
+                        danger
+                        key="cancel"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            mixinFuncs.showCloseFormConfirm();
+                        }}
+                        icon={<StopOutlined />}
+                    >
                         {translate.formatMessage(message.cancel)}
                     </Button>
                 </Col>
@@ -247,6 +282,7 @@ const useSaveBase = ({
             handleShowErrorMessage,
             getActionName,
             setSubmit,
+            showCloseFormConfirm,
         };
 
         override?.(centralizedHandler);
