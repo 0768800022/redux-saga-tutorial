@@ -31,7 +31,7 @@ const ProjectLeaderTaskForm = (props) => {
     const handleSubmit = (values) => {
         values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
-        if(typeof values.developerId === 'string'){
+        if (typeof values.developerId === 'string') {
             values.developerId = dataDetail?.developer?.studentInfo?.id;
         }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values?.description) });
@@ -92,7 +92,7 @@ const ProjectLeaderTaskForm = (props) => {
                                 label: item.developer.studentInfo.fullName,
                             })}
                             optionsParams={{ projectId: projectId }}
-                            initialSearchParams={{ dever: projectId }}
+                            initialSearchParams={{ projectId: projectId }}
                             searchParams={(text) => ({ fullName: text })}
                         />
                     </Col>

@@ -11,7 +11,7 @@ import routes from '@routes';
 import { convertUtcToLocalTime } from '@utils';
 import { Avatar, Button, Tag } from 'antd';
 import { ProjectOutlined, UserOutlined } from '@ant-design/icons';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import FolderIcon from '@assets/icons';
@@ -28,6 +28,8 @@ const DeveloperListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const [projectRole, setProjectROle] = useState([]);
+
     const { data, mixinFuncs, loading, pagination, queryFiter, serializeParams } = useListBase({
         apiConfig: apiConfig.developer,
         options: {
@@ -116,10 +118,19 @@ const DeveloperListPage = () => {
         mixinFuncs.renderActionColumn({ project: true, edit: true, delete: true }, { width: 160 }),
     ];
 
+   
+
+
     const searchFields = [
         {
             key: 'name',
             placeholder: translate.formatMessage(commonMessage.name),
+        },
+        {
+            key: 'roleId',
+            placeholder: translate.formatMessage(commonMessage.role),
+            type: FieldTypes.SELECT,
+            options: projectRole,
         },
         {
             key: 'status',
@@ -128,6 +139,22 @@ const DeveloperListPage = () => {
             options: statusValues,
         },
     ];
+    const {
+        data: projectroles,
+        execute: executesprojectroles,
+    } = useFetch(apiConfig.projectRole.autocomplete, {
+        immediate: true,
+        mappingData: ({ data }) => data.content.map((item) => ({
+            value: item.id,
+            label: item.projectRoleName,
+        })),
+    });
+    useEffect(() => {
+        if (projectroles) {
+            setProjectROle(projectroles);
+        }
+    }, [projectroles]);
+    console.log(projectRole);
 
     return (
         <PageWrapper
