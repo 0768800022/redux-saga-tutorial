@@ -31,6 +31,9 @@ const ProjectLeaderTaskForm = (props) => {
     const handleSubmit = (values) => {
         values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
+        if(typeof values.developerId === 'string'){
+            values.developerId = dataDetail?.developer?.studentInfo?.id;
+        }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values?.description) });
     };
     useEffect(() => {
@@ -48,7 +51,7 @@ const ProjectLeaderTaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
-            developerId: dataDetail?.developer?.studentInfo?.id,
+            developerId: dataDetail?.developer?.studentInfo?.fullName,
             description: insertBaseURL(dataDetail?.description),
         });
     }, [dataDetail]);
@@ -89,7 +92,7 @@ const ProjectLeaderTaskForm = (props) => {
                                 label: item.developer.studentInfo.fullName,
                             })}
                             optionsParams={{ projectId: projectId }}
-                            initialSearchParams={{ projectId: projectId }}
+                            initialSearchParams={{ dever: projectId }}
                             searchParams={(text) => ({ fullName: text })}
                         />
                     </Col>
