@@ -67,15 +67,6 @@ function TaskLogListPage({ breadcrumbName }) {
 
     const columns = [
         {
-            title: translate.formatMessage(commonMessage.createdDate),
-            width: 180,
-            dataIndex: 'createdDate',
-            render: (createdDate) => {
-                const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
-                return <div>{createdDateLocal}</div>;
-            },
-        },
-        {
             title: translate.formatMessage(commonMessage.message),
             dataIndex: 'message',
         },
@@ -88,6 +79,7 @@ function TaskLogListPage({ breadcrumbName }) {
                 return <div>{Math.ceil((totalTime / 60) * 10) / 10} h</div>;
             },
         },
+
         {
             title: 'Loại',
             dataIndex: 'kind',
@@ -100,6 +92,24 @@ function TaskLogListPage({ breadcrumbName }) {
                         <div style={{ padding: '0 4px', fontSize: 14 }}>{kindLog.label}</div>
                     </Tag>
                 );
+            },
+        },
+        {
+            title: translate.formatMessage(commonMessage.createdDate),
+            width: 180,
+            dataIndex: 'createdDate',
+            render: (createdDate) => {
+                const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                return <div>{createdDateLocal}</div>;
+            },
+        },
+        {
+            title: translate.formatMessage(commonMessage.modifiedDate),
+            width: 180,
+            dataIndex: 'modifiedDate',
+            render: (modifiedDate) => {
+                const modifiedDateLocal = convertUtcToLocalTime(modifiedDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                return <div>{modifiedDateLocal}</div>;
             },
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),

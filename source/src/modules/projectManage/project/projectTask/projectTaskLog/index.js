@@ -89,15 +89,6 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
     };
     const columns = [
         {
-            title: translate.formatMessage(commonMessage.createdDate),
-            width: 180,
-            dataIndex: 'createdDate',
-            render: (createdDate) => {
-                const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
-                return <div>{createdDateLocal}</div>;
-            },
-        },
-        {
             title: translate.formatMessage(commonMessage.message),
             dataIndex: 'message',
         },
@@ -112,6 +103,24 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                         </div>
                     )
                 );
+            },
+        },
+        {
+            title: translate.formatMessage(commonMessage.createdDate),
+            width: 180,
+            dataIndex: 'createdDate',
+            render: (createdDate) => {
+                const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                return <div>{createdDateLocal}</div>;
+            },
+        },
+        {
+            title: translate.formatMessage(commonMessage.modifiedDate),
+            width: 180,
+            dataIndex: 'modifiedDate',
+            render: (modifiedDate) => {
+                const modifiedDateLocal = convertUtcToLocalTime(modifiedDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                return <div>{modifiedDateLocal}</div>;
             },
         },
         {
