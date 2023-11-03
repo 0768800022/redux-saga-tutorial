@@ -1,8 +1,6 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import {
-    DEFAULT_TABLE_ITEM_SIZE,
-} from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { TaskLogKindOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -15,6 +13,8 @@ import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { commonMessage } from '@locales/intl';
 import { RightOutlined } from '@ant-design/icons';
+import { FormattedMessage } from 'react-intl';
+import { convertUtcToLocalTime } from '@utils';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -60,12 +60,21 @@ function TaskLogListPage({ breadcrumbName }) {
             };
             funcs.getList = () => {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params, courseName: null,taskName: null, subjectId: null });
+                mixinFuncs.handleFetchList({ ...params, courseName: null, taskName: null, subjectId: null });
             };
         },
     });
 
     const columns = [
+        {
+            title: translate.formatMessage(commonMessage.createdDate),
+            width: 180,
+            dataIndex: 'createdDate',
+            render: (createdDate) => {
+                const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                return <div>{createdDateLocal}</div>;
+            },
+        },
         {
             title: translate.formatMessage(commonMessage.message),
             dataIndex: 'message',
@@ -75,10 +84,8 @@ function TaskLogListPage({ breadcrumbName }) {
             dataIndex: 'totalTime',
             align: 'center',
             width: 150,
-            render (totalTime) {
-                return (
-                    <div>{Math.ceil((totalTime / 60) * 10) / 10} h</div>
-                );
+            render(totalTime) {
+                return <div>{Math.ceil((totalTime / 60) * 10) / 10} h</div>;
             },
         },
         {
@@ -99,18 +106,20 @@ function TaskLogListPage({ breadcrumbName }) {
     ].filter(Boolean);
 
     return (
-        <PageWrapper routes={ breadcrumbName? breadcrumbName:
-            routes.taskLogListPage.breadcrumbs(commonMessage,paramHead,taskParam,search)
-        }>
+        <PageWrapper
+            routes={
+                breadcrumbName
+                    ? breadcrumbName
+                    : routes.taskLogListPage.breadcrumbs(commonMessage, paramHead, taskParam, search)
+            }
+        >
             <div>
                 <ListPage
                     title={
-                        <span
-                            style={
-                                { fontWeight: 'normal' }
-                            }
-                        >
-                            <span>{courseName} <RightOutlined /> {taskName}</span>
+                        <span style={{ fontWeight: 'normal' }}>
+                            <span>
+                                {courseName} <RightOutlined /> {taskName}
+                            </span>
                         </span>
                     }
                     actionBar={mixinFuncs.renderActionBar()}
