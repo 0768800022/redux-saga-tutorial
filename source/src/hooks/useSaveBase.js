@@ -234,7 +234,7 @@ const useSaveBase = ({
                 content: '',
                 okText: intl.formatMessage(closeFormMessage.ok),
                 cancelText: intl.formatMessage(closeFormMessage.cancel),
-                centered:true,
+                centered: true,
                 onOk: () => {
                     onBack();
                 },
