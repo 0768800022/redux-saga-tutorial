@@ -30,6 +30,7 @@ import {
     STUDENT_LOGIN_TYPE,
     COMPANY_LOGIN_TYPE,
     envType,
+    UserTypes,
 } from '@constants';
 import { Buffer } from 'buffer';
 import { setData } from '@utils/localStorage';
@@ -46,8 +47,7 @@ const LoginPage = () => {
         ...apiConfig.account.loginBasic,
         authorization: `Basic ${base64Credentials}`,
     });
-    const tenantIdUrl =
-        envType !== 'dev' && window.location.href.split('.')[0].split('//')[1].split('-')[0];
+    const tenantIdUrl = envType !== 'dev' && window.location.href.split('.')[0].split('//')[1].split('-')[0];
     const tenantId = envType === 'dev' ? apiTenantId : tenantIdUrl;
     const [loginLoading, setLoading] = useState(false);
     const { execute: executeLeaderLogin, loading: loadingLeader } = useFetch(apiConfig.leader.login);
@@ -68,6 +68,7 @@ const LoginPage = () => {
             execute({
                 data: { ...values },
                 onCompleted: (res) => {
+                    if (res.user_kind === UserTypes.ADMIN) throw new Error('Loại tài khoản không phù hợp');
                     handleLoginSuccess(res);
                 },
                 onError: (res) => {

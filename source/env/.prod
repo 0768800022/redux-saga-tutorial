@@ -1,7 +1,6 @@
 REACT_APP_API = https://ilms-auth.developteam.net/
 REACT_APP_API_MEDIA = https://ilms-media.developteam.net/
 REACT_APP_ENV = prod
-REACT_APP_API_TENANT = https://ilms-api.developteam.net/
 GENERATE_SOURCEMAP = true
 CI = false
 IMAGE_INLINE_SIZE_LIMIT = 0

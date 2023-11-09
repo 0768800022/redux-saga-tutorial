@@ -114,9 +114,7 @@ export function* processAction(options, { payload }) {
 
     try {
         const response = yield call(sendRequest, options, payload, cancelTokenSource.token);
-
         if (!response?.data.result) throw response;
-
         onCompleted?.(response);
     } catch (error) {
         onError?.(error);
