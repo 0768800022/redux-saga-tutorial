@@ -164,7 +164,7 @@ export const validatePermission = (
     }
 
     return removePathParams(permissionsSavePage).every((item) => {
-        return userPermissions?.includes(item?.replace(apiTenantUrl, '/'));
+        return userPermissions?.includes(new URL(item ?? apiTenantUrl).pathname);
     });
 };
 

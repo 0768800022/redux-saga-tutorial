@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -16,7 +16,7 @@ import style from './projectTaskLog.module.scss';
 import useNotification from '@hooks/useNotification';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { RightOutlined } from '@ant-design/icons';
-
+import { convertUtcToLocalTime } from '@utils';
 const message = defineMessages({
     objectName: 'Nhật ký',
     gitCommitUrl: 'Đường dẫn commit git',
@@ -89,6 +89,16 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
     };
     const columns = [
         {
+            title: translate.formatMessage(commonMessage.createdDate),
+            width: 180,
+            dataIndex: 'createdDate',
+            align: 'center',
+            render: (createdDate) => {
+                const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                return <div>{createdDateLocal}</div>;
+            },
+        },
+        {
             title: translate.formatMessage(commonMessage.message),
             dataIndex: 'message',
         },
@@ -103,6 +113,16 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                         </div>
                     )
                 );
+            },
+        },
+
+        {
+            title: translate.formatMessage(commonMessage.modifiedDate),
+            width: 180,
+            dataIndex: 'modifiedDate',
+            render: (modifiedDate) => {
+                const modifiedDateLocal = convertUtcToLocalTime(modifiedDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                return <div>{modifiedDateLocal}</div>;
             },
         },
         {

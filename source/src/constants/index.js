@@ -1,5 +1,5 @@
 export const apiUrl = process.env.REACT_APP_API;
-export const apiTenantUrl = process.env.REACT_APP_API_TENANT;
+export const apiTenantUrl = 'http://api-path/';
 export const apiTenantId = process.env.REACT_APP_TENANT_ID;
 export const enableExposure = process.env.REACT_APP_ENABLE_EXPOSURE === 'true';
 export const envType = process.env.REACT_APP_ENV;
@@ -34,7 +34,6 @@ export const multipartFormHeader = {
 
 export const AppConstants = {
     apiRootUrl: process.env.REACT_APP_API,
-    apiTenantRootUrl: process.env.REACT_APP_API_TENANT,
     contentRootUrl: `${process.env.REACT_APP_API_MEDIA}v1/file/download`,
     mediaRootUrl: `${process.env.REACT_APP_API_MEDIA}`,
     langKey: 'vi',
