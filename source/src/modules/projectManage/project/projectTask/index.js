@@ -359,6 +359,7 @@ function ProjectTaskListPage() {
                                     <NumericField
                                         label={<FormattedMessage defaultMessage="Tổng thời gian" />}
                                         name="minutes"
+                                        required
                                         addonAfter={<FormattedMessage defaultMessage="Phút" />}
                                         min={0}
                                     />
@@ -376,6 +377,7 @@ function ProjectTaskListPage() {
                                         label={<FormattedMessage defaultMessage="Lời nhắn" />}
                                         name="message"
                                         type="textarea"
+                                        required
                                     />
                                 </Col>
                             </Row>
