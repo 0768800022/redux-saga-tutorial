@@ -62,8 +62,7 @@ function ProjectLeaderTaskListPage() {
     const developerName = queryParameters.get('developerName');
     const active = queryParameters.get('active');
     const state = queryParameters.get('state');
-    const notification = useNotification();
-
+    const notification = useNotification({ duration: 3 });
     const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
 
     const [openedIntroduceModal, handlersIntroduceModal] = useDisclosure(false);
