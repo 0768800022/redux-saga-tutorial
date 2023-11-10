@@ -8,7 +8,7 @@ import { projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Tag, Button, Modal } from 'antd';
+import { Tag, Button, Modal, Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
@@ -21,15 +21,23 @@ import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProje
 import useDisclosure from '@hooks/useDisclosure';
 import useNotification from '@hooks/useNotification';
 import { useIntl } from 'react-intl';
+import TextField from '@components/common/form/TextField';
+import NumericField from '@components/common/form/NumericField';
+import { BaseForm } from '@components/common/form/BaseForm';
 
 const message = defineMessages({
     objectName: 'Task',
+    cancel: 'Huỷ',
+    done: 'Hoàn thành',
+    updateTaskSuccess: 'Cập nhật tình trạng thành công',
+    updateTaskError: 'Cập nhật tình trạng thất bại',
+
 });
 
 function ProjectTaskListPage() {
     const translate = useTranslate();
     const navigate = useNavigate();
-    const notification = useNotification();
+    const notification = useNotification({ duration: 3 });
     const intl = useIntl();
 
     const { pathname: pagePath } = useLocation();
@@ -63,26 +71,33 @@ function ProjectTaskListPage() {
     };
     const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
 
-    const handleOk = () => {
+    const handleOk = (values) => {
         handlersStateTaskModal.close();
-        updateState(detail);
+        updateState(values);
     };
     const updateState = (values) => {
         executeUpdate({
             data: {
-                id: values.id,
+                id: detail.id,
                 state: 3,
+                minutes: values.minutes,
+                message: values.message,
+                gitCommitUrl: values.gitCommitUrl,
             },
             onCompleted: (response) => {
                 if (response.result === true) {
+                    handlersStateTaskModal.close();
                     mixinFuncs.getList();
                     notification({
                         message: intl.formatMessage(message.updateTaskSuccess),
                     });
-                    handlersStateTaskModal.close();
                 }
             },
-            onError: (err) => {},
+            onError: (err) => {
+                notification({
+                    message: intl.formatMessage(message.updateTaskError),
+                });
+            },
         });
     };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -159,7 +174,7 @@ function ProjectTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.ProjectTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                        `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -229,7 +244,7 @@ function ProjectTaskListPage() {
         },
 
         active &&
-            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
+        mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -330,10 +345,51 @@ function ProjectTaskListPage() {
                 <Modal
                     title="Thay đổi tình trạng hoàn thành"
                     open={openedStateTaskModal}
-                    onOk={handleOk}
+                    destroyOnClose={true}
+                    footer={null}
                     onCancel={() => handlersStateTaskModal.close()}
                     data={detail || {}}
-                ></Modal>
+                >
+                    <BaseForm onFinish={handleOk} size="100%">
+                        <div style={{
+                            margin: '28px 0 20px 0',
+                        }}>
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <NumericField
+                                        label={<FormattedMessage defaultMessage="Tổng thời gian" />}
+                                        name="minutes"
+                                        addonAfter={<FormattedMessage defaultMessage="Phút" />}
+                                        min={0}
+                                    />
+                                </Col>
+                                <Col span={24}>
+                                    <TextField
+                                        label={<FormattedMessage defaultMessage="Đường dẫn commit git" />}
+                                        name="gitCommitUrl"
+                                    />
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <TextField
+                                        label={<FormattedMessage defaultMessage="Lời nhắn" />}
+                                        name="message"
+                                        type="textarea"
+                                    />
+                                </Col>
+                            </Row>
+                            <div style={{ float: 'right' }}>
+                                <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()} >
+                                    {translate.formatMessage(message.cancel)}
+                                </Button>
+                                <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }} >
+                                    {translate.formatMessage(message.done)}
+                                </Button>
+                            </div>
+                        </div>
+                    </BaseForm>
+                </Modal>
             </div>
             <DetailMyTaskProjectModal open={openedModal} onCancel={() => handlersModal.close()} DetailData={detail} />
         </PageWrapper>
