@@ -355,6 +355,7 @@ function ProjectLeaderTaskListPage() {
                                         name="minutes"
                                         addonAfter={<FormattedMessage defaultMessage="Phút" />}
                                         min={0}
+                                        required
                                     />
                                 </Col>
                                 <Col span={24}>
@@ -370,6 +371,7 @@ function ProjectLeaderTaskListPage() {
                                         label={<FormattedMessage defaultMessage="Lời nhắn" />}
                                         name="message"
                                         type="textarea"
+                                        required
                                     />
                                 </Col>
                             </Row>
