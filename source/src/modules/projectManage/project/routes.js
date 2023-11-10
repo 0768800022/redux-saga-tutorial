@@ -196,7 +196,7 @@ export default {
         title: 'Task log',
         auth: true,
         component: MyProjectStudentTaskLogListPage,
-        permissions: [apiConfig.projectTaskLog.create.baseURL, apiConfig.projectTaskLog.update.baseURL],
+        permissions: [apiConfig.projectTaskLog.getList.baseURL],
         breadcrumbs: (message, paramHead, taskParam, taskLogParam, search, title) => {
             return [
                 { breadcrumbName: message.myproject.defaultMessage, path: paramHead },
