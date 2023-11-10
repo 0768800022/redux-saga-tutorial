@@ -84,7 +84,7 @@ export default {
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderMemberSavePage,
-        permissions: [apiConfig.project.getListLeader.baseURL],
+        permissions: [apiConfig.project.create.baseURL, apiConfig.project.update.baseURL],
     },
     projectLeaderTaskListPage: {
         path: '/project-leader/task',
@@ -98,7 +98,7 @@ export default {
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderTaskSavePage,
-        permissions: [apiConfig.project.getListLeader.baseURL],
+        permissions: [apiConfig.project.create.baseURL, apiConfig.project.update.baseURL],
     },
     projectLeaderTeamListPage: {
         path: '/project-leader/team',
@@ -112,7 +112,7 @@ export default {
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderTeamSavePage,
-        permissions: [apiConfig.project.getListLeader.baseURL],
+        permissions: [apiConfig.project.create.baseURL, apiConfig.project.update.baseURL],
     },
     teamListPage: {
         path: '/project/team',
@@ -154,7 +154,7 @@ export default {
         title: 'Project Student Task Save Page',
         auth: true,
         component: ProjectStudentTaskSavePage,
-        permissions: [apiConfig.projectTask.getList.baseURL],
+        permissions: [apiConfig.projectTask.create.baseURL, apiConfig.projectTask.update.baseURL],
     },
     projectStudentMemberListPage: {
         path: '/project-student/member',
