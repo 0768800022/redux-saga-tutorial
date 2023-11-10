@@ -255,11 +255,12 @@ function ProjectLeaderTaskListPage() {
             },
             onCompleted: (response) => {
                 if (response.result === true) {
+                    handlersStateTaskModal.close();
                     mixinFuncs.getList();
                     notification({
                         message: intl.formatMessage(message.updateTaskSuccess),
                     });
-                    handlersStateTaskModal.close();
+
                 }
             },
             onError: (err) => { },
@@ -320,7 +321,6 @@ function ProjectLeaderTaskListPage() {
                                 onClick: (e) => {
                                     e.stopPropagation();
                                     handleFetchDetail(record.id);
-
                                     handlersModal.open();
                                 },
                             })}
