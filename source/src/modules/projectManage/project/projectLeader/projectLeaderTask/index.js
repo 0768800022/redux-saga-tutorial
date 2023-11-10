@@ -8,7 +8,7 @@ import { projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Tag, Button, Modal } from 'antd';
+import { Tag, Button, Modal, Row, Col } from 'antd';
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
@@ -26,6 +26,9 @@ import styles from '@modules/projectManage/project/project.module.scss';
 import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, AppConstants } from '@constants';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import DetailMyTaskProjectModal from '../../projectStudent/myTask/DetailMyTaskProjectModal';
+import { BaseForm } from '@components/common/form/BaseForm';
+import NumericField from '@components/common/form/NumericField';
+import TextField from '@components/common/form/TextField';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -40,6 +43,7 @@ const message = defineMessages({
     startDate: 'Ngày bắt đầu',
     updateTaskSuccess: 'Cập nhật tình trạng thành công',
     done: 'Hoàn thành',
+    cancel: 'Huỷ',
 });
 
 function ProjectLeaderTaskListPage() {
@@ -129,7 +133,7 @@ function ProjectLeaderTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectLeaderTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                        `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -236,15 +240,18 @@ function ProjectLeaderTaskListPage() {
     });
     const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
 
-    const handleOk = () => {
+    const handleOk = (values) => {
         handlersStateTaskModal.close();
-        updateState(detail);
+        updateState(values);
     };
     const updateState = (values) => {
         executeUpdate({
             data: {
-                id: values.id,
+                id: detail.id,
                 state: 3,
+                minutes: values.minutes,
+                message: values.message,
+                gitCommitUrl: values.gitCommitUrl,
             },
             onCompleted: (response) => {
                 if (response.result === true) {
@@ -255,7 +262,7 @@ function ProjectLeaderTaskListPage() {
                     handlersStateTaskModal.close();
                 }
             },
-            onError: (err) => {},
+            onError: (err) => { },
         });
     };
 
@@ -333,10 +340,51 @@ function ProjectLeaderTaskListPage() {
                 <Modal
                     title="Thay đổi tình trạng hoàn thành"
                     open={openedStateTaskModal}
-                    onOk={handleOk}
+                    destroyOnClose={true}
+                    footer={null}
                     onCancel={() => handlersStateTaskModal.close()}
                     data={detail || {}}
-                ></Modal>
+                >
+                    <BaseForm onFinish={handleOk} size="100%">
+                        <div style={{
+                            margin: '28px 0 20px 0',
+                        }}>
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <NumericField
+                                        label={<FormattedMessage defaultMessage="Tổng thời gian" />}
+                                        name="minutes"
+                                        addonAfter={<FormattedMessage defaultMessage="Phút" />}
+                                        min={0}
+                                    />
+                                </Col>
+                                <Col span={24}>
+                                    <TextField
+                                        label={<FormattedMessage defaultMessage="Đường dẫn commit git" />}
+                                        name="gitCommitUrl"
+                                    />
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <TextField
+                                        label={<FormattedMessage defaultMessage="Lời nhắn" />}
+                                        name="message"
+                                        type="textarea"
+                                    />
+                                </Col>
+                            </Row>
+                            <div style={{ float: 'right' }}>
+                                <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()} >
+                                    {translate.formatMessage(message.cancel)}
+                                </Button>
+                                <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }} >
+                                    {translate.formatMessage(message.done)}
+                                </Button>
+                            </div>
+                        </div>
+                    </BaseForm>
+                </Modal>
             </div>
         </PageWrapper>
     );
