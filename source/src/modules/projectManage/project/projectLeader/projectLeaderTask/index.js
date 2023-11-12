@@ -100,6 +100,7 @@ function ProjectLeaderTaskListPage() {
                     const projectName = queryParams.get('projectName');
                     const developerName = queryParams.get('developerName');
                     const leaderName = queryParams.get('leaderName');
+                    const active = queryParams.get('active');
                     let filterAdd;
                     if (developerName) {
                         filterAdd = { developerName };
@@ -109,6 +110,7 @@ function ProjectLeaderTaskListPage() {
                     if (filterAdd) {
                         mixinFuncs.setQueryParams(
                             serializeParams({
+                                active,
                                 projectId: projectId,
                                 projectName: projectName,
                                 ...filterAdd,
@@ -117,7 +119,7 @@ function ProjectLeaderTaskListPage() {
                         );
                     } else {
                         mixinFuncs.setQueryParams(
-                            serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                            serializeParams({ projectId: projectId, projectName: projectName, active, ...filter }),
                         );
                     }
                 };
@@ -132,7 +134,7 @@ function ProjectLeaderTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.projectLeaderTaskListPage.path +
-                                        `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -259,10 +261,9 @@ function ProjectLeaderTaskListPage() {
                     notification({
                         message: intl.formatMessage(message.updateTaskSuccess),
                     });
-
                 }
             },
-            onError: (err) => { },
+            onError: (err) => {},
         });
     };
 
@@ -312,6 +313,7 @@ function ProjectLeaderTaskListPage() {
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
                         className: styles.search,
+                        initialValues: { ...queryFilter },
                     })}
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
@@ -345,9 +347,11 @@ function ProjectLeaderTaskListPage() {
                     data={detail || {}}
                 >
                     <BaseForm onFinish={handleOk} size="100%">
-                        <div style={{
-                            margin: '28px 0 20px 0',
-                        }}>
+                        <div
+                            style={{
+                                margin: '28px 0 20px 0',
+                            }}
+                        >
                             <Row gutter={16}>
                                 <Col span={24}>
                                     <NumericField
@@ -376,10 +380,10 @@ function ProjectLeaderTaskListPage() {
                                 </Col>
                             </Row>
                             <div style={{ float: 'right' }}>
-                                <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()} >
+                                <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()}>
                                     {translate.formatMessage(message.cancel)}
                                 </Button>
-                                <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }} >
+                                <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }}>
                                     {translate.formatMessage(message.done)}
                                 </Button>
                             </div>
