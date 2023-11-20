@@ -6,7 +6,7 @@ import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { projectTaskState, statusOptions } from '@constants/masterData';
+import { projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -32,7 +32,7 @@ const ProjectStudentTaskForm = (props) => {
     const handleSubmit = (values) => {
         values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
-        if(typeof values.developerId === 'string'){
+        if (typeof values.developerId === 'string') {
             values.developerId = dataDetail?.developer?.studentInfo?.id;
         }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values.description) });
@@ -79,7 +79,16 @@ const ProjectStudentTaskForm = (props) => {
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={3}>
+                        <SelectField
+                            label={<FormattedMessage defaultMessage="Loại" />}
+                            name="kind"
+                            required
+                            allowClear={false}
+                            options={projectTaskKind}
+                        />
+                    </Col>
+                    <Col span={9}>
                         <TextField
                             width="100%"
                             label={<FormattedMessage defaultMessage="Tên task" />}

@@ -92,6 +92,11 @@ export const lectureStateMessage = defineMessages({
     recruit: 'Chiêu sinh',
 });
 
+export const taskKindMessage = defineMessages({
+    feature: 'Tính năng',
+    bug: 'Bug',
+});
+
 export const taskStateMessage = defineMessages({
     asign: 'Đang làm',
     done: 'Hoàn thành',
