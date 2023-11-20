@@ -4,7 +4,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { projectTaskState, statusOptions } from '@constants/masterData';
+import { projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
@@ -24,6 +24,8 @@ import { useIntl } from 'react-intl';
 import TextField from '@components/common/form/TextField';
 import NumericField from '@components/common/form/NumericField';
 import { BaseForm } from '@components/common/form/BaseForm';
+import feature from '../../../../assets/images/feature.png';
+import bug from '../../../../assets/images/bug.jpg';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -31,7 +33,6 @@ const message = defineMessages({
     done: 'Hoàn thành',
     updateTaskSuccess: 'Cập nhật tình trạng thành công',
     updateTaskError: 'Cập nhật tình trạng thất bại',
-
 });
 
 function ProjectTaskListPage() {
@@ -174,7 +175,7 @@ function ProjectTaskListPage() {
                                     e.stopPropagation();
                                     navigate(
                                         routes.ProjectTaskListPage.path +
-                                        `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -205,6 +206,24 @@ function ProjectTaskListPage() {
             },
         });
     const columns = [
+        {
+            dataIndex: 'kind',
+            width: 35,
+            render(dataRow) {
+                if (dataRow === 1)
+                    return (
+                        <div>
+                            <img src={feature} />
+                        </div>
+                    );
+                if (dataRow === 2)
+                    return (
+                        <div>
+                            <img src={bug} />
+                        </div>
+                    );
+            },
+        },
         {
             title: translate.formatMessage(commonMessage.task),
             dataIndex: 'taskName',
@@ -244,7 +263,7 @@ function ProjectTaskListPage() {
         },
 
         active &&
-        mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
+            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -351,9 +370,11 @@ function ProjectTaskListPage() {
                     data={detail || {}}
                 >
                     <BaseForm onFinish={handleOk} size="100%">
-                        <div style={{
-                            margin: '28px 0 20px 0',
-                        }}>
+                        <div
+                            style={{
+                                margin: '28px 0 20px 0',
+                            }}
+                        >
                             <Row gutter={16}>
                                 <Col span={24}>
                                     <NumericField
@@ -382,10 +403,10 @@ function ProjectTaskListPage() {
                                 </Col>
                             </Row>
                             <div style={{ float: 'right' }}>
-                                <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()} >
+                                <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()}>
                                     {translate.formatMessage(message.cancel)}
                                 </Button>
-                                <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }} >
+                                <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }}>
                                     {translate.formatMessage(message.done)}
                                 </Button>
                             </div>

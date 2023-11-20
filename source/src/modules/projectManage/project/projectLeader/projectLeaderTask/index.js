@@ -29,6 +29,8 @@ import DetailMyTaskProjectModal from '../../projectStudent/myTask/DetailMyTaskPr
 import { BaseForm } from '@components/common/form/BaseForm';
 import NumericField from '@components/common/form/NumericField';
 import TextField from '@components/common/form/TextField';
+import feature from '../../../../../assets/images/feature.png';
+import bug from '../../../../../assets/images/bug.jpg';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -178,6 +180,24 @@ function ProjectLeaderTaskListPage() {
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
     };
     const columns = [
+        {
+            dataIndex: 'kind',
+            width: 35,
+            render(dataRow) {
+                if (dataRow === 1)
+                    return (
+                        <div>
+                            <img src={feature} />
+                        </div>
+                    );
+                if (dataRow === 2)
+                    return (
+                        <div>
+                            <img src={bug} />
+                        </div>
+                    );
+            },
+        },
         {
             title: translate.formatMessage(message.projectTask),
             dataIndex: 'taskName',

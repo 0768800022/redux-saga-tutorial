@@ -78,4 +78,5 @@ export const commonMessage = defineMessages({
     myproject: ' Task của tôi',
     done: 'Hoàn thành',
     edit: 'Sửa',
+    kind: 'Loại',
 });
