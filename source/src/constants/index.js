@@ -112,6 +112,9 @@ export const STATE_PROJECT_TASK_PROCESSING = 2;
 export const STATE_PROJECT_TASK_DONE = 3;
 export const STATE_PROJECT_TASK_CANCEL = 4;
 
+export const TASK_KIND_FEATURE = 1;
+export const TASK_KIND_BUG = 2;
+
 export const DEFAULT_TABLE_ITEM_SIZE = 20;
 export const DEFAULT_TABLE_PAGE_START = 0;
 export const DEFAULT_GET_ALL_LIST = 1000;

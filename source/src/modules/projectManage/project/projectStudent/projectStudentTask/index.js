@@ -22,6 +22,8 @@ import { FieldTypes } from '@constants/formConfig';
 import DetailMyTaskProjectModal from '../myTask/DetailMyTaskProjectModal';
 import useDisclosure from '@hooks/useDisclosure';
 import { useState } from 'react';
+import feature from '../../../../../assets/images/feature.png';
+import bug from '../../../../../assets/images/bug.jpg';
 const message = defineMessages({
     objectName: 'Task',
     developer: 'Lập trình viên',
@@ -149,6 +151,24 @@ function ProjectStudentTaskListPage() {
             },
         });
     const columns = [
+        {
+            title: translate.formatMessage(commonMessage.kind),
+            dataIndex: 'kind',
+            render(dataRow) {
+                if (dataRow === 1)
+                    return (
+                        <div>
+                            <img src={feature} height="20px" width="20px" />
+                        </div>
+                    );
+                if (dataRow === 2)
+                    return (
+                        <div>
+                            <img src={bug} height="26px" width="26px" />
+                        </div>
+                    );
+            },
+        },
         {
             title: translate.formatMessage(message.projectTask),
             dataIndex: 'taskName',
