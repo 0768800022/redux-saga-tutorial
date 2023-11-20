@@ -98,7 +98,7 @@ export const projectTaskKind = [
         value: TASK_KIND_FEATURE,
         label: (
             <div>
-                <img src={feature} height="15px" width="16px" />
+                <img src={feature} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
             </div>
         ),
     },
@@ -106,7 +106,7 @@ export const projectTaskKind = [
         value: TASK_KIND_BUG,
         label: (
             <div>
-                <img src={bug} height="15px" width="15px" />
+                <img src={bug} height="24px" width="24px" style={{ marginTop: '10px', marginLeft: '5px' }} />
             </div>
         ),
     },

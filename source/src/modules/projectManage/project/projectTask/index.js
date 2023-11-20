@@ -207,19 +207,19 @@ function ProjectTaskListPage() {
         });
     const columns = [
         {
-            title: translate.formatMessage(commonMessage.kind),
             dataIndex: 'kind',
+            width: 35,
             render(dataRow) {
                 if (dataRow === 1)
                     return (
                         <div>
-                            <img src={feature} height="20px" width="20px" />
+                            <img src={feature} />
                         </div>
                     );
                 if (dataRow === 2)
                     return (
                         <div>
-                            <img src={bug} height="26px" width="26px" />
+                            <img src={bug} />
                         </div>
                     );
             },
