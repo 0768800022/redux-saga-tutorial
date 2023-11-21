@@ -153,18 +153,18 @@ function ProjectStudentTaskListPage() {
     const columns = [
         {
             dataIndex: 'kind',
-            width: 35,
+            width: 15,
             render(dataRow) {
                 if (dataRow === 1)
                     return (
                         <div>
-                            <img src={feature} />
+                            <img src={feature} height="15px" width="15px" />
                         </div>
                     );
                 if (dataRow === 2)
                     return (
                         <div>
-                            <img src={bug} />
+                            <img src={bug} height="15px" width="15px" />
                         </div>
                     );
             },

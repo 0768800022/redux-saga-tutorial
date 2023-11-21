@@ -22,6 +22,8 @@ import DetailMyTaskProjectModal from './DetailMyTaskProjectModal';
 import { CalendarOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import routes from '@routes';
+import feature from '../../../../../assets/images/feature.png';
+import bug from '../../../../../assets/images/bug.jpg';
 const message = defineMessages({
     objectName: 'Task',
     myTask: 'Task của tôi',
@@ -108,6 +110,24 @@ function ProjectStudentMyTaskListPage() {
             },
         });
     const columns = [
+        {
+            dataIndex: 'kind',
+            width: 15,
+            render(dataRow) {
+                if (dataRow === 1)
+                    return (
+                        <div>
+                            <img src={feature} height="15px" width="15px" />
+                        </div>
+                    );
+                if (dataRow === 2)
+                    return (
+                        <div>
+                            <img src={bug} height="15px" width="15px" />
+                        </div>
+                    );
+            },
+        },
         {
             title: translate.formatMessage(commonMessage.task),
             dataIndex: 'taskName',

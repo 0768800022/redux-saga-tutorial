@@ -213,13 +213,13 @@ function ProjectTaskListPage() {
                 if (dataRow === 1)
                     return (
                         <div>
-                            <img src={feature} />
+                            <img src={feature} height="30px" width="30px" />
                         </div>
                     );
                 if (dataRow === 2)
                     return (
                         <div>
-                            <img src={bug} />
+                            <img src={bug} height="30px" width="30px" />
                         </div>
                     );
             },
