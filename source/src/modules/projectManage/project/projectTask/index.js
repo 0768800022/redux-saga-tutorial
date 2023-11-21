@@ -208,18 +208,18 @@ function ProjectTaskListPage() {
     const columns = [
         {
             dataIndex: 'kind',
-            width: 35,
+            width: 15,
             render(dataRow) {
                 if (dataRow === 1)
                     return (
                         <div>
-                            <img src={feature} height="30px" width="30px" />
+                            <img src={feature} height="18px" width="18px" />
                         </div>
                     );
                 if (dataRow === 2)
                     return (
                         <div>
-                            <img src={bug} height="30px" width="30px" />
+                            <img src={bug} height="18px" width="18px" />
                         </div>
                     );
             },

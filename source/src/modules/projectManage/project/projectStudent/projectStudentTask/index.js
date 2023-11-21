@@ -158,13 +158,13 @@ function ProjectStudentTaskListPage() {
                 if (dataRow === 1)
                     return (
                         <div>
-                            <img src={feature} height="15px" width="15px" />
+                            <img src={feature} height="18px" width="18px" />
                         </div>
                     );
                 if (dataRow === 2)
                     return (
                         <div>
-                            <img src={bug} height="15px" width="15px" />
+                            <img src={bug} height="18px" width="18px" />
                         </div>
                     );
             },
