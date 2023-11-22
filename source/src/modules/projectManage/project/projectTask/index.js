@@ -213,13 +213,13 @@ function ProjectTaskListPage() {
                 if (dataRow === 1)
                     return (
                         <div>
-                            <img src={feature} height="18px" width="18px" />
+                            <img src={feature} height="30px" width="30px" />
                         </div>
                     );
                 if (dataRow === 2)
                     return (
                         <div>
-                            <img src={bug} height="18px" width="18px" />
+                            <img src={bug} height="30px" width="30px" />
                         </div>
                     );
             },
@@ -275,22 +275,20 @@ function ProjectTaskListPage() {
                 label: item?.developer?.studentInfo?.fullName,
             })),
     });
-    const { data: projectCategory } = useFetch(apiConfig.projectCategory.autocomplete, {
-        immediate: true,
-        params: { projectId: projectId },
-        mappingData: ({ data }) =>
-            data.content.map((item) => ({
-                value: item?.id,
-                label: item?.projectCategoryName,
-            })),
-    });
 
     const searchFields = [
         {
             key: 'projectCategoryId',
-            placeholder: translate.formatMessage(commonMessage.projectCategory),
-            type: FieldTypes.SELECT,
-            options: projectCategory,
+            placeholder: <FormattedMessage defaultMessage={'Danh mục'} />,
+            type: FieldTypes.AUTOCOMPLETE,
+            apiConfig: apiConfig.projectCategory.autocomplete,
+            mappingOptions: (item) => ({
+                value: item.id,
+                label: item.projectCategoryName,
+            }),
+            optionsParams: { projectId: projectId },
+            initialSearchParams: { projectId: projectId },
+            searchParams: (text) => ({ name: text }),
         },
         {
             key: 'developerId',
