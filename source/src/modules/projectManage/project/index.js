@@ -2,6 +2,7 @@ import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
+import { IconCategory } from '@tabler/icons-react';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -111,7 +112,7 @@ const ProjectListPage = () => {
                                     if (status == 1) {
                                         navigate(
                                             routes.projectMemberListPage.path +
-                                            `?projectId=${id}&projectName=${name}&active=${true}`,
+                                                `?projectId=${id}&projectName=${name}&active=${true}`,
                                         );
                                     } else {
                                         navigate(
@@ -152,6 +153,22 @@ const ProjectListPage = () => {
                                 }}
                             >
                                 <IconBrandTeams color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    projectCategory: ({ id, name }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.projectCategory)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const pathDefault = `?projectId=${id}&projectName=${name}`;
+
+                                    navigate(routes.projectCategoryListPage.path + pathDefault);
+                                }}
+                            >
+                                <IconCategory size={16} />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -250,7 +267,7 @@ const ProjectListPage = () => {
             options: stateValues,
         },
         !leaderName &&
-        !developerName && {
+            !developerName && {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
@@ -316,13 +333,14 @@ const ProjectListPage = () => {
         !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
+                projectCategory: true,
                 team: true,
                 member: !leaderName && !developerName && true,
                 task: true,
                 edit: !leaderName && !developerName && true,
                 delete: !leaderName && !developerName && true,
             },
-            { width: '200px' },
+            { width: '220px' },
         ),
     ].filter(Boolean);
     return (

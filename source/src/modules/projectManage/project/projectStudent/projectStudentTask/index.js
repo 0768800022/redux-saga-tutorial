@@ -174,6 +174,10 @@ function ProjectStudentTaskListPage() {
             dataIndex: 'taskName',
         },
         {
+            title: translate.formatMessage(commonMessage.projectCategory),
+            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
+        },
+        {
             title: translate.formatMessage(message.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
         },
