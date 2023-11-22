@@ -120,7 +120,7 @@ const ProjectTaskForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <AutoCompleteField
-                            label={<FormattedMessage defaultMessage="Danh mục dự án" />}
+                            label={<FormattedMessage defaultMessage="Danh mục" />}
                             name="projectCategoryId"
                             apiConfig={apiConfig.projectCategory.autocomplete}
                             mappingOptions={(item) => ({

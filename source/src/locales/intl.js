@@ -79,5 +79,5 @@ export const commonMessage = defineMessages({
     done: 'Hoàn thành',
     edit: 'Sửa',
     kind: 'Loại',
-    projectCategory: 'Danh mục dự án',
+    projectCategory: 'Danh mục',
 });
