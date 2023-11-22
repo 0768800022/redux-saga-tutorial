@@ -203,12 +203,12 @@ function ProjectLeaderTaskListPage() {
             dataIndex: 'taskName',
         },
         {
-            title: translate.formatMessage(commonMessage.projectCategory),
-            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
-        },
-        {
             title: translate.formatMessage(message.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
+        },
+        {
+            title: translate.formatMessage(commonMessage.projectCategory),
+            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
         },
         {
             title: translate.formatMessage(message.startDate),
@@ -301,11 +301,22 @@ function ProjectLeaderTaskListPage() {
             })),
     });
 
+    const { data: projectCategory } = useFetch(apiConfig.projectCategory.autocomplete, {
+        immediate: true,
+        params: { projectId: projectId },
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item?.id,
+                label: item?.projectCategoryName,
+            })),
+    });
     const searchFields = [
-        // {
-        //     key: 'taskName',
-        //     placeholder: translate.formatMessage(commonMessage.task),
-        // },
+        {
+            key: 'projectCategoryId',
+            placeholder: <FormattedMessage defaultMessage={'Danh mục dự án'} />,
+            type: FieldTypes.SELECT,
+            options: projectCategory,
+        },
         {
             key: 'developerId',
             placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,

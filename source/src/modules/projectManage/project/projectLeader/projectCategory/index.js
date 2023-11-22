@@ -94,10 +94,6 @@ const ProjectCategoryListPage = () => {
             dataIndex: 'projectCategoryName',
         },
         {
-            title: translate.formatMessage(commonMessage.description),
-            dataIndex: 'description',
-        },
-        {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
             width: 170,

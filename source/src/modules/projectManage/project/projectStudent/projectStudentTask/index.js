@@ -174,16 +174,12 @@ function ProjectStudentTaskListPage() {
             dataIndex: 'taskName',
         },
         {
-            title: translate.formatMessage(commonMessage.projectCategory),
-            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
-        },
-        {
             title: translate.formatMessage(message.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
         },
         {
-            title: <FormattedMessage defaultMessage="Quản lý" />,
-            dataIndex: ['project', 'leaderInfo', 'leaderName'],
+            title: translate.formatMessage(commonMessage.projectCategory),
+            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
         },
         {
             title: 'Ngày bắt đầu',
@@ -222,8 +218,22 @@ function ProjectStudentTaskListPage() {
                 label: item?.developer?.studentInfo?.fullName,
             })),
     });
-
+    const { data: projectCategory } = useFetch(apiConfig.projectCategory.autocomplete, {
+        immediate: true,
+        params: { projectId: projectId },
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item?.id,
+                label: item?.projectCategoryName,
+            })),
+    });
     const searchFields = [
+        {
+            key: 'projectCategoryId',
+            placeholder: <FormattedMessage defaultMessage={'Danh mục dự án'} />,
+            type: FieldTypes.SELECT,
+            options: projectCategory,
+        },
         {
             key: 'developerId',
             placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,

@@ -333,7 +333,7 @@ const ProjectListPage = () => {
         !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                projectCategory: true,
+                projectCategory: mixinFuncs.hasPermission(apiConfig.projectCategory?.getList?.baseURL),
                 team: true,
                 member: !leaderName && !developerName && true,
                 task: true,

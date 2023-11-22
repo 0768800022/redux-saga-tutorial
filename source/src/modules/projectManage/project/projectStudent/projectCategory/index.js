@@ -93,10 +93,6 @@ const ProjectCategoryListPage = () => {
             title: translate.formatMessage(message.nameCategory),
             dataIndex: 'projectCategoryName',
         },
-        {
-            title: translate.formatMessage(commonMessage.description),
-            dataIndex: 'description',
-        },
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
