@@ -35,6 +35,9 @@ const ProjectTaskForm = (props) => {
         if (typeof values.developerId === 'string') {
             values.developerId = dataDetail?.developer?.studentInfo?.id;
         }
+        if (typeof values.projectCategoryId === 'string') {
+            values.developerId = dataDetail?.projectCategoryInfo?.id;
+        }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values?.description) });
     };
     useEffect(() => {
@@ -59,6 +62,7 @@ const ProjectTaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
+            projectCategoryId: dataDetail?.projectCategoryInfo?.projectCategoryName,
             developerId: dataDetail?.developer?.studentInfo?.fullName,
             description: insertBaseURL(dataDetail?.description),
         });
@@ -108,6 +112,20 @@ const ProjectTaskForm = (props) => {
                             mappingOptions={(item) => ({
                                 value: item.developer.id,
                                 label: item.developer.studentInfo.fullName,
+                            })}
+                            searchParams={(text) => ({ fullName: text })}
+                            optionsParams={{ projectId: projectId }}
+                            initialSearchParams={{ projectId: projectId }}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <AutoCompleteField
+                            label={<FormattedMessage defaultMessage="Danh mục dự án" />}
+                            name="projectCategoryId"
+                            apiConfig={apiConfig.projectCategory.autocomplete}
+                            mappingOptions={(item) => ({
+                                value: item.id,
+                                label: item.projectCategoryName,
                             })}
                             searchParams={(text) => ({ fullName: text })}
                             optionsParams={{ projectId: projectId }}

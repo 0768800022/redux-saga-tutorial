@@ -29,6 +29,12 @@ import ProjectStudentMemberSavePage from './projectStudent/projectStudentMember/
 import ProjectStudentTeamSavePage from './projectStudent/projectStudentGroup/ProjectStudentTeamSavePage';
 import MyTaskLogSavePage from './projectStudent/myTask/tasklog/ProjectStudentTaskLogSavePage';
 import MyProjectStudentTaskLogListPage from './projectStudent/myTask/tasklog';
+import ProjectCategoryListPage from './projectCategory';
+import ProjectCategorySavePage from './projectCategory/ProjectCategorySavePage';
+import ProjectCategoryLeaderListPage from './projectLeader/projectCategory';
+import ProjectCategoryLeaderSavePage from './projectLeader/projectCategory/ProjectCategorySavePage';
+import ProjectCategoryStudentListPage from './projectStudent/projectCategory';
+import ProjectCategoryStudentSavePage from './projectStudent/projectCategory/ProjectCategorySavePage';
 export default {
     projectListPage: {
         path: '/project',
@@ -246,5 +252,47 @@ export default {
         auth: true,
         component: ProjectStudentTaskLogSavePage,
         permissions: [apiConfig.projectTaskLog.create.baseURL, apiConfig.projectTaskLog.update.baseURL],
+    },
+    projectCategoryListPage: {
+        path: '/project/project-category',
+        title: 'Project category Page',
+        auth: true,
+        component: ProjectCategoryListPage,
+        permissions: [apiConfig.projectCategory.getList.baseURL],
+    },
+    projectCategorySavePage: {
+        path: '/project/project-category/:id',
+        title: 'Project category Page',
+        auth: true,
+        component: ProjectCategorySavePage,
+        permissions: [apiConfig.projectCategory.create.baseURL, apiConfig.projectCategory.update.baseURL],
+    },
+    projectCategoryLeaderListPage: {
+        path: '/project-leader/project-category',
+        title: 'project category leader Page',
+        auth: true,
+        component: ProjectCategoryLeaderListPage,
+        permissions: [apiConfig.projectCategory.getList.baseURL],
+    },
+    projectCategoryLeaderSavePage: {
+        path: '/project-leader/project-category/:id',
+        title: 'Project category leader Page',
+        auth: true,
+        component: ProjectCategoryLeaderSavePage,
+        permissions: [apiConfig.projectCategory.create.baseURL, apiConfig.projectCategory.update.baseURL],
+    },
+    projectCategoryStudentListPage: {
+        path: '/project-student/project-category',
+        title: 'project category student Page',
+        auth: true,
+        component: ProjectCategoryStudentListPage,
+        permissions: [apiConfig.projectCategory.getList.baseURL],
+    },
+    projectCategoryStudentSavePage: {
+        path: '/project-student/project-category/:id',
+        title: 'Project category student Page',
+        auth: true,
+        component: ProjectCategoryStudentSavePage,
+        permissions: [apiConfig.projectCategory.create.baseURL, apiConfig.projectCategory.update.baseURL],
     },
 };

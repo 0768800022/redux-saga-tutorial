@@ -21,6 +21,7 @@ import AvatarField from '@components/common/form/AvatarField';
 import { IconBrandTeams } from '@tabler/icons-react';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
+import { IconCategory } from '@tabler/icons-react';
 
 const message = defineMessages({
     objectName: 'Dự án',
@@ -156,6 +157,22 @@ const ProjectLeaderListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
+                    projectCategory: ({ id, name }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.projectCategory)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const pathDefault = `?projectId=${id}&projectName=${name}`;
+
+                                    navigate(routes.projectCategoryLeaderListPage.path + pathDefault);
+                                }}
+                            >
+                                <IconCategory size={16} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                 });
             },
         });
@@ -215,9 +232,17 @@ const ProjectLeaderListPage = () => {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ edit: true, team: true, member: true, task: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn(
+            {
+                projectCategory: mixinFuncs.hasPermission(apiConfig.projectCategory?.getList?.baseURL),
+                edit: true,
+                team: true,
+                member: true,
+                task: true,
+            },
+            { width: '160px' },
+        ),
     ];
-
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.project) }]}>
             <ListPage
