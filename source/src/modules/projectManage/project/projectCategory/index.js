@@ -73,6 +73,14 @@ const ProjectCategoryListPage = () => {
                     const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
                     return `${pagePath}/${dataRow.id}` + pathDefault;
                 };
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const projectName = queryParams.get('projectName');
+
+                    mixinFuncs.setQueryParams(
+                        serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                    );
+                };
             },
         });
 

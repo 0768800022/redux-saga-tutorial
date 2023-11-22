@@ -123,7 +123,7 @@ const ProjectStudentTaskForm = (props) => {
                                 value: item.id,
                                 label: item.projectCategoryName,
                             })}
-                            searchParams={(text) => ({ fullName: text })}
+                            searchParams={(text) => ({ name: text })}
                             optionsParams={{ projectId: projectId }}
                             initialSearchParams={{ projectId: projectId }}
                         />
