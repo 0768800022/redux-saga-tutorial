@@ -302,22 +302,19 @@ function ProjectLeaderTaskListPage() {
             })),
     });
 
-    const { data: projectCategory } = useFetch(apiConfig.projectCategory.autocomplete, {
-        immediate: true,
-        params: { projectId: projectId },
-        mappingData: ({ data }) =>
-            data.content.map((item) => ({
-                value: item?.id,
-                label: item?.projectCategoryName,
-            })),
-    });
-
     const searchFields = [
         {
             key: 'projectCategoryId',
             placeholder: <FormattedMessage defaultMessage={'Danh mục'} />,
-            type: FieldTypes.SELECT,
-            options: projectCategory,
+            type: FieldTypes.AUTOCOMPLETE,
+            apiConfig: apiConfig.projectCategory.autocomplete,
+            mappingOptions: (item) => ({
+                value: item.id,
+                label: item.projectCategoryName,
+            }),
+            optionsParams: { projectId: projectId },
+            initialSearchParams: { projectId: projectId },
+            searchParams: (text) => ({ name: text }),
         },
         {
             key: 'developerId',
