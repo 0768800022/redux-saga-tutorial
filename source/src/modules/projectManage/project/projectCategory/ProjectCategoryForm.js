@@ -100,7 +100,7 @@ const ProjectCategoryForm = (props) => {
                 <Row gutter={16}>
                     <Col span={12}>
                         <TextField
-                            label={<FormattedMessage defaultMessage="Tên danh mục dự án" />}
+                            label={<FormattedMessage defaultMessage="Tên danh mục" />}
                             required
                             name="projectCategoryName"
                         />

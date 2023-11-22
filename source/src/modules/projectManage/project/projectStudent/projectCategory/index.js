@@ -32,7 +32,7 @@ import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 
 const message = defineMessages({
-    objectName: 'Danh mục dự án',
+    objectName: 'Danh mục',
     nameCategory: 'Tên danh mục ',
 });
 
@@ -92,10 +92,6 @@ const ProjectCategoryListPage = () => {
         {
             title: translate.formatMessage(message.nameCategory),
             dataIndex: 'projectCategoryName',
-        },
-        {
-            title: translate.formatMessage(commonMessage.description),
-            dataIndex: 'description',
         },
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
