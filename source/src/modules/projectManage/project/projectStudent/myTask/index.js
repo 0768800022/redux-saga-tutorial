@@ -137,9 +137,8 @@ function ProjectStudentMyTaskListPage() {
             dataIndex: ['project', 'name'],
         },
         {
-            title: <FormattedMessage defaultMessage="Quản lý" />,
-            dataIndex: ['project', 'leaderInfo', 'leaderName'],
-            width: 230,
+            title: translate.formatMessage(commonMessage.projectCategory),
+            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
         },
         {
             title: 'Ngày bắt đầu',
