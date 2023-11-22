@@ -9,7 +9,7 @@ import { defineMessages } from 'react-intl';
 import ProjectCategoryForm from './ProjectCategoryForm';
 import { commonMessage } from '@locales/intl';
 const message = defineMessages({
-    objectName: 'Danh mục dự án',
+    objectName: 'Danh mục',
 });
 
 function ProjectCategorySavePage() {

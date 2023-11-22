@@ -32,7 +32,7 @@ import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 
 const message = defineMessages({
-    objectName: 'Danh mục dự án',
+    objectName: 'Danh mục',
     nameCategory: 'Tên danh mục ',
 });
 

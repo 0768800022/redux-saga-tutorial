@@ -313,7 +313,7 @@ function ProjectLeaderTaskListPage() {
     const searchFields = [
         {
             key: 'projectCategoryId',
-            placeholder: <FormattedMessage defaultMessage={'Danh mục dự án'} />,
+            placeholder: <FormattedMessage defaultMessage={'Danh mục'} />,
             type: FieldTypes.SELECT,
             options: projectCategory,
         },
