@@ -35,7 +35,7 @@ const ProjectLeaderTaskForm = (props) => {
             values.developerId = dataDetail?.developer?.studentInfo?.id;
         }
         if (typeof values.projectCategoryId === 'string') {
-            values.developerId = dataDetail?.projectCategoryInfo?.id;
+            values.projectCategoryId = dataDetail?.projectCategoryInfo?.id;
         }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values?.description) });
     };
