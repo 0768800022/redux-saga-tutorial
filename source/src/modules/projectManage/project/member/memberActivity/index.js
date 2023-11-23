@@ -44,7 +44,7 @@ function MemberActivityProjectListPage() {
     const projectId = queryParameters.get('projectId');
     const studentId = queryParameters.get('studentId');
     const studentName = queryParameters.get('studentName');
-    const archived =  queryParameters.get('archived');
+    const archived = queryParameters.get('archived');
     const dispatch = useDispatch();
     const notification = useNotification();
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
@@ -171,7 +171,9 @@ function MemberActivityProjectListPage() {
         mappingData: ({ data }) => data.content,
     });
 
-    useEffect(() => { executeGetTime({ params: { archived: archived, projectId, studentId } }); }, [archived]);
+    useEffect(() => {
+        executeGetTime({ params: { archived: archived, projectId, studentId } });
+    }, [archived]);
 
     const searchFields = [
         {
@@ -200,6 +202,7 @@ function MemberActivityProjectListPage() {
             },
         });
     };
+    console.log(pathPrev);
     return (
         <PageWrapper
             routes={[
@@ -208,13 +211,13 @@ function MemberActivityProjectListPage() {
                     path:
                         getData(storageKeys.USER_KIND) === UserTypes.MANAGER
                             ? routes.projectListPage.path
-                            : routes.projectLeaderListPage.path + pathPrev,
+                            : routes.projectLeaderListPage.path,
                 },
                 {
                     breadcrumbName: translate.formatMessage(commonMessage.member),
                     path:
                         getData(storageKeys.USER_KIND) === UserTypes.MANAGER
-                            ? routes.projectMemberListPage.path
+                            ? routes.projectMemberListPage.path + pathPrev
                             : routes.projectLeaderMemberListPage.path + pathPrev,
                 },
                 { breadcrumbName: translate.formatMessage(commonMessage.memberActivity) },
