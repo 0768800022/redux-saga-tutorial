@@ -15,7 +15,7 @@ import { Button, Modal, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import style from '../member.module.scss';
-import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
+import { IconAlarm, IconAlarmOff, IconBug } from '@tabler/icons-react';
 import { ReloadOutlined } from '@ant-design/icons';
 import { showSucsessMessage } from '@services/notifyService';
 import { FormattedMessage } from 'react-intl';
@@ -247,6 +247,13 @@ function MemberActivityProjectListPage() {
                                 <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} /> :{' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                     {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                                </span>
+                                <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
+                            </span>
+                            <span style={{ marginLeft: '10px' }}>
+                                <IconBug style={{ marginBottom: '-5px', color: 'red' }} /> :{' '}
+                                <span style={{ fontWeight: 'bold', fontSize: '17px', color: 'red' }}>
+                                    {timeSum ? Math.ceil((timeSum[0]?.totalTimeBug / 60) * 10) / 10 : 0}h
                                 </span>
                             </span>
                         </span>
