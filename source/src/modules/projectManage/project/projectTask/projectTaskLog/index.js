@@ -105,6 +105,7 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
         {
             title: translate.formatMessage(message.gitCommitUrl),
             dataIndex: 'gitCommitUrl',
+            width: 180,
             render: (gitUrl) => {
                 return (
                     gitUrl && (
