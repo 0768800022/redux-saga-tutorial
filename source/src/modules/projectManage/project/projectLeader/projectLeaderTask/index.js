@@ -202,9 +202,6 @@ function ProjectLeaderTaskListPage() {
         {
             title: translate.formatMessage(message.projectTask),
             dataIndex: 'taskName',
-            render: (taskName) => {
-                return <span>{taskName}</span>;
-            },
         },
         {
             title: translate.formatMessage(message.developer),
