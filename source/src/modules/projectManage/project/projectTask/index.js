@@ -227,14 +227,19 @@ function ProjectTaskListPage() {
         {
             title: translate.formatMessage(commonMessage.task),
             dataIndex: 'taskName',
+            render: (taskName) => {
+                return <span>{taskName}</span>;
+            },
         },
         {
             title: translate.formatMessage(commonMessage.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
+            width: 200,
         },
         {
             title: translate.formatMessage(commonMessage.projectCategory),
             dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
+            width: 150,
         },
         {
             title: 'Ngày bắt đầu',

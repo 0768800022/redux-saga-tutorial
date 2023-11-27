@@ -101,10 +101,14 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
         {
             title: translate.formatMessage(commonMessage.message),
             dataIndex: 'message',
+            render: (message) => {
+                return <span>{message}</span>;
+            },
         },
         {
             title: translate.formatMessage(message.gitCommitUrl),
             dataIndex: 'gitCommitUrl',
+            width: 180,
             render: (gitUrl) => {
                 return (
                     gitUrl && (
