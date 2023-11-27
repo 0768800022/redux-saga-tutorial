@@ -135,10 +135,12 @@ function ProjectStudentMyTaskListPage() {
         {
             title: translate.formatMessage(commonMessage.projectName),
             dataIndex: ['project', 'name'],
+            width: 150,
         },
         {
             title: translate.formatMessage(commonMessage.projectCategory),
             dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
+            width: 150,
         },
         {
             title: 'Ngày bắt đầu',

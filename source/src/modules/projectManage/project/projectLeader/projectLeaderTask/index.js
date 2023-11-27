@@ -206,10 +206,12 @@ function ProjectLeaderTaskListPage() {
         {
             title: translate.formatMessage(message.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
+            width: 200,
         },
         {
             title: translate.formatMessage(commonMessage.projectCategory),
             dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
+            width: 150,
         },
         {
             title: translate.formatMessage(message.startDate),
