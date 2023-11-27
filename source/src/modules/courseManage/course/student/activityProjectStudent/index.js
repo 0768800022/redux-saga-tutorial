@@ -18,7 +18,7 @@ import styles from './activityProjectStudent.module.scss';
 import useAuth from '@hooks/useAuth';
 import useNotification from '@hooks/useNotification';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
+import { IconAlarm, IconAlarmOff, IconBug } from '@tabler/icons-react';
 import useDisclosure from '@hooks/useDisclosure';
 import DetailMyTaskProjectModal from '@modules/projectManage/project/projectStudent/myTask/DetailMyTaskProjectModal';
 import { useDispatch } from 'react-redux';
@@ -198,6 +198,13 @@ function MyActivityProjectListPage() {
                                     <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
                                     <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                         {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                                    </span>
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
+                                </span>
+                                <span style={{ marginLeft: '10px' }}>
+                                    <IconBug style={{ marginBottom: '-5px', color: 'red' }} /> :{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px', color: 'red' }}>
+                                        {timeSum ? Math.ceil((timeSum[0]?.totalTimeBug / 60) * 10) / 10 : 0}h
                                     </span>
                                 </span>
                             </span>
