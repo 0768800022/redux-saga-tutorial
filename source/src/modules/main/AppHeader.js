@@ -56,6 +56,54 @@ const AppHeader = ({ collapsed, onCollapse }) => {
             time: '5 giờ trước',
             name: 'Tuan Nguyen',
         },
+        {
+            id: 5,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 6,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 7,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 8,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 9,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 10,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 11,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 12,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
     ];
 
     return (
@@ -68,10 +116,6 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                 className={styles.rightMenu}
                 selectedKeys={[]}
                 items={[
-                    {
-                        key: 'notification',
-                        label: <NotificationForm data={data} />,
-                    },
                     {
                         key: 'menu',
                         label: (
@@ -111,6 +155,10 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                                 onClick: onLogout,
                             },
                         ],
+                    },
+                    {
+                        key: 'notification',
+                        label: <NotificationForm data={data} />,
                     },
                 ]}
             />
