@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppConstants } from '@constants';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-
+import { NotificationForm } from '@components/common/form/NotificationForm';
 const messages = defineMessages({
     profile: 'Profile',
     logout: 'Logout',
@@ -31,6 +31,32 @@ const AppHeader = ({ collapsed, onCollapse }) => {
         removeCacheToken();
         dispatch(accountActions.logout());
     };
+    const data = [
+        {
+            id: 1,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 2,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 3,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+        {
+            id: 4,
+            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
+            time: '5 giờ trước',
+            name: 'Tuan Nguyen',
+        },
+    ];
 
     return (
         <Header className={styles.appHeader} style={{ padding: 0, background: 'white' }}>
@@ -43,14 +69,23 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                 selectedKeys={[]}
                 items={[
                     {
+                        key: 'notification',
+                        label: <NotificationForm data={data} />,
+                    },
+                    {
                         key: 'menu',
                         label: (
                             <Space>
                                 <Avatar
                                     icon={<UserOutlined />}
-                                    src={`${AppConstants.contentRootUrl}${profile.logoPath || profile.avatar || profile.logo}`}
+                                    src={`${AppConstants.contentRootUrl}${
+                                        profile.logoPath || profile.avatar || profile.logo
+                                    }`}
                                 />
-                                {profile?.careerName || profile?.leaderName || profile?.fullName|| profile?.companyName}
+                                {profile?.careerName ||
+                                    profile?.leaderName ||
+                                    profile?.fullName ||
+                                    profile?.companyName}
                                 <DownOutlined />
                             </Space>
                         ),
