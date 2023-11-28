@@ -80,4 +80,6 @@ export const commonMessage = defineMessages({
     edit: 'Sửa',
     kind: 'Loại',
     projectCategory: 'Danh mục',
+    all: 'Tất cả',
+    unRead: 'Chưa đọc',
 });

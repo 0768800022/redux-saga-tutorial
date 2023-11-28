@@ -5,14 +5,18 @@ import HeadlessTippy from '@tippyjs/react/headless';
 import { Avatar, Badge, Button, Card } from 'antd';
 import React, { useState } from 'react';
 import styles from './NotificationForm.module.scss';
+import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
 
 export const NotificationForm = ({ data, ...props }) => {
     const [activeButtonAll, setActiveButtonAll] = useState(true);
+    const translate = useTranslate();
     return (
         <HeadlessTippy
             interactive
             placement="bottom-end"
             trigger="click"
+            offset={[30, 12]}
             render={(attrs) => (
                 <Card className={styles.wrapper}>
                     <div className={styles.wrapperButton}>
@@ -24,7 +28,7 @@ export const NotificationForm = ({ data, ...props }) => {
                             }}
                             style={{ marginRight: '4px' }}
                         >
-                            Tất cả
+                            {translate.formatMessage(commonMessage.all)}
                         </Button>
                         <Button
                             type={!activeButtonAll ? 'primary' : 'default'}
@@ -33,7 +37,7 @@ export const NotificationForm = ({ data, ...props }) => {
                                 setActiveButtonAll(false);
                             }}
                         >
-                            Chưa đọc
+                            {translate.formatMessage(commonMessage.unRead)}
                         </Button>
                     </div>
                     {data?.map((item) => {
