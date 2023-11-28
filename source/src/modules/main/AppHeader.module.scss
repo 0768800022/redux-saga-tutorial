@@ -32,6 +32,11 @@
 
         [role='menuitem'] {
             outline: none !important;
+            padding: 0;
+        }
+        :global .ant-menu-item-only-child{
+            padding: 0;
+            margin-right: 40px;
         }
     }
 }
