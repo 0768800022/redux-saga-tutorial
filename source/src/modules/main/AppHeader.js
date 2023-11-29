@@ -35,15 +35,7 @@ const AppHeader = ({ collapsed, onCollapse }) => {
     };
     useEffect(() => {
         const token = getCacheAccessToken();
-
-        const intervalId = setInterval(() => {
-            webSocket(token);
-        }, 30000);
-
-        // Clear interval khi component bị hủy
-        return () => {
-            clearInterval(intervalId);
-        };
+        webSocket(token);
     }, []);
     const data = [
         {

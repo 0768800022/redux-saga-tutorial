@@ -7,3 +7,4 @@ IMAGE_INLINE_SIZE_LIMIT = 0
 REACT_APP_ENABLE_EXPOSURE = true
 REACT_APP_USERNAME = abc_client
 REACT_APP_PASSWORD = S0akjzNH9ydtlpPZ9nZSxduS9
+REACT_APP_WEB_SOCKET_URL = wss://elms-noti.developteam.net/ws
