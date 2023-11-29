@@ -1,6 +1,17 @@
+import { IconFlower } from '@tabler/icons-react';
+import { notification } from 'antd';
+
 export const webSocket = (tokenLogin) => {
     var wsUri = process.env.REACT_APP_WEB_SOCKET_URL;
     var websocket;
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            // Mở lại kết nối WebSocket nếu trạng thái của trang là "visible"
+            if (!websocket || websocket.readyState === WebSocket.CLOSED) {
+                webSocket();
+            }
+        }
+    });
 
     function init() {
         webSocket();
@@ -41,7 +52,17 @@ export const webSocket = (tokenLogin) => {
     }
 
     function onMessage(evt) {
-        console.log('RESPONSE : ', doReceived(evt.data));
+        const data = JSON.parse(evt?.data)?.data;
+        if (JSON.stringify(data) !== '{}') {
+            if (data?.kind == 1) {
+                notification.success({ message: 'Done Task', description: data?.message });
+            } else if (data?.kind == 2) {
+                notification.info({ message: 'New Task', description: data?.message });
+            } else {
+                notification.error({ message: 'Cancel Task', description: data?.message });
+            }
+        }
+        console.log(data);
         //websocket.close();
     }
     function onError(evt) {
@@ -49,8 +70,12 @@ export const webSocket = (tokenLogin) => {
     }
 
     function doSend(message) {
-        console.log('SENT: ' + message);
-        websocket.send(message);
+        // console.log('SENT: ' + message);
+        if (websocket.readyState === WebSocket.OPEN) {
+            websocket.send(message);
+        } else {
+            console.error('WebSocket is in CLOSING or CLOSED state.');
+        }
     }
     function doReceived(message) {
         return message;
