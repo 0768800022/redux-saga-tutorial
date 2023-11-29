@@ -8,3 +8,4 @@ REACT_APP_ENABLE_EXPOSURE = true
 REACT_APP_USERNAME = abc_client
 REACT_APP_PASSWORD = abc123
 REACT_APP_TENANT_ID = cntt
+REACT_APP_WEB_SOCKET_URL = wss://elms-noti.developteam.net/ws

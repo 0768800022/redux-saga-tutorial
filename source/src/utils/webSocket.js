@@ -1,10 +1,12 @@
 export const webSocket = (tokenLogin) => {
-    var wsUri = 'wss://elms-noti.developteam.net/ws';
+    var wsUri = process.env.REACT_APP_WEB_SOCKET_URL;
     var websocket;
 
     function init() {
         webSocket();
-        doPing();
+        setInterval(() => {
+            doPing();
+        }, 30000);
     }
     function webSocket() {
         websocket = new WebSocket(wsUri);
@@ -39,7 +41,7 @@ export const webSocket = (tokenLogin) => {
     }
 
     function onMessage(evt) {
-        console.log(doReceived(evt.data) );
+        console.log('RESPONSE : ', doReceived(evt.data));
         //websocket.close();
     }
     function onError(evt) {
@@ -53,7 +55,6 @@ export const webSocket = (tokenLogin) => {
     function doReceived(message) {
         return message;
     }
-
 
     function doPing() {
         var pingRequest = {
