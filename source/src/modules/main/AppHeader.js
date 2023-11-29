@@ -16,7 +16,7 @@ import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { NotificationForm } from '@components/common/form/NotificationForm';
 import { webSocket } from '../../utils/webSocket';
-import { withWarn } from 'antd/es/modal/confirm';
+
 const messages = defineMessages({
     profile: 'Profile',
     logout: 'Logout',
