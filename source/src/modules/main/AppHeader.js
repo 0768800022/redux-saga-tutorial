@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Layout, Menu, Avatar, Space } from 'antd';
 import { DownOutlined, UserOutlined, LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 const { Header } = Layout;
@@ -9,12 +9,14 @@ import { useDispatch } from 'react-redux';
 import { accountActions } from '@store/actions';
 import useFetch from '@hooks/useFetch';
 import apiConfig from '@constants/apiConfig';
-import { removeCacheToken } from '@services/userService';
+import { getCacheAccessToken, removeCacheToken } from '@services/userService';
 import { useNavigate } from 'react-router-dom';
 import { AppConstants } from '@constants';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { NotificationForm } from '@components/common/form/NotificationForm';
+import { webSocket } from '../../utils/webSocket';
+import { withWarn } from 'antd/es/modal/confirm';
 const messages = defineMessages({
     profile: 'Profile',
     logout: 'Logout',
@@ -31,6 +33,18 @@ const AppHeader = ({ collapsed, onCollapse }) => {
         removeCacheToken();
         dispatch(accountActions.logout());
     };
+    useEffect(() => {
+        const token = getCacheAccessToken();
+
+        const intervalId = setInterval(() => {
+            webSocket(token);
+        }, 30000);
+
+        // Clear interval khi component bị hủy
+        return () => {
+            clearInterval(intervalId);
+        };
+    }, []);
     const data = [
         {
             id: 1,
