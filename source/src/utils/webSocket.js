@@ -1,3 +1,6 @@
+import { IconFlower } from '@tabler/icons-react';
+import { notification } from 'antd';
+
 export const webSocket = (tokenLogin) => {
     var wsUri = process.env.REACT_APP_WEB_SOCKET_URL;
     var websocket;
@@ -6,7 +9,7 @@ export const webSocket = (tokenLogin) => {
         webSocket();
         setInterval(() => {
             doPing();
-        }, 30000);
+        }, 10000);
     }
     function webSocket() {
         websocket = new WebSocket(wsUri);
@@ -41,7 +44,17 @@ export const webSocket = (tokenLogin) => {
     }
 
     function onMessage(evt) {
-        console.log('RESPONSE : ', doReceived(evt.data));
+        const data = JSON.parse(evt?.data)?.data;
+        if (JSON.stringify(data) !== '{}') {
+            if (data?.kind == 1) {
+                notification.success({ message: 'Done Task', description: data?.message });
+            } else if (data?.kind == 2) {
+                notification.info({ message: 'New Task', description: data?.message });
+            } else {
+                notification.error({ message: 'Cancel Task', description: data?.message });
+            }
+        }
+        console.log(data);
         //websocket.close();
     }
     function onError(evt) {
@@ -49,7 +62,7 @@ export const webSocket = (tokenLogin) => {
     }
 
     function doSend(message) {
-        console.log('SENT: ' + message);
+        // console.log('SENT: ' + message);
         websocket.send(message);
     }
     function doReceived(message) {
