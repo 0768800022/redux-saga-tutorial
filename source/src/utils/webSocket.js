@@ -4,12 +4,20 @@ import { notification } from 'antd';
 export const webSocket = (tokenLogin) => {
     var wsUri = process.env.REACT_APP_WEB_SOCKET_URL;
     var websocket;
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            // Mở lại kết nối WebSocket nếu trạng thái của trang là "visible"
+            if (!websocket || websocket.readyState === WebSocket.CLOSED) {
+                webSocket();
+            }
+        }
+    });
 
     function init() {
         webSocket();
         setInterval(() => {
             doPing();
-        }, 10000);
+        }, 30000);
     }
     function webSocket() {
         websocket = new WebSocket(wsUri);
@@ -63,7 +71,11 @@ export const webSocket = (tokenLogin) => {
 
     function doSend(message) {
         // console.log('SENT: ' + message);
-        websocket.send(message);
+        if (websocket.readyState === WebSocket.OPEN) {
+            websocket.send(message);
+        } else {
+            console.error('WebSocket is in CLOSING or CLOSED state.');
+        }
     }
     function doReceived(message) {
         return message;
