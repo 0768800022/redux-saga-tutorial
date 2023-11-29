@@ -1,6 +1,6 @@
 import { UserOutlined } from '@ant-design/icons';
 import { AppConstants } from '@constants';
-import { IconBell } from '@tabler/icons-react';
+import { IconBell, IconBellFilled } from '@tabler/icons-react';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { Avatar, Badge, Button, Card } from 'antd';
 import React, { useState } from 'react';
@@ -10,12 +10,19 @@ import { commonMessage } from '@locales/intl';
 
 export const NotificationForm = ({ data, ...props }) => {
     const [activeButtonAll, setActiveButtonAll] = useState(true);
+    const [activeIcon, setActiveIcon] = useState(false);
     const translate = useTranslate();
     return (
         <HeadlessTippy
             interactive
             placement="bottom-end"
             trigger="click"
+            onShow={() => {
+                setActiveIcon(true);
+            }}
+            onHide={() => {
+                setActiveIcon(false);
+            }}
             offset={[30, 12]}
             render={(attrs) => (
                 <Card className={styles.wrapper}>
@@ -71,9 +78,7 @@ export const NotificationForm = ({ data, ...props }) => {
             {...props}
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Badge count={88}>
-                    <IconBell />
-                </Badge>
+                <Badge count={88}>{activeIcon ? <IconBellFilled /> : <IconBell />}</Badge>
             </div>
         </HeadlessTippy>
     );
