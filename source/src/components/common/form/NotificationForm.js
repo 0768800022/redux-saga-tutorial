@@ -78,7 +78,7 @@ export const NotificationForm = ({ data, ...props }) => {
             {...props}
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Badge count={88}>{activeIcon ? <IconBellFilled /> : <IconBell />}</Badge>
+                <Badge dot={true}>{activeIcon ? <IconBellFilled /> : <IconBell />}</Badge>
             </div>
         </HeadlessTippy>
     );
