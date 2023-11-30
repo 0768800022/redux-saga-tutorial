@@ -2,14 +2,14 @@ import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { TaskLogKindOptions } from '@constants/masterData';
+import { TaskLogKindOptions, archivedOption } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { commonMessage } from '@locales/intl';
 import { FieldTypes } from '@constants/formConfig';
@@ -38,11 +38,13 @@ function MyActivityProjectListPage() {
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
+    const archived = queryParameters.get('archived');
     const [detail, setDetail] = useState({});
     const [openedModal, handlersModal] = useDisclosure(false);
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const { profile } = useAuth();
     const notification = useNotification();
+    const archivedOptions = translate.formatKeys(archivedOption, ['label']);
     const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
         immediate: false,
     });
@@ -116,7 +118,7 @@ function MyActivityProjectListPage() {
         {
             title: translate.formatMessage(commonMessage.kind),
             dataIndex: ['projectTaskInfo', 'kind'],
-            width: 15,
+            width: 80,
             render(dataRow) {
                 if (dataRow === 1)
                     return (
@@ -199,19 +201,38 @@ function MyActivityProjectListPage() {
             type: FieldTypes.SELECT,
             options: myProject,
         },
+        {
+            key: 'archived',
+            placeholder: <FormattedMessage defaultMessage={'Archived'} />,
+            type: FieldTypes.SELECT,
+            options: archivedOptions,
+        },
     ];
     const { data: timeSum, execute: executeTimeSum } = useFetch(apiConfig.projectTaskLog.getSum, {
         immediate: true,
         params: { projectId: queryFilter?.projectId, studentId: profile.id },
-        mappingData: ({ data }) => data.content,
+        mappingData: ({ data }) =>
+            data.content.reduce(
+                (accumulator, currentValue) => {
+                    accumulator.totalTimeWorking += currentValue.totalTimeWorking;
+                    accumulator.totalTimeBug += currentValue.totalTimeBug;
+                    accumulator.totalTimeOff += currentValue.totalTimeOff;
+                    return accumulator;
+                },
+                {
+                    totalTimeWorking: 0,
+                    totalTimeBug: 0,
+                    totalTimeOff: 0,
+                },
+            ),
     });
 
     useEffect(() => {
-        if (projectId)
-            executeTimeSum({
-                params: { projectId, studentId: profile.id },
-            });
-    }, [projectId]);
+        executeTimeSum({
+            params: { archived, projectId, studentId: profile.id },
+        });
+    }, [projectId, archived]);
+    console.log(timeSum);
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.myActivity) }]}>
             <ListPage
@@ -223,7 +244,7 @@ function MyActivityProjectListPage() {
                                 <span style={{ marginLeft: '5px' }}>
                                     <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
                                     <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                        {timeSum ? Math.ceil((timeSum[0]?.totalTimeWorking / 60) * 10) / 10 : 0}h{' '}
+                                        {timeSum ? Math.ceil((timeSum?.totalTimeWorking / 60) * 10) / 10 : 0}h{' '}
                                         <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>
                                             |{' '}
                                         </span>
@@ -232,14 +253,14 @@ function MyActivityProjectListPage() {
                                 <span style={{ marginLeft: '10px' }}>
                                     <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
                                     <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                        {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
+                                        {timeSum ? Math.ceil((timeSum?.totalTimeOff / 60) * 10) / 10 : 0}h
                                     </span>
                                     <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
                                 </span>
                                 <span style={{ marginLeft: '10px' }}>
                                     <IconBug style={{ marginBottom: '-5px', color: 'red' }} /> :{' '}
                                     <span style={{ fontWeight: 'bold', fontSize: '17px', color: 'red' }}>
-                                        {timeSum ? Math.ceil((timeSum[0]?.totalTimeBug / 60) * 10) / 10 : 0}h
+                                        {timeSum ? Math.ceil((timeSum?.totalTimeBug / 60) * 10) / 10 : 0}h
                                     </span>
                                 </span>
                             </span>
