@@ -42,6 +42,7 @@ const AppHeader = ({ collapsed, onCollapse }) => {
         {
             immediate: true,
             mappingData: ({ data }) => {
+                const pageTotal = data?.totalPages;
                 const unReadTotal = data?.totalUnread;
                 const listNotification = data?.content?.map((item) => ({
                     id: item?.id,
@@ -51,6 +52,7 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                     state: item?.state,
                 }));
                 return {
+                    pageTotal,
                     unReadTotal,
                     listNotification,
                 };
@@ -120,6 +122,7 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                                 executeUpdateState={executeUpdateState}
                                 loading={loadingUpdate}
                                 unReadTotal={dataMyNotification?.unReadTotal}
+                                pageTotal={dataMyNotification?.pageTotal}
                             />
                         ),
                     },

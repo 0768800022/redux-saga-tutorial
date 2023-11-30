@@ -10,15 +10,53 @@ import { commonMessage } from '@locales/intl';
 import { convertStringToDateTime } from '@utils/dayHelper';
 import moment from 'moment';
 import { BaseTooltip } from './BaseTooltip';
+import apiConfig from '@constants/apiConfig';
+import useFetch from '@hooks/useFetch';
 
-export const NotificationForm = ({ data, executeGetData, executeUpdateState, loading, unReadTotal, ...props }) => {
+export const NotificationForm = ({
+    data,
+    executeGetData,
+    executeUpdateState,
+    loading,
+    unReadTotal,
+    pageTotal,
+    ...props
+}) => {
     const [activeButtonAll, setActiveButtonAll] = useState(true);
     const [activeIcon, setActiveIcon] = useState(false);
     const translate = useTranslate();
+    const [dataNotification, setDataNotification] = useState([]);
+    const [isLoadMore, setIsLoadMore] = useState(false);
+    let [countLoadMore, setCountLoadMore] = useState(1);
+    const [hiddenItems, setHiddenItems] = useState([]);
+    const [deleteAll, setDeleteAll] = useState(false);
+    const [readAll, setReadAll] = useState(false);
+    const { execute: executeReadAll } = useFetch(apiConfig.notification.readAll, {
+        immediate: false,
+    });
+    const { execute: executeDeleteAll } = useFetch(apiConfig.notification.deleteAll, {
+        immediate: false,
+    });
+
+    useEffect(() => {
+        if (isLoadMore && data) {
+            setDataNotification([...dataNotification, ...data]);
+        } else {
+            setDataNotification(data);
+        }
+    }, [data]);
     useEffect(() => {
         if (activeIcon) {
-            executeGetData();
+            if (activeButtonAll) {
+                executeGetData();
+            } else {
+                executeGetData({
+                    params: { state: 0 },
+                });
+            }
         }
+        setReadAll(false);
+        setDeleteAll(false);
     }, [activeIcon]);
 
     useEffect(() => {
@@ -29,6 +67,8 @@ export const NotificationForm = ({ data, executeGetData, executeUpdateState, loa
         } else {
             executeGetData();
         }
+        setIsLoadMore(false);
+        setCountLoadMore(1);
     }, [activeButtonAll]);
     const iconNotification = (kind, style, size) => {
         if (kind == 1) {
@@ -66,25 +106,30 @@ export const NotificationForm = ({ data, executeGetData, executeUpdateState, loa
         executeUpdateState({
             data: { id },
         });
+        setHiddenItems([...hiddenItems, id]);
+    };
+
+    const handleLoadMore = () => {
+        setIsLoadMore(true);
         if (!activeButtonAll) {
             executeGetData({
-                params: { state: 0 },
+                params: { state: 0, page: countLoadMore },
             });
         } else {
-            executeGetData();
+            executeGetData({
+                params: { page: countLoadMore },
+            });
         }
+        setCountLoadMore((countLoadMore += 1));
     };
-    useEffect(() => {
-        if (!loading) {
-            if (!activeButtonAll) {
-                executeGetData({
-                    params: { state: 0 },
-                });
-            } else {
-                executeGetData();
-            }
-        }
-    }, [loading]);
+    const handleReadAll = () => {
+        executeReadAll();
+        setReadAll(true);
+    };
+    const handleDeleteAll = () => {
+        executeDeleteAll();
+        setDeleteAll(true);
+    };
 
     return (
         <HeadlessTippy
@@ -101,38 +146,54 @@ export const NotificationForm = ({ data, executeGetData, executeUpdateState, loa
             render={(attrs) => (
                 <Card className={styles.wrapper}>
                     <div className={styles.wrapperButton}>
-                        <Button
-                            type={activeButtonAll ? 'primary' : 'default'}
-                            shape="round"
-                            onClick={() => {
-                                setActiveButtonAll(true);
-                            }}
-                            style={{ marginRight: '4px' }}
-                        >
-                            {translate.formatMessage(commonMessage.all)}
-                        </Button>
-                        <Button
-                            type={!activeButtonAll ? 'primary' : 'default'}
-                            shape="round"
-                            onClick={() => {
-                                setActiveButtonAll(false);
-                            }}
-                        >
-                            {translate.formatMessage(commonMessage.unRead)}
-                        </Button>
+                        <div>
+                            <Button
+                                type={activeButtonAll ? 'primary' : 'default'}
+                                shape="round"
+                                onClick={() => {
+                                    setActiveButtonAll(true);
+                                }}
+                                style={{ marginRight: '4px' }}
+                            >
+                                {translate.formatMessage(commonMessage.all)}
+                            </Button>
+                            <Button
+                                type={!activeButtonAll ? 'primary' : 'default'}
+                                shape="round"
+                                onClick={() => {
+                                    setActiveButtonAll(false);
+                                }}
+                            >
+                                {translate.formatMessage(commonMessage.unRead)}
+                            </Button>
+                        </div>
+                        <div>
+                            <Button type="default" shape="round" style={{ marginRight: '4px' }} onClick={handleReadAll}>
+                                {translate.formatMessage(commonMessage.readAll)}
+                            </Button>
+                            <Button type="default" shape="round" onClick={handleDeleteAll}>
+                                {translate.formatMessage(commonMessage.deleteAll)}
+                            </Button>
+                        </div>
                     </div>
-                    {data?.map((item) => {
+                    {dataNotification?.map((item) => {
                         return (
                             <div
                                 key={item.id}
-                                className={styles.notificationItem + ' ' + (item?.state == 1 && styles.unRead)}
+                                className={
+                                    styles.notificationItem +
+                                    ' ' +
+                                    ((item?.state == 1 || hiddenItems.includes(item?.id) || readAll) && styles.viewed)
+                                }
+                                style={{
+                                    display:
+                                        (hiddenItems.includes(item?.id) && !activeButtonAll) ||
+                                        deleteAll ||
+                                        (readAll && !activeButtonAll)
+                                            ? 'none'
+                                            : '',
+                                }}
                             >
-                                {/* <Avatar
-                                    size={40}
-                                    icon={<UserOutlined />}
-                                    src={`${AppConstants.contentRootUrl}`}
-                                    style={{ marginRight: '16px' }}
-                                /> */}
                                 {iconNotification(item?.kind, { marginRight: '16px' }, 36)}
                                 <div
                                     style={{
@@ -150,7 +211,7 @@ export const NotificationForm = ({ data, executeGetData, executeUpdateState, loa
                                     </text>
                                     <span style={{ paddingTop: '4px' }}>{timeNotification(item?.createdDate)}</span>
                                 </div>
-                                {item?.state == 0 && (
+                                {item?.state == 0 && !hiddenItems.includes(item?.id) && !readAll && (
                                     <BaseTooltip title={'Đánh dấu đã đọc'}>
                                         <Button
                                             type="link"
@@ -164,6 +225,11 @@ export const NotificationForm = ({ data, executeGetData, executeUpdateState, loa
                             </div>
                         );
                     })}
+                    {pageTotal > 0 && countLoadMore != pageTotal && !deleteAll && !(readAll && !activeButtonAll) && (
+                        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '6px' }}>
+                            <Button onClick={handleLoadMore}>Load more</Button>
+                        </div>
+                    )}
                 </Card>
             )}
             {...props}

@@ -1383,6 +1383,18 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        readAll: {
+            baseURL: `${apiTenantUrl}v1/notification/read-all`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        deleteAll: {
+            baseURL: `${apiTenantUrl}v1/notification/delete-all`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
 };
 export default apiConfig;
