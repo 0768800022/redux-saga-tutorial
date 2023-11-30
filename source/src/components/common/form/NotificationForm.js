@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './NotificationForm.module.scss';
 import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
-import { convertStringToDateTime } from '@utils/dayHelper';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import moment from 'moment';
 import { BaseTooltip } from './BaseTooltip';
 import apiConfig from '@constants/apiConfig';
@@ -31,6 +31,7 @@ export const NotificationForm = ({
     const [hiddenItems, setHiddenItems] = useState([]);
     const [deleteAll, setDeleteAll] = useState(false);
     const [readAll, setReadAll] = useState(false);
+    const [dataNotificationUnRead, setDataNotificationUnRead] = useState([]);
     const { execute: executeReadAll } = useFetch(apiConfig.notification.readAll, {
         immediate: false,
     });
@@ -46,6 +47,9 @@ export const NotificationForm = ({
         }
     }, [data]);
     useEffect(() => {
+        setDataNotificationUnRead(dataNotification?.filter((item) => item.state == 0));
+    }, [dataNotification]);
+    useEffect(() => {
         if (activeIcon) {
             if (activeButtonAll) {
                 executeGetData();
@@ -57,6 +61,7 @@ export const NotificationForm = ({
         }
         setReadAll(false);
         setDeleteAll(false);
+        setHiddenItems([]);
     }, [activeIcon]);
 
     useEffect(() => {
@@ -69,6 +74,7 @@ export const NotificationForm = ({
         }
         setIsLoadMore(false);
         setCountLoadMore(1);
+        setHiddenItems([]);
     }, [activeButtonAll]);
     const iconNotification = (kind, style, size) => {
         if (kind == 1) {
@@ -89,23 +95,17 @@ export const NotificationForm = ({
         }
     };
     const timeNotification = (createdDate) => {
-        const dateTime = moment(createdDate, DEFAULT_FORMAT).add(7, 'hours');
-        const currentTime = moment();
-        const minutesTotal = currentTime.diff(dateTime, 'minutes');
-        const hoursTotal = minutesTotal / 60;
-        const daysTotal = hoursTotal / 24;
-        if (daysTotal >= 1) {
-            return daysTotal.toFixed(0) + ' day ago';
-        } else if (hoursTotal >= 1) {
-            return hoursTotal.toFixed(0) + ' hour ago';
-        } else {
-            return minutesTotal.toFixed(0) + ' minute ago';
-        }
+        const dateTime = convertStringToDateTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT).add(7, 'hour');
+        const dateTimeString = convertDateTimeToString(dateTime, DEFAULT_FORMAT);
+        return dateTimeString;
     };
     const handleOnClickChecked = (id) => {
         executeUpdateState({
             data: { id },
         });
+        if (hiddenItems?.length == dataNotificationUnRead?.length - 1) {
+            setReadAll(true);
+        }
         setHiddenItems([...hiddenItems, id]);
     };
 
@@ -235,7 +235,9 @@ export const NotificationForm = ({
             {...props}
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Badge dot={unReadTotal > 0}>{activeIcon ? <IconBellFilled /> : <IconBell />}</Badge>
+                <Badge dot={unReadTotal > 0 && !readAll && !deleteAll}>
+                    {activeIcon ? <IconBellFilled /> : <IconBell />}
+                </Badge>
             </div>
         </HeadlessTippy>
     );
