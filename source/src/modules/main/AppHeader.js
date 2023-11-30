@@ -37,80 +37,29 @@ const AppHeader = ({ collapsed, onCollapse }) => {
         const token = getCacheAccessToken();
         webSocket(token);
     }, []);
-    const data = [
+    const { data: dataMyNotification, execute: executeGetDataMyNotification } = useFetch(
+        apiConfig.notification.myNotification,
         {
-            id: 1,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
+            immediate: true,
+            mappingData: ({ data }) => {
+                const unReadTotal = data?.totalUnread;
+                const listNotification = data?.content?.map((item) => ({
+                    id: item?.id,
+                    message: item?.msg,
+                    kind: item?.kind,
+                    createdDate: item?.createdDate,
+                    state: item?.state,
+                }));
+                return {
+                    unReadTotal,
+                    listNotification,
+                };
+            },
         },
-        {
-            id: 2,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 3,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 4,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 5,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 6,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 7,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 8,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 9,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 10,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 11,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-        {
-            id: 12,
-            label: ' đã hoàn thành xong task xây dựng CRUD trang chủ và CRUD trang người dùng',
-            time: '5 giờ trước',
-            name: 'Tuan Nguyen',
-        },
-    ];
+    );
+    const { execute: executeUpdateState, loading: loadingUpdate } = useFetch(apiConfig.notification.changeState, {
+        immediate: false,
+    });
 
     return (
         <Header className={styles.appHeader} style={{ padding: 0, background: 'white' }}>
@@ -164,7 +113,15 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                     },
                     {
                         key: 'notification',
-                        label: <NotificationForm data={data} />,
+                        label: (
+                            <NotificationForm
+                                data={dataMyNotification?.listNotification}
+                                executeGetData={executeGetDataMyNotification}
+                                executeUpdateState={executeUpdateState}
+                                loading={loadingUpdate}
+                                unReadTotal={dataMyNotification?.unReadTotal}
+                            />
+                        ),
                     },
                 ]}
             />
