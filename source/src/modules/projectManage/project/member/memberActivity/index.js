@@ -2,7 +2,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE, UserTypes, storageKeys } from '@constants';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, UserTypes, storageKeys } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { TaskLogKindOptions, archivedOption } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
@@ -26,6 +26,7 @@ import { hideAppLoading, showAppLoading } from '@store/actions/app';
 import useDisclosure from '@hooks/useDisclosure';
 import DetailMyTaskProjectModal from '../../projectStudent/myTask/DetailMyTaskProjectModal';
 import { getData } from '@utils/localStorage';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
@@ -114,6 +115,19 @@ function MemberActivityProjectListPage() {
     };
 
     const columns = [
+        {
+            title: translate.formatMessage(commonMessage.createdDate),
+            dataIndex: 'createdDate',
+            render: (createdDate) => {
+                const modifiedDate = convertStringToDateTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT).add(
+                    7,
+                    'hour',
+                );
+                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
+            },
+            width: 180,
+        },
         {
             title: translate.formatMessage(commonMessage.task),
             dataIndex: ['projectTaskInfo', 'taskName'],
