@@ -172,6 +172,7 @@ function ProjectStudentTaskListPage() {
         {
             title: translate.formatMessage(message.projectTask),
             dataIndex: 'taskName',
+            width: 400,
         },
         {
             title: translate.formatMessage(message.developer),
