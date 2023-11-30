@@ -117,7 +117,6 @@ function MemberActivityProjectListPage() {
     };
 
     const columns = [
-        
         {
             title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
@@ -133,7 +132,7 @@ function MemberActivityProjectListPage() {
         },
         {
             title: translate.formatMessage(commonMessage.kind),
-            dataIndex: ['projectTaskInfo','kind'],
+            dataIndex: ['projectTaskInfo', 'kind'],
             width: 15,
             render(dataRow) {
                 if (dataRow === 1)
