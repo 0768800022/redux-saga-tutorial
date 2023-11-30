@@ -136,11 +136,6 @@ const ProjectStudentTaskForm = (props) => {
                             placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
-                            rules={[
-                                {
-                                    validator: validateStartDate,
-                                },
-                            ]}
                         />
                     </Col>
                     <Col span={12}>
