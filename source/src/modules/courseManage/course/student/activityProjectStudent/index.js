@@ -25,6 +25,9 @@ import { useDispatch } from 'react-redux';
 import { hideAppLoading, showAppLoading } from '@store/actions/app';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import feature from '@assets/images/feature.png';
+import reset from '@assets/images/reset.svg';
+import noReset from '@assets/images/not_reset.svg';
+
 import bug from '@assets/images/bug.jpg';
 const message = defineMessages({
     selectProject: 'Chọn dự án',
@@ -116,9 +119,15 @@ function MyActivityProjectListPage() {
             width: 180,
         },
         {
+            title: 'Tên dự án',
+            dataIndex: ['projectTaskInfo','project','name'],
+            width: 250,
+        },
+        {
             title: translate.formatMessage(commonMessage.kind),
             dataIndex: ['projectTaskInfo', 'kind'],
             width: 80,
+            align: 'center',
             render(dataRow) {
                 if (dataRow === 1)
                     return (
@@ -134,6 +143,7 @@ function MyActivityProjectListPage() {
                     );
             },
         },
+        
         {
             title: translate.formatMessage(commonMessage.task),
             dataIndex: ['projectTaskInfo', 'taskName'],
@@ -148,6 +158,7 @@ function MyActivityProjectListPage() {
                 );
             },
         },
+        
         {
             title: translate.formatMessage(message.gitCommitUrl),
             dataIndex: 'gitCommitUrl',
@@ -182,6 +193,26 @@ function MyActivityProjectListPage() {
                         <div style={{ padding: '0 4px', fontSize: 14 }}>{kindLog.label}</div>
                     </Tag>
                 );
+            },
+        },
+        {
+            title: translate.formatMessage(commonMessage.reset),
+            dataIndex: ['archived'],
+            align: 'center',
+            width: 80,
+            render(dataRow) {
+                if (dataRow === 1)
+                    return (
+                        <div>
+                            <img src={reset} height="30px" width="30px" />
+                        </div>
+                    );
+                if (dataRow === 0)
+                    return (
+                        <div>
+                            <img src={noReset} height="30px" width="30px" />
+                        </div>
+                    );
             },
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),

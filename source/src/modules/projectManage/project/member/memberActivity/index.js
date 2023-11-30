@@ -29,7 +29,8 @@ import { getData } from '@utils/localStorage';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import feature from '@assets/images/feature.png';
 import bug from '@assets/images/bug.jpg';
-
+import reset from '@assets/images/reset.svg';
+import noReset from '@assets/images/not_reset.svg';
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
     reminderMessage: 'Vui lòng chọn dự án !',
@@ -133,7 +134,8 @@ function MemberActivityProjectListPage() {
         {
             title: translate.formatMessage(commonMessage.kind),
             dataIndex: ['projectTaskInfo', 'kind'],
-            width: 15,
+            align: 'center',
+            width: 80,
             render(dataRow) {
                 if (dataRow === 1)
                     return (
@@ -197,6 +199,26 @@ function MemberActivityProjectListPage() {
                         <div style={{ padding: '0 4px', fontSize: 14 }}>{kindLog.label}</div>
                     </Tag>
                 );
+            },
+        },
+        {
+            title: translate.formatMessage(commonMessage.reset),
+            dataIndex: ['archived'],
+            align: 'center',
+            width: 80,
+            render(dataRow) {
+                if (dataRow === 1)
+                    return (
+                        <div>
+                            <img src={reset} height="30px" width="30px" />
+                        </div>
+                    );
+                if (dataRow === 0)
+                    return (
+                        <div>
+                            <img src={noReset} height="30px" width="30px" />
+                        </div>
+                    );
             },
         },
     ].filter(Boolean);
