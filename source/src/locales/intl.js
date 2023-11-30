@@ -82,4 +82,6 @@ export const commonMessage = defineMessages({
     projectCategory: 'Danh mục',
     all: 'Tất cả',
     unRead: 'Chưa đọc',
+    deleteAll: 'Xoá hết',
+    readAll: 'Đọc hết',
 });
