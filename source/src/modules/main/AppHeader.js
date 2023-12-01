@@ -33,31 +33,39 @@ const AppHeader = ({ collapsed, onCollapse }) => {
         dispatch(accountActions.logout());
     };
 
-    const { data: dataMyNotification, execute: executeGetDataMyNotification, loading: loadingDataMyNotification } = useFetch(
-        apiConfig.notification.myNotification,
-        {
-            immediate: true,
-            mappingData: ({ data }) => {
-                const pageTotal = data?.totalPages;
-                const unReadTotal = data?.totalUnread;
-                const listNotification = data?.content?.map((item) => ({
+    const {
+        data: dataMyNotification,
+        execute: executeGetDataMyNotification,
+        loading: loadingDataMyNotification,
+    } = useFetch(apiConfig.notification.myNotification, {
+        immediate: true,
+        mappingData: ({ data }) => {
+            const pageTotal = data?.totalPages;
+            const unReadTotal = data?.totalUnread;
+            const listNotification = data?.content?.map((item) => {
+                const msg = JSON.parse(item?.msg);
+
+                return {
                     id: item?.id,
-                    message: item?.msg,
                     kind: item?.kind,
                     createdDate: item?.createdDate,
                     state: item?.state,
-                }));
-                return {
-                    pageTotal,
-                    unReadTotal,
-                    listNotification,
+                    projectId: msg?.projectId,
+                    taskName: msg?.taskName,
+                    projectName: msg?.projectName,
                 };
-            },
+            });
+            return {
+                pageTotal,
+                unReadTotal,
+                listNotification,
+            };
         },
-    );
+    });
     const { execute: executeUpdateState } = useFetch(apiConfig.notification.changeState, {
         immediate: false,
     });
+
 
     return (
         <Header className={styles.appHeader} style={{ padding: 0, background: 'white' }}>

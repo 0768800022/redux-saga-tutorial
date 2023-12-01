@@ -1,7 +1,16 @@
-import { IconFlower } from '@tabler/icons-react';
+import { UserTypes } from '@constants';
+import { commonMessage } from '@locales/intl';
 import { notification } from 'antd';
+import { defineMessages } from 'react-intl';
 
-export const webSocket = (tokenLogin) => {
+const messages = defineMessages({
+    doneTaskDescription: 'Bạn vừa hoàn thành task: ',
+    studentNewTaskDescription: 'Bạn vừa được giao task: ',
+    cancelTaskDescription: 'Bạn vừa bị huỷ task : ',
+    leaderNewTaskDescription: 'Một task mới vừa được tạo: ',
+});
+
+export const webSocket = (tokenLogin, kindUser, translate) => {
     var wsUri = process.env.REACT_APP_WEB_SOCKET_URL;
     var websocket;
     document.addEventListener('visibilitychange', () => {
@@ -54,12 +63,34 @@ export const webSocket = (tokenLogin) => {
     function onMessage(evt) {
         const data = JSON.parse(evt?.data)?.data;
         if (JSON.stringify(data) !== '{}') {
-            if (data?.kind == 1) {
-                notification.success({ message: 'Done Task', description: data?.message });
-            } else if (data?.kind == 2) {
-                notification.info({ message: 'New Task', description: data?.message });
-            } else {
-                notification.error({ message: 'Cancel Task', description: data?.message });
+            const dataNotification = JSON.parse(data?.message);
+            if (kindUser == UserTypes.STUDENT){
+                if (data?.kind == 1) {
+                    notification.success({
+                        message: translate.formatMessage(commonMessage.doneTaskTitle),
+                        description: translate.formatMessage(messages.doneTaskDescription) + dataNotification?.taskName,
+                    });
+                } else if (data?.kind == 2) {
+                    notification.info({
+                        message: translate.formatMessage(commonMessage.newTaskTitle),
+                        description:
+                            translate.formatMessage(messages.studentNewTaskDescription) + dataNotification?.taskName,
+                    });
+                } else {
+                    notification.error({
+                        message: translate.formatMessage(commonMessage.cancelTaskTitle),
+                        description:
+                            translate.formatMessage(messages.cancelTaskDescription) + dataNotification?.taskName,
+                    });
+                }
+            } else if (kindUser == UserTypes.LEADER){
+                if (data?.kind == 2) {
+                    notification.info({
+                        message: translate.formatMessage(commonMessage.newTaskTitle),
+                        description:
+                            translate.formatMessage(messages.leaderNewTaskDescription) + dataNotification?.taskName,
+                    });
+                } 
             }
             localStorage.setItem('hasNotification', true);
         }
