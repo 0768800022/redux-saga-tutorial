@@ -8,7 +8,6 @@ export const uploadFile = createAction('app/UPLOAD_FILE');
 export const setRestaurantTenantId = createAction('app/SET_RESTAURANT_TENANT_ID');
 export const getRestaurantListByCustomer = createAction('app/GET_RESTAURANT_LIST_BY_CUSTOMER');
 export const setSelectedRowKey = createAction('app/SET_SELECTED_ROW_KEY');
-
 export const actions = {
     showAppLoading,
     hideAppLoading,
