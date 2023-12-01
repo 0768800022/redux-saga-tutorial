@@ -37,7 +37,7 @@ const AppHeader = ({ collapsed, onCollapse }) => {
         const token = getCacheAccessToken();
         webSocket(token);
     }, []);
-    const { data: dataMyNotification, execute: executeGetDataMyNotification } = useFetch(
+    const { data: dataMyNotification, execute: executeGetDataMyNotification, loading: loadingDataMyNotification } = useFetch(
         apiConfig.notification.myNotification,
         {
             immediate: true,
@@ -120,7 +120,7 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                                 data={dataMyNotification?.listNotification}
                                 executeGetData={executeGetDataMyNotification}
                                 executeUpdateState={executeUpdateState}
-                                loading={loadingUpdate}
+                                loading={loadingDataMyNotification}
                                 unReadTotal={dataMyNotification?.unReadTotal}
                                 pageTotal={dataMyNotification?.pageTotal}
                             />

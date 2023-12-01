@@ -61,6 +61,7 @@ export const webSocket = (tokenLogin) => {
             } else {
                 notification.error({ message: 'Cancel Task', description: data?.message });
             }
+            localStorage.setItem('hasNotification', true);
         }
         console.log(data);
         //websocket.close();
