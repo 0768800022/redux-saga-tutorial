@@ -24,6 +24,8 @@ import { useNavigate } from 'react-router';
 import routes from '@routes';
 import feature from '../../../../../assets/images/feature.png';
 import bug from '../../../../../assets/images/bug.jpg';
+import { IconBellRinging } from '@tabler/icons-react';
+import useNotification from '@hooks/useNotification';
 const message = defineMessages({
     objectName: 'Task',
     myTask: 'Task của tôi',
@@ -35,8 +37,10 @@ function ProjectStudentMyTaskListPage() {
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const [openedModal, handlersModal] = useDisclosure(false);
     const [detail, setDetail] = useState({});
+    const [listNotified, setListNotified] = useState([]);
     const { profile } = useAuth();
     const navigate = useNavigate();
+    const notification = useNotification();
     const { data: projects } = useFetch(apiConfig.project.getListStudent, {
         immediate: true,
         mappingData: ({ data }) => {
@@ -57,6 +61,7 @@ function ProjectStudentMyTaskListPage() {
     const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
         immediate: false,
     });
+    const { execute: executeNotifyDone } = useFetch(apiConfig.projectTask.notifyDone, { immediate: false });
     const handleFetchDetail = (id) => {
         executeGet({
             pathParams: { id: id },
@@ -103,6 +108,31 @@ function ProjectStudentMyTaskListPage() {
                                 }}
                             >
                                 <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    notifyDone: ({ id, state, project }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.notifyDone)}>
+                            <Button
+                                disabled={state != 2 || listNotified.includes(id)}
+                                type="link"
+                                style={{ padding: 0, position: 'relative', width: '15px', height: '32px' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    executeNotifyDone({
+                                        data: {
+                                            projectId: project?.id,
+                                            taskId: id,
+                                        },
+                                    });
+                                    setListNotified([...listNotified, id]);
+                                    notification({
+                                        type: 'success',
+                                        message: translate.formatMessage(commonMessage.notificationDone),
+                                    });
+                                }}
+                            >
+                                <IconBellRinging size={15} style={{ position: 'absolute', top: '3px', left: 0 }} />
                             </Button>
                         </BaseTooltip>
                     ),
@@ -167,7 +197,10 @@ function ProjectStudentMyTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ taskLog: true, edit: false, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn(
+            { notifyDone: true, taskLog: true, edit: false, delete: true },
+            { width: '150px' },
+        ),
     ].filter(Boolean);
 
     const searchFields = [

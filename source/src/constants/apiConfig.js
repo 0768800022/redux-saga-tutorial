@@ -754,6 +754,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        notifyDone: {
+            baseURL: `${apiTenantUrl}v1/project-task/notify-done`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     memberProject: {
         getList: {
