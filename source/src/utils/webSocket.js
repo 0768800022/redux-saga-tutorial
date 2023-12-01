@@ -27,7 +27,7 @@ export const webSocket = (tokenLogin, translate) => {
         webSocket();
         setInterval(() => {
             doPing();
-        }, 10000);
+        }, 30000);
     }
     function webSocket() {
         websocket = new WebSocket(wsUri);
