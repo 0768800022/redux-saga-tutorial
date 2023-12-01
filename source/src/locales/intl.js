@@ -87,4 +87,7 @@ export const commonMessage = defineMessages({
     reset: 'Reset',
     loadMore: 'Load more',
     markAsRead: 'Đánh dấu đã đọc',
+    doneTaskTitle: 'Done Task',
+    newTaskTitle: 'New Task',
+    cancelTaskTitle: 'Cancel Task',
 });

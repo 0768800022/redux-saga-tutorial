@@ -2,6 +2,9 @@ import React from 'react';
 import { BaseTooltip } from '../form/BaseTooltip';
 
 const ScheduleFile = ({ schedule }) => {
+    if(!schedule){
+        return <div></div>;
+    }
     let check = JSON.parse(schedule);
     const newCheck = [
         { key: 'M', value: check.t2 },

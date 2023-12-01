@@ -1,17 +1,25 @@
-import { UserOutlined } from '@ant-design/icons';
-import { AppConstants, DATE_DISPLAY_FORMAT, DEFAULT_FORMAT } from '@constants';
-import { IconBell, IconBellFilled, IconCheck, IconCircleCheck, IconCircleX, IconInfoCircle } from '@tabler/icons-react';
-import HeadlessTippy from '@tippyjs/react/headless';
-import { Avatar, Badge, Button, Card, Skeleton, Spin } from 'antd';
-import React, { useEffect, useState } from 'react';
-import styles from './NotificationForm.module.scss';
+import { DEFAULT_FORMAT, UserTypes } from '@constants';
+import apiConfig from '@constants/apiConfig';
+import useAuth from '@hooks/useAuth';
+import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import { IconBell, IconBellFilled, IconCheck, IconCircleCheck, IconCircleX, IconInfoCircle } from '@tabler/icons-react';
+import HeadlessTippy from '@tippyjs/react/headless';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import moment from 'moment';
+import { Badge, Button, Card, Skeleton } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from './BaseTooltip';
-import apiConfig from '@constants/apiConfig';
-import useFetch from '@hooks/useFetch';
+import styles from './NotificationForm.module.scss';
+const messages = defineMessages({
+    doneTaskDescription: 'Bạn đã hoàn thành task: ',
+    studentNewTaskDescription: 'Bạn đã được giao task: ',
+    cancelTaskDescription: 'Bạn đã bị huỷ task : ',
+    leaderNewTaskDescription: 'Một task mới được tạo: ',
+});
 
 export const NotificationForm = ({
     data,
@@ -33,12 +41,16 @@ export const NotificationForm = ({
     const [readAll, setReadAll] = useState(false);
     const [dataNotificationUnRead, setDataNotificationUnRead] = useState([]);
     const [hasNotification, setHasNotification] = useState(false);
+    const navigate = useNavigate();
+    const hostPath = window.location.host;
+    const  { profile }  = useAuth();
     const { execute: executeReadAll } = useFetch(apiConfig.notification.readAll, {
         immediate: false,
     });
     const { execute: executeDeleteAll } = useFetch(apiConfig.notification.deleteAll, {
         immediate: false,
     });
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -102,11 +114,26 @@ export const NotificationForm = ({
     };
     const titleNotification = (kind) => {
         if (kind == 1) {
-            return 'Done Task';
+            return translate.formatMessage(commonMessage.doneTaskTitle);
         } else if (kind == 2) {
-            return 'New Task';
+            return translate.formatMessage(commonMessage.newTaskTitle);
         } else {
-            return 'Cancel Task';
+            return translate.formatMessage(commonMessage.cancelTaskTitle);
+        }
+    };
+    const descriptionNotification = (kind, taskName) => {
+        if(profile?.kind == UserTypes.STUDENT){
+            if (kind == 1) {
+                return translate.formatMessage(messages.doneTaskDescription) + taskName;
+            } else if (kind == 2) {
+                return translate.formatMessage(messages.studentNewTaskDescription) + taskName;
+            } else {
+                return translate.formatMessage(messages.cancelTaskDescription) + taskName;
+            }
+        } else if (profile?.kind == UserTypes.LEADER) {
+            if (kind == 2) {
+                return translate.formatMessage(messages.leaderNewTaskDescription) + taskName;
+            } 
         }
     };
     const timeNotification = (createdDate) => {
@@ -114,7 +141,8 @@ export const NotificationForm = ({
         const dateTimeString = convertDateTimeToString(dateTime, DEFAULT_FORMAT);
         return dateTimeString;
     };
-    const handleOnClickChecked = (id) => {
+    const handleOnClickChecked = (e,id) => {
+        e.stopPropagation(); 
         executeUpdateState({
             data: { id },
         });
@@ -145,6 +173,21 @@ export const NotificationForm = ({
     const handleDeleteAll = () => {
         executeDeleteAll();
         setDeleteAll(true);
+    };
+    const handleClickItem = (item) => {
+        console.log(item);
+        executeUpdateState({
+            data: { id: item?.id },
+        });
+        if (hiddenItems?.length == dataNotificationUnRead?.length - 1) {
+            setReadAll(true);
+        }
+        setHiddenItems([...hiddenItems, item?.id]);
+        if(profile?.kind == UserTypes.STUDENT){
+            navigate(routes.projectStudentTaskListPage.path + `?projectId=${item?.projectId}&projectName=${item?.projectName}&developerId=${profile?.id}&active=true`);
+        }else if(profile?.kind == UserTypes.LEADER){
+            navigate(routes.projectLeaderTaskListPage.path + `?projectId=${item?.projectId}&projectName=${item?.projectName}&active=true`);
+        }
     };
 
     return (
@@ -219,6 +262,7 @@ export const NotificationForm = ({
                                                     ? 'none'
                                                     : '',
                                         }}
+                                        onClick={() => handleClickItem(item)}
                                     >
                                         {iconNotification(item?.kind, { marginRight: '16px' }, 36)}
                                         <div
@@ -234,7 +278,7 @@ export const NotificationForm = ({
                                                 <span
                                                     style={{ fontWeight: 600, width: '350px', wordWrap: 'break-word' }}
                                                 >
-                                                    {item?.message}
+                                                    {descriptionNotification(item?.kind, item?.taskName)}
                                                 </span>
                                             </text>
                                             <span style={{ paddingTop: '4px' }}>
@@ -246,7 +290,7 @@ export const NotificationForm = ({
                                                 <Button
                                                     type="link"
                                                     style={{ paddingRight: '10px' }}
-                                                    onClick={() => handleOnClickChecked(item?.id)}
+                                                    onClick={(e) => handleOnClickChecked(e,item?.id)}
                                                 >
                                                     <IconCheck color="#2b6fab" />
                                                 </Button>
