@@ -43,7 +43,6 @@ export const NotificationForm = ({
     useEffect(() => {
         const interval = setInterval(() => {
             const hasNotificationLocalStr = JSON.parse(localStorage.getItem('hasNotification'));
-            console.log(hasNotificationLocalStr);
             if (hasNotificationLocalStr && !hasNotification) {
                 setHasNotification(true);
             }
@@ -79,12 +78,14 @@ export const NotificationForm = ({
     }, [activeIcon]);
 
     useEffect(() => {
-        if (!activeButtonAll) {
-            executeGetData({
-                params: { state: 0 },
-            });
-        } else {
-            executeGetData();
+        if(activeIcon){
+            if (!activeButtonAll) {
+                executeGetData({
+                    params: { state: 0 },
+                });
+            } else {
+                executeGetData();
+            }
         }
         setIsLoadMore(false);
         setCountLoadMore(1);
@@ -145,7 +146,7 @@ export const NotificationForm = ({
         executeDeleteAll();
         setDeleteAll(true);
     };
-    console.log(hasNotification);
+
     return (
         <HeadlessTippy
             interactive
