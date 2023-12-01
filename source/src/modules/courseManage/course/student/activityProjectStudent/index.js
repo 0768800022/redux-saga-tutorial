@@ -240,7 +240,7 @@ function MyActivityProjectListPage() {
         },
     ];
     const { data: timeSum, execute: executeTimeSum } = useFetch(apiConfig.projectTaskLog.getSum, {
-        immediate: true,
+        immediate: false,
         params: { projectId: queryFilter?.projectId, studentId: profile.id },
         mappingData: ({ data }) =>
             data.content.reduce(
@@ -263,7 +263,7 @@ function MyActivityProjectListPage() {
             params: { archived, projectId, studentId: profile.id },
         });
     }, [projectId, archived]);
-    console.log(timeSum);
+  
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.myActivity) }]}>
             <ListPage

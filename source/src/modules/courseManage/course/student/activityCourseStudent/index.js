@@ -106,7 +106,7 @@ function MyActivityCourseListPage() {
         },
     ];
     const { data: timeSum, execute: executeTimeSum } = useFetch(apiConfig.taskLog.getSum, {
-        immediate: true,
+        immediate: false,
         params: { courseId: queryFilter?.courseId, studentId: profile.id },
         mappingData: ({ data }) => data.content,
     });
