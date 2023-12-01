@@ -84,5 +84,7 @@ export const commonMessage = defineMessages({
     unRead: 'Chưa đọc',
     deleteAll: 'Xoá hết',
     readAll: 'Đọc hết',
-    reset:'Reset',
+    reset: 'Reset',
+    loadMore: 'Load more',
+    markAsRead: 'Đánh dấu đã đọc',
 });
