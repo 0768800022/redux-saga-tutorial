@@ -182,6 +182,7 @@ export const NotificationForm = ({
             setReadAll(true);
         }
         setHiddenItems([...hiddenItems, item?.id]);
+        setActiveIcon(false);
         if(profile?.kind == UserTypes.STUDENT){
             navigate(routes.projectStudentTaskListPage.path + `?projectId=${item?.projectId}&projectName=${item?.projectName}&developerId=${profile?.id}&active=true`);
         }else if(profile?.kind == UserTypes.LEADER){
@@ -194,6 +195,7 @@ export const NotificationForm = ({
             interactive
             placement="bottom-end"
             trigger="click"
+            visible={activeIcon}
             onShow={() => {
                 setActiveIcon(true);
             }}
@@ -289,7 +291,7 @@ export const NotificationForm = ({
                                                 <Button
                                                     type="link"
                                                     style={{ paddingRight: '10px' }}
-                                                    onClick={(e) => handleOnClickChecked(e,item?.id)}
+                                                    onClick={(e) => handleOnClickChecked(e, item?.id)}
                                                 >
                                                     <IconCheck color="#2b6fab" />
                                                 </Button>
@@ -300,16 +302,27 @@ export const NotificationForm = ({
                             })}
                         </div>
                     )}
-                    {pageTotal > 0 && countLoadMore != pageTotal && !deleteAll && !(readAll && !activeButtonAll) && !loading && (
+                    {pageTotal > 0 &&
+                        countLoadMore != pageTotal &&
+                        !deleteAll &&
+                        !(readAll && !activeButtonAll) &&
+                        !loading && (
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '6px' }}>
-                            <Button onClick={handleLoadMore}>{translate.formatMessage(commonMessage.loadMore)}</Button>
+                            <Button onClick={handleLoadMore}>
+                                {translate.formatMessage(commonMessage.loadMore)}
+                            </Button>
                         </div>
                     )}
                 </Card>
             )}
             {...props}
         >
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div
+                style={{ display: 'flex', alignItems: 'center' }}
+                onClick={() => {
+                    activeIcon ? setActiveIcon(false) : setActiveIcon(true);
+                }}
+            >
                 <Badge dot={(unReadTotal > 0 && !readAll && !deleteAll && !loading) || hasNotification}>
                     {activeIcon ? <IconBellFilled /> : <IconBell />}
                 </Badge>
