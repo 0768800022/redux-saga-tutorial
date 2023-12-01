@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { AppConstants, DATE_DISPLAY_FORMAT, DEFAULT_FORMAT } from '@constants';
 import { IconBell, IconBellFilled, IconCheck, IconCircleCheck, IconCircleX, IconInfoCircle } from '@tabler/icons-react';
 import HeadlessTippy from '@tippyjs/react/headless';
-import { Avatar, Badge, Button, Card } from 'antd';
+import { Avatar, Badge, Button, Card, Skeleton, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styles from './NotificationForm.module.scss';
 import useTranslate from '@hooks/useTranslate';
@@ -32,12 +32,23 @@ export const NotificationForm = ({
     const [deleteAll, setDeleteAll] = useState(false);
     const [readAll, setReadAll] = useState(false);
     const [dataNotificationUnRead, setDataNotificationUnRead] = useState([]);
+    const [hasNotification, setHasNotification] = useState(false);
     const { execute: executeReadAll } = useFetch(apiConfig.notification.readAll, {
         immediate: false,
     });
     const { execute: executeDeleteAll } = useFetch(apiConfig.notification.deleteAll, {
         immediate: false,
     });
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const hasNotificationLocalStr = JSON.parse(localStorage.getItem('hasNotification'));
+            if (hasNotificationLocalStr && !hasNotification) {
+                setHasNotification(true);
+            }
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         if (isLoadMore && data) {
@@ -58,19 +69,23 @@ export const NotificationForm = ({
                     params: { state: 0 },
                 });
             }
+            setReadAll(false);
+            setDeleteAll(false);
+            localStorage.setItem('hasNotification', false);
+            setHasNotification(false);
         }
-        setReadAll(false);
-        setDeleteAll(false);
         setHiddenItems([]);
     }, [activeIcon]);
 
     useEffect(() => {
-        if (!activeButtonAll) {
-            executeGetData({
-                params: { state: 0 },
-            });
-        } else {
-            executeGetData();
+        if(activeIcon){
+            if (!activeButtonAll) {
+                executeGetData({
+                    params: { state: 0 },
+                });
+            } else {
+                executeGetData();
+            }
         }
         setIsLoadMore(false);
         setCountLoadMore(1);
@@ -103,6 +118,7 @@ export const NotificationForm = ({
         executeUpdateState({
             data: { id },
         });
+
         if (hiddenItems?.length == dataNotificationUnRead?.length - 1) {
             setReadAll(true);
         }
@@ -176,56 +192,72 @@ export const NotificationForm = ({
                             </Button>
                         </div>
                     </div>
-                    {dataNotification?.map((item) => {
-                        return (
-                            <div
-                                key={item.id}
-                                className={
-                                    styles.notificationItem +
-                                    ' ' +
-                                    ((item?.state == 1 || hiddenItems.includes(item?.id) || readAll) && styles.viewed)
-                                }
-                                style={{
-                                    display:
-                                        (hiddenItems.includes(item?.id) && !activeButtonAll) ||
-                                        deleteAll ||
-                                        (readAll && !activeButtonAll)
-                                            ? 'none'
-                                            : '',
-                                }}
-                            >
-                                {iconNotification(item?.kind, { marginRight: '16px' }, 36)}
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        whiteSpace: 'normal',
-                                        width: '410px',
-                                    }}
-                                >
-                                    <text style={{ display: 'flex', flexDirection: 'column' }}>
-                                        <span style={{ fontWeight: 700 }}>{titleNotification(item?.kind)}</span>
-                                        <span style={{ fontWeight: 600, width: '350px', wordWrap: 'break-word' }}>
-                                            {item?.message}
-                                        </span>
-                                    </text>
-                                    <span style={{ paddingTop: '4px' }}>{timeNotification(item?.createdDate)}</span>
-                                </div>
-                                {item?.state == 0 && !hiddenItems.includes(item?.id) && !readAll && (
-                                    <BaseTooltip title={'Đánh dấu đã đọc'}>
-                                        <Button
-                                            type="link"
-                                            style={{ paddingRight: '10px' }}
-                                            onClick={() => handleOnClickChecked(item?.id)}
+                    {loading ? (
+                        <div>
+                            <Skeleton active paragraph={{ rows: 2 }} />
+                            <Skeleton active paragraph={{ rows: 2 }} />
+                            <Skeleton active paragraph={{ rows: 2 }} />
+                            <Skeleton active paragraph={{ rows: 2 }} />
+                        </div>
+                    ) : (
+                        <div>
+                            {dataNotification?.map((item) => {
+                                return (
+                                    <div
+                                        key={item.id}
+                                        className={
+                                            styles.notificationItem +
+                                            ' ' +
+                                            ((item?.state == 1 || hiddenItems.includes(item?.id) || readAll) &&
+                                                styles.viewed)
+                                        }
+                                        style={{
+                                            display:
+                                                (hiddenItems.includes(item?.id) && !activeButtonAll) ||
+                                                deleteAll ||
+                                                (readAll && !activeButtonAll)
+                                                    ? 'none'
+                                                    : '',
+                                        }}
+                                    >
+                                        {iconNotification(item?.kind, { marginRight: '16px' }, 36)}
+                                        <div
+                                            style={{
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                whiteSpace: 'normal',
+                                                width: '410px',
+                                            }}
                                         >
-                                            <IconCheck color="#2b6fab" />
-                                        </Button>
-                                    </BaseTooltip>
-                                )}
-                            </div>
-                        );
-                    })}
-                    {pageTotal > 0 && countLoadMore != pageTotal && !deleteAll && !(readAll && !activeButtonAll) && (
+                                            <text style={{ display: 'flex', flexDirection: 'column' }}>
+                                                <span style={{ fontWeight: 700 }}>{titleNotification(item?.kind)}</span>
+                                                <span
+                                                    style={{ fontWeight: 600, width: '350px', wordWrap: 'break-word' }}
+                                                >
+                                                    {item?.message}
+                                                </span>
+                                            </text>
+                                            <span style={{ paddingTop: '4px' }}>
+                                                {timeNotification(item?.createdDate)}
+                                            </span>
+                                        </div>
+                                        {item?.state == 0 && !hiddenItems.includes(item?.id) && !readAll && (
+                                            <BaseTooltip title={'Đánh dấu đã đọc'}>
+                                                <Button
+                                                    type="link"
+                                                    style={{ paddingRight: '10px' }}
+                                                    onClick={() => handleOnClickChecked(item?.id)}
+                                                >
+                                                    <IconCheck color="#2b6fab" />
+                                                </Button>
+                                            </BaseTooltip>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    )}
+                    {pageTotal > 0 && countLoadMore != pageTotal && !deleteAll && !(readAll && !activeButtonAll) && !loading && (
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '6px' }}>
                             <Button onClick={handleLoadMore}>Load more</Button>
                         </div>
@@ -235,7 +267,7 @@ export const NotificationForm = ({
             {...props}
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Badge dot={unReadTotal > 0 && !readAll && !deleteAll}>
+                <Badge dot={(unReadTotal > 0 && !readAll && !deleteAll && !loading) || hasNotification}>
                     {activeIcon ? <IconBellFilled /> : <IconBell />}
                 </Badge>
             </div>
