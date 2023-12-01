@@ -61,7 +61,6 @@ export const webSocket = (tokenLogin, kindUser, translate) => {
     }
 
     function onMessage(evt) {
-        console.log(kindUser);
         const data = JSON.parse(evt?.data)?.data;
         if (JSON.stringify(data) !== '{}') {
             const dataNotification = JSON.parse(data?.message);
@@ -85,7 +84,6 @@ export const webSocket = (tokenLogin, kindUser, translate) => {
                     });
                 }
             } else if (kindUser == UserTypes.LEADER){
-                console.log('eworo');
                 if (data?.kind == 2) {
                     notification.info({
                         message: translate.formatMessage(commonMessage.newTaskTitle),

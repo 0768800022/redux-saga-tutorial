@@ -175,7 +175,6 @@ export const NotificationForm = ({
         setDeleteAll(true);
     };
     const handleClickItem = (item) => {
-        console.log(item);
         executeUpdateState({
             data: { id: item?.id },
         });
