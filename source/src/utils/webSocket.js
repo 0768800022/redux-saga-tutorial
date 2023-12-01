@@ -5,10 +5,11 @@ import { defineMessages } from 'react-intl';
 import { getData } from './localStorage';
 
 const messages = defineMessages({
-    doneTaskDescription: 'Bạn vừa hoàn thành task: ',
+    studentDoneTaskDescription: 'Bạn vừa hoàn thành task: ',
     studentNewTaskDescription: 'Bạn vừa được giao task: ',
     cancelTaskDescription: 'Bạn vừa bị huỷ task : ',
     leaderNewTaskDescription: 'Một task mới vừa được tạo: ',
+    leaderDoneTaskDescription: 'Thông báo đã hoàn thành task: ',
 });
 
 export const webSocket = (tokenLogin, translate) => {
@@ -71,7 +72,7 @@ export const webSocket = (tokenLogin, translate) => {
                 if (data?.kind == 1) {
                     notification.success({
                         message: translate.formatMessage(commonMessage.doneTaskTitle),
-                        description: translate.formatMessage(messages.doneTaskDescription) + dataNotification?.taskName,
+                        description: translate.formatMessage(messages.studentDoneTaskDescription) + dataNotification?.taskName,
                     });
                 } else if (data?.kind == 2) {
                     notification.info({
@@ -93,7 +94,12 @@ export const webSocket = (tokenLogin, translate) => {
                         description:
                             translate.formatMessage(messages.leaderNewTaskDescription) + dataNotification?.taskName,
                     });
-                } 
+                } else if(data?.kind == 4){
+                    notification.success({
+                        message: translate.formatMessage(commonMessage.notifyDoneTaskTitle),
+                        description: translate.formatMessage(messages.leaderDoneTaskDescription) + dataNotification?.taskName,
+                    });
+                }
             }
             localStorage.setItem('hasNotification', true);
         }

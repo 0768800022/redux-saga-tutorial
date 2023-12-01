@@ -24,6 +24,8 @@ import useDisclosure from '@hooks/useDisclosure';
 import { useState } from 'react';
 import feature from '../../../../../assets/images/feature.png';
 import bug from '../../../../../assets/images/bug.jpg';
+import useNotification from '@hooks/useNotification';
+import { IconBellRinging } from '@tabler/icons-react';
 const message = defineMessages({
     objectName: 'Task',
     developer: 'Lập trình viên',
@@ -54,10 +56,13 @@ function ProjectStudentTaskListPage() {
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const [openedModal, handlersModal] = useDisclosure(false);
     const [detail, setDetail] = useState({});
+    const [listNotified, setListNotified] = useState([]);
+    const notification = useNotification();
 
     const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
         immediate: false,
     });
+    const { execute: executeNotifyDone } = useFetch(apiConfig.projectTask.notifyDone, { immediate: false });
     const handleFetchDetail = (id) => {
         executeGet({
             pathParams: { id: id },
@@ -147,6 +152,31 @@ function ProjectStudentTaskListPage() {
                             </Button>
                         </BaseTooltip>
                     ),
+                    notifyDone: ({ id, state, project }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.notifyDone)}>
+                            <Button
+                                disabled={state != 2 || listNotified.includes(id)}
+                                type="link"
+                                style={{ padding: 0, position: 'relative', width: '15px', height: '32px' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    executeNotifyDone({
+                                        data: {
+                                            projectId: project?.id,
+                                            taskId: id,
+                                        },
+                                    });
+                                    setListNotified([...listNotified, id]);
+                                    notification({
+                                        type: 'success',
+                                        message: translate.formatMessage(commonMessage.notificationDone),
+                                    });
+                                }}
+                            >
+                                <IconBellRinging size={15} style={{ position: 'absolute', top: '3px', left: 0 }} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                 });
             },
         });
@@ -210,7 +240,10 @@ function ProjectStudentTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ taskLog: true, edit: true, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn(
+            { notifyDone: true, taskLog: true, edit: true, delete: true },
+            { width: '150px' },
+        ),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
