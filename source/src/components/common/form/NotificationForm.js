@@ -242,7 +242,7 @@ export const NotificationForm = ({
                                             </span>
                                         </div>
                                         {item?.state == 0 && !hiddenItems.includes(item?.id) && !readAll && (
-                                            <BaseTooltip title={'Đánh dấu đã đọc'}>
+                                            <BaseTooltip title={translate.formatMessage(commonMessage.markAsRead)}>
                                                 <Button
                                                     type="link"
                                                     style={{ paddingRight: '10px' }}
@@ -259,7 +259,7 @@ export const NotificationForm = ({
                     )}
                     {pageTotal > 0 && countLoadMore != pageTotal && !deleteAll && !(readAll && !activeButtonAll) && !loading && (
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '6px' }}>
-                            <Button onClick={handleLoadMore}>Load more</Button>
+                            <Button onClick={handleLoadMore}>{translate.formatMessage(commonMessage.loadMore)}</Button>
                         </div>
                     )}
                 </Card>
