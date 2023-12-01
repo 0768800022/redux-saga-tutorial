@@ -150,6 +150,7 @@ function ProjectStudentTaskListPage() {
                 });
             },
         });
+    console.log(queryFilter);
     const columns = [
         {
             dataIndex: 'kind',
@@ -273,6 +274,7 @@ function ProjectStudentTaskListPage() {
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
                         className: styles.search,
+                        initialValues: queryFilter,
                     })}
                     actionBar={stateProject != 3 && mixinFuncs.renderActionBar()}
                     baseTable={

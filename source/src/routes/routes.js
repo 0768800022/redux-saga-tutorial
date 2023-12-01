@@ -49,7 +49,7 @@ const AppRoutes = () => {
     );
     useEffect(() => {
         const accessToken = getCacheAccessToken();
-        webSocket(accessToken, profile?.kind, translate);
+        webSocket(accessToken, translate);
     }, []);
 
     return (
