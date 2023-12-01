@@ -1,17 +1,25 @@
-import { UserOutlined } from '@ant-design/icons';
-import { AppConstants, DATE_DISPLAY_FORMAT, DEFAULT_FORMAT } from '@constants';
-import { IconBell, IconBellFilled, IconCheck, IconCircleCheck, IconCircleX, IconInfoCircle } from '@tabler/icons-react';
-import HeadlessTippy from '@tippyjs/react/headless';
-import { Avatar, Badge, Button, Card, Skeleton, Spin } from 'antd';
-import React, { useEffect, useState } from 'react';
-import styles from './NotificationForm.module.scss';
+import { DEFAULT_FORMAT, UserTypes } from '@constants';
+import apiConfig from '@constants/apiConfig';
+import useAuth from '@hooks/useAuth';
+import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import { IconBell, IconBellFilled, IconCheck, IconCircleCheck, IconCircleX, IconInfoCircle } from '@tabler/icons-react';
+import HeadlessTippy from '@tippyjs/react/headless';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import moment from 'moment';
+import { Badge, Button, Card, Skeleton } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from './BaseTooltip';
-import apiConfig from '@constants/apiConfig';
-import useFetch from '@hooks/useFetch';
+import styles from './NotificationForm.module.scss';
+const messages = defineMessages({
+    doneTaskDescription: 'Bạn đã hoàn thành task: ',
+    studentNewTaskDescription: 'Bạn đã được giao task: ',
+    cancelTaskDescription: 'Bạn đã bị huỷ task : ',
+    leaderNewTaskDescription: 'Một task mới được tạo: ',
+});
 
 export const NotificationForm = ({
     data,
@@ -33,12 +41,16 @@ export const NotificationForm = ({
     const [readAll, setReadAll] = useState(false);
     const [dataNotificationUnRead, setDataNotificationUnRead] = useState([]);
     const [hasNotification, setHasNotification] = useState(false);
+    const navigate = useNavigate();
+    const hostPath = window.location.host;
+    const  { profile }  = useAuth();
     const { execute: executeReadAll } = useFetch(apiConfig.notification.readAll, {
         immediate: false,
     });
     const { execute: executeDeleteAll } = useFetch(apiConfig.notification.deleteAll, {
         immediate: false,
     });
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -102,11 +114,26 @@ export const NotificationForm = ({
     };
     const titleNotification = (kind) => {
         if (kind == 1) {
-            return 'Done Task';
+            return translate.formatMessage(commonMessage.doneTaskTitle);
         } else if (kind == 2) {
-            return 'New Task';
+            return translate.formatMessage(commonMessage.newTaskTitle);
         } else {
-            return 'Cancel Task';
+            return translate.formatMessage(commonMessage.cancelTaskTitle);
+        }
+    };
+    const descriptionNotification = (kind, taskName) => {
+        if(profile?.kind == UserTypes.STUDENT){
+            if (kind == 1) {
+                return translate.formatMessage(messages.doneTaskDescription) + taskName;
+            } else if (kind == 2) {
+                return translate.formatMessage(messages.studentNewTaskDescription) + taskName;
+            } else {
+                return translate.formatMessage(messages.cancelTaskDescription) + taskName;
+            }
+        } else if (profile?.kind == UserTypes.LEADER) {
+            if (kind == 2) {
+                return translate.formatMessage(messages.leaderNewTaskDescription) + taskName;
+            } 
         }
     };
     const timeNotification = (createdDate) => {
@@ -114,7 +141,8 @@ export const NotificationForm = ({
         const dateTimeString = convertDateTimeToString(dateTime, DEFAULT_FORMAT);
         return dateTimeString;
     };
-    const handleOnClickChecked = (id) => {
+    const handleOnClickChecked = (e,id) => {
+        e.stopPropagation(); 
         executeUpdateState({
             data: { id },
         });
@@ -146,12 +174,28 @@ export const NotificationForm = ({
         executeDeleteAll();
         setDeleteAll(true);
     };
+    const handleClickItem = (item) => {
+        executeUpdateState({
+            data: { id: item?.id },
+        });
+        if (hiddenItems?.length == dataNotificationUnRead?.length - 1) {
+            setReadAll(true);
+        }
+        setHiddenItems([...hiddenItems, item?.id]);
+        setActiveIcon(false);
+        if(profile?.kind == UserTypes.STUDENT){
+            navigate(routes.projectStudentTaskListPage.path + `?projectId=${item?.projectId}&projectName=${item?.projectName}&developerId=${profile?.id}&active=true`);
+        }else if(profile?.kind == UserTypes.LEADER){
+            navigate(routes.projectLeaderTaskListPage.path + `?projectId=${item?.projectId}&projectName=${item?.projectName}&active=true`);
+        }
+    };
 
     return (
         <HeadlessTippy
             interactive
             placement="bottom-end"
             trigger="click"
+            visible={activeIcon}
             onShow={() => {
                 setActiveIcon(true);
             }}
@@ -219,6 +263,7 @@ export const NotificationForm = ({
                                                     ? 'none'
                                                     : '',
                                         }}
+                                        onClick={() => handleClickItem(item)}
                                     >
                                         {iconNotification(item?.kind, { marginRight: '16px' }, 36)}
                                         <div
@@ -234,7 +279,7 @@ export const NotificationForm = ({
                                                 <span
                                                     style={{ fontWeight: 600, width: '350px', wordWrap: 'break-word' }}
                                                 >
-                                                    {item?.message}
+                                                    {descriptionNotification(item?.kind, item?.taskName)}
                                                 </span>
                                             </text>
                                             <span style={{ paddingTop: '4px' }}>
@@ -242,11 +287,11 @@ export const NotificationForm = ({
                                             </span>
                                         </div>
                                         {item?.state == 0 && !hiddenItems.includes(item?.id) && !readAll && (
-                                            <BaseTooltip title={'Đánh dấu đã đọc'}>
+                                            <BaseTooltip title={translate.formatMessage(commonMessage.markAsRead)}>
                                                 <Button
                                                     type="link"
                                                     style={{ paddingRight: '10px' }}
-                                                    onClick={() => handleOnClickChecked(item?.id)}
+                                                    onClick={(e) => handleOnClickChecked(e, item?.id)}
                                                 >
                                                     <IconCheck color="#2b6fab" />
                                                 </Button>
@@ -257,16 +302,27 @@ export const NotificationForm = ({
                             })}
                         </div>
                     )}
-                    {pageTotal > 0 && countLoadMore != pageTotal && !deleteAll && !(readAll && !activeButtonAll) && !loading && (
+                    {pageTotal > 0 &&
+                        countLoadMore != pageTotal &&
+                        !deleteAll &&
+                        !(readAll && !activeButtonAll) &&
+                        !loading && (
                         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '6px' }}>
-                            <Button onClick={handleLoadMore}>Load more</Button>
+                            <Button onClick={handleLoadMore}>
+                                {translate.formatMessage(commonMessage.loadMore)}
+                            </Button>
                         </div>
                     )}
                 </Card>
             )}
             {...props}
         >
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div
+                style={{ display: 'flex', alignItems: 'center' }}
+                onClick={() => {
+                    activeIcon ? setActiveIcon(false) : setActiveIcon(true);
+                }}
+            >
                 <Badge dot={(unReadTotal > 0 && !readAll && !deleteAll && !loading) || hasNotification}>
                     {activeIcon ? <IconBellFilled /> : <IconBell />}
                 </Badge>

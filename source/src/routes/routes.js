@@ -14,9 +14,13 @@ import useFetch from '@hooks/useFetch';
 import apiConfig from '@constants/apiConfig';
 import { UserTypes } from '@constants';
 import { appActions } from '@store/actions';
+import { getCacheAccessToken } from '@services/userService';
+import { webSocket } from '@utils/webSocket';
+import useTranslate from '@hooks/useTranslate';
 const routesArray = Object.values(routes);
 const AppRoutes = () => {
     const { isAuthenticated, loading: loadingProfile, profile } = useAuth();
+    const translate = useTranslate();
     const renderRoute = (route) => (
         <Route
             key={route.path || 'not-found'}
@@ -43,7 +47,10 @@ const AppRoutes = () => {
             }
         />
     );
-
+    useEffect(() => {
+        const accessToken = getCacheAccessToken();
+        webSocket(accessToken, profile?.kind, translate);
+    }, []);
 
     return (
         <BrowserRouter>
