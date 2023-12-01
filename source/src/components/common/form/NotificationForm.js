@@ -19,6 +19,7 @@ const messages = defineMessages({
     studentNewTaskDescription: 'Bạn đã được giao task: ',
     cancelTaskDescription: 'Bạn đã bị huỷ task : ',
     leaderNewTaskDescription: 'Một task mới được tạo: ',
+    leaderDoneTaskDescription: 'Thông báo xong task: ',
 });
 
 export const NotificationForm = ({
@@ -108,8 +109,10 @@ export const NotificationForm = ({
             return <IconCircleCheck color="green" style={style} size={size} />;
         } else if (kind == 2) {
             return <IconInfoCircle color="blue" style={style} size={size} />;
-        } else {
+        } else if(kind == 3){
             return <IconCircleX color="red" style={style} size={size} />;
+        } else{
+            return <IconCircleCheck color="green" style={style} size={size} />;
         }
     };
     const titleNotification = (kind) => {
@@ -117,8 +120,10 @@ export const NotificationForm = ({
             return translate.formatMessage(commonMessage.doneTaskTitle);
         } else if (kind == 2) {
             return translate.formatMessage(commonMessage.newTaskTitle);
-        } else {
+        } else if (kind == 3){
             return translate.formatMessage(commonMessage.cancelTaskTitle);
+        } else {
+            return translate.formatMessage(commonMessage.notifyDoneTaskTitle);
         }
     };
     const descriptionNotification = (kind, taskName) => {
@@ -133,7 +138,9 @@ export const NotificationForm = ({
         } else if (profile?.kind == UserTypes.LEADER) {
             if (kind == 2) {
                 return translate.formatMessage(messages.leaderNewTaskDescription) + taskName;
-            } 
+            } else if (kind == 4){
+                return translate.formatMessage(messages.leaderDoneTaskDescription) + taskName;
+            }
         }
     };
     const timeNotification = (createdDate) => {
@@ -231,7 +238,7 @@ export const NotificationForm = ({
                             <Button type="default" shape="round" style={{ marginRight: '4px' }} onClick={handleReadAll}>
                                 {translate.formatMessage(commonMessage.readAll)}
                             </Button>
-                            <Button type="default" shape="round" onClick={handleDeleteAll}>
+                            <Button style={{ color: 'white', backgroundColor: 'red' }} type="default" shape="round" onClick={handleDeleteAll}>
                                 {translate.formatMessage(commonMessage.deleteAll)}
                             </Button>
                         </div>

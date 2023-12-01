@@ -90,4 +90,7 @@ export const commonMessage = defineMessages({
     doneTaskTitle: 'Done Task',
     newTaskTitle: 'New Task',
     cancelTaskTitle: 'Cancel Task',
+    notifyDone: 'Thông báo hoàn thành',
+    notificationDone: 'Đã thông báo hoàn thành task',
+    notifyDoneTaskTitle: 'Notify Done Task',
 });
