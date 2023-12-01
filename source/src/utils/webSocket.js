@@ -1,7 +1,8 @@
-import { UserTypes } from '@constants';
+import { UserTypes, storageKeys } from '@constants';
 import { commonMessage } from '@locales/intl';
 import { notification } from 'antd';
 import { defineMessages } from 'react-intl';
+import { getData } from './localStorage';
 
 const messages = defineMessages({
     doneTaskDescription: 'Bạn vừa hoàn thành task: ',
@@ -10,7 +11,7 @@ const messages = defineMessages({
     leaderNewTaskDescription: 'Một task mới vừa được tạo: ',
 });
 
-export const webSocket = (tokenLogin, kindUser, translate) => {
+export const webSocket = (tokenLogin, translate) => {
     var wsUri = process.env.REACT_APP_WEB_SOCKET_URL;
     var websocket;
     document.addEventListener('visibilitychange', () => {
@@ -26,7 +27,7 @@ export const webSocket = (tokenLogin, kindUser, translate) => {
         webSocket();
         setInterval(() => {
             doPing();
-        }, 30000);
+        }, 10000);
     }
     function webSocket() {
         websocket = new WebSocket(wsUri);
@@ -62,9 +63,11 @@ export const webSocket = (tokenLogin, kindUser, translate) => {
 
     function onMessage(evt) {
         const data = JSON.parse(evt?.data)?.data;
+        console.log(data);
         if (JSON.stringify(data) !== '{}') {
             const dataNotification = JSON.parse(data?.message);
-            if (kindUser == UserTypes.STUDENT){
+            const useKind = getData(storageKeys.USER_KIND);
+            if (useKind == UserTypes.STUDENT){
                 if (data?.kind == 1) {
                     notification.success({
                         message: translate.formatMessage(commonMessage.doneTaskTitle),
@@ -83,7 +86,7 @@ export const webSocket = (tokenLogin, kindUser, translate) => {
                             translate.formatMessage(messages.cancelTaskDescription) + dataNotification?.taskName,
                     });
                 }
-            } else if (kindUser == UserTypes.LEADER){
+            } else if (useKind == UserTypes.LEADER){
                 if (data?.kind == 2) {
                     notification.info({
                         message: translate.formatMessage(commonMessage.newTaskTitle),
@@ -94,7 +97,6 @@ export const webSocket = (tokenLogin, kindUser, translate) => {
             }
             localStorage.setItem('hasNotification', true);
         }
-        console.log(data);
         //websocket.close();
     }
     function onError(evt) {
