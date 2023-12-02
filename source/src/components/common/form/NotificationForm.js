@@ -8,18 +8,20 @@ import routes from '@routes';
 import { IconBell, IconBellFilled, IconCheck, IconCircleCheck, IconCircleX, IconInfoCircle } from '@tabler/icons-react';
 import HeadlessTippy from '@tippyjs/react/headless';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import { Badge, Button, Card, Skeleton } from 'antd';
+import { Badge, Button, Card, Modal, Skeleton } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from './BaseTooltip';
 import styles from './NotificationForm.module.scss';
+import { IconBellRinging } from '@tabler/icons-react';
 const messages = defineMessages({
     doneTaskDescription: 'Bạn đã hoàn thành task: ',
     studentNewTaskDescription: 'Bạn đã được giao task: ',
     cancelTaskDescription: 'Bạn đã bị huỷ task : ',
     leaderNewTaskDescription: 'Một task mới được tạo: ',
     leaderDoneTaskDescription: 'Thông báo xong task: ',
+    deleteAllConfirm: 'Bạn có muốn xoá toàn bộ thông báo không ?',
 });
 
 export const NotificationForm = ({
@@ -112,7 +114,7 @@ export const NotificationForm = ({
         } else if(kind == 3){
             return <IconCircleX color="red" style={style} size={size} />;
         } else{
-            return <IconCircleCheck color="green" style={style} size={size} />;
+            return <IconBellRinging color="orange" style={style} size={size} />;
         }
     };
     const titleNotification = (kind) => {
@@ -178,8 +180,17 @@ export const NotificationForm = ({
         setReadAll(true);
     };
     const handleDeleteAll = () => {
-        executeDeleteAll();
-        setDeleteAll(true);
+        Modal.confirm({
+            title: translate.formatMessage(messages.deleteAllConfirm),
+            centered: true,
+            okText: translate.formatMessage(commonMessage.yes),
+            okType: 'danger',
+            cancelText: translate.formatMessage(commonMessage.no),
+            onOk: () => {
+                executeDeleteAll();
+                setDeleteAll(true);
+            },
+        });
     };
     const handleClickItem = (item) => {
         executeUpdateState({

@@ -3,6 +3,8 @@ import { commonMessage } from '@locales/intl';
 import { notification } from 'antd';
 import { defineMessages } from 'react-intl';
 import { getData } from './localStorage';
+import React from 'react';
+import { IconBellRinging } from '@tabler/icons-react';
 
 const messages = defineMessages({
     studentDoneTaskDescription: 'Bạn vừa hoàn thành task: ',
@@ -68,11 +70,12 @@ export const webSocket = (tokenLogin, translate) => {
         if (JSON.stringify(data) !== '{}') {
             const dataNotification = JSON.parse(data?.message);
             const useKind = getData(storageKeys.USER_KIND);
-            if (useKind == UserTypes.STUDENT){
+            if (useKind == UserTypes.STUDENT) {
                 if (data?.kind == 1) {
                     notification.success({
                         message: translate.formatMessage(commonMessage.doneTaskTitle),
-                        description: translate.formatMessage(messages.studentDoneTaskDescription) + dataNotification?.taskName,
+                        description:
+                            translate.formatMessage(messages.studentDoneTaskDescription) + dataNotification?.taskName,
                     });
                 } else if (data?.kind == 2) {
                     notification.info({
@@ -87,17 +90,19 @@ export const webSocket = (tokenLogin, translate) => {
                             translate.formatMessage(messages.cancelTaskDescription) + dataNotification?.taskName,
                     });
                 }
-            } else if (useKind == UserTypes.LEADER){
+            } else if (useKind == UserTypes.LEADER) {
                 if (data?.kind == 2) {
                     notification.info({
                         message: translate.formatMessage(commonMessage.newTaskTitle),
                         description:
                             translate.formatMessage(messages.leaderNewTaskDescription) + dataNotification?.taskName,
                     });
-                } else if(data?.kind == 4){
-                    notification.success({
+                } else if (data?.kind == 4) {
+                    notification.open({
                         message: translate.formatMessage(commonMessage.notifyDoneTaskTitle),
-                        description: translate.formatMessage(messages.leaderDoneTaskDescription) + dataNotification?.taskName,
+                        description:
+                            translate.formatMessage(messages.leaderDoneTaskDescription) + dataNotification?.taskName,
+                        icon: <IconBellRinging color="orange" size={30}/>,
                     });
                 }
             }
