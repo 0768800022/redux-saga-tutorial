@@ -93,4 +93,6 @@ export const commonMessage = defineMessages({
     notifyDone: 'Thông báo hoàn thành',
     notificationDone: 'Đã thông báo hoàn thành task',
     notifyDoneTaskTitle: 'Notify Done Task',
+    yes: 'Có',
+    no: 'Không',
 });
