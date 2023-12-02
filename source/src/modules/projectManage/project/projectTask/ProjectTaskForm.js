@@ -119,7 +119,8 @@ const ProjectTaskForm = (props) => {
                         />
                     </Col>
                     <Col span={12}>
-                        <AutoCompleteField
+                        <AutoCompleteField  
+                            required
                             label={<FormattedMessage defaultMessage="Danh mục" />}
                             name="projectCategoryId"
                             apiConfig={apiConfig.projectCategory.autocomplete}
