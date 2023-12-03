@@ -17,14 +17,7 @@ const messages = defineMessages({
 export const webSocket = (tokenLogin, translate) => {
     var wsUri = process.env.REACT_APP_WEB_SOCKET_URL;
     var websocket;
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'visible') {
-            // Mở lại kết nối WebSocket nếu trạng thái của trang là "visible"
-            if (!websocket || websocket.readyState === WebSocket.CLOSED) {
-                webSocket();
-            }
-        }
-    });
+   
 
     function init() {
         webSocket();
@@ -62,6 +55,9 @@ export const webSocket = (tokenLogin, translate) => {
 
     function onClose(evt) {
         console.log('DISCONNECTED');
+        setTimeout(() => {
+            webSocket();
+        }, 5000);
     }
 
     function onMessage(evt) {
