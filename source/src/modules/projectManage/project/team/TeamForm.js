@@ -69,7 +69,7 @@ const TeamForm = (props) => {
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leaderInfo?.leaderName,
+            // leaderId: dataDetail?.leaderInfo?.leaderName,
         });
         setImageUrl(dataDetail.avatar);
     }, [dataDetail]);
@@ -115,7 +115,7 @@ const TeamForm = (props) => {
                     <Col span={12}>
                         <AutoCompleteField
                             label={<FormattedMessage defaultMessage="Leader" />}
-                            name="leaderId"
+                            name={['leaderInfo', 'id']}
                             apiConfig={apiConfig.leader.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
                             initialSearchParams={{}}
