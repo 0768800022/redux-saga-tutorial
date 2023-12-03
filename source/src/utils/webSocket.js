@@ -17,14 +17,20 @@ const messages = defineMessages({
 export const webSocket = (tokenLogin, translate) => {
     var wsUri = process.env.REACT_APP_WEB_SOCKET_URL;
     var websocket;
-    document.addEventListener('visibilitychange', () => {
+    var isClosedIntentionally = false;
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    function handleVisibilityChange() {
         if (document.visibilityState === 'visible') {
-            // Mở lại kết nối WebSocket nếu trạng thái của trang là "visible"
-            if (!websocket || websocket.readyState === WebSocket.CLOSED) {
-                webSocket();
+            // If the page becomes visible, reconnect WebSocket
+            webSocket();
+        } else {
+            // If the page becomes hidden, close WebSocket
+            if (websocket) {
+                isClosedIntentionally = true;
+                websocket.close();
             }
         }
-    });
+    }
 
     function init() {
         webSocket();
@@ -62,6 +68,12 @@ export const webSocket = (tokenLogin, translate) => {
 
     function onClose(evt) {
         console.log('DISCONNECTED');
+        if (!isClosedIntentionally) {
+            setTimeout(() => {
+                webSocket();
+            }, 5000);
+        }
+        isClosedIntentionally = false;
     }
 
     function onMessage(evt) {
@@ -102,7 +114,7 @@ export const webSocket = (tokenLogin, translate) => {
                         message: translate.formatMessage(commonMessage.notifyDoneTaskTitle),
                         description:
                             translate.formatMessage(messages.leaderDoneTaskDescription) + dataNotification?.taskName,
-                        icon: <IconBellRinging color="orange" size={30}/>,
+                        icon: <IconBellRinging color="orange" size={30} />,
                     });
                 }
             }
