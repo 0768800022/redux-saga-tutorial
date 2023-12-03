@@ -70,7 +70,6 @@ export const webSocket = (tokenLogin, translate) => {
         console.log('DISCONNECTED');
         if (!isClosedIntentionally) {
             setTimeout(() => {
-                console.log('hello');
                 webSocket();
             }, 5000);
         }
