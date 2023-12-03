@@ -35,12 +35,14 @@ function TeamSavePage() {
                 return {
                     ...data,
                     id: detail.id,
+                    leaderId: data.leaderInfo?.id,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
                     projectId: projectId,
+                    leaderId: data.leaderInfo?.id,
                 };
             };
         },
@@ -58,7 +60,7 @@ function TeamSavePage() {
         if (active) {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.team),
-                path: routes.teamListPage.path + pathDefault +`&active=${active}`,
+                path: routes.teamListPage.path + pathDefault + `&active=${active}`,
             });
         } else {
             breadRoutes.push({
@@ -71,11 +73,7 @@ function TeamSavePage() {
         return breadRoutes;
     };
     return (
-        <PageWrapper
-            loading={loading}
-            routes={setBreadRoutes()}
-            title={title}
-        >
+        <PageWrapper loading={loading} routes={setBreadRoutes()} title={title}>
             <TeamForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
