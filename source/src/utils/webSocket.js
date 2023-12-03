@@ -17,7 +17,18 @@ const messages = defineMessages({
 export const webSocket = (tokenLogin, translate) => {
     var wsUri = process.env.REACT_APP_WEB_SOCKET_URL;
     var websocket;
-   
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    function handleVisibilityChange() {
+        if (document.visibilityState === 'visible') {
+            // If the page becomes visible, reconnect WebSocket
+            websocket.onopen();
+        } else {
+            // If the page becomes hidden, close WebSocket
+            if (websocket) {
+                websocket.close();
+            }
+        }
+    }
 
     function init() {
         webSocket();
