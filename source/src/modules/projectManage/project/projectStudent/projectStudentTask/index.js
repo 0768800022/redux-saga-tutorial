@@ -180,7 +180,7 @@ function ProjectStudentTaskListPage() {
                 });
             },
         });
-    console.log(queryFilter);
+
     const columns = [
         {
             dataIndex: 'kind',
