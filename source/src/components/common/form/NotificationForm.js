@@ -117,15 +117,16 @@ export const NotificationForm = ({
             return <IconBellRinging color="orange" style={style} size={size} />;
         }
     };
-    const titleNotification = (kind) => {
+    const titleNotification = (kind, projectName) => {
+        const projectNameTitle = translate.formatMessage(commonMessage.project) + ` ${projectName}: `;
         if (kind == 1) {
-            return translate.formatMessage(commonMessage.doneTaskTitle);
+            return projectNameTitle + translate.formatMessage(commonMessage.doneTaskTitle);
         } else if (kind == 2) {
-            return translate.formatMessage(commonMessage.newTaskTitle);
+            return projectNameTitle + translate.formatMessage(commonMessage.newTaskTitle);
         } else if (kind == 3){
-            return translate.formatMessage(commonMessage.cancelTaskTitle);
+            return projectNameTitle + translate.formatMessage(commonMessage.cancelTaskTitle);
         } else {
-            return translate.formatMessage(commonMessage.notifyDoneTaskTitle);
+            return projectNameTitle + translate.formatMessage(commonMessage.notifyDoneTaskTitle);
         }
     };
     const descriptionNotification = (kind, taskName) => {
@@ -293,7 +294,7 @@ export const NotificationForm = ({
                                             }}
                                         >
                                             <text style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <span style={{ fontWeight: 700 }}>{titleNotification(item?.kind)}</span>
+                                                <span style={{ fontWeight: 700 }}>{titleNotification(item?.kind, item?.projectName)}</span>
                                                 <span
                                                     style={{ fontWeight: 600, width: '350px', wordWrap: 'break-word' }}
                                                 >
