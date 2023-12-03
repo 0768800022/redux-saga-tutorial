@@ -82,22 +82,23 @@ export const webSocket = (tokenLogin, translate) => {
         if (JSON.stringify(data) !== '{}') {
             const dataNotification = JSON.parse(data?.message);
             const useKind = getData(storageKeys.USER_KIND);
+            const projectNameTitle = translate.formatMessage(commonMessage.project) + ` ${dataNotification?.projectName}: `;
             if (useKind == UserTypes.STUDENT) {
                 if (data?.kind == 1) {
                     notification.success({
-                        message: translate.formatMessage(commonMessage.doneTaskTitle),
+                        message: projectNameTitle + translate.formatMessage(commonMessage.doneTaskTitle),
                         description:
                             translate.formatMessage(messages.studentDoneTaskDescription) + dataNotification?.taskName,
                     });
                 } else if (data?.kind == 2) {
                     notification.info({
-                        message: translate.formatMessage(commonMessage.newTaskTitle),
+                        message: projectNameTitle + translate.formatMessage(commonMessage.newTaskTitle),
                         description:
                             translate.formatMessage(messages.studentNewTaskDescription) + dataNotification?.taskName,
                     });
                 } else {
                     notification.error({
-                        message: translate.formatMessage(commonMessage.cancelTaskTitle),
+                        message: projectNameTitle + translate.formatMessage(commonMessage.cancelTaskTitle),
                         description:
                             translate.formatMessage(messages.cancelTaskDescription) + dataNotification?.taskName,
                     });
@@ -105,13 +106,13 @@ export const webSocket = (tokenLogin, translate) => {
             } else if (useKind == UserTypes.LEADER) {
                 if (data?.kind == 2) {
                     notification.info({
-                        message: translate.formatMessage(commonMessage.newTaskTitle),
+                        message: projectNameTitle + translate.formatMessage(commonMessage.newTaskTitle),
                         description:
                             translate.formatMessage(messages.leaderNewTaskDescription) + dataNotification?.taskName,
                     });
                 } else if (data?.kind == 4) {
                     notification.open({
-                        message: translate.formatMessage(commonMessage.notifyDoneTaskTitle),
+                        message: projectNameTitle + translate.formatMessage(commonMessage.notifyDoneTaskTitle),
                         description:
                             translate.formatMessage(messages.leaderDoneTaskDescription) + dataNotification?.taskName,
                         icon: <IconBellRinging color="orange" size={30} />,
