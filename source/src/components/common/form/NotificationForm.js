@@ -223,12 +223,12 @@ export const NotificationForm = ({
             if (profile?.kind == UserTypes.STUDENT) {
                 navigate(
                     routes.courseStudentListPage.path +
-                        `/task/${item?.courseId}?courseName=${item?.courseName}`,
+                        `/task/${item?.courseId}?courseId=${item?.courseId}&courseName=${item?.courseName}`,
                 );
             } else if (profile?.kind == UserTypes.LEADER) {
                 navigate(
                     routes.courseLeaderListPage.path +
-                    `/task/${item?.courseId}?courseName=${item?.courseName}`,
+                    `/task/${item?.courseId}?courseId=${item?.courseId}&courseName=${item?.courseName}`,
                 );
             }
         }
