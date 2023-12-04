@@ -82,7 +82,10 @@ export const webSocket = (tokenLogin, translate) => {
         if (JSON.stringify(data) !== '{}') {
             const dataNotification = JSON.parse(data?.message);
             const useKind = getData(storageKeys.USER_KIND);
-            const projectNameTitle = translate.formatMessage(commonMessage.project) + ` ${dataNotification?.projectName}: `;
+            const projectNameTitle =
+                translate.formatMessage(commonMessage.project) + ` ${dataNotification?.projectName}: `;
+            const courseNameTitle =
+                translate.formatMessage(commonMessage.course) + ` ${dataNotification?.courseName}: `;
             if (useKind == UserTypes.STUDENT) {
                 if (data?.kind == 1) {
                     notification.success({
@@ -96,11 +99,30 @@ export const webSocket = (tokenLogin, translate) => {
                         description:
                             translate.formatMessage(messages.studentNewTaskDescription) + dataNotification?.taskName,
                     });
-                } else {
+                } else if (data?.kind == 3) {
                     notification.error({
                         message: projectNameTitle + translate.formatMessage(commonMessage.cancelTaskTitle),
                         description:
                             translate.formatMessage(messages.cancelTaskDescription) + dataNotification?.taskName,
+                    });
+                } else if (data?.kind == 5) {
+                    notification.success({
+                        message: courseNameTitle + translate.formatMessage(commonMessage.doneTaskTitle),
+                        description:
+                            translate.formatMessage(messages.studentDoneTaskDescription) +
+                            dataNotification?.lectureName,
+                    });
+                } else if (data?.kind == 6) {
+                    notification.info({
+                        message: courseNameTitle + translate.formatMessage(commonMessage.newTaskTitle),
+                        description:
+                            translate.formatMessage(messages.studentNewTaskDescription) + dataNotification?.lectureName,
+                    });
+                } else if (data?.kind == 7) {
+                    notification.error({
+                        message: courseNameTitle + translate.formatMessage(commonMessage.cancelTaskTitle),
+                        description:
+                            translate.formatMessage(messages.cancelTaskDescription) + dataNotification?.lectureName,
                     });
                 }
             } else if (useKind == UserTypes.LEADER) {
@@ -115,6 +137,19 @@ export const webSocket = (tokenLogin, translate) => {
                         message: projectNameTitle + translate.formatMessage(commonMessage.notifyDoneTaskTitle),
                         description:
                             translate.formatMessage(messages.leaderDoneTaskDescription) + dataNotification?.taskName,
+                        icon: <IconBellRinging color="orange" size={30} />,
+                    });
+                } else if (data?.kind == 6) {
+                    notification.info({
+                        message: courseNameTitle + translate.formatMessage(commonMessage.newTaskTitle),
+                        description:
+                            translate.formatMessage(messages.leaderNewTaskDescription) + dataNotification?.lectureName,
+                    });
+                } else if (data?.kind == 8) {
+                    notification.open({
+                        message: courseNameTitle + translate.formatMessage(commonMessage.notifyDoneTaskTitle),
+                        description:
+                            translate.formatMessage(messages.leaderDoneTaskDescription) + dataNotification?.lectureName,
                         icon: <IconBellRinging color="orange" size={30} />,
                     });
                 }

@@ -53,6 +53,9 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                     projectId: msg?.projectId,
                     taskName: msg?.taskName,
                     projectName: msg?.projectName,
+                    courseId: msg?.courseId,
+                    lectureName: msg?.lectureName,
+                    courseName: msg?.courseName,
                 };
             });
             return {
