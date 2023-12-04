@@ -187,7 +187,7 @@ function TaskStudentListPage() {
         columns.push(
             mixinFuncs.renderActionColumn(
                 { notifyDone: true, taskLog: true, edit: true, delete: true },
-                { width: '120px' },
+                { width: '160px' },
             ),
         );
         return columns;
