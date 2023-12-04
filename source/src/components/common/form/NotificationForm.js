@@ -46,14 +46,13 @@ export const NotificationForm = ({
     const [hasNotification, setHasNotification] = useState(false);
     const navigate = useNavigate();
     const hostPath = window.location.host;
-    const  { profile }  = useAuth();
+    const { profile } = useAuth();
     const { execute: executeReadAll } = useFetch(apiConfig.notification.readAll, {
         immediate: false,
     });
     const { execute: executeDeleteAll } = useFetch(apiConfig.notification.deleteAll, {
         immediate: false,
     });
-
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -93,7 +92,7 @@ export const NotificationForm = ({
     }, [activeIcon]);
 
     useEffect(() => {
-        if(activeIcon){
+        if (activeIcon) {
             if (!activeButtonAll) {
                 executeGetData({
                     params: { state: 0 },
@@ -107,41 +106,46 @@ export const NotificationForm = ({
         setHiddenItems([]);
     }, [activeButtonAll]);
     const iconNotification = (kind, style, size) => {
-        if (kind == 1) {
+        if (kind == 1 || kind == 5) {
             return <IconCircleCheck color="green" style={style} size={size} />;
-        } else if (kind == 2) {
+        } else if (kind == 2 || kind == 6) {
             return <IconInfoCircle color="blue" style={style} size={size} />;
-        } else if(kind == 3){
+        } else if (kind == 3 || kind == 7) {
             return <IconCircleX color="red" style={style} size={size} />;
-        } else{
+        } else if (kind == 4 || kind == 8) {
             return <IconBellRinging color="orange" style={style} size={size} />;
         }
     };
-    const titleNotification = (kind, projectName) => {
-        const projectNameTitle = translate.formatMessage(commonMessage.project) + ` ${projectName}: `;
-        if (kind == 1) {
-            return projectNameTitle + translate.formatMessage(commonMessage.doneTaskTitle);
-        } else if (kind == 2) {
-            return projectNameTitle + translate.formatMessage(commonMessage.newTaskTitle);
-        } else if (kind == 3){
-            return projectNameTitle + translate.formatMessage(commonMessage.cancelTaskTitle);
-        } else {
-            return projectNameTitle + translate.formatMessage(commonMessage.notifyDoneTaskTitle);
+    const titleNotification = (item) => {
+        const kind = item?.kind;
+        const projectNameTitle = translate.formatMessage(commonMessage.project) + ` ${item?.projectName}: `;
+        const courseNameTitle = translate.formatMessage(commonMessage.course) + ` ${item?.courseName}: `;
+        const title = item?.projectName ? projectNameTitle : courseNameTitle;
+        if (kind == 1 || kind == 5) {
+            return title + translate.formatMessage(commonMessage.doneTaskTitle);
+        } else if (kind == 2 || kind == 6) {
+            return title + translate.formatMessage(commonMessage.newTaskTitle);
+        } else if (kind == 3 || kind == 7) {
+            return title + translate.formatMessage(commonMessage.cancelTaskTitle);
+        } else if (kind == 4 || kind == 8) {
+            return title + translate.formatMessage(commonMessage.notifyDoneTaskTitle);
         }
     };
-    const descriptionNotification = (kind, taskName) => {
-        if(profile?.kind == UserTypes.STUDENT){
-            if (kind == 1) {
+    const descriptionNotification = (item) => {
+        const kind = item?.kind;
+        const taskName = item?.taskName ? item?.taskName : item?.lectureName;
+        if (profile?.kind == UserTypes.STUDENT) {
+            if (kind == 1 || kind == 5) {
                 return translate.formatMessage(messages.doneTaskDescription) + taskName;
-            } else if (kind == 2) {
+            } else if (kind == 2 || kind == 6) {
                 return translate.formatMessage(messages.studentNewTaskDescription) + taskName;
-            } else {
+            } else if (kind == 3 || kind == 7) {
                 return translate.formatMessage(messages.cancelTaskDescription) + taskName;
             }
         } else if (profile?.kind == UserTypes.LEADER) {
-            if (kind == 2) {
+            if (kind == 2 || kind == 6) {
                 return translate.formatMessage(messages.leaderNewTaskDescription) + taskName;
-            } else if (kind == 4){
+            } else if (kind == 4 || kind == 8) {
                 return translate.formatMessage(messages.leaderDoneTaskDescription) + taskName;
             }
         }
@@ -151,8 +155,8 @@ export const NotificationForm = ({
         const dateTimeString = convertDateTimeToString(dateTime, DEFAULT_FORMAT);
         return dateTimeString;
     };
-    const handleOnClickChecked = (e,id) => {
-        e.stopPropagation(); 
+    const handleOnClickChecked = (e, id) => {
+        e.stopPropagation();
         executeUpdateState({
             data: { id },
         });
@@ -194,6 +198,7 @@ export const NotificationForm = ({
         });
     };
     const handleClickItem = (item) => {
+        const kind = item?.kind;
         executeUpdateState({
             data: { id: item?.id },
         });
@@ -202,10 +207,30 @@ export const NotificationForm = ({
         }
         setHiddenItems([...hiddenItems, item?.id]);
         setActiveIcon(false);
-        if(profile?.kind == UserTypes.STUDENT){
-            navigate(routes.projectStudentTaskListPage.path + `?projectId=${item?.projectId}&projectName=${item?.projectName}&developerId=${profile?.id}&active=true`);
-        }else if(profile?.kind == UserTypes.LEADER){
-            navigate(routes.projectLeaderTaskListPage.path + `?projectId=${item?.projectId}&projectName=${item?.projectName}&active=true`);
+        if(kind == 1 || kind == 2 || kind == 3 || kind == 4){
+            if (profile?.kind == UserTypes.STUDENT) {
+                navigate(
+                    routes.projectStudentTaskListPage.path +
+                        `?projectId=${item?.projectId}&projectName=${item?.projectName}&developerId=${profile?.id}&active=true`,
+                );
+            } else if (profile?.kind == UserTypes.LEADER) {
+                navigate(
+                    routes.projectLeaderTaskListPage.path +
+                        `?projectId=${item?.projectId}&projectName=${item?.projectName}&active=true`,
+                );
+            }
+        } else if(kind == 5 || kind == 6 || kind == 7 || kind == 8){
+            if (profile?.kind == UserTypes.STUDENT) {
+                navigate(
+                    routes.courseStudentListPage.path +
+                        `/task/${item?.courseId}?courseName=${item?.courseName}`,
+                );
+            } else if (profile?.kind == UserTypes.LEADER) {
+                navigate(
+                    routes.courseLeaderListPage.path +
+                    `/task/${item?.courseId}?courseName=${item?.courseName}`,
+                );
+            }
         }
     };
 
@@ -250,7 +275,12 @@ export const NotificationForm = ({
                             <Button type="default" shape="round" style={{ marginRight: '4px' }} onClick={handleReadAll}>
                                 {translate.formatMessage(commonMessage.readAll)}
                             </Button>
-                            <Button style={{ color: 'white', backgroundColor: 'red' }} type="default" shape="round" onClick={handleDeleteAll}>
+                            <Button
+                                style={{ color: 'white', backgroundColor: 'red' }}
+                                type="default"
+                                shape="round"
+                                onClick={handleDeleteAll}
+                            >
                                 {translate.formatMessage(commonMessage.deleteAll)}
                             </Button>
                         </div>
@@ -294,11 +324,11 @@ export const NotificationForm = ({
                                             }}
                                         >
                                             <text style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <span style={{ fontWeight: 700 }}>{titleNotification(item?.kind, item?.projectName)}</span>
+                                                <span style={{ fontWeight: 700 }}>{titleNotification(item)}</span>
                                                 <span
                                                     style={{ fontWeight: 600, width: '350px', wordWrap: 'break-word' }}
                                                 >
-                                                    {descriptionNotification(item?.kind, item?.taskName)}
+                                                    {descriptionNotification(item)}
                                                 </span>
                                             </text>
                                             <span style={{ paddingTop: '4px' }}>

@@ -48,88 +48,100 @@ function TaskListPage() {
     const [detail, setDetail] = useState();
     const statusValues = translate.formatKeys(taskState, ['label']);
     const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: {
-            getList: apiConfig.task.courseTask,
-            delete: apiConfig.task.delete,
-            update: apiConfig.task.update,
-            getById: apiConfig.task.getById,
-        },
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.prepareGetListPathParams = () => {
-                return {
-                    courseId: paramid.courseId,
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: {
+                getList: apiConfig.task.courseTask,
+                delete: apiConfig.task.delete,
+                update: apiConfig.task.update,
+                getById: apiConfig.task.getById,
+            },
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.prepareGetListPathParams = () => {
+                    return {
+                        courseId: paramid.courseId,
+                    };
                 };
-            };
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
-                        };
+                funcs.mappingData = (response) => {
+                    try {
+                        if (response.result === true) {
+                            return {
+                                data: response.data.content,
+                                total: response.data.totalElements,
+                            };
+                        }
+                    } catch (error) {
+                        return [];
                     }
-                } catch (error) {
-                    return [];
-                }
-            };
-            funcs.getCreateLink = () => {
-                return (
-                    routes.courseLeaderListPage.path +
-                    `/task/${paramid.courseId}/lecture?courseId=${paramid.courseId}&courseName=${courseName}&subjectId=${subjectId}`
-                );
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?courseName=${courseName}&subjectId=${subjectId}`;
-            };
-            funcs.additionalActionColumnButtons = () => ({
-                state: (item) => (
-                    <BaseTooltip title={translate.formatMessage(message.done)}>
-                        <Button
-                            type="link"
-                            disabled={item.state === 2}
-                            style={{ padding: 0 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setDetail(item);
-                                handlersStateTaskModal.open();
-                            }}
-                        >
-                            <CheckOutlined />
-                        </Button>
-                    </BaseTooltip>
-                ),
-                taskLog: ({ id, lecture, state, status, name }) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
-                        <Button
-                            type="link"
-                            style={{ padding: 0 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(
-                                    generatePath(routes.taskLeaderListPage.path, { courseId }) +
-                                        `/task-log?courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
-                                    {
-                                        state: { action: 'taskLog', prevPath: location.pathname },
-                                    },
-                                );
-                            }}
-                        >
-                            <CalendarOutlined />
-                        </Button>
-                    </BaseTooltip>
-                ),
-            });
-            funcs.getList = () => {
-                const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params });
-            };
-        },
-    });
+                };
+                funcs.changeFilter = (filter) => {
+                    const courseName = queryParams.get('courseName');
+                    const subjectId =  queryParams.get('subjectId');
+                    if (courseName) {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({ courseName, subjectId, ...filter }),
+                        );
+                    } else {
+                        mixinFuncs.setQueryParams(serializeParams(filter));
+                    }
+                };
+                funcs.getCreateLink = () => {
+                    return (
+                        routes.courseLeaderListPage.path +
+                        `/task/${paramid.courseId}/lecture?courseId=${paramid.courseId}&courseName=${courseName}&subjectId=${subjectId}`
+                    );
+                };
+                funcs.getItemDetailLink = (dataRow) => {
+                    return `${pagePath}/${dataRow.id}?courseName=${courseName}&subjectId=${subjectId}`;
+                };
+                funcs.additionalActionColumnButtons = () => ({
+                    state: (item) => (
+                        <BaseTooltip title={translate.formatMessage(message.done)}>
+                            <Button
+                                type="link"
+                                disabled={item.state === 2}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDetail(item);
+                                    handlersStateTaskModal.open();
+                                }}
+                            >
+                                <CheckOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    taskLog: ({ id, lecture, state, status, name }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        generatePath(routes.taskLeaderListPage.path, { courseId }) +
+                                            `/task-log?courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
+                                        {
+                                            state: { action: 'taskLog', prevPath: location.pathname },
+                                        },
+                                    );
+                                }}
+                            >
+                                <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                });
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params });
+                };
+            },
+        });
 
     const setColumns = () => {
         const columns = [
@@ -248,6 +260,7 @@ function TaskListPage() {
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
                         className: styles.search,
+                        initialValues: queryFilter,
                     })}
                     baseTable={
                         <BaseTable
