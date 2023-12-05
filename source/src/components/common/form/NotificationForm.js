@@ -239,6 +239,7 @@ export const NotificationForm = ({
             interactive
             placement="bottom-end"
             trigger="click"
+            onClickOutside={() => setActiveIcon(false)}
             visible={activeIcon}
             onShow={() => {
                 setActiveIcon(true);
