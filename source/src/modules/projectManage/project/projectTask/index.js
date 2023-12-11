@@ -226,6 +226,7 @@ function ProjectTaskListPage() {
         },
         {
             title: translate.formatMessage(commonMessage.task),
+            width: 200,
             dataIndex: 'taskName',
         },
         {

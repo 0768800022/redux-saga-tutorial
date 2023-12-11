@@ -24,6 +24,7 @@ import { CalendarOutlined } from '@ant-design/icons';
 import { FormattedMessage } from 'react-intl';
 import { FieldTypes } from '@constants/formConfig';
 import styles from '../../course.module.scss';
+import DetailMyTaskModal from '../../student/myTask/DetailMyTaskModal';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -46,6 +47,7 @@ function TaskListPage() {
     const paramid = useParams();
     const courseId = paramid.courseId;
     const [detail, setDetail] = useState();
+    const [openedDetailLeaderTaskModal, handlersDetailLeaderTaskModal] = useDisclosure(false);
     const statusValues = translate.formatKeys(taskState, ['label']);
     const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -80,11 +82,9 @@ function TaskListPage() {
                 };
                 funcs.changeFilter = (filter) => {
                     const courseName = queryParams.get('courseName');
-                    const subjectId =  queryParams.get('subjectId');
+                    const subjectId = queryParams.get('subjectId');
                     if (courseName) {
-                        mixinFuncs.setQueryParams(
-                            serializeParams({ courseName, subjectId, ...filter }),
-                        );
+                        mixinFuncs.setQueryParams(serializeParams({ courseName, subjectId, ...filter }));
                     } else {
                         mixinFuncs.setQueryParams(serializeParams(filter));
                     }
@@ -242,6 +242,18 @@ function TaskListPage() {
             onError: (err) => {},
         });
     };
+    const { execute: executeGet } = useFetch(apiConfig.task.getById, {
+        immediate: false,
+    });
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+            onError: mixinFuncs.handleGetDetailError,
+        });
+    };
 
     return (
         <PageWrapper
@@ -269,6 +281,14 @@ function TaskListPage() {
                             loading={loading}
                             dataSource={data}
                             columns={setColumns()}
+                            onRow={(record, rowIndex) => ({
+                                onClick: (e) => {
+                                    e.stopPropagation();
+                                    handleFetchDetail(record.id);
+
+                                    handlersDetailLeaderTaskModal.open();
+                                },
+                            })}
                         />
                     }
                 />
@@ -279,6 +299,12 @@ function TaskListPage() {
                     onCancel={() => handlersStateTaskModal.close()}
                     data={detail || {}}
                 ></Modal>
+                <DetailMyTaskModal
+                    open={openedDetailLeaderTaskModal}
+                    onCancel={() => handlersDetailLeaderTaskModal.close()}
+                    width={600}
+                    DetailData={detail}
+                />
             </div>
         </PageWrapper>
     );
