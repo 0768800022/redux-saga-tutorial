@@ -1,24 +1,20 @@
-import TextField from '@components/common/form/TextField';
-import { Card, Col, Form, Modal, Row, Button } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
-import useNotification from '@hooks/useNotification';
-import { defineMessages } from 'react-intl';
-import { useIntl } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
-import SelectField from '@components/common/form/SelectField';
-import { statusOptions, projectTaskState } from '@constants/masterData';
-import { taskState } from '@constants/masterData';
 import RichTextField from '@components/common/form/RichTextField';
-import { commonMessage } from '@locales/intl';
+import SelectField from '@components/common/form/SelectField';
+import TextField from '@components/common/form/TextField';
 import { AppConstants } from '@constants';
+import { taskState } from '@constants/masterData';
+import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
+import { Card, Col, Form, Modal, Row } from 'antd';
+import React, { useEffect } from 'react';
+import { FormattedMessage, defineMessages } from 'react-intl';
 const messages = defineMessages({
     objectName: 'Chi tiết task',
     // update: 'Cập nhật',
     // updateSuccess: 'Cập nhật {objectName} thành công',
 });
-const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
+const DetailTaskLeaderModal = ({ open, onCancel, DetailData, ...props }) => {
     const [form] = Form.useForm();
 
     const translate = useTranslate();
@@ -125,4 +121,4 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
     );
 };
 
-export default DetailMyTaskModal;
+export default DetailTaskLeaderModal;

@@ -3,18 +3,19 @@ import React, { useEffect } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
 import TextField from '@components/common/form/TextField';
-import { defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
 import SelectField from '@components/common/form/SelectField';
 import { lectureKindOptions } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import { useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectedRowKeySelector } from '@selectors/app';
 import { commonMessage } from '@locales/intl';
+import RichTextField from '@components/common/form/RichTextField';
 
 const message = defineMessages({
     description: 'Mô tả chi tiết',
@@ -42,7 +43,7 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     const dataSort = dataLectureBySubject && dataLectureBySubject.sort((a, b) => a.ordering - b.ordering);
 
     const handleSubmit = (values) => {
-        if(dataLectureBySubject) {
+        if (dataLectureBySubject) {
             let isSelectedRowKey = false;
             dataLectureBySubject.map((item) => {
                 if (item.id == selectedRowKey) {
@@ -51,7 +52,6 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     if (item.lectureKind == 1) {
                         values.ordering = item.ordering;
                         isSelectedRowKey = false;
-
                     }
                 }
             });
@@ -87,7 +87,11 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField label={translate.formatMessage(commonMessage.lectureName)} required name="lectureName" />
+                        <TextField
+                            label={translate.formatMessage(commonMessage.lectureName)}
+                            required
+                            name="lectureName"
+                        />
                     </Col>
                     <Col span={12}>
                         <SelectField
@@ -107,10 +111,18 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                 </Row>
                 <Row gutter={16}>
                     <Col span={24}>
-                        <TextField
+                        <RichTextField
                             label={translate.formatMessage(message.description)}
+                            labelAlign="left"
                             name="description"
-                            type="textarea"
+                            style={{
+                                height: 300,
+                                marginBottom: 70,
+                            }}
+                            required
+                            baseURL={AppConstants.contentRootUrl}
+                            setIsChangedFormValues={setIsChangedFormValues}
+                            form={form}
                         />
                     </Col>
                 </Row>
