@@ -25,6 +25,7 @@ import { FormattedMessage } from 'react-intl';
 import { FieldTypes } from '@constants/formConfig';
 import styles from '../../course.module.scss';
 import DetailMyTaskModal from '../../student/myTask/DetailMyTaskModal';
+import DetailTaskLeaderModal from './DetailTaskLeaderModal';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -253,6 +254,7 @@ function TaskListPage() {
             },
             onError: mixinFuncs.handleGetDetailError,
         });
+        handlersDetailLeaderTaskModal.open();
     };
 
     return (
@@ -286,7 +288,7 @@ function TaskListPage() {
                                     e.stopPropagation();
                                     handleFetchDetail(record.id);
 
-                                    handlersDetailLeaderTaskModal.open();
+                   
                                 },
                             })}
                         />
@@ -299,7 +301,7 @@ function TaskListPage() {
                     onCancel={() => handlersStateTaskModal.close()}
                     data={detail || {}}
                 ></Modal>
-                <DetailMyTaskModal
+                <DetailTaskLeaderModal
                     open={openedDetailLeaderTaskModal}
                     onCancel={() => handlersDetailLeaderTaskModal.close()}
                     width={600}

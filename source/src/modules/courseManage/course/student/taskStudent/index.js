@@ -53,6 +53,7 @@ function TaskStudentListPage() {
             },
             onError: mixinFuncs.handleGetDetailError,
         });
+        handlersModal.open();
     };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
@@ -221,8 +222,6 @@ function TaskStudentListPage() {
                                 onClick: (e) => {
                                     e.stopPropagation();
                                     handleFetchDetail(record.id);
-
-                                    handlersModal.open();
                                 },
                             })}
                             onChange={changePagination}

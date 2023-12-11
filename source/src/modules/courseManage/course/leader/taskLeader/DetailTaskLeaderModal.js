@@ -22,6 +22,14 @@ const DetailTaskLeaderModal = ({ open, onCancel, DetailData, ...props }) => {
     const stateValues = translate.formatKeys(taskState, ['label']);
 
     useEffect(() => {
+        if (DetailData) {
+            if (!DetailData?.note) {
+                DetailData.note = null;
+            }
+            if (!DetailData?.lecture?.description) {
+                DetailData.lecture.description = null;
+            }
+        }
         // form.setFields(data);
         form.setFieldsValue({
             ...DetailData,
