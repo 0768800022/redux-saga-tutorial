@@ -26,12 +26,11 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
     const stateValues = translate.formatKeys(taskState, ['label']);
 
     useEffect(() => {
-        if (DetailData) {
+        if (JSON.stringify(DetailData) !== '{}') {
             if (!DetailData?.note) {
                 DetailData.note = null;
             }
             if (!DetailData?.lecture?.description) {
-                console.log(true);
                 DetailData.lecture.description = null;
             }
         }
