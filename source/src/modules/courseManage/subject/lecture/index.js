@@ -158,16 +158,18 @@ const LectureListPage = () => {
                                 }
                             }}
                         />
-                        <Button
-                            style={{ marginTop: '20px', marginLeft: 'calc(50vw - 190px)' }}
-                            key="submit"
-                            htmlType="submit"
-                            type="primary"
-                            onClick={handleUpdate}
-                            icon={<SaveOutlined />}
-                        >
-                            Cập nhật vị trí
-                        </Button>
+                        {data?.length > 1 && (
+                            <Button
+                                style={{ marginTop: '20px', marginLeft: 'calc(50vw - 190px)' }}
+                                key="submit"
+                                htmlType="submit"
+                                type="primary"
+                                onClick={handleUpdate}
+                                icon={<SaveOutlined />}
+                            >
+                                Cập nhật vị trí
+                            </Button>
+                        )}
                     </>
                 }
             />
