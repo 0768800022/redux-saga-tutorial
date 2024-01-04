@@ -53,7 +53,6 @@ export const NotificationForm = ({
     const { execute: executeDeleteAll } = useFetch(apiConfig.notification.deleteAll, {
         immediate: false,
     });
-
     useEffect(() => {
         const interval = setInterval(() => {
             const hasNotificationLocalStr = JSON.parse(localStorage.getItem('hasNotification'));
