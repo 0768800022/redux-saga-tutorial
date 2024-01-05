@@ -59,7 +59,6 @@ const ProjectTaskLogForm = (props) => {
                     <Col span={12}>
                         <SelectField
                             required
-                            disabled={isEditing}
                             name="kind"
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
