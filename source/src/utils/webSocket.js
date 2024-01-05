@@ -79,7 +79,7 @@ export const webSocket = (tokenLogin, translate) => {
     function onMessage(evt) {
         const data = JSON.parse(evt?.data)?.data;
         console.log(data);
-        if (JSON.stringify(data) !== '{}') {
+        if (JSON.stringify(data) !== '{}' && data) {
             const dataNotification = JSON.parse(data?.message);
             const useKind = getData(storageKeys.USER_KIND);
             const projectNameTitle =
