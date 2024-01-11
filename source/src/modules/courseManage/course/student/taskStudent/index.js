@@ -1,13 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { taskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag } from 'antd';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useLocation, useParams, useNavigate, generatePath } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
@@ -22,6 +22,9 @@ import { useState } from 'react';
 import useFetch from '@hooks/useFetch';
 import { IconBellRinging } from '@tabler/icons-react';
 import useNotification from '@hooks/useNotification';
+import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import { FieldTypes } from '@constants/formConfig';
+import dayjs from 'dayjs';
 const message = defineMessages({
     objectName: 'Task',
 });
@@ -139,6 +142,38 @@ function TaskStudentListPage() {
                     </BaseTooltip>
                 ),
             });
+            const handleFilterSearchChange = funcs.handleFilterSearchChange;
+            funcs.handleFilterSearchChange = (values) => {
+                if (values.toDate == null && values.fromDate == null) {
+                    delete values.toDate;
+                    delete values.fromDate;
+                    handleFilterSearchChange({
+                        ...values,
+                    });
+                } else if (values.toDate == null) {
+                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                    delete values.toDate;
+                    handleFilterSearchChange({
+                        ...values,
+                        fromDate: fromDate,
+                    });
+                } else if (values.fromDate == null) {
+                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                    delete values.fromDate;
+                    handleFilterSearchChange({
+                        ...values,
+                        toDate: toDate,
+                    });
+                } else {
+                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                    handleFilterSearchChange({
+                        ...values,
+                        fromDate: fromDate,
+                        toDate: toDate,
+                    });
+                }
+            };
         },
     });
 
@@ -171,6 +206,20 @@ function TaskStudentListPage() {
                 align: 'center',
             },
             {
+                title: 'Ngày hoàn thành',
+                dataIndex: 'dateComplete',
+                width: 180,
+                render: (dateComplete) => {
+                    const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                    const modifiedDateCompleteTimeString = convertDateTimeToString(
+                        modifiedDateComplete,
+                        DEFAULT_FORMAT,
+                    );
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
+                },
+                align: 'center',
+            },
+            {
                 title: translate.formatMessage(commonMessage.state),
                 dataIndex: 'state',
                 align: 'center',
@@ -194,6 +243,31 @@ function TaskStudentListPage() {
         return columns;
     };
 
+    const initialFilterValues = useMemo(() => {
+        const initialFilterValues = {
+            ...queryFilter,
+            fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
+            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+        };
+
+        return initialFilterValues;
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
+    const searchFields = [
+        {
+            key: 'fromDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.fromDate),
+            colSpan: 3,
+        },
+        {
+            key: 'toDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.toDate),
+            colSpan: 3,
+        },
+    ];
     return (
         <PageWrapper
             routes={[
@@ -216,6 +290,10 @@ function TaskStudentListPage() {
                             {courseName}
                         </span>
                     }
+                    searchForm={mixinFuncs.renderSearchForm({
+                        fields: searchFields,
+                        initialValues: initialFilterValues,
+                    })}
                     baseTable={
                         <BaseTable
                             onRow={(record, rowIndex) => ({
@@ -242,5 +320,12 @@ function TaskStudentListPage() {
         </PageWrapper>
     );
 }
+const formatDateToZeroTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
 
+const formatDateToLocal = (date) => {
+    return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+};
 export default TaskStudentListPage;

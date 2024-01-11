@@ -95,4 +95,6 @@ export const commonMessage = defineMessages({
     notifyDoneTaskTitle: 'Notify Done Task',
     yes: 'Có',
     no: 'Không',
+    fromDate: 'Từ ngày',
+    toDate: 'Đến ngày',
 });
