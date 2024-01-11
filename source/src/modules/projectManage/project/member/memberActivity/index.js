@@ -2,7 +2,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, UserTypes, storageKeys } from '@constants';
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, UserTypes, storageKeys } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { TaskLogKindOptions, archivedOption } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
@@ -12,7 +12,7 @@ import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 import { Button, Modal, Tag } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import style from '../member.module.scss';
 import { IconAlarm, IconAlarmOff, IconBug } from '@tabler/icons-react';
@@ -31,6 +31,8 @@ import feature from '@assets/images/feature.png';
 import bug from '@assets/images/bug.jpg';
 import reset from '@assets/images/reset.svg';
 import noReset from '@assets/images/not_reset.svg';
+import { convertUtcToLocalTime, formatDateString } from '@utils';
+import dayjs from 'dayjs';
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
     reminderMessage: 'Vui lòng chọn dự án !',
@@ -90,6 +92,38 @@ function MemberActivityProjectListPage() {
                     const studentId = queryParams.get('studentId');
                     const studentName = queryParams.get('studentName');
                     mixinFuncs.setQueryParams(serializeParams({ projectId, studentId, studentName, ...filter }));
+                };
+                const handleFilterSearchChange = funcs.handleFilterSearchChange;
+                funcs.handleFilterSearchChange = (values) => {
+                    if (values.toDate == null && values.fromDate == null) {
+                        delete values.toDate;
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                        });
+                    } else if (values.toDate == null) {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        delete values.toDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                        });
+                    } else if (values.fromDate == null) {
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            toDate: toDate,
+                        });
+                    } else {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        });
+                    }
                 };
             },
         });
@@ -239,7 +273,31 @@ function MemberActivityProjectListPage() {
             type: FieldTypes.SELECT,
             options: archivedOptions,
         },
+        {
+            key: 'fromDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.fromDate),
+            colSpan: 3,
+        },
+        {
+            key: 'toDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.toDate),
+            colSpan: 3,
+        },
     ].filter(Boolean);
+    const initialFilterValues = useMemo(() => {
+        const initialFilterValues = {
+            ...queryFilter,
+            fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
+            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+        };
+
+        return initialFilterValues;
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
+
 
     const handleAchiveAll = () => {
         Modal.confirm({
@@ -319,7 +377,7 @@ function MemberActivityProjectListPage() {
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
                     className: styles.search,
-                    initialValues: queryFilter,
+                    initialValues: initialFilterValues,
                 })}
                 baseTable={
                     <div>
@@ -337,5 +395,13 @@ function MemberActivityProjectListPage() {
         </PageWrapper>
     );
 }
+const formatDateToZeroTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+
+const formatDateToLocal = (date) => {
+    return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+};
 
 export default MemberActivityProjectListPage;

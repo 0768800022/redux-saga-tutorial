@@ -1,13 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { TaskLogKindOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag } from 'antd';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
@@ -17,6 +17,9 @@ import useFetch from '@hooks/useFetch';
 import styles from '../Registration.module.scss';
 import useAuth from '@hooks/useAuth';
 import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
+import dayjs from 'dayjs';
+import { convertUtcToLocalTime, formatDateString } from '@utils';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
     reminderMessage: 'Vui lòng chọn khoá học !',
@@ -33,7 +36,7 @@ function StudentActivityCourseListPage() {
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const { profile } = useAuth();
     const pathPrev = localStorage.getItem('pathPrev');
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams,serializeParams } = useListBase({
         apiConfig: apiConfig.taskLog,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -56,10 +59,61 @@ function StudentActivityCourseListPage() {
                 const params = mixinFuncs.prepareGetListParams(queryFilter);
                 mixinFuncs.handleFetchList({ ...params, studentId, courseId, studentName: null });
             };
+            funcs.changeFilter = (filter) => {
+                const courseId = queryParams.get('courseId');
+                const studentId = queryParams.get('studentId');
+                const studentName = queryParams.get('studentName');
+                mixinFuncs.setQueryParams(serializeParams({ courseId, studentId, studentName, ...filter }));
+            };
+            const handleFilterSearchChange = funcs.handleFilterSearchChange;
+            funcs.handleFilterSearchChange = (values) => {
+                if (values.toDate == null && values.fromDate == null) {
+                    delete values.toDate;
+                    delete values.fromDate;
+                    handleFilterSearchChange({
+                        ...values,
+                    });
+                } else if (values.toDate == null) {
+                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                    delete values.toDate;
+                    handleFilterSearchChange({
+                        ...values,
+                        fromDate: fromDate,
+                    });
+                } else if (values.fromDate == null) {
+                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                    delete values.fromDate;
+                    handleFilterSearchChange({
+                        ...values,
+                        toDate: toDate,
+                    });
+                } else {
+                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                    handleFilterSearchChange({
+                        ...values,
+                        fromDate: fromDate,
+                        toDate: toDate,
+                    });
+                }
+            };
         },
     });
 
     const columns = [
+        {
+            title: translate.formatMessage(commonMessage.createdDate),
+            dataIndex: 'createdDate',
+            render: (createdDate) => {
+                const modifiedDate = convertStringToDateTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT).add(
+                    7,
+                    'hour',
+                );
+                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
+            },
+            width: 180,
+        },
         {
             title: translate.formatMessage(commonMessage.message),
             dataIndex: 'message',
@@ -93,6 +147,31 @@ function StudentActivityCourseListPage() {
         params: { courseId, studentId },
         mappingData: ({ data }) => data.content,
     });
+    const searchFields = [
+        {
+            key: 'fromDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.fromDate),
+            colSpan: 3,
+        },
+        {
+            key: 'toDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.toDate),
+            colSpan: 3,
+        },
+    ];
+    const initialFilterValues = useMemo(() => {
+        const initialFilterValues = {
+            ...queryFilter,
+            fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
+            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+        };
+
+        return initialFilterValues;
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
 
     return (
         <PageWrapper
@@ -135,6 +214,11 @@ function StudentActivityCourseListPage() {
                         </span>
                     </div>
                 }
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    className: styles.search,
+                    initialValues: initialFilterValues,
+                })}
                 baseTable={
                     <div>
                         <BaseTable
@@ -150,5 +234,13 @@ function StudentActivityCourseListPage() {
         </PageWrapper>
     );
 }
+const formatDateToZeroTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+
+const formatDateToLocal = (date) => {
+    return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+};
 
 export default StudentActivityCourseListPage;
