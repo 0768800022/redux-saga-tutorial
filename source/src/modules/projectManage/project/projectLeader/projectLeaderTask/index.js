@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DATE_DISPLAY_FORMAT, DATE_FORMAT_ZERO_TIME, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { projectTaskState, statusOptions } from '@constants/masterData';
@@ -9,7 +9,7 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag, Button, Modal, Row, Col } from 'antd';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
@@ -31,6 +31,8 @@ import NumericField from '@components/common/form/NumericField';
 import TextField from '@components/common/form/TextField';
 import feature from '../../../../../assets/images/feature.png';
 import bug from '../../../../../assets/images/bug.jpg';
+import dayjs from 'dayjs';
+import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -165,6 +167,38 @@ function ProjectLeaderTaskListPage() {
                         </BaseTooltip>
                     ),
                 });
+                const handleFilterSearchChange = funcs.handleFilterSearchChange;
+                funcs.handleFilterSearchChange = (values) => {
+                    if (values.toDate == null && values.fromDate == null) {
+                        delete values.toDate;
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                        });
+                    } else if (values.toDate == null) {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        delete values.toDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                        });
+                    } else if (values.fromDate == null) {
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            toDate: toDate,
+                        });
+                    } else {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        });
+                    }
+                };
             },
         });
     const handleFetchDetail = (id) => {
@@ -228,6 +262,20 @@ function ProjectLeaderTaskListPage() {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(dueDate)}</div>;
             },
             width: 200,
+            align: 'center',
+        },
+        {
+            title: 'Ngày hoàn thành',
+            dataIndex: 'dateComplete',
+            width: 180,
+            render: (dateComplete) => {
+                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
+                    7,
+                    'hour',
+                );
+                const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
+            },
             align: 'center',
         },
         {
@@ -304,6 +352,16 @@ function ProjectLeaderTaskListPage() {
             })),
     });
 
+    const initialFilterValues = useMemo(() => {
+        const initialFilterValues = {
+            ...queryFilter,
+            fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
+            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+        };
+
+        return initialFilterValues;
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
+
     const searchFields = [
         {
             key: 'projectCategoryId',
@@ -323,6 +381,20 @@ function ProjectLeaderTaskListPage() {
             placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
             options: memberProject,
+        },
+        {
+            key: 'fromDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.fromDate),
+            colSpan: 3,
+        },
+        {
+            key: 'toDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.toDate),
+            colSpan: 3,
         },
         // !leaderName &&
         //     !developerName && {
@@ -349,7 +421,7 @@ function ProjectLeaderTaskListPage() {
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
                         className: styles.search,
-                        initialValues: { ...queryFilter },
+                        initialValues: initialFilterValues,
                     })}
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
@@ -430,4 +502,11 @@ function ProjectLeaderTaskListPage() {
         </PageWrapper>
     );
 }
+const formatDateToZeroTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+const formatDateToLocal = (date) => {
+    return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+};
 export default ProjectLeaderTaskListPage;

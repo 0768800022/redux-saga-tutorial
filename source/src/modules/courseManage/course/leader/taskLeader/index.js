@@ -1,13 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT, DATE_FORMAT_ZERO_TIME, DATE_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { taskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag, Modal } from 'antd';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useLocation, useParams, useNavigate, generatePath } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
@@ -26,6 +26,8 @@ import { FieldTypes } from '@constants/formConfig';
 import styles from '../../course.module.scss';
 import DetailMyTaskModal from '../../student/myTask/DetailMyTaskModal';
 import DetailTaskLeaderModal from './DetailTaskLeaderModal';
+import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import dayjs from 'dayjs';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -141,6 +143,38 @@ function TaskListPage() {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
                     mixinFuncs.handleFetchList({ ...params });
                 };
+                const handleFilterSearchChange = funcs.handleFilterSearchChange;
+                funcs.handleFilterSearchChange = (values) => {
+                    if (values.toDate == null && values.fromDate == null) {
+                        delete values.toDate;
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                        });
+                    } else if (values.toDate == null) {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        delete values.toDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                        });
+                    } else if (values.fromDate == null) {
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            toDate: toDate,
+                        });
+                    } else {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        });
+                    }
+                };
             },
         });
 
@@ -173,6 +207,24 @@ function TaskListPage() {
                     const modifieddueDate = convertStringToDateTime(dueDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
                     const modifieddueDateTimeString = convertDateTimeToString(modifieddueDate, DEFAULT_FORMAT);
                     return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifieddueDateTimeString}</div>;
+                },
+                align: 'center',
+            },
+            {
+                title: 'Ngày hoàn thành',
+                dataIndex: 'dateComplete',
+                width: 180,
+                render: (dateComplete) => {
+                    const modifiedDateComplete = convertStringToDateTime(
+                        dateComplete,
+                        DEFAULT_FORMAT,
+                        DEFAULT_FORMAT,
+                    )?.add(7, 'hour');
+                    const modifiedDateCompleteTimeString = convertDateTimeToString(
+                        modifiedDateComplete,
+                        DEFAULT_FORMAT,
+                    );
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
                 },
                 align: 'center',
             },
@@ -219,6 +271,20 @@ function TaskListPage() {
             type: FieldTypes.SELECT,
             options: memberCourse,
         },
+        {
+            key: 'fromDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.fromDate),
+            colSpan: 3,
+        },
+        {
+            key: 'toDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.toDate),
+            colSpan: 3,
+        },
     ].filter(Boolean);
 
     const { execute: executeUpdate } = useFetch(apiConfig.task.updateState, { immediate: false });
@@ -256,7 +322,15 @@ function TaskListPage() {
         });
         handlersDetailLeaderTaskModal.open();
     };
+    const initialFilterValues = useMemo(() => {
+        const initialFilterValues = {
+            ...queryFilter,
+            fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
+            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+        };
 
+        return initialFilterValues;
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
     return (
         <PageWrapper
             routes={[
@@ -269,12 +343,12 @@ function TaskListPage() {
         >
             <div>
                 <ListPage
-                    title={<span style={{ fontWeight: 'normal' }}>{courseName}</span>}
+                    title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{courseName}</span>}
                     actionBar={state != 3 ? mixinFuncs.renderActionBar() : ''}
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
                         className: styles.search,
-                        initialValues: queryFilter,
+                        initialValues: initialFilterValues,
                     })}
                     baseTable={
                         <BaseTable
@@ -287,8 +361,6 @@ function TaskListPage() {
                                 onClick: (e) => {
                                     e.stopPropagation();
                                     handleFetchDetail(record.id);
-
-                   
                                 },
                             })}
                         />
@@ -311,5 +383,13 @@ function TaskListPage() {
         </PageWrapper>
     );
 }
+const formatDateToZeroTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+
+const formatDateToLocal = (date) => {
+    return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+};
 
 export default TaskListPage;
