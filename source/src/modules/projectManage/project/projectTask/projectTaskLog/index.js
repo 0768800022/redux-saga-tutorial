@@ -12,7 +12,7 @@ import { defineMessages } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
 import { TaskLogKindOptions } from '@constants/masterData';
-import style from './projectTaskLog.module.scss';
+import styles from './projectTaskLog.module.scss';
 import useNotification from '@hooks/useNotification';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { RightOutlined } from '@ant-design/icons';
@@ -153,7 +153,7 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
             render: (gitUrl) => {
                 return (
                     gitUrl && (
-                        <div className={style.customDiv} onClick={() => handleOnClickReview(gitUrl)}>
+                        <div className={styles.customDiv} onClick={() => handleOnClickReview(gitUrl)}>
                             <BaseTooltip title={gitUrl}>Review</BaseTooltip>
                         </div>
                     )
@@ -243,6 +243,7 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                     }
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
+                        className: styles.search,
                         initialValues: initialFilterValues,
                     })}
                     actionBar={mixinFuncs.renderActionBar()}
