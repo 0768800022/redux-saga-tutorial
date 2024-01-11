@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
@@ -9,7 +9,7 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag, Button, Modal, Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
@@ -26,6 +26,9 @@ import NumericField from '@components/common/form/NumericField';
 import { BaseForm } from '@components/common/form/BaseForm';
 import feature from '../../../../assets/images/feature.png';
 import bug from '../../../../assets/images/bug.jpg';
+import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import dayjs from 'dayjs';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -203,6 +206,38 @@ function ProjectTaskListPage() {
                         </BaseTooltip>
                     ),
                 });
+                const handleFilterSearchChange = funcs.handleFilterSearchChange;
+                funcs.handleFilterSearchChange = (values) => {
+                    if (values.toDate == null && values.fromDate == null) {
+                        delete values.toDate;
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                        });
+                    } else if (values.toDate == null) {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        delete values.toDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                        });
+                    } else if (values.fromDate == null) {
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            toDate: toDate,
+                        });
+                    } else {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        });
+                    }
+                };
             },
         });
     const columns = [
@@ -249,6 +284,20 @@ function ProjectTaskListPage() {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
             width: 200,
+        },
+        {
+            title: 'Ngày hoàn thành',
+            dataIndex: 'dateComplete',
+            width: 180,
+            render: (dateComplete) => {
+                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
+                    7,
+                    'hour',
+                );
+                const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
+            },
+            align: 'center',
         },
         {
             title: 'Tình trạng',
@@ -305,6 +354,20 @@ function ProjectTaskListPage() {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
+        {
+            key: 'fromDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.fromDate),
+            colSpan: 3,
+        },
+        {
+            key: 'toDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.toDate),
+            colSpan: 3,
+        },
         // !leaderName &&
         //     !developerName && {
         //     key: 'status',
@@ -313,6 +376,16 @@ function ProjectTaskListPage() {
         //     options: statusValues,
         // },
     ].filter(Boolean);
+    const initialFilterValues = useMemo(() => {
+        const initialFilterValues = {
+            ...queryFilter,
+            fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
+            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+        };
+
+        return initialFilterValues;
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
+
     const pathPrev = localStorage.getItem('pathPrev');
     const setBreadRoutes = () => {
         const breadRoutes = [];
@@ -353,6 +426,7 @@ function ProjectTaskListPage() {
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
                         className: styles.search,
+                        initialValues: initialFilterValues,
                     })}
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
@@ -430,4 +504,12 @@ function ProjectTaskListPage() {
         </PageWrapper>
     );
 }
+const formatDateToZeroTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+
+const formatDateToLocal = (date) => {
+    return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+};
 export default ProjectTaskListPage;

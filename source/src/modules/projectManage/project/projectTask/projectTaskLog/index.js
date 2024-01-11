@@ -1,13 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT } from '@constants';
+import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Tag } from 'antd';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
@@ -16,7 +16,9 @@ import style from './projectTaskLog.module.scss';
 import useNotification from '@hooks/useNotification';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { RightOutlined } from '@ant-design/icons';
-import { convertUtcToLocalTime } from '@utils';
+import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import { FieldTypes } from '@constants/formConfig';
+import dayjs from 'dayjs';
 const message = defineMessages({
     objectName: 'Nhật ký',
     gitCommitUrl: 'Đường dẫn commit git',
@@ -73,6 +75,48 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                         active: null,
                         task: null,
                     });
+                };
+                const handleFilterSearchChange = funcs.handleFilterSearchChange;
+                funcs.handleFilterSearchChange = (values) => {
+                    if (values.toDate == null && values.fromDate == null) {
+                        delete values.toDate;
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                        });
+                    } else if (values.toDate == null) {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        delete values.toDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                        });
+                    } else if (values.fromDate == null) {
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            toDate: toDate,
+                        });
+                    } else {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        });
+                    }
+                };
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const projectName = queryParams.get('projectName');
+                    const projectTaskId = queryParams.get('projectTaskId');
+                    const task = queryParams.get('task');
+
+                    mixinFuncs.setQueryParams(
+                        serializeParams({ projectId, projectName, projectTaskId, task, ...filter }),
+                    );
                 };
             },
         });
@@ -151,6 +195,32 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
         },
         renderAction === false ? '' : mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
+
+    const searchFields = [
+        {
+            key: 'fromDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.fromDate),
+            colSpan: 3,
+        },
+        {
+            key: 'toDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.toDate),
+            colSpan: 3,
+        },
+    ];
+    const initialFilterValues = useMemo(() => {
+        const initialFilterValues = {
+            ...queryFilter,
+            fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
+            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+        };
+
+        return initialFilterValues;
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
     return (
         <PageWrapper
             routes={
@@ -171,6 +241,10 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                             {projectName} <RightOutlined /> {taskName}
                         </span>
                     }
+                    searchForm={mixinFuncs.renderSearchForm({
+                        fields: searchFields,
+                        initialValues: initialFilterValues,
+                    })}
                     actionBar={mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
@@ -186,4 +260,12 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
         </PageWrapper>
     );
 }
+const formatDateToZeroTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+
+const formatDateToLocal = (date) => {
+    return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+};
 export default ProjectTaskLogListPage;

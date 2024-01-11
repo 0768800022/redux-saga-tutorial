@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { projectTaskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -26,6 +26,7 @@ import feature from '../../../../../assets/images/feature.png';
 import bug from '../../../../../assets/images/bug.jpg';
 import { IconBellRinging } from '@tabler/icons-react';
 import useNotification from '@hooks/useNotification';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 const message = defineMessages({
     objectName: 'Task',
     myTask: 'Task của tôi',
@@ -182,6 +183,20 @@ function ProjectStudentMyTaskListPage() {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
             width: 200,
+        },
+        {
+            title: 'Ngày hoàn thành',
+            dataIndex: 'dateComplete',
+            width: 180,
+            render: (dateComplete) => {
+                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
+                    7,
+                    'hour',
+                );
+                const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
+            },
+            align: 'center',
         },
         {
             title: 'Tình trạng',

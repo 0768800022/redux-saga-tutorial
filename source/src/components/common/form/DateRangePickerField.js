@@ -3,6 +3,8 @@ import React from 'react';
 import { Form, DatePicker } from 'antd';
 import { DATE_SHORT_MONTH_FORMAT } from '@constants';
 import useFormField from '@hooks/useFormField';
+import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
 
 const { RangePicker } = DatePicker;
 
@@ -20,10 +22,11 @@ function DateRangePickerField({
     fieldProps,
     onOpenChange,
     ref,
+    placeholder,
     ...props
 }) {
     const { rules } = useFormField(props);
-
+    const translate = useTranslate();
     return (
         <Form.Item {...formItemProps} label={label} name={name} rules={rules} {...props}>
             <RangePicker
@@ -37,6 +40,12 @@ function DateRangePickerField({
                 onCalendarChange={onCalendarChange}
                 onOpenChange={onOpenChange}
                 ref={ref}
+                placeholder={
+                    placeholder || [
+                        translate.formatMessage(commonMessage.fromDate),
+                        translate.formatMessage(commonMessage.toDate),
+                    ]
+                }
             />
         </Form.Item>
     );
