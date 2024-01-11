@@ -25,6 +25,7 @@ import useNotification from '@hooks/useNotification';
 import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
 import { FieldTypes } from '@constants/formConfig';
 import dayjs from 'dayjs';
+import styles from '../../course.module.scss';
 const message = defineMessages({
     objectName: 'Task',
 });
@@ -210,7 +211,11 @@ function TaskStudentListPage() {
                 dataIndex: 'dateComplete',
                 width: 180,
                 render: (dateComplete) => {
-                    const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                    const modifiedDateComplete = convertStringToDateTime(
+                        dateComplete,
+                        DEFAULT_FORMAT,
+                        DEFAULT_FORMAT,
+                    )?.add(7, 'hour');
                     const modifiedDateCompleteTimeString = convertDateTimeToString(
                         modifiedDateComplete,
                         DEFAULT_FORMAT,
@@ -281,17 +286,10 @@ function TaskStudentListPage() {
             <div>
                 <ListPage
                     actionBar={state != 3 ? mixinFuncs.renderActionBar() : ''}
-                    title={
-                        <span
-                            style={
-                                state != 2 ? { fontWeight: 'normal' } : { fontWeight: 'normal', position: 'absolute' }
-                            }
-                        >
-                            {courseName}
-                        </span>
-                    }
+                    title={<span style={{ fontWeight: 'normal' }}>{courseName}</span>}
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
+                        className: styles.search,
                         initialValues: initialFilterValues,
                     })}
                     baseTable={

@@ -23,17 +23,18 @@ const DetailTaskLeaderModal = ({ open, onCancel, DetailData, ...props }) => {
 
     useEffect(() => {
         if (DetailData) {
-            if (!DetailData?.note) {
-                DetailData.note = null;
+            const updatedDetailData = { ...DetailData };
+            if (!updatedDetailData?.note) {
+                updatedDetailData.note = null;
             }
-            if (!DetailData?.lecture?.description) {
-                DetailData.lecture.description = null;
+            if (!updatedDetailData?.lecture?.description) {
+                updatedDetailData.lecture.description = null;
             }
+            form.setFieldsValue({
+                ...updatedDetailData,
+            });
         }
         // form.setFields(data);
-        form.setFieldsValue({
-            ...DetailData,
-        });
     }, [DetailData]);
     const handleOnCancel = () => {
         onCancel();

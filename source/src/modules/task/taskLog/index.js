@@ -17,6 +17,7 @@ import { FormattedMessage } from 'react-intl';
 import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
 import dayjs from 'dayjs';
 import { FieldTypes } from '@constants/formConfig';
+import styles from './taskLog.module.scss';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -205,6 +206,7 @@ function TaskLogListPage({ breadcrumbName }) {
                     actionBar={mixinFuncs.renderActionBar()}
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
+                        className: styles.search,
                         initialValues: initialFilterValues,
                     })}
                     baseTable={

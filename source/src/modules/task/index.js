@@ -30,6 +30,7 @@ import { commonMessage } from '@locales/intl';
 import { CalendarOutlined } from '@ant-design/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import styles from './task.module.scss';
 const message = defineMessages({
     objectName: 'Task',
 });
@@ -166,7 +167,10 @@ function TaskListPage() {
             dataIndex: 'dateComplete',
             width: 180,
             render: (dateComplete) => {
-                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
+                    7,
+                    'hour',
+                );
                 const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
             },
@@ -243,17 +247,10 @@ function TaskListPage() {
         <PageWrapper routes={setBreadRoutes()}>
             <div>
                 <ListPage
-                    title={
-                        <span
-                            style={
-                                state != 2 ? { fontWeight: 'normal' } : { fontWeight: 'normal', position: 'absolute' }
-                            }
-                        >
-                            {courseName}
-                        </span>
-                    }
+                    title={<span style={{ fontWeight: 'normal' }}>{courseName}</span>}
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
+                        className: styles.search,
                         initialValues: initialFilterValues,
                     })}
                     actionBar={state == 2 && courseStatus == 1 && !leaderName ? mixinFuncs.renderActionBar() : ''}

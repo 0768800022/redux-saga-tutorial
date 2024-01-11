@@ -290,7 +290,10 @@ function ProjectTaskListPage() {
             dataIndex: 'dateComplete',
             width: 180,
             render: (dateComplete) => {
-                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT);
+                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
+                    7,
+                    'hour',
+                );
                 const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
             },
