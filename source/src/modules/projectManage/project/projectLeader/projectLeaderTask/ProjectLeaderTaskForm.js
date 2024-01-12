@@ -29,7 +29,6 @@ const ProjectLeaderTaskForm = (props) => {
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
-        console.log(values.startDate);
         values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
         values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
         if (typeof values.developerId === 'string') {

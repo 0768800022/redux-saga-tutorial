@@ -9,6 +9,7 @@ import {
     DEFAULT_TABLE_ITEM_SIZE,
     DEFAULT_FORMAT,
     DATE_FORMAT_ZERO_TIME,
+    DATE_FORMAT_END_OF_DAY_TIME,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
@@ -49,87 +50,105 @@ function TaskListPage() {
     const navigate = useNavigate();
 
     const statusValues = translate.formatKeys(taskState, ['label']);
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: apiConfig.task,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
-                        };
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.task,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.mappingData = (response) => {
+                    try {
+                        if (response.result === true) {
+                            return {
+                                data: response.data.content,
+                                total: response.data.totalElements,
+                            };
+                        }
+                    } catch (error) {
+                        return [];
                     }
-                } catch (error) {
-                    return [];
-                }
-            };
-            funcs.getCreateLink = () => {
-                return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`;
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`;
-            };
-            funcs.additionalActionColumnButtons = () => ({
-                taskLog: ({ id, lecture, state, status, name }) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
-                        <Button
-                            type="link"
-                            style={{ padding: 0 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(
-                                    routes.taskListPage.path +
-                                        `/task-log?courseId=${courseId}&courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`,
-                                    {
-                                        state: { action: 'taskLog', prevPath: location.pathname },
-                                    },
-                                );
-                            }}
-                        >
-                            <CalendarOutlined />
-                        </Button>
-                    </BaseTooltip>
-                ),
-            });
-            const handleFilterSearchChange = funcs.handleFilterSearchChange;
-            funcs.handleFilterSearchChange = (values) => {
-                if (values.toDate == null && values.fromDate == null) {
-                    delete values.toDate;
-                    delete values.fromDate;
-                    handleFilterSearchChange({
-                        ...values,
-                    });
-                } else if (values.toDate == null) {
-                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
-                    delete values.toDate;
-                    handleFilterSearchChange({
-                        ...values,
-                        fromDate: fromDate,
-                    });
-                } else if (values.fromDate == null) {
-                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
-                    delete values.fromDate;
-                    handleFilterSearchChange({
-                        ...values,
-                        toDate: toDate,
-                    });
-                } else {
-                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
-                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
-                    handleFilterSearchChange({
-                        ...values,
-                        fromDate: fromDate,
-                        toDate: toDate,
-                    });
-                }
-            };
-        },
-    });
+                };
+                funcs.getCreateLink = () => {
+                    return `${pagePath}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`;
+                };
+                funcs.getItemDetailLink = (dataRow) => {
+                    return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`;
+                };
+                funcs.additionalActionColumnButtons = () => ({
+                    taskLog: ({ id, lecture, state, status, name }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        routes.taskListPage.path +
+                                            `/task-log?courseId=${courseId}&courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}&state=${state}&courseStatus=${courseStatus}`,
+                                        {
+                                            state: { action: 'taskLog', prevPath: location.pathname },
+                                        },
+                                    );
+                                }}
+                            >
+                                <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                });
+                const handleFilterSearchChange = funcs.handleFilterSearchChange;
+                funcs.handleFilterSearchChange = (values) => {
+                    if (values.toDate == null && values.fromDate == null) {
+                        delete values.toDate;
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                        });
+                    } else if (values.toDate == null) {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        delete values.toDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                        });
+                    } else if (values.fromDate == null) {
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            toDate: toDate,
+                        });
+                    } else {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        });
+                    }
+                };
+                funcs.changeFilter = (filter) => {
+                    const courseId = queryParams.get('courseId');
+                    const subjectId = queryParams.get('subjectId');
+                    const courseName = queryParams.get('courseName');
+                    const state = queryParams.get('state');
+                    const courseStatus = queryParams.get('courseStatus');
+                    mixinFuncs.setQueryParams(
+                        serializeParams({
+                            courseId,
+                            courseName,
+                            subjectId,
+                            state,
+                            courseStatus,
+                            ...filter,
+                        }),
+                    );
+                };
+            },
+        });
 
     const columns = [
         {
@@ -237,9 +256,9 @@ function TaskListPage() {
         const initialFilterValues = {
             ...queryFilter,
             fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
-            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+            toDate:
+                queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT).subtract(7, 'hour'),
         };
-
         return initialFilterValues;
     }, [queryFilter?.fromDate, queryFilter?.toDate]);
 
@@ -271,6 +290,10 @@ function TaskListPage() {
 const formatDateToZeroTime = (date) => {
     const dateString = formatDateString(date, DEFAULT_FORMAT);
     return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+const formatDateToEndOfDayTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
 };
 
 const formatDateToLocal = (date) => {

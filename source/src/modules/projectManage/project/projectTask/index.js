@@ -1,7 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import {
+    DATE_FORMAT_DISPLAY,
+    DATE_FORMAT_END_OF_DAY_TIME,
+    DATE_FORMAT_ZERO_TIME,
+    DEFAULT_FORMAT,
+    DEFAULT_TABLE_ITEM_SIZE,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
@@ -222,7 +228,7 @@ function ProjectTaskListPage() {
                             fromDate: fromDate,
                         });
                     } else if (values.fromDate == null) {
-                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
                         delete values.fromDate;
                         handleFilterSearchChange({
                             ...values,
@@ -230,7 +236,7 @@ function ProjectTaskListPage() {
                         });
                     } else {
                         const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
-                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
                         handleFilterSearchChange({
                             ...values,
                             fromDate: fromDate,
@@ -380,7 +386,8 @@ function ProjectTaskListPage() {
         const initialFilterValues = {
             ...queryFilter,
             fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
-            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+            toDate:
+                queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT).subtract(7, 'hour'),
         };
 
         return initialFilterValues;
@@ -507,6 +514,10 @@ function ProjectTaskListPage() {
 const formatDateToZeroTime = (date) => {
     const dateString = formatDateString(date, DEFAULT_FORMAT);
     return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+const formatDateToEndOfDayTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
 };
 
 const formatDateToLocal = (date) => {

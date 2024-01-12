@@ -164,7 +164,6 @@ const DeveloperListPage = () => {
             setProjectROle(projectroles);
         }
     }, [projectroles]);
-    console.log(projectRole);
 
     return (
         <PageWrapper

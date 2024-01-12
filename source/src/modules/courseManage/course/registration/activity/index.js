@@ -1,6 +1,12 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import {
+    DATE_FORMAT_DISPLAY,
+    DATE_FORMAT_END_OF_DAY_TIME,
+    DATE_FORMAT_ZERO_TIME,
+    DEFAULT_FORMAT,
+    DEFAULT_TABLE_ITEM_SIZE,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { TaskLogKindOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -36,69 +42,70 @@ function StudentActivityCourseListPage() {
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const { profile } = useAuth();
     const pathPrev = localStorage.getItem('pathPrev');
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams,serializeParams } = useListBase({
-        apiConfig: apiConfig.taskLog,
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
-                        };
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: apiConfig.taskLog,
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.mappingData = (response) => {
+                    try {
+                        if (response.result === true) {
+                            return {
+                                data: response.data.content,
+                                total: response.data.totalElements,
+                            };
+                        }
+                    } catch (error) {
+                        return [];
                     }
-                } catch (error) {
-                    return [];
-                }
-            };
-            funcs.getList = () => {
-                const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params, studentId, courseId, studentName: null });
-            };
-            funcs.changeFilter = (filter) => {
-                const courseId = queryParams.get('courseId');
-                const studentId = queryParams.get('studentId');
-                const studentName = queryParams.get('studentName');
-                mixinFuncs.setQueryParams(serializeParams({ courseId, studentId, studentName, ...filter }));
-            };
-            const handleFilterSearchChange = funcs.handleFilterSearchChange;
-            funcs.handleFilterSearchChange = (values) => {
-                if (values.toDate == null && values.fromDate == null) {
-                    delete values.toDate;
-                    delete values.fromDate;
-                    handleFilterSearchChange({
-                        ...values,
-                    });
-                } else if (values.toDate == null) {
-                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
-                    delete values.toDate;
-                    handleFilterSearchChange({
-                        ...values,
-                        fromDate: fromDate,
-                    });
-                } else if (values.fromDate == null) {
-                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
-                    delete values.fromDate;
-                    handleFilterSearchChange({
-                        ...values,
-                        toDate: toDate,
-                    });
-                } else {
-                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
-                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
-                    handleFilterSearchChange({
-                        ...values,
-                        fromDate: fromDate,
-                        toDate: toDate,
-                    });
-                }
-            };
-        },
-    });
+                };
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, studentId, courseId, studentName: null });
+                };
+                funcs.changeFilter = (filter) => {
+                    const courseId = queryParams.get('courseId');
+                    const studentId = queryParams.get('studentId');
+                    const studentName = queryParams.get('studentName');
+                    mixinFuncs.setQueryParams(serializeParams({ courseId, studentId, studentName, ...filter }));
+                };
+                const handleFilterSearchChange = funcs.handleFilterSearchChange;
+                funcs.handleFilterSearchChange = (values) => {
+                    if (values.toDate == null && values.fromDate == null) {
+                        delete values.toDate;
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                        });
+                    } else if (values.toDate == null) {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        delete values.toDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                        });
+                    } else if (values.fromDate == null) {
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            toDate: toDate,
+                        });
+                    } else {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        });
+                    }
+                };
+            },
+        });
 
     const columns = [
         {
@@ -167,7 +174,8 @@ function StudentActivityCourseListPage() {
         const initialFilterValues = {
             ...queryFilter,
             fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
-            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+            toDate:
+                queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT).subtract(7, 'hour'),
         };
 
         return initialFilterValues;
@@ -237,6 +245,10 @@ function StudentActivityCourseListPage() {
 const formatDateToZeroTime = (date) => {
     const dateString = formatDateString(date, DEFAULT_FORMAT);
     return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+const formatDateToEndOfDayTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
 };
 
 const formatDateToLocal = (date) => {

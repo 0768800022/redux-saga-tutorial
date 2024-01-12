@@ -1,6 +1,12 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME } from '@constants';
+import {
+    DEFAULT_TABLE_ITEM_SIZE,
+    DEFAULT_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DATE_FORMAT_ZERO_TIME,
+    DATE_FORMAT_END_OF_DAY_TIME,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { taskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -59,124 +65,140 @@ function TaskStudentListPage() {
         });
         handlersModal.open();
     };
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
-        apiConfig: {
-            getList: apiConfig.task.studentTask,
-            delete: apiConfig.task.delete,
-            update: apiConfig.task.update,
-            getById: apiConfig.task.getById,
-        },
-        options: {
-            pageSize: DEFAULT_TABLE_ITEM_SIZE,
-            objectName: translate.formatMessage(message.objectName),
-        },
-        override: (funcs) => {
-            funcs.getList = () => {
-                const params = mixinFuncs.prepareGetListParams(queryFilter);
-                mixinFuncs.handleFetchList({ ...params });
-            };
-            funcs.getCreateLink = () => {
-                return (
-                    routes.courseStudentListPage.path +
-                    `/task/${courseId}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`
-                );
-            };
-            funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
-            };
-            funcs.mappingData = (response) => {
-                try {
-                    if (response.result === true) {
-                        return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
-                        };
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
+        useListBase({
+            apiConfig: {
+                getList: apiConfig.task.studentTask,
+                delete: apiConfig.task.delete,
+                update: apiConfig.task.update,
+                getById: apiConfig.task.getById,
+            },
+            options: {
+                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                objectName: translate.formatMessage(message.objectName),
+            },
+            override: (funcs) => {
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params });
+                };
+                funcs.getCreateLink = () => {
+                    return (
+                        routes.courseStudentListPage.path +
+                        `/task/${courseId}/lecture?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`
+                    );
+                };
+                funcs.getItemDetailLink = (dataRow) => {
+                    return `${pagePath}/${dataRow.id}?courseId=${courseId}&courseName=${courseName}&subjectId=${subjectId}`;
+                };
+                funcs.mappingData = (response) => {
+                    try {
+                        if (response.result === true) {
+                            return {
+                                data: response.data.content,
+                                total: response.data.totalElements,
+                            };
+                        }
+                    } catch (error) {
+                        return [];
                     }
-                } catch (error) {
-                    return [];
-                }
-            };
-            funcs.additionalActionColumnButtons = () => ({
-                taskLog: ({ id, lecture, state, status, name }) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
-                        <Button
-                            type="link"
-                            style={{ padding: 0 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(
-                                    generatePath(routes.taskStudentListPage.path, { courseId }) +
-                                        `/task-log?courseId=${courseId}&courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
-                                    {
-                                        state: { action: 'taskLog', prevPath: location.pathname },
-                                    },
-                                );
-                            }}
-                        >
-                            <CalendarOutlined />
-                        </Button>
-                    </BaseTooltip>
-                ),
-                notifyDone: ({ id, course, state }) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.notifyDone)}>
-                        <Button
-                            disabled={state != 1 || listNotified.includes(id)}
-                            type="link"
-                            style={{ padding: 0, position: 'relative', width: '15px', height: '32px' }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                executeNotifyDone({
-                                    data: {
-                                        courseId: course?.id,
-                                        taskId: id,
-                                    },
-                                });
-                                setListNotified([...listNotified, id]);
-                                notification({
-                                    type: 'success',
-                                    message: translate.formatMessage(commonMessage.notificationDone),
-                                });
-                            }}
-                        >
-                            <IconBellRinging size={15} style={{ position: 'absolute', top: '3px', left: 0 }} />
-                        </Button>
-                    </BaseTooltip>
-                ),
-            });
-            const handleFilterSearchChange = funcs.handleFilterSearchChange;
-            funcs.handleFilterSearchChange = (values) => {
-                if (values.toDate == null && values.fromDate == null) {
-                    delete values.toDate;
-                    delete values.fromDate;
-                    handleFilterSearchChange({
-                        ...values,
-                    });
-                } else if (values.toDate == null) {
-                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
-                    delete values.toDate;
-                    handleFilterSearchChange({
-                        ...values,
-                        fromDate: fromDate,
-                    });
-                } else if (values.fromDate == null) {
-                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
-                    delete values.fromDate;
-                    handleFilterSearchChange({
-                        ...values,
-                        toDate: toDate,
-                    });
-                } else {
-                    const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
-                    const toDate = values.toDate && formatDateToZeroTime(values.toDate);
-                    handleFilterSearchChange({
-                        ...values,
-                        fromDate: fromDate,
-                        toDate: toDate,
-                    });
-                }
-            };
-        },
-    });
+                };
+                funcs.additionalActionColumnButtons = () => ({
+                    taskLog: ({ id, lecture, state, status, name }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        generatePath(routes.taskStudentListPage.path, { courseId }) +
+                                            `/task-log?courseId=${courseId}&courseName=${courseName}&taskId=${id}&taskName=${lecture.lectureName}&subjectId=${subjectId}`,
+                                        {
+                                            state: { action: 'taskLog', prevPath: location.pathname },
+                                        },
+                                    );
+                                }}
+                            >
+                                <CalendarOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                    notifyDone: ({ id, course, state }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.notifyDone)}>
+                            <Button
+                                disabled={state != 1 || listNotified.includes(id)}
+                                type="link"
+                                style={{ padding: 0, position: 'relative', width: '15px', height: '32px' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    executeNotifyDone({
+                                        data: {
+                                            courseId: course?.id,
+                                            taskId: id,
+                                        },
+                                    });
+                                    setListNotified([...listNotified, id]);
+                                    notification({
+                                        type: 'success',
+                                        message: translate.formatMessage(commonMessage.notificationDone),
+                                    });
+                                }}
+                            >
+                                <IconBellRinging size={15} style={{ position: 'absolute', top: '3px', left: 0 }} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
+                });
+                const handleFilterSearchChange = funcs.handleFilterSearchChange;
+                funcs.handleFilterSearchChange = (values) => {
+                    if (values.toDate == null && values.fromDate == null) {
+                        delete values.toDate;
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                        });
+                    } else if (values.toDate == null) {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        delete values.toDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                        });
+                    } else if (values.fromDate == null) {
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            toDate: toDate,
+                        });
+                    } else {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        });
+                    }
+                };
+                funcs.changeFilter = (filter) => {
+                    const courseId = queryParams.get('courseId');
+                    const subjectId = queryParams.get('subjectId');
+                    const courseName = queryParams.get('courseName');
+                    const state = queryParams.get('state');
+                    mixinFuncs.setQueryParams(
+                        serializeParams({
+                            courseId,
+                            courseName,
+                            subjectId,
+                            state,
+                            ...filter,
+                        }),
+                    );
+                };
+            },
+        });
 
     const setColumns = () => {
         const columns = [
@@ -252,7 +274,8 @@ function TaskStudentListPage() {
         const initialFilterValues = {
             ...queryFilter,
             fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
-            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+            toDate:
+                queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT).subtract(7, 'hour'),
         };
 
         return initialFilterValues;
@@ -321,6 +344,10 @@ function TaskStudentListPage() {
 const formatDateToZeroTime = (date) => {
     const dateString = formatDateString(date, DEFAULT_FORMAT);
     return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+const formatDateToEndOfDayTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
 };
 
 const formatDateToLocal = (date) => {
