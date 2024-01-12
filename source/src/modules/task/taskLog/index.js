@@ -1,6 +1,12 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME } from '@constants';
+import {
+    DEFAULT_TABLE_ITEM_SIZE,
+    DEFAULT_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DATE_FORMAT_ZERO_TIME,
+    DATE_FORMAT_END_OF_DAY_TIME,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { TaskLogKindOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -14,7 +20,12 @@ import BaseTable from '@components/common/table/BaseTable';
 import { commonMessage } from '@locales/intl';
 import { RightOutlined } from '@ant-design/icons';
 import { FormattedMessage } from 'react-intl';
-import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import {
+    convertLocalTimeToUtc,
+    convertUtcToLocalTime,
+    deleteSearchFilterInLocationSearch,
+    formatDateString,
+} from '@utils';
 import dayjs from 'dayjs';
 import { FieldTypes } from '@constants/formConfig';
 import styles from './taskLog.module.scss';
@@ -23,7 +34,7 @@ const message = defineMessages({
     objectName: 'Task',
 });
 
-function TaskLogListPage({ breadcrumbName }) {
+function TaskLogListPage({ setBreadCrumbName }) {
     const translate = useTranslate();
     const location = useLocation();
     const { pathname: pagePath } = useLocation();
@@ -34,6 +45,7 @@ function TaskLogListPage({ breadcrumbName }) {
     const state = location?.state?.prevPath;
     const taskParam = routes.taskListPage.path;
     const search = location.search;
+
     const paramHead = routes.courseListPage.path;
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, queryParams, changePagination, serializeParams } =
@@ -82,7 +94,7 @@ function TaskLogListPage({ breadcrumbName }) {
                             fromDate: fromDate,
                         });
                     } else if (values.fromDate == null) {
-                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
                         delete values.fromDate;
                         handleFilterSearchChange({
                             ...values,
@@ -90,7 +102,7 @@ function TaskLogListPage({ breadcrumbName }) {
                         });
                     } else {
                         const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
-                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
                         handleFilterSearchChange({
                             ...values,
                             fromDate: fromDate,
@@ -99,12 +111,27 @@ function TaskLogListPage({ breadcrumbName }) {
                     }
                 };
                 funcs.changeFilter = (filter) => {
+                    const courseId = queryParams.get('courseId');
                     const subjectId = queryParams.get('subjectId');
                     const courseName = queryParams.get('courseName');
                     const taskId = queryParams.get('taskId');
                     const taskName = queryParams.get('taskName');
-
-                    mixinFuncs.setQueryParams(serializeParams({ subjectId, courseName, taskId, taskName, ...filter }));
+                    const state = queryParams.get('state');
+                    const courseStatus = queryParams.get('courseStatus');
+                    const params = {
+                        courseId,
+                        courseName,
+                        taskId,
+                        taskName,
+                        subjectId,
+                        state,
+                        courseStatus,
+                        ...filter,
+                    };
+                    const filteredParams = Object.fromEntries(
+                        Object.entries(params).filter(([_, value]) => value != null),
+                    );
+                    mixinFuncs.setQueryParams(serializeParams(filteredParams));
                 };
             },
         });
@@ -181,7 +208,8 @@ function TaskLogListPage({ breadcrumbName }) {
         const initialFilterValues = {
             ...queryFilter,
             fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
-            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+            toDate:
+                queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT).subtract(7, 'hour'),
         };
 
         return initialFilterValues;
@@ -189,9 +217,14 @@ function TaskLogListPage({ breadcrumbName }) {
     return (
         <PageWrapper
             routes={
-                breadcrumbName
-                    ? breadcrumbName
-                    : routes.taskLogListPage.breadcrumbs(commonMessage, paramHead, taskParam, search)
+                setBreadCrumbName
+                    ? setBreadCrumbName(['fromDate','toDate'])
+                    : routes.taskLogListPage.breadcrumbs(
+                        commonMessage,
+                        paramHead,
+                        taskParam,
+                        deleteSearchFilterInLocationSearch(search, ['fromDate', 'toDate']),
+                    )
             }
         >
             <div>
@@ -226,6 +259,10 @@ function TaskLogListPage({ breadcrumbName }) {
 const formatDateToZeroTime = (date) => {
     const dateString = formatDateString(date, DEFAULT_FORMAT);
     return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+const formatDateToEndOfDayTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
 };
 const formatDateToLocal = (date) => {
     return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);

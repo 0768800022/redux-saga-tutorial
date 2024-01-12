@@ -386,3 +386,10 @@ export function copyToClipboard(text) {
     document.execCommand('copy');
     textField.remove();
 }
+
+//Sử dụng trong trường hợp khi search rồi back về bằng breadcrumb
+export const deleteSearchFilterInLocationSearch = (locationSearch, searchFilter = []) => {
+    const searchParams = new URLSearchParams(locationSearch);
+    searchFilter.forEach((value) => searchParams.delete(value));
+    return `?${searchParams.toString()}`;
+};

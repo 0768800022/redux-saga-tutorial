@@ -61,6 +61,7 @@ export const DATE_FORMAT_VALUE = 'DD/MM/YYYY';
 export const DATE_FORMAT_DISPLAY = 'DD/MM/YYYY';
 export const DEFAULT_FORMAT = 'DD/MM/YYYY HH:mm:ss';
 export const DATE_FORMAT_ZERO_TIME = 'DD/MM/YYYY 00:00:00';
+export const DATE_FORMAT_END_OF_DAY_TIME = 'DD/MM/YYYY 23:59:59';
 export const navigateTypeEnum = {
     PUSH: 'PUSH',
     POP: 'POP',
