@@ -1,7 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DATE_FORMAT_ZERO_TIME } from '@constants';
+import {
+    DEFAULT_TABLE_ITEM_SIZE,
+    DEFAULT_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DATE_FORMAT_ZERO_TIME,
+    DATE_FORMAT_END_OF_DAY_TIME,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -92,7 +98,7 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                             fromDate: fromDate,
                         });
                     } else if (values.fromDate == null) {
-                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
                         delete values.fromDate;
                         handleFilterSearchChange({
                             ...values,
@@ -100,7 +106,7 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
                         });
                     } else {
                         const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
-                        const toDate = values.toDate && formatDateToZeroTime(values.toDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
                         handleFilterSearchChange({
                             ...values,
                             fromDate: fromDate,
@@ -216,7 +222,8 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
         const initialFilterValues = {
             ...queryFilter,
             fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
-            toDate: queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT),
+            toDate:
+                queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT).subtract(7, 'hour'),
         };
 
         return initialFilterValues;
@@ -264,6 +271,10 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
 const formatDateToZeroTime = (date) => {
     const dateString = formatDateString(date, DEFAULT_FORMAT);
     return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+const formatDateToEndOfDayTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
 };
 
 const formatDateToLocal = (date) => {
