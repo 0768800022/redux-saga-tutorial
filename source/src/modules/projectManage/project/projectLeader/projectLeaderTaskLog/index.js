@@ -4,6 +4,7 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
 import ProjectTaskLogListPage from '@modules/projectManage/project/projectTask/projectTaskLog';
+import { deleteSearchFilterInLocationSearch } from '@utils';
 
 function ProjectLeaderTaskLogListPage() {
     const location = useLocation();
@@ -11,11 +12,19 @@ function ProjectLeaderTaskLogListPage() {
     const search = location.search;
     const paramHead = routes.projectLeaderListPage.path;
     const isProject = true;
-    const breadcrumbName= routes.taskLogListPage.breadcrumbs(commonMessage,paramHead,taskParam,search,isProject);
+    const setBreadCrumbName = (searchFilter) => {
+        return routes.ProjectTaskLogListPage.breadcrumbs(
+            commonMessage,
+            paramHead,
+            taskParam,
+            deleteSearchFilterInLocationSearch(search, searchFilter),
+        );
+    };
+
     const renderAction = true;
     const createPermission = true;
     return (
-        <ProjectTaskLogListPage breadcrumbName={breadcrumbName} renderAction = {renderAction} createPermission = {createPermission}/>
+        <ProjectTaskLogListPage setBreadCrumbName={setBreadCrumbName} renderAction = {renderAction} createPermission = {createPermission}/>
     );
 }
 

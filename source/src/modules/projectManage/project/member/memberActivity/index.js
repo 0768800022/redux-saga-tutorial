@@ -325,7 +325,6 @@ function MemberActivityProjectListPage() {
             },
         });
     };
-    console.log(pathPrev);
     return (
         <PageWrapper
             routes={[

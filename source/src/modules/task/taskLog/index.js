@@ -20,7 +20,12 @@ import BaseTable from '@components/common/table/BaseTable';
 import { commonMessage } from '@locales/intl';
 import { RightOutlined } from '@ant-design/icons';
 import { FormattedMessage } from 'react-intl';
-import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import {
+    convertLocalTimeToUtc,
+    convertUtcToLocalTime,
+    deleteSearchFilterInLocationSearch,
+    formatDateString,
+} from '@utils';
 import dayjs from 'dayjs';
 import { FieldTypes } from '@constants/formConfig';
 import styles from './taskLog.module.scss';
@@ -29,7 +34,7 @@ const message = defineMessages({
     objectName: 'Task',
 });
 
-function TaskLogListPage({ breadcrumbName }) {
+function TaskLogListPage({ setBreadCrumbName }) {
     const translate = useTranslate();
     const location = useLocation();
     const { pathname: pagePath } = useLocation();
@@ -40,6 +45,7 @@ function TaskLogListPage({ breadcrumbName }) {
     const state = location?.state?.prevPath;
     const taskParam = routes.taskListPage.path;
     const search = location.search;
+
     const paramHead = routes.courseListPage.path;
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, queryParams, changePagination, serializeParams } =
@@ -112,18 +118,20 @@ function TaskLogListPage({ breadcrumbName }) {
                     const taskName = queryParams.get('taskName');
                     const state = queryParams.get('state');
                     const courseStatus = queryParams.get('courseStatus');
-                    mixinFuncs.setQueryParams(
-                        serializeParams({
-                            courseId,
-                            courseName,
-                            taskId,
-                            taskName,
-                            subjectId,
-                            state,
-                            courseStatus,
-                            ...filter,
-                        }),
+                    const params = {
+                        courseId,
+                        courseName,
+                        taskId,
+                        taskName,
+                        subjectId,
+                        state,
+                        courseStatus,
+                        ...filter,
+                    };
+                    const filteredParams = Object.fromEntries(
+                        Object.entries(params).filter(([_, value]) => value != null),
                     );
+                    mixinFuncs.setQueryParams(serializeParams(filteredParams));
                 };
             },
         });
@@ -197,7 +205,6 @@ function TaskLogListPage({ breadcrumbName }) {
     ];
 
     const initialFilterValues = useMemo(() => {
-        console.log(true);
         const initialFilterValues = {
             ...queryFilter,
             fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
@@ -210,9 +217,14 @@ function TaskLogListPage({ breadcrumbName }) {
     return (
         <PageWrapper
             routes={
-                breadcrumbName
-                    ? breadcrumbName
-                    : routes.taskLogListPage.breadcrumbs(commonMessage, paramHead, taskParam, search)
+                setBreadCrumbName
+                    ? setBreadCrumbName(['fromDate','toDate'])
+                    : routes.taskLogListPage.breadcrumbs(
+                        commonMessage,
+                        paramHead,
+                        taskParam,
+                        deleteSearchFilterInLocationSearch(search, ['fromDate', 'toDate']),
+                    )
             }
         >
             <div>

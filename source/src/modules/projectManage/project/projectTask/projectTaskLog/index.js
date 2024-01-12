@@ -22,7 +22,12 @@ import styles from './projectTaskLog.module.scss';
 import useNotification from '@hooks/useNotification';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { RightOutlined } from '@ant-design/icons';
-import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import {
+    convertLocalTimeToUtc,
+    convertUtcToLocalTime,
+    deleteSearchFilterInLocationSearch,
+    formatDateString,
+} from '@utils';
 import { FieldTypes } from '@constants/formConfig';
 import dayjs from 'dayjs';
 const message = defineMessages({
@@ -31,7 +36,7 @@ const message = defineMessages({
     warningUrl: `Đường dẫn không hợp lệ !`,
 });
 
-function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission }) {
+function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermission }) {
     const translate = useTranslate();
     const location = useLocation();
     const { pathname: pagePath } = useLocation();
@@ -42,7 +47,9 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const state = location?.state?.prevPath;
     const taskParam = routes.ProjectTaskListPage.path;
-    const search = location.search;
+    const search = useMemo(() => {
+        return location.search;
+    }, []);
     const notification = useNotification();
     const navigate = useNavigate();
     const paramHead = routes.projectListPage.path;
@@ -231,9 +238,14 @@ function ProjectTaskLogListPage({ breadcrumbName, renderAction, createPermission
     return (
         <PageWrapper
             routes={
-                breadcrumbName
-                    ? breadcrumbName
-                    : routes.ProjectTaskLogListPage.breadcrumbs(commonMessage, paramHead, taskParam, search)
+                setBreadCrumbName
+                    ? setBreadCrumbName(['fromDate', 'toDate'])
+                    : routes.ProjectTaskLogListPage.breadcrumbs(
+                        commonMessage,
+                        paramHead,
+                        taskParam,
+                        deleteSearchFilterInLocationSearch(search, ['fromDate', 'toDate']),
+                    )
             }
         >
             <div>
