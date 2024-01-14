@@ -97,4 +97,7 @@ export const commonMessage = defineMessages({
     no: 'Không',
     fromDate: 'Từ ngày',
     toDate: 'Đến ngày',
+    finance: 'Tài chính',
+    moneyReceived: 'Tiền nhận',
+    moneyReturn: 'Tiền trả',
 });

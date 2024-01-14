@@ -157,11 +157,11 @@ const CourseForm = (props) => {
     const getRules = () => {
         let rules = [...initialRules];
 
-        if (!isDisableStartDate) {
-            rules.push({
-                validator: validateStartDate,
-            });
-        }
+        // if (!isDisableStartDate) {
+        //     rules.push({
+        //         validator: validateStartDate,
+        //     });
+        // }
 
         return rules;
     };
