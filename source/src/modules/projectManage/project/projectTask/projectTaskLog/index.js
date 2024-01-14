@@ -126,9 +126,9 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
                     const projectName = queryParams.get('projectName');
                     const projectTaskId = queryParams.get('projectTaskId');
                     const task = queryParams.get('task');
-
+                    const active = queryParams.get('active');
                     mixinFuncs.setQueryParams(
-                        serializeParams({ projectId, projectName, projectTaskId, task, ...filter }),
+                        serializeParams({ projectId, projectName, projectTaskId, task, active, ...filter }),
                     );
                 };
             },

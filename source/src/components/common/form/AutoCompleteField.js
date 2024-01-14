@@ -25,6 +25,7 @@ function AutoCompleteField({
     onChange,
     disabled,
     renderCustomOption,
+    ...props
 }) {
     const { placeholder: _placeholder, rules: _rules } = useFormField({
         placeholder,
@@ -120,6 +121,7 @@ function AutoCompleteField({
             onChange={onChange}
             onFocus={handleFocus}
             onClear={() => handleOnSearch('')}
+            {...props}
         />
     );
 }
