@@ -101,6 +101,7 @@ const FinanceListPage = () => {
                 });
                 return <div>{formattedValue}</div>;
             },
+            align: 'right',
         },
         {
             title: translate.formatMessage(commonMessage.moneyReturn),
@@ -114,6 +115,7 @@ const FinanceListPage = () => {
                 });
                 return <div>{formattedValue}</div>;
             },
+            align: 'right',
         },
     ];
     return (
