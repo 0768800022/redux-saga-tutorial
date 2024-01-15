@@ -174,7 +174,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                         <BaseTooltip title={translate.formatMessage(commonMessage.done)}>
                             <Button
                                 type="link"
-                                disabled={item.state === 3}
+                                disabled={!!item?.developer == false || item.state === 3}
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
