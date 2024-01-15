@@ -300,6 +300,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        listSum: {
+            baseURL: `${apiTenantUrl}v1/registration-money-history/list-sum`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
         getById: {
             baseURL: `${apiTenantUrl}v1/registration-money-history/get/:id`,
             method: 'GET',
