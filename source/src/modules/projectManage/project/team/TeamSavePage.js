@@ -27,7 +27,7 @@ function TeamSavePage() {
             update: apiConfig.team.update,
         },
         options: {
-            getListUrl: generatePath(routes.teamListPage.path, { teamId }),
+            getListUrl: generatePath(routes.projectTabPage.path),
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
@@ -59,8 +59,8 @@ function TeamSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.team),
-                path: routes.teamListPage.path + pathDefault + `&active=${active}`,
+                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                path: routes.projectTabPage.path + pathDefault + `&active=${active}`,
             });
         } else {
             breadRoutes.push({

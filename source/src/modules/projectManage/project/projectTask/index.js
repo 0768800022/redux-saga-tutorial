@@ -44,7 +44,7 @@ const message = defineMessages({
     updateTaskError: 'Cập nhật tình trạng thất bại',
 });
 
-function ProjectTaskListPage() {
+function ProjectTaskListPage({ setSearchFilter }) {
     const translate = useTranslate();
     const navigate = useNavigate();
     const notification = useNotification({ duration: 3 });
@@ -54,20 +54,16 @@ function ProjectTaskListPage() {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
-    const leaderId = queryParameters.get('leaderId');
-    const leaderName = queryParameters.get('leaderName');
-    const developerName = queryParameters.get('developerName');
     const active = queryParameters.get('active');
-    const state = queryParameters.get('state');
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const location = useLocation();
+    const activeProjectTab = localStorage.getItem('activeProjectTab');
     localStorage.setItem('pathPrev', location.search);
-    const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [openedModal, handlersModal] = useDisclosure(false);
     const [detail, setDetail] = useState({});
     const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
 
-    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
+    const { execute: executeGet } = useFetch(apiConfig.projectTask.getById, {
         immediate: false,
     });
     const handleFetchDetail = (id) => {
@@ -135,44 +131,23 @@ function ProjectTaskListPage() {
                     }
                 };
                 funcs.getCreateLink = () => {
-                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                    return `${routes.ProjectTaskListPage.path}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                    return `${routes.ProjectTaskListPage.path}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
                     const projectName = queryParams.get('projectName');
-                    const developerName = queryParams.get('developerName');
-                    const leaderName = queryParams.get('leaderName');
-                    const leaderId = queryParams.get('leaderId');
                     const active = queryParams.get('active');
-                    let filterAdd;
-                    if (developerName) {
-                        filterAdd = { developerName };
-                    } else if (leaderName) {
-                        filterAdd = { leaderName };
-                    }
-                    if (filterAdd) {
-                        mixinFuncs.setQueryParams(
-                            serializeParams({
-                                projectId: projectId,
-                                projectName: projectName,
-                                ...filterAdd,
-                                ...filter,
-                            }),
-                        );
-                    } else {
-                        mixinFuncs.setQueryParams(
-                            serializeParams({
-                                projectId: projectId,
-                                projectName: projectName,
-                                leaderId,
-                                active,
-                                ...filter,
-                            }),
-                        );
-                    }
+                    mixinFuncs.setQueryParams(
+                        serializeParams({
+                            projectId: projectId,
+                            projectName: projectName,
+                            active: active,
+                            ...filter,
+                        }),
+                    );
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     taskLog: ({ id, taskName }) => (
@@ -374,13 +349,6 @@ function ProjectTaskListPage() {
             placeholder: translate.formatMessage(commonMessage.toDate),
             colSpan: 3,
         },
-        // !leaderName &&
-        //     !developerName && {
-        //     key: 'status',
-        //     placeholder: translate.formatMessage(commonMessage.status),
-        //     type: FieldTypes.SELECT,
-        //     options: statusValues,
-        // },
     ].filter(Boolean);
     const initialFilterValues = useMemo(() => {
         const initialFilterValues = {
@@ -393,122 +361,91 @@ function ProjectTaskListPage() {
         return initialFilterValues;
     }, [queryFilter?.fromDate, queryFilter?.toDate]);
 
-    const pathPrev = localStorage.getItem('pathPrev');
-    const setBreadRoutes = () => {
-        const breadRoutes = [];
-        if (leaderName) {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.leader),
-                path: routes.leaderListPage.path,
-            });
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: generatePath(routes.leaderProjectListPage.path + pathPrev),
-            });
-        } else if (developerName) {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.developer),
-                path: routes.developerListPage.path,
-            });
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: generatePath(routes.developerProjectListPage.path + pathPrev),
-            });
-        } else {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: generatePath(routes.projectListPage.path),
-            });
-        }
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.task) });
-
-        return breadRoutes;
-    };
+    useEffect(() => {
+        setSearchFilter(queryFilter);
+    }, [queryFilter]);
 
     return (
-        <PageWrapper routes={setBreadRoutes()}>
-            <div>
-                <ListPage
-                    title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{projectName}</span>}
-                    searchForm={mixinFuncs.renderSearchForm({
-                        fields: searchFields,
-                        className: styles.search,
-                        initialValues: initialFilterValues,
-                    })}
-                    actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
-                    baseTable={
-                        <BaseTable
-                            onRow={(record) => ({
-                                onClick: (e) => {
-                                    e.stopPropagation();
-                                    handleFetchDetail(record.id);
+        <div>
+            <ListPage
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    className: styles.search,
+                    activeTab: activeProjectTab,
+                })}
+                actionBar={active && mixinFuncs.renderActionBar()}
+                baseTable={
+                    <BaseTable
+                        onRow={(record) => ({
+                            onClick: (e) => {
+                                e.stopPropagation();
+                                handleFetchDetail(record.id);
 
-                                    handlersModal.open();
-                                },
-                            })}
-                            onChange={changePagination}
-                            pagination={pagination}
-                            loading={loading}
-                            dataSource={data}
-                            columns={columns}
-                        />
-                    }
-                />
-                <Modal
-                    title="Thay đổi tình trạng hoàn thành"
-                    open={openedStateTaskModal}
-                    destroyOnClose={true}
-                    footer={null}
-                    onCancel={() => handlersStateTaskModal.close()}
-                    data={detail || {}}
-                >
-                    <BaseForm onFinish={handleOk} size="100%">
-                        <div
-                            style={{
-                                margin: '28px 0 20px 0',
-                            }}
-                        >
-                            <Row gutter={16}>
-                                <Col span={24}>
-                                    <NumericField
-                                        label={<FormattedMessage defaultMessage="Tổng thời gian" />}
-                                        name="minutes"
-                                        required
-                                        addonAfter={<FormattedMessage defaultMessage="Phút" />}
-                                        min={0}
-                                    />
-                                </Col>
-                                <Col span={24}>
-                                    <TextField
-                                        label={<FormattedMessage defaultMessage="Đường dẫn commit git" />}
-                                        name="gitCommitUrl"
-                                    />
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col span={24}>
-                                    <TextField
-                                        label={<FormattedMessage defaultMessage="Lời nhắn" />}
-                                        name="message"
-                                        type="textarea"
-                                        required
-                                    />
-                                </Col>
-                            </Row>
-                            <div style={{ float: 'right' }}>
-                                <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()}>
-                                    {translate.formatMessage(message.cancel)}
-                                </Button>
-                                <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }}>
-                                    {translate.formatMessage(message.done)}
-                                </Button>
-                            </div>
+                                handlersModal.open();
+                            },
+                        })}
+                        onChange={changePagination}
+                        pagination={pagination}
+                        loading={loading}
+                        dataSource={data}
+                        columns={columns}
+                    />
+                }
+            />
+            <Modal
+                title="Thay đổi tình trạng hoàn thành"
+                open={openedStateTaskModal}
+                destroyOnClose={true}
+                footer={null}
+                onCancel={() => handlersStateTaskModal.close()}
+                data={detail || {}}
+            >
+                <BaseForm onFinish={handleOk} size="100%">
+                    <div
+                        style={{
+                            margin: '28px 0 20px 0',
+                        }}
+                    >
+                        <Row gutter={16}>
+                            <Col span={24}>
+                                <NumericField
+                                    label={<FormattedMessage defaultMessage="Tổng thời gian" />}
+                                    name="minutes"
+                                    required
+                                    addonAfter={<FormattedMessage defaultMessage="Phút" />}
+                                    min={0}
+                                />
+                            </Col>
+                            <Col span={24}>
+                                <TextField
+                                    label={<FormattedMessage defaultMessage="Đường dẫn commit git" />}
+                                    name="gitCommitUrl"
+                                />
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={24}>
+                                <TextField
+                                    label={<FormattedMessage defaultMessage="Lời nhắn" />}
+                                    name="message"
+                                    type="textarea"
+                                    required
+                                />
+                            </Col>
+                        </Row>
+                        <div style={{ float: 'right' }}>
+                            <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()}>
+                                {translate.formatMessage(message.cancel)}
+                            </Button>
+                            <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }}>
+                                {translate.formatMessage(message.done)}
+                            </Button>
                         </div>
-                    </BaseForm>
-                </Modal>
-            </div>
+                    </div>
+                </BaseForm>
+            </Modal>
             <DetailMyTaskProjectModal open={openedModal} onCancel={() => handlersModal.close()} DetailData={detail} />
-        </PageWrapper>
+        </div>
     );
 }
 const formatDateToZeroTime = (date) => {

@@ -36,7 +36,7 @@ const message = defineMessages({
     nameCategory: 'Tên danh mục ',
 });
 
-const ProjectCategoryListPage = () => {
+const ProjectCategoryListPage = ({ setSearchFilter }) => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
@@ -46,6 +46,7 @@ const ProjectCategoryListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
+    const activeProjectTab = localStorage.getItem('activeProjectTab');
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.projectCategory,
@@ -67,11 +68,11 @@ const ProjectCategoryListPage = () => {
                     }
                 };
                 funcs.getCreateLink = () => {
-                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}`;
+                    return `${routes.projectCategoryListPage.path}/create?projectId=${projectId}&projectName=${projectName}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
                     const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
-                    return `${pagePath}/${dataRow.id}` + pathDefault;
+                    return `${routes.projectCategoryListPage.path}/${dataRow.id}` + pathDefault;
                 };
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
@@ -83,18 +84,9 @@ const ProjectCategoryListPage = () => {
                 };
             },
         });
-
-    const setBreadRoutes = () => {
-        const breadRoutes = [];
-
-        breadRoutes.push({
-            breadcrumbName: translate.formatMessage(commonMessage.project),
-            path: route.projectListPage.path,
-        });
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.projectCategory) });
-
-        return breadRoutes;
-    };
+    useEffect(() => {
+        setSearchFilter(queryFilter);
+    }, [queryFilter]);
 
     const columns = [
         {
@@ -119,11 +111,7 @@ const ProjectCategoryListPage = () => {
             { width: '150px' },
         ),
     ].filter(Boolean);
-    // const { data: teamData } = useFetch(apiConfig.team.autocomplete, {
-    //     immediate: true,
-    //     params: { projectId },
-    //     mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
-    // });
+
     const searchFields = [
         {
             key: 'name',
@@ -132,26 +120,22 @@ const ProjectCategoryListPage = () => {
     ];
 
     return (
-        <PageWrapper routes={setBreadRoutes()}>
-            <ListPage
-                title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                    initialValues: queryFilter,
-                    // className: styles.search,
-                })}
-                actionBar={mixinFuncs.renderActionBar()}
-                baseTable={
-                    <BaseTable
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={data}
-                        columns={columns}
-                    />
-                }
-            />
-        </PageWrapper>
+        <ListPage
+            searchForm={mixinFuncs.renderSearchForm({
+                fields: searchFields,
+                activeTab: activeProjectTab,
+            })}
+            actionBar={mixinFuncs.renderActionBar()}
+            baseTable={
+                <BaseTable
+                    onChange={changePagination}
+                    pagination={pagination}
+                    loading={loading}
+                    dataSource={data}
+                    columns={columns}
+                />
+            }
+        />
     );
 };
 

@@ -26,7 +26,7 @@ function ProjectCategorySavePage() {
             update: apiConfig.projectCategory.update,
         },
         options: {
-            getListUrl: generatePath(routes.projectCategoryListPage.path, { projectCategoryId }),
+            getListUrl: generatePath(routes.projectTabPage.path, { projectCategoryId }),
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
@@ -55,8 +55,8 @@ function ProjectCategorySavePage() {
         ];
 
         breadRoutes.push({
-            breadcrumbName: translate.formatMessage(commonMessage.projectCategory),
-            path: routes.projectCategoryListPage.path + pathDefault,
+            breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+            path: routes.projectTabPage.path + pathDefault,
         });
         breadRoutes.push({ breadcrumbName: title });
 

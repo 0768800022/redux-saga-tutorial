@@ -35,12 +35,21 @@ import ProjectCategoryLeaderListPage from './projectLeader/projectCategory';
 import ProjectCategoryLeaderSavePage from './projectLeader/projectCategory/ProjectCategorySavePage';
 import ProjectCategoryStudentListPage from './projectStudent/projectCategory';
 import ProjectCategoryStudentSavePage from './projectStudent/projectCategory/ProjectCategorySavePage';
+import ProjectTabPage from './ProjectTabPage';
 export default {
     projectListPage: {
         path: '/project',
         title: 'Project',
         auth: true,
         component: ProjectListPage,
+        permissions: [apiConfig.project.getList.baseURL],
+    },
+    projectTabPage: {
+        path: '/project/project-tab',
+        title: 'Project Tab',
+        auth: true,
+        component: ProjectTabPage,
+        keyActiveTab: 'activeProjectTab',
         permissions: [apiConfig.project.getList.baseURL],
     },
     projectSavePage: {

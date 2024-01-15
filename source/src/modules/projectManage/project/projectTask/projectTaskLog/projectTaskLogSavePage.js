@@ -20,7 +20,6 @@ function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
     const state = location.state.prevPath;
     const search = location.search;
     const paramHead = routes.projectListPage.path;
-    const taskParam = routes.ProjectTaskListPage.path;
     const taskLogParam = routes.ProjectTaskLogListPage.path;
     const taskLogId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
@@ -52,8 +51,16 @@ function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
     return (
         <PageWrapper
             loading={loading}
-            routes={ breadcrumbName ? breadcrumbName: 
-                routes.ProjectTaskLogSavePage.breadcrumbs(commonMessage,paramHead,taskParam,taskLogParam,search,title)
+            routes={
+                breadcrumbName ||
+                routes.ProjectTaskLogSavePage.breadcrumbs(
+                    commonMessage,
+                    paramHead,
+                    routes.projectTabPage.path,
+                    taskLogParam,
+                    search,
+                    title,
+                )
             }
         >
             <ProjectTaskLogForm
