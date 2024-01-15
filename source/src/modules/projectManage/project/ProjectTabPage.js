@@ -37,7 +37,6 @@ const ProjectTabPage = ({ pageOptions }) => {
             label: translate.formatMessage(commonMessage.task),
             key: translate.formatMessage(commonMessage.task),
             children: <ProjectTaskListPage setSearchFilter={setSearchFilter} />,
-            params: {},
         },
         {
             label: translate.formatMessage(commonMessage.team),
@@ -57,7 +56,7 @@ const ProjectTabPage = ({ pageOptions }) => {
     ];
 
     useEffect(() => {
-        for (const [key, value] of Object.entries(searchFilter)) {
+        for (const [key] of Object.entries(searchFilter)) {
             if (key !== 'projectId' && key !== 'projectName' && key !== 'active') {
                 queryParams.delete(key);
             }
