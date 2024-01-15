@@ -6,6 +6,6 @@ export default {
         title: 'Finance List Page',
         auth: true,
         component: FinanceListPage,
-        permissions: apiConfig.registrationMoney.getSum.baseURL,
+        permissions: apiConfig.registrationMoney.listSum.baseURL,
     },
 };
