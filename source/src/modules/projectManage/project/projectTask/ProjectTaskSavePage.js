@@ -29,7 +29,10 @@ function ProjectTaskSavePage() {
             update: apiConfig.projectTask.update,
         },
         options: {
-            getListUrl: generatePath(routes.ProjectTaskListPage.path, { projectTaskId }),
+            getListUrl: generatePath(
+                routes.projectTabPage.path,
+                active ? { projectId, projectName, active } : { projectId, projectName },
+            ),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -67,13 +70,14 @@ function ProjectTaskSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.task),
-                path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
+                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                path:
+                    routes.projectTabPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.task),
-                path: routes.ProjectTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
+                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                path: routes.projectTabPage.path + `?projectId=${projectId}&projectName=${projectName}`,
             });
         }
         breadRoutes.push({ breadcrumbName: title });
@@ -81,11 +85,7 @@ function ProjectTaskSavePage() {
         return breadRoutes;
     };
     return (
-        <PageWrapper
-            loading={loading}
-            routes={setBreadRoutes()}
-            title={title}
-        >
+        <PageWrapper loading={loading} routes={setBreadRoutes()} title={title}>
             <ProjectTaskForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}

@@ -23,18 +23,21 @@ const messages = defineMessages({
     createNew: '+',
     deleteSuccess: 'Xoá slider thành công',
     slider: 'Slider',
+    revenue: 'Lợi nhuận chia sẻ',
 });
 const GeneralSettingPage = ({ groupName }) => {
     const translate = useTranslate();
     const intl = useIntl();
     const notification = useNotification();
     const [sliderData, setSliderData] = useState({});
+    const [revenueData, setRevenueData] = useState({});
     const [introduceData, setIntroduceData] = useState({});
     const [openedGeneralModal, handlersGeneralModal] = useDisclosure(false);
     const [openedIntroduceModal, handlersIntroduceModal] = useDisclosure(false);
     const [openedSliderModal, handlersSliderModal] = useDisclosure(false);
     const [detail, setDetail] = useState();
     const [isEditing, setIsEditing] = useState(false);
+    const [isEditingRevenue, setIsEditingRevenue] = useState(false);
     const [parentData, setParentData] = useState({});
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.settings,
@@ -89,7 +92,13 @@ const GeneralSettingPage = ({ groupName }) => {
                                     handlersSliderModal.open();
                                 } else if (item?.keyName === 'introduce') {
                                     handlersIntroduceModal.open();
-                                } else {
+                                }
+                                else if (item?.groupName === 'revenue_config') {
+                                    setIsEditingRevenue(true);
+                                    handlersGeneralModal.open();
+                                }
+                                else {
+                                    setIsEditingRevenue(false);
                                     handlersGeneralModal.open();
                                 }
                             }}
@@ -160,6 +169,27 @@ const GeneralSettingPage = ({ groupName }) => {
         },
         mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '100px' }),
     ];
+
+    const columnRevenue = [
+        {
+            title: <FormattedMessage defaultMessage="Quyền lợi" />,
+            dataIndex: 'keyName',
+            width: 200,
+        },
+        {
+            title: <FormattedMessage defaultMessage="Phần trăm" />,
+            dataIndex: 'valueData',
+            width: 500,
+            align:'center',
+            render: (valueData, record) => {
+                if (valueData > 0) {
+                    return <div>{valueData} %</div>;
+                } else return <div>{valueData}</div>;
+            },
+        },
+        mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '100px' }),
+    ];
+
     const columnsSlider = [
         {
             title: '#',
@@ -167,7 +197,7 @@ const GeneralSettingPage = ({ groupName }) => {
             align: 'center',
             width: '100px',
             render: (imageUrl) => (
-                <AvatarField 
+                <AvatarField
                     style={{ width: '100%', height: '60px' }}
                     size="large"
                     shape="square"
@@ -191,6 +221,7 @@ const GeneralSettingPage = ({ groupName }) => {
         execute: executeLoading,
     } = useFetch(apiConfig.settings.getList, {
         immediate: false,
+        params: { groupName: groupName },
         mappingData: (response) => {
             if (response.result === true) {
                 return {
@@ -205,7 +236,19 @@ const GeneralSettingPage = ({ groupName }) => {
             }
         },
     });
-    const handleCloseSliderModal = () => {};
+    const {
+        data: listSettingRevenue,
+        loading: dataLoadingRevenue,
+        execute: executeLoadingRevenue,
+    } = useFetch(apiConfig.settings.getList, {
+        immediate: true,
+        params: { groupName: 'revenue_config' },
+        mappingData: ({ data }) => data.content,
+    });
+    const handleCloseSliderModal = () => {
+        setIsEditingRevenue(false);
+        handlersGeneralModal.close();
+    };
 
     return (
         <div>
@@ -215,6 +258,29 @@ const GeneralSettingPage = ({ groupName }) => {
                     columns={columns}
                     dataSource={listSetting ? listSetting?.data : data}
                     loading={loading || dataLoading}
+                    pagination={pagination}
+                />
+            </Card>
+            <Card
+                style={{
+                    marginTop: '16px',
+                }}
+            >
+                <div
+                    style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '16px',
+                    }}
+                >
+                    <span style={{ fontSize: '20px' }}>{intl.formatMessage(messages.revenue)}</span>
+                </div>
+                <BaseTable
+                    onChange={mixinFuncs.changePagination}
+                    columns={columnRevenue}
+                    dataSource={listSettingRevenue}
+                    loading={dataLoadingRevenue}
                     pagination={pagination}
                 />
             </Card>
@@ -253,10 +319,12 @@ const GeneralSettingPage = ({ groupName }) => {
             </Card>
             <EditGenralModal
                 open={openedGeneralModal}
-                onCancel={() => handlersGeneralModal.close()}
+                onCancel={ () => handlersGeneralModal.close() }
                 data={detail || {}}
                 executeUpdate={executeUpdate}
                 executeLoading={executeLoading}
+                executeLoadingRevenue={executeLoadingRevenue}
+                isEditingRevenue={isEditingRevenue}
                 width={800}
             />
             <IntroduceModal

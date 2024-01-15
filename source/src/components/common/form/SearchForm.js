@@ -42,6 +42,7 @@ function SearchForm({
     width = 1100,
     alignSearchField,
     getFormInstance,
+    activeTab,
 }) {
     const [form] = Form.useForm();
     const intl = useIntl();
@@ -71,7 +72,10 @@ function SearchForm({
         form.resetFields();
         onReset?.();
     };
-
+    useEffect(() => {
+        form.resetFields();
+        onReset?.();
+    }, [activeTab]);
     const renderField = useCallback(
         ({ type, submitOnChanged, onChange, key, renderItem, style, component, ...props }) => {
             if (renderItem) {

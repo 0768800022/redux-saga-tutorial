@@ -3,7 +3,7 @@ import ListPage from '@components/common/layout/ListPage';
 import BaseTable from '@components/common/table/BaseTable';
 import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, Button, Tag, notification } from 'antd';
 import { UserOutlined, ContainerOutlined, ProjectOutlined } from '@ant-design/icons';
 import { defineMessages, FormattedMessage } from 'react-intl';
@@ -22,7 +22,7 @@ const message = defineMessages({
     objectName: 'Nhóm',
 });
 
-const TeamListPage = () => {
+const TeamListPage = ({ setSearchFilter }) => {
     const navigate = useNavigate();
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
@@ -30,10 +30,7 @@ const TeamListPage = () => {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
-    const leaderId = queryParameters.get('leaderId');
-    const developerId = queryParameters.get('developerId');
-    const leaderName = queryParameters.get('leaderName');
-    const developerName = queryParameters.get('developerName');
+    const activeProjectTab = localStorage.getItem('activeProjectTab');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFilter, queryParams, serializeParams } = useListBase({
         apiConfig: apiConfig.team,
@@ -51,45 +48,27 @@ const TeamListPage = () => {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                return `${routes.teamListPage.path}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
                 const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
-                if (active)
-                    return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
-                else
-                    return `${pagePath}/${dataRow.id}` + pathDefault;
+                if (active) return `${routes.teamListPage.path}/${dataRow.id}` + pathDefault + `&active=${active}`;
+                else return `${routes.teamListPage.path}/${dataRow.id}` + pathDefault;
             };
             funcs.changeFilter = (filter) => {
                 const projectId = queryParams.get('projectId');
                 const projectName = queryParams.get('projectName');
-                const developerId = queryParams.get('developerId');
-                const developerName = queryParams.get('developerName');
-                const leaderId = queryParams.get('leaderId');
-                const leaderName = queryParams.get('leaderName');
-                let filterAdd;
-                if (developerName) {
-                    filterAdd = { developerId, developerName };
-                } else if (leaderName) {
-                    filterAdd = { leaderId, leaderName };
-                }
-                if (filterAdd) {
-                    mixinFuncs.setQueryParams(
-                        serializeParams({
-                            projectId: projectId,
-                            projectName: projectName,
-                            ...filterAdd,
-                            ...filter,
-                        }),
-                    );
-                } else {
-                    mixinFuncs.setQueryParams(
-                        serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
-                    );
-                }
+                const active = queryParams.get('active');
+                mixinFuncs.setQueryParams(
+                    serializeParams({ projectId: projectId, projectName: projectName, active: active, ...filter }),
+                );
             };
         },
     });
+
+    useEffect(() => {
+        setSearchFilter(queryFilter);
+    }, [queryFilter]);
     const setColumns = () => {
         const columns = [
             {
@@ -122,15 +101,16 @@ const TeamListPage = () => {
             },
             mixinFuncs.renderStatusColumn({ width: '120px' }),
         ];
-        active && columns.push(
-            mixinFuncs.renderActionColumn(
-                {
-                    edit: true,
-                    delete: true,
-                },
-                { width: '150px' },
-            ),
-        );
+        active &&
+            columns.push(
+                mixinFuncs.renderActionColumn(
+                    {
+                        edit: true,
+                        delete: true,
+                    },
+                    { width: '150px' },
+                ),
+            );
         return columns;
     };
 
@@ -147,38 +127,6 @@ const TeamListPage = () => {
         },
     ];
 
-    const setBreadRoutes = () => {
-        const breadRoutes = [];
-        if (leaderName) {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.leader),
-                path: routes.leaderListPage.path,
-            });
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.leaderProjectListPage.path + `?leaderId=${leaderId}&leaderName=${leaderName}`,
-            });
-        } else if (developerName) {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.developer),
-                path: routes.developerListPage.path,
-            });
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.developerProjectListPage.path + `?developerId=${developerId}&developerName=${developerName}`,
-            });
-        }
-        else {
-            breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.projectListPage.path,
-            });
-        }
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.team) });
-
-        return breadRoutes;
-    };
-
     const { execute: executeUpdateLeader } = useFetch(apiConfig.memberProject.autocomplete, { immediate: false });
 
     useEffect(() => {
@@ -194,29 +142,28 @@ const TeamListPage = () => {
         });
     }, [projectId]);
 
+    const clearSearchFunc = (functionClear) => {
+        functionClear();
+    };
+
     return (
-        <PageWrapper
-            routes={setBreadRoutes()}
-        >
-            <ListPage
-                title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                    initialValues: queryFilter,
-                    className: styles.search,
-                })}
-                actionBar={active && mixinFuncs.renderActionBar()}
-                baseTable={
-                    <BaseTable
-                        onChange={mixinFuncs.changePagination}
-                        columns={setColumns()}
-                        dataSource={data}
-                        loading={loading}
-                        pagination={pagination}
-                    />
-                }
-            ></ListPage>
-        </PageWrapper>
+        <ListPage
+            searchForm={mixinFuncs.renderSearchForm({
+                fields: searchFields,
+                className: styles.search,
+                activeTab: activeProjectTab,
+            })}
+            actionBar={active && mixinFuncs.renderActionBar()}
+            baseTable={
+                <BaseTable
+                    onChange={mixinFuncs.changePagination}
+                    columns={setColumns()}
+                    dataSource={data}
+                    loading={loading}
+                    pagination={pagination}
+                />
+            }
+        ></ListPage>
     );
 };
 export default TeamListPage;

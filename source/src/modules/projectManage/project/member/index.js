@@ -38,7 +38,7 @@ const message = defineMessages({
     team: 'Nhóm',
 });
 
-const ProjectMemberListPage = () => {
+const ProjectMemberListPage = ({ setSearchFilter }) => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const { pathname: pagePath } = useLocation();
@@ -47,6 +47,7 @@ const ProjectMemberListPage = () => {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
+    const activeProjectTab = localStorage.getItem('activeProjectTab');
     localStorage.setItem('pathPrev', location.search);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
@@ -70,11 +71,11 @@ const ProjectMemberListPage = () => {
                     }
                 };
                 funcs.getCreateLink = () => {
-                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                    return `${routes.projectMemberListPage.path}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    if (active) return `${pagePath}/${dataRow.id}` + pathDefault + `&active=${active}`;
-                    else return `${pagePath}/${dataRow.id}` + pathDefault;
+                    if (active) return `${routes.projectMemberListPage.path}/${dataRow.id}` + pathDefault + `&active=${active}`;
+                    else return `${routes.projectMemberListPage.path}/${dataRow.id}` + pathDefault;
                 };
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
@@ -87,17 +88,9 @@ const ProjectMemberListPage = () => {
             },
         });
 
-    const setBreadRoutes = () => {
-        const breadRoutes = [];
-
-        breadRoutes.push({
-            breadcrumbName: translate.formatMessage(commonMessage.project),
-            path: route.projectListPage.path,
-        });
-        breadRoutes.push({ breadcrumbName: translate.formatMessage(commonMessage.member) });
-
-        return breadRoutes;
-    };
+    useEffect(() => {
+        setSearchFilter(queryFilter);
+    }, [queryFilter]);
     const handleOnClick = (event, record) => {
         event.preventDefault();
         navigate(
@@ -150,7 +143,6 @@ const ProjectMemberListPage = () => {
             width: 180,
         },
 
-        // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
         active &&
             mixinFuncs.renderActionColumn(
                 {
@@ -174,29 +166,24 @@ const ProjectMemberListPage = () => {
         },
     ];
 
-    // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-
     return (
-        <PageWrapper routes={setBreadRoutes()}>
-            <ListPage
-                title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                    initialValues: queryFilter,
-                    className: styles.search,
-                })}
-                actionBar={active && mixinFuncs.renderActionBar()}
-                baseTable={
-                    <BaseTable
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={data}
-                        columns={columns}
-                    />
-                }
-            />
-        </PageWrapper>
+        <ListPage
+            searchForm={mixinFuncs.renderSearchForm({
+                fields: searchFields,
+                className: styles.search,
+                activeTab: activeProjectTab,
+            })}
+            actionBar={active && mixinFuncs.renderActionBar()}
+            baseTable={
+                <BaseTable
+                    onChange={changePagination}
+                    pagination={pagination}
+                    loading={loading}
+                    dataSource={data}
+                    columns={columns}
+                />
+            }
+        />
     );
 };
 
