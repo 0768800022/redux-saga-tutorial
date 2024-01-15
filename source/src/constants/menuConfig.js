@@ -28,7 +28,7 @@ const navMenuConfig = [
                 label: <FormattedMessage defaultMessage="Quản lý tài chính" />,
                 key: 'financial-management',
                 path: routes.financeListPage.path,
-                permission: apiConfig.registrationMoney.getSum.baseURL,
+                permission: apiConfig.registrationMoney.listSum.baseURL,
             },
             {
                 label: <FormattedMessage defaultMessage="Khoá học" />,
