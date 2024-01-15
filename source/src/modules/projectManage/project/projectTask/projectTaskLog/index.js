@@ -46,7 +46,6 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
 
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const state = location?.state?.prevPath;
-    const taskParam = routes.ProjectTaskListPage.path;
     const search = useMemo(() => {
         return location.search;
     }, []);
@@ -243,7 +242,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
                     : routes.ProjectTaskLogListPage.breadcrumbs(
                         commonMessage,
                         paramHead,
-                        taskParam,
+                        routes.projectTabPage.path,
                         deleteSearchFilterInLocationSearch(search, ['fromDate', 'toDate']),
                     )
             }

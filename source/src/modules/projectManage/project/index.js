@@ -274,7 +274,11 @@ const ProjectListPage = () => {
             options: statusValues,
         },
     ].filter(Boolean);
-
+    const handleOnClick = (event, record) => {
+        event.preventDefault();
+        localStorage.setItem(routes.projectTabPage.keyActiveTab, translate.formatMessage(commonMessage.task));
+        navigate(routes.projectTabPage.path + `?projectId=${record.id}&projectName=${record.name}&active=${!!record.status == 1}`);
+    };
     const columns = [
         {
             title: '#',
@@ -292,6 +296,11 @@ const ProjectListPage = () => {
         {
             title: translate.formatMessage(commonMessage.projectName),
             dataIndex: 'name',
+            render: (name, record) => (
+                <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
+                    {name}
+                </div>
+            ),
         },
         {
             title: translate.formatMessage(commonMessage.leader),
@@ -333,10 +342,6 @@ const ProjectListPage = () => {
         !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                projectCategory: mixinFuncs.hasPermission(apiConfig.projectCategory?.getList?.baseURL),
-                team: true,
-                member: !leaderName && !developerName && true,
-                task: true,
                 edit: !leaderName && !developerName && true,
                 delete: !leaderName && !developerName && true,
             },

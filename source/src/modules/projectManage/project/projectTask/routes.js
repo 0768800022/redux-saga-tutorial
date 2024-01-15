@@ -28,7 +28,7 @@ export default {
         breadcrumbs: (message,paramHead,taskParam, search) => {
             return [
                 { breadcrumbName: message.project.defaultMessage, path: paramHead },
-                { breadcrumbName: message.task.defaultMessage, path: taskParam + search },
+                { breadcrumbName: message.generalManage.defaultMessage, path: taskParam + search },
                 { breadcrumbName: message.taskLog.defaultMessage },
             ];
         },
@@ -42,7 +42,7 @@ export default {
         breadcrumbs: (message,paramHead,taskParam,taskLogParam, search,title) => {
             return [
                 { breadcrumbName: message.project.defaultMessage, path: paramHead },
-                { breadcrumbName: message.task.defaultMessage, path: taskParam + search },
+                { breadcrumbName: message.generalManage.defaultMessage, path: taskParam + search },
                 { breadcrumbName: message.taskLog.defaultMessage, path: taskLogParam + search },
                 { breadcrumbName: title },
             ];

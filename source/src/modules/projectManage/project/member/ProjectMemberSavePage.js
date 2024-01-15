@@ -22,23 +22,14 @@ function ProjectMemberSavePage() {
     const projectName = queryParameters.get('projectName');
     const projectId = queryParameters.get('projectId');
     const active = queryParameters.get('active');
-    const {
-        detail,
-        onSave,
-        mixinFuncs,
-        setIsChangedFormValues,
-        isEditing,
-        errors,
-        loading,
-        title,
-    } = useSaveBase({
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.memberProject.getById,
             create: apiConfig.memberProject.create,
             update: apiConfig.memberProject.update,
         },
         options: {
-            getListUrl: routes.projectMemberListPage.path,
+            getListUrl: generatePath(routes.projectTabPage.path),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -74,13 +65,13 @@ function ProjectMemberSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.member),
-                path: routes.projectMemberListPage.path + pathDefault + `&active=${active}`,
+                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                path: routes.projectTabPage.path + pathDefault + `&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.member),
-                path: routes.projectMemberListPage.path + pathDefault,
+                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                path: routes.projectTabPage.path + pathDefault,
             });
         }
         breadRoutes.push({ breadcrumbName: title });

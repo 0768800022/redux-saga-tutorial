@@ -465,9 +465,11 @@ const useListBase = ({
         onSearch,
         onReset,
         alignSearchField = 'left',
+        activeTab,
     }) => {
         return (
             <SearchForm
+                activeTab={activeTab}
                 getFormInstance={getFormInstance}
                 alignSearchField={alignSearchField}
                 fields={fields}
