@@ -10,6 +10,9 @@ import useTranslate from '@hooks/useTranslate';
 import SelectField from '@components/common/form/SelectField';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { taskState } from '@constants/masterData';
+import RichTextField from '@components/common/form/RichTextField';
+import { commonMessage } from '@locales/intl';
+import { AppConstants } from '@constants';
 const messages = defineMessages({
     objectName: 'Chi tiết task',
     // update: 'Cập nhật',
@@ -23,7 +26,15 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
     const stateValues = translate.formatKeys(taskState, ['label']);
 
     useEffect(() => {
-        // form.setFields(data);
+        if (JSON.stringify(DetailData) !== '{}') {
+            if (!DetailData?.note) {
+                DetailData.note = null;
+            }
+            if (!DetailData?.lecture?.description) {
+                DetailData.lecture.description = null;
+            }
+        }
+
         form.setFieldsValue({
             ...DetailData,
         });
@@ -76,6 +87,23 @@ const DetailMyTaskModal = ({ open, onCancel, DetailData, ...props }) => {
                                 label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                                 name="dueDate"
                                 // initialValue={detail?.subject?.subjectName}
+                            />
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={24}>
+                            <RichTextField
+                                disabled
+                                label={translate.formatMessage(commonMessage.description)}
+                                labelAlign="left"
+                                name={['lecture', 'description']}
+                                style={{
+                                    height: 300,
+                                    marginBottom: 70,
+                                }}
+                                required
+                                baseURL={AppConstants.contentRootUrl}
+                                form={form}
                             />
                         </Col>
                     </Row>

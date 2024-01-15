@@ -9,7 +9,7 @@ import {
     removeCacheToken,
     setCacheToken,
 } from './userService';
-
+import jwtDecode from 'jwt-decode';
 // Handle refresh token
 const axiosInstance = axios.create();
 let isRefreshing = false;
@@ -28,7 +28,7 @@ axiosInstance.interceptors.response.use(
     async (err) => {
         const originalConfig = err.config;
 
-        if (originalConfig.url !== apiConfig.account.login.baseURL && err.response) {
+        if (originalConfig.url !== apiConfig.account.loginBasic.baseURL && err.response) {
             // Access Token was expired
             if (err.response?.status === 401 && !originalConfig._retry) {
                 const handleExpireAll = () => {
@@ -79,6 +79,14 @@ const sendRequest = (options, payload, cancelToken) => {
     let { method, baseURL, headers, ignoreAuth, authorization } = options;
 
     const userAccessToken = getCacheAccessToken();
+    if (userAccessToken) {
+        const currentTimestamp = Math.floor(Date.now() / 1000);
+        const decodeAccessToken = jwtDecode(userAccessToken);
+        if (decodeAccessToken?.exp < currentTimestamp) {
+            removeCacheToken();
+        }
+    }
+
     delete options.headers[storageKeys.TENANT_HEADER];
     const tenantId = getData(storageKeys.TENANT_HEADER);
     if (options && options.isRequiredTenantId && !options.isUpload) {

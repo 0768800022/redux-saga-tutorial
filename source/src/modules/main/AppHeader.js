@@ -1,19 +1,20 @@
+import { DownOutlined, LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Layout, Menu, Space } from 'antd';
 import React from 'react';
-import { Layout, Menu, Avatar, Space } from 'antd';
-import { DownOutlined, UserOutlined, LoginOutlined, MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 const { Header } = Layout;
 
-import styles from './AppHeader.module.scss';
-import useAuth from '@hooks/useAuth';
-import { useDispatch } from 'react-redux';
-import { accountActions } from '@store/actions';
-import useFetch from '@hooks/useFetch';
-import apiConfig from '@constants/apiConfig';
-import { removeCacheToken } from '@services/userService';
-import { useNavigate } from 'react-router-dom';
+import { NotificationForm } from '@components/common/form/NotificationForm';
 import { AppConstants } from '@constants';
-import { defineMessages } from 'react-intl';
+import apiConfig from '@constants/apiConfig';
+import useAuth from '@hooks/useAuth';
+import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
+import { removeCacheToken } from '@services/userService';
+import { accountActions } from '@store/actions';
+import { defineMessages } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import styles from './AppHeader.module.scss';
 
 const messages = defineMessages({
     profile: 'Profile',
@@ -32,6 +33,43 @@ const AppHeader = ({ collapsed, onCollapse }) => {
         dispatch(accountActions.logout());
     };
 
+    const {
+        data: dataMyNotification,
+        execute: executeGetDataMyNotification,
+        loading: loadingDataMyNotification,
+    } = useFetch(apiConfig.notification.myNotification, {
+        immediate: true,
+        mappingData: ({ data }) => {
+            const pageTotal = data?.totalPages;
+            const unReadTotal = data?.totalUnread;
+            const listNotification = data?.content?.map((item) => {
+                const msg = JSON.parse(item?.msg);
+
+                return {
+                    id: item?.id,
+                    kind: item?.kind,
+                    createdDate: item?.createdDate,
+                    state: item?.state,
+                    projectId: msg?.projectId,
+                    taskName: msg?.taskName,
+                    projectName: msg?.projectName,
+                    courseId: msg?.courseId,
+                    lectureName: msg?.lectureName,
+                    courseName: msg?.courseName,
+                };
+            });
+            return {
+                pageTotal,
+                unReadTotal,
+                listNotification,
+            };
+        },
+    });
+    const { execute: executeUpdateState } = useFetch(apiConfig.notification.changeState, {
+        immediate: false,
+    });
+
+
     return (
         <Header className={styles.appHeader} style={{ padding: 0, background: 'white' }}>
             <span className={styles.iconCollapse} onClick={onCollapse}>
@@ -48,9 +86,14 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                             <Space>
                                 <Avatar
                                     icon={<UserOutlined />}
-                                    src={`${AppConstants.contentRootUrl}${profile.logoPath || profile.avatar || profile.logo}`}
+                                    src={`${AppConstants.contentRootUrl}${
+                                        profile.logoPath || profile.avatar || profile.logo
+                                    }`}
                                 />
-                                {profile?.careerName || profile?.leaderName || profile?.fullName|| profile?.companyName}
+                                {profile?.careerName ||
+                                    profile?.leaderName ||
+                                    profile?.fullName ||
+                                    profile?.companyName}
                                 <DownOutlined />
                             </Space>
                         ),
@@ -76,6 +119,19 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                                 onClick: onLogout,
                             },
                         ],
+                    },
+                    {
+                        key: 'notification',
+                        label: (
+                            <NotificationForm
+                                data={dataMyNotification?.listNotification}
+                                executeGetData={executeGetDataMyNotification}
+                                executeUpdateState={executeUpdateState}
+                                loading={loadingDataMyNotification}
+                                unReadTotal={dataMyNotification?.unReadTotal}
+                                pageTotal={dataMyNotification?.pageTotal}
+                            />
+                        ),
                     },
                 ]}
             />

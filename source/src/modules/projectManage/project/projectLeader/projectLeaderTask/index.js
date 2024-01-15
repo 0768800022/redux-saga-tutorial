@@ -1,15 +1,20 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import {
+    DATE_DISPLAY_FORMAT,
+    DATE_FORMAT_END_OF_DAY_TIME,
+    DATE_FORMAT_ZERO_TIME,
+    DEFAULT_TABLE_ITEM_SIZE,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { projectTaskState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Tag, Button, Modal } from 'antd';
-import React from 'react';
+import { Tag, Button, Modal, Row, Col } from 'antd';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { EditOutlined, CheckOutlined } from '@ant-design/icons';
@@ -26,6 +31,13 @@ import styles from '@modules/projectManage/project/project.module.scss';
 import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, AppConstants } from '@constants';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import DetailMyTaskProjectModal from '../../projectStudent/myTask/DetailMyTaskProjectModal';
+import { BaseForm } from '@components/common/form/BaseForm';
+import NumericField from '@components/common/form/NumericField';
+import TextField from '@components/common/form/TextField';
+import feature from '../../../../../assets/images/feature.png';
+import bug from '../../../../../assets/images/bug.jpg';
+import dayjs from 'dayjs';
+import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -40,6 +52,7 @@ const message = defineMessages({
     startDate: 'Ngày bắt đầu',
     updateTaskSuccess: 'Cập nhật tình trạng thành công',
     done: 'Hoàn thành',
+    cancel: 'Huỷ',
 });
 
 function ProjectLeaderTaskListPage() {
@@ -58,8 +71,7 @@ function ProjectLeaderTaskListPage() {
     const developerName = queryParameters.get('developerName');
     const active = queryParameters.get('active');
     const state = queryParameters.get('state');
-    const notification = useNotification();
-
+    const notification = useNotification({ duration: 3 });
     const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
 
     const [openedIntroduceModal, handlersIntroduceModal] = useDisclosure(false);
@@ -92,11 +104,13 @@ function ProjectLeaderTaskListPage() {
                 funcs.getItemDetailLink = (dataRow) => {
                     return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
+
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
                     const projectName = queryParams.get('projectName');
                     const developerName = queryParams.get('developerName');
                     const leaderName = queryParams.get('leaderName');
+                    const active = queryParams.get('active');
                     let filterAdd;
                     if (developerName) {
                         filterAdd = { developerName };
@@ -106,6 +120,7 @@ function ProjectLeaderTaskListPage() {
                     if (filterAdd) {
                         mixinFuncs.setQueryParams(
                             serializeParams({
+                                active,
                                 projectId: projectId,
                                 projectName: projectName,
                                 ...filterAdd,
@@ -114,7 +129,7 @@ function ProjectLeaderTaskListPage() {
                         );
                     } else {
                         mixinFuncs.setQueryParams(
-                            serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                            serializeParams({ projectId: projectId, projectName: projectName, active, ...filter }),
                         );
                     }
                 };
@@ -157,6 +172,38 @@ function ProjectLeaderTaskListPage() {
                         </BaseTooltip>
                     ),
                 });
+                const handleFilterSearchChange = funcs.handleFilterSearchChange;
+                funcs.handleFilterSearchChange = (values) => {
+                    if (values.toDate == null && values.fromDate == null) {
+                        delete values.toDate;
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                        });
+                    } else if (values.toDate == null) {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        delete values.toDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                        });
+                    } else if (values.fromDate == null) {
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
+                        delete values.fromDate;
+                        handleFilterSearchChange({
+                            ...values,
+                            toDate: toDate,
+                        });
+                    } else {
+                        const fromDate = values.fromDate && formatDateToZeroTime(values.fromDate);
+                        const toDate = values.toDate && formatDateToEndOfDayTime(values.toDate);
+                        handleFilterSearchChange({
+                            ...values,
+                            fromDate: fromDate,
+                            toDate: toDate,
+                        });
+                    }
+                };
             },
         });
     const handleFetchDetail = (id) => {
@@ -174,12 +221,36 @@ function ProjectLeaderTaskListPage() {
     };
     const columns = [
         {
+            dataIndex: 'kind',
+            width: 15,
+            render(dataRow) {
+                if (dataRow === 1)
+                    return (
+                        <div>
+                            <img src={feature} height="30px" width="30px" />
+                        </div>
+                    );
+                if (dataRow === 2)
+                    return (
+                        <div>
+                            <img src={bug} height="30px" width="30px" />
+                        </div>
+                    );
+            },
+        },
+        {
             title: translate.formatMessage(message.projectTask),
             dataIndex: 'taskName',
         },
         {
             title: translate.formatMessage(message.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
+            width: 200,
+        },
+        {
+            title: translate.formatMessage(commonMessage.projectCategory),
+            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
+            width: 150,
         },
         {
             title: translate.formatMessage(message.startDate),
@@ -196,6 +267,20 @@ function ProjectLeaderTaskListPage() {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(dueDate)}</div>;
             },
             width: 200,
+            align: 'center',
+        },
+        {
+            title: 'Ngày hoàn thành',
+            dataIndex: 'dateComplete',
+            width: 180,
+            render: (dateComplete) => {
+                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
+                    7,
+                    'hour',
+                );
+                const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
+            },
             align: 'center',
         },
         {
@@ -236,23 +321,26 @@ function ProjectLeaderTaskListPage() {
     });
     const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
 
-    const handleOk = () => {
+    const handleOk = (values) => {
         handlersStateTaskModal.close();
-        updateState(detail);
+        updateState(values);
     };
     const updateState = (values) => {
         executeUpdate({
             data: {
-                id: values.id,
+                id: detail.id,
                 state: 3,
+                minutes: values.minutes,
+                message: values.message,
+                gitCommitUrl: values.gitCommitUrl,
             },
             onCompleted: (response) => {
                 if (response.result === true) {
+                    handlersStateTaskModal.close();
                     mixinFuncs.getList();
                     notification({
                         message: intl.formatMessage(message.updateTaskSuccess),
                     });
-                    handlersStateTaskModal.close();
                 }
             },
             onError: (err) => {},
@@ -269,16 +357,50 @@ function ProjectLeaderTaskListPage() {
             })),
     });
 
+    const initialFilterValues = useMemo(() => {
+        const initialFilterValues = {
+            ...queryFilter,
+            fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
+            toDate:
+                queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT).subtract(7, 'hour'),
+        };
+
+        return initialFilterValues;
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
+
     const searchFields = [
-        // {
-        //     key: 'taskName',
-        //     placeholder: translate.formatMessage(commonMessage.task),
-        // },
+        {
+            key: 'projectCategoryId',
+            placeholder: <FormattedMessage defaultMessage={'Danh mục'} />,
+            type: FieldTypes.AUTOCOMPLETE,
+            apiConfig: apiConfig.projectCategory.autocomplete,
+            mappingOptions: (item) => ({
+                value: item.id,
+                label: item.projectCategoryName,
+            }),
+            optionsParams: { projectId: projectId },
+            initialSearchParams: { projectId: projectId },
+            searchParams: (text) => ({ name: text }),
+        },
         {
             key: 'developerId',
             placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
             options: memberProject,
+        },
+        {
+            key: 'fromDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.fromDate),
+            colSpan: 3,
+        },
+        {
+            key: 'toDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.toDate),
+            colSpan: 3,
         },
         // !leaderName &&
         //     !developerName && {
@@ -305,6 +427,7 @@ function ProjectLeaderTaskListPage() {
                     searchForm={mixinFuncs.renderSearchForm({
                         fields: searchFields,
                         className: styles.search,
+                        initialValues: initialFilterValues,
                     })}
                     actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
                     baseTable={
@@ -313,7 +436,6 @@ function ProjectLeaderTaskListPage() {
                                 onClick: (e) => {
                                     e.stopPropagation();
                                     handleFetchDetail(record.id);
-
                                     handlersModal.open();
                                 },
                             })}
@@ -333,12 +455,68 @@ function ProjectLeaderTaskListPage() {
                 <Modal
                     title="Thay đổi tình trạng hoàn thành"
                     open={openedStateTaskModal}
-                    onOk={handleOk}
+                    destroyOnClose={true}
+                    footer={null}
                     onCancel={() => handlersStateTaskModal.close()}
                     data={detail || {}}
-                ></Modal>
+                >
+                    <BaseForm onFinish={handleOk} size="100%">
+                        <div
+                            style={{
+                                margin: '28px 0 20px 0',
+                            }}
+                        >
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <NumericField
+                                        label={<FormattedMessage defaultMessage="Tổng thời gian" />}
+                                        name="minutes"
+                                        addonAfter={<FormattedMessage defaultMessage="Phút" />}
+                                        min={0}
+                                        required
+                                    />
+                                </Col>
+                                <Col span={24}>
+                                    <TextField
+                                        label={<FormattedMessage defaultMessage="Đường dẫn commit git" />}
+                                        name="gitCommitUrl"
+                                    />
+                                </Col>
+                            </Row>
+                            <Row gutter={16}>
+                                <Col span={24}>
+                                    <TextField
+                                        label={<FormattedMessage defaultMessage="Lời nhắn" />}
+                                        name="message"
+                                        type="textarea"
+                                        required
+                                    />
+                                </Col>
+                            </Row>
+                            <div style={{ float: 'right' }}>
+                                <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()}>
+                                    {translate.formatMessage(message.cancel)}
+                                </Button>
+                                <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }}>
+                                    {translate.formatMessage(message.done)}
+                                </Button>
+                            </div>
+                        </div>
+                    </BaseForm>
+                </Modal>
             </div>
         </PageWrapper>
     );
 }
+const formatDateToZeroTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+const formatDateToEndOfDayTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
+};
+const formatDateToLocal = (date) => {
+    return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+};
 export default ProjectLeaderTaskListPage;

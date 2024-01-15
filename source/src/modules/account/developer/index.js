@@ -19,6 +19,7 @@ import { FieldTypes } from '@constants/formConfig';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
 
 const message = defineMessages({
     objectName: 'Lập trình viên',
@@ -114,6 +115,15 @@ const DeveloperListPage = () => {
                 return <div>{createdDateLocal}</div>;
             },
         },
+        {
+            title: 'Lịch trình',
+            dataIndex: 'schedule',
+            align: 'center',
+            render: (schedule) => {
+                return <ScheduleFile schedule={schedule} />;
+            },
+            width: 180,
+        },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ project: true, edit: true, delete: true }, { width: 160 }),
     ];
@@ -154,7 +164,6 @@ const DeveloperListPage = () => {
             setProjectROle(projectroles);
         }
     }, [projectroles]);
-    console.log(projectRole);
 
     return (
         <PageWrapper

@@ -25,6 +25,12 @@ const navMenuConfig = [
                 permission: apiConfig.student.getList.baseURL,
             },
             {
+                label: <FormattedMessage defaultMessage="Quản lý tài chính" />,
+                key: 'financial-management',
+                path: routes.financeListPage.path,
+                permission: apiConfig.registrationMoney.listSum.baseURL,
+            },
+            {
                 label: <FormattedMessage defaultMessage="Khoá học" />,
                 key: 'khoa-hoc',
                 path: generatePath(routes.courseListPage.path, {}),

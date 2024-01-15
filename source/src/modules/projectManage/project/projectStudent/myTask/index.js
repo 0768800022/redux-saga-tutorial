@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { projectTaskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -22,6 +22,11 @@ import DetailMyTaskProjectModal from './DetailMyTaskProjectModal';
 import { CalendarOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router';
 import routes from '@routes';
+import feature from '../../../../../assets/images/feature.png';
+import bug from '../../../../../assets/images/bug.jpg';
+import { IconBellRinging } from '@tabler/icons-react';
+import useNotification from '@hooks/useNotification';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 const message = defineMessages({
     objectName: 'Task',
     myTask: 'Task của tôi',
@@ -33,8 +38,10 @@ function ProjectStudentMyTaskListPage() {
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const [openedModal, handlersModal] = useDisclosure(false);
     const [detail, setDetail] = useState({});
+    const [listNotified, setListNotified] = useState([]);
     const { profile } = useAuth();
     const navigate = useNavigate();
+    const notification = useNotification();
     const { data: projects } = useFetch(apiConfig.project.getListStudent, {
         immediate: true,
         mappingData: ({ data }) => {
@@ -55,6 +62,7 @@ function ProjectStudentMyTaskListPage() {
     const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
         immediate: false,
     });
+    const { execute: executeNotifyDone } = useFetch(apiConfig.projectTask.notifyDone, { immediate: false });
     const handleFetchDetail = (id) => {
         executeGet({
             pathParams: { id: id },
@@ -104,10 +112,53 @@ function ProjectStudentMyTaskListPage() {
                             </Button>
                         </BaseTooltip>
                     ),
+                    notifyDone: ({ id, state, project }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.notifyDone)}>
+                            <Button
+                                disabled={state != 2 || listNotified.includes(id)}
+                                type="link"
+                                style={{ padding: 0, position: 'relative', width: '15px', height: '32px' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    executeNotifyDone({
+                                        data: {
+                                            projectId: project?.id,
+                                            taskId: id,
+                                        },
+                                    });
+                                    setListNotified([...listNotified, id]);
+                                    notification({
+                                        type: 'success',
+                                        message: translate.formatMessage(commonMessage.notificationDone),
+                                    });
+                                }}
+                            >
+                                <IconBellRinging size={15} style={{ position: 'absolute', top: '3px', left: 0 }} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                 });
             },
         });
     const columns = [
+        {
+            dataIndex: 'kind',
+            width: 15,
+            render(dataRow) {
+                if (dataRow === 1)
+                    return (
+                        <div>
+                            <img src={feature} height="30px" width="30px" />
+                        </div>
+                    );
+                if (dataRow === 2)
+                    return (
+                        <div>
+                            <img src={bug} height="30px" width="30px" />
+                        </div>
+                    );
+            },
+        },
         {
             title: translate.formatMessage(commonMessage.task),
             dataIndex: 'taskName',
@@ -115,11 +166,12 @@ function ProjectStudentMyTaskListPage() {
         {
             title: translate.formatMessage(commonMessage.projectName),
             dataIndex: ['project', 'name'],
+            width: 150,
         },
         {
-            title: <FormattedMessage defaultMessage="Quản lý" />,
-            dataIndex: ['project', 'leaderInfo', 'leaderName'],
-            width: 230,
+            title: translate.formatMessage(commonMessage.projectCategory),
+            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
+            width: 150,
         },
         {
             title: 'Ngày bắt đầu',
@@ -131,6 +183,20 @@ function ProjectStudentMyTaskListPage() {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
             width: 200,
+        },
+        {
+            title: 'Ngày hoàn thành',
+            dataIndex: 'dateComplete',
+            width: 180,
+            render: (dateComplete) => {
+                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
+                    7,
+                    'hour',
+                );
+                const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
+            },
+            align: 'center',
         },
         {
             title: 'Tình trạng',
@@ -146,7 +212,10 @@ function ProjectStudentMyTaskListPage() {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ taskLog: true, edit: false, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn(
+            { notifyDone: true, taskLog: true, edit: false, delete: true },
+            { width: '150px' },
+        ),
     ].filter(Boolean);
 
     const searchFields = [

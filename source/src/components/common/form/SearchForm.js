@@ -130,13 +130,13 @@ function SearchForm({
         //     ...initialValues,
         //     ...dateRangeValues,
         // });
-        const normalizeValues = { ...initialValues };
-        Object.keys(normalizeValues).forEach((key) => {
-            if (!isNaN(normalizeValues[key])) {
-                normalizeValues[key] = Number(normalizeValues[key]);
-            }
-        });
-        form.setFieldsValue(normalizeValues);
+        // const normalizeValues = { ...initialValues };
+        // Object.keys(normalizeValues).forEach((key) => {
+        //     if (!isNaN(normalizeValues[key])) {
+        //         normalizeValues[key] = Number(normalizeValues[key]);
+        //     }
+        // });
+        form.setFieldsValue(initialValues);
     }, [initialValues]);
     return (
         <Form form={form} layout="horizontal" className={className || styles.searchForm} onFinish={handleSearchSubmit}>

@@ -103,9 +103,9 @@ const AsignAllForm = ({ onCancel,courseId, lectureId,setHasError }) => {
                                     required: true,
                                     message: 'Vui lòng chọn ngày bắt đầu',
                                 },
-                                {
-                                    validator: validateStartDate,
-                                },
+                                // {
+                                //     validator: validateStartDate,
+                                // },
                             ]}
                         />
                     </Col>

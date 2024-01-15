@@ -20,6 +20,8 @@ import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import { CalendarOutlined } from '@ant-design/icons';
+import { IconBellRinging } from '@tabler/icons-react';
+import useNotification from '@hooks/useNotification';
 const message = defineMessages({
     objectName: 'My Task',
     myTask: 'Task của tôi',
@@ -31,6 +33,9 @@ function MyTaskStudentListPage() {
     const [openedModal, handlersModal] = useDisclosure(false);
     const [detail, setDetail] = useState({});
     const navigate = useNavigate();
+    const notification = useNotification();
+    const [listNotified, setListNotified] = useState([]);
+    const { execute: executeNotifyDone } = useFetch(apiConfig.task.notifyDone, { immediate: false });
     const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.task.getById, {
         immediate: false,
     });
@@ -86,6 +91,31 @@ function MyTaskStudentListPage() {
                         </Button>
                     </BaseTooltip>
                 ),
+                notifyDone: ({ id, course, state }) => (
+                    <BaseTooltip title={translate.formatMessage(commonMessage.notifyDone)}>
+                        <Button
+                            disabled={state != 1 || listNotified.includes(id)}
+                            type="link"
+                            style={{ padding: 0, position: 'relative', width: '15px', height: '32px' }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                executeNotifyDone({
+                                    data: {
+                                        courseId: course?.id,
+                                        taskId: id,
+                                    },
+                                });
+                                setListNotified([...listNotified, id]);
+                                notification({
+                                    type: 'success',
+                                    message: translate.formatMessage(commonMessage.notificationDone),
+                                });
+                            }}
+                        >
+                            <IconBellRinging size={15} style={{ position: 'absolute', top: '3px', left: 0 }} />
+                        </Button>
+                    </BaseTooltip>
+                ),
             });
         },
     });
@@ -123,6 +153,24 @@ function MyTaskStudentListPage() {
                 align: 'center',
             },
             {
+                title: 'Ngày hoàn thành',
+                dataIndex: 'dateComplete',
+                width: 180,
+                render: (dateComplete) => {
+                    const modifiedDateComplete = convertStringToDateTime(
+                        dateComplete,
+                        DEFAULT_FORMAT,
+                        DEFAULT_FORMAT,
+                    )?.add(7, 'hour');
+                    const modifiedDateCompleteTimeString = convertDateTimeToString(
+                        modifiedDateComplete,
+                        DEFAULT_FORMAT,
+                    );
+                    return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
+                },
+                align: 'center',
+            },
+            {
                 title: translate.formatMessage(commonMessage.state),
                 dataIndex: 'state',
                 align: 'center',
@@ -136,7 +184,7 @@ function MyTaskStudentListPage() {
                     );
                 },
             },
-            mixinFuncs.renderActionColumn({ taskLog: true }, { width: '150px' }),
+            mixinFuncs.renderActionColumn({ notifyDone: true, taskLog: true }, { width: '150px' }),
         ];
         return columns;
     };

@@ -25,6 +25,8 @@ import {
     TASK_LOG_OFF,
     COMPANY_SEEK_STATE_LOOKING,
     COMPANY_SEEK_STATE_ACCEPT,
+    TASK_KIND_FEATURE,
+    TASK_KIND_BUG,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -48,7 +50,11 @@ import {
     companySeek,
     expYearMessage,
     archivedMessage,
+    taskKindMessage,
 } from './intl';
+import React from 'react';
+import feature from '../assets/images/feature.png';
+import bug from '../assets/images/bug.jpg';
 
 export const languageOptions = [
     { value: 1, label: 'EN' },
@@ -86,6 +92,24 @@ export const projectTaskState = [
     { value: STATE_PROJECT_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
     { value: STATE_PROJECT_TASK_DONE, label: projectTaskStateMessage.done, color: 'green' },
     { value: STATE_PROJECT_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
+];
+export const projectTaskKind = [
+    {
+        value: TASK_KIND_FEATURE,
+        label: (
+            <div>
+                <img src={feature} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
+            </div>
+        ),
+    },
+    {
+        value: TASK_KIND_BUG,
+        label: (
+            <div>
+                <img src={bug} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
+            </div>
+        ),
+    },
 ];
 
 export const archivedOption = [

@@ -25,6 +25,8 @@ import DetailProjectModal from './DetailProjectModal';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import { FormattedMessage } from 'react-intl';
+import { IconCategory } from '@tabler/icons-react';
+
 const message = defineMessages({
     objectName: 'dự án',
     code: 'Mã dự án',
@@ -164,6 +166,22 @@ const ProjectStudentListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
+                    projectCategory: ({ id, name }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.projectCategory)}>
+                            <Button
+                                type="link"
+                                style={{ padding: '0' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    const pathDefault = `?projectId=${id}&projectName=${name}`;
+
+                                    navigate(routes.projectCategoryStudentListPage.path + pathDefault);
+                                }}
+                            >
+                                <IconCategory size={16} />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                 });
             },
         });
@@ -240,11 +258,17 @@ const ProjectStudentListPage = () => {
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
 
         mixinFuncs.renderActionColumn(
-            { team: true, member: true, task: true, edit: true, delete: true },
-            { width: '220px' },
+            {
+                projectCategory: mixinFuncs.hasPermission(apiConfig.projectCategory?.getList?.baseURL),
+                team: true,
+                member: true,
+                task: true,
+                edit: true,
+                delete: true,
+            },
+            { width: '260px' },
         ),
     ];
-
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.project) }]}>
             <ListPage

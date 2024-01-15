@@ -6,7 +6,7 @@ import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { projectTaskState, statusOptions } from '@constants/masterData';
+import { projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -34,6 +34,9 @@ const ProjectLeaderTaskForm = (props) => {
         if (typeof values.developerId === 'string') {
             values.developerId = dataDetail?.developer?.studentInfo?.id;
         }
+        if (typeof values.projectCategoryId === 'string') {
+            values.projectCategoryId = dataDetail?.projectCategoryInfo?.id;
+        }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values?.description) });
     };
     useEffect(() => {
@@ -51,6 +54,7 @@ const ProjectLeaderTaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
+            projectCategoryId: dataDetail?.projectCategoryInfo?.projectCategoryName,
             developerId: dataDetail?.developer?.studentInfo?.fullName,
             description: insertBaseURL(dataDetail?.description),
         });
@@ -74,7 +78,16 @@ const ProjectLeaderTaskForm = (props) => {
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={3}>
+                        <SelectField
+                            label={<FormattedMessage defaultMessage="Loại" />}
+                            name="kind"
+                            required
+                            allowClear={false}
+                            options={projectTaskKind}
+                        />
+                    </Col>
+                    <Col span={9}>
                         <TextField
                             width="100%"
                             label={<FormattedMessage defaultMessage="Tên task" />}
@@ -96,6 +109,21 @@ const ProjectLeaderTaskForm = (props) => {
                             searchParams={(text) => ({ fullName: text })}
                         />
                     </Col>
+                    <Col span={12}>
+                        <AutoCompleteField
+                            required
+                            label={<FormattedMessage defaultMessage="Danh mục" />}
+                            name="projectCategoryId"
+                            apiConfig={apiConfig.projectCategory.autocomplete}
+                            mappingOptions={(item) => ({
+                                value: item.id,
+                                label: item.projectCategoryName,
+                            })}
+                            searchParams={(text) => ({ name: text })}
+                            optionsParams={{ projectId: projectId }}
+                            initialSearchParams={{ projectId: projectId }}
+                        />
+                    </Col>
 
                     <Col span={12}>
                         <DatePickerField
@@ -105,11 +133,6 @@ const ProjectLeaderTaskForm = (props) => {
                             placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
-                            rules={[
-                                {
-                                    validator: validateStartDate,
-                                },
-                            ]}
                         />
                     </Col>
                     <Col span={12}>

@@ -6,7 +6,7 @@ import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { projectTaskState, statusOptions } from '@constants/masterData';
+import { projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -22,6 +22,7 @@ const ProjectTaskForm = (props) => {
     const translate = useTranslate();
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    // const kindValues = translate.formatKeys(projectTaskKind, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
@@ -31,8 +32,11 @@ const ProjectTaskForm = (props) => {
     const handleSubmit = (values) => {
         values.startDate = values.startDate && formatDateString(values.startDate, DEFAULT_FORMAT);
         values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
-        if(typeof values.developerId === 'string'){
+        if (typeof values.developerId === 'string') {
             values.developerId = dataDetail?.developer?.studentInfo?.id;
+        }
+        if (typeof values.projectCategoryId === 'string') {
+            values.projectCategoryId = dataDetail?.projectCategoryInfo?.id;
         }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values?.description) });
     };
@@ -58,6 +62,7 @@ const ProjectTaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
+            projectCategoryId: dataDetail?.projectCategoryInfo?.projectCategoryName,
             developerId: dataDetail?.developer?.studentInfo?.fullName,
             description: insertBaseURL(dataDetail?.description),
         });
@@ -77,11 +82,21 @@ const ProjectTaskForm = (props) => {
         }
         return Promise.resolve();
     };
+
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={3}>
+                        <SelectField
+                            label={<FormattedMessage defaultMessage="Loại" />}
+                            name="kind"
+                            required
+                            allowClear={false}
+                            options={projectTaskKind}
+                        />
+                    </Col>
+                    <Col span={9}>
                         <TextField
                             width="100%"
                             label={<FormattedMessage defaultMessage="Tên task" />}
@@ -99,6 +114,21 @@ const ProjectTaskForm = (props) => {
                                 label: item.developer.studentInfo.fullName,
                             })}
                             searchParams={(text) => ({ fullName: text })}
+                            optionsParams={{ projectId: projectId }}
+                            initialSearchParams={{ projectId: projectId }}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <AutoCompleteField  
+                            required
+                            label={<FormattedMessage defaultMessage="Danh mục" />}
+                            name="projectCategoryId"
+                            apiConfig={apiConfig.projectCategory.autocomplete}
+                            mappingOptions={(item) => ({
+                                value: item.id,
+                                label: item.projectCategoryName,
+                            })}
+                            searchParams={(text) => ({ name: text })}
                             optionsParams={{ projectId: projectId }}
                             initialSearchParams={{ projectId: projectId }}
                         />
@@ -129,11 +159,6 @@ const ProjectTaskForm = (props) => {
                             placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
-                            rules={[
-                                {
-                                    validator: validateStartDate,
-                                },
-                            ]}
                         />
                     </Col>
                     <Col span={12}>

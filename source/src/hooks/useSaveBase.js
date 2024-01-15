@@ -114,7 +114,6 @@ const useSaveBase = ({
             if (location?.state?.prevPath === options.getListUrl) {
                 navigate(-1);
             } else {
-                console.log(location?.state?.prevPath + ' : ' + options.getListUrl);
                 navigate(options.getListUrl);
             }
         };

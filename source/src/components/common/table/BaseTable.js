@@ -9,7 +9,7 @@ const BaseTable = ({
     className,
     onChange,
     rowSelection,
-    columns,
+    columns = [],
     loading,
     pagination,
     rowKey = (record) => record.id,
@@ -18,7 +18,7 @@ const BaseTable = ({
     <Table
         onChange={onChange}
         scroll={{ x: true }}
-        columns={columns}
+        columns={columns.filter(Boolean)}
         dataSource={dataSource}
         loading={loading}
         rowKey={rowKey}
