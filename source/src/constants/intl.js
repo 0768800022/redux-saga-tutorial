@@ -120,6 +120,11 @@ export const projectTaskStateMessage = defineMessages({
     done: 'Hoàn tất',
     cancel: 'Đã hủy',
 });
+export const salaryPeriodStateMessage = defineMessages({
+    create: 'Đang tạo',
+    processing: 'Đang xử lý',
+    done: 'Hoàn tất',
+});
 export const actionMessage = defineMessages({
     contactForm: 'Biểu mẫu liên hệ',
     navigation: 'Chuyển hướng',

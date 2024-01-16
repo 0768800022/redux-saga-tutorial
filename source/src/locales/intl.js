@@ -101,4 +101,6 @@ export const commonMessage = defineMessages({
     moneyReceived: 'Tiền nhận',
     moneyReturn: 'Tiền trả',
     generalManage: 'Quản lý chung',
+    salaryPeriod: 'Kỳ lương',
+    salary: 'Lương',
 });
