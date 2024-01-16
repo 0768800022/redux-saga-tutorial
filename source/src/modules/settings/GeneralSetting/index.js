@@ -17,6 +17,7 @@ import useNotification from '@hooks/useNotification';
 import IntroduceModal from './IntroduceModal';
 import ColumnGroup from 'antd/es/table/ColumnGroup';
 import AvatarField from '@components/common/form/AvatarField';
+import { settingGroups } from '@constants/masterData';
 
 const messages = defineMessages({
     objectName: 'Cài đặt chung',
@@ -92,12 +93,10 @@ const GeneralSettingPage = ({ groupName }) => {
                                     handlersSliderModal.open();
                                 } else if (item?.keyName === 'introduce') {
                                     handlersIntroduceModal.open();
-                                }
-                                else if (item?.groupName === 'revenue_config') {
+                                } else if (item?.groupName === settingGroups.REVENUE) {
                                     setIsEditingRevenue(true);
                                     handlersGeneralModal.open();
-                                }
-                                else {
+                                } else {
                                     setIsEditingRevenue(false);
                                     handlersGeneralModal.open();
                                 }
@@ -180,7 +179,7 @@ const GeneralSettingPage = ({ groupName }) => {
             title: <FormattedMessage defaultMessage="Phần trăm" />,
             dataIndex: 'valueData',
             width: 500,
-            align:'center',
+            align: 'center',
             render: (valueData, record) => {
                 if (valueData > 0) {
                     return <div>{valueData} %</div>;
@@ -255,71 +254,50 @@ const GeneralSettingPage = ({ groupName }) => {
             <Card>
                 <BaseTable
                     onChange={mixinFuncs.changePagination}
-                    columns={columns}
+                    columns={ groupName === 'page_config' ? columns : columnRevenue }
                     dataSource={listSetting ? listSetting?.data : data}
                     loading={loading || dataLoading}
                     pagination={pagination}
                 />
             </Card>
-            <Card
-                style={{
-                    marginTop: '16px',
-                }}
-            >
-                <div
+            {groupName === 'page_config' && (
+                <Card
                     style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '16px',
+                        marginTop: '16px',
                     }}
                 >
-                    <span style={{ fontSize: '20px' }}>{intl.formatMessage(messages.revenue)}</span>
-                </div>
-                <BaseTable
-                    onChange={mixinFuncs.changePagination}
-                    columns={columnRevenue}
-                    dataSource={listSettingRevenue}
-                    loading={dataLoadingRevenue}
-                    pagination={pagination}
-                />
-            </Card>
-            <Card
-                style={{
-                    marginTop: '16px',
-                }}
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '16px',
-                    }}
-                >
-                    <span style={{ fontSize: '20px' }}>{intl.formatMessage(messages.slider)}</span>
-                    <Button
-                        type="primary"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setIsEditing(false);
-                            handlersSliderModal.open();
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginBottom: '16px',
                         }}
                     >
-                        {intl.formatMessage(messages.createNew)}
-                    </Button>
-                </div>
-                <BaseTable
-                    onChange={mixinFuncs.changePagination}
-                    columns={columnsSlider}
-                    dataSource={sliderData.length > 0 ? sliderData : []}
-                    loading={loading}
-                    pagination={pagination}
-                />
-            </Card>
+                        <span style={{ fontSize: '20px' }}>{intl.formatMessage(messages.slider)}</span>
+                        <Button
+                            type="primary"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsEditing(false);
+                                handlersSliderModal.open();
+                            }}
+                        >
+                            {intl.formatMessage(messages.createNew)}
+                        </Button>
+                    </div>
+                    <BaseTable
+                        onChange={mixinFuncs.changePagination}
+                        columns={columnsSlider}
+                        dataSource={sliderData.length > 0 ? sliderData : []}
+                        loading={loading}
+                        pagination={pagination}
+                    />
+                </Card>
+            )}
             <EditGenralModal
                 open={openedGeneralModal}
-                onCancel={ () => handlersGeneralModal.close() }
+                onCancel={() => handlersGeneralModal.close()}
                 data={detail || {}}
                 executeUpdate={executeUpdate}
                 executeLoading={executeLoading}
