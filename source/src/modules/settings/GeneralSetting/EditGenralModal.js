@@ -7,13 +7,25 @@ import useNotification from '@hooks/useNotification';
 import { defineMessages } from 'react-intl';
 import { useIntl } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
+import NumericField from '@components/common/form/NumericField';
 
 const messages = defineMessages({
     objectName: 'setting',
     update: 'Cập nhật',
     updateSuccess: 'Cập nhật {objectName} thành công',
 });
-const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, executeLoading, ...props }) => {
+const EditGenralModal = ({
+    open,
+    onCancel,
+    onOk,
+    title,
+    data,
+    executeUpdate,
+    executeLoading,
+    executeLoadingRevenue,
+    isEditingRevenue,
+    ...props
+}) => {
     const [form] = Form.useForm();
     const [isChanged, setChange] = useState(false);
     const notification = useNotification();
@@ -37,10 +49,12 @@ const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, exe
                         }),
                     });
                     executeLoading();
+                    // if (isEditingRevenue) executeLoadingRevenue();
+                    // else executeLoading();
                     setChange(false);
                 }
             },
-            onError: (err) => { },
+            onError: (err) => {},
         });
     };
 
@@ -59,13 +73,27 @@ const EditGenralModal = ({ open, onCancel, onOk, title, data, executeUpdate, exe
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} onFinish={updateSetting} size="100%">
                     <Row gutter={16}>
-                        <Col span={24}>
-                            <TextField
-                                label={<FormattedMessage defaultMessage="Nội dung" />}
-                                name="valueData"
-                                onChange={handleInputChange}
-                            />
-                        </Col>
+                        {isEditingRevenue ? (
+                            <Col span={24}>
+                                <NumericField
+                                    label={<FormattedMessage defaultMessage="Phần trăm" />}
+                                    name="valueData"
+                                    min={0}
+                                    max={100}
+                                    formatter={(value) => `${value}%`}
+                                    parser={(value) => value.replace('%', '')}
+                                    onChange={handleInputChange}
+                                />
+                            </Col>
+                        ) : (
+                            <Col span={24}>
+                                <TextField
+                                    label={<FormattedMessage defaultMessage="Nội dung" />}
+                                    name="valueData"
+                                    onChange={handleInputChange}
+                                />
+                            </Col>
+                        )}
                     </Row>
                     <div style={{ float: 'right' }}>
                         <Button key="submit" type="primary" htmlType="submit" disabled={!isChanged}>
