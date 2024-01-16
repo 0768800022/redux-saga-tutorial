@@ -316,6 +316,7 @@ export const levelOptionSelect = [
 
 export const settingGroups = {
     GENERAL: 'page_config',
+    REVENUE: 'revenue_config',
 };
 
 export const registrationMoneyKind = [

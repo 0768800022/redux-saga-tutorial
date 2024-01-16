@@ -8,6 +8,7 @@ import { settingGroups } from '@constants/masterData';
 
 const message = defineMessages({
     generalSetting: 'Cài đặt chung',
+    generalRevenue: 'Lợi nhuận chia sẻ',
 });
 
 const SettingPage = () => {
@@ -27,6 +28,11 @@ const SettingPage = () => {
                             key: 'general',
                             label: translate.formatMessage(message.generalSetting),
                             children: <GeneralSettingPage groupName={settingGroups.GENERAL} />,
+                        },
+                        {
+                            key: 'renevue',
+                            label: translate.formatMessage(message.generalRevenue),
+                            children: <GeneralSettingPage groupName={settingGroups.REVENUE} />,
                         },
                     ]}
                 />
