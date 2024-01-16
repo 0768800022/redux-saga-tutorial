@@ -17,6 +17,7 @@ import useNotification from '@hooks/useNotification';
 import IntroduceModal from './IntroduceModal';
 import ColumnGroup from 'antd/es/table/ColumnGroup';
 import AvatarField from '@components/common/form/AvatarField';
+import { settingGroups } from '@constants/masterData';
 
 const messages = defineMessages({
     objectName: 'Cài đặt chung',
@@ -92,7 +93,7 @@ const GeneralSettingPage = ({ groupName }) => {
                                     handlersSliderModal.open();
                                 } else if (item?.keyName === 'introduce') {
                                     handlersIntroduceModal.open();
-                                } else if (item?.groupName === 'revenue_config') {
+                                } else if (item?.groupName === settingGroups.REVENUE) {
                                     setIsEditingRevenue(true);
                                     handlersGeneralModal.open();
                                 } else {
@@ -259,29 +260,6 @@ const GeneralSettingPage = ({ groupName }) => {
                     pagination={pagination}
                 />
             </Card>
-            {/* <Card
-                style={{
-                    marginTop: '16px',
-                }}
-            >
-                <div
-                    style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '16px',
-                    }}
-                >
-                    <span style={{ fontSize: '20px' }}>{intl.formatMessage(messages.revenue)}</span>
-                </div>
-                <BaseTable
-                    onChange={mixinFuncs.changePagination}
-                    columns={columnRevenue}
-                    dataSource={listSettingRevenue}
-                    loading={dataLoadingRevenue}
-                    pagination={pagination}
-                />
-            </Card> */}
             {groupName === 'page_config' && (
                 <Card
                     style={{
