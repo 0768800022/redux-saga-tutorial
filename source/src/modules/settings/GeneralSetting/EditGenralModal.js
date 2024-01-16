@@ -48,9 +48,9 @@ const EditGenralModal = ({
                             objectName: translate.formatMessage(messages.objectName),
                         }),
                     });
-                    // executeLoading();
-                    if (isEditingRevenue) executeLoadingRevenue();
-                    else executeLoading();
+                    executeLoading();
+                    // if (isEditingRevenue) executeLoadingRevenue();
+                    // else executeLoading();
                     setChange(false);
                 }
             },
