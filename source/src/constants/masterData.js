@@ -51,6 +51,7 @@ import {
     expYearMessage,
     archivedMessage,
     taskKindMessage,
+    salaryPeriodStateMessage,
 } from './intl';
 import React from 'react';
 import feature from '../assets/images/feature.png';
@@ -93,6 +94,13 @@ export const projectTaskState = [
     { value: STATE_PROJECT_TASK_DONE, label: projectTaskStateMessage.done, color: 'green' },
     { value: STATE_PROJECT_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
 ];
+
+export const salaryPeriodState = [
+    { value: 1, label: salaryPeriodStateMessage.create, color: 'yellow' },
+    { value: 2, label: salaryPeriodStateMessage.processing, color: 'blue' },
+    { value: 3, label: salaryPeriodStateMessage.done, color: 'green' },
+];
+
 export const projectTaskKind = [
     {
         value: TASK_KIND_FEATURE,

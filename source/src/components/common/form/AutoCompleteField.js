@@ -68,6 +68,9 @@ function AutoCompleteField({
         };
 
         const loadOptions = (searchText) => {
+            if (searchText == '') {
+                setOptions(initialOpts);
+            }
             if (!searchText || !mappingOptions) return;
             setOptions([]);
             setFetching(true);
