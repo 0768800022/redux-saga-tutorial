@@ -73,8 +73,10 @@ function SearchForm({
         onReset?.();
     };
     useEffect(() => {
-        form.resetFields();
-        onReset?.();
+        if (activeTab) {
+            form.resetFields();
+            onReset?.();
+        }
     }, [activeTab]);
     const renderField = useCallback(
         ({ type, submitOnChanged, onChange, key, renderItem, style, component, ...props }) => {
