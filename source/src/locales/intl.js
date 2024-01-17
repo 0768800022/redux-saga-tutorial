@@ -102,5 +102,6 @@ export const commonMessage = defineMessages({
     moneyReturn: 'Tiền trả',
     generalManage: 'Quản lý chung',
     salaryPeriod: 'Kỳ lương',
+    salaryPeriodName: 'Tên kỳ lương',
     salary: 'Lương',
 });
