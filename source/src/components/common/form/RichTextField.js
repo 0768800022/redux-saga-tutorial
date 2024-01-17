@@ -9,6 +9,7 @@ import { AppConstants } from '@constants';
 import notFoundImage from '@assets/images/avatar-default.png';
 const AlignStyle = ReactQuill.Quill.import('attributors/style/align');
 ReactQuill.Quill.register(AlignStyle, true);
+
 function getLoader() {
     const div = document.createElement('div');
     div.className = 'loader-container';
@@ -17,12 +18,8 @@ function getLoader() {
 }
 
 export const removeBaseURL = (data) => {
-    console.log(data);
     let imgArray = data?.replaceAll(AppConstants.contentRootUrl, '');
-    console.log(imgArray);
-    if (!imgArray.includes('data:image')) {
-        imgArray = imgArray?.replaceAll('src="', 'src="{{baseURL}}');
-    }
+    imgArray = imgArray?.replaceAll('src="', 'src="{{baseURL}}');
     return imgArray;
 };
 
@@ -75,6 +72,12 @@ const RichTextField = (props) => {
         }
     };
     const reactQuill = useRef();
+
+    const handleImagePaste = (e) => {
+        const clipboardData = e.clipboardData || window.Clipboard;
+        const items = clipboardData.items;
+        console.log(items);
+    };
     const modules = useMemo(() => {
         return {
             toolbar: {
@@ -95,9 +98,10 @@ const RichTextField = (props) => {
                         input.setAttribute('type', 'file');
                         input.setAttribute('accept', 'image/png, image/gif, image/jpeg, image/bmp, image/x-icon');
                         input.click();
-
                         input.onchange = async () => {
+                            console.log(input);
                             var file = input.files[0];
+                            console.log(file);
                             var formData = new FormData();
                             formData.append('image', file);
                             const res = await uploadFile(file);
@@ -119,6 +123,27 @@ const RichTextField = (props) => {
     useEffect(() => {
         if (reactQuill.current) {
             const quill = reactQuill.current.getEditor();
+            quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+                if (node.tagName === 'IMG') {
+                    const src = node.getAttribute('src');
+                    if (src) {
+                        delta.insert({ image: src });
+                    }
+                }
+                return delta;
+            });
+
+            quill.on('text-change', (delta, oldDelta, source) => {
+                if (source === 'user' && delta.ops.length > 1) {
+                    const lastOp = delta.ops[delta.ops.length - 1];
+                    if (lastOp.insert && typeof lastOp.insert === 'object' && lastOp.insert.image) {
+                        const imageUrl = lastOp.insert.image;
+                        // Lưu trữ hoặc tải lên tệp hình ảnh tại đây
+                        console.log(imageUrl);
+                        uploadFile(imageUrl);
+                    }
+                }
+            });
             quill.root.addEventListener('click', (event) => {
                 if (event.target.tagName === 'IMG') {
                     // Xử lý sự kiện khi click vào hình ảnh
@@ -151,6 +176,7 @@ const RichTextField = (props) => {
                         }
                     }}
                     value={form.getFieldValue(name)}
+                    onPaste={handleImagePaste}
                 />
                 <Modal
                     open={isModalVisible}
