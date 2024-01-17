@@ -41,22 +41,6 @@ const SalaryPeriodListPage = () => {
                         };
                     }
                 };
-                funcs.additionalActionColumnButtons = () => ({
-                    detail: ({ id }) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.detail)}>
-                            <Button
-                                type="link"
-                                style={{ padding: 0 }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    navigate(routes.salaryPeriodDetailListPage.path + `?salaryPeriodId=${id}`);
-                                }}
-                            >
-                                <FileSearchOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
-                });
             },
         });
 
@@ -65,21 +49,28 @@ const SalaryPeriodListPage = () => {
         return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
     };
 
-    // const searchFields = [
-    //     {
-    //         key: 'name',
-    //         placeholder: translate.formatMessage(commonMessage.projectName),
-    //     },
-    // ].filter(Boolean);
+    const searchFields = [
+        {
+            key: 'name',
+            placeholder: translate.formatMessage(commonMessage.salaryPeriodName),
+        },
+    ].filter(Boolean);
     const handleOnClick = (event, record) => {
         event.preventDefault();
-        localStorage.setItem(routes.projectTabPage.keyActiveTab, translate.formatMessage(commonMessage.task));
-        navigate(
-            routes.projectTabPage.path +
-                `?projectId=${record.id}&projectName=${record.name}&active=${!!record.status == 1}`,
-        );
+        navigate(routes.salaryPeriodDetailListPage.path + `?salaryPeriodId=${record.id}`);
     };
+
     const columns = [
+        {
+            title: translate.formatMessage(commonMessage.salaryPeriodName),
+            dataIndex: 'name',
+            width: 300,
+            render: (name, record) => (
+                <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
+                    {name}
+                </div>
+            ),
+        },
         {
             title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'start',
@@ -121,10 +112,8 @@ const SalaryPeriodListPage = () => {
                 );
             },
         },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                detail: true,
                 edit: true,
                 delete: true,
             },
@@ -141,7 +130,7 @@ const SalaryPeriodListPage = () => {
         <PageWrapper routes={breadcrumbs}>
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({
-                    // fields: searchFields,
+                    fields: searchFields,
                     initialValues: queryFilter,
                 })}
                 actionBar={mixinFuncs.renderActionBar()}

@@ -7,6 +7,9 @@ import apiConfig from '@constants/apiConfig';
 import { sendRequest } from '@services/api';
 import { AppConstants } from '@constants';
 import notFoundImage from '@assets/images/avatar-default.png';
+import QuillImageDropAndPaste from 'quill-image-drop-and-paste';
+
+ReactQuill.Quill.register('modules/imageDropAndPaste', QuillImageDropAndPaste);
 const AlignStyle = ReactQuill.Quill.import('attributors/style/align');
 ReactQuill.Quill.register(AlignStyle, true);
 function getLoader() {
@@ -110,8 +113,21 @@ const RichTextField = (props) => {
                 // toggle to add extra line breaks when pasting HTML:
                 matchVisual: false,
             },
+            imageDropAndPaste: {
+                // add an custom image handler
+                handler: imageHandler,
+            },
         };
     }, []);
+    async function imageHandler(imageDataUrl, type, imageData) {
+        const file = imageData.toFile();
+        const res = await uploadFile(file);
+        const range = reactQuill.current.getEditor().selection;
+        reactQuill.current
+            .getEditor()
+            .insertEmbed(range.lastRange.index, 'image', baseURL + res.data.filePath);
+      
+    }
     useEffect(() => {
         if (reactQuill.current) {
             const quill = reactQuill.current.getEditor();
