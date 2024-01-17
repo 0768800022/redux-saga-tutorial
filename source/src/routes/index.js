@@ -23,6 +23,7 @@ import courseRequestRoutes from '@modules/courseManage/courseRequest/routes';
 import CompanyRequestRoutes from '@modules/companyManage/company/companyRequest/routes';
 import MyCompanySubscriptionRoutes from '@modules/companyManage/myCompanySubscription/routes';
 import FinanceRoutes from '@modules/courseManage/finance/routes';
+import SalaryPeriodRoutes from '@modules/projectManage/salaryPeriod/routes';
 /*
     auth
         + null: access login and not login
@@ -75,7 +76,7 @@ const routes = {
     ...CompanyRequestRoutes,
     ...MyCompanySubscriptionRoutes,
     ...FinanceRoutes,
-
+    ...SalaryPeriodRoutes,
     // keep this at last
     //
     notFound: {

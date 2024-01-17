@@ -77,9 +77,9 @@ const ProjectCategoryListPage = ({ setSearchFilter }) => {
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
                     const projectName = queryParams.get('projectName');
-
+                    const active = queryParams.get('active');
                     mixinFuncs.setQueryParams(
-                        serializeParams({ projectId: projectId, projectName: projectName, ...filter }),
+                        serializeParams({ projectId: projectId, projectName: projectName, active: active, ...filter }),
                     );
                 };
             },

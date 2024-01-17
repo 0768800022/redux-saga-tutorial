@@ -22,7 +22,7 @@ import routes from '@routes';
 const message = defineMessages({
     objectName: 'setting',
 });
-const ProjectTabPage = ({ pageOptions }) => {
+const ProjectTabPage = () => {
     const translate = useTranslate();
     const { params: queryParams, setQueryParams, serializeParams, deserializeParams } = useQueryParams();
     const projectName = queryParams.get('projectName');
@@ -73,6 +73,8 @@ const ProjectTabPage = ({ pageOptions }) => {
             breadcrumbName: translate.formatMessage(commonMessage.generalManage),
         },
     ];
+
+    console.log('hello');
     return (
         <PageWrapper routes={breadcrumbs}>
             <ListPage

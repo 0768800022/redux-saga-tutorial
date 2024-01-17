@@ -67,6 +67,12 @@ const navMenuConfig = [
                 path: generatePath(routes.developerListPage.path, {}),
                 permission: apiConfig.developer.getList.baseURL,
             },
+            {
+                label: <FormattedMessage defaultMessage="Quản lý kỳ lương" />,
+                key: 'salary-period',
+                path: generatePath(routes.salaryPeriodListPage.path, {}),
+                permission: apiConfig.salaryPeriod.getList.baseURL,
+            },
 
             {
                 label: <FormattedMessage defaultMessage="Dự án" />,
