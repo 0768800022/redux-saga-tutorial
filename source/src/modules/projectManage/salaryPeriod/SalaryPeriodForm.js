@@ -54,6 +54,22 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
+                        <TextField
+                            label={<FormattedMessage defaultMessage="Tên kỳ lương" />}
+                            name="name"
+                            required
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            defaultValue={stateValues[0]}
+                            name="state"
+                            label={<FormattedMessage defaultMessage="Tình trạng" />}
+                            allowClear={false}
+                            options={stateValues}
+                        />
+                    </Col>
+                    <Col span={12}>
                         <DatePickerField
                             showTime={true}
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
@@ -86,15 +102,6 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
                             ]}
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
-                        />
-                    </Col>
-                    <Col span={12}>
-                        <SelectField
-                            defaultValue={stateValues[0]}
-                            name="state"
-                            label={<FormattedMessage defaultMessage="Tình trạng" />}
-                            allowClear={false}
-                            options={stateValues}
                         />
                     </Col>
                 </Row>

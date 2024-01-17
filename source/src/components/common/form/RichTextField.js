@@ -17,8 +17,12 @@ function getLoader() {
 }
 
 export const removeBaseURL = (data) => {
+    console.log(data);
     let imgArray = data?.replaceAll(AppConstants.contentRootUrl, '');
-    imgArray = imgArray?.replaceAll('src="', 'src="{{baseURL}}');
+    console.log(imgArray);
+    if (!imgArray.includes('data:image')) {
+        imgArray = imgArray?.replaceAll('src="', 'src="{{baseURL}}');
+    }
     return imgArray;
 };
 
