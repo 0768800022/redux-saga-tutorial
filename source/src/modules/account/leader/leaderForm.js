@@ -14,6 +14,7 @@ import { SalaryOptions, statusOptions } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
 import { commonMessage } from '@locales/intl';
 import NumericField from '@components/common/form/NumericField';
+import AutoCompleteField from '@components/common/form/AutoCompleteField';
 
 const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
@@ -46,12 +47,16 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
     };
 
     const handleSubmit = (values) => {
+        if (isEditing) {
+            delete values.referId;
+        }
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
 
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
+            referId: dataDetail?.refer?.leaderName,
         });
         setImageUrl(dataDetail.avatar);
     }, [dataDetail]);
@@ -132,6 +137,18 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
                             name="salaryKind"
                             options={salaryValues}
                             required
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <AutoCompleteField
+                            disabled={isEditing}
+                            required
+                            label={<FormattedMessage defaultMessage="Leader refer" />}
+                            name='referId'
+                            apiConfig={apiConfig.leader.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
+                            initialSearchParams={{ pageNumber: 0 }}
+                            searchParams={(text) => ({ leaderName: text })}
                         />
                     </Col>
                     <Col span={12}>
