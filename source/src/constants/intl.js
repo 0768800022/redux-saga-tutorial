@@ -163,3 +163,7 @@ export const archivedMessage = defineMessages({
     NotReset: 'Chưa reset',
     Reset: 'Đã reset',
 });
+export const salaryMessage = defineMessages({
+    fix: 'Lương cố định',
+    hour: 'Lương theo giờ',
+});
