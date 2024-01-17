@@ -10,7 +10,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import { FieldTypes } from '@constants/formConfig';
-import { statusOptions } from '@constants/masterData';
+import { SalaryOptions, statusOptions } from '@constants/masterData';
 import { useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import { IconClipboardText, IconSchool } from '@tabler/icons-react';
@@ -19,6 +19,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import styles from './leader.module.scss';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import { formatMoney } from '@utils';
 
 const message = defineMessages({
     objectName: 'Leader',
@@ -28,6 +29,7 @@ const LeaderListPage = () => {
     const navigate = useNavigate();
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const salaryValues = translate.formatKeys(SalaryOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.leader,
         options: {
@@ -104,6 +106,36 @@ const LeaderListPage = () => {
             title: <FormattedMessage defaultMessage="Email" />,
             dataIndex: 'email',
             width: '200px',
+        },
+        {
+            title: <FormattedMessage defaultMessage="Tiền lương" />,
+            dataIndex: 'salary',
+            width: 150,
+            align: 'center',
+            render: (price) => {
+                const formattedValue = formatMoney(price, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: 'đ',
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
+            title: 'Loại lương',
+            dataIndex: 'salaryKind',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = salaryValues.find((item) => item.value == dataRow);
+                console.log(state);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
+            },
         },
         {
             title: <FormattedMessage defaultMessage="Số điện thoại" />,
