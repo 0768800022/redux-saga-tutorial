@@ -128,7 +128,7 @@ const DeveloperListPage = () => {
         mixinFuncs.renderActionColumn({ project: true, edit: true, delete: true }, { width: 160 }),
     ];
 
-   
+
 
 
     const searchFields = [

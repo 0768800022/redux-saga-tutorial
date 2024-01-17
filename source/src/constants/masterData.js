@@ -27,6 +27,8 @@ import {
     COMPANY_SEEK_STATE_ACCEPT,
     TASK_KIND_FEATURE,
     TASK_KIND_BUG,
+    FIX_SALARY,
+    HOUR_SALARY,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -52,6 +54,7 @@ import {
     archivedMessage,
     taskKindMessage,
     salaryPeriodStateMessage,
+    salaryMessage,
 } from './intl';
 import React from 'react';
 import feature from '../assets/images/feature.png';
@@ -380,4 +383,16 @@ export const expYearOptions = [
     { value: 3, label: expYearMessage.threeYear },
     { value: 4, label: expYearMessage.fourYear },
     { value: 5, label: expYearMessage.fiveYear },
+];
+export const SalaryOptions = [
+    {
+        value: FIX_SALARY,
+        label: salaryMessage.fix,
+        color: '#46ae19',
+    },
+    {
+        value: HOUR_SALARY,
+        label: salaryMessage.hour,
+        color: '#d2cb19',
+    },
 ];
