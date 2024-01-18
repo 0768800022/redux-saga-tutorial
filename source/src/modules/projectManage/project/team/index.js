@@ -1,22 +1,19 @@
-import PageWrapper from '@components/common/layout/PageWrapper';
+import { UserOutlined } from '@ant-design/icons';
+import AvatarField from '@components/common/form/AvatarField';
 import ListPage from '@components/common/layout/ListPage';
 import BaseTable from '@components/common/table/BaseTable';
-import useListBase from '@hooks/useListBase';
-import apiConfig from '@constants/apiConfig';
-import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Tag, notification } from 'antd';
-import { UserOutlined, ContainerOutlined, ProjectOutlined } from '@ant-design/icons';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { statusOptions } from '@constants/masterData';
-import { useNavigate, generatePath, useLocation } from 'react-router-dom';
-import routes from '@routes';
-import AvatarField from '@components/common/form/AvatarField';
+import useListBase from '@hooks/useListBase';
+import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import React, { useEffect } from 'react';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from '../project.module.scss';
-import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
     objectName: 'Nhóm',
@@ -38,6 +35,12 @@ const TeamListPage = ({ setSearchFilter }) => {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
         },
+        tabOptions:{
+            queryPage: {
+                projectId,
+            },
+            isTab: true,
+        },
         override: (funcs) => {
             funcs.mappingData = (response) => {
                 if (response.result === true) {
@@ -54,14 +57,6 @@ const TeamListPage = ({ setSearchFilter }) => {
                 const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
                 if (active) return `${routes.teamListPage.path}/${dataRow.id}` + pathDefault + `&active=${active}`;
                 else return `${routes.teamListPage.path}/${dataRow.id}` + pathDefault;
-            };
-            funcs.changeFilter = (filter) => {
-                const projectId = queryParams.get('projectId');
-                const projectName = queryParams.get('projectName');
-                const active = queryParams.get('active');
-                mixinFuncs.setQueryParams(
-                    serializeParams({ projectId: projectId, projectName: projectName, active: active, ...filter }),
-                );
             };
         },
     });
@@ -127,20 +122,6 @@ const TeamListPage = ({ setSearchFilter }) => {
         },
     ];
 
-    const { execute: executeUpdateLeader } = useFetch(apiConfig.memberProject.autocomplete, { immediate: false });
-
-    useEffect(() => {
-        executeUpdateLeader({
-            params: {
-                projectId,
-            },
-            onError: () =>
-                notification({
-                    type: 'error',
-                    title: 'Error',
-                }),
-        });
-    }, [projectId]);
 
     const clearSearchFunc = (functionClear) => {
         functionClear();
