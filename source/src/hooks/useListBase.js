@@ -98,6 +98,7 @@ const useListBase = ({
     },
     tabOptions = {
         queryPage: {},
+        isTab: false,
     },
     override,
 } = {}) => {
@@ -167,7 +168,7 @@ const useListBase = ({
     const prepareGetListParams = (filter) => {
         let copyFilter = { ...filter };
         let page = parseInt(queryParams.get('page'));
-        if(tabOptions){
+        if(tabOptions.isTab){
             copyFilter = { ...filter, ...options.queryPage };
             page = parseInt(currentPageTab);
         }   
@@ -181,14 +182,14 @@ const useListBase = ({
 
     const getList = (filter) => {
         let params = mixinFuncs.prepareGetListParams(queryFilter);
-        if(tabOptions){
+        if(tabOptions.isTab){
             params = mixinFuncs.prepareGetListParams({ ...tabOptions.queryPage, ...filter });
         }
         mixinFuncs.handleFetchList({ ...params });
     };
 
     const changeFilter = (filter) => {
-        if(tabOptions){
+        if(tabOptions.isTab){
             mixinFuncs.getList(filter);
         }else{
             setQueryParams(serializeParams(filter));
@@ -196,7 +197,7 @@ const useListBase = ({
     };
 
     function changePagination(page) {
-        if(tabOptions){
+        if(tabOptions.isTab){
             setCurrentPageTab(page.current);
         }else{
             queryParams.set('page', page.current);
@@ -210,11 +211,11 @@ const useListBase = ({
 
     const onDeleteItemCompleted = (id) => {
         let currentPage = queryParams.get('page');
-        if(tabOptions){
+        if(tabOptions.isTab){
             currentPage = currentPageTab;
         }
         if (data.length === 1 && currentPage > 1) {
-            if(tabOptions){
+            if(tabOptions.isTab.isTab){
                 setCurrentPageTab(currentPage - 1);
             }else{
                 queryParams.set('page', currentPage - 1);

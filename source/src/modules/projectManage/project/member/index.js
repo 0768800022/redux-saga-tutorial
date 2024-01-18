@@ -47,6 +47,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
                 queryPage: {
                     projectId,
                 },
+                isTab: true,
             },
             override: (funcs) => {
                 const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;

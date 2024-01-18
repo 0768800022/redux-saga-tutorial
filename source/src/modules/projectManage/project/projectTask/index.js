@@ -116,6 +116,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                 queryPage: {
                     projectId,
                 },
+                isTab: true,
             },
             override: (funcs) => {
                 funcs.mappingData = (response) => {
