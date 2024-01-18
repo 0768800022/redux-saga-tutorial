@@ -44,8 +44,8 @@ const SalaryPeriodListPage = () => {
             },
         });
 
-    const convertDate = (date) => {
-        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
+    const convertDate = (date, addHour = 0) => {
+        let dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT).add(addHour, 'hour');
         return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
     };
 
@@ -93,7 +93,7 @@ const SalaryPeriodListPage = () => {
             title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
             render: (createdDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(createdDate)}</div>;
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(createdDate, 7)}</div>;
             },
             width: 180,
             align: 'center',
