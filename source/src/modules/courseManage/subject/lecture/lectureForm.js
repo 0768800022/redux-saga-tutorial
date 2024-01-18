@@ -135,6 +135,23 @@ const LectureForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         />
                     </Col>
                 </Row>
+                <Row gutter={16}>
+                    <Col span={24}>
+                        <RichTextField
+                            label={translate.formatMessage(commonMessage.leaderGuide)}
+                            labelAlign="left"
+                            name="leaderGuide"
+                            style={{
+                                height: 300,
+                                marginBottom: 70,
+                            }}
+                            required
+                            baseURL={AppConstants.contentRootUrl}
+                            setIsChangedFormValues={setIsChangedFormValues}
+                            form={form}
+                        />
+                    </Col>
+                </Row>
                 <div className="footer-card-form">{actions}</div>
             </Card>
         </BaseForm>

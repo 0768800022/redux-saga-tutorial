@@ -1,33 +1,20 @@
+import { UserOutlined } from '@ant-design/icons';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect, useState } from 'react';
-import PageWrapper from '@components/common/layout/PageWrapper';
-import {
-    DATE_DISPLAY_FORMAT,
-    DATE_FORMAT_DISPLAY,
-    DEFAULT_FORMAT,
-    DEFAULT_TABLE_ITEM_SIZE,
-    AppConstants,
-} from '@constants';
+import BaseTable from '@components/common/table/BaseTable';
+import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
+import { FieldTypes } from '@constants/formConfig';
+import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
-import { TeamOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Avatar, Tag } from 'antd';
-import { generatePath, useNavigate } from 'react-router-dom';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import { convertUtcToLocalTime } from '@utils';
-import { useLocation } from 'react-router-dom';
-import useFetch from '@hooks/useFetch';
-import route from '@modules/projectManage/project/routes';
-import routes from '@routes';
-import { EditOutlined } from '@ant-design/icons';
-import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import { Avatar } from 'antd';
+import React, { useEffect } from 'react';
+import { defineMessages } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './member.module.scss';
-import { FieldTypes } from '@constants/formConfig';
 
 const message = defineMessages({
     objectName: 'Thành viên',
@@ -56,6 +43,12 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
             },
+            tabOptions: {
+                queryPage: {
+                    projectId,
+                },
+                isTab: true,
+            },
             override: (funcs) => {
                 const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
                 funcs.mappingData = (response) => {
@@ -74,16 +67,9 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
                     return `${routes.projectMemberListPage.path}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    if (active) return `${routes.projectMemberListPage.path}/${dataRow.id}` + pathDefault + `&active=${active}`;
+                    if (active)
+                        return `${routes.projectMemberListPage.path}/${dataRow.id}` + pathDefault + `&active=${active}`;
                     else return `${routes.projectMemberListPage.path}/${dataRow.id}` + pathDefault;
-                };
-                funcs.changeFilter = (filter) => {
-                    const projectId = queryParams.get('projectId');
-                    const projectName = queryParams.get('projectName');
-                    const active = queryParams.get('active');
-                    mixinFuncs.setQueryParams(
-                        serializeParams({ projectId: projectId, projectName: projectName, active, ...filter }),
-                    );
                 };
             },
         });
