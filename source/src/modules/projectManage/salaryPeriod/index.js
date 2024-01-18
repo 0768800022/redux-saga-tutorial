@@ -45,7 +45,7 @@ const SalaryPeriodListPage = () => {
         });
 
     const convertDate = (date, addHour = 0) => {
-        let dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT).add(addHour, 'hour');
+        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT).add(addHour, 'hour');
         return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
     };
 
