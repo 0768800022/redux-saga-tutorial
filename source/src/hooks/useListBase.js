@@ -96,6 +96,9 @@ const useListBase = ({
         objectName: '',
         pageSize: DEFAULT_TABLE_ITEM_SIZE,
     },
+    tabOptions = {
+        queryPage: {},
+    },
     override,
 } = {}) => {
     const { params: queryParams, setQueryParams, serializeParams, deserializeParams } = useQueryParams();
@@ -104,6 +107,7 @@ const useListBase = ({
     const { execute: executeGetList } = useFetch(apiConfig.getList);
     const { execute: executeDelete } = useFetch(apiConfig.delete);
     const { execute: executeChangeStatus } = useFetch(apiConfig.changeStatus);
+    const [currentPageTab, setCurrentPageTab] = useState(0);
     const [pagination, setPagination] = useState({
         pageSize: options.pageSize,
         total: 0,
@@ -161,9 +165,13 @@ const useListBase = ({
     };
 
     const prepareGetListParams = (filter) => {
-        const copyFilter = { ...filter };
+        let copyFilter = { ...filter };
+        let page = parseInt(queryParams.get('page'));
+        if(tabOptions){
+            copyFilter = { ...filter, ...options.queryPage };
+            page = parseInt(currentPageTab);
+        }   
 
-        const page = parseInt(queryParams.get('page'));
         copyFilter.page = page > 0 ? page - 1 : DEFAULT_TABLE_PAGE_START;
 
         copyFilter.size = options.pageSize;
@@ -171,18 +179,29 @@ const useListBase = ({
         return copyFilter;
     };
 
-    const getList = () => {
-        const params = mixinFuncs.prepareGetListParams(queryFilter);
+    const getList = (filter) => {
+        let params = mixinFuncs.prepareGetListParams(queryFilter);
+        if(tabOptions){
+            params = mixinFuncs.prepareGetListParams({ ...tabOptions.queryPage, ...filter });
+        }
         mixinFuncs.handleFetchList({ ...params });
     };
 
     const changeFilter = (filter) => {
-        setQueryParams(serializeParams(filter));
+        if(tabOptions){
+            mixinFuncs.getList(filter);
+        }else{
+            setQueryParams(serializeParams(filter));
+        }
     };
 
     function changePagination(page) {
-        queryParams.set('page', page.current);
-        setQueryParams(queryParams);
+        if(tabOptions){
+            setCurrentPageTab(page.current);
+        }else{
+            queryParams.set('page', page.current);
+            setQueryParams(queryParams);
+        }
     }
 
     const handleDeleteItemError = (error) => {
@@ -190,10 +209,17 @@ const useListBase = ({
     };
 
     const onDeleteItemCompleted = (id) => {
-        const currentPage = queryParams.get('page');
+        let currentPage = queryParams.get('page');
+        if(tabOptions){
+            currentPage = currentPageTab;
+        }
         if (data.length === 1 && currentPage > 1) {
-            queryParams.set('page', currentPage - 1);
-            setQueryParams(queryParams);
+            if(tabOptions){
+                setCurrentPageTab(currentPage - 1);
+            }else{
+                queryParams.set('page', currentPage - 1);
+                setQueryParams(queryParams);
+            }
         } else {
             mixinFuncs.getList();
             // setData((data) => data.filter((item) => item.id !== id));
@@ -540,13 +566,16 @@ const useListBase = ({
     useEffect(() => {
         mixinFuncs.getList();
 
-        const page = parseInt(queryFilter.page);
+        let page = parseInt(queryFilter.page);
+        if(tabOptions){
+            page = parseInt(currentPageTab);
+        }
         if (page > 0 && page !== pagination.current) {
             setPagination((p) => ({ ...p, current: page }));
         } else if (page < 1) {
             setPagination((p) => ({ ...p, current: 1 }));
         }
-    }, [queryParams, pagePath]);
+    }, [queryParams, pagePath, currentPageTab]);
 
     return {
         loading,

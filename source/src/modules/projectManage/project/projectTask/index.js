@@ -1,5 +1,9 @@
+import { CalendarOutlined, CheckOutlined } from '@ant-design/icons';
+import { BaseForm } from '@components/common/form/BaseForm';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import NumericField from '@components/common/form/NumericField';
+import TextField from '@components/common/form/TextField';
 import ListPage from '@components/common/layout/ListPage';
-import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import {
     DATE_FORMAT_DISPLAY,
@@ -10,32 +14,25 @@ import {
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
-import useListBase from '@hooks/useListBase';
-import useTranslate from '@hooks/useTranslate';
-import routes from '@routes';
-import { Tag, Button, Modal, Col, Row } from 'antd';
-import React, { useEffect, useMemo, useState } from 'react';
-import { FormattedMessage, defineMessages } from 'react-intl';
-import { generatePath, useLocation, useNavigate } from 'react-router-dom';
-import { commonMessage } from '@locales/intl';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { CalendarOutlined, CheckOutlined } from '@ant-design/icons';
-import styles from '../project.module.scss';
-import useFetch from '@hooks/useFetch';
-import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
+import { projectTaskState } from '@constants/masterData';
 import useDisclosure from '@hooks/useDisclosure';
+import useFetch from '@hooks/useFetch';
+import useListBase from '@hooks/useListBase';
 import useNotification from '@hooks/useNotification';
-import { useIntl } from 'react-intl';
-import TextField from '@components/common/form/TextField';
-import NumericField from '@components/common/form/NumericField';
-import { BaseForm } from '@components/common/form/BaseForm';
-import feature from '../../../../assets/images/feature.png';
-import bug from '../../../../assets/images/bug.jpg';
-import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
-import dayjs from 'dayjs';
+import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import { convertUtcToLocalTime, formatDateString } from '@utils';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import useListBaseTab from '@hooks/useListBaseTab';
+import { Button, Col, Modal, Row, Tag } from 'antd';
+import dayjs from 'dayjs';
+import React, { useEffect, useMemo, useState } from 'react';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
+import bug from '../../../../assets/images/bug.jpg';
+import feature from '../../../../assets/images/feature.png';
+import styles from '../project.module.scss';
+import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -108,11 +105,14 @@ function ProjectTaskListPage({ setSearchFilter }) {
         });
     };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBaseTab({
+        useListBase({
             apiConfig: apiConfig.projectTask,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(commonMessage.task),
+              
+            },
+            tabOptions:{
                 queryPage: {
                     projectId,
                 },

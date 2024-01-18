@@ -1,23 +1,19 @@
-import PageWrapper from '@components/common/layout/PageWrapper';
+import { UserOutlined } from '@ant-design/icons';
+import AvatarField from '@components/common/form/AvatarField';
 import ListPage from '@components/common/layout/ListPage';
 import BaseTable from '@components/common/table/BaseTable';
-import useListBase from '@hooks/useListBase';
-import apiConfig from '@constants/apiConfig';
-import React, { useEffect, useState } from 'react';
-import { Avatar, Button, Tag, notification } from 'antd';
-import { UserOutlined, ContainerOutlined, ProjectOutlined } from '@ant-design/icons';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
 import { statusOptions } from '@constants/masterData';
-import { useNavigate, generatePath, useLocation } from 'react-router-dom';
-import routes from '@routes';
-import AvatarField from '@components/common/form/AvatarField';
+import useListBase from '@hooks/useListBase';
+import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import React, { useEffect } from 'react';
+import { FormattedMessage, defineMessages } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from '../project.module.scss';
-import useFetch from '@hooks/useFetch';
-import useListBaseTab from '@hooks/useListBaseTab';
 
 const message = defineMessages({
     objectName: 'Nhóm',
@@ -33,12 +29,16 @@ const TeamListPage = ({ setSearchFilter }) => {
     const active = queryParameters.get('active');
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFilter, queryParams, serializeParams } = useListBaseTab({
+    const { data, mixinFuncs, loading, pagination, queryFilter, queryParams, serializeParams } = useListBase({
         apiConfig: apiConfig.team,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
-            queryPage: { projectId },
+        },
+        tabOptions:{
+            queryPage: {
+                projectId,
+            },
         },
         override: (funcs) => {
             funcs.mappingData = (response) => {

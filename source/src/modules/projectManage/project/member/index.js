@@ -1,34 +1,20 @@
+import { UserOutlined } from '@ant-design/icons';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect, useState } from 'react';
-import PageWrapper from '@components/common/layout/PageWrapper';
-import {
-    DATE_DISPLAY_FORMAT,
-    DATE_FORMAT_DISPLAY,
-    DEFAULT_FORMAT,
-    DEFAULT_TABLE_ITEM_SIZE,
-    AppConstants,
-} from '@constants';
+import BaseTable from '@components/common/table/BaseTable';
+import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
+import { FieldTypes } from '@constants/formConfig';
+import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
-import { TeamOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Avatar, Tag } from 'antd';
-import { generatePath, useNavigate } from 'react-router-dom';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import { convertUtcToLocalTime } from '@utils';
-import { useLocation } from 'react-router-dom';
-import useFetch from '@hooks/useFetch';
-import route from '@modules/projectManage/project/routes';
-import routes from '@routes';
-import { EditOutlined } from '@ant-design/icons';
-import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import { Avatar } from 'antd';
+import React, { useEffect } from 'react';
+import { defineMessages } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './member.module.scss';
-import { FieldTypes } from '@constants/formConfig';
-import useListBaseTab from '@hooks/useListBaseTab';
 
 const message = defineMessages({
     objectName: 'Thành viên',
@@ -51,12 +37,16 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     localStorage.setItem('pathPrev', location.search);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBaseTab({
+        useListBase({
             apiConfig: apiConfig.memberProject,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
-                queryPage: { projectId },
+            },
+            tabOptions: {
+                queryPage: {
+                    projectId,
+                },
             },
             override: (funcs) => {
                 const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;

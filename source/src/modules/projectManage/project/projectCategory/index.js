@@ -1,36 +1,16 @@
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect, useState } from 'react';
-import PageWrapper from '@components/common/layout/PageWrapper';
-import {
-    DATE_DISPLAY_FORMAT,
-    DATE_FORMAT_DISPLAY,
-    DEFAULT_FORMAT,
-    DEFAULT_TABLE_ITEM_SIZE,
-    AppConstants,
-} from '@constants';
+import BaseTable from '@components/common/table/BaseTable';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
-import { TeamOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Avatar, Tag } from 'antd';
-import { generatePath, useNavigate } from 'react-router-dom';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import { convertUtcToLocalTime } from '@utils';
-import { useLocation } from 'react-router-dom';
-import useFetch from '@hooks/useFetch';
-import route from '@modules/projectManage/project/routes';
 import routes from '@routes';
-import { EditOutlined } from '@ant-design/icons';
-import ScheduleFile from '@components/common/elements/ScheduleFile';
-import { commonMessage } from '@locales/intl';
+import { convertUtcToLocalTime } from '@utils';
+import React, { useEffect } from 'react';
+import { defineMessages } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
 // import styles from './member.module.scss';
 import { statusOptions } from '@constants/masterData';
-
-import { FieldTypes } from '@constants/formConfig';
-import useListBaseTab from '@hooks/useListBaseTab';
 
 const message = defineMessages({
     objectName: 'Danh mục',
@@ -47,15 +27,19 @@ const ProjectCategoryListPage = ({ setSearchFilter }) => {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
-    const active =  queryParameters.get('active');
+    const active = queryParameters.get('active');
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBaseTab({
+        useListBase({
             apiConfig: apiConfig.projectCategory,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
-                queryPage: { projectId },
+            },
+            tabOptions: {
+                queryPage: {
+                    projectId,
+                },
             },
             override: (funcs) => {
                 funcs.mappingData = (response) => {
