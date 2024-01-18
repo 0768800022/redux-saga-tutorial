@@ -28,6 +28,7 @@ import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
 import styles from './member.module.scss';
 import { FieldTypes } from '@constants/formConfig';
+import useListBaseTab from '@hooks/useListBaseTab';
 
 const message = defineMessages({
     objectName: 'Thành viên',
@@ -50,11 +51,12 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     localStorage.setItem('pathPrev', location.search);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBase({
+        useListBaseTab({
             apiConfig: apiConfig.memberProject,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
+                queryPage: { projectId },
             },
             override: (funcs) => {
                 const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
@@ -74,16 +76,9 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
                     return `${routes.projectMemberListPage.path}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    if (active) return `${routes.projectMemberListPage.path}/${dataRow.id}` + pathDefault + `&active=${active}`;
+                    if (active)
+                        return `${routes.projectMemberListPage.path}/${dataRow.id}` + pathDefault + `&active=${active}`;
                     else return `${routes.projectMemberListPage.path}/${dataRow.id}` + pathDefault;
-                };
-                funcs.changeFilter = (filter) => {
-                    const projectId = queryParams.get('projectId');
-                    const projectName = queryParams.get('projectName');
-                    const active = queryParams.get('active');
-                    mixinFuncs.setQueryParams(
-                        serializeParams({ projectId: projectId, projectName: projectName, active, ...filter }),
-                    );
                 };
             },
         });

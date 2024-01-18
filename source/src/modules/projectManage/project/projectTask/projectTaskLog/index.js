@@ -244,6 +244,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
                         paramHead,
                         routes.projectTabPage.path,
                         deleteSearchFilterInLocationSearch(search, ['fromDate', 'toDate']),
+                        true,
                     )
             }
         >

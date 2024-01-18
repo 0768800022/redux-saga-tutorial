@@ -17,6 +17,7 @@ import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
 import styles from '../project.module.scss';
 import useFetch from '@hooks/useFetch';
+import useListBaseTab from '@hooks/useListBaseTab';
 
 const message = defineMessages({
     objectName: 'Nhóm',
@@ -32,11 +33,12 @@ const TeamListPage = ({ setSearchFilter }) => {
     const active = queryParameters.get('active');
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFilter, queryParams, serializeParams } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter, queryParams, serializeParams } = useListBaseTab({
         apiConfig: apiConfig.team,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
+            queryPage: { projectId },
         },
         override: (funcs) => {
             funcs.mappingData = (response) => {
@@ -54,14 +56,6 @@ const TeamListPage = ({ setSearchFilter }) => {
                 const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
                 if (active) return `${routes.teamListPage.path}/${dataRow.id}` + pathDefault + `&active=${active}`;
                 else return `${routes.teamListPage.path}/${dataRow.id}` + pathDefault;
-            };
-            funcs.changeFilter = (filter) => {
-                const projectId = queryParams.get('projectId');
-                const projectName = queryParams.get('projectName');
-                const active = queryParams.get('active');
-                mixinFuncs.setQueryParams(
-                    serializeParams({ projectId: projectId, projectName: projectName, active: active, ...filter }),
-                );
             };
         },
     });
@@ -127,20 +121,6 @@ const TeamListPage = ({ setSearchFilter }) => {
         },
     ];
 
-    const { execute: executeUpdateLeader } = useFetch(apiConfig.memberProject.autocomplete, { immediate: false });
-
-    useEffect(() => {
-        executeUpdateLeader({
-            params: {
-                projectId,
-            },
-            onError: () =>
-                notification({
-                    type: 'error',
-                    title: 'Error',
-                }),
-        });
-    }, [projectId]);
 
     const clearSearchFunc = (functionClear) => {
         functionClear();

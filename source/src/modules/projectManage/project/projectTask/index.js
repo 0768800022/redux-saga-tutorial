@@ -35,6 +35,7 @@ import bug from '../../../../assets/images/bug.jpg';
 import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
 import dayjs from 'dayjs';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import useListBaseTab from '@hooks/useListBaseTab';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -107,17 +108,16 @@ function ProjectTaskListPage({ setSearchFilter }) {
         });
     };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBase({
+        useListBaseTab({
             apiConfig: apiConfig.projectTask,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(commonMessage.task),
+                queryPage: {
+                    projectId,
+                },
             },
             override: (funcs) => {
-                funcs.getList = () => {
-                    const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, projectName: null, projectTaskId: null });
-                };
                 funcs.mappingData = (response) => {
                     try {
                         if (response.result === true) {
@@ -135,19 +135,6 @@ function ProjectTaskListPage({ setSearchFilter }) {
                 };
                 funcs.getItemDetailLink = (dataRow) => {
                     return `${routes.ProjectTaskListPage.path}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
-                };
-                funcs.changeFilter = (filter) => {
-                    const projectId = queryParams.get('projectId');
-                    const projectName = queryParams.get('projectName');
-                    const active = queryParams.get('active');
-                    mixinFuncs.setQueryParams(
-                        serializeParams({
-                            projectId: projectId,
-                            projectName: projectName,
-                            active: active,
-                            ...filter,
-                        }),
-                    );
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     taskLog: ({ id, taskName }) => (

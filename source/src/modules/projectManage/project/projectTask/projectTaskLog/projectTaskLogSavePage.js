@@ -60,6 +60,7 @@ function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
                     taskLogParam,
                     search,
                     title,
+                    true,
                 )
             }
         >

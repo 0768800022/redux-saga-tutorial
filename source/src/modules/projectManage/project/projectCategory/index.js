@@ -30,6 +30,7 @@ import { commonMessage } from '@locales/intl';
 import { statusOptions } from '@constants/masterData';
 
 import { FieldTypes } from '@constants/formConfig';
+import useListBaseTab from '@hooks/useListBaseTab';
 
 const message = defineMessages({
     objectName: 'Danh mục',
@@ -46,13 +47,15 @@ const ProjectCategoryListPage = ({ setSearchFilter }) => {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
+    const active =  queryParameters.get('active');
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBase({
+        useListBaseTab({
             apiConfig: apiConfig.projectCategory,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
+                queryPage: { projectId },
             },
             override: (funcs) => {
                 funcs.mappingData = (response) => {
@@ -68,19 +71,11 @@ const ProjectCategoryListPage = ({ setSearchFilter }) => {
                     }
                 };
                 funcs.getCreateLink = () => {
-                    return `${routes.projectCategoryListPage.path}/create?projectId=${projectId}&projectName=${projectName}`;
+                    return `${routes.projectCategoryListPage.path}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
+                    const pathDefault = `?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                     return `${routes.projectCategoryListPage.path}/${dataRow.id}` + pathDefault;
-                };
-                funcs.changeFilter = (filter) => {
-                    const projectId = queryParams.get('projectId');
-                    const projectName = queryParams.get('projectName');
-                    const active = queryParams.get('active');
-                    mixinFuncs.setQueryParams(
-                        serializeParams({ projectId: projectId, projectName: projectName, active: active, ...filter }),
-                    );
                 };
             },
         });
