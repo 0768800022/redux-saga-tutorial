@@ -92,6 +92,9 @@ export const STATUS_ACTIVE = 1;
 export const STATUS_INACTIVE = -1;
 export const STATUS_DELETE = -2;
 
+export const FIX_SALARY = 1;
+export const HOUR_SALARY = 2;
+
 export const STATE_ORDER_PENDING = 0;
 export const STATE_ORDER_DONE = 1;
 export const STATE_ORDER_CANCEL = -1;

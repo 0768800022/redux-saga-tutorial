@@ -3,7 +3,7 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import apiConfig from '@constants/apiConfig';
-import { levelOptionSelect, statusOptions } from '@constants/masterData';
+import { SalaryOptions, levelOptionSelect, sALARYOptions, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -15,11 +15,13 @@ import ScheduleTable from '@components/common/table/ScheduleTable';
 import { TIME_FORMAT_DISPLAY } from '@constants';
 import dayjs from 'dayjs';
 import { daysOfWeekSchedule as daysOfWeekScheduleOptions } from '@constants/masterData';
+import NumericField from '@components/common/form/NumericField';
 
 const DeveloperForm = (props) => {
     const translate = useTranslate();
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const salaryValues = translate.formatKeys(SalaryOptions, ['label']);
     const daysOfWeekSchedule = translate.formatKeys(daysOfWeekScheduleOptions, ['label']);
     const { form, mixinFuncs, onValuesChange, setFieldValue, getFieldValue } = useBasicForm({
         onSubmit,
@@ -47,6 +49,9 @@ const DeveloperForm = (props) => {
         }
         if (!values.status) {
             values.status = 0;
+        }
+        if (!values.salaryKind) {
+            values.salaryKind = 0;
         }
         for (const day in values.schedule) {
             for (const timeRange of values.schedule[day]) {
@@ -176,6 +181,7 @@ const DeveloperForm = (props) => {
         if (!isEditing > 0) {
             form.setFieldsValue({
                 status: statusValues[1].value,
+                salaryKind: salaryValues[1].value,
             });
         }
     }, [isEditing]);
@@ -275,6 +281,24 @@ const DeveloperForm = (props) => {
                             />
                         </Col>
                         <Col span={12}>
+                            <NumericField
+                                label={<FormattedMessage defaultMessage="Tiền lương" />}
+                                name="salary"
+                                min={0}
+                                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                addonAfter="₫"
+                                required
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <SelectField
+                                label={<FormattedMessage defaultMessage="Loại lương" />}
+                                name="salaryKind"
+                                options={salaryValues}
+                                required
+                            />
+                        </Col>
+                        <Col span={12}>
                             <AutoCompleteField
                                 required
                                 label={translate.formatMessage(commonMessage.role)}
@@ -305,7 +329,9 @@ const DeveloperForm = (props) => {
                     handleTimeChange={handleTimeChange}
                     handleReset={handleReset}
                 />
-                <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>{actions}</div>
+                <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
+                    {actions}
+                </div>
             </Card>
         </BaseForm>
     );
