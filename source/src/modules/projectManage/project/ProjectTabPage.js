@@ -55,15 +55,6 @@ const ProjectTabPage = () => {
         },
     ];
 
-    useEffect(() => {
-        for (const [key] of Object.entries(searchFilter)) {
-            if (key !== 'projectId' && key !== 'projectName' && key !== 'active') {
-                queryParams.delete(key);
-            }
-        }
-        setQueryParams(queryParams);
-    }, [activeTab]);
-
     const breadcrumbs = [
         {
             breadcrumbName: translate.formatMessage(commonMessage.project),
@@ -74,7 +65,6 @@ const ProjectTabPage = () => {
         },
     ];
 
-    console.log('hello');
     return (
         <PageWrapper routes={breadcrumbs}>
             <ListPage

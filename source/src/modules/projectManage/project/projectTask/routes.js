@@ -25,10 +25,13 @@ export default {
         auth: true,
         component: ProjectTaskLogListPage,
         permissions: [apiConfig.projectTaskLog.getList.baseURL],
-        breadcrumbs: (message,paramHead,taskParam, search) => {
+        breadcrumbs: (message, paramHead, taskParam, search, isTaskTab) => {
             return [
                 { breadcrumbName: message.project.defaultMessage, path: paramHead },
-                { breadcrumbName: message.generalManage.defaultMessage, path: taskParam + search },
+                {
+                    breadcrumbName: isTaskTab ? message.generalManage.defaultMessage : message.task.defaultMessage,
+                    path: taskParam + search,
+                },
                 { breadcrumbName: message.taskLog.defaultMessage },
             ];
         },
@@ -39,10 +42,10 @@ export default {
         auth: true,
         component: ProjectTaskLogSavePage,
         permissions: [apiConfig.projectTaskLog.create.baseURL, apiConfig.projectTaskLog.update.baseURL],
-        breadcrumbs: (message,paramHead,taskParam,taskLogParam, search,title) => {
+        breadcrumbs: (message, paramHead, taskParam, taskLogParam, search, title, isTaskTab) => {
             return [
                 { breadcrumbName: message.project.defaultMessage, path: paramHead },
-                { breadcrumbName: message.generalManage.defaultMessage, path: taskParam + search },
+                { breadcrumbName: isTaskTab ? message.generalManage.defaultMessage : message.task.defaultMessage, path: taskParam + search },
                 { breadcrumbName: message.taskLog.defaultMessage, path: taskLogParam + search },
                 { breadcrumbName: title },
             ];
