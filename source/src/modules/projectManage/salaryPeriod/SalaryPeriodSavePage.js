@@ -7,6 +7,7 @@ import { defineMessages } from 'react-intl';
 import { generatePath, useParams } from 'react-router-dom';
 import SalaryPeriodForm from './SalaryPeriodForm';
 import routes from './routes';
+import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
     objectName: 'Kỳ lương',
@@ -31,6 +32,15 @@ const SalaryPeriodSavePage = () => {
                 return {
                     ...data,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-SALARY-PERIOD-ERROR-0001') {
+                    showErrorMessage('Khoảng thời gian đã trùng với kỳ khác !');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });
