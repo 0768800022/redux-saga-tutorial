@@ -67,13 +67,7 @@ const navMenuConfig = [
                 path: generatePath(routes.developerListPage.path, {}),
                 permission: apiConfig.developer.getList.baseURL,
             },
-            {
-                label: <FormattedMessage defaultMessage="Quản lý kỳ lương" />,
-                key: 'salary-period',
-                path: generatePath(routes.salaryPeriodListPage.path, {}),
-                permission: apiConfig.salaryPeriod.getList.baseURL,
-            },
-
+            
             {
                 label: <FormattedMessage defaultMessage="Dự án" />,
                 key: 'project-management',
@@ -85,6 +79,12 @@ const navMenuConfig = [
                 key: 'project-role-management',
                 path: generatePath(routes.projectRoleListPage.path, {}),
                 permission: apiConfig.projectRole.getList.baseURL,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Quản lý kỳ lương" />,
+                key: 'salary-period',
+                path: generatePath(routes.salaryPeriodListPage.path, {}),
+                permission: apiConfig.salaryPeriod.getList.baseURL,
             },
         ],
     },

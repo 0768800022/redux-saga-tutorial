@@ -9,7 +9,15 @@ import useFetch from '@hooks/useFetch';
 import apiConfig from '@constants/apiConfig';
 import CropImageField from '@components/common/form/CropImageField';
 import { FormattedMessage } from 'react-intl';
-import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import {
+    AppConstants,
+    DATE_DISPLAY_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DATE_FORMAT_END_OF_DAY_TIME,
+    DATE_FORMAT_VALUE,
+    DATE_FORMAT_ZERO_TIME,
+    DEFAULT_FORMAT,
+} from '@constants';
 import { statusOptions, projectTaskState, salaryPeriodState } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
 import DatePickerField from '@components/common/form/DatePickerField';
@@ -29,8 +37,8 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
         if (!values?.state) {
             values.state = 1;
         }
-        values.start = formatDateString(values.start, DEFAULT_FORMAT);
-        values.end = formatDateString(values.end, DEFAULT_FORMAT);
+        values.start = formatDateToZeroTime(values.start);
+        values.end = formatDateToEndOfDayTime(values.end);
         return mixinFuncs.handleSubmit({ ...values });
     };
 
@@ -54,11 +62,7 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
             <Card>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField
-                            label={<FormattedMessage defaultMessage="Tên kỳ lương" />}
-                            name="name"
-                            required
-                        />
+                        <TextField label={<FormattedMessage defaultMessage="Tên kỳ lương" />} name="name" required />
                     </Col>
                     <Col span={12}>
                         <SelectField
@@ -71,11 +75,10 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime={true}
                             label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
                             name="start"
                             placeholder="Ngày bắt đầu"
-                            format={DEFAULT_FORMAT}
+                            format={DATE_FORMAT_DISPLAY}
                             style={{ width: '100%' }}
                             rules={[
                                 {
@@ -87,7 +90,6 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
                     </Col>
                     <Col span={12}>
                         <DatePickerField
-                            showTime={true}
                             label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
                             name="end"
                             placeholder="Ngày kết thúc"
@@ -100,7 +102,7 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
                                     validator: validateDueDate,
                                 },
                             ]}
-                            format={DEFAULT_FORMAT}
+                            format={DATE_FORMAT_DISPLAY}
                             style={{ width: '100%' }}
                         />
                     </Col>
@@ -109,6 +111,14 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
             </Card>
         </BaseForm>
     );
+};
+const formatDateToZeroTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_ZERO_TIME);
+};
+const formatDateToEndOfDayTime = (date) => {
+    const dateString = formatDateString(date, DEFAULT_FORMAT);
+    return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
 };
 
 export default SalaryPeriodForm;

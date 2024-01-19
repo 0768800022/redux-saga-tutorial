@@ -44,9 +44,9 @@ const SalaryPeriodListPage = () => {
             },
         });
 
-    const convertDate = (date, addHour = 0) => {
+    const convertDate = (date, format = DEFAULT_FORMAT, addHour = 0) => {
         const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT).add(addHour, 'hour');
-        return convertDateTimeToString(dateConvert, DEFAULT_FORMAT);
+        return convertDateTimeToString(dateConvert, format);
     };
 
     const searchFields = [
@@ -75,7 +75,7 @@ const SalaryPeriodListPage = () => {
             title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'start',
             render: (startDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate, DATE_FORMAT_DISPLAY)}</div>;
             },
             width: 180,
             align: 'center',
@@ -84,7 +84,7 @@ const SalaryPeriodListPage = () => {
             title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'end',
             render: (endDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate, DATE_FORMAT_DISPLAY)}</div>;
             },
             width: 180,
             align: 'center',
@@ -93,7 +93,9 @@ const SalaryPeriodListPage = () => {
             title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
             render: (createdDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(createdDate, 7)}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(createdDate, DEFAULT_FORMAT, 7)}</div>
+                );
             },
             width: 180,
             align: 'center',
