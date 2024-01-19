@@ -281,20 +281,20 @@ const DeveloperForm = (props) => {
                             />
                         </Col>
                         <Col span={12}>
+                            <SelectField
+                                label={<FormattedMessage defaultMessage="Loại lương" />}
+                                name="salaryKind"
+                                options={salaryValues}
+                                required
+                            />
+                        </Col>
+                        <Col span={12}>
                             <NumericField
                                 label={<FormattedMessage defaultMessage="Tiền lương" />}
                                 name="salary"
                                 min={0}
                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                addonAfter="₫"
-                                required
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <SelectField
-                                label={<FormattedMessage defaultMessage="Loại lương" />}
-                                name="salaryKind"
-                                options={salaryValues}
+                                addonAfter="$"
                                 required
                             />
                         </Col>
@@ -307,6 +307,16 @@ const DeveloperForm = (props) => {
                                 mappingOptions={(item) => ({ value: item.id, label: item.projectRoleName })}
                                 initialSearchParams={{ pageNumber: 0 }}
                                 searchParams={(text) => ({ fullName: text })}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Leader refer" />}
+                                name="developerId"
+                                apiConfig={apiConfig.leader.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
+                                initialSearchParams={{ pageNumber: 0 }}
+                                searchParams={(text) => ({ leaderName: text })}
                             />
                         </Col>
                         <Col span={12}>

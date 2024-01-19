@@ -122,15 +122,6 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
                         />
                     </Col>
                     <Col span={12}>
-                        <NumericField
-                            label={<FormattedMessage defaultMessage="Tiền lương" />}
-                            name="salary"
-                            min={0}
-                            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            addonAfter="₫"
-                        />
-                    </Col>
-                    <Col span={12}>
                         <SelectField
                             // defaultValue={salaryValues[0]}
                             label={<FormattedMessage defaultMessage="Loại lương" />}
@@ -140,9 +131,16 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
                         />
                     </Col>
                     <Col span={12}>
+                        <NumericField
+                            label={<FormattedMessage defaultMessage="Tiền lương" />}
+                            name="salary"
+                            min={0}
+                            formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            addonAfter="$"
+                        />
+                    </Col>
+                    <Col span={12}>
                         <AutoCompleteField
-                            disabled={isEditing}
-                            required
                             label={<FormattedMessage defaultMessage="Leader refer" />}
                             name='referId'
                             apiConfig={apiConfig.leader.autocomplete}
