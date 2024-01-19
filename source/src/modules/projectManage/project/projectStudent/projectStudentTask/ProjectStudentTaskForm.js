@@ -11,7 +11,7 @@ import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
 import { formatDateString } from '@utils';
-import { Card, Col, Form, Row } from 'antd';
+import { Card, Col, Form, Input, Row, Select, Space } from 'antd';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect } from 'react';
@@ -60,6 +60,7 @@ const ProjectStudentTaskForm = (props) => {
             form.setFieldsValue({
                 status: statusValues[1].value,
                 state: stateValues[1].value,
+                kind: projectTaskKind[0].value,
                 developerId: profile.id,
             });
         }
@@ -82,23 +83,28 @@ const ProjectStudentTaskForm = (props) => {
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
-                <Row gutter={16}>
-                    <Col span={3}>
-                        <SelectField
-                            label={<FormattedMessage defaultMessage="Loại" />}
-                            name="kind"
-                            required
-                            allowClear={false}
-                            options={projectTaskKind}
-                        />
-                    </Col>
-                    <Col span={9}>
-                        <TextField
-                            width="100%"
-                            label={<FormattedMessage defaultMessage="Tên task" />}
-                            name="taskName"
-                            required
-                        />
+                <Row gutter={16} align="stretch">
+                    <Col span={12}>
+                        <Space.Compact align="start">
+                            <SelectField
+                                style={{
+                                    width: '100%',
+                                }}
+                                label={<FormattedMessage defaultMessage="Loại" />}
+                                name="kind"
+                                required
+                                allowClear={false}
+                                options={projectTaskKind}
+                            />
+                            <TextField
+                                style={{
+                                    width: '250px',
+                                }}
+                                label={<FormattedMessage defaultMessage="Tên task" />}
+                                name="taskName"
+                                required
+                            />
+                        </Space.Compact>
                     </Col>
                     <Col span={12}>
                         <AutoCompleteField
