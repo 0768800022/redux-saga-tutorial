@@ -544,6 +544,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        leaderRefer: {
+            baseURL: `${apiTenantUrl}v1/developer/reject`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     lecture: {
         autocomplete: {

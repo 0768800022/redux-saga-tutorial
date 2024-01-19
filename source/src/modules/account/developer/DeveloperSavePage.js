@@ -9,6 +9,7 @@ import apiConfig from '@constants/apiConfig';
 import DeveloperForm from './DeveloperForm';
 import { showErrorMessage } from '@services/notifyService';
 import { commonMessage } from '@locales/intl';
+import useFetch from '@hooks/useFetch';
 
 const messages = defineMessages({
     objectName: 'Lập trình viên',
@@ -55,6 +56,9 @@ const DeveloperSavePage = () => {
             };
         },
     });
+
+    const { execute: executeLeaderRefer } = useFetch(apiConfig.developer.leaderRefer, { immediate: false });
+
 
     return (
         <PageWrapper
