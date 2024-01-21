@@ -6,7 +6,7 @@ import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
 import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
+import { memberTaskKind, projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
@@ -14,7 +14,7 @@ import { formatDateString } from '@utils';
 import { Card, Col, Form, Input, Row, Select, Space } from 'antd';
 import dayjs from 'dayjs';
 import moment from 'moment';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import useAuth from '@hooks/useAuth';
 const ProjectStudentTaskForm = (props) => {
@@ -25,6 +25,7 @@ const ProjectStudentTaskForm = (props) => {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const { profile } = useAuth();
+    const [valueSelect, setValueSelect] = useState(1);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -38,6 +39,9 @@ const ProjectStudentTaskForm = (props) => {
         if (typeof values.projectCategoryId === 'string') {
             values.projectCategoryId = dataDetail?.projectCategoryInfo?.id;
         }
+        if (typeof values.leaderId === 'string') {
+            values.leaderId = dataDetail?.leader?.id;
+        }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values.description) });
     };
 
@@ -46,12 +50,22 @@ const ProjectStudentTaskForm = (props) => {
             ? dayjs(dataDetail.startDate, DEFAULT_FORMAT)
             : dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DEFAULT_FORMAT);
         dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
+        let value;
+
+        if (dataDetail?.startDate && dataDetail?.leader) {
+            setValueSelect(2);
+            value = 2;
+        } else {
+            value = 1;
+        }
 
         form.setFieldsValue({
             ...dataDetail,
             projectCategoryId: dataDetail?.projectCategoryInfo?.projectCategoryName,
             developerId: dataDetail?.developer?.studentInfo?.fullName,
             description: insertBaseURL(dataDetail?.description),
+            leaderId: dataDetail?.leader?.leaderName,
+            memKind: value,
         });
     }, [dataDetail]);
 
@@ -62,6 +76,7 @@ const ProjectStudentTaskForm = (props) => {
                 state: stateValues[1].value,
                 kind: projectTaskKind[0].value,
                 developerId: profile.id,
+                memKind: valueSelect,
             });
         }
     }, [isEditing]);
@@ -80,6 +95,39 @@ const ProjectStudentTaskForm = (props) => {
         }
         return Promise.resolve();
     };
+
+    const {
+        data: developers,
+        loading: getdevelopersLoading,
+        execute: executesdevelopers,
+    } = useFetch(apiConfig.developer.autocomplete, {
+        params: { projectId: projectId },
+        immediate: true,
+        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.studentInfo.fullName })),
+    });
+
+    const {
+        data: team,
+        loading: getTeamLoading,
+        execute: executesTeams,
+    } = useFetch(apiConfig.team.autocomplete, {
+        params: { projectId: projectId },
+        immediate: true,
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({ value: item?.leaderInfo?.id, label: item?.leaderInfo?.leaderName })),
+    });
+
+    const handleOnSelect = (value) => {
+        setValueSelect(value);
+    };
+
+    useEffect(() => {
+        if (valueSelect == 2) {
+            executesTeams();
+        } else {
+            executesdevelopers();
+        }
+    }, [valueSelect]);
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
@@ -107,18 +155,56 @@ const ProjectStudentTaskForm = (props) => {
                         </Space.Compact>
                     </Col>
                     <Col span={12}>
-                        <AutoCompleteField
-                            label={<FormattedMessage defaultMessage="Lập trình viên" />}
-                            name="developerId"
-                            apiConfig={apiConfig.memberProject.autocomplete}
-                            mappingOptions={(item) => ({
-                                value: item.developer.id,
-                                label: item.developer.studentInfo.fullName,
-                            })}
-                            initialSearchParams={{ projectId: projectId }}
-                            searchParams={(text) => ({ fullName: text })}
-                            disabled
-                        />
+                        <Space.Compact align="start">
+                            <SelectField
+                                disabled={isEditing}
+                                style={{
+                                    width: '100px',
+                                }}
+                                label={<FormattedMessage defaultMessage="Role" />}
+                                name="memKind"
+                                required
+                                allowClear={false}
+                                options={memberTaskKind}
+                                onSelect={handleOnSelect}
+                            />
+                            {valueSelect == 1 ? (
+                                <AutoCompleteField
+                                    disabled={isEditing}
+                                    style={{
+                                        width: '220px',
+                                    }}
+                                    label={<FormattedMessage defaultMessage="Người thực hiện" />}
+                                    name="developerId"
+                                    apiConfig={apiConfig.memberProject.autocomplete}
+                                    mappingOptions={(item) => ({
+                                        value: item.developer.id,
+                                        label: item.developer.studentInfo.fullName,
+                                    })}
+                                    searchParams={(text) => ({ fullName: text })}
+                                    optionsParams={{ projectId: projectId }}
+                                    initialSearchParams={{ projectId: projectId }}
+                                    options={developers}
+                                    required
+                                />
+                            ) : (
+                                <AutoCompleteField
+                                    disabled={isEditing}
+                                    style={{
+                                        width: '220px',
+                                    }}
+                                    required
+                                    label={<FormattedMessage defaultMessage="Người thực hiện" />}
+                                    name="leaderId"
+                                    apiConfig={apiConfig.team.autocomplete}
+                                    mappingOptions={(item) => ({ value: item.id, label: item?.leaderInfo?.leaderName })}
+                                    optionsParams={{ projectId: projectId }}
+                                    initialSearchParams={{ projectId: projectId }}
+                                    searchParams={(text) => ({ name: text })}
+                                    options={team}
+                                />
+                            )}
+                        </Space.Compact>
                     </Col>
                     <Col span={12}>
                         <AutoCompleteField

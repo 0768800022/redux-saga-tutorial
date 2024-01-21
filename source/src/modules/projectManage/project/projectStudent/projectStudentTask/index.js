@@ -250,6 +250,7 @@ function ProjectStudentTaskListPage() {
             title: translate.formatMessage(message.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
             width: 200,
+            render: (_, record) => record?.developer?.studentInfo?.fullName || record?.leader?.leaderName,
         },
         {
             title: translate.formatMessage(commonMessage.projectCategory),
