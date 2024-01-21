@@ -131,14 +131,14 @@ const ProjectStudentTaskForm = (props) => {
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card className="card-form" bordered={false}>
-                <Row gutter={16} align="stretch">
+                <Row gutter={16}>
                     <Col span={12}>
-                        <Space.Compact align="start">
+                        <Space.Compact>
                             <SelectField
                                 style={{
-                                    width: '100%',
+                                    width: '80px',
                                 }}
-                                label={<FormattedMessage defaultMessage="Loại" />}
+                                label={<FormattedMessage defaultMessage="Tên Task" />}
                                 name="kind"
                                 required
                                 allowClear={false}
@@ -146,65 +146,72 @@ const ProjectStudentTaskForm = (props) => {
                             />
                             <TextField
                                 style={{
-                                    width: '250px',
+                                    width: '240px',
+                                    marginTop: 1,
                                 }}
-                                label={<FormattedMessage defaultMessage="Tên task" />}
+                                label={<FormattedMessage defaultMessage=" " />}
                                 name="taskName"
-                                required
+                                // required
                             />
                         </Space.Compact>
                     </Col>
                     <Col span={12}>
-                        <Space.Compact align="start">
-                            <SelectField
-                                disabled={isEditing}
-                                style={{
-                                    width: '100px',
-                                }}
-                                label={<FormattedMessage defaultMessage="Role" />}
-                                name="memKind"
-                                required
-                                allowClear={false}
-                                options={memberTaskKind}
-                                onSelect={handleOnSelect}
-                            />
-                            {valueSelect == 1 ? (
-                                <AutoCompleteField
+                        <Space direction='vertical'>
+                            <Space>Người thực hiện</Space>
+                            <Space.Compact align="start">
+                                <SelectField
                                     disabled={isEditing}
                                     style={{
-                                        width: '220px',
+                                        width: '90px',
                                     }}
-                                    label={<FormattedMessage defaultMessage="Người thực hiện" />}
-                                    name="developerId"
-                                    apiConfig={apiConfig.memberProject.autocomplete}
-                                    mappingOptions={(item) => ({
-                                        value: item.developer.id,
-                                        label: item.developer.studentInfo.fullName,
-                                    })}
-                                    searchParams={(text) => ({ fullName: text })}
-                                    optionsParams={{ projectId: projectId }}
-                                    initialSearchParams={{ projectId: projectId }}
-                                    options={developers}
+                                    // label={<FormattedMessage defaultMessage="Người thực hiện" />}
+                                    name="memKind"
+                                    allowClear={false}
+                                    options={memberTaskKind}
+                                    onSelect={handleOnSelect}
                                     required
                                 />
-                            ) : (
-                                <AutoCompleteField
-                                    disabled={isEditing}
-                                    style={{
-                                        width: '220px',
-                                    }}
-                                    required
-                                    label={<FormattedMessage defaultMessage="Người thực hiện" />}
-                                    name="leaderId"
-                                    apiConfig={apiConfig.team.autocomplete}
-                                    mappingOptions={(item) => ({ value: item.id, label: item?.leaderInfo?.leaderName })}
-                                    optionsParams={{ projectId: projectId }}
-                                    initialSearchParams={{ projectId: projectId }}
-                                    searchParams={(text) => ({ name: text })}
-                                    options={team}
-                                />
-                            )}
-                        </Space.Compact>
+                                {valueSelect == 1 ? (
+                                    <AutoCompleteField
+                                        disabled={isEditing}
+                                        style={{
+                                            width: '230px',
+                                        }}
+                                        // label={<FormattedMessage defaultMessage=" " />}
+                                        name="developerId"
+                                        apiConfig={apiConfig.memberProject.autocomplete}
+                                        mappingOptions={(item) => ({
+                                            value: item.developer.id,
+                                            label: item.developer.studentInfo.fullName,
+                                        })}
+                                        searchParams={(text) => ({ fullName: text })}
+                                        optionsParams={{ projectId: projectId }}
+                                        initialSearchParams={{ projectId: projectId }}
+                                        options={developers}
+                                        // required
+                                    />
+                                ) : (
+                                    <AutoCompleteField
+                                        disabled={isEditing}
+                                        style={{
+                                            width: '230px',
+                                        }}
+                                        // required
+                                        // label={<FormattedMessage defaultMessage=" " />}
+                                        name="leaderId"
+                                        apiConfig={apiConfig.team.autocomplete}
+                                        mappingOptions={(item) => ({
+                                            value: item.id,
+                                            label: item?.leaderInfo?.leaderName,
+                                        })}
+                                        optionsParams={{ projectId: projectId }}
+                                        initialSearchParams={{ projectId: projectId }}
+                                        searchParams={(text) => ({ name: text })}
+                                        options={team}
+                                    />
+                                )}
+                            </Space.Compact>
+                        </Space>
                     </Col>
                     <Col span={12}>
                         <AutoCompleteField
