@@ -110,7 +110,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(commonMessage.task),
-              
+
             },
             tabOptions:{
                 queryPage: {
@@ -237,6 +237,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
             title: translate.formatMessage(commonMessage.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
             width: 200,
+            render: (_, record) => record?.developer?.studentInfo?.fullName || record?.leader?.leaderName,
         },
         {
             title: translate.formatMessage(commonMessage.projectCategory),
