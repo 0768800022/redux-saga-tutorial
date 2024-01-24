@@ -51,8 +51,8 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
     }, [dataDetail]);
 
     const validateDueDate = (_, value) => {
-        const { startDate } = form.getFieldValue();
-        if (startDate && value && value.isBefore(startDate)) {
+        const { start } = form.getFieldValue();
+        if (start && value && value.isBefore(start.add(1, 'day'))) {
             return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
         }
         return Promise.resolve();
