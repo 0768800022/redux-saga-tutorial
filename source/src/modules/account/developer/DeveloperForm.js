@@ -175,6 +175,7 @@ const DeveloperForm = (props) => {
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
+            leaderId: dataDetail?.leader?.leaderName,
         });
     }, [dataDetail]);
     useEffect(() => {
@@ -300,7 +301,7 @@ const DeveloperForm = (props) => {
                         </Col>
                         <Col span={12}>
                             <AutoCompleteField
-                                required
+                                requiredleaderId
                                 label={translate.formatMessage(commonMessage.role)}
                                 name={['roleInfo', 'id']}
                                 apiConfig={apiConfig.projectRole.autocomplete}
@@ -312,7 +313,7 @@ const DeveloperForm = (props) => {
                         <Col span={12}>
                             <AutoCompleteField
                                 label={<FormattedMessage defaultMessage="Leader refer" />}
-                                name="developerId"
+                                name="leaderId"
                                 apiConfig={apiConfig.leader.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
                                 initialSearchParams={{ pageNumber: 0 }}
