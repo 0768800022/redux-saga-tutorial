@@ -175,7 +175,7 @@ const DeveloperForm = (props) => {
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leader?.leaderName,
+            leaderId: dataDetail?.leader?.id,
         });
     }, [dataDetail]);
     useEffect(() => {
