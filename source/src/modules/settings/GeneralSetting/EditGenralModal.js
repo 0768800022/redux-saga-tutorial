@@ -89,7 +89,6 @@ const EditGenralModal = ({
                 </Col>
             );
         } else if (dataType == dataTypeSetting.RICHTEXT) {
-
             return (
                 <Col span={24}>
                     <RichTextField
@@ -114,9 +113,13 @@ const EditGenralModal = ({
             );
         }
     };
+    const onCancelModal = () => {
+        onCancel();
+        setChange(false);
+    };
 
     return (
-        <Modal centered open={open} onCancel={onCancel} footer={null} title={data?.keyName} {...props}>
+        <Modal centered open={open} onCancel={onCancelModal} footer={null} title={data?.keyName} {...props}>
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} onFinish={updateSetting} size="100%">
                     <Row gutter={16}>{renderField()}</Row>

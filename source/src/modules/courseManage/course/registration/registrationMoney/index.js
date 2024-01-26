@@ -24,6 +24,7 @@ import {
     DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
 } from '@constants';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 const message = defineMessages({
     objectName: 'Lịch sử trả phí',
     registration: 'Danh sách sinh viên đăng kí khóa học',
@@ -45,6 +46,7 @@ function RegistrationMoneyListPage() {
     // const courseStatus = queryParameters.get('courseStatus');
     //  const courseStatus = queryParameters.get('courseStatus');
     const registrationId = queryParameters.get('registrationId');
+    const moneyUnit = useMoneyUnit();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registrationMoney,
         options: {
@@ -98,7 +100,7 @@ function RegistrationMoneyListPage() {
 
             render: (price) => {
                 const formattedValue = formatMoney(price, {
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                     groupSeparator: ',',
                 });

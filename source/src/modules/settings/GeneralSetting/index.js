@@ -316,15 +316,17 @@ const GeneralSettingPage = ({ groupName }) => {
                     />
                 </Card>
             )}
-            <EditGenralModal
-                open={openedGeneralModal}
-                onCancel={() => handlersGeneralModal.close()}
-                data={detail || {}}
-                executeUpdate={executeUpdate}
-                executeLoading={executeLoading}
-                isEditingRevenue={isEditingRevenue}
-                width={800}
-            />
+            {detail && (
+                <EditGenralModal
+                    open={openedGeneralModal}
+                    onCancel={() => handlersGeneralModal.close()}
+                    data={detail || {}}
+                    executeUpdate={executeUpdate}
+                    executeLoading={executeLoading}
+                    isEditingRevenue={isEditingRevenue}
+                    width={800}
+                />
+            )}
             <IntroduceModal
                 open={openedIntroduceModal}
                 onCancel={() => handlersIntroduceModal.close()}

@@ -10,7 +10,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import { FieldTypes } from '@constants/formConfig';
-import { SalaryOptions, statusOptions } from '@constants/masterData';
+import { SalaryOptions, settingKeyName, statusOptions } from '@constants/masterData';
 import { useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import { IconClipboardText, IconSchool } from '@tabler/icons-react';
@@ -20,6 +20,9 @@ import styles from './leader.module.scss';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
 import { formatMoney } from '@utils';
+import { settingSystemSelector } from '@selectors/app';
+import { useSelector } from 'react-redux';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const message = defineMessages({
     objectName: 'Leader',
@@ -30,6 +33,7 @@ const LeaderListPage = () => {
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const salaryValues = translate.formatKeys(SalaryOptions, ['label']);
+    const moneyUnit = useMoneyUnit();
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: apiConfig.leader,
         options: {
@@ -116,7 +120,7 @@ const LeaderListPage = () => {
                 const formattedValue = formatMoney(price, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                 });
                 return <div>{formattedValue}</div>;
