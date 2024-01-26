@@ -17,10 +17,12 @@ import { appActions } from '@store/actions';
 import { getCacheAccessToken } from '@services/userService';
 import { webSocket } from '@utils/webSocket';
 import useTranslate from '@hooks/useTranslate';
+import { actions } from '@store/actions/app';
 const routesArray = Object.values(routes);
 const AppRoutes = () => {
     const { isAuthenticated, loading: loadingProfile, profile } = useAuth();
     const translate = useTranslate();
+    const dispatch = useDispatch();
     const renderRoute = (route) => (
         <Route
             key={route.path || 'not-found'}
@@ -47,6 +49,14 @@ const AppRoutes = () => {
             }
         />
     );
+    const { data: dataSetting } = useFetch(apiConfig.settings.settings, {
+        immediate: true,
+        mappingData: ({ data }) => data,
+    });
+    useEffect(() => {
+        dispatch(actions.settingSystem(dataSetting));
+    }, [dataSetting]);
+
     useEffect(() => {
         const accessToken = getCacheAccessToken();
         webSocket(accessToken, translate);

@@ -280,7 +280,7 @@ const CourseStudentForm = (props) => {
                             label={<FormattedMessage defaultMessage="Học phí" />}
                             name="fee"
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            addonAfter="₫"
+                            isCurrency
                             min={0}
                         />
                     </Col>
@@ -291,7 +291,7 @@ const CourseStudentForm = (props) => {
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            addonAfter="₫"
+                            isCurrency
                             min={0}
                         />
                     </Col>

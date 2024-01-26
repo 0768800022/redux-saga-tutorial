@@ -326,8 +326,21 @@ export const levelOptionSelect = [
 ];
 
 export const settingGroups = {
-    GENERAL: 'page_config',
+    GENERAL: 'general',
+    PAGE: 'page_config',
     REVENUE: 'revenue_config',
+};
+
+export const dataTypeSetting = {
+    INT: 'int',
+    STRING: 'string',
+    BOOLEAN: 'boolean',
+    DOUBLE: 'double',
+    RICHTEXT: 'richtext',
+};
+
+export const settingKeyName = {
+    MONEY_UNIT: 'money_unit',
 };
 
 export const registrationMoneyKind = [

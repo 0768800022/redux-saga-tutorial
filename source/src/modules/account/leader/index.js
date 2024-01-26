@@ -129,7 +129,6 @@ const LeaderListPage = () => {
             width: 120,
             render(dataRow) {
                 const state = salaryValues.find((item) => item.value == dataRow);
-                console.log(state);
                 return (
                     <Tag color={state.color}>
                         <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>

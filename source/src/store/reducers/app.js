@@ -11,6 +11,7 @@ const {
     setRestaurantTenantId,
     getRestaurantListByCustomer,
     setSelectedRowKey,
+    settingSystem,
 } = appActions;
 
 const initialState = {
@@ -20,6 +21,7 @@ const initialState = {
     restaurantList: [],
     apiUrl: null,
     selectedRowKey: null,
+    settingSystem: [],
 };
 
 const appReducer = createReducer(
@@ -59,6 +61,9 @@ const appReducer = createReducer(
         },
         [setSelectedRowKey.type]: (state, { payload }) => {
             state.selectedRowKey = payload;
+        },
+        [settingSystem.type]: (state, { payload }) => {
+            state.settingSystem = payload;
         },
     },
 );

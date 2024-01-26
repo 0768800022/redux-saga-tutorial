@@ -136,7 +136,7 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
                             name="salary"
                             min={0}
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            addonAfter="$"
+                            isCurrency
                         />
                     </Col>
                     <Col span={12}>

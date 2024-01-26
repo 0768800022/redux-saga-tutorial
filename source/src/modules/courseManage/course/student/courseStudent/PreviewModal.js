@@ -126,7 +126,7 @@ const PreviewModal = ({ open, onCancel, detail }) => {
                                 name="fee"
                                 readOnly
                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                addonAfter="₫"
+                                isCurrency
                                 defaultValue={detail?.fee}
                             />
                         </Col>
@@ -135,7 +135,7 @@ const PreviewModal = ({ open, onCancel, detail }) => {
                                 label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                                 name="returnFee"
                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                addonAfter="₫"
+                                isCurrency
                                 readOnly
                                 defaultValue={detail?.returnFee}
                             />

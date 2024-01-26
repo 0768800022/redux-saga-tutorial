@@ -17,7 +17,7 @@ import useNotification from '@hooks/useNotification';
 import IntroduceModal from './IntroduceModal';
 import ColumnGroup from 'antd/es/table/ColumnGroup';
 import AvatarField from '@components/common/form/AvatarField';
-import { settingGroups } from '@constants/masterData';
+import { dataTypeSetting, settingGroups } from '@constants/masterData';
 
 const messages = defineMessages({
     objectName: 'Cài đặt chung',
@@ -142,7 +142,7 @@ const GeneralSettingPage = ({ groupName }) => {
             onError: (err) => {},
         });
     };
-    const columns = [
+    const columnPage = [
         {
             title: <FormattedMessage defaultMessage="Tên" />,
             dataIndex: 'keyName',
@@ -183,6 +183,30 @@ const GeneralSettingPage = ({ groupName }) => {
             render: (valueData, record) => {
                 if (valueData > 0) {
                     return <div>{valueData} %</div>;
+                } else return <div>{valueData}</div>;
+            },
+        },
+        mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '100px' }),
+    ];
+
+    const columnGeneral = [
+        {
+            title: <FormattedMessage defaultMessage="Quyền lợi" />,
+            dataIndex: 'keyName',
+            width: 200,
+        },
+        {
+            title: <FormattedMessage defaultMessage="Giá trị" />,
+            dataIndex: 'valueData',
+            width: 500,
+            align: 'center',
+            render: (valueData, record) => {
+                if (valueData > 0) {
+                    return <div>{valueData} %</div>;
+                }
+                if (record.dataType == dataTypeSetting.RICHTEXT) {
+                    const htmlContent = { __html: valueData };
+                    return <div dangerouslySetInnerHTML={htmlContent} />;
                 } else return <div>{valueData}</div>;
             },
         },
@@ -235,18 +259,15 @@ const GeneralSettingPage = ({ groupName }) => {
             }
         },
     });
-    const {
-        data: listSettingRevenue,
-        loading: dataLoadingRevenue,
-        execute: executeLoadingRevenue,
-    } = useFetch(apiConfig.settings.getList, {
-        immediate: true,
-        params: { groupName: 'revenue_config' },
-        mappingData: ({ data }) => data.content,
-    });
-    const handleCloseSliderModal = () => {
-        setIsEditingRevenue(false);
-        handlersGeneralModal.close();
+
+    const renderColumn = () => {
+        if (groupName == settingGroups.GENERAL) {
+            return columnGeneral;
+        } else if (groupName == settingGroups.PAGE) {
+            return columnPage;
+        } else if (groupName == settingGroups.REVENUE) {
+            return columnRevenue;
+        }
     };
 
     return (
@@ -254,13 +275,13 @@ const GeneralSettingPage = ({ groupName }) => {
             <Card>
                 <BaseTable
                     onChange={mixinFuncs.changePagination}
-                    columns={ groupName === 'page_config' ? columns : columnRevenue }
+                    columns={renderColumn()}
                     dataSource={listSetting ? listSetting?.data : data}
                     loading={loading || dataLoading}
                     pagination={pagination}
                 />
             </Card>
-            {groupName === 'page_config' && (
+            {groupName === settingGroups.PAGE && (
                 <Card
                     style={{
                         marginTop: '16px',
@@ -301,7 +322,6 @@ const GeneralSettingPage = ({ groupName }) => {
                 data={detail || {}}
                 executeUpdate={executeUpdate}
                 executeLoading={executeLoading}
-                executeLoadingRevenue={executeLoadingRevenue}
                 isEditingRevenue={isEditingRevenue}
                 width={800}
             />

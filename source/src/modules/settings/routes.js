@@ -7,6 +7,7 @@ export default {
         title: 'Settings',
         auth: true,
         component: SettingPage,
+        keyActiveTab: 'activeSettingTab',
         permissions: [apiConfig.settings.getList.baseURL],
     },
 };
