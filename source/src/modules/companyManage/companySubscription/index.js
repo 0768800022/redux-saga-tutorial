@@ -13,7 +13,7 @@ import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY } from '@constants';
 import { formatMoney } from '@utils/index';
-import { statusOptions } from '@constants/masterData';
+import { settingKeyName, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -22,6 +22,9 @@ import { render } from '@testing-library/react';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import { useSelector } from 'react-redux';
+import { settingSystemSelector } from '@selectors/app';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const message = defineMessages({
     objectName: 'đăng ký gói',
@@ -33,6 +36,7 @@ const CompanySubscriptionListPage = () => {
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const companyId = queryParameters.get('companyId');
+    const moneyUnit = useMoneyUnit();
     const [companyOptions, setCompanyOptions] = useState([]);
     // const companyOptions =[];
     // const companyValues = translate.formatKeys(companyOptions, ['label']);
@@ -90,7 +94,7 @@ const CompanySubscriptionListPage = () => {
             align: 'right',
             render: (money) => {
                 const formattedValue = formatMoney(money, {
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                     groupSeparator: ',',
                 });
@@ -122,7 +126,7 @@ const CompanySubscriptionListPage = () => {
                 else  
                     totalAmount = priceTotal;
                 const formattedValue = formatMoney(totalAmount, {
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                     groupSeparator: ',',
                 });

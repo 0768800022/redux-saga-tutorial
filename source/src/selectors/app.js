@@ -29,3 +29,8 @@ export const selectedRowKeySelector = createSelector(
     (state) => state.app.selectedRowKey,
     (selectedRowKey) => selectedRowKey,
 );
+
+export const settingSystemSelector = createSelector(
+    (state) => state.app.settingSystem,
+    (settingSystem) => settingSystem,
+);

@@ -9,7 +9,7 @@ import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
 import { formatMoney } from '@utils/index';
 import { FieldTypes } from '@constants/formConfig';
-import { statusOptions } from '@constants/masterData';
+import { settingKeyName, statusOptions } from '@constants/masterData';
 import { commonMessage } from '@locales/intl';
 import { generatePath } from 'react-router-dom';
 import routes from '@routes';
@@ -20,6 +20,9 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import useDisclosure from '@hooks/useDisclosure';
 import BuyServiceModal from './BuyServiceModal';
 import useFetch from '@hooks/useFetch';
+import { useSelector } from 'react-redux';
+import { settingSystemSelector } from '@selectors/app';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const message = defineMessages({
     objectName: 'gói dịch vụ',
@@ -37,6 +40,7 @@ const BuyServiceListPage = () => {
     const [detail, setDetail] = useState();
     const [isEditing, setIsEditing] = useState(false);
     const [parentData, setParentData] = useState({});
+    const moneyUnit = useMoneyUnit();
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: {
             getList: apiConfig.serviceCompanySubscription.getListServiceActive,
@@ -93,7 +97,7 @@ const BuyServiceListPage = () => {
                 const formattedValue = formatMoney(price, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                 });
                 return <div>{formattedValue}</div>;
@@ -124,7 +128,7 @@ const BuyServiceListPage = () => {
                 const formattedValue = formatMoney(totalAmount, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                 });
 

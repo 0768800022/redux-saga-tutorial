@@ -3,6 +3,10 @@ import React from 'react';
 import useFormField from '@hooks/useFormField';
 import { formatNumber } from '@utils';
 import { useCurrency } from '../elements/Currency';
+import { useSelector } from 'react-redux';
+import { settingSystemSelector } from '@selectors/app';
+import { settingKeyName } from '@constants/masterData';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const NumericField = (props) => {
     const {
@@ -23,7 +27,7 @@ const NumericField = (props) => {
         addonAfter,
     } = props;
     const currency = useCurrency();
-
+    const moneyUnit = useMoneyUnit();
     const fieldParser = (value) => {
         return value.replace(/\$\s?|(,*)/g, '');
     };
@@ -38,7 +42,7 @@ const NumericField = (props) => {
     return (
         <Form.Item required={required} label={label} name={name} rules={rules} className={className}>
             <InputNumber
-                addonAfter={isCurrency ? currency.symbol : addonAfter}
+                addonAfter={isCurrency ? moneyUnit : addonAfter}
                 placeholder={placeholder}
                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 max={max}

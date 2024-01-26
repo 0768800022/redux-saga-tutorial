@@ -1,13 +1,19 @@
-import TextField from '@components/common/form/TextField';
-import { Card, Col, Form, Modal, Row, Button } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
-import useNotification from '@hooks/useNotification';
-import { defineMessages } from 'react-intl';
-import { useIntl } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
 import NumericField from '@components/common/form/NumericField';
+import RichTextField from '@components/common/form/RichTextField';
+import TextField from '@components/common/form/TextField';
+import { AppConstants } from '@constants';
+import apiConfig from '@constants/apiConfig';
+import { dataTypeSetting } from '@constants/masterData';
+import useBasicForm from '@hooks/useBasicForm';
+import useFetch from '@hooks/useFetch';
+import useNotification from '@hooks/useNotification';
+import useTranslate from '@hooks/useTranslate';
+import { actions } from '@store/actions/app';
+import { Button, Card, Col, Form, Modal, Row } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
 
 const messages = defineMessages({
     objectName: 'setting',
@@ -26,12 +32,16 @@ const EditGenralModal = ({
     isEditingRevenue,
     ...props
 }) => {
-    const [form] = Form.useForm();
+    const { form, mixinFuncs, onValuesChange } = useBasicForm({});
     const [isChanged, setChange] = useState(false);
     const notification = useNotification();
     const intl = useIntl();
     const translate = useTranslate();
-
+    const dispatch = useDispatch();
+    const [loading, setLoading] = useState(true);
+    const { execute: executeGetDataSetting } = useFetch(apiConfig.settings.settings, {
+        immediate: false,
+    });
     const updateSetting = (values) => {
         executeUpdate({
             data: {
@@ -49,8 +59,12 @@ const EditGenralModal = ({
                         }),
                     });
                     executeLoading();
-                    // if (isEditingRevenue) executeLoadingRevenue();
-                    // else executeLoading();
+                    executeGetDataSetting({
+                        onCompleted: (response) => {
+                            const dataSetting = response?.data;
+                            dispatch(actions.settingSystem(dataSetting));
+                        },
+                    });
                     setChange(false);
                 }
             },
@@ -67,34 +81,60 @@ const EditGenralModal = ({
         form.setFieldsValue({
             ...data,
         });
+        setLoading(false);
     }, [data]);
+
+    const renderField = () => {
+        const dataType = data.dataType;
+        if (dataType == dataTypeSetting.INT || dataType == dataTypeSetting.DOUBLE) {
+            return (
+                <Col span={24}>
+                    <NumericField
+                        label={<FormattedMessage defaultMessage="Phần trăm" />}
+                        name="valueData"
+                        min={0}
+                        max={100}
+                        formatter={(value) => `${value}%`}
+                        parser={(value) => value.replace('%', '')}
+                        onChange={handleInputChange}
+                    />
+                </Col>
+            );
+        } else if (dataType == dataTypeSetting.RICHTEXT) {
+            return (
+                <Col span={24}>
+                    <RichTextField
+                        style={{ height: 200, marginBottom: 70 }}
+                        label={<FormattedMessage defaultMessage="Nội dung" />}
+                        name="valueData"
+                        baseURL={AppConstants.contentRootUrl}
+                        form={form}
+                        setIsChangedFormValues={handleInputChange}
+                    />
+                </Col>
+            );
+        } else {
+            return (
+                <Col span={24}>
+                    <TextField
+                        label={<FormattedMessage defaultMessage="Nội dung" />}
+                        name="valueData"
+                        onChange={handleInputChange}
+                    />
+                </Col>
+            );
+        }
+    };
+    const onCancelModal = () => {
+        onCancel();
+        setChange(false);
+    };
+
     return (
-        <Modal centered open={open} onCancel={onCancel} footer={null} title={data?.keyName} {...props}>
+        <Modal centered open={open} onCancel={onCancelModal} footer={null} title={data?.keyName} {...props}>
             <Card className="card-form" bordered={false}>
                 <BaseForm form={form} onFinish={updateSetting} size="100%">
-                    <Row gutter={16}>
-                        {isEditingRevenue ? (
-                            <Col span={24}>
-                                <NumericField
-                                    label={<FormattedMessage defaultMessage="Phần trăm" />}
-                                    name="valueData"
-                                    min={0}
-                                    max={100}
-                                    formatter={(value) => `${value}%`}
-                                    parser={(value) => value.replace('%', '')}
-                                    onChange={handleInputChange}
-                                />
-                            </Col>
-                        ) : (
-                            <Col span={24}>
-                                <TextField
-                                    label={<FormattedMessage defaultMessage="Nội dung" />}
-                                    name="valueData"
-                                    onChange={handleInputChange}
-                                />
-                            </Col>
-                        )}
-                    </Row>
+                    <Row gutter={16}>{renderField()}</Row>
                     <div style={{ float: 'right' }}>
                         <Button key="submit" type="primary" htmlType="submit" disabled={!isChanged}>
                             {intl.formatMessage(messages.update)}

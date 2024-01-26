@@ -175,7 +175,7 @@ const DeveloperForm = (props) => {
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            leaderId: dataDetail?.leader?.leaderName,
+            leaderId: dataDetail?.leader?.id,
         });
     }, [dataDetail]);
     useEffect(() => {
@@ -295,7 +295,7 @@ const DeveloperForm = (props) => {
                                 name="salary"
                                 min={0}
                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                addonAfter="$"
+                                isCurrency
                                 required
                             />
                         </Col>

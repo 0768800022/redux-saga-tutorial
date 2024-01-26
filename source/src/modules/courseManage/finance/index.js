@@ -16,6 +16,7 @@ import React, { useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import styles from './finance.module.scss';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 const message = defineMessages({
     objectName: 'Tài chính',
 });
@@ -27,6 +28,7 @@ const FinanceListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const studentId = queryParameters.get('studentId');
+    const moneyUnit = useMoneyUnit();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: { getList: apiConfig.registrationMoney.listSum },
         options: {
@@ -80,7 +82,7 @@ const FinanceListPage = () => {
         return formatMoney(value, {
             groupSeparator: ',',
             decimalSeparator: '.',
-            currentcy: 'đ',
+            currentcy: moneyUnit,
             currentDecimal: '0',
         });
     };

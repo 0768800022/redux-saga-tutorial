@@ -23,6 +23,7 @@ import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import useAuth from '@hooks/useAuth';
 import PreviewModal from './PreviewModal';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const message = defineMessages({
     objectName: 'Khóa học',
@@ -41,6 +42,7 @@ const CourseStudentListPage = () => {
     const [courseId, setCourseId] = useState();
     const [courseState, setCourseState] = useState();
     const [checkReivew, setCheckReview] = useState(false);
+    const moneyUnit = useMoneyUnit();
 
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -168,7 +170,7 @@ const CourseStudentListPage = () => {
             align: 'right',
             render: (fee) => {
                 const formattedValue = formatMoney(fee, {
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                     groupSeparator: ',',
                 });
@@ -182,7 +184,7 @@ const CourseStudentListPage = () => {
             align: 'right',
             render: (returnFee) => {
                 const formattedValue = formatMoney(returnFee, {
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                     groupSeparator: ',',
                 });
