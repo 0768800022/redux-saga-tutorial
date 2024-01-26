@@ -30,6 +30,7 @@ import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import ReviewListModal from '@modules/review/student/ReviewListModal';
 import styles from './course.module.scss';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 const message = defineMessages({
     objectName: 'Khoá học',
 });
@@ -42,7 +43,7 @@ const CourseListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const [checkReivew,setCheckReview] = useState(true);
     const [courseId, setCourseId] = useState();
-
+    const moneyUnit = useMoneyUnit();
     const [openReviewModal, handlersReviewModal] = useDisclosure(false);
 
     const location = useLocation();
@@ -214,7 +215,7 @@ const CourseListPage = () => {
             align: 'right',
             render: (fee) => {
                 const formattedValue = formatMoney(fee, {
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                     groupSeparator: ',',
                 });

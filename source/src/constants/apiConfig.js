@@ -1017,6 +1017,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        settings: {
+            baseURL: `${apiTenantUrl}v1/setting/settings`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     team: {
         getList: {

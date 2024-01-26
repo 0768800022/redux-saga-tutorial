@@ -295,7 +295,7 @@ const DeveloperForm = (props) => {
                                 name="salary"
                                 min={0}
                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                addonAfter="$"
+                                isCurrency
                                 required
                             />
                         </Col>

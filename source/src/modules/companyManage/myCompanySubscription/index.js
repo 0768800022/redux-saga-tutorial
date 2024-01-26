@@ -13,7 +13,7 @@ import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { DATE_DISPLAY_FORMAT, DATE_FORMAT_DISPLAY } from '@constants';
 import { formatMoney } from '@utils/index';
-import { statusOptions } from '@constants/masterData';
+import { settingKeyName, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -26,6 +26,9 @@ import useAuth from '@hooks/useAuth';
 import routes from '@routes';
 import { PlusOutlined } from '@ant-design/icons';
 import Title from 'antd/es/skeleton/Title';
+import { useSelector } from 'react-redux';
+import { settingSystemSelector } from '@selectors/app';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const message = defineMessages({
     objectName: 'Gói dịch vụ',
@@ -40,7 +43,7 @@ const CompanySubscriptionListPage = () => {
     const navigate = useNavigate();
     const { profile } = useAuth();
     const companyId = profile.id;
-
+    const moneyUnit = useMoneyUnit();
 
     const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
         apiConfig: {
@@ -91,7 +94,7 @@ const CompanySubscriptionListPage = () => {
                 const formattedValue = formatMoney(price, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                 });
                 return <div>{formattedValue}</div>;
@@ -122,7 +125,7 @@ const CompanySubscriptionListPage = () => {
                 const formattedValue = formatMoney(totalAmount, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                 });
 

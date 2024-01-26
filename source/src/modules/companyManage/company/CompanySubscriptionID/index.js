@@ -12,9 +12,12 @@ import { UserOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { DATE_DISPLAY_FORMAT, DEFAULT_FORMAT } from '@constants';
 import { formatMoney } from '@utils/index';
-import { statusOptions } from '@constants/masterData';
+import { settingKeyName, statusOptions } from '@constants/masterData';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import { settingSystemSelector } from '@selectors/app';
+import { useSelector } from 'react-redux';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const message = defineMessages({
     objectName: 'dịch vụ',
@@ -25,7 +28,7 @@ const CompanySubscriptionIdListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const companyId = queryParameters.get('companyId');
     const companyName = queryParameters.get('companyName');
-
+    const moneyUnit = useMoneyUnit();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFiter, pagePath } = useListBase({
         apiConfig: apiConfig.companySubscription,
@@ -75,7 +78,7 @@ const CompanySubscriptionIdListPage = () => {
                 const formattedValue = formatMoney(money, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentcyPosition: 'BACK',
                     currentDecimal: '0',
                 });
@@ -107,7 +110,7 @@ const CompanySubscriptionIdListPage = () => {
                 const formattedValue = formatMoney(totalAmount, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                 });
 

@@ -9,8 +9,11 @@ import useTranslate from '@hooks/useTranslate';
 import { DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
 import { formatMoney } from '@utils/index';
 import { FieldTypes } from '@constants/formConfig';
-import { statusOptions } from '@constants/masterData';
+import { settingKeyName, statusOptions } from '@constants/masterData';
 import { commonMessage } from '@locales/intl';
+import { useSelector } from 'react-redux';
+import { settingSystemSelector } from '@selectors/app';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const message = defineMessages({
     objectName: 'gói dịch vụ',
@@ -38,6 +41,7 @@ const ServiceCompanySubListPage = () => {
             };
         },
     });
+    const moneyUnit = useMoneyUnit();
 
     const columns = [
         {
@@ -53,7 +57,7 @@ const ServiceCompanySubListPage = () => {
                 const formattedValue = formatMoney(price, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                 });
                 return <div>{formattedValue}</div>;
@@ -84,7 +88,7 @@ const ServiceCompanySubListPage = () => {
                 const formattedValue = formatMoney(totalAmount, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
-                    currentcy: 'đ',
+                    currentcy: moneyUnit,
                     currentDecimal: '0',
                 });
 

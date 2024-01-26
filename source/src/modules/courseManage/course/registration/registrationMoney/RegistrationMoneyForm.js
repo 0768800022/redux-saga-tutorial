@@ -39,7 +39,7 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
                     label={<FormattedMessage defaultMessage="Số tiền" />} 
                     name={['money']}
                     formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                    addonAfter="₫"
+                    isCurrency
                     min={0}
                 />
                 <SelectField
