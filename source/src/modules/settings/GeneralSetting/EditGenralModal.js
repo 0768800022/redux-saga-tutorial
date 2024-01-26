@@ -3,13 +3,17 @@ import NumericField from '@components/common/form/NumericField';
 import RichTextField from '@components/common/form/RichTextField';
 import TextField from '@components/common/form/TextField';
 import { AppConstants } from '@constants';
+import apiConfig from '@constants/apiConfig';
 import { dataTypeSetting } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
+import useFetch from '@hooks/useFetch';
 import useNotification from '@hooks/useNotification';
 import useTranslate from '@hooks/useTranslate';
+import { actions } from '@store/actions/app';
 import { Button, Card, Col, Form, Modal, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { useDispatch } from 'react-redux';
 
 const messages = defineMessages({
     objectName: 'setting',
@@ -33,7 +37,11 @@ const EditGenralModal = ({
     const notification = useNotification();
     const intl = useIntl();
     const translate = useTranslate();
+    const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
+    const { execute: executeGetDataSetting } = useFetch(apiConfig.settings.settings, {
+        immediate: false,
+    });
     const updateSetting = (values) => {
         executeUpdate({
             data: {
@@ -51,8 +59,12 @@ const EditGenralModal = ({
                         }),
                     });
                     executeLoading();
-                    // if (isEditingRevenue) executeLoadingRevenue();
-                    // else executeLoading();
+                    executeGetDataSetting({
+                        onCompleted: (response) => {
+                            const dataSetting = response?.data;
+                            dispatch(actions.settingSystem(dataSetting));
+                        },
+                    });
                     setChange(false);
                 }
             },
