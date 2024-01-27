@@ -3,7 +3,7 @@ import { DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { Button, Avatar, Card, Col } from 'antd';
+import { Button, Avatar, Card, Col, Switch, Modal } from 'antd';
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
@@ -18,6 +18,11 @@ import IntroduceModal from './IntroduceModal';
 import ColumnGroup from 'antd/es/table/ColumnGroup';
 import AvatarField from '@components/common/form/AvatarField';
 import { dataTypeSetting, settingGroups } from '@constants/masterData';
+import { actions } from '@store/actions/app';
+import { useDispatch } from 'react-redux';
+import RichTextField from '@components/common/form/RichTextField';
+import { commonMessage } from '@locales/intl';
+import styles from './GeneralSetting.module.scss';
 
 const messages = defineMessages({
     objectName: 'Cài đặt chung',
@@ -25,6 +30,8 @@ const messages = defineMessages({
     deleteSuccess: 'Xoá slider thành công',
     slider: 'Slider',
     revenue: 'Lợi nhuận chia sẻ',
+    setting: 'setting',
+    updateSuccess: 'Cập nhật {objectName} thành công',
 });
 const GeneralSettingPage = ({ groupName }) => {
     const translate = useTranslate();
@@ -36,10 +43,13 @@ const GeneralSettingPage = ({ groupName }) => {
     const [openedGeneralModal, handlersGeneralModal] = useDisclosure(false);
     const [openedIntroduceModal, handlersIntroduceModal] = useDisclosure(false);
     const [openedSliderModal, handlersSliderModal] = useDisclosure(false);
+    const [openedRichTextModal, handlersRichTextModal] = useDisclosure(false);
     const [detail, setDetail] = useState();
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingRevenue, setIsEditingRevenue] = useState(false);
     const [parentData, setParentData] = useState({});
+    const dispatch = useDispatch();
+    const [switchValue, setSwitchValue] = useState(false);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.settings,
         options: {
@@ -80,31 +90,66 @@ const GeneralSettingPage = ({ groupName }) => {
                 mixinFuncs.handleFetchList({ ...params, groupName });
             };
             funcs.additionalActionColumnButtons = () => ({
-                editSetting: (item) => {
-                    return (
-                        <Button
-                            type="link"
-                            style={{ padding: 0 }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setDetail(item);
-                                if (item?.isSlider) {
-                                    setIsEditing(true);
-                                    handlersSliderModal.open();
-                                } else if (item?.keyName === 'introduce') {
-                                    handlersIntroduceModal.open();
-                                } else if (item?.groupName === settingGroups.REVENUE) {
-                                    setIsEditingRevenue(true);
-                                    handlersGeneralModal.open();
-                                } else {
-                                    setIsEditingRevenue(false);
-                                    handlersGeneralModal.open();
+                booleanSetting: (item) => {
+                    const handleChangeSwitch = (checked) => {
+                        executeUpdate({
+                            data: {
+                                id: item.id,
+                                isSystem: item.isSystem,
+                                status: item.status,
+                                valueData: checked,
+                            },
+                            onCompleted: (response) => {
+                                if (response.result === true) {
+                                    setSwitchValue(checked.toString());
+                                    notification({
+                                        message: intl.formatMessage(messages.updateSuccess, {
+                                            objectName: translate.formatMessage(messages.setting),
+                                        }),
+                                    });
+                                    executeLoading();
+                                    executeGetDataSetting({
+                                        onCompleted: (response) => {
+                                            const dataSetting = response?.data;
+                                            dispatch(actions.settingSystem(dataSetting));
+                                        },
+                                    });
                                 }
-                            }}
-                        >
-                            <EditOutlined />
-                        </Button>
-                    );
+                            },
+                            onError: (err) => {},
+                        });
+                    };
+                    if (item?.dataType == dataTypeSetting.BOOLEAN) {
+                        setSwitchValue(item.valueData);
+                        return <Switch onChange={handleChangeSwitch} checked={switchValue === 'true'} size={'small'} />;
+                    }
+                },
+                editSetting: (item) => {
+                    if (item?.dataType != dataTypeSetting.BOOLEAN)
+                        return (
+                            <Button
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDetail(item);
+                                    if (item?.isSlider) {
+                                        setIsEditing(true);
+                                        handlersSliderModal.open();
+                                    } else if (item?.keyName === 'introduce') {
+                                        handlersIntroduceModal.open();
+                                    } else if (item?.groupName === settingGroups.REVENUE) {
+                                        setIsEditingRevenue(true);
+                                        handlersGeneralModal.open();
+                                    } else {
+                                        setIsEditingRevenue(false);
+                                        handlersGeneralModal.open();
+                                    }
+                                }}
+                            >
+                                <EditOutlined />
+                            </Button>
+                        );
                 },
                 delete: (item) => (
                     <Button
@@ -121,6 +166,7 @@ const GeneralSettingPage = ({ groupName }) => {
             });
         },
     });
+
     const deleteSlider = (item) => {
         const updateSliderData = sliderData.filter((obj) => obj.index !== item?.index);
         executeUpdate({
@@ -206,11 +252,31 @@ const GeneralSettingPage = ({ groupName }) => {
                 }
                 if (record.dataType == dataTypeSetting.RICHTEXT) {
                     const htmlContent = { __html: valueData };
-                    return <div dangerouslySetInnerHTML={htmlContent} />;
+                    return (
+                        <div>
+                            <span
+                                className={styles.customDiv}
+                                onClick={() => {
+                                    handlersRichTextModal.open();
+                                }}
+                            >
+                                {translate.formatMessage(commonMessage.content)}
+                            </span>
+                            <Modal
+                                open={openedRichTextModal}
+                                footer={null}
+                                onCancel={() => {
+                                    handlersRichTextModal.close();
+                                }}
+                            >
+                                <div dangerouslySetInnerHTML={htmlContent} />
+                            </Modal>
+                        </div>
+                    );
                 } else return <div>{valueData}</div>;
             },
         },
-        mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '100px' }),
+        mixinFuncs.renderActionColumn({ booleanSetting: true, editSetting: true, delete: false }, { width: '100px' }),
     ];
 
     const columnsSlider = [
@@ -238,6 +304,9 @@ const GeneralSettingPage = ({ groupName }) => {
         mixinFuncs.renderActionColumn({ editSetting: true, delete: true }, { width: '60px' }),
     ];
     const { execute: executeUpdate } = useFetch(apiConfig.settings.update, { immediate: false });
+    const { execute: executeGetDataSetting } = useFetch(apiConfig.settings.settings, {
+        immediate: false,
+    });
     const {
         data: listSetting,
         loading: dataLoading,
@@ -325,6 +394,7 @@ const GeneralSettingPage = ({ groupName }) => {
                     executeLoading={executeLoading}
                     isEditingRevenue={isEditingRevenue}
                     width={800}
+                    executeGetDataSetting={executeGetDataSetting}
                 />
             )}
             <IntroduceModal
