@@ -28,6 +28,7 @@ const EditGenralModal = ({
     data,
     executeUpdate,
     executeLoading,
+    executeGetDataSetting,
     executeLoadingRevenue,
     isEditingRevenue,
     ...props
@@ -39,9 +40,7 @@ const EditGenralModal = ({
     const translate = useTranslate();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
-    const { execute: executeGetDataSetting } = useFetch(apiConfig.settings.settings, {
-        immediate: false,
-    });
+    
     const updateSetting = (values) => {
         executeUpdate({
             data: {
