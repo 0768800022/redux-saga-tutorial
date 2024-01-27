@@ -105,4 +105,5 @@ export const commonMessage = defineMessages({
     salaryPeriodName: 'Tên kỳ lương',
     salary: 'Lương',
     leaderGuide: 'Hướng dẫn của leader',
+    content: 'Nội dung',
 });
