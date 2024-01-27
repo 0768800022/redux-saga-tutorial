@@ -195,7 +195,7 @@ const GeneralSettingPage = ({ groupName }) => {
             width: 200,
         },
         {
-            title: <FormattedMessage defaultMessage="Nội dung" />,
+            title: <FormattedMessage defaultMessage="Giá trị" />,
             dataIndex: 'valueData',
             width: 500,
             render: (valueData, record) => {
@@ -217,12 +217,12 @@ const GeneralSettingPage = ({ groupName }) => {
 
     const columnRevenue = [
         {
-            title: <FormattedMessage defaultMessage="Quyền lợi" />,
+            title: <FormattedMessage defaultMessage="Tên" />,
             dataIndex: 'keyName',
             width: 200,
         },
         {
-            title: <FormattedMessage defaultMessage="Phần trăm" />,
+            title: <FormattedMessage defaultMessage="Giá trị" />,
             dataIndex: 'valueData',
             width: 500,
             align: 'center',
@@ -237,7 +237,7 @@ const GeneralSettingPage = ({ groupName }) => {
 
     const columnGeneral = [
         {
-            title: <FormattedMessage defaultMessage="Quyền lợi" />,
+            title: <FormattedMessage defaultMessage="Tên" />,
             dataIndex: 'keyName',
             width: 200,
         },
