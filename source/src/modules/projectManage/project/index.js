@@ -52,6 +52,7 @@ const ProjectListPage = () => {
     const [openModalSalaryPeriod, setOpenModalSalaryPeriod] = useState(false);
     const { data: salaryPeriodAutoComplete, execute: executeGetSalaryPeriod } = useFetch(
         apiConfig.salaryPeriod.autocomplete,
+        { mappingData: (data) => data.data.content },
     );
     const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.income.calculateProjectSalary);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -130,7 +131,7 @@ const ProjectListPage = () => {
                                                     });
                                                 },
                                             })}
-                                            dataSource={salaryPeriodAutoComplete?.data?.content}
+                                            dataSource={salaryPeriodAutoComplete?.filter(item => item.state == 2)}
                                         />
                                     </div>
                                 </Modal>
