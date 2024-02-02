@@ -106,4 +106,12 @@ export const commonMessage = defineMessages({
     salary: 'Lương',
     leaderGuide: 'Hướng dẫn của leader',
     content: 'Xem nội dung',
+    calculateSalaryPeriod: 'Tính toán kỳ lương',
+    fixSalary: 'Sửa lương',
+    fixSalarySuccess: 'Hoàn thành sửa lương',
+    projectSalarySuccess: 'Hoàn thành lương dự án',
+    projectSalary: 'Lương dự án',
+    generatePeriodDetail: 'Tạo chi tiết kỳ lương',
+    generatePeriodDetailSuccess: 'Hoàn thành tạo chi tiết kỳ lương',
+    selectPeriodSalarySuccess: 'Chọn kỳ lương thành công',
 });

@@ -4,11 +4,12 @@ import RichTextField from '@components/common/form/RichTextField';
 import TextField from '@components/common/form/TextField';
 import { AppConstants } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { dataTypeSetting } from '@constants/masterData';
+import { dataTypeSetting, settingGroups } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useNotification from '@hooks/useNotification';
 import useTranslate from '@hooks/useTranslate';
+import routes from '@routes';
 import { actions } from '@store/actions/app';
 import { Button, Card, Col, Form, Modal, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
@@ -40,7 +41,7 @@ const EditGenralModal = ({
     const translate = useTranslate();
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
-    
+
     const updateSetting = (values) => {
         executeUpdate({
             data: {
@@ -89,11 +90,15 @@ const EditGenralModal = ({
             return (
                 <Col span={24}>
                     <NumericField
-                        label={<FormattedMessage defaultMessage="Phần trăm" />}
+                        label={<FormattedMessage defaultMessage="Nội dung" />}
                         name="valueData"
                         min={0}
-                        max={100}
-                        formatter={(value) => `${value}%`}
+                        max={ localStorage.getItem(routes.settingsPage.keyActiveTab) == settingGroups.REVENUE && 100}
+                        formatter={(value) =>
+                            localStorage.getItem(routes.settingsPage.keyActiveTab) == settingGroups.REVENUE
+                                ? `${value}%`
+                                : `${value}`
+                        }
                         parser={(value) => value.replace('%', '')}
                         onChange={handleInputChange}
                     />

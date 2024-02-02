@@ -23,6 +23,7 @@ import { useDispatch } from 'react-redux';
 import RichTextField from '@components/common/form/RichTextField';
 import { commonMessage } from '@locales/intl';
 import styles from './GeneralSetting.module.scss';
+import routes from '@routes';
 
 const messages = defineMessages({
     objectName: 'Cài đặt chung',
@@ -248,7 +249,12 @@ const GeneralSettingPage = ({ groupName }) => {
             align: 'center',
             render: (valueData, record) => {
                 if (valueData > 0) {
-                    return <div>{valueData} %</div>;
+                    return (
+                        <div>
+                            {valueData}{' '}
+                            {localStorage.getItem(routes.settingsPage.keyActiveTab) == settingGroups.REVENUE && '%'}
+                        </div>
+                    );
                 }
                 if (record.dataType == dataTypeSetting.RICHTEXT) {
                     const htmlContent = { __html: valueData };

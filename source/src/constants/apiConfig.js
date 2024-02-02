@@ -1502,5 +1502,31 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+    income: {
+        fixSalary: {
+            baseURL: `${apiTenantUrl}v1/income/calculate-income-fix-salary`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        projectSalary: {
+            baseURL: `${apiTenantUrl}v1/income/finish-calculate-income-project`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        calculateProjectSalary:{
+            baseURL: `${apiTenantUrl}v1/income/calculate-income-project-salary`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        generatePeriodDetail: {
+            baseURL: `${apiTenantUrl}v1/income/generate-period-detail`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
 };
 export default apiConfig;

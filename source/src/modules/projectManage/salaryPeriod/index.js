@@ -14,10 +14,13 @@ import React from 'react';
 import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import styles from './salaryPeriod.module.scss';
-
+import { BsWrenchAdjustableCircle } from 'react-icons/bs';
+import { TbReportMoney } from 'react-icons/tb';
+import { GrMoney } from 'react-icons/gr';
 import useNotification from '@hooks/useNotification';
 import { Button, Tag } from 'antd';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import useFetch from '@hooks/useFetch';
 const message = defineMessages({
     objectName: 'Kỳ lương',
 });
@@ -25,6 +28,10 @@ const SalaryPeriodListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const stateValues = translate.formatKeys(salaryPeriodState, ['label']);
+    const { execute: executeFixSalary } = useFetch(apiConfig.income.fixSalary);
+    const { execute: executeProjectSalary } = useFetch(apiConfig.income.projectSalary);
+    const { execute: executeGeneratePeriodDetail } = useFetch(apiConfig.income.generatePeriodDetail);
+    const notification = useNotification();
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.salaryPeriod,
@@ -41,6 +48,108 @@ const SalaryPeriodListPage = () => {
                         };
                     }
                 };
+                funcs.additionalActionColumnButtons = () => ({
+                    fixSalary: ({ id, process }) => {
+                        const processJson = process && JSON.parse(process);
+                        return (
+                            <BaseTooltip title={translate.formatMessage(commonMessage.fixSalary)}>
+                                <Button
+                                    disabled={processJson?.fixSalaryState}
+                                    type="link"
+                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        executeFixSalary({
+                                            data: {
+                                                salaryPeriodId: id,
+                                            },
+                                            onCompleted: () => {
+                                                notification({
+                                                    type: 'success',
+                                                    message: translate.formatMessage(commonMessage.fixSalarySuccess),
+                                                });
+                                                mixinFuncs.getList();
+                                            },
+                                            onError: (error) => {
+                                                notification({ type: 'error', message: error?.message });
+                                            },
+                                        });
+                                    }}
+                                >
+                                    <BsWrenchAdjustableCircle size={17} />
+                                </Button>
+                            </BaseTooltip>
+                        );
+                    },
+                    projectSalary: ({ id, process }) => {
+                        const processJson = process && JSON.parse(process);
+                        return (
+                            <BaseTooltip title={translate.formatMessage(commonMessage.projectSalary)}>
+                                <Button
+                                    disabled={processJson?.projectSalaryState}
+                                    type="link"
+                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        executeProjectSalary({
+                                            data: {
+                                                salaryPeriodId: id,
+                                            },
+                                            onCompleted: () => {
+                                                notification({
+                                                    type: 'success',
+                                                    message: translate.formatMessage(
+                                                        commonMessage.projectSalarySuccess,
+                                                    ),
+                                                });
+                                                mixinFuncs.getList();
+                                            },
+                                            onError: (error) => {
+                                                notification({ type: 'error', message: error?.message });
+                                            },
+                                        });
+                                    }}
+                                >
+                                    <TbReportMoney size={19} />
+                                </Button>
+                            </BaseTooltip>
+                        );
+                    },
+                    generatePeriodDetail: ({ id, process }) => {
+                        const processJson = process && JSON.parse(process);
+                        return (
+                            <BaseTooltip title={translate.formatMessage(commonMessage.generatePeriodDetail)}>
+                                <Button
+                                    disabled={processJson?.generatePeriodDetail}
+                                    type="link"
+                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        executeGeneratePeriodDetail({
+                                            data: {
+                                                salaryPeriodId: id,
+                                            },
+                                            onCompleted: () => {
+                                                notification({
+                                                    type: 'success',
+                                                    message: translate.formatMessage(
+                                                        commonMessage.generatePeriodDetailSuccess,
+                                                    ),
+                                                });
+                                                mixinFuncs.getList();
+                                            },
+                                            onError: (error) => {
+                                                notification({ type: 'error', message: error?.message });
+                                            },
+                                        });
+                                    }}
+                                >
+                                    <GrMoney size={17} />
+                                </Button>
+                            </BaseTooltip>
+                        );
+                    },
+                });
             },
         });
 
@@ -65,17 +174,29 @@ const SalaryPeriodListPage = () => {
             title: translate.formatMessage(commonMessage.salaryPeriodName),
             dataIndex: 'name',
             width: 300,
-            render: (name, record) => (
-                <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
-                    {name}
-                </div>
-            ),
+            render: (name, record) => {
+                const processJson = JSON.parse(record?.process);
+                let active = false;
+                if (processJson.fixSalaryState && processJson.projectSalaryState && processJson.generatePeriodDetail) {
+                    active = true;
+                }
+                return (
+                    <div
+                        onClick={(event) => active && handleOnClick(event, record)}
+                        className={active && styles.customDiv}
+                    >
+                        {name}
+                    </div>
+                );
+            },
         },
         {
             title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'start',
             render: (startDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate, DATE_FORMAT_DISPLAY)}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate, DATE_FORMAT_DISPLAY)}</div>
+                );
             },
             width: 180,
             align: 'center',
@@ -84,7 +205,9 @@ const SalaryPeriodListPage = () => {
             title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'end',
             render: (endDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate, DATE_FORMAT_DISPLAY)}</div>;
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate, DATE_FORMAT_DISPLAY)}</div>
+                );
             },
             width: 180,
             align: 'center',
@@ -114,6 +237,14 @@ const SalaryPeriodListPage = () => {
                 );
             },
         },
+        mixinFuncs.renderActionColumn(
+            {
+                fixSalary: true,
+                projectSalary: true,
+                generatePeriodDetail: true,
+            },
+            { width: '150px', title: translate.formatMessage(commonMessage.calculateSalaryPeriod) },
+        ),
         mixinFuncs.renderActionColumn(
             {
                 edit: true,
