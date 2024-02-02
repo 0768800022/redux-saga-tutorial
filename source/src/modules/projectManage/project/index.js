@@ -103,7 +103,8 @@ const ProjectListPage = () => {
                                                     align: 'left',
                                                 },
                                             ]}
-                                            onRow={(record, rowIndex) => ({
+                                            rowClassName={styles.clickRowTable}
+                                            onRow={(record) => ({
                                                 onClick: (e) => {
                                                     e.stopPropagation();
                                                     executeCalculateProjectSalary({
@@ -131,7 +132,7 @@ const ProjectListPage = () => {
                                                     });
                                                 },
                                             })}
-                                            dataSource={salaryPeriodAutoComplete?.filter(item => item.state == 2)}
+                                            dataSource={salaryPeriodAutoComplete?.filter((item) => item.state == 2)}
                                         />
                                     </div>
                                 </Modal>
