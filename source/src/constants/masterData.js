@@ -29,6 +29,8 @@ import {
     TASK_KIND_BUG,
     FIX_SALARY,
     HOUR_SALARY,
+    TASK_KIND_DEV,
+    TASK_KIND_LEADER,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -407,5 +409,16 @@ export const SalaryOptions = [
         value: HOUR_SALARY,
         label: salaryMessage.hour,
         color: '#d2cb19',
+    },
+];
+
+export const memberTaskKind = [
+    {
+        value: TASK_KIND_DEV,
+        label: "Dev",
+    },
+    {
+        value: TASK_KIND_LEADER,
+        label: "Leader",
     },
 ];

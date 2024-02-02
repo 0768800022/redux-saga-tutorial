@@ -241,16 +241,19 @@ function ProjectLeaderTaskListPage() {
         {
             title: translate.formatMessage(message.projectTask),
             dataIndex: 'taskName',
+            width: 400,
         },
         {
             title: translate.formatMessage(message.developer),
             dataIndex: ['developer', 'studentInfo', 'fullName'],
             width: 200,
+            render: (_, record) => record?.developer?.studentInfo?.fullName || record?.leader?.leaderName,
         },
         {
             title: translate.formatMessage(commonMessage.projectCategory),
             dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
             width: 150,
+            align: 'center',
         },
         {
             title: translate.formatMessage(message.startDate),

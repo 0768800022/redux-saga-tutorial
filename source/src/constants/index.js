@@ -412,3 +412,8 @@ export const TASK_LOG_OFF = 100;
 
 export const COMPANY_SEEK_STATE_LOOKING = 1;
 export const COMPANY_SEEK_STATE_ACCEPT = 2;
+
+export const TASK_KIND_DEV = 1;
+export const TASK_KIND_LEADER = 2;
+
+

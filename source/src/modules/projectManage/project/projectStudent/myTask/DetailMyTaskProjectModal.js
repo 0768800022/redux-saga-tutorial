@@ -29,13 +29,17 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
         // form.setFields(data);
 
         form.setFieldsValue({
-            ...DetailData, 
+            ...DetailData,
             developer: {
                 ...DetailData?.developer,
                 studentInfo: {
                     ...DetailData?.developer?.studentInfo,
                     fullName: DetailData?.developer?.studentInfo?.fullName || '',
                 },
+            },
+            leader: {
+                ...DetailData?.leader,
+                leaderName: DetailData?.leader?.leaderName || '',
             },
             startDate: DetailData?.startDate || '',
             dueDate: DetailData?.dueDate || '',
@@ -65,14 +69,25 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                                 // initialValue={detail.name}
                             />
                         </Col>
-                        <Col span={12}>
-                            <TextField
-                                readOnly
-                                label={<FormattedMessage defaultMessage="Lập trình viên" />}
-                                name={['developer', 'studentInfo', 'fullName']}
-                                // initialValue={detail.name}
-                            />
-                        </Col>
+                        {DetailData?.leader ? (
+                            <Col span={12}>
+                                <TextField
+                                    readOnly
+                                    label={<FormattedMessage defaultMessage="Leader" />}
+                                    name={['leader', 'leaderName']}
+                                    // initialValue={detail.name}
+                                />
+                            </Col>
+                        ) : (
+                            <Col span={12}>
+                                <TextField
+                                    readOnly
+                                    label={<FormattedMessage defaultMessage="Lập trình viên" />}
+                                    name={['developer', 'studentInfo', 'fullName']}
+                                    // initialValue={detail.name}
+                                />
+                            </Col>
+                        )}
                     </Row>
                     <Row gutter={12}>
                         <Col span={12}>

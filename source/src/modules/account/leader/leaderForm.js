@@ -47,9 +47,9 @@ const LeaderForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCha
     };
 
     const handleSubmit = (values) => {
-        if (isEditing) {
-            delete values.referId;
-        }
+        // if (isEditing) {
+        //     delete values.referId;
+        // }
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
 
