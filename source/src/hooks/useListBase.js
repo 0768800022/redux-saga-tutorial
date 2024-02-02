@@ -403,8 +403,8 @@ const useListBase = ({
         if (!isRender) return;
         return {
             align: 'center',
-            ...columnsProps,
             title: intl.formatMessage(message.tableColumn.action),
+            ...columnsProps,
             render: (data) => {
                 const buttons = [];
                 const actionButtons = mixinFuncs.createActionColumnButtons(action, data);

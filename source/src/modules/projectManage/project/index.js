@@ -16,7 +16,7 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
 import route from '@modules/projectManage/project/projectTask/routes';
-import { BookOutlined, TeamOutlined, WomanOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { DollarOutlined, TeamOutlined, WomanOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
@@ -49,7 +49,11 @@ const ProjectListPage = () => {
     const notification = useNotification();
     const [hasError, setHasError] = useState(false);
     const [visible, setVisible] = useState(true);
-
+    const [openModalSalaryPeriod, setOpenModalSalaryPeriod] = useState(false);
+    const { data: salaryPeriodAutoComplete, execute: executeGetSalaryPeriod } = useFetch(
+        apiConfig.salaryPeriod.autocomplete,
+    );
+    const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.income.calculateProjectSalary);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.project,
@@ -68,39 +72,71 @@ const ProjectListPage = () => {
                 };
 
                 funcs.additionalActionColumnButtons = () => ({
-                    task: ({ id, name, leaderInfo, status, state }) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
-                            <Button
-                                type="link"
-                                disabled={state === 1}
-                                style={{ padding: 0 }}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    const pathDefault = `?projectId=${id}&projectName=${name}&leaderId=${leaderInfo.id}`;
-                                    let path;
-                                    if (leaderName) {
-                                        path =
-                                            routes.leaderProjectTaskListPage.path +
-                                            pathDefault +
-                                            `&leaderName=${leaderName}`;
-                                    } else if (developerName) {
-                                        path =
-                                            routes.developerProjectTaskListPage.path +
-                                            pathDefault +
-                                            `&developerName=${developerName}`;
-                                    } else {
-                                        if (status == 1) {
-                                            path = route.ProjectTaskListPage.path + pathDefault + `&active=${true}`;
-                                        } else path = route.ProjectTaskListPage.path + pathDefault;
-                                    }
-                                    // navigate(path);
-                                    checkMember(id, path);
-                                }}
-                            >
-                                <BookOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
+                    salaryPeriod: ({ id }) => {
+                        return (
+                            <BaseTooltip title={translate.formatMessage(commonMessage.salaryPeriod)}>
+                                <Button
+                                    type="link"
+                                    style={{ padding: 0 }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        executeGetSalaryPeriod();
+                                        setOpenModalSalaryPeriod(true);
+                                    }}
+                                >
+                                    <DollarOutlined />
+                                </Button>
+                                <Modal
+                                    open={openModalSalaryPeriod}
+                                    footer={null}
+                                    onCancel={() => {
+                                        setOpenModalSalaryPeriod(false);
+                                    }}
+                                >
+                                    <div style={{ marginTop: '30px' }}>
+                                        <BaseTable
+                                            columns={[
+                                                {
+                                                    title: translate.formatMessage(commonMessage.salaryPeriod),
+                                                    dataIndex: 'name',
+                                                    align: 'left',
+                                                },
+                                            ]}
+                                            onRow={(record, rowIndex) => ({
+                                                onClick: (e) => {
+                                                    e.stopPropagation();
+                                                    executeCalculateProjectSalary({
+                                                        data: {
+                                                            projectId: id,
+                                                            salaryPeriodId: record?.id,
+                                                        },
+                                                        onCompleted: () => {
+                                                            notification({
+                                                                type: 'success',
+                                                                message: translate.formatMessage(
+                                                                    commonMessage.selectPeriodSalarySuccess,
+                                                                ),
+                                                            });
+                                                            setOpenModalSalaryPeriod(false);
+                                                        },
+                                                        onError: (error) => {
+                                                            console.log(error);
+                                                            notification({
+                                                                type: 'error',
+                                                                message: error?.response?.data?.message,
+                                                            });
+                                                            setOpenModalSalaryPeriod(false);
+                                                        },
+                                                    });
+                                                },
+                                            })}
+                                            dataSource={salaryPeriodAutoComplete?.data?.content}
+                                        />
+                                    </div>
+                                </Modal>
+                            </BaseTooltip>
+                        );
+                    },
                     member: ({ id, name, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.member)}>
                             <Button
@@ -266,8 +302,7 @@ const ProjectListPage = () => {
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        !leaderName &&
-            !developerName && {
+        {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
@@ -277,7 +312,10 @@ const ProjectListPage = () => {
     const handleOnClick = (event, record) => {
         event.preventDefault();
         localStorage.setItem(routes.projectTabPage.keyActiveTab, translate.formatMessage(commonMessage.task));
-        navigate(routes.projectTabPage.path + `?projectId=${record.id}&projectName=${record.name}&active=${!!record.status == 1}`);
+        navigate(
+            routes.projectTabPage.path +
+                `?projectId=${record.id}&projectName=${record.name}&active=${!!record.status == 1}`,
+        );
     };
     const columns = [
         {
@@ -339,11 +377,12 @@ const ProjectListPage = () => {
                 );
             },
         },
-        !leaderName && !developerName && mixinFuncs.renderStatusColumn({ width: '120px' }),
+        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                edit: !leaderName && !developerName && true,
-                delete: !leaderName && !developerName && true,
+                salaryPeriod: true,
+                edit: true,
+                delete: true,
             },
             { width: '220px' },
         ),
