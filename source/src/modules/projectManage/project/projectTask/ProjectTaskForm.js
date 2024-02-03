@@ -131,31 +131,32 @@ const ProjectTaskForm = (props) => {
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <Space.Compact>
-                            <SelectField
-                                style={{
-                                    width: '80px',
-                                }}
-                                label={<FormattedMessage defaultMessage="Tên Task" />}
-                                name="kind"
-                                required
-                                allowClear={false}
-                                options={projectTaskKind}
-                            />
-                            <TextField
-                                style={{
-                                    width: '240px',
-                                    marginTop: 1,
-                                }}
-                                label={<FormattedMessage defaultMessage=" " />}
-                                name="taskName"
-                                // required
-                            />
-                        </Space.Compact>
+                        <Space direction="vertical">
+                            <Space>{<FormattedMessage defaultMessage="Tên task" />}</Space>
+                            <Space.Compact align="start">
+                                <SelectField
+                                    style={{
+                                        width: '80px',
+                                        height: '31.8px',
+                                    }}
+                                    // label={<FormattedMessage defaultMessage="Tên Task" />}
+                                    name="kind"
+                                    allowClear={false}
+                                    options={projectTaskKind}
+                                />
+                                <TextField
+                                    style={{
+                                        width: '240px',
+                                    }}
+                                    name="taskName"
+                                    required
+                                />
+                            </Space.Compact>
+                        </Space>
                     </Col>
                     <Col span={12}>
                         <Space direction="vertical">
-                            <Space>Người thực hiện</Space>
+                            <Space>{<FormattedMessage defaultMessage="Người thực hiện" />}</Space>
                             <Space.Compact align="start">
                                 <SelectField
                                     disabled={isEditing}
