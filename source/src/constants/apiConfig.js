@@ -1528,5 +1528,47 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+    groupPermission: {
+        getGroupList: {
+            baseURL: `${apiUrl}v1/group/list`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getList: {
+            baseURL: `${apiUrl}v1/group/list`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getPemissionList: {
+            baseURL: `${apiUrl}v1/permission/list`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            baseURL: `${apiUrl}v1/group/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+        create: {
+            baseURL: `${apiUrl}v1/group/create`,
+            method: 'POST',
+            headers: baseHeader,
+        },
+        update: {
+            baseURL: `${apiUrl}v1/group/update`,
+            method: 'PUT',
+            headers: baseHeader,
+        },
+        delete: {
+            baseURL: `${apiUrl}v1/group/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+        },
+        getGroupListCombobox: {
+            baseURL: `${apiUrl}v1/group/list_combobox`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+    },
 };
 export default apiConfig;

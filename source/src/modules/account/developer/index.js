@@ -73,7 +73,7 @@ const DeveloperListPage = () => {
     const columns = [
         {
             title: '#',
-            dataIndex: ['studentInfo', 'avatar'],
+            dataIndex: ['account', 'avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -86,13 +86,9 @@ const DeveloperListPage = () => {
         },
         {
             title: 'Họ và tên',
-            dataIndex: ['studentInfo', 'fullName'],
+            dataIndex: ['account', 'fullName'],
         },
-        {
-            title: 'Vai trò',
-            dataIndex: ['roleInfo', 'projectRoleName'],
-            width: 170,
-        },
+       
         {
             title: 'Trình độ',
             dataIndex: 'level',
@@ -106,15 +102,15 @@ const DeveloperListPage = () => {
                 return <div>{levelLabel}</div>;
             },
         },
-        {
-            title: 'Ngày tạo',
-            dataIndex: 'createdDate',
-            width: 170,
-            render: (createdDate) => {
-                const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
-                return <div>{createdDateLocal}</div>;
-            },
-        },
+        // {
+        //     title: 'Ngày tạo',
+        //     dataIndex: 'createdDate',
+        //     width: 170,
+        //     render: (createdDate) => {
+        //         const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
+        //         return <div>{createdDateLocal}</div>;
+        //     },
+        // },
         {
             title: 'Lịch trình',
             dataIndex: 'schedule',
@@ -136,12 +132,12 @@ const DeveloperListPage = () => {
             key: 'name',
             placeholder: translate.formatMessage(commonMessage.name),
         },
-        {
-            key: 'roleId',
-            placeholder: translate.formatMessage(commonMessage.role),
-            type: FieldTypes.SELECT,
-            options: projectRole,
-        },
+        // {
+        //     key: 'roleId',
+        //     placeholder: translate.formatMessage(commonMessage.role),
+        //     type: FieldTypes.SELECT,
+        //     options: projectRole,
+        // },
         {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),

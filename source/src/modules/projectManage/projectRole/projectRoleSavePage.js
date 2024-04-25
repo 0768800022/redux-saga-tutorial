@@ -1,6 +1,6 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import useSaveBase from '@hooks/useSaveBase';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { generatePath, useParams } from 'react-router-dom';
@@ -8,6 +8,7 @@ import routes from './routes';
 import apiConfig from '@constants/apiConfig';
 import ProjectRoleForm from './projectRoleForm';
 import { commonMessage } from '@locales/intl';
+import useFetch from '@hooks/useFetch';
 
 const messages = defineMessages({
     objectName: 'Vai trò dự án',
@@ -40,7 +41,20 @@ const ProjectRoleSavePage = () => {
             };
         },
     });
-
+    const { execute: executeGetPermission } = useFetch(apiConfig.groupPermission.getPemissionList, {
+        immediate: false,
+    });
+    const [permissions, setPermissions] = useState([]);
+    useEffect(() => {
+        executeGetPermission({
+            params: {
+                size: 1000,
+            },
+            onCompleted: (res) => {
+                setPermissions(res?.data);
+            },
+        });
+    }, []);
     return (
         <PageWrapper
             loading={loading}
@@ -60,6 +74,7 @@ const ProjectRoleSavePage = () => {
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
                 onSubmit={mixinFuncs.onSave}
+                permissions={permissions || []}
             />
         </PageWrapper>
     );

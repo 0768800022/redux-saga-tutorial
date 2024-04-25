@@ -1,5 +1,5 @@
 import { Card, Col, Row } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
 import TextField from '@components/common/form/TextField';
@@ -9,7 +9,7 @@ import { statusOptions } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
 import { commonMessage } from '@locales/intl';
 
-const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
+const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues,permissions }) => {
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
 
@@ -27,7 +27,7 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
             ...dataDetail,
         });
     }, [dataDetail]);
-
+    const [group, setGroup] = useState([]);
     useEffect(() => {
         if (!isEditing > 0) {
             form.setFieldsValue({
@@ -35,7 +35,17 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
             });
         }
     }, [isEditing]);
-
+    const getGroupPermission = () => {
+        // const { permissions } = props;
+        let groups;
+        if (permissions && permissions.length > 0) {
+            groups = permissions.reduce((r, a) => {
+                r[a.nameGroup] = [...(r[a.nameGroup] || []), a];
+                return r;
+            }, {});
+        }
+        setGroup(groups);
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>

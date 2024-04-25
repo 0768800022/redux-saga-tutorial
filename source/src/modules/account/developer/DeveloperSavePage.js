@@ -10,6 +10,7 @@ import DeveloperForm from './DeveloperForm';
 import { showErrorMessage } from '@services/notifyService';
 import { commonMessage } from '@locales/intl';
 import useFetch from '@hooks/useFetch';
+import { commonStatus } from '@constants';
 
 const messages = defineMessages({
     objectName: 'Lập trình viên',
@@ -31,18 +32,15 @@ const DeveloperSavePage = () => {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
-                    developerId: detail.id,
-                    roleId: data.roleInfo.id,
-                    status: 1,
+                    // developerId: detail.id,
+                    // roleId: data.roleInfo.id,
+                    status: commonStatus.ACTIVE,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    totalCancelProject: 1,
-                    roleId: data.roleInfo.id,
-                    studentId: data.studentInfo.fullName,
-                    totalProject: 1,
+                    status: commonStatus.ACTIVE,
                 };
             };
             funcs.onSaveError = (err) => {

@@ -45,10 +45,11 @@ function ProjectMemberSavePage() {
             funcs.prepareCreateData = (data) => {
                 return {
                     projectId: projectId,
-                    developerId: data.developer.studentInfo.fullName,
-                    projectRoleId: data.projectRole.id,
+                    developerId: data?.account?.fullName,
+                    projectRoleId: data?.projectRole?.id,
                     schedule: data.schedule,
-                    teamId: data.team.id,
+                    contractSign : "contractSign",
+                    // teamId: data.team.id,
                 };
             };
         },
