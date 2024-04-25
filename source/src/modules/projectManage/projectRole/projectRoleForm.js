@@ -1,4 +1,4 @@
-import { Card, Col, Row } from 'antd';
+import { Card, Checkbox, Col, Form, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
@@ -46,6 +46,15 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
         }
         setGroup(groups);
     };
+    useEffect(() => {
+        if (permissions.length !== 0) getGroupPermission();
+    }, [permissions]);
+    const premissionCustom = (premission) => {
+        return  {
+            permissionId: premission?.id,
+            permissionCode: premission?.pcode,
+        };
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>
@@ -73,6 +82,38 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
                     name="description"
                     type="textarea"
                 />
+                <Row gutter={16}>
+                    <Col span={24}>
+                        <Form.Item
+                            name="permissions"
+                            label={'GroupPermission'}
+                            rules={[{ required: true, message: 'permission' }]}
+                        >
+                            <Checkbox.Group style={{ width: '100%', display: 'block' }} name="permissions">
+                                {group
+                                    ? Object.keys(group).map((groupName) => (
+                                        <Card
+                                            key={groupName}
+                                            size="small"
+                                            title={groupName}
+                                            style={{ width: '100%', marginBottom: '4px' }}
+                                        >
+                                            <Row>
+                                                {group[groupName].map((permission) => (
+
+                                                    
+                                                    <Col span={8} key={permission.id}>
+                                                        <Checkbox value={premissionCustom(permission)}>{permission.name}</Checkbox>
+                                                    </Col>
+                                                ))}
+                                            </Row>
+                                        </Card>
+                                    ))
+                                    : null}
+                            </Checkbox.Group>
+                        </Form.Item>
+                    </Col>
+                </Row>
                 <div className="footer-card-form">{actions}</div>
             </Card>
         </BaseForm>

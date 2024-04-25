@@ -49,6 +49,7 @@ const ProjectRoleSavePage = () => {
         executeGetPermission({
             params: {
                 size: 1000,
+                kind : 1,
             },
             onCompleted: (res) => {
                 setPermissions(res?.data);

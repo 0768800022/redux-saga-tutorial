@@ -138,27 +138,15 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
                 { width: '150px' },
             ),
     ].filter(Boolean);
-    const { data: teamData } = useFetch(apiConfig.team.autocomplete, {
-        immediate: true,
-        params: { projectId },
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
-    });
-    const searchFields = [
-        {
-            key: 'teamId',
-            placeholder: translate.formatMessage(commonMessage.team),
-            type: FieldTypes.SELECT,
-            options: teamData,
-        },
-    ];
+  
 
     return (
         <ListPage
-            searchForm={mixinFuncs.renderSearchForm({
-                fields: searchFields,
-                className: styles.search,
-                activeTab: activeProjectTab,
-            })}
+            // searchForm={mixinFuncs.renderSearchForm({
+            //     fields: searchFields,
+            //     className: styles.search,
+            //     activeTab: activeProjectTab,
+            // })}
             actionBar={active && mixinFuncs.renderActionBar()}
             baseTable={
                 <BaseTable

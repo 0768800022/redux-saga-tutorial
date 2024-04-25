@@ -38,11 +38,11 @@ const ProjectTabPage = () => {
             key: translate.formatMessage(commonMessage.task),
             children: <ProjectTaskListPage setSearchFilter={setSearchFilter} />,
         },
-        {
-            label: translate.formatMessage(commonMessage.team),
-            key: translate.formatMessage(commonMessage.team),
-            children: <TeamListPage setSearchFilter={setSearchFilter} />,
-        },
+        // {
+        //     label: translate.formatMessage(commonMessage.team),
+        //     key: translate.formatMessage(commonMessage.team),
+        //     children: <TeamListPage setSearchFilter={setSearchFilter} />,
+        // },
         {
             label: translate.formatMessage(commonMessage.member),
             key: translate.formatMessage(commonMessage.member),
