@@ -550,6 +550,18 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        login: {
+            baseURL: `${apiTenantUrl}v1/developer/login-developer`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getProfile: {
+            baseURL: `${apiTenantUrl}v1/developer/profile`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     lecture: {
         autocomplete: {

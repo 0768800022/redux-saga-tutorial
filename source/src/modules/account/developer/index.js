@@ -73,7 +73,7 @@ const DeveloperListPage = () => {
     const columns = [
         {
             title: '#',
-            dataIndex: ['account', 'avatar'],
+            dataIndex: ['accountDto', 'avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -86,7 +86,7 @@ const DeveloperListPage = () => {
         },
         {
             title: 'Họ và tên',
-            dataIndex: ['account', 'fullName'],
+            dataIndex: ['accountDto', 'fullName'],
         },
        
         {

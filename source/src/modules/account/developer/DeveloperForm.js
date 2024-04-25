@@ -179,8 +179,12 @@ const DeveloperForm = (props) => {
         }
 
         dataDetail.schedule = data || dataDefault;
+        dataDetail.birthday = dataDetail?.accountDto?.birthday && dayjs(dataDetail?.accountDto?.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
+            fullName : dataDetail?.accountDto?.fullName,
+            phone : dataDetail?.accountDto?.phone,
+            email: dataDetail?.accountDto?.email,
             leaderId: dataDetail?.leader?.id,
         });
 

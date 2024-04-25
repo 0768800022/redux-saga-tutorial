@@ -32,7 +32,7 @@ const DeveloperSavePage = () => {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
-                    // developerId: detail.id,
+                    developerId: detail.id,
                     // roleId: data.roleInfo.id,
                     status: commonStatus.ACTIVE,
                 };

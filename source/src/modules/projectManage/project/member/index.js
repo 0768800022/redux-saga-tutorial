@@ -88,7 +88,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
     const columns = [
         {
             title: '#',
-            dataIndex: ['developer', 'studentInfo', 'avatar'],
+            dataIndex: ['developer', 'accountDto', 'avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -101,18 +101,18 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
         },
         {
             title: translate.formatMessage(commonMessage.name),
-            dataIndex: ['developer', 'studentInfo', 'fullName'],
+            dataIndex: ['developer', 'accountDto', 'fullName'],
             render: (fullName, record) => (
                 <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
                     {fullName}
                 </div>
             ),
         },
-        {
-            title: translate.formatMessage(message.team),
-            dataIndex: ['team', 'teamName'],
-            width: 150,
-        },
+        // {
+        //     title: translate.formatMessage(message.team),
+        //     dataIndex: ['team', 'teamName'],
+        //     width: 150,
+        // },
         {
             title: translate.formatMessage(commonMessage.role),
             dataIndex: ['projectRole', 'projectRoleName'],
