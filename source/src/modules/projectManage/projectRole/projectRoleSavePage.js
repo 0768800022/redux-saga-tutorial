@@ -21,12 +21,7 @@ const ProjectRoleSavePage = () => {
         immediate: false,
     });
     const translate = useTranslate();
-    const permissonCustomer = (permisson) => {
-        return {
-            permissionId: permissions?.permissionId,
-            permissionCode: permissions?.pcode,
-        };
-    };
+   
     const projectRoleId = useParams();
     const { detail, mixinFuncs, loading, onSave, setIsChangedFormValues, isEditing, title } = useSaveBase({
         apiConfig: {

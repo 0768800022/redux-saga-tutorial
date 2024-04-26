@@ -170,45 +170,26 @@ const ProjectTaskForm = (props) => {
                                     onSelect={handleOnSelect}
                                     required
                                 />
-                                {valueSelect == 1 ? (
-                                    <AutoCompleteField
-                                        disabled={isEditing}
-                                        style={{
-                                            width: '230px',
-                                        }}
-                                        // label={<FormattedMessage defaultMessage=" " />}
-                                        name="developerId"
-                                        apiConfig={apiConfig.memberProject.autocomplete}
-                                        mappingOptions={(item) => ({
-                                            value: item.developer.id,
-                                            label: item.developer.studentInfo.fullName,
-                                        })}
-                                        searchParams={(text) => ({ fullName: text })}
-                                        optionsParams={{ projectId: projectId }}
-                                        initialSearchParams={{ projectId: projectId }}
-                                        options={developers}
-                                        // required
-                                    />
-                                ) : (
-                                    <AutoCompleteField
-                                        disabled={isEditing}
-                                        style={{
-                                            width: '230px',
-                                        }}
-                                        // required
-                                        // label={<FormattedMessage defaultMessage=" " />}
-                                        name="leaderId"
-                                        apiConfig={apiConfig.team.autocomplete}
-                                        mappingOptions={(item) => ({
-                                            value: item.id,
-                                            label: item?.leaderInfo?.leaderName,
-                                        })}
-                                        optionsParams={{ projectId: projectId }}
-                                        initialSearchParams={{ projectId: projectId }}
-                                        searchParams={(text) => ({ name: text })}
-                                        options={team}
-                                    />
-                                )}
+                            
+                                <AutoCompleteField
+                                    disabled={isEditing}
+                                    style={{
+                                        width: '230px',
+                                    }}
+                                    // label={<FormattedMessage defaultMessage=" " />}
+                                    name="developerId"
+                                    apiConfig={apiConfig.memberProject.autocomplete}
+                                    mappingOptions={(item) => ({
+                                        value: item.developer.id,
+                                        label: item.developer.account.fullName,
+                                    })}
+                                    searchParams={(text) => ({ fullName: text })}
+                                    optionsParams={{ projectId: projectId }}
+                                    initialSearchParams={{ projectId: projectId }}
+                                    // options={developers}
+                                    // required
+                                />
+                                
                             </Space.Compact>
                         </Space>
                     </Col>

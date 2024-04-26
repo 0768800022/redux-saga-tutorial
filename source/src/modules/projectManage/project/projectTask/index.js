@@ -294,7 +294,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
         mappingData: ({ data }) =>
             data.content.map((item) => ({
                 value: item?.developer?.id,
-                label: item?.developer?.studentInfo?.fullName,
+                label: item?.developer?.account?.fullName,
             })),
     });
 

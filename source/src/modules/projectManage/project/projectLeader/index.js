@@ -43,7 +43,7 @@ const ProjectLeaderListPage = () => {
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: {
-                getList: apiConfig.project.getListLeader,
+                getList: apiConfig.developer.myProject,
                 getById: apiConfig.project.getById,
                 delete: apiConfig.project.delete,
             },

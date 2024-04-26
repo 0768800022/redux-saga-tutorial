@@ -562,7 +562,16 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        myProject: {
+            baseURL: `${apiTenantUrl}v1/developer/my-project`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        
     },
+  
+    
     lecture: {
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/lecture/auto-complete`,
@@ -745,6 +754,14 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getTokenForProject: {
+            baseURL: `${apiTenantUrl}v1/project/get-token-for-project`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        
+  
     },
     projectTask: {
         getList: {
