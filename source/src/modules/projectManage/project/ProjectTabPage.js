@@ -19,6 +19,7 @@ import ProjectMemberListPage from './member';
 import ProjectCategoryListPage from './projectCategory';
 import routes from '@routes';
 import useFetch from '@hooks/useFetch';
+import StoryTaskListPage from './storyTask';
 
 const message = defineMessages({
     objectName: 'setting',
@@ -31,7 +32,7 @@ const ProjectTabPage = () => {
     const [activeTab, setActiveTab] = useState(
         localStorage.getItem(routes.projectTabPage.keyActiveTab)
             ? localStorage.getItem(routes.projectTabPage.keyActiveTab)
-            : translate.formatMessage(commonMessage.task),
+            : translate.formatMessage(commonMessage.story),
     );
     const projectId = queryParams.get('projectId');
 
@@ -52,9 +53,9 @@ const ProjectTabPage = () => {
     }, []);
     const dataTab = [
         {
-            label: translate.formatMessage(commonMessage.task),
+            label: translate.formatMessage(commonMessage.story),
             key: translate.formatMessage(commonMessage.task),
-            children: <ProjectTaskListPage setSearchFilter={setSearchFilter} />,
+            children: <StoryTaskListPage setSearchFilter={setSearchFilter} />,
         },
         // {
         //     label: translate.formatMessage(commonMessage.team),

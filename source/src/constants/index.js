@@ -112,6 +112,11 @@ export const STATE_COURSE_RECRUITED = 5;
 export const STATE_TASK_ASIGN = 1;
 export const STATE_TASK_DONE = 2;
 
+export const STATE_STORY_TASK_CREATE = 0;
+export const STATE_STORY_TASK_PROCESSING = 1;
+export const STATE_STORY_TASK_DONE = 2;
+export const STATE_STORY_TASK_CANCEL = 3;
+
 export const STATE_PROJECT_TASK_CREATE = 1;
 export const STATE_PROJECT_TASK_PROCESSING = 2;
 export const STATE_PROJECT_TASK_DONE = 3;
