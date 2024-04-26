@@ -11,6 +11,7 @@ import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import NumericField from '@components/common/form/NumericField';
 
+
 const messages = defineMessages({
     banner: 'Banner',
     avatarPath: 'Avatar',
@@ -130,7 +131,7 @@ const ProfileForm = (props) => {
     return (
         <Card className="card-form" bordered={false} style={{ minHeight: 'calc(100vh - 190px)' }}>
             <Form
-                style={{ width: '50%' }}
+                style={{ width: '80%' }}
                 labelCol={{ span: 8 }}
                 id={formId}
                 onFinish={handleFinish}
