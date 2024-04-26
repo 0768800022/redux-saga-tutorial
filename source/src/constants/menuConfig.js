@@ -192,29 +192,29 @@ const navMenuConfig = [
             },
         ],
     },
-    {
-        label: <FormattedMessage defaultMessage="Dự án" />,
-        key: 'project-student',
-        icon: <BulbOutlined />,
-        permission: apiConfig.course.getListStudentCourse.baseURL,
-        children: [
-            {
-                label: <FormattedMessage defaultMessage="Dự án của tôi" />,
-                key: 'my-project-student',
-                path: routes.projectStudentListPage.path,
-            },
-            {
-                label: <FormattedMessage defaultMessage="Task của tôi" />,
-                key: 'my-task-project-student',
-                path: routes.projectStudentMyTaskListPage.path,
-            },
-            {
-                label: <FormattedMessage defaultMessage="Hoạt động của tôi" />,
-                key: 'my-activity-project-student',
-                path: generatePath(routes.myActivityProjectStudentListPage.path, {}),
-            },
-        ],
-    },
+    // {
+    //     label: <FormattedMessage defaultMessage="Dự án" />,
+    //     key: 'project-student',
+    //     icon: <BulbOutlined />,
+    //     permission: apiConfig.course.getListStudentCourse.baseURL,
+    //     children: [
+    //         {
+    //             label: <FormattedMessage defaultMessage="Dự án của tôi" />,
+    //             key: 'my-project-student',
+    //             path: routes.projectStudentListPage.path,
+    //         },
+    //         {
+    //             label: <FormattedMessage defaultMessage="Task của tôi" />,
+    //             key: 'my-task-project-student',
+    //             path: routes.projectStudentMyTaskListPage.path,
+    //         },
+    //         {
+    //             label: <FormattedMessage defaultMessage="Hoạt động của tôi" />,
+    //             key: 'my-activity-project-student',
+    //             path: generatePath(routes.myActivityProjectStudentListPage.path, {}),
+    //         },
+    //     ],
+    // },
     ///////////////////// COMPANY MENU /////////////////////////////
     {
         label: <FormattedMessage defaultMessage="Quản lý công ty" />,
