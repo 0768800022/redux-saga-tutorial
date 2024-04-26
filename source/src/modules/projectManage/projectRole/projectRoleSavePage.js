@@ -15,9 +15,20 @@ const messages = defineMessages({
 });
 
 const ProjectRoleSavePage = () => {
-    const projectRoleId = useParams();
+    const { id } = useParams();
+    const [permissions, setPermissions] = useState([]);
+    const { execute: executeGetPermission } = useFetch(apiConfig.groupPermission.getPemissionList, {
+        immediate: false,
+    });
     const translate = useTranslate();
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
+    const permissonCustomer = (permisson) => {
+        return {
+            permissionId: permissions?.permissionId,
+            permissionCode: permissions?.pcode,
+        };
+    };
+    const projectRoleId = useParams();
+    const { detail, mixinFuncs, loading, onSave, setIsChangedFormValues, isEditing, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.projectRole.getById,
             create: apiConfig.projectRole.create,
@@ -30,51 +41,61 @@ const ProjectRoleSavePage = () => {
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
+                    // status: STATUS_ACTIVE,
+                    // kind: UserTypes.ADMIN,
+                    // avatarPath: data.avatar,
                     ...data,
-                    id: detail.id,
+                    id: id,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
+                    // kind: UserTypes.ADMIN,
+                    // avatarPath: data.avatar,
                 };
+            };
+            funcs.mappingData = (response) => {
+                if (response.result === true)
+                    return {
+                        ...response.data,
+                        permissions: response.data?.projectRolePermissionDtos
+                            ? response.data?.projectRolePermissionDtos.map((permission) => (JSON.stringify({
+
+                                permissionId: permission?.permissionId,
+                                permissionCode: permission?.pcode,
+                            })))
+                            : [],
+                    };
             };
         },
     });
-    const { execute: executeGetPermission } = useFetch(apiConfig.groupPermission.getPemissionList, {
-        immediate: false,
-    });
-    const [permissions, setPermissions] = useState([]);
+
     useEffect(() => {
         executeGetPermission({
             params: {
                 size: 1000,
-                kind : 1,
+                kind: 1,
             },
             onCompleted: (res) => {
                 setPermissions(res?.data);
             },
         });
     }, []);
+
     return (
         <PageWrapper
             loading={loading}
-            routes={[
-                {
-                    breadcrumbName: translate.formatMessage(commonMessage.projectRole),
-                    path: generatePath(routes.projectRoleListPage.path, { projectRoleId }),
-                },
-                { breadcrumbName: title },
-            ]}
-            title={title}
+            routes={[{ breadcrumbName: 'Vai trò', path: routes.projectRoleListPage.path }, { breadcrumbName: title }]}
         >
             <ProjectRoleForm
+                size="normal"
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
-                onSubmit={mixinFuncs.onSave}
+                onSubmit={onSave}
                 permissions={permissions || []}
             />
         </PageWrapper>

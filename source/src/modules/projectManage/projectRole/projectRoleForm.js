@@ -9,34 +9,36 @@ import { statusOptions } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
 import { commonMessage } from '@locales/intl';
 
-const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues,permissions }) => {
-    const translate = useTranslate();
-    const statusValues = translate.formatKeys(statusOptions, ['label']);
-
+const ProjectRoleForm = (props) => {
+    const {
+        formId,
+        actions,
+        dataDetail,
+        onSubmit,
+        setIsChangedFormValues,
+        isEditing,
+        permissions,
+        size = 'small',
+    } = props;
+    const [group, setGroup] = useState([]);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
+ 
 
     const handleSubmit = (values) => {
+
+        const permissonArray = values?.permissions?.map((item) => {
+            return JSON.parse(item);
+        });
+      
+        values.permissions = permissonArray;
         return mixinFuncs.handleSubmit({ ...values });
     };
 
-    useEffect(() => {
-        form.setFieldsValue({
-            ...dataDetail,
-        });
-    }, [dataDetail]);
-    const [group, setGroup] = useState([]);
-    useEffect(() => {
-        if (!isEditing > 0) {
-            form.setFieldsValue({
-                status: statusValues[1].value,
-            });
-        }
-    }, [isEditing]);
     const getGroupPermission = () => {
-        // const { permissions } = props;
+        const { permissions } = props;
         let groups;
         if (permissions && permissions.length > 0) {
             groups = permissions.reduce((r, a) => {
@@ -46,42 +48,38 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
         }
         setGroup(groups);
     };
+
+    useEffect(() => {
+       
+        form.setFieldsValue({
+            ...dataDetail,
+        });
+    }, [dataDetail]);
+
     useEffect(() => {
         if (permissions.length !== 0) getGroupPermission();
     }, [permissions]);
-    const premissionCustom = (premission) => {
-        return  {
-            permissionId: premission?.id,
-            permissionCode: premission?.pcode,
-        };
-    };
+
+
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
-            <Card>
+        <Form
+            style={{ width: '920px' }}
+            id={formId}
+            onFinish={handleSubmit}
+            form={form}
+            layout="vertical"
+            onValuesChange={onValuesChange}
+        >
+            <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <TextField
-                            label={translate.formatMessage(commonMessage.projectRoleName)}
-                            name="projectRoleName"
-                            required
-                        />
+                        <TextField label="Name" required name="projectRoleName" />
                     </Col>
                     <Col span={12}>
-                        <SelectField
-                            required
-                            label={translate.formatMessage(commonMessage.status)}
-                            name="status"
-                            allowClear={false}
-                            options={statusValues}
-                        />
+                        <TextField label="Mô tả" type="textarea" name="description" />
                     </Col>
                 </Row>
-                <TextField
-                    width={'100%'}
-                    label={translate.formatMessage(commonMessage.description)}
-                    name="description"
-                    type="textarea"
-                />
+
                 <Row gutter={16}>
                     <Col span={24}>
                         <Form.Item
@@ -100,10 +98,16 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
                                         >
                                             <Row>
                                                 {group[groupName].map((permission) => (
-
-                                                    
                                                     <Col span={8} key={permission.id}>
-                                                        <Checkbox value={premissionCustom(permission)}>{permission.name}</Checkbox>
+                                                        <Checkbox
+                                                            value={JSON.stringify({
+                                                                permissionId: permission?.id,
+                                                                permissionCode: permission?.pcode,
+                                                            })}
+                                                            // value={permission?.id}
+                                                        >
+                                                            {permission.name}
+                                                        </Checkbox>
                                                     </Col>
                                                 ))}
                                             </Row>
@@ -116,7 +120,7 @@ const ProjectRoleForm = ({ isEditing, formId, actions, dataDetail, onSubmit, set
                 </Row>
                 <div className="footer-card-form">{actions}</div>
             </Card>
-        </BaseForm>
+        </Form>
     );
 };
 
