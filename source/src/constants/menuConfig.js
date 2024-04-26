@@ -141,19 +141,19 @@ const navMenuConfig = [
     },
 
     ///////////////////// LEADER MENU /////////////////////////////
-    {
-        label: <FormattedMessage defaultMessage="Khoá học" />,
-        key: 'course-leader',
-        icon: <IconSchool size={16} />,
-        permission: apiConfig.course.getListLeaderCourse.baseURL,
-        children: [
-            {
-                label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
-                key: 'my-course-leader',
-                path: routes.courseLeaderListPage.path,
-            },
-        ],
-    },
+    // {
+    //     label: <FormattedMessage defaultMessage="Khoá học" />,
+    //     key: 'course-leader',
+    //     icon: <IconSchool size={16} />,
+    //     permission: apiConfig.course.getListLeaderCourse.baseURL,
+    //     children: [
+    //         {
+    //             label: <FormattedMessage defaultMessage="Khoá học của tôi" />,
+    //             key: 'my-course-leader',
+    //             path: routes.courseLeaderListPage.path,
+    //         },
+    //     ],
+    // },
     {
         label: <FormattedMessage defaultMessage="Dự án" />,
         key: 'project-leader',

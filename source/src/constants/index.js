@@ -22,6 +22,7 @@ export const storageKeys = {
     RESTAURANT_ID: `${appName}-restaurant-id`,
     TENANT_HEADER: `X-tenant`,
     TENANT_API_URL: `${appName}-tenant-api-url`,
+    USER_PROJECT_ACCESS_TOKEN: `${appName}-user-project-access-token`,
 };
 
 export const baseHeader = {

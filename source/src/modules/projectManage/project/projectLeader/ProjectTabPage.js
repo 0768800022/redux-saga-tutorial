@@ -1,24 +1,18 @@
 import apiConfig from '@constants/apiConfig';
-import useListBase from '@hooks/useListBase';
 import React, { useEffect, useState } from 'react';
-import BaseTable from '@components/common/table/BaseTable';
 
-import { DEFAULT_TABLE_ITEM_SIZE, isSystemSettingOptions } from '@constants';
-import PageWrapper from '@components/common/layout/PageWrapper';
 import ListPage from '@components/common/layout/ListPage';
-import { defineMessages } from 'react-intl';
+import PageWrapper from '@components/common/layout/PageWrapper';
+import { apiTenantId, envType, storageKeys } from '@constants';
+import useFetch from '@hooks/useFetch';
+import useQueryParams from '@hooks/useQueryParams';
 import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
-import useAuth from '@hooks/useAuth';
-import SelectField from '@components/common/form/SelectField';
-import { Tabs } from 'antd';
-import ProjectTaskListPage from './projectTask';
-import TeamListPage from './team';
-import useQueryParams from '@hooks/useQueryParams';
-import ProjectMemberListPage from './member';
-import ProjectCategoryListPage from './projectCategory';
 import routes from '@routes';
-import useFetch from '@hooks/useFetch';
+import { getData, setData } from '@utils/localStorage';
+import { Tabs, notification } from 'antd';
+import { defineMessages } from 'react-intl';
+import ProjectLeaderTaskListPage from './projectLeaderTask';
 
 const message = defineMessages({
     objectName: 'setting',
@@ -38,15 +32,37 @@ const ProjectDevelopTabPage = () => {
     const { execute: executeGetTokenProject } = useFetch(apiConfig.project.getTokenForProject, {
         immediate: false,
     });
+    const tenantIdUrl = envType !== 'dev' && window.location.href.split('.')[0].split('//')[1].split('-')[0];
+    const tenantId = envType === 'dev' ? apiTenantId : tenantIdUrl;
     useEffect(() => {
         executeGetTokenProject({
             data: {
               
                 projectId: projectId,
+                tenantId : tenantId,
             },
             onCompleted: (res) => {
+            
+                setData(storageKeys?.USER_PROJECT_ACCESS_TOKEN,res?.data?.access_token);
+                console.log(res?.data?.access_token);
+            },
+        });
+    }, []);
+    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
+    const { execute : getList, loading } = useFetch({
+        ...apiConfig.projectTask.getList,
+        authorization: `Bearer ${userTokenProject}`,
+    });
+
+    useEffect(() => {
+        userTokenProject &&  getList({
+            params: {
+              
+                projectId: projectId,
+            },
+            onCompleted: (res) => {
+            
                 console.log(res);
-                
             },
         });
     }, []);
@@ -54,23 +70,23 @@ const ProjectDevelopTabPage = () => {
         {
             label: translate.formatMessage(commonMessage.task),
             key: translate.formatMessage(commonMessage.task),
-            children: <ProjectTaskListPage setSearchFilter={setSearchFilter} />,
+            children: <ProjectLeaderTaskListPage setSearchFilter={setSearchFilter} />,
         },
         // {
         //     label: translate.formatMessage(commonMessage.team),
         //     key: translate.formatMessage(commonMessage.team),
         //     children: <TeamListPage setSearchFilter={setSearchFilter} />,
         // },
-        {
-            label: translate.formatMessage(commonMessage.member),
-            key: translate.formatMessage(commonMessage.member),
-            children: <ProjectMemberListPage setSearchFilter={setSearchFilter} />,
-        },
-        {
-            label: translate.formatMessage(commonMessage.projectCategory),
-            key: translate.formatMessage(commonMessage.projectCategory),
-            children: <ProjectCategoryListPage setSearchFilter={setSearchFilter} />,
-        },
+        // {
+        //     label: translate.formatMessage(commonMessage.member),
+        //     key: translate.formatMessage(commonMessage.member),
+        //     children: <ProjectMemberListPage setSearchFilter={setSearchFilter} />,
+        // },
+        // {
+        //     label: translate.formatMessage(commonMessage.projectCategory),
+        //     key: translate.formatMessage(commonMessage.projectCategory),
+        //     children: <ProjectCategoryListPage setSearchFilter={setSearchFilter} />,
+        // },
     ];
 
     const breadcrumbs = [

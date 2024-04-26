@@ -36,6 +36,7 @@ import ProjectCategoryLeaderSavePage from './projectLeader/projectCategory/Proje
 import ProjectCategoryStudentListPage from './projectStudent/projectCategory';
 import ProjectCategoryStudentSavePage from './projectStudent/projectCategory/ProjectCategorySavePage';
 import ProjectTabPage from './ProjectTabPage';
+import ProjectDevelopTabPage from './projectLeader/ProjectTabPage';
 
 export default {
     projectListPage: {
@@ -53,6 +54,15 @@ export default {
         keyActiveTab: 'activeProjectTab',
         permissions: [apiConfig.project.getList.baseURL],
     },
+    projectDeveloperTabPage: {
+        path: '/project-developer/project-tab',
+        title: 'Project Tab',
+        auth: true,
+        component: ProjectDevelopTabPage,
+        keyActiveTab: 'activeProjectTab',
+        // permissions: [apiConfig.project.getList.baseURL],
+    },
+  
   
     projectSavePage: {
         path: '/project/:id',
@@ -76,14 +86,14 @@ export default {
         permissions: [apiConfig.memberProject.create.baseURL, apiConfig.memberProject.update.baseURL],
     },
     projectLeaderListPage: {
-        path: '/project-leader',
+        path: '/project-developer',
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderListPage,
         permissions: [apiConfig.project.getListLeader.baseURL],
     },
     projectLeaderSavePage: {
-        path: '/project-leader/:id',
+        path: '/project-developer/:id',
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderSavePage,

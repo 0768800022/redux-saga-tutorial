@@ -6,6 +6,7 @@ import {
     DATE_FORMAT_END_OF_DAY_TIME,
     DATE_FORMAT_ZERO_TIME,
     DEFAULT_TABLE_ITEM_SIZE,
+    storageKeys,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
@@ -38,6 +39,9 @@ import feature from '../../../../../assets/images/feature.png';
 import bug from '../../../../../assets/images/bug.jpg';
 import dayjs from 'dayjs';
 import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import useListBaseProject from '@hooks/useListBaseProject';
+import { getData } from '@utils/localStorage';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -79,11 +83,12 @@ function ProjectLeaderTaskListPage() {
     const location = useLocation();
     const [detail, setDetail] = useState();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { execute: executeGet, loading: loadingDetail } = useFetch(apiConfig.projectTask.getById, {
+    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
+    const { execute: executeGet, loading: loadingDetail } = useFetch({ ...apiConfig.projectTask.getById,    authorization: `Bearer ${userTokenProject}` }, {
         immediate: false,
     });
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBase({
+        useListBaseProject({
             apiConfig: apiConfig.projectTask,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -245,9 +250,9 @@ function ProjectLeaderTaskListPage() {
         },
         {
             title: translate.formatMessage(message.developer),
-            dataIndex: ['developer', 'studentInfo', 'fullName'],
+            dataIndex: ['developer', 'account', 'fullName'],
             width: 200,
-            render: (_, record) => record?.developer?.studentInfo?.fullName || record?.leader?.leaderName,
+            render: (_, record) => record?.developer?.account?.fullName || record?.leader?.leaderName,
         },
         {
             title: translate.formatMessage(commonMessage.projectCategory),
@@ -322,7 +327,7 @@ function ProjectLeaderTaskListPage() {
             }
         },
     });
-    const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
+    const { execute: executeUpdate } = useFetch({ ...apiConfig.projectTask.changeState,authorization: `Bearer ${userTokenProject}` }, { immediate: false });
 
     const handleOk = (values) => {
         handlersStateTaskModal.close();
@@ -346,7 +351,9 @@ function ProjectLeaderTaskListPage() {
                     });
                 }
             },
-            onError: (err) => {},
+            onError: (err) => {
+                showErrorMessage("error");
+            },
         });
     };
 
@@ -415,100 +422,92 @@ function ProjectLeaderTaskListPage() {
     ].filter(Boolean);
 
     return (
-        <PageWrapper
-            routes={[
-                {
-                    breadcrumbName: translate.formatMessage(message.project),
-                    path: generatePath(routes.projectLeaderListPage.path),
-                },
-                { breadcrumbName: translate.formatMessage(message.projectTask) },
-            ]}
-        >
-            <div>
-                <ListPage
-                    title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{projectName}</span>}
-                    searchForm={mixinFuncs.renderSearchForm({
-                        fields: searchFields,
-                        className: styles.search,
-                        initialValues: initialFilterValues,
-                    })}
-                    actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
-                    baseTable={
-                        <BaseTable
-                            onRow={(record) => ({
-                                onClick: (e) => {
-                                    e.stopPropagation();
-                                    handleFetchDetail(record.id);
-                                    handlersModal.open();
-                                },
-                            })}
-                            onChange={changePagination}
-                            pagination={pagination}
-                            loading={loading}
-                            dataSource={listSetting ? listSetting?.data : data}
-                            columns={columns}
-                        />
-                    }
-                />
-                <DetailMyTaskProjectModal
-                    open={openedModal}
-                    onCancel={() => handlersModal.close()}
-                    DetailData={detail}
-                />
-                <Modal
-                    title="Thay đổi tình trạng hoàn thành"
-                    open={openedStateTaskModal}
-                    destroyOnClose={true}
-                    footer={null}
-                    onCancel={() => handlersStateTaskModal.close()}
-                    data={detail || {}}
-                >
-                    <BaseForm onFinish={handleOk} size="100%">
-                        <div
-                            style={{
-                                margin: '28px 0 20px 0',
-                            }}
-                        >
-                            <Row gutter={16}>
-                                <Col span={24}>
-                                    <NumericField
-                                        label={<FormattedMessage defaultMessage="Tổng thời gian" />}
-                                        name="minutes"
-                                        addonAfter={<FormattedMessage defaultMessage="Phút" />}
-                                        min={0}
-                                        required
-                                    />
-                                </Col>
-                                <Col span={24}>
-                                    <TextField
-                                        label={<FormattedMessage defaultMessage="Đường dẫn commit git" />}
-                                        name="gitCommitUrl"
-                                    />
-                                </Col>
-                            </Row>
-                            <Row gutter={16}>
-                                <Col span={24}>
-                                    <TextField
-                                        label={<FormattedMessage defaultMessage="Lời nhắn" />}
-                                        name="message"
-                                        type="textarea"
-                                        required
-                                    />
-                                </Col>
-                            </Row>
-                            <div style={{ float: 'right' }}>
-                                <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()}>
-                                    {translate.formatMessage(message.cancel)}
-                                </Button>
-                                <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }}>
-                                    {translate.formatMessage(message.done)}
-                                </Button>
-                            </div>
+       
+        <div>
+            <ListPage
+                title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{projectName}</span>}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    className: styles.search,
+                    initialValues: initialFilterValues,
+                })}
+                actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
+                baseTable={
+                    <BaseTable
+                        onRow={(record) => ({
+                            onClick: (e) => {
+                                e.stopPropagation();
+                                handleFetchDetail(record.id);
+                                handlersModal.open();
+                            },
+                        })}
+                        onChange={changePagination}
+                        pagination={pagination}
+                        loading={loading}
+                        dataSource={listSetting ? listSetting?.data : data}
+                        columns={columns}
+                    />
+                }
+            />
+            <DetailMyTaskProjectModal
+                open={openedModal}
+                onCancel={() => handlersModal.close()}
+                DetailData={detail}
+            />
+            <Modal
+                title="Thay đổi tình trạng hoàn thành"
+                open={openedStateTaskModal}
+                destroyOnClose={true}
+                footer={null}
+                onCancel={() => handlersStateTaskModal.close()}
+                data={detail || {}}
+            >
+                <BaseForm onFinish={handleOk} size="100%">
+                    <div
+                        style={{
+                            margin: '28px 0 20px 0',
+                        }}
+                    >
+                        <Row gutter={16}>
+                            <Col span={24}>
+                                <NumericField
+                                    label={<FormattedMessage defaultMessage="Tổng thời gian" />}
+                                    name="minutes"
+                                    addonAfter={<FormattedMessage defaultMessage="Phút" />}
+                                    min={0}
+                                    required
+                                />
+                            </Col>
+                            <Col span={24}>
+                                <TextField
+                                    label={<FormattedMessage defaultMessage="Đường dẫn commit git" />}
+                                    name="gitCommitUrl"
+                                />
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={24}>
+                                <TextField
+                                    label={<FormattedMessage defaultMessage="Lời nhắn" />}
+                                    name="message"
+                                    type="textarea"
+                                    required
+                                />
+                            </Col>
+                        </Row>
+                        <div style={{ float: 'right' }}>
+                            <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()}>
+                                {translate.formatMessage(message.cancel)}
+                            </Button>
+                            <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }}>
+                                {translate.formatMessage(message.done)}
+                            </Button>
                         </div>
-                    </BaseForm>
-                </Modal>
-            </div>
-        </PageWrapper>
+                    </div>
+                </BaseForm>
+            </Modal>
+        </div>
+     
     );
 }
 const formatDateToZeroTime = (date) => {
