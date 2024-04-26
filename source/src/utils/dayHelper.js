@@ -1,4 +1,5 @@
-import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE } from '@constants';
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { formatDateString } from '@utils';
 import dayjs from 'dayjs';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import moment from 'moment';
@@ -52,4 +53,13 @@ export const convertStringToDateTime = (
     } catch (err) {
         return null;
     }
+};
+
+
+export const validateDate = (_, value) => {
+    const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+    if (date && value && value.isAfter(date)) {
+        return Promise.reject('Ngày sinh phải nhỏ hơn ngày hiện tại');
+    }
+    return Promise.resolve();
 };

@@ -1,6 +1,6 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import useSaveBase from '@hooks/useSaveBase';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { generatePath, useParams } from 'react-router-dom';
@@ -8,15 +8,22 @@ import routes from './routes';
 import apiConfig from '@constants/apiConfig';
 import ProjectRoleForm from './projectRoleForm';
 import { commonMessage } from '@locales/intl';
+import useFetch from '@hooks/useFetch';
 
 const messages = defineMessages({
     objectName: 'Vai trò dự án',
 });
 
 const ProjectRoleSavePage = () => {
-    const projectRoleId = useParams();
+    const { id } = useParams();
+    const [permissions, setPermissions] = useState([]);
+    const { execute: executeGetPermission } = useFetch(apiConfig.groupPermission.getPemissionList, {
+        immediate: false,
+    });
     const translate = useTranslate();
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
+   
+    const projectRoleId = useParams();
+    const { detail, mixinFuncs, loading, onSave, setIsChangedFormValues, isEditing, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.projectRole.getById,
             create: apiConfig.projectRole.create,
@@ -29,37 +36,62 @@ const ProjectRoleSavePage = () => {
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
+                    // status: STATUS_ACTIVE,
+                    // kind: UserTypes.ADMIN,
+                    // avatarPath: data.avatar,
                     ...data,
-                    id: detail.id,
+                    id: id,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
+                    // kind: UserTypes.ADMIN,
+                    // avatarPath: data.avatar,
                 };
+            };
+            funcs.mappingData = (response) => {
+                if (response.result === true)
+                    return {
+                        ...response.data,
+                        permissions: response.data?.projectRolePermissionDtos
+                            ? response.data?.projectRolePermissionDtos.map((permission) => (JSON.stringify({
+
+                                permissionId: permission?.permissionId,
+                                permissionCode: permission?.pcode,
+                            })))
+                            : [],
+                    };
             };
         },
     });
 
+    useEffect(() => {
+        executeGetPermission({
+            params: {
+                size: 1000,
+                kind: 1,
+            },
+            onCompleted: (res) => {
+                setPermissions(res?.data);
+            },
+        });
+    }, []);
+
     return (
         <PageWrapper
             loading={loading}
-            routes={[
-                {
-                    breadcrumbName: translate.formatMessage(commonMessage.projectRole),
-                    path: generatePath(routes.projectRoleListPage.path, { projectRoleId }),
-                },
-                { breadcrumbName: title },
-            ]}
-            title={title}
+            routes={[{ breadcrumbName: 'Vai trò', path: routes.projectRoleListPage.path }, { breadcrumbName: title }]}
         >
             <ProjectRoleForm
+                size="normal"
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
-                onSubmit={mixinFuncs.onSave}
+                onSubmit={onSave}
+                permissions={permissions || []}
             />
         </PageWrapper>
     );

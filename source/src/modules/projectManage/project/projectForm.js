@@ -153,16 +153,7 @@ const ProjectForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     <Col span={12}>
                         <TextField label={translate.formatMessage(message.name)} name="name" required />
                     </Col>
-                    <Col span={12}>
-                        <AutoCompleteField
-                            label={translate.formatMessage(message.leader)}
-                            name="leaderId"
-                            apiConfig={apiConfig.leader.autocomplete}
-                            mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
-                            initialSearchParams={{}}
-                            searchParams={(text) => ({ name: text })}
-                            required />
-                    </Col>
+                  
                 </Row>
 
                 <Row gutter={16}>

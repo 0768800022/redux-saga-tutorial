@@ -134,7 +134,15 @@ const useListBase = ({
     };
 
     const handleGetListError = (error) => {
-        notification({ type: 'error', message: 'Get list error' });
+        console.log(error);
+        if(error?.response?.data?.code == "[Ex2]: Access is denied")
+        {
+            notification({ type: 'error', message: 'Access is denied' });
+        }
+        else {
+            notification({ type: 'error', message: 'Access is denied' });
+        }
+       
     };
 
     const onCompletedGetList = (response) => {

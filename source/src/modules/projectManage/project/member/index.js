@@ -88,7 +88,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
     const columns = [
         {
             title: '#',
-            dataIndex: ['developer', 'studentInfo', 'avatar'],
+            dataIndex: ['developer', 'accountDto', 'avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -101,18 +101,18 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
         },
         {
             title: translate.formatMessage(commonMessage.name),
-            dataIndex: ['developer', 'studentInfo', 'fullName'],
+            dataIndex: ['developer', 'accountDto', 'fullName'],
             render: (fullName, record) => (
                 <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
                     {fullName}
                 </div>
             ),
         },
-        {
-            title: translate.formatMessage(message.team),
-            dataIndex: ['team', 'teamName'],
-            width: 150,
-        },
+        // {
+        //     title: translate.formatMessage(message.team),
+        //     dataIndex: ['team', 'teamName'],
+        //     width: 150,
+        // },
         {
             title: translate.formatMessage(commonMessage.role),
             dataIndex: ['projectRole', 'projectRoleName'],
@@ -138,27 +138,15 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
                 { width: '150px' },
             ),
     ].filter(Boolean);
-    const { data: teamData } = useFetch(apiConfig.team.autocomplete, {
-        immediate: true,
-        params: { projectId },
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
-    });
-    const searchFields = [
-        {
-            key: 'teamId',
-            placeholder: translate.formatMessage(commonMessage.team),
-            type: FieldTypes.SELECT,
-            options: teamData,
-        },
-    ];
+  
 
     return (
         <ListPage
-            searchForm={mixinFuncs.renderSearchForm({
-                fields: searchFields,
-                className: styles.search,
-                activeTab: activeProjectTab,
-            })}
+            // searchForm={mixinFuncs.renderSearchForm({
+            //     fields: searchFields,
+            //     className: styles.search,
+            //     activeTab: activeProjectTab,
+            // })}
             actionBar={active && mixinFuncs.renderActionBar()}
             baseTable={
                 <BaseTable

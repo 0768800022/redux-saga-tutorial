@@ -31,6 +31,7 @@ import {
     COMPANY_LOGIN_TYPE,
     envType,
     UserTypes,
+    DEVELOPER_LOGIN_TYPE,
 } from '@constants';
 import { Buffer } from 'buffer';
 import { setData } from '@utils/localStorage';
@@ -53,6 +54,7 @@ const LoginPage = () => {
     const { execute: executeLeaderLogin, loading: loadingLeader } = useFetch(apiConfig.leader.login);
     const { execute: executeStudentLogin, loading: loadingStudent } = useFetch(apiConfig.student.login);
     const { execute: executeCompanyLogin, loading: loadingCompany } = useFetch(apiConfig.company.login);
+    const { execute: executeDeveloperLogin, loading: loadingDeveloper } = useFetch(apiConfig.developer.login);
     const { execute: executeGetCareerDetail, loading: loadingCareer } = useFetch(apiConfig.organize.getDetail, {
         pathParams: { id: tenantId },
     });
@@ -64,6 +66,7 @@ const LoginPage = () => {
         if (values.grant_type === LEADER_LOGIN_TYPE) handleGetCareerInfo(values, executeLeaderLogin);
         else if (values.grant_type === STUDENT_LOGIN_TYPE) handleGetCareerInfo(values, executeStudentLogin);
         else if (values.grant_type === COMPANY_LOGIN_TYPE) handleGetCareerInfo(values, executeCompanyLogin);
+        else if (values.grant_type === DEVELOPER_LOGIN_TYPE) handleGetCareerInfo(values, executeDeveloperLogin);
         else
             execute({
                 data: { ...values },

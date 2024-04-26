@@ -23,7 +23,7 @@ import useFetch from '@hooks/useFetch';
 const message = defineMessages({
     objectName: 'setting',
 });
-const ProjectTabPage = () => {
+const ProjectDevelopTabPage = () => {
     const translate = useTranslate();
     const { params: queryParams, setQueryParams, serializeParams, deserializeParams } = useQueryParams();
     const projectName = queryParams.get('projectName');
@@ -110,4 +110,4 @@ const ProjectTabPage = () => {
     );
 };
 
-export default ProjectTabPage;
+export default ProjectDevelopTabPage;
