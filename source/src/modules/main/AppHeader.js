@@ -86,12 +86,13 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                                 <Avatar
                                     icon={<UserOutlined />}
                                     src={`${AppConstants.contentRootUrl}${
-                                        profile.logoPath || profile?.account?.avatar || profile.logo
+                                        profile.logoPath || profile?.account?.avatar || profile.accountDto?.avatar
                                     }`}
                                 />
                                 {profile?.careerName ||
                                     profile?.name ||
                                     profile?.account?.fullName ||
+                                    profile?.accountDto?.fullName ||
                                     profile?.companyName}
                                 <DownOutlined />
                             </Space>

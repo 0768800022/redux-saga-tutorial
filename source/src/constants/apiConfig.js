@@ -568,7 +568,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/developer/update-profile`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
   
     

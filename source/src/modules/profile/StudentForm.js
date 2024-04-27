@@ -33,6 +33,7 @@ const StudentForm = (props) => {
         onSubmit,
         setIsChangedFormValues,
     });
+
     const uploadFile = (file, onSuccess, onError) => {
         executeUpFile({
             data: {
@@ -57,16 +58,18 @@ const StudentForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
         });
-        setImageUrl(dataDetail?.account?.avatar);
+        setImageUrl(dataDetail.account?.avatar);
     }, [dataDetail]);
 
     const handleFinish = (values) => {
         (values.avatar = imageUrl),
         mixinFuncs.handleSubmit({
             ...values,
-            avatarPath: values.avatar,
+            avatar: values.avatar,
         });
     };
+
+    console.log(imageUrl);
 
     const validateStartDate = (_, value) => {
         const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
@@ -90,11 +93,10 @@ const StudentForm = (props) => {
                 <Row style={{ marginLeft: '8rem' }} gutter={16}>
                     <Col span={12}>
                         <CropImageField
-                            label={translate.formatMessage(messages.avatarPath)}
+                            label={<FormattedMessage defaultMessage="Avatar" />}
                             name="avatar"
                             imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                             aspect={1 / 1}
-                            required
                             uploadFile={uploadFile}
                         />
                     </Col>
