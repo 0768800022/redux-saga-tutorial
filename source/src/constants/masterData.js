@@ -31,6 +31,11 @@ import {
     HOUR_SALARY,
     TASK_KIND_DEV,
     TASK_KIND_LEADER,
+    STATE_PROJECT_TASK_BEFORE,
+    STATE_STORY_TASK_CREATE,
+    STATE_STORY_TASK_PROCESSING,
+    STATE_STORY_TASK_DONE,
+    STATE_STORY_TASK_CANCEL,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -91,6 +96,13 @@ export const lectureState = [
 export const taskState = [
     { value: STATE_TASK_ASIGN, label: taskStateMessage.asign, color: 'warning' },
     { value: STATE_TASK_DONE, label: taskStateMessage.done, color: 'green' },
+];
+
+export const storyTaskState = [
+    { value: STATE_STORY_TASK_CREATE, label: projectTaskStateMessage.create, color: 'yellow' },
+    { value: STATE_STORY_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
+    { value: STATE_STORY_TASK_DONE, label: projectTaskStateMessage.done, color: 'green' },
+    { value: STATE_STORY_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
 ];
 
 export const projectTaskState = [
