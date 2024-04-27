@@ -34,6 +34,7 @@ import feature from '../../../../assets/images/feature.png';
 import styles from '../project.module.scss';
 import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
 import PageWrapper from '@components/common/layout/PageWrapper';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -100,9 +101,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                 }
             },
             onError: (err) => {
-                notification({
-                    message: intl.formatMessage(message.updateTaskError),
-                });
+                showErrorMessage(intl.formatMessage(message.updateTaskError));
             },
         });
     };
