@@ -12,7 +12,9 @@ import routes from '@routes';
 import { getData, setData } from '@utils/localStorage';
 import { Tabs, notification } from 'antd';
 import { defineMessages } from 'react-intl';
-import ProjectLeaderTaskListPage from './projectLeaderTask';
+import ProjectLeaderTaskListPage from './projectDevelopStory';
+import ProjectCategoryListPage from './projectCategory';
+import ProjectLeaderMemberListPage from './projectLeaderMember';
 
 const message = defineMessages({
     objectName: 'setting',
@@ -25,7 +27,7 @@ const ProjectDevelopTabPage = () => {
     const [activeTab, setActiveTab] = useState(
         localStorage.getItem(routes.projectTabPage.keyActiveTab)
             ? localStorage.getItem(routes.projectTabPage.keyActiveTab)
-            : translate.formatMessage(commonMessage.task),
+            : translate.formatMessage(commonMessage.story),
     );
     const projectId = queryParams.get('projectId');
 
@@ -44,7 +46,7 @@ const ProjectDevelopTabPage = () => {
             onCompleted: (res) => {
             
                 setData(storageKeys?.USER_PROJECT_ACCESS_TOKEN,res?.data?.access_token);
-                console.log(res?.data?.access_token);
+             
             },
         });
     }, []);
@@ -68,8 +70,8 @@ const ProjectDevelopTabPage = () => {
     }, []);
     const dataTab = [
         {
-            label: translate.formatMessage(commonMessage.task),
-            key: translate.formatMessage(commonMessage.task),
+            label: translate.formatMessage(commonMessage.story),
+            key: translate.formatMessage(commonMessage.story),
             children: <ProjectLeaderTaskListPage setSearchFilter={setSearchFilter} />,
         },
         // {
@@ -77,11 +79,11 @@ const ProjectDevelopTabPage = () => {
         //     key: translate.formatMessage(commonMessage.team),
         //     children: <TeamListPage setSearchFilter={setSearchFilter} />,
         // },
-        // {
-        //     label: translate.formatMessage(commonMessage.member),
-        //     key: translate.formatMessage(commonMessage.member),
-        //     children: <ProjectMemberListPage setSearchFilter={setSearchFilter} />,
-        // },
+        {
+            label: translate.formatMessage(commonMessage.member),
+            key: translate.formatMessage(commonMessage.member),
+            children: <ProjectLeaderMemberListPage setSearchFilter={setSearchFilter} />,
+        },
         // {
         //     label: translate.formatMessage(commonMessage.projectCategory),
         //     key: translate.formatMessage(commonMessage.projectCategory),
@@ -92,7 +94,7 @@ const ProjectDevelopTabPage = () => {
     const breadcrumbs = [
         {
             breadcrumbName: translate.formatMessage(commonMessage.project),
-            path: routes.projectListPage.path,
+            path: routes.projectLeaderListPage.path,
         },
         {
             breadcrumbName: translate.formatMessage(commonMessage.generalManage),

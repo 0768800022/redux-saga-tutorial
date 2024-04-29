@@ -36,21 +36,7 @@ const ProjectTabPage = () => {
     );
     const projectId = queryParams.get('projectId');
 
-    const { execute: executeGetTokenProject } = useFetch(apiConfig.project.getTokenForProject, {
-        immediate: false,
-    });
-    useEffect(() => {
-        executeGetTokenProject({
-            data: {
-              
-                projectId: projectId,
-            },
-            onCompleted: (res) => {
-                console.log(res);
-                
-            },
-        });
-    }, []);
+
     const dataTab = [
         {
             label: translate.formatMessage(commonMessage.story),

@@ -8,6 +8,7 @@ import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import ProjectCategoryForm from './ProjectCategoryForm';
 import { commonMessage } from '@locales/intl';
+import useSaveBaseProject from '@hooks/useSaveBaseProject';
 const message = defineMessages({
     objectName: 'Danh mục',
 });
@@ -19,7 +20,7 @@ function ProjectCategorySavePage() {
     const projectName = queryParameters.get('projectName');
     // const projectName = queryParameters.get('projectName');
     const projectCategoryId = useParams();
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBaseProject({
         apiConfig: {
             getById: apiConfig.projectCategory.getById,
             create: apiConfig.projectCategory.create,

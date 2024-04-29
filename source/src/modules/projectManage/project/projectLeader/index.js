@@ -183,7 +183,7 @@ const ProjectLeaderListPage = () => {
     };
     const handleOnClick = (event, record) => {
         event.preventDefault();
-        localStorage.setItem(routes.projectTabPage.keyActiveTab, translate.formatMessage(commonMessage.task));
+        localStorage.setItem(routes.projectTabPage.keyActiveTab, translate.formatMessage(commonMessage.story));
         navigate(
             routes.projectDeveloperTabPage.path +
                 `?projectId=${record.id}&projectName=${record.name}&active=${!!record.status == 1}`,

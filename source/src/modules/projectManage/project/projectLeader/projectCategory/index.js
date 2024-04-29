@@ -30,6 +30,7 @@ import { commonMessage } from '@locales/intl';
 import { statusOptions } from '@constants/masterData';
 
 import { FieldTypes } from '@constants/formConfig';
+import useListBaseProject from '@hooks/useListBaseProject';
 
 const message = defineMessages({
     objectName: 'Danh mục',
@@ -47,7 +48,7 @@ const ProjectCategoryListPage = () => {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBase({
+        useListBaseProject({
             apiConfig: apiConfig.projectCategory,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -132,26 +133,26 @@ const ProjectCategoryListPage = () => {
     ];
 
     return (
-        <PageWrapper routes={setBreadRoutes()}>
-            <ListPage
-                title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                    initialValues: queryFilter,
-                    // className: styles.search,
-                })}
-                actionBar={mixinFuncs.renderActionBar()}
-                baseTable={
-                    <BaseTable
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={data}
-                        columns={columns}
-                    />
-                }
-            />
-        </PageWrapper>
+        
+        <ListPage
+            title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
+            searchForm={mixinFuncs.renderSearchForm({
+                fields: searchFields,
+                initialValues: queryFilter,
+                // className: styles.search,
+            })}
+            actionBar={mixinFuncs.renderActionBar()}
+            baseTable={
+                <BaseTable
+                    onChange={changePagination}
+                    pagination={pagination}
+                    loading={loading}
+                    dataSource={data}
+                    columns={columns}
+                />
+            }
+        />
+       
     );
 };
 

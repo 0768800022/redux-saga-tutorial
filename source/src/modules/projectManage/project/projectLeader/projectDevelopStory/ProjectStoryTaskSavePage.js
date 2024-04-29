@@ -5,31 +5,33 @@ import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 import routes from '@routes';
-import ProjectLeaderTaskForm from './ProjectLeaderTaskForm';
+
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
 import { showErrorMessage } from '@services/notifyService';
+import ProjectStoryTaskForm from './ProjectStoryTaskForm';
+import useSaveBaseProject from '@hooks/useSaveBaseProject';
 
 const messages = defineMessages({
     objectName: 'Task',
 });
 
-function ProjectLeaderTaskSavePage() {
+function ProjectStoryTaskSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
     const projectTaskId = useParams();
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBaseProject({
         apiConfig: {
-            getById: apiConfig.projectTask.getById,
-            create: apiConfig.projectTask.create,
-            update: apiConfig.projectTask.update,
+            getById: apiConfig.story.getById,
+            create: apiConfig.story.create,
+            update: apiConfig.story.update,
         },
         options: {
-            getListUrl: generatePath(routes.projectLeaderTaskListPage.path),
+            getListUrl: generatePath(routes.projectDeveloperTabPage.path),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
@@ -37,6 +39,7 @@ function ProjectLeaderTaskSavePage() {
                 return {
                     ...data,
                     id: detail.id,
+                    projectId: projectId,
                     status: 1,
                 };
             };
@@ -68,15 +71,14 @@ function ProjectLeaderTaskSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.task),
+                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
                 path:
-                    routes.projectLeaderTaskListPage.path +
-                    `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
+                    routes.projectDeveloperTabPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.task),
-                path: routes.projectLeaderTaskListPage.path + `?projectId=${projectId}&projectName=${projectName}`,
+                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                path: routes.projectDeveloperTabPage.path  + `?projectId=${projectId}&projectName=${projectName}`,
             });
         }
         breadRoutes.push({ breadcrumbName: title });
@@ -85,7 +87,7 @@ function ProjectLeaderTaskSavePage() {
     };
     return (
         <PageWrapper loading={loading} routes={setBreadRoutes()} title={title}>
-            <ProjectLeaderTaskForm
+            <ProjectStoryTaskForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -97,4 +99,4 @@ function ProjectLeaderTaskSavePage() {
     );
 }
 
-export default ProjectLeaderTaskSavePage;
+export default ProjectStoryTaskSavePage;

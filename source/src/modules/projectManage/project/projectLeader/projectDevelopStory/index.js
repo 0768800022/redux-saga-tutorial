@@ -89,7 +89,7 @@ function ProjectLeaderTaskListPage() {
     });
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBaseProject({
-            apiConfig: apiConfig.projectTask,
+            apiConfig: apiConfig.story,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
@@ -98,16 +98,16 @@ function ProjectLeaderTaskListPage() {
                 funcs.mappingData = (response) => {
                     if (response.result === true) {
                         return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
+                            data: response?.data?.content,
+                            total: response?.data?.totalElements,
                         };
                     }
                 };
                 funcs.getCreateLink = () => {
-                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                    return `${pagePath}/story/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                    return `${pagePath}/story/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
 
                 funcs.changeFilter = (filter) => {
@@ -226,54 +226,19 @@ function ProjectLeaderTaskListPage() {
     };
     const columns = [
         {
-            dataIndex: 'kind',
-            width: 15,
-            render(dataRow) {
-                if (dataRow === 1)
-                    return (
-                        <div>
-                            <img src={feature} height="30px" width="30px" />
-                        </div>
-                    );
-                if (dataRow === 2)
-                    return (
-                        <div>
-                            <img src={bug} height="30px" width="30px" />
-                        </div>
-                    );
-            },
-        },
-        {
-            title: translate.formatMessage(message.projectTask),
-            dataIndex: 'taskName',
-            width: 400,
-        },
-        {
-            title: translate.formatMessage(message.developer),
-            dataIndex: ['developer', 'account', 'fullName'],
+            title: <FormattedMessage defaultMessage="Tên story" />,
             width: 200,
-            render: (_, record) => record?.developer?.account?.fullName || record?.leader?.leaderName,
+            dataIndex: 'storyName',
         },
+        // {
+        //     title: <FormattedMessage defaultMessage="Người thực hiện" />,
+        //     width: 200,
+        //     dataIndex: ['developerInfo','account','fullName'],
+        //     render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
+        // },
         {
-            title: translate.formatMessage(commonMessage.projectCategory),
-            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
-            width: 150,
-            align: 'center',
-        },
-        {
-            title: translate.formatMessage(message.startDate),
-            dataIndex: 'startDate',
-            render: (startDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
-            },
-            width: 200,
-        },
-        {
-            title: 'Ngày kết thúc',
-            dataIndex: 'dueDate',
-            render: (dueDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(dueDate)}</div>;
-            },
+            title: 'Ngày tạo',
+            dataIndex: 'createdDate',
             width: 200,
             align: 'center',
         },
@@ -292,8 +257,8 @@ function ProjectLeaderTaskListPage() {
             align: 'center',
         },
         {
-            title: 'Tình trạng',
-            dataIndex: 'state',
+            title: 'Trạng thái',
+            dataIndex: 'status',
             align: 'center',
             width: 120,
             render(dataRow) {
@@ -306,27 +271,11 @@ function ProjectLeaderTaskListPage() {
             },
         },
 
-        mixinFuncs.renderActionColumn(
-            { taskLog: true, state: true, edit: active && true, delete: active && true },
-            { width: '150px' },
-        ),
+        // active &&
+        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
     const params = mixinFuncs.prepareGetListParams(queryFilter);
-    const {
-        data: listSetting,
-        loading: dataLoading,
-        execute: executeLoading,
-    } = useFetch(apiConfig.projectTask.getList, {
-        immediate: false,
-        params: { ...params },
-        mappingData: (response) => {
-            if (response.result === true) {
-                return {
-                    data: response.data.content,
-                };
-            }
-        },
-    });
+ 
     const { execute: executeUpdate } = useFetch({ ...apiConfig.projectTask.changeState,authorization: `Bearer ${userTokenProject}` }, { immediate: false });
 
     const handleOk = (values) => {
@@ -357,15 +306,15 @@ function ProjectLeaderTaskListPage() {
         });
     };
 
-    const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
-        immediate: true,
-        params: { projectId: projectId },
-        mappingData: ({ data }) =>
-            data.content.map((item) => ({
-                value: item?.developer?.id,
-                label: item?.developer?.studentInfo?.fullName,
-            })),
-    });
+    // const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
+    //     immediate: true,
+    //     params: { projectId: projectId },
+    //     mappingData: ({ data }) =>
+    //         data.content.map((item) => ({
+    //             value: item?.developer?.id,
+    //             label: item?.developer?.account?.fullName,
+    //         })),
+    // });
 
     const initialFilterValues = useMemo(() => {
         const initialFilterValues = {
@@ -378,60 +327,60 @@ function ProjectLeaderTaskListPage() {
         return initialFilterValues;
     }, [queryFilter?.fromDate, queryFilter?.toDate]);
 
-    const searchFields = [
-        {
-            key: 'projectCategoryId',
-            placeholder: <FormattedMessage defaultMessage={'Danh mục'} />,
-            type: FieldTypes.AUTOCOMPLETE,
-            apiConfig: apiConfig.projectCategory.autocomplete,
-            mappingOptions: (item) => ({
-                value: item.id,
-                label: item.projectCategoryName,
-            }),
-            optionsParams: { projectId: projectId },
-            initialSearchParams: { projectId: projectId },
-            searchParams: (text) => ({ name: text }),
-        },
-        {
-            key: 'developerId',
-            placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
-            type: FieldTypes.SELECT,
-            options: memberProject,
-        },
-        {
-            key: 'fromDate',
-            type: FieldTypes.DATE,
-            format: DATE_FORMAT_DISPLAY,
-            placeholder: translate.formatMessage(commonMessage.fromDate),
-            colSpan: 3,
-        },
-        {
-            key: 'toDate',
-            type: FieldTypes.DATE,
-            format: DATE_FORMAT_DISPLAY,
-            placeholder: translate.formatMessage(commonMessage.toDate),
-            colSpan: 3,
-        },
-        // !leaderName &&
-        //     !developerName && {
-        //     key: 'status',
-        //     placeholder: translate.formatMessage(commonMessage.status),
-        //     type: FieldTypes.SELECT,
-        //     options: statusValues,
-        // },
-    ].filter(Boolean);
+    // const searchFields = [
+    //     {
+    //         key: 'projectCategoryId',
+    //         placeholder: <FormattedMessage defaultMessage={'Danh mục'} />,
+    //         type: FieldTypes.AUTOCOMPLETE,
+    //         apiConfig: apiConfig.projectCategory.autocomplete,
+    //         mappingOptions: (item) => ({
+    //             value: item.id,
+    //             label: item.projectCategoryName,
+    //         }),
+    //         optionsParams: { projectId: projectId },
+    //         initialSearchParams: { projectId: projectId },
+    //         searchParams: (text) => ({ name: text }),
+    //     },
+    //     {
+    //         key: 'developerId',
+    //         placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
+    //         type: FieldTypes.SELECT,
+    //         options: memberProject,
+    //     },
+    //     {
+    //         key: 'fromDate',
+    //         type: FieldTypes.DATE,
+    //         format: DATE_FORMAT_DISPLAY,
+    //         placeholder: translate.formatMessage(commonMessage.fromDate),
+    //         colSpan: 3,
+    //     },
+    //     {
+    //         key: 'toDate',
+    //         type: FieldTypes.DATE,
+    //         format: DATE_FORMAT_DISPLAY,
+    //         placeholder: translate.formatMessage(commonMessage.toDate),
+    //         colSpan: 3,
+    //     },
+    //     // !leaderName &&
+    //     //     !developerName && {
+    //     //     key: 'status',
+    //     //     placeholder: translate.formatMessage(commonMessage.status),
+    //     //     type: FieldTypes.SELECT,
+    //     //     options: statusValues,
+    //     // },
+    // ].filter(Boolean);
 
     return (
        
         <div>
             <ListPage
                 title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{projectName}</span>}
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                    className: styles.search,
-                    initialValues: initialFilterValues,
-                })}
-                actionBar={active && !leaderName && !developerName && mixinFuncs.renderActionBar()}
+                // searchForm={mixinFuncs.renderSearchForm({
+                //     fields: searchFields,
+                //     className: styles.search,
+                //     initialValues: initialFilterValues,
+                // })}
+                actionBar={ mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onRow={(record) => ({
@@ -444,7 +393,7 @@ function ProjectLeaderTaskListPage() {
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={listSetting ? listSetting?.data : data}
+                        dataSource={ data}
                         columns={columns}
                     />
                 }

@@ -308,7 +308,7 @@ const useListBaseProject = ({
 
     const actionColumnButtons = (additionalButtons = {}) => ({
         delete: ({ id, buttonProps }) => {
-            if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
+            // if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
 
             return (
                 <BaseTooltip type="delete" objectName={options.objectName}>
@@ -342,7 +342,7 @@ const useListBaseProject = ({
             );
         },
         edit: ({ buttonProps, ...dataRow }) => {
-            if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
+            // if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
 
             return (
                 <BaseTooltip type="edit" objectName={options.objectName}>
@@ -388,11 +388,12 @@ const useListBaseProject = ({
             if (value || value?.show) {
                 switch (type) {
                                 case 'delete':
-                                    if (mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) isShow = true;
+                                    // if (mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) 
+                                    isShow = true;
                                     break;
                                 case 'edit':
-                                    if (mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]))
-                                        isShow = true;
+                                    // if (mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]))
+                                    isShow = true;
                                     break;
                                 default:
                                     // if (mixinFuncs.hasPermission(value?.permissions)) isShow = true;
@@ -478,7 +479,7 @@ const useListBaseProject = ({
     const renderActionBar = ({ type, style, onBulkDelete, selectedRows = [] } = {}) => {
         return (
             <ActionBar
-                createPermission={apiConfig.create?.baseURL}
+                // createPermission={apiConfig.create?.baseURL}
                 selectedRows={selectedRows}
                 onBulkDelete={onBulkDelete}
                 objectName={options.objectName}

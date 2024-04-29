@@ -7,14 +7,14 @@ import ProjectLeaderListPage from './projectLeader';
 import TeamListPage from './team';
 import TeamSavePage from './team/TeamSavePage';
 import ProjectLeaderMemberListPage from './projectLeader/projectLeaderMember';
-import ProjectLeaderTaskListPage from './projectLeader/projectLeaderTask';
+import ProjectLeaderTaskListPage from './projectLeader/projectDevelopStory';
 
 import ProjectStudentListPage from './projectStudent';
 import ProjectStudentTaskListPage from './projectStudent/projectStudentTask';
 import ProjectStudentMemberListPage from './projectStudent/projectStudentMember';
 import projectLeaderTaskLogListPage from './projectLeader/projectLeaderTaskLog';
 import ProjectLeaderSavePage from './projectLeader/projectLeaderSavePage';
-import ProjectLeaderTaskSavePage from './projectLeader/projectLeaderTask/ProjectLeaderTaskSavePage';
+import ProjectLeaderTaskSavePage from './projectLeader/projectDevelopStory/ProjectStoryTaskSavePage';
 import ProjectLeaderMemberForm from './projectLeader/projectLeaderMember/ProjectLeaderMemberForm';
 import ProjectLeaderMemberSavePage from './projectLeader/projectLeaderMember/ProjectLeaderMemberSavePage';
 
@@ -37,6 +37,7 @@ import ProjectCategoryStudentListPage from './projectStudent/projectCategory';
 import ProjectCategoryStudentSavePage from './projectStudent/projectCategory/ProjectCategorySavePage';
 import ProjectTabPage from './ProjectTabPage';
 import ProjectDevelopTabPage from './projectLeader/ProjectTabPage';
+import ProjectStoryTaskSavePage from './projectLeader/projectDevelopStory/ProjectStoryTaskSavePage';
 
 export default {
     projectListPage: {
@@ -62,6 +63,23 @@ export default {
         keyActiveTab: 'activeProjectTab',
         // permissions: [apiConfig.project.getList.baseURL],
     },
+    projectDeveloperStorySaveTabPage: {
+        path: '/project-developer/project-tab/story/:id',
+        title: 'Project Tab',
+        auth: true,
+        component: ProjectStoryTaskSavePage,
+        keyActiveTab: 'activeProjectTab',
+        // permissions: [apiConfig.project.getList.baseURL],
+    },
+    projectDeveloperMemberSaveTabPage: {
+        path: '/project-developer/project-tab/member/:id',
+        title: 'Project Tab',
+        auth: true,
+        component: ProjectLeaderMemberSavePage,
+        keyActiveTab: 'activeProjectTab',
+        // permissions: [apiConfig.project.getList.baseURL],
+    },
+
   
   
     projectSavePage: {
