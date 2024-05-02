@@ -51,23 +51,7 @@ const ProjectDevelopTabPage = () => {
         });
     }, []);
     const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
-    const { execute : getList, loading } = useFetch({
-        ...apiConfig.projectTask.getList,
-        authorization: `Bearer ${userTokenProject}`,
-    });
-
-    useEffect(() => {
-        userTokenProject &&  getList({
-            params: {
-              
-                projectId: projectId,
-            },
-            onCompleted: (res) => {
-            
-                console.log(res);
-            },
-        });
-    }, []);
+    
     const dataTab = [
         {
             label: translate.formatMessage(commonMessage.story),

@@ -459,6 +459,8 @@ const useListBaseProject = ({
             align: 'center',
             ...columnsProps,
             render: (status) => (
+
+               
                 <Tag color={commonStatusColor[status]}>
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
                         {intl.formatMessage(message.tableColumn.status[status])}
