@@ -24,10 +24,7 @@ const ProjectDevelopTabPage = () => {
     const { params: queryParams, setQueryParams, serializeParams, deserializeParams } = useQueryParams();
     const projectName = queryParams.get('projectName');
     const [searchFilter, setSearchFilter] = useState([]);
-    const [activeTab, setActiveTab] = useState(
-        localStorage.getItem(routes.projectTabPage.keyActiveTab)
-            ? localStorage.getItem(routes.projectTabPage.keyActiveTab)
-            : translate.formatMessage(commonMessage.story),
+    const [activeTab, setActiveTab] = useState(translate.formatMessage(commonMessage.story),
     );
     const projectId = queryParams.get('projectId');
 

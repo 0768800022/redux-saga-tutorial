@@ -38,6 +38,10 @@ import ProjectCategoryStudentSavePage from './projectStudent/projectCategory/Pro
 import ProjectTabPage from './ProjectTabPage';
 import ProjectDevelopTabPage from './projectLeader/ProjectTabPage';
 import ProjectStoryTaskSavePage from './projectLeader/projectDevelopStory/ProjectStoryTaskSavePage';
+import ProjectTaskListPage from './projectLeader/projectDevelopTask';
+import ProjectTaskSavePage from './projectLeader/projectDevelopTask/ProjectTaskSavePage';
+import ProjectTaskLogListPage from './projectLeader/projectDevelopTask/projectTaskLog';
+import ProjectTaskLogSavePage from './projectLeader/projectDevelopTask/projectTaskLog/projectTaskLogSavePage';
 
 export default {
     projectListPage: {
@@ -70,6 +74,31 @@ export default {
         component: ProjectStoryTaskSavePage,
         keyActiveTab: 'activeProjectTab',
         // permissions: [apiConfig.project.getList.baseURL],
+    },
+    projectDevelopTask: {
+        path: '/project-developer/project-tab/story/task',
+        title: 'Project Developer Task',
+        auth: true,
+        component: ProjectTaskListPage,
+    },
+    projectDevelopTaskSavePage: {
+        path: '/project-developer/project-tab/story/task/:id',
+        title: 'Project Developer Task Save Page',
+        auth: true,
+        component: ProjectTaskSavePage,
+    },
+    projectDevelopTaskLog: {
+        path: '/project-developer/project-tab/story/task-log',
+        title: 'Project Developer Task Log',
+        auth: true,
+        component: ProjectTaskLogListPage,
+    },
+    projectDevelopTaskLogSavePage: {
+        path: '/project-developer/project-tab/story/task-log/:id',
+        title: 'Project Developer Task Log Save Page',
+        auth: true,
+        component: ProjectTaskLogSavePage,
+        // permissions: [apiConfig.projectTaskLog.create.baseURL, apiConfig.projectTaskLog.update.baseURL],
     },
     projectDeveloperMemberSaveTabPage: {
         path: '/project-developer/project-tab/member/:id',

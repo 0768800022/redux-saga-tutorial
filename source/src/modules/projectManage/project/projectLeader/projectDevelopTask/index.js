@@ -1,98 +1,113 @@
+import { CalendarOutlined, CheckOutlined } from '@ant-design/icons';
+import { BaseForm } from '@components/common/form/BaseForm';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import NumericField from '@components/common/form/NumericField';
+import TextField from '@components/common/form/TextField';
 import ListPage from '@components/common/layout/ListPage';
-import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import {
-    DATE_DISPLAY_FORMAT,
+    DATE_FORMAT_DISPLAY,
     DATE_FORMAT_END_OF_DAY_TIME,
     DATE_FORMAT_ZERO_TIME,
+    DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
-    storageKeys,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { projectTaskState, statusOptions } from '@constants/masterData';
-import useListBase from '@hooks/useListBase';
-import useTranslate from '@hooks/useTranslate';
-import routes from '@routes';
-import { Tag, Button, Modal, Row, Col } from 'antd';
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { FormattedMessage, defineMessages } from 'react-intl';
-import { generatePath, useLocation, useNavigate } from 'react-router-dom';
-import { EditOutlined, CheckOutlined } from '@ant-design/icons';
+import { projectTaskState } from '@constants/masterData';
 import useDisclosure from '@hooks/useDisclosure';
-import { useState } from 'react';
 import useFetch from '@hooks/useFetch';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { CalendarOutlined } from '@ant-design/icons';
-import { commonMessage } from '@locales/intl';
+import useListBase from '@hooks/useListBase';
 import useNotification from '@hooks/useNotification';
-import { useIntl } from 'react-intl';
-import styles from '@modules/projectManage/project/project.module.scss';
-
-import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, AppConstants } from '@constants';
+import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import { convertUtcToLocalTime, formatDateString } from '@utils';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import DetailMyTaskProjectModal from '../../projectStudent/myTask/DetailMyTaskProjectModal';
-import { BaseForm } from '@components/common/form/BaseForm';
-import NumericField from '@components/common/form/NumericField';
-import TextField from '@components/common/form/TextField';
-import feature from '../../../../../assets/images/feature.png';
-import bug from '../../../../../assets/images/bug.jpg';
+import { Button, Col, Modal, Row, Tag } from 'antd';
 import dayjs from 'dayjs';
-import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
-import useListBaseProject from '@hooks/useListBaseProject';
-import { getData } from '@utils/localStorage';
+import React, { useEffect, useMemo, useState } from 'react';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
+import bug from '../../../../../assets/images/bug.jpg';
+import feature from '../../../../../assets/images/feature.png';
+// import styles from '../project.module.scss';
+import PageWrapper from '@components/common/layout/PageWrapper';
 import { showErrorMessage } from '@services/notifyService';
+import useListBaseProject from '@hooks/useListBaseProject';
 
 const message = defineMessages({
     objectName: 'Task',
-    developer: 'Lập trình viên',
-    home: 'Trang chủ',
-    state: 'Tình trạng',
-    projectTask: 'Task',
-    project: 'Dự án',
-    leader: 'Leader',
-    name: 'Tên task',
-    status: 'Trạng thái',
-    startDate: 'Ngày bắt đầu',
-    updateTaskSuccess: 'Cập nhật tình trạng thành công',
-    done: 'Hoàn thành',
     cancel: 'Huỷ',
+    done: 'Hoàn thành',
+    updateTaskSuccess: 'Cập nhật tình trạng thành công',
+    updateTaskError: 'Cập nhật tình trạng thất bại',
 });
 
-function ProjectLeaderTaskListPage() {
+function ProjectTaskListPage({ setSearchFilter }) {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const notification = useNotification({ duration: 3 });
     const intl = useIntl();
+
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
-    const [introduceData, setIntroduceData] = useState({});
-    const [openedModal, handlersModal] = useDisclosure(false);
-
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
-    const leaderId = queryParameters.get('leaderId');
-    const leaderName = queryParameters.get('leaderName');
-    const developerName = queryParameters.get('developerName');
     const active = queryParameters.get('active');
-    const state = queryParameters.get('state');
-    const notification = useNotification({ duration: 3 });
-    const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
-
-    const [openedIntroduceModal, handlersIntroduceModal] = useDisclosure(false);
+    const storyName = queryParameters.get('storyName');
+    const storyId = queryParameters.get('storyId');
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const location = useLocation();
-    const [detail, setDetail] = useState();
-    const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
-    const { execute: executeGet, loading: loadingDetail } = useFetch(
-        { ...apiConfig.projectTask.getById, authorization: `Bearer ${userTokenProject}` },
-        {
-            immediate: false,
-        },
-    );
+    const activeProjectTab = localStorage.getItem('activeProjectTab');
+    localStorage.setItem('pathPrev', location.search);
+    const [openedModal, handlersModal] = useDisclosure(false);
+    const [detail, setDetail] = useState({});
+    const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
+
+    const { execute: executeGet } = useFetch(apiConfig.projectTask.getById, {
+        immediate: false,
+    });
+    const handleFetchDetail = (id) => {
+        executeGet({
+            pathParams: { id: id },
+            onCompleted: (response) => {
+                setDetail(response.data);
+            },
+        });
+    };
+    const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
+
+    const handleOk = (values) => {
+        handlersStateTaskModal.close();
+        updateState(values);
+    };
+    const updateState = (values) => {
+        executeUpdate({
+            data: {
+                id: detail.id,
+                state: 3,
+                minutes: values.minutes,
+                message: values.message,
+                gitCommitUrl: values.gitCommitUrl,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    handlersStateTaskModal.close();
+                    mixinFuncs.getList();
+                    notification({
+                        message: intl.formatMessage(message.updateTaskSuccess),
+                    });
+                }
+            },
+            onError: (err) => {
+                showErrorMessage(intl.formatMessage(message.updateTaskError));
+            },
+        });
+    };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBaseProject({
-            apiConfig: apiConfig.story,
+            apiConfig: apiConfig.projectTask,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
@@ -106,11 +121,11 @@ function ProjectLeaderTaskListPage() {
                         };
                     }
                 };
-                funcs.getCreateLink = () => {
-                    return `${pagePath}/story/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                funcs.getCreateLink = (record) => {
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}&storyId=${storyId}&storyName=${storyName}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    return `${pagePath}/story/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
+                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}&storyId=${storyId}&storyName=${storyName}`;
                 };
 
                 funcs.changeFilter = (filter) => {
@@ -151,8 +166,8 @@ function ProjectLeaderTaskListPage() {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     navigate(
-                                        routes.projectLeaderTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                        routes.projectDevelopTaskLog.path +
+                                            `?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}&storyName=${storyName}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -214,119 +229,167 @@ function ProjectLeaderTaskListPage() {
                 };
             },
         });
-    const handleFetchDetail = (id) => {
-        executeGet({
-            pathParams: { id: id },
-            onCompleted: (response) => {
-                setDetail(response.data);
-            },
-            onError: mixinFuncs.handleGetDetailError,
-        });
-    };
-    const convertDate = (date) => {
-        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
-        return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
-    };
     const columns = [
         {
-            title: <FormattedMessage defaultMessage="Tên story" />,
-            width: 200,
-            dataIndex: 'storyName',
+            dataIndex: 'kind',
+            width: 15,
+            render(dataRow) {
+                if (dataRow === 1)
+                    return (
+                        <div>
+                            <img src={feature} height="30px" width="30px" />
+                        </div>
+                    );
+                if (dataRow === 2)
+                    return (
+                        <div>
+                            <img src={bug} height="30px" width="30px" />
+                        </div>
+                    );
+            },
         },
-        // {
-        //     title: <FormattedMessage defaultMessage="Người thực hiện" />,
-        //     width: 200,
-        //     dataIndex: ['developerInfo','account','fullName'],
-        //     render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
-        // },
         {
-            title: 'Ngày tạo',
-            dataIndex: 'createdDate',
+            title: translate.formatMessage(commonMessage.task),
+            width: 200,
+            dataIndex: 'taskName',
+        },
+        {
+            title: translate.formatMessage(commonMessage.developer),
+            dataIndex: ['developer', 'account', 'fullName'],
+            width: 200,
+            render: (_, record) => record?.developer?.account?.fullName || record?.leader?.leaderName,
+        },
+        {
+            title: translate.formatMessage(commonMessage.projectCategory),
+            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
+            width: 150,
+        },
+        {
+            title: 'Ngày bắt đầu',
+            dataIndex: 'startDate',
             width: 200,
             align: 'center',
         },
         {
-            title: 'Ngày hoàn thành',
-            dataIndex: 'dateComplete',
-            width: 180,
-            render: (dateComplete) => {
-                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
-                    7,
-                    'hour',
+            title: 'Ngày kết thúc',
+            dataIndex: 'dueDate',
+            width: 200,
+        },
+        {
+            title: 'Tình trạng',
+            dataIndex: 'state',
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues?.find((item) => item?.value == dataRow);
+                return (
+                    <Tag color={state?.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
+                    </Tag>
                 );
-                const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
             },
-            align: 'center',
         },
 
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
-
-        // active &&
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '180px' }),
+        active &&
+            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
-    const params = mixinFuncs.prepareGetListParams(queryFilter);
 
-    const { execute: executeUpdate } = useFetch(
-        { ...apiConfig.projectTask.changeState, authorization: `Bearer ${userTokenProject}` },
-        { immediate: false },
-    );
+    const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
+        immediate: true,
+        params: { projectId: projectId },
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item?.developer?.id,
+                label: item?.developer?.account?.fullName,
+            })),
+    });
 
-    const handleOk = (values) => {
-        handlersStateTaskModal.close();
-        updateState(values);
-    };
-    const updateState = (values) => {
-        executeUpdate({
-            data: {
-                id: detail.id,
-                state: 3,
-                minutes: values.minutes,
-                message: values.message,
-                gitCommitUrl: values.gitCommitUrl,
-            },
-            onCompleted: (response) => {
-                if (response.result === true) {
-                    handlersStateTaskModal.close();
-                    mixinFuncs.getList();
-                    notification({
-                        message: intl.formatMessage(message.updateTaskSuccess),
-                    });
-                }
-            },
-            onError: (err) => {
-                showErrorMessage('error');
-            },
-        });
-    };
+    const searchFields = [
+        {
+            key: 'projectCategoryId',
+            placeholder: <FormattedMessage defaultMessage={'Danh mục'} />,
+            type: FieldTypes.AUTOCOMPLETE,
+            apiConfig: apiConfig.projectCategory.autocomplete,
+            mappingOptions: (item) => ({
+                value: item.id,
+                label: item.projectCategoryName,
+            }),
+            optionsParams: { projectId: projectId },
+            initialSearchParams: { projectId: projectId },
+            searchParams: (text) => ({ name: text }),
+        },
+        {
+            key: 'developerId',
+            placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
+            type: FieldTypes.SELECT,
+            options: memberProject,
+        },
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(commonMessage.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
+        {
+            key: 'fromDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.fromDate),
+            colSpan: 3,
+        },
+        {
+            key: 'toDate',
+            type: FieldTypes.DATE,
+            format: DATE_FORMAT_DISPLAY,
+            placeholder: translate.formatMessage(commonMessage.toDate),
+            colSpan: 3,
+        },
+    ].filter(Boolean);
+    const initialFilterValues = useMemo(() => {
+        const initialFilterValues = {
+            ...queryFilter,
+            fromDate: queryFilter.fromDate && dayjs(formatDateToLocal(queryFilter.fromDate), DEFAULT_FORMAT),
+            toDate:
+                queryFilter.toDate && dayjs(formatDateToLocal(queryFilter.toDate), DEFAULT_FORMAT).subtract(7, 'hour'),
+        };
 
-    const handleOnClick = (event, record) => {
-        event.preventDefault();
-        localStorage.setItem(routes.projectTabPage.keyActiveTab, translate.formatMessage(commonMessage.task));
-        console.log(record);
-        navigate(
-            routes.projectDevelopTask.path +
-                `?projectId=${projectId}&storyId=${record.id}&storyName=${record?.storyName}&active=${!!record.status == 1}&projectName=${projectName}`,
-        );
-    };
+        return initialFilterValues;
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
+
+    // useEffect(() => {
+    //     setSearchFilter(queryFilter);
+    // }, [queryFilter]);
+
+    const breadcrumbs = [
+        {
+            breadcrumbName: translate.formatMessage(commonMessage.project),
+            path: routes.projectLeaderListPage.path,
+        },
+        {
+            breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+            path: routes.projectDeveloperTabPage.path+`?projectId=${projectId}&projectName=${projectName}&active=${active}`,
+        },
+        {
+            breadcrumbName: storyName,
+        },
+    ];
 
     return (
-        <div>
+        <PageWrapper routes={breadcrumbs}>
             <ListPage
-                title={<span style={{ fontWeight: 'normal', fontSize: '16px' }}>{projectName}</span>}
-                // searchForm={mixinFuncs.renderSearchForm({
-                //     fields: searchFields,
-                //     className: styles.search,
-                //     initialValues: initialFilterValues,
-                // })}
-                actionBar={mixinFuncs.renderActionBar()}
+                searchForm={mixinFuncs.renderSearchForm({
+                    fields: searchFields,
+                    activeTab: activeProjectTab,
+                })}
+                actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onRow={(record) => ({
                             onClick: (e) => {
                                 e.stopPropagation();
-                                handleOnClick(e, record);
-                                // handleFetchDetail(record.id);
+                                handleFetchDetail(record.id);
+
+                                handlersModal.open();
                             },
                         })}
                         onChange={changePagination}
@@ -337,7 +400,6 @@ function ProjectLeaderTaskListPage() {
                     />
                 }
             />
-            <DetailMyTaskProjectModal open={openedModal} onCancel={() => handlersModal.close()} DetailData={detail} />
             <Modal
                 title="Thay đổi tình trạng hoàn thành"
                 open={openedStateTaskModal}
@@ -357,9 +419,9 @@ function ProjectLeaderTaskListPage() {
                                 <NumericField
                                     label={<FormattedMessage defaultMessage="Tổng thời gian" />}
                                     name="minutes"
+                                    required
                                     addonAfter={<FormattedMessage defaultMessage="Phút" />}
                                     min={0}
-                                    required
                                 />
                             </Col>
                             <Col span={24}>
@@ -380,7 +442,7 @@ function ProjectLeaderTaskListPage() {
                             </Col>
                         </Row>
                         <div style={{ float: 'right' }}>
-                            <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()}>
+                            <Button onClick={() => handlersStateTaskModal.close()}>
                                 {translate.formatMessage(message.cancel)}
                             </Button>
                             <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }}>
@@ -390,7 +452,7 @@ function ProjectLeaderTaskListPage() {
                     </div>
                 </BaseForm>
             </Modal>
-        </div>
+        </PageWrapper>
     );
 }
 const formatDateToZeroTime = (date) => {
@@ -401,7 +463,8 @@ const formatDateToEndOfDayTime = (date) => {
     const dateString = formatDateString(date, DEFAULT_FORMAT);
     return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
 };
+
 const formatDateToLocal = (date) => {
     return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
 };
-export default ProjectLeaderTaskListPage;
+export default ProjectTaskListPage;
