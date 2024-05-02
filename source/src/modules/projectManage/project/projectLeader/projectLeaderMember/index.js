@@ -1,34 +1,19 @@
+import { UserOutlined } from '@ant-design/icons';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect, useState } from 'react';
-import PageWrapper from '@components/common/layout/PageWrapper';
+import BaseTable from '@components/common/table/BaseTable';
 import {
-    DATE_DISPLAY_FORMAT,
-    DATE_FORMAT_DISPLAY,
-    DEFAULT_FORMAT,
-    DEFAULT_TABLE_ITEM_SIZE,
     AppConstants,
+    DEFAULT_TABLE_ITEM_SIZE,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
-import { TeamOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Avatar, Tag } from 'antd';
-import { generatePath, useNavigate } from 'react-router-dom';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import { convertUtcToLocalTime } from '@utils';
-import { useLocation } from 'react-router-dom';
-import useFetch from '@hooks/useFetch';
-import route from '@modules/projectManage/project/routes';
 import routes from '@routes';
-import { EditOutlined } from '@ant-design/icons';
-import ScheduleFile from '@components/common/elements/ScheduleFile';
-import styles from './projectLeaderMember.module.scss';
-import { commonMessage } from '@locales/intl';
-import { FieldTypes } from '@constants/formConfig';
-import useListBaseProject from '@hooks/useListBaseProject';
+import { Avatar } from 'antd';
+import React from 'react';
+import { defineMessages } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -52,12 +37,13 @@ const ProjectLeaderMemberListPage = () => {
     const leaderId = queryParameters.get('leaderId');
     localStorage.setItem('pathPrev', location.search);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBaseProject({
+        useListBase({
             apiConfig: apiConfig.memberProject,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
             },
+            isProjectToken : true,
             override: (funcs) => {
                 funcs.mappingData = (response) => {
                     if (response.result === true) {

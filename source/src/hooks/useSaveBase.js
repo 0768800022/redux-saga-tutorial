@@ -9,6 +9,8 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import useNotification from './useNotification';
 import useTranslate from './useTranslate';
+import { getData } from '@utils/localStorage';
+import { storageKeys } from '@constants';
 
 const message = defineMessages({
     createSuccess: 'Tạo {objectName} thành công',
@@ -37,6 +39,7 @@ const useSaveBase = ({
         objectName: '',
         getListUrl: '',
     },
+    isProjectToken =false,
     override,
 }) => {
     const navigate = useNavigate();
@@ -51,9 +54,10 @@ const useSaveBase = ({
     const { execute: executeGet, loading } = useFetch(apiConfig.getById, {
         immediate: false,
     });
+    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
     const translate = useTranslate();
-    const { execute: executeCreate, loading: loadingCreate } = useFetch(apiConfig.create, { immediate: false });
-    const { execute: executeUpdate, loading: loadingUpdate } = useFetch(apiConfig.update, { immediate: false });
+    const { execute: executeCreate, loading: loadingCreate } = useFetch( isProjectToken ? { ...apiConfig.create,authorization: `Bearer ${userTokenProject}` } : { ...apiConfig.create }, { immediate: false });
+    const { execute: executeUpdate, loading: loadingUpdate } = useFetch(isProjectToken ? { ...apiConfig.create,authorization: `Bearer ${userTokenProject}` } : { ...apiConfig.update }, { immediate: false });
     const title =
         params.id === 'create'
             ? `${translate.formatMessage(message.new)} ${options.objectName}`

@@ -23,10 +23,9 @@ import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 import { convertUtcToLocalTime, formatDateString } from '@utils';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { Button, Col, Modal, Row, Tag } from 'antd';
 import dayjs from 'dayjs';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import bug from '../../../../../assets/images/bug.jpg';
@@ -34,7 +33,6 @@ import feature from '../../../../../assets/images/feature.png';
 // import styles from '../project.module.scss';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { showErrorMessage } from '@services/notifyService';
-import useListBaseProject from '@hooks/useListBaseProject';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -106,12 +104,13 @@ function ProjectTaskListPage({ setSearchFilter }) {
         });
     };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBaseProject({
+        useListBase({
             apiConfig: apiConfig.projectTask,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
             },
+            isProjectToken : true,
             override: (funcs) => {
                 funcs.mappingData = (response) => {
                     if (response.result === true) {

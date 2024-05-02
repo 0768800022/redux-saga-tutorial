@@ -6,11 +6,10 @@ import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 import React from 'react';
 import { defineMessages } from 'react-intl';
-import ProjectLeaderMemberForm from './ProjectLeaderMemberForm';
 import { generatePath } from 'react-router-dom';
+import ProjectLeaderMemberForm from './ProjectLeaderMemberForm';
 // import routes from '@modules/course/routes';
 import { showErrorMessage } from '@services/notifyService';
-import useSaveBaseProject from '@hooks/useSaveBaseProject';
 
 const messages = defineMessages({
     objectName: 'Thành viên',
@@ -24,7 +23,7 @@ function ProjectLeaderMemberSavePage() {
     const projectId = queryParameters.get('projectId');
     const leaderId = queryParameters.get('leaderId');
     const active = queryParameters.get('active');
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBaseProject({
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.memberProject.getById,
             create: apiConfig.memberProject.create,
@@ -34,6 +33,7 @@ function ProjectLeaderMemberSavePage() {
             getListUrl: generatePath(routes.projectDeveloperTabPage.path),
             objectName: translate.formatMessage(messages.objectName),
         },
+        isProjectToken : true,
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {

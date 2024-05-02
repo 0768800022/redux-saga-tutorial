@@ -6,6 +6,7 @@ import {
     DEFAULT_TABLE_ITEM_SIZE,
     DEFAULT_TABLE_PAGE_START,
     STATUS_INACTIVE,
+    storageKeys,
 } from '@constants';
 
 import { Modal, Button, Divider, Tag } from 'antd';
@@ -21,6 +22,7 @@ import HasPermission from '@components/common/elements/HasPermission';
 import useAuth from './useAuth';
 import { validatePermission } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import { getData } from '@utils/localStorage';
 
 const message = defineMessages({
     deleteConfirm: {
@@ -100,14 +102,16 @@ const useListBase = ({
         queryPage: {},
         isTab: false,
     },
+    isProjectToken = false,
     override,
 } = {}) => {
     const { params: queryParams, setQueryParams, serializeParams, deserializeParams } = useQueryParams();
     const [data, setData] = useState(0);
     const [loading, setLoading] = useState(false);
-    const { execute: executeGetList } = useFetch(apiConfig.getList);
-    const { execute: executeDelete } = useFetch(apiConfig.delete);
-    const { execute: executeChangeStatus } = useFetch(apiConfig.changeStatus);
+    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
+    const { execute: executeGetList } = useFetch( isProjectToken ? { ...apiConfig.getList,authorization: `Bearer ${userTokenProject}` } :  { ...apiConfig.getList } );
+    const { execute: executeDelete } = useFetch(isProjectToken ? { ...apiConfig.delete,authorization: `Bearer ${userTokenProject}` } : { ...apiConfig.delete });
+    const { execute: executeChangeStatus } = useFetch(isProjectToken ? { ...apiConfig.changeStatus,authorization: `Bearer ${userTokenProject}` }: { ...apiConfig.changeStatus });
     const [currentPageTab, setCurrentPageTab] = useState(0);
     const [pagination, setPagination] = useState({
         pageSize: options.pageSize,
@@ -305,7 +309,7 @@ const useListBase = ({
 
     const actionColumnButtons = (additionalButtons = {}) => ({
         delete: ({ id, buttonProps }) => {
-            if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
+            if (!isProjectToken && !mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
 
             return (
                 <BaseTooltip type="delete" objectName={options.objectName}>
@@ -339,7 +343,7 @@ const useListBase = ({
             );
         },
         edit: ({ buttonProps, ...dataRow }) => {
-            if (!mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
+            if (!isProjectToken && !mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
 
             return (
                 <BaseTooltip type="edit" objectName={options.objectName}>
@@ -385,10 +389,10 @@ const useListBase = ({
             if (value || value?.show) {
                 switch (type) {
                                 case 'delete':
-                                    if (mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) isShow = true;
+                                    if (!isProjectToken && mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) isShow = true;
                                     break;
                                 case 'edit':
-                                    if (mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]))
+                                    if (!isProjectToken && mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]))
                                         isShow = true;
                                     break;
                                 default:
@@ -475,7 +479,7 @@ const useListBase = ({
     const renderActionBar = ({ type, style, onBulkDelete, selectedRows = [] } = {}) => {
         return (
             <ActionBar
-                createPermission={apiConfig.create?.baseURL}
+                createPermission={!isProjectToken && apiConfig.create?.baseURL}
                 selectedRows={selectedRows}
                 onBulkDelete={onBulkDelete}
                 objectName={options.objectName}

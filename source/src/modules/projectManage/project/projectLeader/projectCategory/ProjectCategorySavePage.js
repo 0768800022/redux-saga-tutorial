@@ -1,14 +1,13 @@
-import React from 'react';
-import apiConfig from '@constants/apiConfig';
-import routes from '@routes';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import useTranslate from '@hooks/useTranslate';
+import apiConfig from '@constants/apiConfig';
 import useSaveBase from '@hooks/useSaveBase';
-import { generatePath, useParams } from 'react-router-dom';
-import { defineMessages } from 'react-intl';
-import ProjectCategoryForm from './ProjectCategoryForm';
+import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
-import useSaveBaseProject from '@hooks/useSaveBaseProject';
+import routes from '@routes';
+import React from 'react';
+import { defineMessages } from 'react-intl';
+import { generatePath, useParams } from 'react-router-dom';
+import ProjectCategoryForm from './ProjectCategoryForm';
 const message = defineMessages({
     objectName: 'Danh mục',
 });
@@ -20,7 +19,7 @@ function ProjectCategorySavePage() {
     const projectName = queryParameters.get('projectName');
     // const projectName = queryParameters.get('projectName');
     const projectCategoryId = useParams();
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBaseProject({
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.projectCategory.getById,
             create: apiConfig.projectCategory.create,
@@ -30,6 +29,7 @@ function ProjectCategorySavePage() {
             getListUrl: generatePath(routes.projectCategoryLeaderListPage.path, { projectCategoryId }),
             objectName: translate.formatMessage(message.objectName),
         },
+        isProjectToken : true,
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {

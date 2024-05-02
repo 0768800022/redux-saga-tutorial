@@ -336,11 +336,7 @@ const ProjectListPage = () => {
                 </div>
             ),
         },
-        {
-            title: translate.formatMessage(commonMessage.leader),
-            dataIndex: ['leaderInfo', 'leaderName'],
-            width: 150,
-        },
+       
         {
             title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'startDate',

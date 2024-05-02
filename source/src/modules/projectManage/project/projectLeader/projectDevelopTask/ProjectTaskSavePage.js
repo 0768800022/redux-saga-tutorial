@@ -1,16 +1,14 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import apiConfig from '@constants/apiConfig';
-import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
-import React from 'react';
-import { generatePath, useParams } from 'react-router-dom';
-import routes from '@routes';
-import ProjectTaskForm from './ProjectTaskForm';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
 import { showErrorMessage } from '@services/notifyService';
-import useSaveBaseProject from '@hooks/useSaveBaseProject';
+import React from 'react';
+import { defineMessages } from 'react-intl';
+import { generatePath, useParams } from 'react-router-dom';
+import ProjectTaskForm from './ProjectTaskForm';
 
 const messages = defineMessages({
     objectName: 'Task',
@@ -25,7 +23,7 @@ function ProjectTaskSavePage() {
     const storyId = queryParameters.get('storyId');
     const storyName = queryParameters.get('storyName');
     const projectTaskId = useParams();
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBaseProject({
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.projectTask.getById,
             create: apiConfig.projectTask.create,
@@ -35,6 +33,7 @@ function ProjectTaskSavePage() {
             getListUrl: generatePath(routes.projectDevelopTask.path),
             objectName: translate.formatMessage(messages.objectName),
         },
+        isProjectToken : true,
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
