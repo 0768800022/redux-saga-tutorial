@@ -229,10 +229,10 @@ const SalaryPeriodListPage = () => {
             align: 'center',
             width: 120,
             render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
+                const state = stateValues?.find((item) => item?.value == dataRow);
                 return (
-                    <Tag color={state.color}>
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    <Tag color={state?.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
                     </Tag>
                 );
             },

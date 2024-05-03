@@ -11,6 +11,7 @@ import {
     DATE_FORMAT_ZERO_TIME,
     DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
+    storageKeys,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
@@ -33,6 +34,7 @@ import feature from '../../../../../assets/images/feature.png';
 // import styles from '../project.module.scss';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { showErrorMessage } from '@services/notifyService';
+import { getData } from '@utils/localStorage';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -74,7 +76,8 @@ function ProjectTaskListPage({ setSearchFilter }) {
             },
         });
     };
-    const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
+    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
+    const { execute: executeUpdate } = useFetch({ ...apiConfig.projectTask.changeState, authorization: `Bearer ${userTokenProject}` }, { immediate: false });
 
     const handleOk = (values) => {
         handlersStateTaskModal.close();

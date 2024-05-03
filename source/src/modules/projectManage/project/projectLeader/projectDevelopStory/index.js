@@ -74,7 +74,7 @@ function ProjectLeaderTaskListPage() {
     const location = useLocation();
     const [detail, setDetail] = useState();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
+   
     const { execute: executeGet, loading: loadingDetail } = useFetch(
         { ...apiConfig.projectTask.getById, authorization: `Bearer ${userTokenProject}` },
         {
@@ -258,18 +258,15 @@ function ProjectLeaderTaskListPage() {
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
     const params = mixinFuncs.prepareGetListParams(queryFilter);
-
-    const { execute: executeUpdate } = useFetch(
-        { ...apiConfig.projectTask.changeState, authorization: `Bearer ${userTokenProject}` },
+    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
+    const { execute: executeUpdateStateValue } = useFetch(
+        { ...apiConfig.projectTask.changeState, authorization: `Bearer1231212 ${userTokenProject}` },
         { immediate: false },
     );
 
-    const handleOk = (values) => {
-        handlersStateTaskModal.close();
-        updateState(values);
-    };
+    
     const updateState = (values) => {
-        executeUpdate({
+        executeUpdateStateValue({
             data: {
                 id: detail.id,
                 state: 3,
@@ -338,7 +335,7 @@ function ProjectLeaderTaskListPage() {
                 onCancel={() => handlersStateTaskModal.close()}
                 data={detail || {}}
             >
-                <BaseForm onFinish={handleOk} size="100%">
+                <BaseForm onFinish={updateState} size="100%">
                     <div
                         style={{
                             margin: '28px 0 20px 0',

@@ -77,7 +77,7 @@ function RegistrationMoneyListPage() {
     const columns = [
         {
             title: '#',
-            dataIndex: ['registrationInfo', 'studentInfo', 'avatar'],
+            dataIndex: ['registrationInfo', 'studentInfo', 'account',"avatar"],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -90,7 +90,7 @@ function RegistrationMoneyListPage() {
         },
         {
             title: translate.formatMessage(commonMessage.studentName),
-            dataIndex: ['registrationInfo', 'studentInfo', 'fullName'],
+            dataIndex: ['registrationInfo', 'studentInfo',"account", 'fullName'],
         },
 
         {

@@ -541,7 +541,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                     name={['studentInfo', 'fullName']}
                                     apiConfig={apiConfig.student.autocomplete}
                                     mappingOptions={(item) => {
-                                        return { value: item.id, label: item.fullName };
+                                        return { value: item.id, label: item?.account?.fullName };
                                     }}
                                     initialSearchParams={{ pageNumber: 0 }}
                                     searchParams={(text) => ({ fullName: text })}

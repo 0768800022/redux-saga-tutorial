@@ -109,9 +109,19 @@ const useListBase = ({
     const [data, setData] = useState(0);
     const [loading, setLoading] = useState(false);
     const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
-    const { execute: executeGetList } = useFetch( isProjectToken ? { ...apiConfig.getList,authorization: `Bearer ${userTokenProject}` } :  { ...apiConfig.getList } );
-    const { execute: executeDelete } = useFetch(isProjectToken ? { ...apiConfig.delete,authorization: `Bearer ${userTokenProject}` } : { ...apiConfig.delete });
-    const { execute: executeChangeStatus } = useFetch(isProjectToken ? { ...apiConfig.changeStatus,authorization: `Bearer ${userTokenProject}` }: { ...apiConfig.changeStatus });
+    const { execute: executeGetList } = useFetch(
+        isProjectToken
+            ? { ...apiConfig.getList, authorization: `Bearer ${userTokenProject}` }
+            : { ...apiConfig.getList },
+    );
+    const { execute: executeDelete } = useFetch(
+        isProjectToken ? { ...apiConfig.delete, authorization: `Bearer ${userTokenProject}` } : { ...apiConfig.delete },
+    );
+    const { execute: executeChangeStatus } = useFetch(
+        isProjectToken
+            ? { ...apiConfig.changeStatus, authorization: `Bearer ${userTokenProject}` }
+            : { ...apiConfig.changeStatus },
+    );
     const [currentPageTab, setCurrentPageTab] = useState(0);
     const [pagination, setPagination] = useState({
         pageSize: options.pageSize,
@@ -139,14 +149,11 @@ const useListBase = ({
 
     const handleGetListError = (error) => {
         console.log(error);
-        if(error?.response?.data?.code == "[Ex2]: Access is denied")
-        {
+        if (error?.response?.data?.code == '[Ex2]: Access is denied') {
             notification({ type: 'error', message: 'Access is denied' });
+        } else {
+            notification({ type: 'error', message: 'Lỗi' });
         }
-        else {
-            notification({ type: 'error', message: 'Access is denied' });
-        }
-       
     };
 
     const onCompletedGetList = (response) => {
@@ -180,10 +187,10 @@ const useListBase = ({
     const prepareGetListParams = (filter) => {
         let copyFilter = { ...filter };
         let page = parseInt(queryParams.get('page'));
-        if(tabOptions.isTab){
+        if (tabOptions.isTab) {
             copyFilter = { ...filter, ...options.queryPage };
             page = parseInt(currentPageTab);
-        }   
+        }
 
         copyFilter.page = page > 0 ? page - 1 : DEFAULT_TABLE_PAGE_START;
 
@@ -194,24 +201,24 @@ const useListBase = ({
 
     const getList = (filter) => {
         let params = mixinFuncs.prepareGetListParams(queryFilter);
-        if(tabOptions.isTab){
+        if (tabOptions.isTab) {
             params = mixinFuncs.prepareGetListParams({ ...tabOptions.queryPage, ...filter });
         }
         mixinFuncs.handleFetchList({ ...params });
     };
 
     const changeFilter = (filter) => {
-        if(tabOptions.isTab){
+        if (tabOptions.isTab) {
             mixinFuncs.getList(filter);
-        }else{
+        } else {
             setQueryParams(serializeParams(filter));
         }
     };
 
     function changePagination(page) {
-        if(tabOptions.isTab){
+        if (tabOptions.isTab) {
             setCurrentPageTab(page.current);
-        }else{
+        } else {
             queryParams.set('page', page.current);
             setQueryParams(queryParams);
         }
@@ -223,13 +230,13 @@ const useListBase = ({
 
     const onDeleteItemCompleted = (id) => {
         let currentPage = queryParams.get('page');
-        if(tabOptions.isTab){
+        if (tabOptions.isTab) {
             currentPage = currentPageTab;
         }
         if (data.length === 1 && currentPage > 1) {
-            if(tabOptions.isTab.isTab){
+            if (tabOptions.isTab.isTab) {
                 setCurrentPageTab(currentPage - 1);
-            }else{
+            } else {
                 queryParams.set('page', currentPage - 1);
                 setQueryParams(queryParams);
             }
@@ -343,7 +350,8 @@ const useListBase = ({
             );
         },
         edit: ({ buttonProps, ...dataRow }) => {
-            if (!isProjectToken && !mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL])) return null;
+            if (!isProjectToken && !mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]))
+                return null;
 
             return (
                 <BaseTooltip type="edit" objectName={options.objectName}>
@@ -389,11 +397,22 @@ const useListBase = ({
             if (value || value?.show) {
                 switch (type) {
                                 case 'delete':
-                                    if (!isProjectToken && mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) isShow = true;
-                                    break;
-                                case 'edit':
-                                    if (!isProjectToken && mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]))
+                                    if (isProjectToken) {
                                         isShow = true;
+                                    } else mixinFuncs.hasPermission([apiConfig.delete?.baseURL]);
+                                    {
+                                        isShow = true;
+                                    }
+                                    break;
+
+                                case 'edit':
+                                    if (isProjectToken) {
+                                        isShow = true;
+                                    } else mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]);
+                                    {
+                                        isShow = true;
+                                    }
+
                                     break;
                                 default:
                                     // if (mixinFuncs.hasPermission(value?.permissions)) isShow = true;
@@ -580,7 +599,7 @@ const useListBase = ({
         mixinFuncs.getList();
 
         let page = parseInt(queryFilter.page);
-        if(tabOptions){
+        if (tabOptions) {
             page = parseInt(currentPageTab);
         }
         if (page > 0 && page !== pagination.current) {
