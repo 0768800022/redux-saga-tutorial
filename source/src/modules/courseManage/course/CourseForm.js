@@ -73,6 +73,7 @@ const CourseForm = (props) => {
             ...dataDetail,
             subjectId: dataDetail?.subject?.subjectName,
         });
+        console.log(dataDetail);
     }, [dataDetail]);
 
     useEffect(() => {

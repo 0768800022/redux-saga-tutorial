@@ -90,7 +90,7 @@ const ProjectTaskForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
             projectCategoryId: dataDetail?.projectCategoryInfo?.projectCategoryName,
-            developerId: dataDetail?.developer?.studentInfo?.fullName,
+            developerId: dataDetail?.developer?.account?.fullName,
             leaderId: dataDetail?.leader?.leaderName,
             description: insertBaseURL(dataDetail?.description),
             memKind: value,

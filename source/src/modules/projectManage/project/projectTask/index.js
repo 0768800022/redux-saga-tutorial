@@ -113,13 +113,13 @@ function ProjectTaskListPage({ setSearchFilter }) {
                 objectName: translate.formatMessage(commonMessage.task),
 
             },
-            tabOptions:{
-                queryPage: {
-                    projectId,
-                    storyId,
-                },
-                isTab: true,
-            },
+            // tabOptions:{
+            //     queryPage: {
+            //         projectId,
+            //         storyId,
+            //     },
+            //     isTab: true,
+            // },
             override: (funcs) => {
                 funcs.mappingData = (response) => {
                     try {
