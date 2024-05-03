@@ -1,47 +1,38 @@
+import { CalendarOutlined, CheckOutlined } from '@ant-design/icons';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
-import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import {
-    DATE_DISPLAY_FORMAT,
     DATE_FORMAT_END_OF_DAY_TIME,
     DATE_FORMAT_ZERO_TIME,
     DEFAULT_TABLE_ITEM_SIZE,
     storageKeys,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { FieldTypes } from '@constants/formConfig';
 import { projectTaskState, statusOptions } from '@constants/masterData';
-import useListBase from '@hooks/useListBase';
-import useTranslate from '@hooks/useTranslate';
-import routes from '@routes';
-import { Tag, Button, Modal, Row, Col } from 'antd';
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { FormattedMessage, defineMessages } from 'react-intl';
-import { generatePath, useLocation, useNavigate } from 'react-router-dom';
-import { EditOutlined, CheckOutlined } from '@ant-design/icons';
 import useDisclosure from '@hooks/useDisclosure';
-import { useState } from 'react';
 import useFetch from '@hooks/useFetch';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { CalendarOutlined } from '@ant-design/icons';
-import { commonMessage } from '@locales/intl';
+import useListBase from '@hooks/useListBase';
 import useNotification from '@hooks/useNotification';
-import { useIntl } from 'react-intl';
+import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
 import styles from '@modules/projectManage/project/project.module.scss';
+import routes from '@routes';
+import { Button, Col, Modal, Row } from 'antd';
+import React, { useState } from 'react';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, AppConstants } from '@constants';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import DetailMyTaskProjectModal from '../../projectStudent/myTask/DetailMyTaskProjectModal';
 import { BaseForm } from '@components/common/form/BaseForm';
 import NumericField from '@components/common/form/NumericField';
 import TextField from '@components/common/form/TextField';
-import feature from '../../../../../assets/images/feature.png';
-import bug from '../../../../../assets/images/bug.jpg';
-import dayjs from 'dayjs';
-import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
-import useListBaseProject from '@hooks/useListBaseProject';
-import { getData } from '@utils/localStorage';
+import { DATE_FORMAT_DISPLAY, DEFAULT_FORMAT } from '@constants';
 import { showErrorMessage } from '@services/notifyService';
+import { convertUtcToLocalTime, formatDateString } from '@utils';
+import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
+import { getData } from '@utils/localStorage';
+import dayjs from 'dayjs';
+import DetailMyTaskProjectModal from '../../projectStudent/myTask/DetailMyTaskProjectModal';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -83,7 +74,7 @@ function ProjectLeaderTaskListPage() {
     const location = useLocation();
     const [detail, setDetail] = useState();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
+   
     const { execute: executeGet, loading: loadingDetail } = useFetch(
         { ...apiConfig.projectTask.getById, authorization: `Bearer ${userTokenProject}` },
         {
@@ -91,12 +82,13 @@ function ProjectLeaderTaskListPage() {
         },
     );
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBaseProject({
+        useListBase({
             apiConfig: apiConfig.story,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
             },
+            isProjectToken : true,
             override: (funcs) => {
                 funcs.mappingData = (response) => {
                     if (response.result === true) {
@@ -266,18 +258,15 @@ function ProjectLeaderTaskListPage() {
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
     const params = mixinFuncs.prepareGetListParams(queryFilter);
-
-    const { execute: executeUpdate } = useFetch(
-        { ...apiConfig.projectTask.changeState, authorization: `Bearer ${userTokenProject}` },
+    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
+    const { execute: executeUpdateStateValue } = useFetch(
+        { ...apiConfig.projectTask.changeState, authorization: `Bearer1231212 ${userTokenProject}` },
         { immediate: false },
     );
 
-    const handleOk = (values) => {
-        handlersStateTaskModal.close();
-        updateState(values);
-    };
+    
     const updateState = (values) => {
-        executeUpdate({
+        executeUpdateStateValue({
             data: {
                 id: detail.id,
                 state: 3,
@@ -346,7 +335,7 @@ function ProjectLeaderTaskListPage() {
                 onCancel={() => handlersStateTaskModal.close()}
                 data={detail || {}}
             >
-                <BaseForm onFinish={handleOk} size="100%">
+                <BaseForm onFinish={updateState} size="100%">
                     <div
                         style={{
                             margin: '28px 0 20px 0',

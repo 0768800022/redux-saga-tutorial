@@ -443,6 +443,7 @@ const apiConfig = {
             baseURL: `${apiTenantUrl}v1/student/detail-by-phone`,
             method: 'GET',
             headers: baseHeader,
+            isRequiredTenantId: true,
         },
     },
     leader: {

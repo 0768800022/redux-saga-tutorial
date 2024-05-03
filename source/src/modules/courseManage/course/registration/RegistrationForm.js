@@ -545,10 +545,9 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                     label={translate.formatMessage(commonMessage.studentName)}
                                     name={['studentId']}
                                     apiConfig={apiConfig.student.autocomplete}
-                                    mappingOptions={(item) => ({
-                                        value: item.id,
-                                        label: item.account.fullName,
-                                    })}
+                                    mappingOptions={(item) => {
+                                        return { value: item.id, label: item?.account?.fullName };
+                                    }}
                                     initialSearchParams={{ pageNumber: 0 }}
                                     searchParams={(text) => ({ name: text })}
                                 />

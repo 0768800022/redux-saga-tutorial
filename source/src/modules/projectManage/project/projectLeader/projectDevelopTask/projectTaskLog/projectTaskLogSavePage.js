@@ -9,7 +9,7 @@ import ProjectTaskLogForm from './projectTaskLogForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
-import useSaveBaseProject from '@hooks/useSaveBaseProject';
+
 
 const messages = defineMessages({
     objectName: 'Nhật ký',
@@ -29,7 +29,7 @@ function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
     const active = queryParameters.get('active');
     const storyName = queryParameters.get('storyName');
     const storyId = queryParameters.get('storyId');
-    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBaseProject({
+    const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.projectTaskLog.getById,
             create: apiConfig.projectTaskLog.create,
@@ -39,6 +39,7 @@ function ProjectTaskLogSavePage({ getListUrl, breadcrumbName }) {
             getListUrl: generatePath(routes.projectDevelopTaskLog.path),
             objectName: translate.formatMessage(messages.objectName),
         },
+        isProjectToken : true,
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {

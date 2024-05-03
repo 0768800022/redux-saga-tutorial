@@ -1,36 +1,33 @@
+import { RightOutlined } from '@ant-design/icons';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import {
-    DEFAULT_TABLE_ITEM_SIZE,
-    DEFAULT_FORMAT,
     DATE_FORMAT_DISPLAY,
-    DATE_FORMAT_ZERO_TIME,
     DATE_FORMAT_END_OF_DAY_TIME,
+    DATE_FORMAT_ZERO_TIME,
+    DEFAULT_FORMAT,
+    DEFAULT_TABLE_ITEM_SIZE,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
+import { FieldTypes } from '@constants/formConfig';
+import { TaskLogKindOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
+import useNotification from '@hooks/useNotification';
 import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
 import routes from '@routes';
+import {
+    convertUtcToLocalTime,
+    formatDateString,
+} from '@utils';
 import { Tag } from 'antd';
+import dayjs from 'dayjs';
 import React, { useMemo } from 'react';
 import { defineMessages } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { commonMessage } from '@locales/intl';
-import { TaskLogKindOptions } from '@constants/masterData';
 import styles from './projectTaskLog.module.scss';
-import useNotification from '@hooks/useNotification';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { RightOutlined } from '@ant-design/icons';
-import {
-    convertLocalTimeToUtc,
-    convertUtcToLocalTime,
-    deleteSearchFilterInLocationSearch,
-    formatDateString,
-} from '@utils';
-import { FieldTypes } from '@constants/formConfig';
-import dayjs from 'dayjs';
-import useListBaseProject from '@hooks/useListBaseProject';
 const message = defineMessages({
     objectName: 'Nhật ký',
     gitCommitUrl: 'Đường dẫn commit git',
@@ -58,12 +55,13 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
     const navigate = useNavigate();
     const paramHead = routes.projectListPage.path;
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
-        useListBaseProject({
+        useListBase({
             apiConfig: apiConfig.projectTaskLog,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
             },
+            isProjectToken : true,
             override: (funcs) => {
                 funcs.mappingData = (response) => {
                     try {

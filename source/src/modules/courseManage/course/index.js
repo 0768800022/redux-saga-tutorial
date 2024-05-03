@@ -200,7 +200,7 @@ const CourseListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(commonMessage.name),
+            title: translate.formatMessage(commonMessage.courseName),
             dataIndex: 'name',
         },
         // {

@@ -85,6 +85,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             universityId: dataDetail?.university?.categoryName,
             studyClass: dataDetail?.studyClass?.categoryName,
         });
+        setImageUrl(dataDetail?.account?.avatar);
     }, [dataDetail]);
 
     const handleSubmit = (values) => {

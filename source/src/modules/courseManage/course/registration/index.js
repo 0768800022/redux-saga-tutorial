@@ -102,7 +102,7 @@ function RegistrationListPage() {
     const columns = [
         {
             title: translate.formatMessage(commonMessage.studentName),
-            dataIndex: ['studentInfo', 'account', 'fullName'],
+            dataIndex: ['studentInfo', 'account',"fullName"],
             render: (fullName, record) => (
                 <div onClick={(event) => handleOnClick(event, record)} className={style.customDiv}>
                     {fullName}

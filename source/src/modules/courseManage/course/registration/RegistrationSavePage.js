@@ -47,7 +47,6 @@ function RegistrationSavePage() {
                 };
             };
             funcs.prepareCreateData = (data) => {
-                console.log(data);
                 if (dataLocation) {
                     data.courseRequestId = dataLocation.id;
                     return {
@@ -59,10 +58,11 @@ function RegistrationSavePage() {
                     };
                 }
                 return {
-                    ...data,
+                    ...data,              
                     courseId: courseId,
                     isIssuedCertify: 1,
                     moneyState: 1,
+                    contractSign : "contractSign",
                 };
             };
             funcs.onSaveError = (err) => {
