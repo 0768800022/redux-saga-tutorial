@@ -103,6 +103,7 @@ const ProjectRoleForm = (props) => {
                                                             value={JSON.stringify({
                                                                 permissionId: permission?.id,
                                                                 permissionCode: permission?.pcode,
+                                                                action : permission?.action,
                                                             })}
                                                             // value={permission?.id}
                                                         >
