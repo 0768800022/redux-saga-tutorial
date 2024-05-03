@@ -19,6 +19,7 @@ import styles from './subject.module.scss';
 import { statusOptions, statusSubjectOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { commonMessage } from '@locales/intl';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'môn học',
@@ -30,7 +31,7 @@ const SubjectListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const statusValue = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
+    const { data, mixinFuncs, queryFilter, loading, pagination, changePagination,setLoading } = useListBase({
         apiConfig: apiConfig.subject,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -47,6 +48,27 @@ const SubjectListPage = () => {
                     }
                 } catch (error) {
                     return [];
+                }
+            };
+            // funcs.onSaveError = (err) => {
+            //     if (err.code === 'ERROR-COURSE-ERROR-0001') {
+            //         showErrorMessage('Môn học đã được liên kết với khóa học');
+            //         mixinFuncs.setSubmit(false);
+            //     } else {
+            //         mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+            //         mixinFuncs.setSubmit(false);
+            //     }
+            // };
+            funcs.handleDeleteItemError=(error) => {
+                console.log(error);
+                if (error.response?.data?.code === 'ERROR-COURSE-ERROR-0001') {
+                    showErrorMessage('Môn học đã được liên kết với khóa học');
+                    // mixinFuncs.setSubmit(false);
+                    setLoading(false);
+                } else {
+                    showErrorMessage(error?.response?.data?.message);
+                    // mixinFuncs.setSubmit(false);
+                    setLoading(false);
                 }
             };
         },
