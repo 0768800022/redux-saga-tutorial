@@ -44,11 +44,6 @@ function RegistrationSavePage() {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
-                    id: detail.id,
-                    status: 1,
-                    isIssuedCertify: 1,
-                    moneyState: 1,
-                    studentId: detail.studentInfo.id,
                 };
             };
             funcs.prepareCreateData = (data) => {
@@ -56,15 +51,16 @@ function RegistrationSavePage() {
                     data.courseRequestId = dataLocation.id;
                     return {
                         ...data,
+                        // courseId: courseId,
+                        // isIssuedCertify: 1,
+                        // studentId: data.studentInfo.account.fullName,
+                        // moneyState: 1,
                     };
                 }
-                console.log(data);
                 return {
-                    ...data,
-               
+                    ...data,              
                     courseId: courseId,
                     isIssuedCertify: 1,
-                    studentId: data?.studentInfo?.fullName,
                     moneyState: 1,
                     contractSign : "contractSign",
                 };

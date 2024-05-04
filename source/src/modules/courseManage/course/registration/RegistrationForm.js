@@ -131,7 +131,12 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             values.state = 1;
             // values.state = stateResgistration[0].value;
         }
-        return mixinFuncs.handleSubmit({ ...values });
+        const studentId = values?.studentInfo?.account?.fullName;
+        console.log(studentId);
+        return mixinFuncs.handleSubmit({
+            studentId: studentId,
+            ...values,
+        });
     };
     function addFrameTime(data) {
         const result = {};
@@ -232,7 +237,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            studentId: dataDetail?.studentInfo?.fullName,
+            studentId: dataDetail?.studentInfo?.account?.fullName,
         });
     }, [dataDetail]);
 
@@ -533,28 +538,36 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                 <div style={{ width: '980px' }}>
                     <Row gutter={16}>
                         {!dataLocation && (
-                            <Col span={12}>
+                            <Col span={8}>
                                 <AutoCompleteField
                                     disabled={isEditing}
                                     required
                                     label={translate.formatMessage(commonMessage.studentName)}
-                                    name={['studentInfo', 'fullName']}
+                                    name={['studentId']}
                                     apiConfig={apiConfig.student.autocomplete}
                                     mappingOptions={(item) => {
                                         return { value: item.id, label: item?.account?.fullName };
                                     }}
                                     initialSearchParams={{ pageNumber: 0 }}
-                                    searchParams={(text) => ({ fullName: text })}
+                                    searchParams={(text) => ({ name: text })}
                                 />
                             </Col>
                         )}
-                        <Col span={dataLocation ? 13 : 12} style={dataLocation && { paddingRight: '14px' }}>
+                        <Col span={dataLocation ? 13 : 8} style={dataLocation && { paddingRight: '14px' }}>
                             <SelectField
                                 disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
                                 defaultValue={registrationStateFilter[0]}
                                 label={<FormattedMessage defaultMessage="Tình trạng" />}
                                 name="state"
                                 options={registrationStateFilter}
+                            />
+                        </Col>
+                        <Col span={8}>
+                            <TextField
+                                label={<FormattedMessage defaultMessage="Sign" />}
+                                required
+                                disabled={isEditing}
+                                name={['contractSign']}
                             />
                         </Col>
                         <Col span={12}>
