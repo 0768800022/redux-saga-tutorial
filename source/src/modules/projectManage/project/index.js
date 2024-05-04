@@ -372,7 +372,7 @@ const ProjectListPage = () => {
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                salaryPeriod: true,
+                // salaryPeriod: true,
                 edit: true,
                 delete: true,
             },
