@@ -58,12 +58,15 @@ function RegistrationSavePage() {
                         ...data,
                     };
                 }
+                console.log(data);
                 return {
                     ...data,
+               
                     courseId: courseId,
                     isIssuedCertify: 1,
-                    studentId: data.studentInfo.fullName,
+                    studentId: data?.studentInfo?.fullName,
                     moneyState: 1,
+                    contractSign : "contractSign",
                 };
             };
             funcs.onSaveError = (err) => {

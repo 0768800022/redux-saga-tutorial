@@ -1,58 +1,66 @@
-import React from 'react';
-import apiConfig from '@constants/apiConfig';
-import routes from '@routes';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import useTranslate from '@hooks/useTranslate';
+import apiConfig from '@constants/apiConfig';
 import useSaveBase from '@hooks/useSaveBase';
+import routes from '@routes';
+import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import { defineMessages } from 'react-intl';
-import ProjectLeaderTeamForm from './ProjectLeaderTeamForm';
+
+import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
-import useAuth from '@hooks/useAuth';
-const message = defineMessages({
-    objectName: 'Nhóm',
+import { showErrorMessage } from '@services/notifyService';
+import { defineMessages } from 'react-intl';
+import ProjectStoryTaskForm from './ProjectStoryTaskForm';
+
+const messages = defineMessages({
+    objectName: 'Task',
 });
 
-// const TeamSavePage = () => {
-function ProjectLeaderTeamSavePage() {
-    const { profile } = useAuth();
+function ProjectStoryTaskSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
-    const leaderId = queryParameters.get('leaderId');
-    // const projectName = queryParameters.get('projectName');
-    const teamId = useParams();
+    const projectTaskId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.team.getById,
-            create: apiConfig.team.create,
-            update: apiConfig.team.update,
+            getById: apiConfig.story.getById,
+            create: apiConfig.story.create,
+            update: apiConfig.story.update,
         },
         options: {
-            getListUrl: generatePath(routes.projectLeaderTeamListPage.path),
-            objectName: translate.formatMessage(message.objectName),
+            getListUrl: generatePath(routes.projectDeveloperTabPage.path),
+            objectName: translate.formatMessage(messages.objectName),
         },
+        isProjectToken : true,
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
                     id: detail.id,
+                    projectId: projectId,
+                    status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
                     projectId: projectId,
-                    leaderId: profile.id,
+                    status: 1,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-PROJECT-ERROR-0001') {
+                    showErrorMessage('Dự án đã hoàn thành không thể tạo thêm task');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });
     const setBreadRoutes = () => {
-        const pathDefault = `?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
-
         const breadRoutes = [
             {
                 breadcrumbName: translate.formatMessage(commonMessage.project),
@@ -62,13 +70,14 @@ function ProjectLeaderTeamSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.team),
-                path: routes.projectLeaderTeamListPage.path + pathDefault + `&active=${active}`,
+                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                path:
+                    routes.projectDeveloperTabPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.team),
-                path: routes.projectLeaderTeamListPage.path + pathDefault,
+                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                path: routes.projectDeveloperTabPage.path  + `?projectId=${projectId}&projectName=${projectName}`,
             });
         }
         breadRoutes.push({ breadcrumbName: title });
@@ -77,7 +86,7 @@ function ProjectLeaderTeamSavePage() {
     };
     return (
         <PageWrapper loading={loading} routes={setBreadRoutes()} title={title}>
-            <ProjectLeaderTeamForm
+            <ProjectStoryTaskForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -89,4 +98,4 @@ function ProjectLeaderTeamSavePage() {
     );
 }
 
-export default ProjectLeaderTeamSavePage;
+export default ProjectStoryTaskSavePage;

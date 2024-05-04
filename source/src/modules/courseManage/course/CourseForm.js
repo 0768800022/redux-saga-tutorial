@@ -74,14 +74,7 @@ const CourseForm = (props) => {
             subjectId: dataDetail?.subject?.subjectName,
         });
     }, [dataDetail]);
-    const {
-        data: leaders,
-        loading: getLeadersLoading,
-        execute: executeGetLeaders,
-    } = useFetch(apiConfig.leader.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.leaderName })),
-    });
+
     useEffect(() => {
         form.setFieldsValue({
             ...dataDetail,
@@ -253,10 +246,10 @@ const CourseForm = (props) => {
                         <AutoCompleteField
                             // disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             required
-                            label={<FormattedMessage defaultMessage="Leader" />}
+                            label={<FormattedMessage defaultMessage="Lập trình viên" />}
                             name="leaderId"
-                            apiConfig={apiConfig.leader.autocomplete}
-                            mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
+                            apiConfig={apiConfig.developer.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item?.account?.fullName })}
                             initialSearchParams={{}}
                             searchParams={(text) => ({ name: text })}
                         />

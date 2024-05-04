@@ -8,14 +8,18 @@ import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
 import { Card, Col, Form, Row } from 'antd';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
 import ScheduleTable from '@components/common/table/ScheduleTable';
-import { TIME_FORMAT_DISPLAY } from '@constants';
+import { AppConstants, DATE_FORMAT_VALUE, TIME_FORMAT_DISPLAY } from '@constants';
 import dayjs from 'dayjs';
 import { daysOfWeekSchedule as daysOfWeekScheduleOptions } from '@constants/masterData';
 import NumericField from '@components/common/form/NumericField';
+import CropImageField from '@components/common/form/CropImageField';
+import DatePickerField from '@components/common/form/DatePickerField';
+import { validateDate } from '@utils/dayHelper';
+import { formatDateString } from '@utils';
 
 const DeveloperForm = (props) => {
     const translate = useTranslate();
@@ -27,6 +31,7 @@ const DeveloperForm = (props) => {
         onSubmit,
         setIsChangedFormValues,
     });
+    const [imageUrl, setImageUrl] = useState(null);
     function formatTimeRange(timeArray) {
         return timeArray
             .map((time) => {
@@ -75,6 +80,7 @@ const DeveloperForm = (props) => {
                 return acc;
             }, {});
         values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
+        values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values });
     };
     function addFrameTime(data) {
@@ -132,7 +138,7 @@ const DeveloperForm = (props) => {
         }
         return result;
     };
-
+  
     useEffect(() => {
         let data = dataDetail?.schedule && JSON.parse(dataDetail?.schedule);
         if (data) {
@@ -173,10 +179,16 @@ const DeveloperForm = (props) => {
         }
 
         dataDetail.schedule = data || dataDefault;
+        dataDetail.birthday = dataDetail?.accountDto?.birthday && dayjs(dataDetail?.accountDto?.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
+            fullName : dataDetail?.accountDto?.fullName,
+            phone : dataDetail?.accountDto?.phone,
+            email: dataDetail?.accountDto?.email,
             leaderId: dataDetail?.leader?.id,
         });
+
+        setImageUrl(dataDetail.avatar);
     }, [dataDetail]);
     useEffect(() => {
         if (!isEditing > 0) {
@@ -256,90 +268,106 @@ const DeveloperForm = (props) => {
     const onFieldsChange = () => {
         onValuesChange();
     };
+    const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
+    const uploadFile = (file, onSuccess, onError) => {
+        executeUpFile({
+            data: {
+                type: 'AVATAR',
+                file: file,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    onSuccess();
+                    setImageUrl(response.data.filePath);
+                    setIsChangedFormValues(true);
+                }
+            },
+            onError: (error) => {
+                onError();
+            },
+        });
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onFieldsChange={onFieldsChange} size="1100px">
             <Card className="card-form" bordered={false}>
-                <div style={{ width: '980px' }}>
+                <div style={{ width : "980px" }}>
                     <Row gutter={16}>
                         <Col span={12}>
-                            <AutoCompleteField
-                                disabled={isEditing}
-                                required
-                                label={translate.formatMessage(commonMessage.studentName)}
-                                name={['studentInfo', 'fullName']}
-                                apiConfig={apiConfig.student.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.fullName })}
-                                initialSearchParams={{ pageNumber: 0, excludeInDeveloper: true }}
-                                searchParams={(text) => ({ fullName: text })}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <SelectField
-                                defaultValue={levelOptionSelect[0]}
-                                label={<FormattedMessage defaultMessage="Trình độ" />}
-                                name="level"
-                                options={levelOptionSelect}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <SelectField
-                                label={<FormattedMessage defaultMessage="Loại lương" />}
-                                name="salaryKind"
-                                options={salaryValues}
-                                required
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <NumericField
-                                label={<FormattedMessage defaultMessage="Tiền lương" />}
-                                name="salary"
-                                min={0}
-                                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                                isCurrency
-                                required
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <AutoCompleteField
-                                requiredleaderId
-                                label={translate.formatMessage(commonMessage.role)}
-                                name={['roleInfo', 'id']}
-                                apiConfig={apiConfig.projectRole.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.projectRoleName })}
-                                initialSearchParams={{ pageNumber: 0 }}
-                                searchParams={(text) => ({ fullName: text })}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <AutoCompleteField
-                                label={<FormattedMessage defaultMessage="Leader refer" />}
-                                name="leaderId"
-                                apiConfig={apiConfig.leader.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.leaderName })}
-                                initialSearchParams={{ pageNumber: 0 }}
-                                searchParams={(text) => ({ leaderName: text })}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <SelectField
-                                defaultValue={statusValues[0]}
-                                label={<FormattedMessage defaultMessage="Trạng thái" />}
-                                name="status"
-                                options={statusValues}
+                            <CropImageField
+                                label={<FormattedMessage defaultMessage="Avatar" />}
+                                name="avatar"
+                                imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
+                                aspect={1 / 1}
+                                uploadFile={uploadFile}
                             />
                         </Col>
                     </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <TextField
+                                label={translate.formatMessage(commonMessage.name)}
+                                required={isEditing ? false : true}
+                                disabled={isEditing}
+                                name="fullName"
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <DatePickerField
+                                name="birthday"
+                                label="Ngày sinh"
+                                placeholder="Ngày sinh"
+                                format={DATE_FORMAT_VALUE}
+                                style={{ width: '100%' }}
+                                required={isEditing ? false : true}
+                                rules={[
+                                    {
+                                        validator: validateDate,
+                                    },
+                                ]}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <TextField
+                                label={translate.formatMessage(commonMessage.phone)}
+                                type="number"
+                                name="phone"
+                                required={isEditing ? false : true}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <TextField
+                                label={translate.formatMessage(commonMessage.password)}
+                                rules={[
+                                    {
+                                        min: 6,
+                                        message: 'Mật khẩu phải có ít nhất 6 kí tự!',
+                                    },
+                                ]}
+                                required={isEditing ? false : true}
+                                name="password"
+                                type="password"
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <TextField
+                                label={translate.formatMessage(commonMessage.email)}
+                                type="email"
+                                name="email"
+                                required={isEditing ? false : true}
+                            />
+                        </Col>
+                    </Row>
+                    <ScheduleTable
+                        handleOk={handleOk}
+                        label={translate.formatMessage(commonMessage.schedule)}
+                        onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
+                        translate={translate}
+                        handleApplyAll={handleApplyAll}
+                        daysOfWeekSchedule={daysOfWeekSchedule}
+                        handleTimeChange={handleTimeChange}
+                        handleReset={handleReset}
+                    />
                 </div>
-                <ScheduleTable
-                    handleOk={handleOk}
-                    label={translate.formatMessage(commonMessage.schedule)}
-                    onSelectScheduleTabletRandom={onSelectScheduleTabletRandom}
-                    translate={translate}
-                    handleApplyAll={handleApplyAll}
-                    daysOfWeekSchedule={daysOfWeekSchedule}
-                    handleTimeChange={handleTimeChange}
-                    handleReset={handleReset}
-                />
                 <div className="footer-card-form" style={{ marginTop: '20px', marginRight: '69px' }}>
                     {actions}
                 </div>

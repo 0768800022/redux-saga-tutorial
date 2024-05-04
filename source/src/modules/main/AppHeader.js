@@ -69,7 +69,6 @@ const AppHeader = ({ collapsed, onCollapse }) => {
         immediate: false,
     });
 
-
     return (
         <Header className={styles.appHeader} style={{ padding: 0, background: 'white' }}>
             <span className={styles.iconCollapse} onClick={onCollapse}>
@@ -87,12 +86,13 @@ const AppHeader = ({ collapsed, onCollapse }) => {
                                 <Avatar
                                     icon={<UserOutlined />}
                                     src={`${AppConstants.contentRootUrl}${
-                                        profile.logoPath || profile.avatar || profile.logo
+                                        profile.logoPath || profile?.account?.avatar || profile.accountDto?.avatar
                                     }`}
                                 />
                                 {profile?.careerName ||
-                                    profile?.leaderName ||
-                                    profile?.fullName ||
+                                    profile?.name ||
+                                    profile?.account?.fullName ||
+                                    profile?.accountDto?.fullName ||
                                     profile?.companyName}
                                 <DownOutlined />
                             </Space>

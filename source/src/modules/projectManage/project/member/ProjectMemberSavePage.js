@@ -38,17 +38,19 @@ function ProjectMemberSavePage() {
                     id: detail.id,
                     schedule: data.schedule,
                     roleId: data?.projectRole?.id,
-                    teamId: data?.team?.id,
+                    // teamId: data?.team?.id,
                     status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
+                console.log(data);
                 return {
                     projectId: projectId,
-                    developerId: data.developer.studentInfo.fullName,
-                    projectRoleId: data.projectRole.id,
+                    developerId: data?.developer?.accountDto?.fullName,
+                    projectRoleId: data?.projectRole?.id,
                     schedule: data.schedule,
-                    teamId: data.team.id,
+                    contractSign : "contractSign",
+                    // teamId: data.team.id,
                 };
             };
         },

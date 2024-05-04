@@ -31,14 +31,14 @@ axiosInstance.interceptors.response.use(
         if (originalConfig.url !== apiConfig.account.loginBasic.baseURL && err.response) {
             // Access Token was expired
             if (err.response?.status === 401 && !originalConfig._retry) {
-                const handleExpireAll = () => {
-                    removeCacheToken();
-                    window.location.reload();
-                };
+                // const handleExpireAll = () => {
+                //     removeCacheToken();
+                //     window.location.reload();
+                // };
 
-                if (!getCacheRefreshToken()) {
-                    handleExpireAll();
-                }
+                // if (!getCacheRefreshToken()) {
+                //     handleExpireAll();
+                // }
 
                 originalConfig._retry = true;
                 // if (!isRefreshing) {

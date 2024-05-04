@@ -166,8 +166,8 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            teamId: dataDetail?.team?.teamName,
-            studentId: dataDetail?.studentInfo?.fullName,
+        
+            studentId: dataDetail?.developer?.accountDto?.id,
         });
     }, [dataDetail]);
 
@@ -214,7 +214,6 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
     const handleOk = () => {
         document.activeElement.blur();
     };
-    
 
     useEffect(() => {
         registrationStateOption.map((state, index) => {
@@ -269,11 +268,11 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
                                 disabled={isEditing}
                                 required
                                 label={translate.formatMessage(commonMessage.developer)}
-                                name={['developer', 'studentInfo', 'fullName']}
+                                name={[ 'developer','accountDto' ,'id']}
                                 apiConfig={apiConfig.developer.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
-                                    label: item.studentInfo.fullName,
+                                    label: item.account.fullName,
                                 })}
                                 initialSearchParams={{ pageNumber: 0 }}
                                 searchParams={(text) => ({ name: text })}
@@ -293,18 +292,7 @@ function ProjectLeaderMemberForm({ formId, actions, dataDetail, onSubmit, setIsC
                                 searchParams={(text) => ({ name: text })}
                             />
                         </Col>
-                        <Col span={6}>
-                            <AutoCompleteField
-                                required
-                                label={<FormattedMessage defaultMessage="Nhóm" />}
-                                name={['team','id']}
-                                apiConfig={apiConfig.team.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                                optionsParams={{ projectId: projectId }}
-                                initialSearchParams={{ projectId: projectId }}
-                                searchParams={(text) => ({ name: text })}
-                            />
-                        </Col>
+                       
                     </Row>
                 </div>
                 <ScheduleTable

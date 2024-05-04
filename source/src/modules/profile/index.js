@@ -15,6 +15,7 @@ import { UserTypes, storageKeys } from '@constants';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { getData } from '@utils/localStorage';
+import DeveloperForm from './DeveloperForm';
 
 const messages = defineMessages({
     profile: 'Profile',
@@ -22,7 +23,7 @@ const messages = defineMessages({
 
 const userProfileType = {
     [UserTypes.MANAGER]: 'organize',
-    [UserTypes.LEADER]: 'leader',
+    [UserTypes.DEVELOPER]: 'developer',
     [UserTypes.STUDENT]: 'student',
     [UserTypes.COMPANY]: 'company',
 };
@@ -56,13 +57,8 @@ const ProfilePage = () => {
     });
 
     return (
-        <PageWrapper
-            loading={loading}
-            routes={[
-                { breadcrumbName: translate.formatMessage(messages.profile) },
-            ]}
-        >
-            {useKind === UserTypes.MANAGER &&(
+        <PageWrapper loading={loading} routes={[{ breadcrumbName: translate.formatMessage(messages.profile) }]}>
+            {useKind === UserTypes.MANAGER && (
                 <ProfileForm
                     setIsChangedFormValues={setIsChangedFormValues}
                     dataDetail={data ? data : {}}
@@ -73,17 +69,18 @@ const ProfilePage = () => {
                     // isAdmin={isAdmin}
                 />
             )}
-            {useKind === UserTypes.LEADER &&(
-                <LeaderForm
+            {useKind === UserTypes.DEVELOPER && (
+                <DeveloperForm
                     setIsChangedFormValues={setIsChangedFormValues}
                     dataDetail={data ? data : {}}
                     formId={mixinFuncs.getFormId()}
                     isEditing={isEditing}
                     actions={mixinFuncs.renderActions()}
                     onSubmit={onSave}
+                    // isAdmin={isAdmin}
                 />
             )}
-            {useKind === UserTypes.STUDENT &&(
+            {useKind === UserTypes.STUDENT && (
                 <StudentForm
                     setIsChangedFormValues={setIsChangedFormValues}
                     dataDetail={data ? data : {}}
@@ -93,7 +90,7 @@ const ProfilePage = () => {
                     onSubmit={onSave}
                 />
             )}
-            {useKind === UserTypes.COMPANY &&(
+            {useKind === UserTypes.COMPANY && (
                 <CompanyForm
                     setIsChangedFormValues={setIsChangedFormValues}
                     dataDetail={data ? data : {}}

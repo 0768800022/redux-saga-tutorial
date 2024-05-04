@@ -12,13 +12,14 @@ const getProfileSaga = (payload) => {
     let api;
     if (useKind === UserTypes.MANAGER) {
         api = apiConfig.organize.getProfile;
-    } else if (useKind === UserTypes.LEADER) {
-        api = apiConfig.leader.getProfile;
+    } else if (useKind === UserTypes.DEVELOPER) {
+        api = apiConfig.developer.getProfile;
     } else if (useKind === UserTypes.STUDENT) {
         api = apiConfig.student.getProfile;
     } else if (useKind === UserTypes.COMPANY) {
         api = apiConfig.company.getProfile;
     }
+  
 
     return processAction(api, payload);
 };

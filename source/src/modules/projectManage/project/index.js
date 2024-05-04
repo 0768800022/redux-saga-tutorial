@@ -258,18 +258,12 @@ const ProjectListPage = () => {
     const { execute: executeUpdateLeader } = useFetch(apiConfig.memberProject.autocomplete, { immediate: true });
     const { execute: executeLoading } = useFetch(apiConfig.project.getList, { immediate: false });
 
-    const { data: dataDeveloperProject, execute: executeGetList } = useFetch(apiConfig.developer.getProject, {
-        immediate: true,
-        params: { developerId: developerId },
-    });
+    // const { data: dataDeveloperProject, execute: executeGetList } = useFetch(apiConfig.developer.getProject, {
+    //     immediate: true,
+    //     params: { developerId: developerId },
+    // });
 
-    useEffect(() => {
-        if (!developerId) {
-            setDataApply(data);
-        } else {
-            setDataApply(dataDeveloperProject?.data?.content);
-        }
-    }, [data, dataDeveloperProject]);
+
 
     const setBreadRoutes = () => {
         const breadRoutes = [];
@@ -342,11 +336,7 @@ const ProjectListPage = () => {
                 </div>
             ),
         },
-        {
-            title: translate.formatMessage(commonMessage.leader),
-            dataIndex: ['leaderInfo', 'leaderName'],
-            width: 150,
-        },
+       
         {
             title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'startDate',
@@ -382,7 +372,7 @@ const ProjectListPage = () => {
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                salaryPeriod: true,
+                // salaryPeriod: true,
                 edit: true,
                 delete: true,
             },
@@ -404,7 +394,7 @@ const ProjectListPage = () => {
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={dataApply}
+                        dataSource={data}
                         columns={columns}
                     />
                 }
