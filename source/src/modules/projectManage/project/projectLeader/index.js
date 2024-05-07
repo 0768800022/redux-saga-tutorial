@@ -43,7 +43,7 @@ const ProjectLeaderListPage = () => {
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: {
-                getList: apiConfig.project.getListLeader,
+                getList: apiConfig.developer.myProject,
                 getById: apiConfig.project.getById,
                 delete: apiConfig.project.delete,
             },
@@ -181,7 +181,14 @@ const ProjectLeaderListPage = () => {
         const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
         return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
     };
-
+    const handleOnClick = (event, record) => {
+        event.preventDefault();
+        localStorage.setItem(routes.projectTabPage.keyActiveTab, translate.formatMessage(commonMessage.story));
+        navigate(
+            routes.projectDeveloperTabPage.path +
+                `?projectId=${record.id}&projectName=${record.name}&active=${!!record.status == 1}`,
+        );
+    };
     const columns = [
         {
             title: '#',
@@ -199,6 +206,11 @@ const ProjectLeaderListPage = () => {
         {
             title: translate.formatMessage(commonMessage.projectName),
             dataIndex: 'name',
+            render: (name, record) => (
+                <div onClick={(event) => handleOnClick(event, record)} >
+                    {name}
+                </div>
+            ),
         },
         {
             title: translate.formatMessage(message.startDate),
@@ -224,10 +236,10 @@ const ProjectLeaderListPage = () => {
             align: 'center',
             width: 120,
             render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
+                const state = stateValues?.find((item) => item?.value == dataRow);
                 return (
-                    <Tag color={state.color}>
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    <Tag color={state?.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
                     </Tag>
                 );
             },

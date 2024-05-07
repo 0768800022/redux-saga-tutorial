@@ -49,106 +49,106 @@ const SalaryPeriodListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
-                    fixSalary: ({ id, process }) => {
-                        const processJson = process && JSON.parse(process);
-                        return (
-                            <BaseTooltip title={translate.formatMessage(commonMessage.fixSalary)}>
-                                <Button
-                                    disabled={processJson?.fixSalaryState}
-                                    type="link"
-                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        executeFixSalary({
-                                            data: {
-                                                salaryPeriodId: id,
-                                            },
-                                            onCompleted: () => {
-                                                notification({
-                                                    type: 'success',
-                                                    message: translate.formatMessage(commonMessage.fixSalarySuccess),
-                                                });
-                                                mixinFuncs.getList();
-                                            },
-                                            onError: (error) => {
-                                                notification({ type: 'error', message: error?.message });
-                                            },
-                                        });
-                                    }}
-                                >
-                                    <BsWrenchAdjustableCircle size={17} />
-                                </Button>
-                            </BaseTooltip>
-                        );
-                    },
-                    projectSalary: ({ id, process }) => {
-                        const processJson = process && JSON.parse(process);
-                        return (
-                            <BaseTooltip title={translate.formatMessage(commonMessage.projectSalary)}>
-                                <Button
-                                    disabled={processJson?.projectSalaryState}
-                                    type="link"
-                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        executeProjectSalary({
-                                            data: {
-                                                salaryPeriodId: id,
-                                            },
-                                            onCompleted: () => {
-                                                notification({
-                                                    type: 'success',
-                                                    message: translate.formatMessage(
-                                                        commonMessage.projectSalarySuccess,
-                                                    ),
-                                                });
-                                                mixinFuncs.getList();
-                                            },
-                                            onError: (error) => {
-                                                notification({ type: 'error', message: error?.message });
-                                            },
-                                        });
-                                    }}
-                                >
-                                    <TbReportMoney size={19} />
-                                </Button>
-                            </BaseTooltip>
-                        );
-                    },
-                    generatePeriodDetail: ({ id, process }) => {
-                        const processJson = process && JSON.parse(process);
-                        return (
-                            <BaseTooltip title={translate.formatMessage(commonMessage.generatePeriodDetail)}>
-                                <Button
-                                    disabled={processJson?.generatePeriodDetail}
-                                    type="link"
-                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        executeGeneratePeriodDetail({
-                                            data: {
-                                                salaryPeriodId: id,
-                                            },
-                                            onCompleted: () => {
-                                                notification({
-                                                    type: 'success',
-                                                    message: translate.formatMessage(
-                                                        commonMessage.generatePeriodDetailSuccess,
-                                                    ),
-                                                });
-                                                mixinFuncs.getList();
-                                            },
-                                            onError: (error) => {
-                                                notification({ type: 'error', message: error?.message });
-                                            },
-                                        });
-                                    }}
-                                >
-                                    <GrMoney size={17} />
-                                </Button>
-                            </BaseTooltip>
-                        );
-                    },
+                    // fixSalary: ({ id, process }) => {
+                    //     const processJson = process && JSON.parse(process);
+                    //     return (
+                    //         <BaseTooltip title={translate.formatMessage(commonMessage.fixSalary)}>
+                    //             <Button
+                    //                 disabled={processJson?.fixSalaryState}
+                    //                 type="link"
+                    //                 style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                    //                 onClick={(e) => {
+                    //                     e.stopPropagation();
+                    //                     executeFixSalary({
+                    //                         data: {
+                    //                             salaryPeriodId: id,
+                    //                         },
+                    //                         onCompleted: () => {
+                    //                             notification({
+                    //                                 type: 'success',
+                    //                                 message: translate.formatMessage(commonMessage.fixSalarySuccess),
+                    //                             });
+                    //                             mixinFuncs.getList();
+                    //                         },
+                    //                         onError: (error) => {
+                    //                             notification({ type: 'error', message: error?.message });
+                    //                         },
+                    //                     });
+                    //                 }}
+                    //             >
+                    //                 <BsWrenchAdjustableCircle size={17} />
+                    //             </Button>
+                    //         </BaseTooltip>
+                    //     );
+                    // },
+                    // projectSalary: ({ id, process }) => {
+                    //     const processJson = process && JSON.parse(process);
+                    //     return (
+                    //         <BaseTooltip title={translate.formatMessage(commonMessage.projectSalary)}>
+                    //             <Button
+                    //                 disabled={processJson?.projectSalaryState}
+                    //                 type="link"
+                    //                 style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                    //                 onClick={(e) => {
+                    //                     e.stopPropagation();
+                    //                     executeProjectSalary({
+                    //                         data: {
+                    //                             salaryPeriodId: id,
+                    //                         },
+                    //                         onCompleted: () => {
+                    //                             notification({
+                    //                                 type: 'success',
+                    //                                 message: translate.formatMessage(
+                    //                                     commonMessage.projectSalarySuccess,
+                    //                                 ),
+                    //                             });
+                    //                             mixinFuncs.getList();
+                    //                         },
+                    //                         onError: (error) => {
+                    //                             notification({ type: 'error', message: error?.message });
+                    //                         },
+                    //                     });
+                    //                 }}
+                    //             >
+                    //                 <TbReportMoney size={19} />
+                    //             </Button>
+                    //         </BaseTooltip>
+                    //     );
+                    // },
+                    // generatePeriodDetail: ({ id, process }) => {
+                    //     const processJson = process && JSON.parse(process);
+                    //     return (
+                    //         <BaseTooltip title={translate.formatMessage(commonMessage.generatePeriodDetail)}>
+                    //             <Button
+                    //                 disabled={processJson?.generatePeriodDetail}
+                    //                 type="link"
+                    //                 style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                    //                 onClick={(e) => {
+                    //                     e.stopPropagation();
+                    //                     executeGeneratePeriodDetail({
+                    //                         data: {
+                    //                             salaryPeriodId: id,
+                    //                         },
+                    //                         onCompleted: () => {
+                    //                             notification({
+                    //                                 type: 'success',
+                    //                                 message: translate.formatMessage(
+                    //                                     commonMessage.generatePeriodDetailSuccess,
+                    //                                 ),
+                    //                             });
+                    //                             mixinFuncs.getList();
+                    //                         },
+                    //                         onError: (error) => {
+                    //                             notification({ type: 'error', message: error?.message });
+                    //                         },
+                    //                     });
+                    //                 }}
+                    //             >
+                    //                 <GrMoney size={17} />
+                    //             </Button>
+                    //         </BaseTooltip>
+                    //     );
+                    // },
                 });
             },
         });
@@ -229,22 +229,22 @@ const SalaryPeriodListPage = () => {
             align: 'center',
             width: 120,
             render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
+                const state = stateValues?.find((item) => item?.value == dataRow);
                 return (
-                    <Tag color={state.color}>
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    <Tag color={state?.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
                     </Tag>
                 );
             },
         },
-        mixinFuncs.renderActionColumn(
-            {
-                fixSalary: true,
-                projectSalary: true,
-                generatePeriodDetail: true,
-            },
-            { width: '150px', title: translate.formatMessage(commonMessage.calculateSalaryPeriod) },
-        ),
+        // mixinFuncs.renderActionColumn(
+        //     {
+        //         fixSalary: true,
+        //         projectSalary: true,
+        //         generatePeriodDetail: true,
+        //     },
+        //     { width: '150px', title: translate.formatMessage(commonMessage.calculateSalaryPeriod) },
+        // ),
         mixinFuncs.renderActionColumn(
             {
                 edit: true,

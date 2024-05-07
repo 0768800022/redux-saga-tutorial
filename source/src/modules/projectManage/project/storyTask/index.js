@@ -14,7 +14,7 @@ import {
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { projectTaskState } from '@constants/masterData';
+import { projectTaskState, storyTaskState } from '@constants/masterData';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
@@ -33,18 +33,16 @@ import bug from '../../../../assets/images/bug.jpg';
 import feature from '../../../../assets/images/feature.png';
 import styles from '../project.module.scss';
 import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
-import PageWrapper from '@components/common/layout/PageWrapper';
-import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
-    objectName: 'Task',
+    objectName: 'Story',
     cancel: 'Huỷ',
     done: 'Hoàn thành',
     updateTaskSuccess: 'Cập nhật tình trạng thành công',
     updateTaskError: 'Cập nhật tình trạng thất bại',
 });
 
-function ProjectTaskListPage({ setSearchFilter }) {
+function StoryTaskListPage({ setSearchFilter }) {
     const translate = useTranslate();
     const navigate = useNavigate();
     const notification = useNotification({ duration: 3 });
@@ -55,9 +53,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
-    const storyName = queryParameters.get('storyName');
-    const storyId = queryParameters.get('storyId');
-    const stateValues = translate.formatKeys(projectTaskState, ['label']);
+    const stateValues = translate.formatKeys(storyTaskState, ['label']);
     const location = useLocation();
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     localStorage.setItem('pathPrev', location.search);
@@ -65,7 +61,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
     const [detail, setDetail] = useState({});
     const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
 
-    const { execute: executeGet } = useFetch(apiConfig.projectTask.getById, {
+    const { execute: executeGet } = useFetch(apiConfig.story.getById, {
         immediate: false,
     });
     const handleFetchDetail = (id) => {
@@ -74,6 +70,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
             onCompleted: (response) => {
                 setDetail(response.data);
             },
+            onError: mixinFuncs.handleGetListError,
         });
     };
     const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
@@ -101,25 +98,26 @@ function ProjectTaskListPage({ setSearchFilter }) {
                 }
             },
             onError: (err) => {
-                showErrorMessage(intl.formatMessage(message.updateTaskError));
+                notification({
+                    message: intl.formatMessage(message.updateTaskError),
+                });
             },
         });
     };
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
-            apiConfig: apiConfig.projectTask,
+            apiConfig: apiConfig.story,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
-                objectName: translate.formatMessage(commonMessage.task),
+                objectName: translate.formatMessage(commonMessage.story),
 
             },
-            // tabOptions:{
-            //     queryPage: {
-            //         projectId,
-            //         storyId,
-            //     },
-            //     isTab: true,
-            // },
+            tabOptions:{
+                queryPage: {
+                    projectId,
+                },
+                isTab: true,
+            },
             override: (funcs) => {
                 funcs.mappingData = (response) => {
                     try {
@@ -133,12 +131,11 @@ function ProjectTaskListPage({ setSearchFilter }) {
                         return [];
                     }
                 };
-                
                 funcs.getCreateLink = () => {
-                    return `${routes.ProjectTaskListPage.path}/create?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}`;
+                    return `${routes.StoryTaskListPage.path}/create?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    return `${routes.ProjectTaskListPage.path}/${dataRow.id}?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}`;
+                    return `${routes.StoryTaskListPage.path}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}`;
                 };
                 funcs.additionalActionColumnButtons = () => ({
                     taskLog: ({ id, taskName }) => (
@@ -214,67 +211,53 @@ function ProjectTaskListPage({ setSearchFilter }) {
         });
     const columns = [
         {
-            dataIndex: 'kind',
-            width: 15,
-            render(dataRow) {
-                if (dataRow === 1)
-                    return (
-                        <div>
-                            <img src={feature} height="30px" width="30px" />
-                        </div>
-                    );
-                if (dataRow === 2)
-                    return (
-                        <div>
-                            <img src={bug} height="30px" width="30px" />
-                        </div>
-                    );
-            },
-        },
-        {
-            title: translate.formatMessage(commonMessage.task),
+            title: <FormattedMessage defaultMessage="Tên story" />,
             width: 200,
-            dataIndex: 'taskName',
+            dataIndex: 'storyName',
         },
+        // {
+        //     title: <FormattedMessage defaultMessage="Người thực hiện" />,
+        //     width: 200,
+        //     dataIndex: ['developerInfo','account','fullName'],
+        //     render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
+        // },
         {
-            title: translate.formatMessage(commonMessage.developer),
-            dataIndex: ['developer', 'account', 'fullName'],
-            width: 200,
-            render: (_, record) => record?.developer?.account?.fullName || record?.leader?.leaderName,
-        },
-        {
-            title: translate.formatMessage(commonMessage.projectCategory),
-            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
-            width: 150,
-        },
-        {
-            title: 'Ngày bắt đầu',
-            dataIndex: 'startDate',
+            title: 'Ngày tạo',
+            dataIndex: 'createdDate',
             width: 200,
             align: 'center',
         },
         {
-            title: 'Ngày kết thúc',
-            dataIndex: 'dueDate',
-            width: 200,
-        },
-        {
-            title: 'Tình trạng',
-            dataIndex: 'state',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const state = stateValues?.find((item) => item?.value == dataRow);
-                return (
-                    <Tag color={state?.color}>
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
-                    </Tag>
+            title: 'Ngày hoàn thành',
+            dataIndex: 'dateComplete',
+            width: 180,
+            render: (dateComplete) => {
+                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
+                    7,
+                    'hour',
                 );
+                const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
             },
+            align: 'center',
         },
+        // {
+        //     title: 'Trạng thái',
+        //     dataIndex: 'status',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         const state = stateValues?.find((item) => item?.value == dataRow);
+        //         return (
+        //             <Tag color={state?.color}>
+        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
+        //             </Tag>
+        //         );
+        //     },
+        // },
 
         active &&
-            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
+            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -339,26 +322,22 @@ function ProjectTaskListPage({ setSearchFilter }) {
         return initialFilterValues;
     }, [queryFilter?.fromDate, queryFilter?.toDate]);
 
-    // useEffect(() => {
-    //     setSearchFilter(queryFilter);
-    // }, [queryFilter]);
+    useEffect(() => {
+        setSearchFilter(queryFilter);
+    }, [queryFilter]);
 
-    const breadcrumbs = [
-        {
-            breadcrumbName: translate.formatMessage(commonMessage.project),
-            path: routes.projectListPage.path,
-        },
-        {
-            breadcrumbName: translate.formatMessage(commonMessage.generalManage),
-            path: routes.projectTabPage.path+`?projectId=${projectId}&storyId=${storyId}&active=${active}&projectName=${projectName}`,
-        },
-        {
-            breadcrumbName: storyName,
-        },
-    ];
+    const handleOnClick = (event, record) => {
+        event.preventDefault();
+        localStorage.setItem(routes.projectTabPage.keyActiveTab, translate.formatMessage(commonMessage.task));
+        console.log(record);
+        navigate(
+            routes.ProjectTaskListPage.path +
+                `?projectId=${projectId}&storyId=${record.id}&storyName=${record.storyName}&active=${!!record.status == 1}&projectName=${projectName}`,
+        );
+    };
 
     return (
-        <PageWrapper routes={breadcrumbs}>
+        <div>
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
@@ -371,9 +350,8 @@ function ProjectTaskListPage({ setSearchFilter }) {
                         onRow={(record) => ({
                             onClick: (e) => {
                                 e.stopPropagation();
-                                handleFetchDetail(record.id);
-
-                                handlersModal.open();
+                                handleOnClick(e,record);
+                                // handleFetchDetail(record.id);
                             },
                         })}
                         onChange={changePagination}
@@ -437,7 +415,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                 </BaseForm>
             </Modal>
             <DetailMyTaskProjectModal open={openedModal} onCancel={() => handlersModal.close()} DetailData={detail} />
-        </PageWrapper>
+        </div>
     );
 }
 const formatDateToZeroTime = (date) => {
@@ -452,4 +430,4 @@ const formatDateToEndOfDayTime = (date) => {
 const formatDateToLocal = (date) => {
     return convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
 };
-export default ProjectTaskListPage;
+export default StoryTaskListPage;

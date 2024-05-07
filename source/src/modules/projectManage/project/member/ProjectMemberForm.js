@@ -16,6 +16,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import ScheduleTable from '@components/common/table/ScheduleTable';
 import { commonMessage } from '@locales/intl';
+import BooleanField from '@components/common/form/BooleanField';
 
 function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
@@ -171,7 +172,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         form.setFieldsValue({
             ...dataDetail,
             teamId: dataDetail?.team?.teamName,
-            studentId: dataDetail?.studentInfo?.fullName,
+            developerId: dataDetail?.developer?.accountDto?.fullName,
         });
     }, [dataDetail]);
 
@@ -262,6 +263,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         setFieldValue('schedule', schedule);
         onValuesChange();
     };
+    console.log(dataDetail);
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             <Card className="card-form" bordered={false}>
@@ -272,11 +274,11 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 disabled={isEditing}
                                 required
                                 label={translate.formatMessage(commonMessage.developer)}
-                                name={['developer', 'studentInfo', 'fullName']}
+                                name={[ 'developer','accountDto', 'fullName']}
                                 apiConfig={apiConfig.developer.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
-                                    label: item.studentInfo.fullName,
+                                    label: item.account.fullName,
                                 })}
                                 initialSearchParams={{ pageNumber: 0 }}
                                 searchParams={(text) => ({ name: text })}
@@ -296,18 +298,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 searchParams={(text) => ({ name: text })}
                             />
                         </Col>
-                        <Col span={6}>
-                            <AutoCompleteField
-                                required
-                                label={<FormattedMessage defaultMessage="Nhóm" />}
-                                name={['team', 'id']}
-                                apiConfig={apiConfig.team.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.teamName })}
-                                optionsParams={{ projectId: projectId }}
-                                initialSearchParams={{ projectId: projectId }}
-                                searchParams={(text) => ({ name: text })}
-                            />
-                        </Col>
+                       
                     </Row>
                 </div>
                 <ScheduleTable

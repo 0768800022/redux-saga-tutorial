@@ -1,13 +1,13 @@
-import React from 'react';
-import apiConfig from '@constants/apiConfig';
-import routes from '@routes';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import useTranslate from '@hooks/useTranslate';
+import apiConfig from '@constants/apiConfig';
 import useSaveBase from '@hooks/useSaveBase';
-import { generatePath, useParams } from 'react-router-dom';
-import { defineMessages } from 'react-intl';
-import ProjectCategoryForm from './ProjectCategoryForm';
+import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
+import React from 'react';
+import { defineMessages } from 'react-intl';
+import { generatePath, useParams } from 'react-router-dom';
+import ProjectCategoryForm from './ProjectCategoryForm';
 const message = defineMessages({
     objectName: 'Danh mục',
 });
@@ -29,6 +29,7 @@ function ProjectCategorySavePage() {
             getListUrl: generatePath(routes.projectCategoryLeaderListPage.path, { projectCategoryId }),
             objectName: translate.formatMessage(message.objectName),
         },
+        isProjectToken : true,
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {

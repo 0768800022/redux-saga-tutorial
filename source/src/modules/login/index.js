@@ -31,6 +31,8 @@ import {
     COMPANY_LOGIN_TYPE,
     envType,
     UserTypes,
+    DEVELOPER_LOGIN_TYPE,
+    ADMIN_LOGIN_TYPE,
 } from '@constants';
 import { Buffer } from 'buffer';
 import { setData } from '@utils/localStorage';
@@ -53,6 +55,7 @@ const LoginPage = () => {
     const { execute: executeLeaderLogin, loading: loadingLeader } = useFetch(apiConfig.leader.login);
     const { execute: executeStudentLogin, loading: loadingStudent } = useFetch(apiConfig.student.login);
     const { execute: executeCompanyLogin, loading: loadingCompany } = useFetch(apiConfig.company.login);
+    const { execute: executeDeveloperLogin, loading: loadingDeveloper } = useFetch(apiConfig.developer.login);
     const { execute: executeGetCareerDetail, loading: loadingCareer } = useFetch(apiConfig.organize.getDetail, {
         pathParams: { id: tenantId },
     });
@@ -61,20 +64,17 @@ const LoginPage = () => {
     });
     const notification = useNotification();
     const onFinish = (values) => {
-        if (values.grant_type === LEADER_LOGIN_TYPE) handleGetCareerInfo(values, executeLeaderLogin);
-        else if (values.grant_type === STUDENT_LOGIN_TYPE) handleGetCareerInfo(values, executeStudentLogin);
-        else if (values.grant_type === COMPANY_LOGIN_TYPE) handleGetCareerInfo(values, executeCompanyLogin);
-        else
-            execute({
-                data: { ...values },
-                onCompleted: (res) => {
-                    if (res.user_kind === UserTypes.ADMIN) throw new Error('Loại tài khoản không phù hợp');
-                    handleLoginSuccess(res);
-                },
-                onError: (res) => {
-                    notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
-                },
-            });
+        execute({
+            data: { ...values,grant_type : ADMIN_LOGIN_TYPE },
+            onCompleted: (res) => {
+                if (res.user_kind === UserTypes.ADMIN) throw new Error('Loại tài khoản không phù hợp');
+                handleLoginSuccess(res);
+            },
+            onError: (res) => {
+                notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
+            },
+        });
+           
     };
 
     const handleLoginSuccess = (res) => {
@@ -137,12 +137,12 @@ const LoginPage = () => {
                         type="password"
                     />
 
-                    <SelectField
+                    {/* <SelectField
                         placeholder={<FormattedMessage defaultMessage="Bạn là?" />}
                         required
                         name="grant_type"
                         options={loginOptions}
-                    />
+                    /> */}
 
                     <Button
                         type="primary"

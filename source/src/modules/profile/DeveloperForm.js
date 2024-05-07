@@ -6,26 +6,39 @@ import CropImageField from '@components/common/form/CropImageField';
 import useFetch from '@hooks/useFetch';
 import apiConfig from '@constants/apiConfig';
 import { AppConstants } from '@constants';
+import { Fragment } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
-import { commonMessage } from '@locales/intl';
-import { convertUtcToLocalTime, formatDateString } from '@utils/index';
-import { DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants/index';
 import NumericField from '@components/common/form/NumericField';
-import DatePickerField from '@components/common/form/DatePickerField';
-import dayjs from 'dayjs';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
+    banner: 'Banner',
     avatarPath: 'Avatar',
+    username: 'Username',
+    career: 'Career Name',
+    fullName: 'Leader',
+    email: 'Email',
+    hotline: 'Hot line',
+    phoneNumber: 'Phone Number',
+    taxNumber: 'Tax Number',
+    zipCode: 'Zip Code',
+    city: 'City',
+    address: 'Address',
+    logo: 'Logo',
+    currentPassword: 'Current password',
+    newPassword: 'New password',
+    confirmPassword: 'Confirm password',
     passwordLengthError: 'Password must be at least 6 characters',
     passwordMatchError: 'Password does not match',
-    banner: 'Banner',
-    logo: 'Logo',
 });
 
-const StudentForm = (props) => {
+const DeveloperForm = (props) => {
     const { formId, dataDetail, onSubmit, setIsChangedFormValues, actions, isAdmin } = props;
     const [imageUrl, setImageUrl] = useState(null);
+    const [logoUrl, setLogoUrl] = useState(null);
+    const [bannerUrl, setBannerUrl] = useState(null);
+
     const { execute: executeUpFile } = useFetch(apiConfig.file.upload);
     const translate = useTranslate();
 
@@ -54,35 +67,26 @@ const StudentForm = (props) => {
     };
 
     useEffect(() => {
-        dataDetail.birthday = convertUtcToLocalTime(dataDetail.birthday, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
         });
-        setImageUrl(dataDetail.account?.avatar);
+        setImageUrl(dataDetail.accountDto?.avatar);
     }, [dataDetail]);
 
     const handleFinish = (values) => {
         (values.avatar = imageUrl),
         mixinFuncs.handleSubmit({
             ...values,
-            avatar: values.avatar,
+            avatar: values?.avatar,
         });
     };
 
     console.log(imageUrl);
 
-    const validateStartDate = (_, value) => {
-        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
-        if (date && value && value.isBefore(date)) {
-            return Promise.reject('Ngày sinh phải nhỏ hơn ngày hiện tại');
-        }
-        return Promise.resolve();
-    };
-
     return (
         <Card className="card-form" bordered={false} style={{ minHeight: 'calc(100vh - 190px)' }}>
             <Form
-                style={{ width: '60%' }}
+                style={{ width: '80%' }}
                 labelCol={{ span: 8 }}
                 id={formId}
                 onFinish={handleFinish}
@@ -91,7 +95,7 @@ const StudentForm = (props) => {
                 onValuesChange={onValuesChange}
             >
                 <Row style={{ marginLeft: '8rem' }} gutter={16}>
-                    <Col span={12}>
+                    <Col span={16}>
                         <CropImageField
                             label={<FormattedMessage defaultMessage="Avatar" />}
                             name="avatar"
@@ -101,14 +105,31 @@ const StudentForm = (props) => {
                         />
                     </Col>
                 </Row>
-                <TextField label={translate.formatMessage(commonMessage.fullName)} name={['account', 'fullName']} />
-                <TextField label={translate.formatMessage(commonMessage.email)} disabled name={['account', 'email']} />
-                <TextField label={translate.formatMessage(commonMessage.mssv)} name="mssv" />
-                <TextField label={translate.formatMessage(commonMessage.birthday)} disabled name={['account', 'birthday']} />
-                <TextField label={translate.formatMessage(commonMessage.university)} disabled name={['university', 'categoryName']} />
-                <TextField label={translate.formatMessage(commonMessage.studyClass)} disabled name={['studyClass', 'categoryName']} />
-
-                <TextField label={translate.formatMessage(commonMessage.phone)} disabled name={['account', 'phone']} />
+                <TextField label={translate.formatMessage(commonMessage.fullName)} name={['accountDto', 'fullName']} />
+                <TextField
+                    label={translate.formatMessage(commonMessage.email)}
+                    disabled
+                    name={['accountDto', 'email']}
+                />
+                <TextField
+                    label={translate.formatMessage(commonMessage.birthday)}
+                    disabled
+                    name={['accountDto', 'birthday']}
+                />
+                <TextField
+                    label={translate.formatMessage(commonMessage.phone)}
+                    disabled
+                    name={['accountDto', 'phone']}
+                />
+                {/* {!isAdmin && (
+                    <Fragment>
+                        <TextField
+                            name={['accountDto', 'phone']}
+                            label={translate.formatMessage(messages.phoneNumber)}
+                            required
+                        />
+                    </Fragment>
+                )} */}
                 <TextField
                     type="password"
                     label={translate.formatMessage(commonMessage.currentPassword)}
@@ -149,11 +170,10 @@ const StudentForm = (props) => {
                         },
                     ]}
                 />
-
                 <div className="footer-card-form">{actions}</div>
             </Form>
         </Card>
     );
 };
 
-export default StudentForm;
+export default DeveloperForm;

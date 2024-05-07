@@ -443,6 +443,7 @@ const apiConfig = {
             baseURL: `${apiTenantUrl}v1/student/detail-by-phone`,
             method: 'GET',
             headers: baseHeader,
+            isRequiredTenantId: true,
         },
     },
     leader: {
@@ -550,7 +551,33 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        login: {
+            baseURL: `${apiTenantUrl}v1/developer/login-developer`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getProfile: {
+            baseURL: `${apiTenantUrl}v1/developer/profile`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        myProject: {
+            baseURL: `${apiTenantUrl}v1/developer/my-project`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/developer/update-profile`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
+  
+    
     lecture: {
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/lecture/auto-complete`,
@@ -733,6 +760,14 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getTokenForProject: {
+            baseURL: `${apiTenantUrl}v1/project/get-token-for-project`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        
+  
     },
     projectTask: {
         getList: {
@@ -1524,6 +1559,86 @@ const apiConfig = {
         generatePeriodDetail: {
             baseURL: `${apiTenantUrl}v1/income/generate-period-detail`,
             method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    groupPermission: {
+        getGroupList: {
+            baseURL: `${apiUrl}v1/group/list`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getList: {
+            baseURL: `${apiUrl}v1/group/list`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getPemissionList: {
+            baseURL: `${apiUrl}v1/permission/list`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+        getById: {
+            baseURL: `${apiUrl}v1/group/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+        create: {
+            baseURL: `${apiUrl}v1/group/create`,
+            method: 'POST',
+            headers: baseHeader,
+        },
+        update: {
+            baseURL: `${apiUrl}v1/group/update`,
+            method: 'PUT',
+            headers: baseHeader,
+        },
+        delete: {
+            baseURL: `${apiUrl}v1/group/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+        },
+        getGroupListCombobox: {
+            baseURL: `${apiUrl}v1/group/list_combobox`,
+            method: 'GET',
+            headers: baseHeader,
+        },
+    },
+    story: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/story/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/story/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/story/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/story/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/story/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/story/update`,
+            method: 'PUT',
             headers: baseHeader,
             isRequiredTenantId: true,
         },

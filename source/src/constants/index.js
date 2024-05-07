@@ -22,6 +22,7 @@ export const storageKeys = {
     RESTAURANT_ID: `${appName}-restaurant-id`,
     TENANT_HEADER: `X-tenant`,
     TENANT_API_URL: `${appName}-tenant-api-url`,
+    USER_PROJECT_ACCESS_TOKEN: `${appName}-user-project-access-token`,
 };
 
 export const baseHeader = {
@@ -112,6 +113,11 @@ export const STATE_COURSE_RECRUITED = 5;
 export const STATE_TASK_ASIGN = 1;
 export const STATE_TASK_DONE = 2;
 
+export const STATE_STORY_TASK_CREATE = 0;
+export const STATE_STORY_TASK_PROCESSING = 1;
+export const STATE_STORY_TASK_DONE = 2;
+export const STATE_STORY_TASK_CANCEL = 3;
+
 export const STATE_PROJECT_TASK_CREATE = 1;
 export const STATE_PROJECT_TASK_PROCESSING = 2;
 export const STATE_PROJECT_TASK_DONE = 3;
@@ -137,18 +143,20 @@ export const UserTypes = {
     STUDENT: 3,
     LEADER: 4,
     COMPANY: 5,
+    DEVELOPER : 4,
 };
 
 export const LEADER_LOGIN_TYPE = 'leader';
 export const ADMIN_LOGIN_TYPE = 'password';
 export const STUDENT_LOGIN_TYPE = 'student';
 export const COMPANY_LOGIN_TYPE = 'company';
-
+export const DEVELOPER_LOGIN_TYPE = 'developer';
 export const loginOptions = [
     { label: 'Admin', value: ADMIN_LOGIN_TYPE },
     { label: 'Sinh viên', value: STUDENT_LOGIN_TYPE },
-    { label: 'Leader', value: LEADER_LOGIN_TYPE },
-    { label: 'Công ty', value: COMPANY_LOGIN_TYPE },
+    { label: 'Lập trình viên', value: DEVELOPER_LOGIN_TYPE },
+    // { label: 'Leader', value: LEADER_LOGIN_TYPE },
+    // { label: 'Công ty', value: COMPANY_LOGIN_TYPE },
 ];
 
 export const commonStatusColor = {

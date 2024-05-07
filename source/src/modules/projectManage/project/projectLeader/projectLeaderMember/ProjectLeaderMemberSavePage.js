@@ -6,8 +6,8 @@ import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 import React from 'react';
 import { defineMessages } from 'react-intl';
-import ProjectLeaderMemberForm from './ProjectLeaderMemberForm';
 import { generatePath } from 'react-router-dom';
+import ProjectLeaderMemberForm from './ProjectLeaderMemberForm';
 // import routes from '@modules/course/routes';
 import { showErrorMessage } from '@services/notifyService';
 
@@ -30,9 +30,10 @@ function ProjectLeaderMemberSavePage() {
             update: apiConfig.memberProject.update,
         },
         options: {
-            getListUrl: generatePath(routes.projectLeaderMemberListPage.path),
+            getListUrl: generatePath(routes.projectDeveloperTabPage.path),
             objectName: translate.formatMessage(messages.objectName),
         },
+        isProjectToken : true,
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
@@ -46,10 +47,11 @@ function ProjectLeaderMemberSavePage() {
             funcs.prepareCreateData = (data) => {
                 return {
                     projectId: projectId,
-                    developerId: data.developer.studentInfo.fullName,
-                    projectRoleId: data.projectRole.id,
+                    developerId: data?.account?.fullName,
+                    projectRoleId: data?.projectRole?.id,
                     schedule: data.schedule,
-                    teamId: data.team.id,
+                    contractSign : "contractSign",
+                    // teamId: data.team.id,
                 };
             };
             funcs.onSaveError = (err) => {
