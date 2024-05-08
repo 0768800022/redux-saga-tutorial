@@ -142,11 +142,10 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                 ...values,
             });
         }
-        return console.log(values);
-        // return mixinFuncs.handleSubmit({
-        //     studentId: studentId,
-        //     ...values,
-        // });
+        return mixinFuncs.handleSubmit({
+            studentId: studentId,
+            ...values,
+        });
     };
     function addFrameTime(data) {
         const result = {};
