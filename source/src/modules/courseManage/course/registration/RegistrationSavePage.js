@@ -43,6 +43,7 @@ function RegistrationSavePage() {
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
+                    id: detail.id,
                     ...data,
                 };
             };
