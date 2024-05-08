@@ -11,32 +11,37 @@ import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
 import useTranslate from '@hooks/useTranslate';
 import { formatDateString } from '@utils';
-import { Card, Col, Form, Row, Space } from 'antd';
+import { Card, Col, Form, Radio, Row, Space } from 'antd';
 import dayjs from 'dayjs';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-const ProjectLeaderTaskForm = (props) => {
+const ProjectTaskForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const translate = useTranslate();
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    // const kindValues = translate.formatKeys(projectTaskKind, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const [valueSelect, setValueSelect] = useState(1);
+    const [memKind, setMemKind] = useState(1);
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
     });
     const handleSubmit = (values) => {
-        values.startDate = formatDateString(values.startDate, DEFAULT_FORMAT);
-        values.dueDate = formatDateString(values.dueDate, DEFAULT_FORMAT);
+        values.startDate = values.startDate && formatDateString(values.startDate, DEFAULT_FORMAT);
+        values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
         if (typeof values.developerId === 'string') {
             values.developerId = dataDetail?.developer?.studentInfo?.id;
         }
         if (typeof values.projectCategoryId === 'string') {
             values.projectCategoryId = dataDetail?.projectCategoryInfo?.id;
+        }
+        if (typeof values.leaderId === 'string') {
+            values.leaderId = dataDetail?.leader?.id;
         }
         return mixinFuncs.handleSubmit({ ...values, description: removeBaseURL(values?.description) });
     };
@@ -45,50 +50,11 @@ const ProjectLeaderTaskForm = (props) => {
             form.setFieldsValue({
                 status: statusValues[1].value,
                 state: stateValues[0].value,
-                memKind: valueSelect,
                 kind: projectTaskKind[0].value,
+                memKind: valueSelect,
             });
         }
     }, [isEditing]);
-
-    useEffect(() => {
-        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
-        dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
-
-        let value;
-
-        if (dataDetail?.startDate && dataDetail?.leader) {
-            setValueSelect(2);
-            value = 2;
-        } else {
-            value = 1;
-        }
-
-        form.setFieldsValue({
-            ...dataDetail,
-            projectCategoryId: dataDetail?.projectCategoryInfo?.projectCategoryName,
-            developerId: dataDetail?.developer?.studentInfo?.fullName,
-            description: insertBaseURL(dataDetail?.description),
-            leaderId: dataDetail?.leader?.leaderName,
-            memKind: value,
-        });
-    }, [dataDetail]);
-    const validateDueDate = (_, value) => {
-        const { startDate } = form.getFieldValue();
-        if (startDate && value && value.isBefore(startDate)) {
-            return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
-        }
-        return Promise.resolve();
-    };
-
-    const validateStartDate = (_, value) => {
-        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
-        if (date && value && value.isBefore(date) && !isEditing) {
-            return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
-        }
-        return Promise.resolve();
-    };
-
     const {
         data: developers,
         loading: getdevelopersLoading,
@@ -109,6 +75,44 @@ const ProjectLeaderTaskForm = (props) => {
         mappingData: ({ data }) =>
             data.content.map((item) => ({ value: item?.leaderInfo?.id, label: item?.leaderInfo?.leaderName })),
     });
+    useEffect(() => {
+        dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
+        dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
+        let value;
+
+        if (dataDetail?.startDate && dataDetail?.leader) {
+            setValueSelect(2);
+            value = 2;
+        } else {
+            value = 1;
+        }
+
+        form.setFieldsValue({
+            ...dataDetail,
+            projectCategoryId: dataDetail?.projectCategoryInfo?.projectCategoryName,
+            developerId: dataDetail?.developer?.account?.id,
+            leaderId: dataDetail?.leader?.leaderName,
+            description: insertBaseURL(dataDetail?.description),
+            memKind: value,
+        });
+        console.log(dataDetail);
+    }, [dataDetail]);
+
+    const validateDueDate = (_, value) => {
+        const { startDate } = form.getFieldValue();
+        if (startDate && value && value.isBefore(startDate)) {
+            return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
+        }
+        return Promise.resolve();
+    };
+
+    const validateStartDate = (_, value) => {
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+        if (date && value && value.isBefore(date) && !isEditing) {
+            return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
+        }
+        return Promise.resolve();
+    };
 
     const handleOnSelect = (value) => {
         setValueSelect(value);
@@ -127,31 +131,32 @@ const ProjectLeaderTaskForm = (props) => {
             <Card className="card-form" bordered={false}>
                 <Row gutter={16}>
                     <Col span={12}>
-                        <Space.Compact>
-                            <SelectField
-                                style={{
-                                    width: '80px',
-                                }}
-                                label={<FormattedMessage defaultMessage="Tên Task" />}
-                                name="kind"
-                                required
-                                allowClear={false}
-                                options={projectTaskKind}
-                            />
-                            <TextField
-                                style={{
-                                    width: '240px',
-                                    marginTop: 1,
-                                }}
-                                label={<FormattedMessage defaultMessage=" " />}
-                                name="taskName"
-                                // required
-                            />
-                        </Space.Compact>
+                        <Space direction="vertical">
+                            <Space>{<FormattedMessage defaultMessage="Tên task" />}</Space>
+                            <Space.Compact align="start">
+                                <SelectField
+                                    style={{
+                                        width: '80px',
+                                        height: '31.8px',
+                                    }}
+                                    // label={<FormattedMessage defaultMessage="Tên Task" />}
+                                    name="kind"
+                                    allowClear={false}
+                                    options={projectTaskKind}
+                                />
+                                <TextField
+                                    style={{
+                                        width: '240px',
+                                    }}
+                                    name="taskName"
+                                    required
+                                />
+                            </Space.Compact>
+                        </Space>
                     </Col>
                     <Col span={12}>
                         <Space direction="vertical">
-                            <Space>Người thực hiện</Space>
+                            <Space>{<FormattedMessage defaultMessage="Người thực hiện" />}</Space>
                             <Space.Compact align="start">
                                 <SelectField
                                     disabled={isEditing}
@@ -165,45 +170,26 @@ const ProjectLeaderTaskForm = (props) => {
                                     onSelect={handleOnSelect}
                                     required
                                 />
-                                {valueSelect == 1 ? (
-                                    <AutoCompleteField
-                                        disabled={isEditing}
-                                        style={{
-                                            width: '230px',
-                                        }}
-                                        // label={<FormattedMessage defaultMessage=" " />}
-                                        name="developerId"
-                                        apiConfig={apiConfig.memberProject.autocomplete}
-                                        mappingOptions={(item) => ({
-                                            value: item.developer.id,
-                                            label: item.developer.studentInfo.fullName,
-                                        })}
-                                        searchParams={(text) => ({ fullName: text })}
-                                        optionsParams={{ projectId: projectId }}
-                                        initialSearchParams={{ projectId: projectId }}
-                                        options={developers}
-                                        // required
-                                    />
-                                ) : (
-                                    <AutoCompleteField
-                                        disabled={isEditing}
-                                        style={{
-                                            width: '230px',
-                                        }}
-                                        // required
-                                        // label={<FormattedMessage defaultMessage=" " />}
-                                        name="leaderId"
-                                        apiConfig={apiConfig.team.autocomplete}
-                                        mappingOptions={(item) => ({
-                                            value: item.id,
-                                            label: item?.leaderInfo?.leaderName,
-                                        })}
-                                        optionsParams={{ projectId: projectId }}
-                                        initialSearchParams={{ projectId: projectId }}
-                                        searchParams={(text) => ({ name: text })}
-                                        options={team}
-                                    />
-                                )}
+                            
+                                <AutoCompleteField
+                                    disabled={isEditing}
+                                    style={{
+                                        width: '230px',
+                                    }}
+                                    // label={<FormattedMessage defaultMessage=" " />}
+                                    name="developerId"
+                                    apiConfig={apiConfig.memberProject.autocomplete}
+                                    mappingOptions={(item) => ({
+                                        value: item.developer.id,
+                                        label: item.developer.account.fullName,
+                                    })}
+                                    searchParams={(text) => ({ fullName: text })}
+                                    optionsParams={{ projectId: projectId }}
+                                    initialSearchParams={{ projectId: projectId }}
+                                    // options={developers}
+                                    // required
+                                />
+                                
                             </Space.Compact>
                         </Space>
                     </Col>
@@ -222,7 +208,24 @@ const ProjectLeaderTaskForm = (props) => {
                             initialSearchParams={{ projectId: projectId }}
                         />
                     </Col>
-
+                    <Col span={12}>
+                        <SelectField
+                            required
+                            name="state"
+                            label={<FormattedMessage defaultMessage="Tình trạng" />}
+                            allowClear={false}
+                            options={stateValues}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            required
+                            name="status"
+                            label={<FormattedMessage defaultMessage="Trạng thái" />}
+                            allowClear={false}
+                            options={statusValues}
+                        />
+                    </Col>
                     <Col span={12}>
                         <DatePickerField
                             showTime={true}
@@ -248,15 +251,6 @@ const ProjectLeaderTaskForm = (props) => {
                             style={{ width: '100%' }}
                         />
                     </Col>
-                    <Col span={12}>
-                        <SelectField
-                            required
-                            name="state"
-                            label={<FormattedMessage defaultMessage="Tình trạng" />}
-                            allowClear={false}
-                            options={stateValues}
-                        />
-                    </Col>
                 </Row>
                 <RichTextField
                     label={<FormattedMessage defaultMessage="Mô tả" />}
@@ -278,4 +272,4 @@ const ProjectLeaderTaskForm = (props) => {
     );
 };
 
-export default ProjectLeaderTaskForm;
+export default ProjectTaskForm;

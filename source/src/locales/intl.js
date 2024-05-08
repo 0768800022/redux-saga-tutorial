@@ -52,6 +52,7 @@ export const commonMessage = defineMessages({
     subject: 'Môn học',
     subjectName: 'Tên môn học',
     task: 'Task',
+    story: 'Story',
     team: 'Nhóm',
     teamName: 'Tên nhóm',
     username: 'Tài khoản đăng nhập',

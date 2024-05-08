@@ -31,6 +31,11 @@ import {
     HOUR_SALARY,
     TASK_KIND_DEV,
     TASK_KIND_LEADER,
+    STATE_PROJECT_TASK_BEFORE,
+    STATE_STORY_TASK_CREATE,
+    STATE_STORY_TASK_PROCESSING,
+    STATE_STORY_TASK_DONE,
+    STATE_STORY_TASK_CANCEL,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -93,6 +98,13 @@ export const taskState = [
     { value: STATE_TASK_DONE, label: taskStateMessage.done, color: 'green' },
 ];
 
+export const storyTaskState = [
+    { value: STATE_STORY_TASK_CREATE, label: projectTaskStateMessage.create, color: 'yellow' },
+    { value: STATE_STORY_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
+    { value: STATE_STORY_TASK_DONE, label: projectTaskStateMessage.done, color: 'green' },
+    { value: STATE_STORY_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
+];
+
 export const projectTaskState = [
     { value: STATE_PROJECT_TASK_CREATE, label: projectTaskStateMessage.create, color: 'yellow' },
     { value: STATE_PROJECT_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
@@ -101,6 +113,7 @@ export const projectTaskState = [
 ];
 
 export const salaryPeriodState = [
+    { value: 0, label: salaryPeriodStateMessage.create, color: 'yellow' },
     { value: 1, label: salaryPeriodStateMessage.create, color: 'yellow' },
     { value: 2, label: salaryPeriodStateMessage.processing, color: 'blue' },
     { value: 3, label: salaryPeriodStateMessage.done, color: 'green' },

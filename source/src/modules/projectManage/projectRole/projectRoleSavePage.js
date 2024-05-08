@@ -59,6 +59,7 @@ const ProjectRoleSavePage = () => {
 
                                 permissionId: permission?.permissionId,
                                 permissionCode: permission?.pcode,
+                                action:permission?.action,
                             })))
                             : [],
                     };

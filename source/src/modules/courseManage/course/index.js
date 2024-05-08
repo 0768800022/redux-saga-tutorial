@@ -200,14 +200,14 @@ const CourseListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(commonMessage.name),
+            title: translate.formatMessage(commonMessage.courseName),
             dataIndex: 'name',
         },
-        {
-            title: translate.formatMessage(commonMessage.leader),
-            dataIndex: ['leader', 'leaderName'],
-            width: 200,
-        },
+        // {
+        //     title: translate.formatMessage(commonMessage.leader),
+        //     dataIndex: ['leader', 'leaderName'],
+        //     width: 200,
+        // },
         {
             title: <FormattedMessage defaultMessage="Học phí" />,
             dataIndex: 'fee',

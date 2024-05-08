@@ -95,14 +95,14 @@ function RegistrationListPage() {
         event.preventDefault();
         navigate(
             routes.studentActivityCourseListPage.path +
-                `?courseId=${record?.courseInfo?.id}&studentId=${record?.studentInfo?.id}&studentName=${record?.studentInfo?.fullName}`,
+                `?courseId=${record?.courseInfo?.id}&studentId=${record?.studentInfo?.id}&studentName=${record?.studentInfo?.account?.fullName}`,
         );
     };
 
     const columns = [
         {
             title: translate.formatMessage(commonMessage.studentName),
-            dataIndex: ['studentInfo', 'fullName'],
+            dataIndex: ['studentInfo', 'account',"fullName"],
             render: (fullName, record) => (
                 <div onClick={(event) => handleOnClick(event, record)} className={style.customDiv}>
                     {fullName}

@@ -74,6 +74,8 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
 
     useEffect(() => {
         dataDetail.birthday = dataDetail?.account?.birthday && dayjs(dataDetail?.account?.birthday, DATE_FORMAT_VALUE);
+        // console.log(dataDetail.account.avatar);
+        setImageUrl(dataDetail.account?.avatar);
         form.setFieldsValue({
             ...dataDetail,
             // university: dataDetail?.category?.categoryName,
@@ -83,7 +85,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             universityId: dataDetail?.university?.categoryName,
             studyClass: dataDetail?.studyClass?.categoryName,
         });
-        setImageUrl(dataDetail.avatar);
+        setImageUrl(dataDetail?.account?.avatar);
     }, [dataDetail]);
 
     const handleSubmit = (values) => {
@@ -110,6 +112,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                             aspect={1 / 1}
                             uploadFile={uploadFile}
+                            disabled={isEditing}
                         />
                     </Col>
                 </Row>

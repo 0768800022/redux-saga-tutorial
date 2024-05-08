@@ -22,6 +22,7 @@ export const storageKeys = {
     RESTAURANT_ID: `${appName}-restaurant-id`,
     TENANT_HEADER: `X-tenant`,
     TENANT_API_URL: `${appName}-tenant-api-url`,
+    USER_PROJECT_ACCESS_TOKEN: `${appName}-user-project-access-token`,
 };
 
 export const baseHeader = {
@@ -111,6 +112,11 @@ export const STATE_COURSE_RECRUITED = 5;
 
 export const STATE_TASK_ASIGN = 1;
 export const STATE_TASK_DONE = 2;
+
+export const STATE_STORY_TASK_CREATE = 0;
+export const STATE_STORY_TASK_PROCESSING = 1;
+export const STATE_STORY_TASK_DONE = 2;
+export const STATE_STORY_TASK_CANCEL = 3;
 
 export const STATE_PROJECT_TASK_CREATE = 1;
 export const STATE_PROJECT_TASK_PROCESSING = 2;

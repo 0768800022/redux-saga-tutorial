@@ -443,6 +443,7 @@ const apiConfig = {
             baseURL: `${apiTenantUrl}v1/student/detail-by-phone`,
             method: 'GET',
             headers: baseHeader,
+            isRequiredTenantId: true,
         },
     },
     leader: {
@@ -568,7 +569,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        
+        updateProfile: {
+            baseURL: `${apiTenantUrl}v1/developer/update-profile`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
   
     
@@ -1597,6 +1603,44 @@ const apiConfig = {
             baseURL: `${apiUrl}v1/group/list_combobox`,
             method: 'GET',
             headers: baseHeader,
+        },
+    },
+    story: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/story/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/story/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/story/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/story/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/story/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/story/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
         },
     },
 };

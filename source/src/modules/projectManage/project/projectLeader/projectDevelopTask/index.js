@@ -11,6 +11,7 @@ import {
     DATE_FORMAT_ZERO_TIME,
     DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
+    storageKeys,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
@@ -23,18 +24,17 @@ import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 import { convertUtcToLocalTime, formatDateString } from '@utils';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { Button, Col, Modal, Row, Tag } from 'antd';
 import dayjs from 'dayjs';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
-import bug from '../../../../assets/images/bug.jpg';
-import feature from '../../../../assets/images/feature.png';
-import styles from '../project.module.scss';
-import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
+import bug from '../../../../../assets/images/bug.jpg';
+import feature from '../../../../../assets/images/feature.png';
+// import styles from '../project.module.scss';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { showErrorMessage } from '@services/notifyService';
+import { getData } from '@utils/localStorage';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -76,7 +76,8 @@ function ProjectTaskListPage({ setSearchFilter }) {
             },
         });
     };
-    const { execute: executeUpdate } = useFetch(apiConfig.projectTask.changeState, { immediate: false });
+    const userTokenProject = getData(storageKeys.USER_PROJECT_ACCESS_TOKEN);
+    const { execute: executeUpdate } = useFetch({ ...apiConfig.projectTask.changeState, authorization: `Bearer ${userTokenProject}` }, { immediate: false });
 
     const handleOk = (values) => {
         handlersStateTaskModal.close();
@@ -110,36 +111,54 @@ function ProjectTaskListPage({ setSearchFilter }) {
             apiConfig: apiConfig.projectTask,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
-                objectName: translate.formatMessage(commonMessage.task),
-
+                objectName: translate.formatMessage(message.objectName),
             },
-            // tabOptions:{
-            //     queryPage: {
-            //         projectId,
-            //         storyId,
-            //     },
-            //     isTab: true,
-            // },
+            isProjectToken : true,
             override: (funcs) => {
                 funcs.mappingData = (response) => {
-                    try {
-                        if (response.result === true) {
-                            return {
-                                data: response.data.content,
-                                total: response.data.totalElements,
-                            };
-                        }
-                    } catch (error) {
-                        return [];
+                    if (response.result === true) {
+                        return {
+                            data: response?.data?.content,
+                            total: response?.data?.totalElements,
+                        };
                     }
                 };
-                
-                funcs.getCreateLink = () => {
-                    return `${routes.ProjectTaskListPage.path}/create?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}`;
+                funcs.getCreateLink = (record) => {
+                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&active=${active}&storyId=${storyId}&storyName=${storyName}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
-                    return `${routes.ProjectTaskListPage.path}/${dataRow.id}?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}`;
+                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&active=${active}&storyId=${storyId}&storyName=${storyName}`;
                 };
+
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const projectName = queryParams.get('projectName');
+                    const developerName = queryParams.get('developerName');
+                    const leaderName = queryParams.get('leaderName');
+                    const active = queryParams.get('active');
+                    let filterAdd;
+                    if (developerName) {
+                        filterAdd = { developerName };
+                    } else if (leaderName) {
+                        filterAdd = { leaderName };
+                    }
+                    if (filterAdd) {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({
+                                active,
+                                projectId: projectId,
+                                projectName: projectName,
+                                ...filterAdd,
+                                ...filter,
+                            }),
+                        );
+                    } else {
+                        mixinFuncs.setQueryParams(
+                            serializeParams({ projectId: projectId, projectName: projectName, active, ...filter }),
+                        );
+                    }
+                };
+
                 funcs.additionalActionColumnButtons = () => ({
                     taskLog: ({ id, taskName }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
@@ -149,8 +168,8 @@ function ProjectTaskListPage({ setSearchFilter }) {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     navigate(
-                                        routes.ProjectTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                        routes.projectDevelopTaskLog.path +
+                                            `?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}&storyName=${storyName}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -162,10 +181,10 @@ function ProjectTaskListPage({ setSearchFilter }) {
                         </BaseTooltip>
                     ),
                     state: (item) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.done)}>
+                        <BaseTooltip title={translate.formatMessage(message.done)}>
                             <Button
                                 type="link"
-                                disabled={!!item?.developer == false || item.state === 3}
+                                disabled={item.state === 3}
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -346,11 +365,11 @@ function ProjectTaskListPage({ setSearchFilter }) {
     const breadcrumbs = [
         {
             breadcrumbName: translate.formatMessage(commonMessage.project),
-            path: routes.projectListPage.path,
+            path: routes.projectLeaderListPage.path,
         },
         {
             breadcrumbName: translate.formatMessage(commonMessage.generalManage),
-            path: routes.projectTabPage.path+`?projectId=${projectId}&storyId=${storyId}&active=${active}&projectName=${projectName}`,
+            path: routes.projectDeveloperTabPage.path+`?projectId=${projectId}&projectName=${projectName}&active=${active}`,
         },
         {
             breadcrumbName: storyName,
@@ -362,7 +381,6 @@ function ProjectTaskListPage({ setSearchFilter }) {
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
-                    className: styles.search,
                     activeTab: activeProjectTab,
                 })}
                 actionBar={active && mixinFuncs.renderActionBar()}
@@ -426,7 +444,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                             </Col>
                         </Row>
                         <div style={{ float: 'right' }}>
-                            <Button className={styles.btnModal} onClick={() => handlersStateTaskModal.close()}>
+                            <Button onClick={() => handlersStateTaskModal.close()}>
                                 {translate.formatMessage(message.cancel)}
                             </Button>
                             <Button key="submit" type="primary" htmlType="submit" style={{ marginLeft: '8px' }}>
@@ -436,7 +454,6 @@ function ProjectTaskListPage({ setSearchFilter }) {
                     </div>
                 </BaseForm>
             </Modal>
-            <DetailMyTaskProjectModal open={openedModal} onCancel={() => handlersModal.close()} DetailData={detail} />
         </PageWrapper>
     );
 }

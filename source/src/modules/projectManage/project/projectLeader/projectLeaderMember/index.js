@@ -1,33 +1,19 @@
+import { UserOutlined } from '@ant-design/icons';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect, useState } from 'react';
-import PageWrapper from '@components/common/layout/PageWrapper';
+import BaseTable from '@components/common/table/BaseTable';
 import {
-    DATE_DISPLAY_FORMAT,
-    DATE_FORMAT_DISPLAY,
-    DEFAULT_FORMAT,
-    DEFAULT_TABLE_ITEM_SIZE,
     AppConstants,
+    DEFAULT_TABLE_ITEM_SIZE,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
-import { TeamOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Avatar, Tag } from 'antd';
-import { generatePath, useNavigate } from 'react-router-dom';
-import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
-import { convertUtcToLocalTime } from '@utils';
-import { useLocation } from 'react-router-dom';
-import useFetch from '@hooks/useFetch';
-import route from '@modules/projectManage/project/routes';
 import routes from '@routes';
-import { EditOutlined } from '@ant-design/icons';
-import ScheduleFile from '@components/common/elements/ScheduleFile';
-import styles from './projectLeaderMember.module.scss';
-import { commonMessage } from '@locales/intl';
-import { FieldTypes } from '@constants/formConfig';
+import { Avatar } from 'antd';
+import React from 'react';
+import { defineMessages } from 'react-intl';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const message = defineMessages({
     home: 'Trang chủ',
@@ -57,6 +43,7 @@ const ProjectLeaderMemberListPage = () => {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
             },
+            isProjectToken : true,
             override: (funcs) => {
                 funcs.mappingData = (response) => {
                     if (response.result === true) {
@@ -68,15 +55,15 @@ const ProjectLeaderMemberListPage = () => {
                 };
                 funcs.getCreateLink = () => {
                     if (active) {
-                        return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
+                        return `${pagePath}/member/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
                     }
-                    return `${pagePath}/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
+                    return `${pagePath}/member/create?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
                 };
                 funcs.getItemDetailLink = (dataRow) => {
                     if (active) {
-                        return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
+                        return `${pagePath}/member/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}&active=${active}`;
                     }
-                    return `${pagePath}/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
+                    return `${pagePath}/member/${dataRow.id}?projectId=${projectId}&projectName=${projectName}&leaderId=${leaderId}`;
                 };
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
@@ -98,7 +85,7 @@ const ProjectLeaderMemberListPage = () => {
     const columns = [
         {
             title: '#',
-            dataIndex: ['developer', 'studentInfo', 'avatar'],
+            dataIndex: ['developer', 'accountDto', 'avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -111,18 +98,14 @@ const ProjectLeaderMemberListPage = () => {
         },
         {
             title: translate.formatMessage(message.name),
-            dataIndex: ['developer', 'studentInfo', 'fullName'],
-            render: (fullName, record) => (
-                <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
-                    {fullName}
-                </div>
-            ),
+            dataIndex: ['developer', 'accountDto', 'fullName'],
+            // render: (fullName, record) => (
+            //     <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
+            //         {fullName}
+            //     </div>
+            // ),
         },
-        {
-            title: translate.formatMessage(message.team),
-            dataIndex: ['team', 'teamName'],
-            width: 150,
-        },
+   
         {
             title: translate.formatMessage(message.role),
             dataIndex: ['projectRole', 'projectRoleName'],
@@ -148,50 +131,31 @@ const ProjectLeaderMemberListPage = () => {
                 { width: '150px' },
             ),
     ].filter(Boolean);
-    const { data: teamData } = useFetch(apiConfig.team.autocomplete, {
-        immediate: true,
-        params: { projectId },
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.teamName })),
-    });
+  
 
     // !leaderName && !developerName && columns.push(mixinFuncs.renderStatusColumn({ width: '120px' }));
-    const searchFields = [
-        {
-            key: 'teamId',
-            placeholder: translate.formatMessage(commonMessage.team),
-            type: FieldTypes.SELECT,
-            options: teamData,
-        },
-    ];
+  
     return (
-        <PageWrapper
-            routes={[
-                {
-                    breadcrumbName: translate.formatMessage(message.project),
-                    path: generatePath(routes.projectLeaderListPage.path),
-                },
-                { breadcrumbName: translate.formatMessage(message.member) },
-            ]}
-        >
-            <ListPage
-                title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
-                actionBar={active && mixinFuncs.renderActionBar()}
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                    initialValues: queryFilter,
-                    className: styles.search,
-                })}
-                baseTable={
-                    <BaseTable
-                        onChange={changePagination}
-                        pagination={pagination}
-                        loading={loading}
-                        dataSource={data}
-                        columns={columns}
-                    />
-                }
-            />
-        </PageWrapper>
+       
+        <ListPage
+            title={<span style={{ fontWeight: 'normal' }}>{projectName}</span>}
+            actionBar={active && mixinFuncs.renderActionBar()}
+            // searchForm={mixinFuncs.renderSearchForm({
+            //     fields: searchFields,
+            //     initialValues: queryFilter,
+            //     className: styles.search,
+            // })}
+            baseTable={
+                <BaseTable
+                    onChange={changePagination}
+                    pagination={pagination}
+                    loading={loading}
+                    dataSource={data}
+                    columns={columns}
+                />
+            }
+        />
+       
     );
 };
 

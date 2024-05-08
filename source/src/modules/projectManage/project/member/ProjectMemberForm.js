@@ -172,7 +172,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         form.setFieldsValue({
             ...dataDetail,
             teamId: dataDetail?.team?.teamName,
-            studentId: dataDetail?.studentInfo?.fullName,
+            developerId: dataDetail?.developer?.accountDto?.fullName,
         });
     }, [dataDetail]);
 
@@ -263,6 +263,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         setFieldValue('schedule', schedule);
         onValuesChange();
     };
+    console.log(dataDetail);
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             <Card className="card-form" bordered={false}>
@@ -273,7 +274,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 disabled={isEditing}
                                 required
                                 label={translate.formatMessage(commonMessage.developer)}
-                                name={[ 'account', 'fullName']}
+                                name={[ 'developer','accountDto', 'fullName']}
                                 apiConfig={apiConfig.developer.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,

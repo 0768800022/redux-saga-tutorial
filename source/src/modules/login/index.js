@@ -32,6 +32,7 @@ import {
     envType,
     UserTypes,
     DEVELOPER_LOGIN_TYPE,
+    ADMIN_LOGIN_TYPE,
 } from '@constants';
 import { Buffer } from 'buffer';
 import { setData } from '@utils/localStorage';
@@ -63,21 +64,17 @@ const LoginPage = () => {
     });
     const notification = useNotification();
     const onFinish = (values) => {
-        if (values.grant_type === LEADER_LOGIN_TYPE) handleGetCareerInfo(values, executeLeaderLogin);
-        else if (values.grant_type === STUDENT_LOGIN_TYPE) handleGetCareerInfo(values, executeStudentLogin);
-        else if (values.grant_type === COMPANY_LOGIN_TYPE) handleGetCareerInfo(values, executeCompanyLogin);
-        else if (values.grant_type === DEVELOPER_LOGIN_TYPE) handleGetCareerInfo(values, executeDeveloperLogin);
-        else
-            execute({
-                data: { ...values },
-                onCompleted: (res) => {
-                    if (res.user_kind === UserTypes.ADMIN) throw new Error('Loại tài khoản không phù hợp');
-                    handleLoginSuccess(res);
-                },
-                onError: (res) => {
-                    notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
-                },
-            });
+        execute({
+            data: { ...values,grant_type : ADMIN_LOGIN_TYPE },
+            onCompleted: (res) => {
+                if (res.user_kind === UserTypes.ADMIN) throw new Error('Loại tài khoản không phù hợp');
+                handleLoginSuccess(res);
+            },
+            onError: (res) => {
+                notification({ type: 'error', message: 'Tên đăng nhập hoặc mật khẩu không chính xác' });
+            },
+        });
+           
     };
 
     const handleLoginSuccess = (res) => {
@@ -140,12 +137,12 @@ const LoginPage = () => {
                         type="password"
                     />
 
-                    <SelectField
+                    {/* <SelectField
                         placeholder={<FormattedMessage defaultMessage="Bạn là?" />}
                         required
                         name="grant_type"
                         options={loginOptions}
-                    />
+                    /> */}
 
                     <Button
                         type="primary"

@@ -7,9 +7,10 @@ import useFetch from '@hooks/useFetch';
 import apiConfig from '@constants/apiConfig';
 import { AppConstants } from '@constants';
 import { Fragment } from 'react';
-import { defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import NumericField from '@components/common/form/NumericField';
+import { commonMessage } from '@locales/intl';
 
 const messages = defineMessages({
     banner: 'Banner',
@@ -55,7 +56,7 @@ const DeveloperForm = (props) => {
             onCompleted: (response) => {
                 if (response.result === true) {
                     onSuccess();
-                    setBannerUrl(response.data.filePath);
+                    setImageUrl(response.data.filePath);
                     setIsChangedFormValues(true);
                 }
             },
@@ -76,9 +77,11 @@ const DeveloperForm = (props) => {
         (values.avatar = imageUrl),
         mixinFuncs.handleSubmit({
             ...values,
-            avatarPath: values.avatar,
+            avatar: values?.avatar,
         });
     };
+
+    console.log(imageUrl);
 
     return (
         <Card className="card-form" bordered={false} style={{ minHeight: 'calc(100vh - 190px)' }}>
@@ -94,27 +97,30 @@ const DeveloperForm = (props) => {
                 <Row style={{ marginLeft: '8rem' }} gutter={16}>
                     <Col span={16}>
                         <CropImageField
-                            label={translate.formatMessage(messages.avatarPath)}
+                            label={<FormattedMessage defaultMessage="Avatar" />}
                             name="avatar"
                             imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                             aspect={1 / 1}
-                            required
                             uploadFile={uploadFile}
                         />
                     </Col>
                 </Row>
-
+                <TextField label={translate.formatMessage(commonMessage.fullName)} name={['accountDto', 'fullName']} />
                 <TextField
-                    readOnly
-                    label={translate.formatMessage(messages.username)}
-                    name={['accountDto', 'username']}
-                    placeholder={'Tấn Phát'}
+                    label={translate.formatMessage(commonMessage.email)}
+                    disabled
+                    name={['accountDto', 'email']}
                 />
-                <TextField label={translate.formatMessage(messages.career)} name={['careerName']} placeholder={'Developer_No1'}/>
-                <TextField label={translate.formatMessage(messages.email)} name={['email']} placeholder={'test123@gmail.com'}/>
-                <TextField label={translate.formatMessage(messages.fullName)} name={['name']} />
-                <TextField label={translate.formatMessage(messages.phoneNumber)} name={'phone'} placeholder={'01234567'}/>
-                <TextField label={translate.formatMessage(messages.hotline)} name="hotline" placeholder={'01234567'}/>
+                <TextField
+                    label={translate.formatMessage(commonMessage.birthday)}
+                    disabled
+                    name={['accountDto', 'birthday']}
+                />
+                <TextField
+                    label={translate.formatMessage(commonMessage.phone)}
+                    disabled
+                    name={['accountDto', 'phone']}
+                />
                 {/* {!isAdmin && (
                     <Fragment>
                         <TextField
@@ -126,14 +132,14 @@ const DeveloperForm = (props) => {
                 )} */}
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.currentPassword)}
+                    label={translate.formatMessage(commonMessage.currentPassword)}
                     required
                     name="oldPassword"
                 />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.newPassword)}
-                    name="password"
+                    label={translate.formatMessage(commonMessage.newPassword)}
+                    name="newPassword"
                     rules={[
                         {
                             validator: async () => {
@@ -150,7 +156,8 @@ const DeveloperForm = (props) => {
                 />
                 <TextField
                     type="password"
-                    label={translate.formatMessage(messages.confirmPassword)}
+                    label={translate.formatMessage(commonMessage.confirmPassword)}
+                    name="confirmPassword"
                     rules={[
                         {
                             validator: async () => {
@@ -163,7 +170,6 @@ const DeveloperForm = (props) => {
                         },
                     ]}
                 />
-
                 <div className="footer-card-form">{actions}</div>
             </Form>
         </Card>

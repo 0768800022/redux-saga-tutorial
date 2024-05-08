@@ -7,14 +7,14 @@ import ProjectLeaderListPage from './projectLeader';
 import TeamListPage from './team';
 import TeamSavePage from './team/TeamSavePage';
 import ProjectLeaderMemberListPage from './projectLeader/projectLeaderMember';
-import ProjectLeaderTaskListPage from './projectLeader/projectLeaderTask';
+import ProjectLeaderTaskListPage from './projectLeader/projectDevelopStory';
 
 import ProjectStudentListPage from './projectStudent';
 import ProjectStudentTaskListPage from './projectStudent/projectStudentTask';
 import ProjectStudentMemberListPage from './projectStudent/projectStudentMember';
 import projectLeaderTaskLogListPage from './projectLeader/projectLeaderTaskLog';
 import ProjectLeaderSavePage from './projectLeader/projectLeaderSavePage';
-import ProjectLeaderTaskSavePage from './projectLeader/projectLeaderTask/ProjectLeaderTaskSavePage';
+import ProjectLeaderTaskSavePage from './projectLeader/projectDevelopStory/ProjectStoryTaskSavePage';
 import ProjectLeaderMemberForm from './projectLeader/projectLeaderMember/ProjectLeaderMemberForm';
 import ProjectLeaderMemberSavePage from './projectLeader/projectLeaderMember/ProjectLeaderMemberSavePage';
 
@@ -36,6 +36,12 @@ import ProjectCategoryLeaderSavePage from './projectLeader/projectCategory/Proje
 import ProjectCategoryStudentListPage from './projectStudent/projectCategory';
 import ProjectCategoryStudentSavePage from './projectStudent/projectCategory/ProjectCategorySavePage';
 import ProjectTabPage from './ProjectTabPage';
+import ProjectDevelopTabPage from './projectLeader/ProjectTabPage';
+import ProjectStoryTaskSavePage from './projectLeader/projectDevelopStory/ProjectStoryTaskSavePage';
+import ProjectTaskListPage from './projectLeader/projectDevelopTask';
+import ProjectTaskSavePage from './projectLeader/projectDevelopTask/ProjectTaskSavePage';
+import ProjectTaskLogListPage from './projectLeader/projectDevelopTask/projectTaskLog';
+import ProjectTaskLogSavePage from './projectLeader/projectDevelopTask/projectTaskLog/projectTaskLogSavePage';
 
 export default {
     projectListPage: {
@@ -53,6 +59,57 @@ export default {
         keyActiveTab: 'activeProjectTab',
         permissions: [apiConfig.project.getList.baseURL],
     },
+    projectDeveloperTabPage: {
+        path: '/project-developer/project-tab',
+        title: 'Project Tab',
+        auth: true,
+        component: ProjectDevelopTabPage,
+        keyActiveTab: 'activeProjectTab',
+        // permissions: [apiConfig.project.getList.baseURL],
+    },
+    projectDeveloperStorySaveTabPage: {
+        path: '/project-developer/project-tab/story/:id',
+        title: 'Project Tab',
+        auth: true,
+        component: ProjectStoryTaskSavePage,
+        keyActiveTab: 'activeProjectTab',
+        // permissions: [apiConfig.project.getList.baseURL],
+    },
+    projectDevelopTask: {
+        path: '/project-developer/project-tab/story/task',
+        title: 'Project Developer Task',
+        auth: true,
+        component: ProjectTaskListPage,
+    },
+    projectDevelopTaskSavePage: {
+        path: '/project-developer/project-tab/story/task/:id',
+        title: 'Project Developer Task Save Page',
+        auth: true,
+        component: ProjectTaskSavePage,
+    },
+    projectDevelopTaskLog: {
+        path: '/project-developer/project-tab/story/task-log',
+        title: 'Project Developer Task Log',
+        auth: true,
+        component: ProjectTaskLogListPage,
+    },
+    projectDevelopTaskLogSavePage: {
+        path: '/project-developer/project-tab/story/task-log/:id',
+        title: 'Project Developer Task Log Save Page',
+        auth: true,
+        component: ProjectTaskLogSavePage,
+        // permissions: [apiConfig.projectTaskLog.create.baseURL, apiConfig.projectTaskLog.update.baseURL],
+    },
+    projectDeveloperMemberSaveTabPage: {
+        path: '/project-developer/project-tab/member/:id',
+        title: 'Project Tab',
+        auth: true,
+        component: ProjectLeaderMemberSavePage,
+        keyActiveTab: 'activeProjectTab',
+        // permissions: [apiConfig.project.getList.baseURL],
+    },
+
+  
   
     projectSavePage: {
         path: '/project/:id',
@@ -76,14 +133,14 @@ export default {
         permissions: [apiConfig.memberProject.create.baseURL, apiConfig.memberProject.update.baseURL],
     },
     projectLeaderListPage: {
-        path: '/project-leader',
+        path: '/project-developer',
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderListPage,
         permissions: [apiConfig.project.getListLeader.baseURL],
     },
     projectLeaderSavePage: {
-        path: '/project-leader/:id',
+        path: '/project-developer/:id',
         title: 'Project Leader Page',
         auth: true,
         component: ProjectLeaderSavePage,

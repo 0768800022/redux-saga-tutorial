@@ -24,6 +24,7 @@ import CompanyRequestRoutes from '@modules/companyManage/company/companyRequest/
 import MyCompanySubscriptionRoutes from '@modules/companyManage/myCompanySubscription/routes';
 import FinanceRoutes from '@modules/courseManage/finance/routes';
 import SalaryPeriodRoutes from '@modules/projectManage/salaryPeriod/routes';
+import StoryTaskRoutes from '@modules/projectManage/project/storyTask/routes';
 /*
     auth
         + null: access login and not login
@@ -77,6 +78,7 @@ const routes = {
     ...MyCompanySubscriptionRoutes,
     ...FinanceRoutes,
     ...SalaryPeriodRoutes,
+    ...StoryTaskRoutes,
     // keep this at last
     //
     notFound: {

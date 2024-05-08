@@ -81,7 +81,7 @@ const DeveloperForm = (props) => {
             }, {});
         values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
         values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
-        return mixinFuncs.handleSubmit({ ...values });
+        return mixinFuncs.handleSubmit({ ...values, avatar:imageUrl });
     };
     function addFrameTime(data) {
         const result = {};
@@ -188,7 +188,7 @@ const DeveloperForm = (props) => {
             leaderId: dataDetail?.leader?.id,
         });
 
-        setImageUrl(dataDetail.avatar);
+        setImageUrl(dataDetail.accountDto?.avatar);
     }, [dataDetail]);
     useEffect(() => {
         if (!isEditing > 0) {
@@ -299,6 +299,7 @@ const DeveloperForm = (props) => {
                                 imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                                 aspect={1 / 1}
                                 uploadFile={uploadFile}
+                                disabled={isEditing}
                             />
                         </Col>
                     </Row>

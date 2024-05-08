@@ -1,99 +1,101 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import apiConfig from '@constants/apiConfig';
-import { categoryKind } from '@constants/masterData';
 import useSaveBase from '@hooks/useSaveBase';
+import routes from '@routes';
 import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import routes from '@routes';
-import ProjectMemberForm from './ProjectMemberForm';
+
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
-// import routes from '@modules/course/routes';
+import { showErrorMessage } from '@services/notifyService';
+import { defineMessages } from 'react-intl';
+import ProjectStoryTaskForm from './ProjectStoryTaskForm';
 
 const messages = defineMessages({
-    objectName: 'Thành viên',
+    objectName: 'Task',
 });
 
-function ProjectMemberSavePage() {
+function ProjectStoryTaskSavePage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
-
-    const projectName = queryParameters.get('projectName');
     const projectId = queryParameters.get('projectId');
+    const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
+    const projectTaskId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
-            getById: apiConfig.memberProject.getById,
-            create: apiConfig.memberProject.create,
-            update: apiConfig.memberProject.update,
+            getById: apiConfig.story.getById,
+            create: apiConfig.story.create,
+            update: apiConfig.story.update,
         },
         options: {
-            getListUrl: generatePath(routes.projectTabPage.path),
+            getListUrl: generatePath(routes.projectDeveloperTabPage.path),
             objectName: translate.formatMessage(messages.objectName),
         },
+        isProjectToken : true,
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
+                    ...data,
                     id: detail.id,
-                    schedule: data.schedule,
-                    roleId: data?.projectRole?.id,
-                    // teamId: data?.team?.id,
+                    projectId: projectId,
                     status: 1,
                 };
             };
             funcs.prepareCreateData = (data) => {
-                console.log(data);
                 return {
+                    ...data,
                     projectId: projectId,
-                    developerId: data?.developer?.accountDto?.fullName,
-                    projectRoleId: data?.projectRole?.id,
-                    schedule: data.schedule,
-                    contractSign : "contractSign",
-                    // teamId: data.team.id,
+                    status: 1,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.code === 'ERROR-PROJECT-ERROR-0001') {
+                    showErrorMessage('Dự án đã hoàn thành không thể tạo thêm task');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });
-
     const setBreadRoutes = () => {
-        const pathDefault = `?projectId=${projectId}&projectName=${projectName}`;
         const breadRoutes = [
             {
                 breadcrumbName: translate.formatMessage(commonMessage.project),
-                path: routes.projectListPage.path,
+                path: routes.projectLeaderListPage.path,
             },
         ];
 
         if (active) {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.generalManage),
-                path: routes.projectTabPage.path + pathDefault + `&active=${active}`,
+                path:
+                    routes.projectDeveloperTabPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
             });
         } else {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.generalManage),
-                path: routes.projectTabPage.path + pathDefault,
+                path: routes.projectDeveloperTabPage.path  + `?projectId=${projectId}&projectName=${projectName}`,
             });
         }
         breadRoutes.push({ breadcrumbName: title });
 
         return breadRoutes;
     };
-
     return (
         <PageWrapper loading={loading} routes={setBreadRoutes()} title={title}>
-            <ProjectMemberForm
+            <ProjectStoryTaskForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
                 isEditing={isEditing}
                 actions={mixinFuncs.renderActions()}
-                onSubmit={onSave}
-                isError={errors}
+                onSubmit={mixinFuncs.onSave}
             />
         </PageWrapper>
     );
 }
 
-export default ProjectMemberSavePage;
+export default ProjectStoryTaskSavePage;
