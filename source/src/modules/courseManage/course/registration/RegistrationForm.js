@@ -133,10 +133,20 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         }
         const studentId = values?.studentInfo?.account?.fullName;
         console.log(studentId);
-        return mixinFuncs.handleSubmit({
-            studentId: studentId,
-            ...values,
-        });
+        if (isEditing) {
+            return mixinFuncs.handleSubmit({
+                isIntern: dataDetail?.isIntern,
+                moneyState: dataDetail?.moneyState,
+                isIssuedCertify: dataDetail?.isIssuedCertify,
+                status: dataDetail?.status,
+                ...values,
+            });
+        }
+        return console.log(values);
+        // return mixinFuncs.handleSubmit({
+        //     studentId: studentId,
+        //     ...values,
+        // });
     };
     function addFrameTime(data) {
         const result = {};
@@ -237,7 +247,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            studentId: dataDetail?.studentInfo?.account?.fullName,
+            studentId: dataDetail?.studentInfo?.account?.id,
         });
     }, [dataDetail]);
 
