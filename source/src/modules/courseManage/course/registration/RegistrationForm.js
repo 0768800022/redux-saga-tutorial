@@ -133,15 +133,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         }
         const studentId = values?.studentInfo?.account?.fullName;
         console.log(studentId);
-        if (isEditing) {
-            return mixinFuncs.handleSubmit({
-                isIntern: dataDetail?.isIntern,
-                moneyState: dataDetail?.moneyState,
-                isIssuedCertify: dataDetail?.isIssuedCertify,
-                status: dataDetail?.status,
-                ...values,
-            });
-        }
         return mixinFuncs.handleSubmit({
             studentId: studentId,
             ...values,
