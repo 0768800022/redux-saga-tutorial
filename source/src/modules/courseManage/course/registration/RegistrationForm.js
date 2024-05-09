@@ -237,7 +237,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            studentId: dataDetail?.studentInfo?.account?.fullName,
+            studentId: dataDetail?.studentInfo?.account?.id,
         });
     }, [dataDetail]);
 
