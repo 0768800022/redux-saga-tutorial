@@ -49,13 +49,13 @@ function ProjectCategorySavePage() {
 
         const breadRoutes = [
             {
-                breadcrumbName: translate.formatMessage(commonMessage.project),
+                breadcrumbName: projectName,
                 path: routes.projectListPage.path,
             },
         ];
 
         breadRoutes.push({
-            breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+            breadcrumbName: projectName,
             path: routes.projectTabPage.path + pathDefault,
         });
         breadRoutes.push({ breadcrumbName: title });

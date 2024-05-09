@@ -74,7 +74,7 @@ function ProjectTaskSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                breadcrumbName: projectName,
                 path:
                     routes.projectTabPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
             },
@@ -85,7 +85,7 @@ function ProjectTaskSavePage() {
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                breadcrumbName: projectName,
                 path: routes.projectTabPage.path + `?projectId=${projectId}&projectName=${projectName}`,
             },
             {
