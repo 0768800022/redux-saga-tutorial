@@ -17,6 +17,7 @@ import { FormattedMessage, defineMessages } from 'react-intl';
 import ScheduleTable from '@components/common/table/ScheduleTable';
 import { commonMessage } from '@locales/intl';
 import BooleanField from '@components/common/form/BooleanField';
+import TextField from '@components/common/form/TextField';
 
 function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
@@ -263,7 +264,6 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         setFieldValue('schedule', schedule);
         onValuesChange();
     };
-    console.log(dataDetail);
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             <Card className="card-form" bordered={false}>
@@ -298,7 +298,14 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 searchParams={(text) => ({ name: text })}
                             />
                         </Col>
-                       
+                        <Col span={8}>
+                            <TextField
+                                label={<FormattedMessage defaultMessage="Sign" />}
+                                required
+                                disabled={isEditing}
+                                name={['contractSign']}
+                            />
+                        </Col>
                     </Row>
                 </div>
                 <ScheduleTable
