@@ -132,7 +132,6 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             // values.state = stateResgistration[0].value;
         }
         const studentId = values?.studentInfo?.account?.fullName;
-        console.log(studentId);
         return mixinFuncs.handleSubmit({
             studentId: studentId,
             ...values,
