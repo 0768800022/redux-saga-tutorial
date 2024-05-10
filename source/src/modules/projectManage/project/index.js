@@ -71,6 +71,12 @@ const ProjectListPage = () => {
                         };
                     }
                 };
+                funcs.getItemDetailLink = (dataRow) => {
+                    if (developerId)
+                        return `${routes.projectListPage.path}/${dataRow.id}?developerId=${developerId}&developerName=${developerName}`;
+                    else 
+                        return `${routes.projectListPage.path}/${dataRow.id}`;
+                };
 
                 funcs.additionalActionColumnButtons = () => ({
                     salaryPeriod: ({ id }) => {

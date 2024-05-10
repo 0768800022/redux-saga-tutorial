@@ -132,21 +132,10 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
             // values.state = stateResgistration[0].value;
         }
         const studentId = values?.studentInfo?.account?.fullName;
-        console.log(studentId);
-        if (isEditing) {
-            return mixinFuncs.handleSubmit({
-                isIntern: dataDetail?.isIntern,
-                moneyState: dataDetail?.moneyState,
-                isIssuedCertify: dataDetail?.isIssuedCertify,
-                status: dataDetail?.status,
-                ...values,
-            });
-        }
-        return console.log(values);
-        // return mixinFuncs.handleSubmit({
-        //     studentId: studentId,
-        //     ...values,
-        // });
+        return mixinFuncs.handleSubmit({
+            studentId: studentId,
+            ...values,
+        });
     };
     function addFrameTime(data) {
         const result = {};
