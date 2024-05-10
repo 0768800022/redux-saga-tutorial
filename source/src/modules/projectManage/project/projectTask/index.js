@@ -308,8 +308,8 @@ function ProjectTaskListPage({ setSearchFilter }) {
             options: memberProject,
         },
         {
-            key: 'state',
-            placeholder: translate.formatMessage(commonMessage.state),
+            key: 'status',
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: stateValues,
         },
@@ -349,7 +349,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
             path: routes.projectListPage.path,
         },
         {
-            breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+            breadcrumbName: projectName,
             path: routes.projectTabPage.path+`?projectId=${projectId}&storyId=${storyId}&active=${active}&projectName=${projectName}`,
         },
         {

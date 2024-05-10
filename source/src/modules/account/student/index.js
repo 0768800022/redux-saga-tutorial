@@ -44,14 +44,14 @@ const StudentListPage = () => {
                 }
             };
             funcs.additionalActionColumnButtons = () => ({
-                task: ({ id, fullName }) => (
+                task: ({ id, account }) => (
                     <BaseTooltip title={translate.formatMessage(commonMessage.course)}>
                         <Button
                             type="link"
                             style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${fullName}`);
+                                navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${account?.fullName}`);
                                 // navigate(route.studentCourseListPage.path);
                                 // navigate(`./course/${id}`);
                                 // navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);

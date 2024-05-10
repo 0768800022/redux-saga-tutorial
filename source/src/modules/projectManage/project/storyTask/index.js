@@ -215,46 +215,26 @@ function StoryTaskListPage({ setSearchFilter }) {
             width: 200,
             dataIndex: 'storyName',
         },
-        // {
-        //     title: <FormattedMessage defaultMessage="Người thực hiện" />,
-        //     width: 200,
-        //     dataIndex: ['developerInfo','account','fullName'],
-        //     render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
-        // },
         {
-            title: 'Ngày tạo',
-            dataIndex: 'createdDate',
+            title: <FormattedMessage defaultMessage="Người thực hiện" />,
             width: 200,
-            align: 'center',
+            dataIndex: ['developerInfo','account','fullName'],
+            render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
         },
         {
-            title: 'Ngày hoàn thành',
-            dataIndex: 'dateComplete',
-            width: 180,
-            render: (dateComplete) => {
-                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
-                    7,
-                    'hour',
-                );
-                const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
-            },
+            title: 'Trạng thái',
+            dataIndex: 'status',
             align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues?.find((item) => item?.value == dataRow);
+                return (
+                    <Tag color={state?.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
+                    </Tag>
+                );
+            },
         },
-        // {
-        //     title: 'Trạng thái',
-        //     dataIndex: 'status',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const state = stateValues?.find((item) => item?.value == dataRow);
-        //         return (
-        //             <Tag color={state?.color}>
-        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
-        //             </Tag>
-        //         );
-        //     },
-        // },
 
         active &&
             mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '180px' }),
@@ -291,8 +271,8 @@ function StoryTaskListPage({ setSearchFilter }) {
             options: memberProject,
         },
         {
-            key: 'state',
-            placeholder: translate.formatMessage(commonMessage.state),
+            key: 'status',
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: stateValues,
         },

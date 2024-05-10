@@ -50,23 +50,25 @@ const DeveloperListPage = () => {
                 mixinFuncs.setQueryParams(serializeParams(filter));
             };
             funcs.additionalActionColumnButtons = () => ({
-                project: ({ id, studentInfo }) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.project)}>
-                        <Button
-                            type="link"
-                            style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(
-                                    routes.developerProjectListPage.path +
-                                        `?developerId=${id}&developerName=${studentInfo?.fullName}`,
-                                );
-                            }}
-                        >
-                            <FolderIcon />
-                        </Button>
-                    </BaseTooltip>
-                ),
+                project: ({ id, accountDto }) => {
+                    return (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.project)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        routes.developerProjectListPage.path +
+                                            `?developerId=${id}&developerName=${accountDto?.fullName}`,
+                                    );
+                                }}
+                            >
+                                <FolderIcon />
+                            </Button>
+                        </BaseTooltip>
+                    );
+                },
             });
         },
     });
@@ -88,7 +90,7 @@ const DeveloperListPage = () => {
             title: 'Họ và tên',
             dataIndex: ['accountDto', 'fullName'],
         },
-       
+
         {
             title: 'Trình độ',
             dataIndex: 'level',
@@ -124,9 +126,6 @@ const DeveloperListPage = () => {
         mixinFuncs.renderActionColumn({ project: true, edit: true, delete: true }, { width: 160 }),
     ];
 
-
-
-
     const searchFields = [
         {
             key: 'name',
@@ -150,10 +149,11 @@ const DeveloperListPage = () => {
         execute: executesprojectroles,
     } = useFetch(apiConfig.projectRole.autocomplete, {
         immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({
-            value: item.id,
-            label: item.projectRoleName,
-        })),
+        mappingData: ({ data }) =>
+            data.content.map((item) => ({
+                value: item.id,
+                label: item.projectRoleName,
+            })),
     });
     useEffect(() => {
         if (projectroles) {

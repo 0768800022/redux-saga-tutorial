@@ -50,6 +50,7 @@ function ProjectMemberSavePage() {
                     projectRoleId: data?.projectRole?.id,
                     schedule: data.schedule,
                     contractSign : "contractSign",
+                    isPaid: true,
                     // teamId: data.team.id,
                 };
             };
@@ -67,12 +68,12 @@ function ProjectMemberSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                breadcrumbName: projectName,
                 path: routes.projectTabPage.path + pathDefault + `&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                breadcrumbName: projectName,
                 path: routes.projectTabPage.path + pathDefault,
             });
         }
