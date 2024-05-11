@@ -30,7 +30,7 @@ const CompanySubscriptionIdListPage = () => {
     const companyName = queryParameters.get('companyName');
     const moneyUnit = useMoneyUnit();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFiter, pagePath } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter, pagePath } = useListBase({
         apiConfig: apiConfig.companySubscription,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
