@@ -178,7 +178,17 @@ function ProjectTaskListPage({ setSearchFilter }) {
                         </BaseTooltip>
                     ),
                 });
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const storyId = queryParams.get('storyId');
+                    const projectName = queryParams.get('projectName');
+                    const storyName = queryParams.get('storyName');
+                   
+                    mixinFuncs.setQueryParams(serializeParams({ projectId, storyId, projectName,storyName ,...filter }));
+                };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
+
+
                 funcs.handleFilterSearchChange = (values) => {
                     if (values.toDate == null && values.fromDate == null) {
                         delete values.toDate;
@@ -364,6 +374,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                     fields: searchFields,
                     className: styles.search,
                     activeTab: activeProjectTab,
+                    initialFilterValues:initialFilterValues,
                 })}
                 actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={

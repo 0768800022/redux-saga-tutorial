@@ -28,7 +28,7 @@ const StudentListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
         apiConfig: apiConfig.student,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -126,7 +126,7 @@ const StudentListPage = () => {
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.student) }]}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
