@@ -1,19 +1,17 @@
+import { ClearOutlined, SearchOutlined } from '@ant-design/icons';
 import { FieldTypes } from '@constants/formConfig';
 import { Button, Col, Form, Row } from 'antd';
 import React, { useCallback, useEffect, useRef } from 'react';
-import SelectField from './SelectField';
+import { defineMessages, useIntl } from 'react-intl';
 import DatePickerField from './DatePickerField';
 import DateRangePickerField from './DateRangePickerField';
 import InputTextField from './InputTextField';
-import { SearchOutlined, ClearOutlined } from '@ant-design/icons';
-import { defineMessages, useIntl } from 'react-intl';
+import SelectField from './SelectField';
 
-import styles from './SearchForm.module.scss';
-import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
-import { DATE_FORMAT_DISPLAY } from '@constants';
 import dayjs from 'dayjs';
-import { DEFAULT_FORMAT } from '@constants';
 import AutoCompleteField from './AutoCompleteField';
+import styles from './SearchForm.module.scss';
+// import InputPhoneField from './InputPhoneField';
 
 const disabledDate = (current) => {
     return current && current > dayjs().endOf('day');
@@ -24,12 +22,13 @@ const searchFields = {
     [FieldTypes.DATE]: DatePickerField,
     [FieldTypes.DATE_RANGE]: (props) => <DateRangePickerField disabledDate={disabledDate} {...props} />,
     [FieldTypes.AUTOCOMPLETE]: AutoCompleteField,
+    // [FieldTypes.PHONE]: InputPhoneField,
     default: InputTextField,
 };
 
 const message = defineMessages({
-    search: 'Search',
-    clear: 'Clear',
+    search: 'Tìm kiếm',
+    clear: 'Xóa',
 });
 
 function SearchForm({
@@ -42,7 +41,7 @@ function SearchForm({
     width = 1100,
     alignSearchField,
     getFormInstance,
-    activeTab,
+    searchParams,
 }) {
     const [form] = Form.useForm();
     const intl = useIntl();
@@ -63,7 +62,8 @@ function SearchForm({
             //     return acc;
             // }, {});
             // onSearch?.({ ...values, ...dateRangeValues });
-            onSearch?.(values);
+            // console.log(values);
+            onSearch?.({ ...searchParams, ...values });
         },
         [form, onSearch],
     );
@@ -72,11 +72,7 @@ function SearchForm({
         form.resetFields();
         onReset?.();
     };
-    useEffect(() => {
-        if (activeTab) {
-            form.resetFields();
-        }
-    }, [activeTab]);
+
     const renderField = useCallback(
         ({ type, submitOnChanged, onChange, key, renderItem, style, component, ...props }) => {
             if (renderItem) {
@@ -135,14 +131,15 @@ function SearchForm({
         //     ...initialValues,
         //     ...dateRangeValues,
         // });
-        // const normalizeValues = { ...initialValues };
-        // Object.keys(normalizeValues).forEach((key) => {
-        //     if (!isNaN(normalizeValues[key])) {
-        //         normalizeValues[key] = Number(normalizeValues[key]);
-        //     }
-        // });
-        form.setFieldsValue(initialValues);
+        const normalizeValues = { ...initialValues };
+        Object.keys(normalizeValues).forEach((key) => {
+            if (!isNaN(normalizeValues[key])) {
+                normalizeValues[key] = Number(normalizeValues[key]);
+            }
+        });
+        form.setFieldsValue(normalizeValues);
     }, [initialValues]);
+
     return (
         <Form form={form} layout="horizontal" className={className || styles.searchForm} onFinish={handleSearchSubmit}>
             <Row align={alignSearchField} gutter={10} style={{ maxWidth: width }}>
@@ -168,13 +165,5 @@ function SearchForm({
         </Form>
     );
 }
-
-const formatDateToUtc = (date) => {
-    return convertLocalTimeToUtc(formatDateString(date, DATE_FORMAT_DISPLAY), DATE_FORMAT_DISPLAY, DATE_FORMAT_DISPLAY);
-};
-
-const formatDateToLocal = (date) => {
-    return convertUtcToLocalTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
-};
 
 export default SearchForm;
