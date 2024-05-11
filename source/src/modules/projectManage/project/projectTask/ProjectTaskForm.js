@@ -25,8 +25,10 @@ const ProjectTaskForm = (props) => {
     // const kindValues = translate.formatKeys(projectTaskKind, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
+    const storyId = queryParameters.get('storyId');
     const [valueSelect, setValueSelect] = useState(1);
-    const [memKind, setMemKind] = useState(1);
+    const [isTaskBug, setIsTaskBug] = useState(false);
+
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
         setIsChangedFormValues,
@@ -65,16 +67,16 @@ const ProjectTaskForm = (props) => {
         mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.studentInfo.fullName })),
     });
 
-    const {
-        data: team,
-        loading: getTeamLoading,
-        execute: executesTeams,
-    } = useFetch(apiConfig.team.autocomplete, {
-        params: { projectId: projectId },
-        immediate: true,
-        mappingData: ({ data }) =>
-            data.content.map((item) => ({ value: item?.leaderInfo?.id, label: item?.leaderInfo?.leaderName })),
-    });
+    // const {
+    //     data: team,
+    //     loading: getTeamLoading,
+    //     execute: executesTeams,
+    // } = useFetch(apiConfig.team.autocomplete, {
+    //     params: { projectId: projectId },
+    //     immediate: true,
+    //     mappingData: ({ data }) =>
+    //         data.content.map((item) => ({ value: item?.leaderInfo?.id, label: item?.leaderInfo?.leaderName })),
+    // });
     useEffect(() => {
         dataDetail.startDate = dataDetail.startDate && dayjs(dataDetail.startDate, DEFAULT_FORMAT);
         dataDetail.dueDate = dataDetail.dueDate && dayjs(dataDetail.dueDate, DEFAULT_FORMAT);
@@ -118,13 +120,13 @@ const ProjectTaskForm = (props) => {
         setValueSelect(value);
     };
 
-    useEffect(() => {
-        if (valueSelect == 2) {
-            executesTeams();
-        } else {
-            executesdevelopers();
-        }
-    }, [valueSelect]);
+    // useEffect(() => {
+    //     if (valueSelect == 2) {
+    //         executesTeams();
+    //     } else {
+    //         executesdevelopers();
+    //     }
+    // }, [valueSelect]);
 
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
@@ -143,6 +145,14 @@ const ProjectTaskForm = (props) => {
                                     name="kind"
                                     allowClear={false}
                                     options={projectTaskKind}
+                                    onChange={(value) => {
+                                        console.log(value);
+                                        if (value == 1) {
+                                            setIsTaskBug(false);
+                                        } else {
+                                            setIsTaskBug(true);
+                                        }
+                                    }}
                                 />
                                 <TextField
                                     style={{
@@ -154,6 +164,26 @@ const ProjectTaskForm = (props) => {
                             </Space.Compact>
                         </Space>
                     </Col>
+                    {isTaskBug && <Col span={12}>
+                        <AutoCompleteField
+                            disabled={isEditing}
+                            style={{
+                                // width: '230px',
+                            }}
+                            label={<FormattedMessage defaultMessage="Task Bug" />}
+                            name="projectTaskBugId"
+                            apiConfig={apiConfig.projectTask.autocomplete}
+                            mappingOptions={(item) => ({
+                                value: item.id,
+                                label: item.taskName,
+                            })}
+                            searchParams={(text) => ({ taskName: text })}
+                            optionsParams={{ storyId: storyId }}
+                            initialSearchParams={{ storyId: storyId }}
+                            // options={developers}
+                            // required
+                        />
+                    </Col>}
                     <Col span={12}>
                         <Space direction="vertical">
                             <Space>{<FormattedMessage defaultMessage="Người thực hiện" />}</Space>
