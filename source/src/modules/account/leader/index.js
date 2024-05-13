@@ -34,7 +34,7 @@ const LeaderListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const salaryValues = translate.formatKeys(SalaryOptions, ['label']);
     const moneyUnit = useMoneyUnit();
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
         apiConfig: apiConfig.leader,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -168,7 +168,7 @@ const LeaderListPage = () => {
             ]}
         >
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

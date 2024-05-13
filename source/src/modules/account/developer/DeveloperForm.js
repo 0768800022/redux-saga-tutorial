@@ -287,6 +287,15 @@ const DeveloperForm = (props) => {
             },
         });
     };
+
+    const checkPhone = (_, value) => {
+        const phoneRegex = /^[0-9]{10}$/; // Regex để kiểm tra số điện thoại có 10 chữ số
+        if (!phoneRegex.test(value)) {
+            return Promise.reject('Số điện thoại không hợp lệ, vui lòng nhập lại');
+        }
+        return Promise.resolve();
+    };
+    
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onFieldsChange={onFieldsChange} size="1100px">
             <Card className="card-form" bordered={false}>
@@ -330,9 +339,14 @@ const DeveloperForm = (props) => {
                         <Col span={12}>
                             <TextField
                                 label={translate.formatMessage(commonMessage.phone)}
-                                type="number"
+                                type="phone"
                                 name="phone"
                                 required={isEditing ? false : true}
+                                rules={[
+                                    {
+                                        validator: checkPhone,
+                                    },
+                                ]}
                             />
                         </Col>
                         <Col span={12}>

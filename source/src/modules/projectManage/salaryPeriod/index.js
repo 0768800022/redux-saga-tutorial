@@ -247,10 +247,10 @@ const SalaryPeriodListPage = () => {
         // ),
         mixinFuncs.renderActionColumn(
             {
-                edit: true,
+                edit: false,
                 delete: true,
             },
-            { width: '90px' },
+            { width: '100px' },
         ),
     ].filter(Boolean);
 
@@ -266,7 +266,7 @@ const SalaryPeriodListPage = () => {
                     fields: searchFields,
                     initialValues: queryFilter,
                 })}
-                actionBar={mixinFuncs.renderActionBar()}
+                // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
