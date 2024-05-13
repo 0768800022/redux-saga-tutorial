@@ -178,14 +178,6 @@ function ProjectTaskListPage({ setSearchFilter }) {
                         </BaseTooltip>
                     ),
                 });
-                funcs.changeFilter = (filter) => {
-                    const projectId = queryParams.get('projectId');
-                    const storyId = queryParams.get('storyId');
-                    const projectName = queryParams.get('projectName');
-                    const storyName = queryParams.get('storyName');
-                   
-                    mixinFuncs.setQueryParams(serializeParams({ projectId, storyId, projectName,storyName ,...filter }));
-                };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
 
 
