@@ -75,7 +75,7 @@ const navMenuConfig = [
                 permission: apiConfig.project.getList.baseURL,
             },
             {
-                label: <FormattedMessage defaultMessage="Quản lý vai trò dự án" />,
+                label: <FormattedMessage defaultMessage="Quản lý roles" />,
                 key: 'project-role-management',
                 path: generatePath(routes.projectRoleListPage.path, {}),
                 permission: apiConfig.projectRole.getList.baseURL,
@@ -118,6 +118,11 @@ const navMenuConfig = [
         icon: <IconSettings size={16} />,
         permission: apiConfig.category.getList.baseURL,
         children: [
+            {
+                label: <FormattedMessage defaultMessage="Quản lý vai trò dự án" />,
+                key: 'project-role-category',
+                path: generatePath(routes.categoryListPageRole.path, {}),
+            },
             {
                 label: categoryKind.education.title,
                 key: 'education-category',
