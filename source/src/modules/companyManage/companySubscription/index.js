@@ -41,7 +41,7 @@ const CompanySubscriptionListPage = () => {
     // const companyOptions =[];
     // const companyValues = translate.formatKeys(companyOptions, ['label']);
 
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
         apiConfig: apiConfig.companySubscription,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -203,7 +203,7 @@ const CompanySubscriptionListPage = () => {
             ]}
         >
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

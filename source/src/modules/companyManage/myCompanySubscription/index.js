@@ -45,7 +45,7 @@ const CompanySubscriptionListPage = () => {
     const companyId = profile.id;
     const moneyUnit = useMoneyUnit();
 
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
         apiConfig: {
             getList: apiConfig.serviceCompanySubscription.getMyService,
             create: apiConfig.serviceCompanySubscription.create,
@@ -175,7 +175,7 @@ const CompanySubscriptionListPage = () => {
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.serviceCompanySubscription) }]}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={<Flex align="center" justify="space-between" style={{ marginBottom: '2px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                         <Button

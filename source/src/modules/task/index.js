@@ -157,7 +157,7 @@ function TaskListPage() {
         },
         {
             title: translate.formatMessage(commonMessage.studentName),
-            dataIndex: ['student', 'fullName'],
+            dataIndex: ['student', 'account', 'fullName'],
         },
         {
             title: 'Ngày bắt đầu',

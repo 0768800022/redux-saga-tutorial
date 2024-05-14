@@ -31,7 +31,7 @@ const DeveloperListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const [projectRole, setProjectROle] = useState([]);
 
-    const { data, mixinFuncs, loading, pagination, queryFiter, serializeParams } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter, serializeParams } = useListBase({
         apiConfig: apiConfig.developer,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -168,7 +168,7 @@ const DeveloperListPage = () => {
             ]}
         >
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

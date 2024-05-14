@@ -39,7 +39,7 @@ const ProjectStudentTeamListPage = () => {
     const active = queryParameters.get('active');
     const leaderId = queryParameters.get('leaderId');
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
         apiConfig: apiConfig.team,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,

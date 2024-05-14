@@ -32,7 +32,7 @@ const CompanyRequestListPage = () => {
     const companyId = profile.id;
 
 
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
         apiConfig: apiConfig.companyRequest,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -128,7 +128,7 @@ const CompanyRequestListPage = () => {
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.companyRequest) }]}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

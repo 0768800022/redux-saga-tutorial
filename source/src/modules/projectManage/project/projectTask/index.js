@@ -179,6 +179,8 @@ function ProjectTaskListPage({ setSearchFilter }) {
                     ),
                 });
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
+
+
                 funcs.handleFilterSearchChange = (values) => {
                     if (values.toDate == null && values.fromDate == null) {
                         delete values.toDate;
@@ -364,6 +366,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                     fields: searchFields,
                     className: styles.search,
                     activeTab: activeProjectTab,
+                    initialFilterValues:initialFilterValues,
                 })}
                 actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={
