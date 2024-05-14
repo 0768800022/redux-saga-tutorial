@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { AppConstants, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { AppConstants, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, PaymentState } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { salaryPeriodState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -18,15 +18,19 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { Button, Tag } from 'antd';
 import AvatarField from '@components/common/form/AvatarField';
 import { FieldTypes } from '@constants/formConfig';
+import { render } from '@testing-library/react';
+import useMoneyUnit from '@hooks/useMoneyUnit';
+import { formatMoney } from '@utils';
 const message = defineMessages({
     objectName: 'Chi tiết kỳ lương',
 });
 const SalaryPeriodDetailListPage = () => {
+    const moneyUnit = useMoneyUnit();
     const translate = useTranslate();
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const salaryPeriodId = queryParameters.get('salaryPeriodId');
-    const stateValues = translate.formatKeys(salaryPeriodState, ['label']);
+    const stateValues = translate.formatKeys(PaymentState, ['label']);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.salaryPeriodDetail,
@@ -92,7 +96,7 @@ const SalaryPeriodDetailListPage = () => {
     const columns = [
         {
             title: '#',
-            dataIndex: ['developer', 'studentInfo', 'avatar'],
+            dataIndex: ['developer', 'account', 'avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -105,37 +109,73 @@ const SalaryPeriodDetailListPage = () => {
         },
         {
             title: translate.formatMessage(commonMessage.developer),
-            dataIndex: ['developer', 'studentInfo', 'fullName'],
+            dataIndex: ['developer', 'account', 'fullName'],
         },
         {
-            title: translate.formatMessage(commonMessage.project),
-            dataIndex: ['project', 'name'],
-            width: 320,
+            title: <FormattedMessage defaultMessage={'Lương ref'}/>,
+            dataIndex: 'refSalary',
+            align: 'center',
+            render: (refSalary) => {
+                const formattedValue = formatMoney(refSalary, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
+            },
         },
         {
             title: translate.formatMessage(commonMessage.salary),
             dataIndex: 'salary',
             align: 'center',
+            render: (salary) => {
+                const formattedValue = formatMoney(salary, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
+            },
         },
         {
             title: translate.formatMessage(commonMessage.totalTimeWorking),
             dataIndex: 'totalTimeWorking',
             align: 'center',
             width: 200,
-            render(totalTimeWorking) {
-                if (totalTimeWorking) return <div>{Math.ceil((totalTimeWorking / 60) * 10) / 10} h</div>;
-            },
+            // render(totalTimeWorking) {
+            //     if (totalTimeWorking) return <div>{Math.ceil((totalTimeWorking / 60) * 10) / 10} h</div>;
+            // },
         },
+        
         {
             title: translate.formatMessage(commonMessage.totalTimeOff),
             dataIndex: 'totalTimeOff',
             align: 'center',
             width: 180,
-            render(totalTimeOff) {
-                if (totalTimeOff) return <div>{Math.ceil((totalTimeOff / 60) * 10) / 10} h</div>;
+            // render(totalTimeOff) {
+            //     if (totalTimeOff) return <div>{Math.ceil((totalTimeOff / 60) * 10) / 10} h</div>;
+            // },
+        },
+        {
+            title: translate.formatMessage(commonMessage.payoutStatus),
+            dataIndex: 'payoutStatus',
+            align: 'center',
+            width: 120,
+            render(payoutStatus) {
+                const state = stateValues.find((item) => item.value == payoutStatus);
+                return (
+                    <div>
+                        <Tag color={state?.color}>
+                            <div style={{ padding: '0 1px', fontSize: 14 }}>
+                                {state?.label}
+                            </div>
+                        </Tag>
+                    </div>
+                );
             },
         },
-
         mixinFuncs.renderActionColumn(
             {
                 delete: true,
@@ -159,7 +199,7 @@ const SalaryPeriodDetailListPage = () => {
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
                 })}
-                actionBar={mixinFuncs.renderActionBar()}
+                // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
                         onChange={changePagination}
