@@ -165,8 +165,9 @@ const SalaryPeriodListPage = () => {
         },
     ].filter(Boolean);
     const handleOnClick = (event, record) => {
-        event.preventDefault();
+        // event.preventDefault();
         navigate(routes.salaryPeriodDetailListPage.path + `?salaryPeriodId=${record.id}`);
+        // console.log(record);
     };
 
     const columns = [
@@ -174,21 +175,21 @@ const SalaryPeriodListPage = () => {
             title: translate.formatMessage(commonMessage.salaryPeriodName),
             dataIndex: 'name',
             width: 300,
-            render: (name, record) => {
-                const processJson = JSON.parse(record?.process);
-                let active = false;
-                if (processJson.fixSalaryState && processJson.projectSalaryState && processJson.generatePeriodDetail) {
-                    active = true;
-                }
-                return (
-                    <div
-                        onClick={(event) => active && handleOnClick(event, record)}
-                        className={active && styles.customDiv}
-                    >
-                        {name}
-                    </div>
-                );
-            },
+            // render: (name, record) => {
+            //     const processJson = JSON.parse(record?.process);
+            //     let active = false;
+            //     if (processJson.fixSalaryState && processJson.projectSalaryState && processJson.generatePeriodDetail) {
+            //         active = true;
+            //     }
+            //     return (
+            //         <div
+            //             onClick={(event) => active && handleOnClick(event, record)}
+            //             className={active && styles.customDiv}
+            //         >
+            //             {name}
+            //         </div>
+            //     );
+            // },
         },
         {
             title: translate.formatMessage(commonMessage.startDate),
@@ -247,7 +248,7 @@ const SalaryPeriodListPage = () => {
         // ),
         mixinFuncs.renderActionColumn(
             {
-                edit: false,
+                edit: true,
                 delete: true,
             },
             { width: '100px' },
@@ -274,6 +275,12 @@ const SalaryPeriodListPage = () => {
                         loading={loading}
                         dataSource={data}
                         columns={columns}
+                        onRow={(record, rowIndex) => ({
+                            onClick: (e) => {
+                                e.stopPropagation();
+                                handleOnClick(e,record);
+                            },
+                        })}
                     />
                 }
             />

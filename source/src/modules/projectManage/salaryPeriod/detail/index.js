@@ -46,6 +46,13 @@ const SalaryPeriodDetailListPage = () => {
                 funcs.getCreateLink = () => {
                     return `${routes.salaryPeriodDetailListPage.path}/create?salaryPeriodId=${salaryPeriodId}`;
                 };
+                const prepareGetListParams = funcs.prepareGetListParams;
+                funcs.prepareGetListParams = (params) => {
+                    return {
+                        ...prepareGetListParams(params),
+                        salaryPeriodId,
+                    };
+                };
                 funcs.changeFilter = (filter) => {
                     const salaryPeriodId = queryParams.get('salaryPeriodId');
                     mixinFuncs.setQueryParams(serializeParams({ salaryPeriodId, ...filter }));
