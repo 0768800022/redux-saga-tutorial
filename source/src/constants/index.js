@@ -125,6 +125,11 @@ export const STATE_PROJECT_TASK_PROCESSING = 2;
 export const STATE_PROJECT_TASK_DONE = 3;
 export const STATE_PROJECT_TASK_CANCEL = 4;
 
+
+export const STATE_PROJECT_STORY_CREATE = 1;
+export const STATE_PROJECT_STORY_PROCESSING = 2;
+export const STATE_PROJECT_STORY_DONE = 3;
+export const STATE_PROJECT_STORY_CANCEL = 4;
 export const TASK_KIND_FEATURE = 1;
 export const TASK_KIND_BUG = 2;
 
@@ -184,6 +189,7 @@ export const CATEGORY_KIND_MAJOR = 3;
 const CATEGORY_KIND_NEWS = 4;
 const CATEGORY_KIND_SERVICE = 5;
 const CATEGORY_KIND_KNOWLEDGE = 8;
+const CATEGORY_KIND_ROLE = 4;
 export const categoryKinds = {
     CATEGORY_KIND_NEWS,
     CATEGORY_KIND_JOBS,
@@ -193,6 +199,7 @@ export const categoryKinds = {
     CATEGORY_KIND_KNOWLEDGE,
     CATEGORY_KIND_GENERATION,
     CATEGORY_KIND_MAJOR,
+    CATEGORY_KIND_ROLE,
 };
 
 const GROUP_KIND_ADMIN = 1;
@@ -429,8 +436,8 @@ export const TASK_KIND_DEV = 1;
 export const TASK_KIND_LEADER = 2;
 
 export const PaymentState = [
-    { value: PAYMENT_UNPAID, label: commonMessage.paymentUnpaid, color: 'yellow' },
-    { value: PAYMENT_PAID, label: commonMessage.paymentPaid, color: 'green' },
+    { value: PAYMENT_UNPAID, label: commonMessage.paymentUnpaid, color: 'green' },
+    { value: PAYMENT_PAID, label: commonMessage.paymentPaid, color: 'blue' },
 ];
 
 

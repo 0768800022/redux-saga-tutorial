@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
 import ScheduleTable from '@components/common/table/ScheduleTable';
-import { AppConstants, DATE_FORMAT_VALUE, TIME_FORMAT_DISPLAY } from '@constants';
+import { AppConstants, DATE_FORMAT_VALUE, TIME_FORMAT_DISPLAY, categoryKinds } from '@constants';
 import dayjs from 'dayjs';
 import { daysOfWeekSchedule as daysOfWeekScheduleOptions } from '@constants/masterData';
 import NumericField from '@components/common/form/NumericField';
@@ -81,7 +81,7 @@ const DeveloperForm = (props) => {
             }, {});
         values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
         values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
-        return mixinFuncs.handleSubmit({ ...values, avatar:imageUrl });
+        return mixinFuncs.handleSubmit({ ...values, avatar:imageUrl, developerRoleId:values.developerRole.id  });
     };
     function addFrameTime(data) {
         const result = {};
@@ -401,6 +401,25 @@ const DeveloperForm = (props) => {
                                 required={isEditing ? false : true}
                                 name="password"
                                 type="password"
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <TextField
+                                label={translate.formatMessage(commonMessage.email)}
+                                type="email"
+                                name="email"
+                                required={isEditing ? false : true}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Vai trò dự án" />}
+                                name={['developerRole','id']}
+                                apiConfig={apiConfig.category.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                                initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
+                                searchParams={(text) => ({ categoryName: text })}
+                                required
                             />
                         </Col>
                     </Row>
