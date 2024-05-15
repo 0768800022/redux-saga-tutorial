@@ -351,6 +351,36 @@ const DeveloperForm = (props) => {
                         </Col>
                         <Col span={12}>
                             <TextField
+                                label={translate.formatMessage(commonMessage.email)}
+                                type="email"
+                                name="email"
+                                required={isEditing ? false : true}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <NumericField
+                                label={translate.formatMessage(commonMessage.hourlySalary)}
+                                name="hourlySalary"
+                                min={0}
+                                max={100000000000000}
+                                addonAfter="$"
+                                // defaultValue={0}
+                                required
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <NumericField
+                                label={translate.formatMessage(commonMessage.salary)}
+                                name="salary"
+                                min={0}
+                                max={100000000000000}
+                                addonAfter="$"
+                                // defaultValue={0}
+                                required
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <TextField
                                 label={translate.formatMessage(commonMessage.password)}
                                 rules={[
                                     {

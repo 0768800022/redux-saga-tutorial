@@ -1,3 +1,5 @@
+import { commonMessage } from "@locales/intl";
+
 export const apiUrl = process.env.REACT_APP_API;
 export const apiTenantUrl = 'http://api-path/';
 export const apiTenantId = process.env.REACT_APP_TENANT_ID;
@@ -130,6 +132,8 @@ export const DEFAULT_TABLE_ITEM_SIZE = 20;
 export const DEFAULT_TABLE_PAGE_START = 0;
 export const DEFAULT_GET_ALL_LIST = 1000;
 export const DEFAULT_TIME = '01/01/2023 00:00:00';
+export const PAYMENT_UNPAID = 0;
+export const PAYMENT_PAID = 1;
 export const commonStatus = {
     PENDING: 0,
     ACTIVE: 1,
@@ -425,5 +429,10 @@ export const COMPANY_SEEK_STATE_ACCEPT = 2;
 
 export const TASK_KIND_DEV = 1;
 export const TASK_KIND_LEADER = 2;
+
+export const PaymentState = [
+    { value: PAYMENT_UNPAID, label: commonMessage.paymentUnpaid, color: 'yellow' },
+    { value: PAYMENT_PAID, label: commonMessage.paymentPaid, color: 'green' },
+];
 
 

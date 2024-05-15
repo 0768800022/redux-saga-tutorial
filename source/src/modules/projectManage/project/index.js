@@ -2,7 +2,7 @@ import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
-import { IconCategory } from '@tabler/icons-react';
+import { IconCategory, IconReportMoney } from '@tabler/icons-react';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -16,7 +16,12 @@ import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
 import route from '@modules/projectManage/project/projectTask/routes';
-import { DollarOutlined, TeamOutlined, WomanOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import {
+    DollarOutlined,
+    TeamOutlined,
+    WomanOutlined,
+    ExclamationCircleOutlined,
+} from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
@@ -74,8 +79,7 @@ const ProjectListPage = () => {
                 funcs.getItemDetailLink = (dataRow) => {
                     if (developerId)
                         return `${routes.projectListPage.path}/${dataRow.id}?developerId=${developerId}&developerName=${developerName}`;
-                    else 
-                        return `${routes.projectListPage.path}/${dataRow.id}`;
+                    else return `${routes.projectListPage.path}/${dataRow.id}`;
                 };
 
                 funcs.additionalActionColumnButtons = () => ({
@@ -216,6 +220,26 @@ const ProjectListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
+                    moneyForDev: ({ id, accountDto }) => {
+                        return (
+                            <BaseTooltip title={translate.formatMessage(commonMessage.moneyForMember)}>
+                                <Button
+                                    type="link"
+                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        // navigate(
+                                        //     routes.developerProjectListPage.path +
+                                        //         `?developerId=${id}&developerName=${accountDto?.fullName}`,
+                                        // );
+                                        console.log('Money for dev');
+                                    }}
+                                >
+                                    <IconReportMoney size={'18px'}/>
+                                </Button>
+                            </BaseTooltip>
+                        );
+                    },
                 });
 
                 funcs.changeFilter = (filter) => {
@@ -268,8 +292,6 @@ const ProjectListPage = () => {
     //     immediate: true,
     //     params: { developerId: developerId },
     // });
-
-
 
     const setBreadRoutes = () => {
         const breadRoutes = [];
@@ -342,7 +364,7 @@ const ProjectListPage = () => {
                 </div>
             ),
         },
-       
+
         {
             title: translate.formatMessage(commonMessage.startDate),
             dataIndex: 'startDate',
@@ -379,6 +401,7 @@ const ProjectListPage = () => {
         mixinFuncs.renderActionColumn(
             {
                 // salaryPeriod: true,
+                moneyForDev: true,
                 edit: true,
                 delete: true,
             },
