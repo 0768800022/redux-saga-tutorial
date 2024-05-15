@@ -230,6 +230,16 @@ function StoryTaskListPage({ setSearchFilter }) {
             render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
         },
         {
+            title: 'Ngày tạo',
+            dataIndex: 'createdDate',
+            width: 100,
+            align: 'center',
+            render: (date) => {
+                const createdDate = convertUtcToLocalTime(date, DATE_FORMAT_DISPLAY,DATE_FORMAT_DISPLAY);
+                return <div >{createdDate}</div>;
+            },
+        },
+        {
             title: 'Trạng thái',
             dataIndex: 'status',
             align: 'center',
