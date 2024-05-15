@@ -115,4 +115,10 @@ export const commonMessage = defineMessages({
     generatePeriodDetail: 'Tạo chi tiết kỳ lương',
     generatePeriodDetailSuccess: 'Hoàn thành tạo chi tiết kỳ lương',
     selectPeriodSalarySuccess: 'Chọn kỳ lương thành công',
+    isPaid: 'Được trả lương',
+    moneyForMember: 'Lương thành viên',
+    hourlySalary: 'Lương theo giờ',
+    payoutStatus: 'TT thanh toán',
+    paymentUnpaid: 'Đã thanh toán',
+    paymentPaid: 'Chờ thanh toán',
 });

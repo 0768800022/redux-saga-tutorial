@@ -165,6 +165,15 @@ const StoryTaskForm = (props) => {
                     <Col span={12}>
                         <SelectField
                             required
+                            name="state"
+                            label={<FormattedMessage defaultMessage="Tình trạng" />}
+                            allowClear={false}
+                            options={stateValues}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <SelectField
+                            required
                             name="status"
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
                             allowClear={false}

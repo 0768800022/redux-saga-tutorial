@@ -10,6 +10,7 @@ import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const NumericField = (props) => {
     const {
+        size = 'large',
         label,
         name,
         disabled,
@@ -26,6 +27,7 @@ const NumericField = (props) => {
         isCurrency,
         readOnly,
         addonAfter,
+        initialValue,
     } = props;
     const currency = useCurrency();
     const moneyUnit = useMoneyUnit();
@@ -34,14 +36,13 @@ const NumericField = (props) => {
     };
 
     const fieldFormatter = (value) => {
-        if (!isCurrency) return value;
-        return currency.format(value, '');
+        return formatNumber(value);
     };
 
     const { rules, placeholder } = useFormField(props);
 
     return (
-        <Form.Item required={required} label={label} name={name} rules={rules} className={className}>
+        <Form.Item label={label} name={name} rules={rules} className={className}>
             <InputNumber
                 addonAfter={isCurrency ? moneyUnit : addonAfter}
                 placeholder={placeholder}

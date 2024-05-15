@@ -23,7 +23,6 @@ const SalaryPeriodDetailForm = ({ isEditing, formId, actions, dataDetail, onSubm
         });
     }, [dataDetail]);
 
-
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>

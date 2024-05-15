@@ -35,23 +35,16 @@ function ProjectMemberSavePage() {
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
-                    id: detail.id,
-                    schedule: data.schedule,
-                    roleId: data?.projectRole?.id,
-                    // teamId: data?.team?.id,
+                    ...data,
                     status: 1,
+                    id: detail.id,
+                    roleId: data.projectRoleId,
                 };
             };
             funcs.prepareCreateData = (data) => {
-                console.log(data);
                 return {
+                    ...data,
                     projectId: projectId,
-                    developerId: data?.developer?.accountDto?.fullName,
-                    projectRoleId: data?.projectRole?.id,
-                    schedule: data.schedule,
-                    contractSign : "contractSign",
-                    isPaid: true,
-                    // teamId: data.team.id,
                 };
             };
         },
