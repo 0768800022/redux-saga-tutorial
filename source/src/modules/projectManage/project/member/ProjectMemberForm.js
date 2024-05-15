@@ -18,6 +18,7 @@ import ScheduleTable from '@components/common/table/ScheduleTable';
 import { commonMessage } from '@locales/intl';
 import BooleanField from '@components/common/form/BooleanField';
 import TextField from '@components/common/form/TextField';
+import styles from './member.module.scss';
 
 function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
     const translate = useTranslate();
@@ -45,7 +46,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
             .join('|');
     }
     const handleSubmit = (values) => {
-        values.isIntern = isChecked ? 1 : 0;
+        values.isPaid = isChecked;
         for (const day in values.schedule) {
             for (const timeRange of values.schedule[day]) {
                 timeRange.from = timeRange.from.set({ hour: 0, minute: 0 }).format('HH[H]mm');
@@ -130,7 +131,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
     };
 
     useEffect(() => {
-        dataDetail?.isIntern && setIsChecked(dataDetail?.isIntern == 1 && true);
+        dataDetail?.isPaid && setIsChecked(dataDetail?.isPaid == 1 && true);
         let data = dataDetail?.schedule && JSON.parse(dataDetail?.schedule);
         if (data) {
             const dataFullFrame = addFrameTime(data);
@@ -172,8 +173,8 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         dataDetail.schedule = data || dataDefault;
         form.setFieldsValue({
             ...dataDetail,
-            teamId: dataDetail?.team?.teamName,
-            developerId: dataDetail?.developer?.accountDto?.fullName,
+            projectRoleId: dataDetail?.projectRole?.id,
+            developerId: dataDetail?.developer?.accountDto?.id,
         });
     }, [dataDetail]);
 
@@ -264,17 +265,22 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
         setFieldValue('schedule', schedule);
         onValuesChange();
     };
+
+    const handleOnChangeCheckBox = () => {
+        setIsChecked(!isChecked);
+    };
+
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange} size="1100px">
             <Card className="card-form" bordered={false}>
                 <div style={{ width: '980px' }}>
                     <Row gutter={16}>
-                        <Col span={6}>
+                        <Col span={8}>
                             <AutoCompleteField
                                 disabled={isEditing}
                                 required
                                 label={translate.formatMessage(commonMessage.developer)}
-                                name={[ 'developer','accountDto', 'fullName']}
+                                name={['developerId']}
                                 apiConfig={apiConfig.developer.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
@@ -284,11 +290,11 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 searchParams={(text) => ({ name: text })}
                             />
                         </Col>
-                        <Col span={6}>
+                        <Col span={8}>
                             <AutoCompleteField
                                 required
                                 label={translate.formatMessage(commonMessage.role)}
-                                name={['projectRole', 'id']}
+                                name={['projectRoleId']}
                                 apiConfig={apiConfig.projectRole.autocomplete}
                                 mappingOptions={(item) => ({
                                     value: item.id,
@@ -301,9 +307,20 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                         <Col span={8}>
                             <TextField
                                 label={<FormattedMessage defaultMessage="Sign" />}
-                                required
                                 disabled={isEditing}
                                 name={['contractSign']}
+                            />
+                        </Col>
+                    </Row>
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <CheckboxField
+                                className={styles.customCheckbox}
+                                required
+                                label={translate.formatMessage(commonMessage.isPaid)}
+                                name="isPaid"
+                                checked={isChecked}
+                                onChange={handleOnChangeCheckBox}
                             />
                         </Col>
                     </Row>
