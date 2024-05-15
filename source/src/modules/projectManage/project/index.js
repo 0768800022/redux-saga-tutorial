@@ -60,6 +60,14 @@ const ProjectListPage = () => {
         { mappingData: (data) => data.data.content },
     );
     const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.income.calculateProjectSalary);
+    const {  data: isCheckExist } = useFetch(apiConfig.salaryPeriod.checkExist, { 
+        immediate:true,
+        mappingData: ({ data }) => {
+            console.log(data);
+            return data;
+        },
+
+    });
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.project,
@@ -224,6 +232,7 @@ const ProjectListPage = () => {
                         return (
                             <BaseTooltip title={translate.formatMessage(commonMessage.moneyForMember)}>
                                 <Button
+                                    disabled={!isCheckExist}
                                     type="link"
                                     style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                     onClick={(e) => {
