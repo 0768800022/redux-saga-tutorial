@@ -255,7 +255,7 @@ function StoryTaskListPage({ setSearchFilter }) {
         },
 
         active &&
-            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '180px' }),
+            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '80px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
