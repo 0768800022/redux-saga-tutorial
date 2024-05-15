@@ -184,6 +184,7 @@ export const CATEGORY_KIND_MAJOR = 3;
 const CATEGORY_KIND_NEWS = 4;
 const CATEGORY_KIND_SERVICE = 5;
 const CATEGORY_KIND_KNOWLEDGE = 8;
+const CATEGORY_KIND_ROLE = 4;
 export const categoryKinds = {
     CATEGORY_KIND_NEWS,
     CATEGORY_KIND_JOBS,
@@ -193,6 +194,7 @@ export const categoryKinds = {
     CATEGORY_KIND_KNOWLEDGE,
     CATEGORY_KIND_GENERATION,
     CATEGORY_KIND_MAJOR,
+    CATEGORY_KIND_ROLE,
 };
 
 const GROUP_KIND_ADMIN = 1;
