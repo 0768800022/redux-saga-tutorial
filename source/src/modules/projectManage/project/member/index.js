@@ -116,7 +116,8 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
         {
             title: translate.formatMessage(commonMessage.role),
             dataIndex: ['projectRole', 'projectRoleName'],
-            width: 150,
+            width: 120,
+            align:'center', 
         },
 
         {
@@ -135,7 +136,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
                     edit: true,
                     delete: true,
                 },
-                { width: '150px' },
+                { width: '120px' },
             ),
     ].filter(Boolean);
   

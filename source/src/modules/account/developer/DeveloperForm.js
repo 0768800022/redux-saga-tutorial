@@ -185,7 +185,7 @@ const DeveloperForm = (props) => {
             fullName : dataDetail?.accountDto?.fullName,
             phone : dataDetail?.accountDto?.phone,
             email: dataDetail?.accountDto?.email,
-            leaderId: dataDetail?.leader?.id,
+            leaderId: dataDetail?.leader?.accountDto?.id,
         });
 
         setImageUrl(dataDetail.accountDto?.avatar);
@@ -377,6 +377,16 @@ const DeveloperForm = (props) => {
                                 addonAfter="$"
                                 // defaultValue={0}
                                 required
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Leader" />}
+                                name='leaderId'
+                                apiConfig={apiConfig.developer.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.account.fullName })}
+                                initialSearchParams={{ pageNumber: 0 }}
+                                searchParams={(text) => ({ leaderName: text })}
                             />
                         </Col>
                         <Col span={12}>

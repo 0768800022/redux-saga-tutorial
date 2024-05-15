@@ -88,7 +88,7 @@ const ProjectCategoryListPage = ({ setSearchFilter }) => {
                 edit: true,
                 delete: true,
             },
-            { width: '150px' },
+            { width: '120px' },
         ),
     ].filter(Boolean);
 

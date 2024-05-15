@@ -220,12 +220,12 @@ function StoryTaskListPage({ setSearchFilter }) {
     const columns = [
         {
             title: <FormattedMessage defaultMessage="Tên story" />,
-            width: 200,
             dataIndex: 'storyName',
         },
         {
             title: <FormattedMessage defaultMessage="Người thực hiện" />,
             width: 200,
+            align: 'center',
             dataIndex: ['developerInfo','account','fullName'],
             render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
         },
@@ -245,7 +245,7 @@ function StoryTaskListPage({ setSearchFilter }) {
         },
 
         active &&
-            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '180px' }),
+            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {

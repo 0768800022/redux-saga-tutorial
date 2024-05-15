@@ -38,7 +38,6 @@ function ProjectMemberSavePage() {
                     ...data,
                     status: 1,
                     id: detail.id,
-                    roleId: data.projectRoleId,
                 };
             };
             funcs.prepareCreateData = (data) => {

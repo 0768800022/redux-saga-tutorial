@@ -33,7 +33,6 @@ const DeveloperSavePage = () => {
                 return {
                     ...data,
                     developerId: detail.id,
-                    // roleId: data.roleInfo.id,
                     status: commonStatus.ACTIVE,
                 };
             };
