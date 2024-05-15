@@ -14,7 +14,7 @@ import {
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { projectTaskState, storyTaskState } from '@constants/masterData';
+import { projectTaskState, storyState, storyTaskState } from '@constants/masterData';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
@@ -53,7 +53,7 @@ function StoryTaskListPage({ setSearchFilter }) {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
-    const stateValues = translate.formatKeys(storyTaskState, ['label']);
+    const stateValues = translate.formatKeys(storyState, ['label']);
     const location = useLocation();
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     localStorage.setItem('pathPrev', location.search);

@@ -1504,6 +1504,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        checkExist:{
+            baseURL: `${apiTenantUrl}v1/salary-period/check-exist`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     salaryPeriodDetail: {
         getList: {
