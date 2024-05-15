@@ -90,7 +90,11 @@ const DeveloperListPage = () => {
             title: 'Họ và tên',
             dataIndex: ['accountDto', 'fullName'],
         },
-
+        {
+            title: 'Số điện thoại',
+            dataIndex: ['accountDto', 'phone'],
+            width: 120,
+        },
         {
             title: 'Trình độ',
             dataIndex: 'level',

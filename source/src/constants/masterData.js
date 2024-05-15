@@ -36,6 +36,10 @@ import {
     STATE_STORY_TASK_PROCESSING,
     STATE_STORY_TASK_DONE,
     STATE_STORY_TASK_CANCEL,
+    STATE_PROJECT_STORY_CREATE,
+    STATE_PROJECT_STORY_PROCESSING,
+    STATE_PROJECT_STORY_DONE,
+    STATE_PROJECT_STORY_CANCEL,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -103,6 +107,13 @@ export const storyTaskState = [
     { value: STATE_STORY_TASK_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
     { value: STATE_STORY_TASK_DONE, label: projectTaskStateMessage.done, color: 'green' },
     { value: STATE_STORY_TASK_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
+];
+
+export const storyState = [
+    { value: STATE_PROJECT_STORY_CREATE, label: projectTaskStateMessage.create, color: 'yellow' },
+    { value: STATE_PROJECT_STORY_PROCESSING, label: projectTaskStateMessage.processing, color: 'blue' },
+    { value: STATE_PROJECT_STORY_DONE, label: projectTaskStateMessage.done, color: 'green' },
+    { value: STATE_PROJECT_STORY_CANCEL, label: projectTaskStateMessage.cancel, color: 'red' },
 ];
 
 export const projectTaskState = [
