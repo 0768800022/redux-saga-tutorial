@@ -240,8 +240,8 @@ function StoryTaskListPage({ setSearchFilter }) {
             },
         },
         {
-            title: 'Trạng thái',
-            dataIndex: 'status',
+            title: 'Tình trạng',
+            dataIndex: 'state',
             align: 'center',
             width: 120,
             render(dataRow) {
