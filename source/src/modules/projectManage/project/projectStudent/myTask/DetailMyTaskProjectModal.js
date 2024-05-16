@@ -83,7 +83,7 @@ const DetailMyTaskProjectModal = ({ open, onCancel, DetailData, ...props }) => {
                                 <TextField
                                     readOnly
                                     label={<FormattedMessage defaultMessage="Lập trình viên" />}
-                                    name={['developer', 'studentInfo', 'fullName']}
+                                    name={['developer', 'account', 'fullName']}
                                     // initialValue={detail.name}
                                 />
                             </Col>

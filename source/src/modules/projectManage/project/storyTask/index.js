@@ -175,13 +175,17 @@ function StoryTaskListPage({ setSearchFilter }) {
                         </BaseTooltip>
                     ),
                 });
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, projectId });
+                };
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
                     const storyId = queryParams.get('storyId');
                     const projectName = queryParams.get('projectName');
                     const storyName = queryParams.get('storyName');
                    
-                    mixinFuncs.setQueryParams(serializeParams({ projectId, storyId, projectName,storyName ,...filter }));
+                    mixinFuncs.setQueryParams(serializeParams({ projectId, projectName, ...filter }));
                 };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
                 funcs.handleFilterSearchChange = (values) => {
@@ -337,9 +341,9 @@ function StoryTaskListPage({ setSearchFilter }) {
     return (
         <div>
             <ListPage
+                title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
-                    className: styles.search,
                     activeTab: activeProjectTab,
                 })}
                 actionBar={active && mixinFuncs.renderActionBar()}

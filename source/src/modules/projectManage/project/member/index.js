@@ -149,6 +149,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
             //     className: styles.search,
             //     activeTab: activeProjectTab,
             // })}
+            title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
             actionBar={active && mixinFuncs.renderActionBar()}
             baseTable={
                 <BaseTable
