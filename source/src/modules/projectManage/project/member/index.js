@@ -15,6 +15,7 @@ import React, { useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './member.module.scss';
+import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
     objectName: 'Thành viên',
@@ -92,7 +93,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
             align: 'center',
             width: 80,
             render: (avatar) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}

@@ -308,7 +308,6 @@ const DeveloperForm = (props) => {
                                 imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                                 aspect={1 / 1}
                                 uploadFile={uploadFile}
-                                disabled={isEditing}
                             />
                         </Col>
                     </Row>
@@ -364,8 +363,6 @@ const DeveloperForm = (props) => {
                                 min={0}
                                 max={100000000000000}
                                 addonAfter="$"
-                                // defaultValue={0}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -375,8 +372,6 @@ const DeveloperForm = (props) => {
                                 min={0}
                                 max={100000000000000}
                                 addonAfter="$"
-                                // defaultValue={0}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -419,7 +414,7 @@ const DeveloperForm = (props) => {
                                 mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
                                 initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
                                 searchParams={(text) => ({ categoryName: text })}
-                                required
+                                required={isEditing ? false : true}
                             />
                         </Col>
                     </Row>
