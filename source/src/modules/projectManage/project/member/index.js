@@ -15,6 +15,7 @@ import React, { useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './member.module.scss';
+import AvatarField from '@components/common/form/AvatarField';
 
 const message = defineMessages({
     objectName: 'Thành viên',
@@ -92,7 +93,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
             align: 'center',
             width: 80,
             render: (avatar) => (
-                <Avatar
+                <AvatarField
                     size="large"
                     icon={<UserOutlined />}
                     src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
@@ -116,7 +117,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
         {
             title: translate.formatMessage(commonMessage.role),
             dataIndex: ['projectRole', 'projectRoleName'],
-            width: 150,
+            width: 120,
         },
 
         {
@@ -135,7 +136,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
                     edit: true,
                     delete: true,
                 },
-                { width: '150px' },
+                { width: '120px' },
             ),
     ].filter(Boolean);
   
@@ -147,7 +148,15 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
             //     className: styles.search,
             //     activeTab: activeProjectTab,
             // })}
-            actionBar={active && mixinFuncs.renderActionBar()}
+            title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
+            actionBar={<div style={{
+                position: "absolute",
+                top: '-88px',
+                right: '-26px',
+                zIndex: 999,
+            }}>
+                {mixinFuncs.renderActionBar()}
+            </div>}
             baseTable={
                 <BaseTable
                     onChange={changePagination}

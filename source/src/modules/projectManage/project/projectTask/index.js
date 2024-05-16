@@ -178,7 +178,20 @@ function ProjectTaskListPage({ setSearchFilter }) {
                         </BaseTooltip>
                     ),
                 });
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, projectId, storyId });
+                };
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const storyId = queryParams.get('storyId');
+                    const projectName = queryParams.get('projectName');
+                    const storyName = queryParams.get('storyName');
+                   
+                    mixinFuncs.setQueryParams(serializeParams({ projectId, projectName, storyId, storyName, ...filter }));
+                };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
+
                 funcs.handleFilterSearchChange = (values) => {
                     if (values.toDate == null && values.fromDate == null) {
                         delete values.toDate;
@@ -288,19 +301,19 @@ function ProjectTaskListPage({ setSearchFilter }) {
     });
 
     const searchFields = [
-        {
-            key: 'projectCategoryId',
-            placeholder: <FormattedMessage defaultMessage={'Danh mục'} />,
-            type: FieldTypes.AUTOCOMPLETE,
-            apiConfig: apiConfig.projectCategory.autocomplete,
-            mappingOptions: (item) => ({
-                value: item.id,
-                label: item.projectCategoryName,
-            }),
-            optionsParams: { projectId: projectId },
-            initialSearchParams: { projectId: projectId },
-            searchParams: (text) => ({ name: text }),
-        },
+        // {
+        //     key: 'projectCategoryId',
+        //     placeholder: <FormattedMessage defaultMessage={'Danh mục'} />,
+        //     type: FieldTypes.AUTOCOMPLETE,
+        //     apiConfig: apiConfig.projectCategory.autocomplete,
+        //     mappingOptions: (item) => ({
+        //         value: item.id,
+        //         label: item.projectCategoryName,
+        //     }),
+        //     optionsParams: { projectId: projectId },
+        //     initialSearchParams: { projectId: projectId },
+        //     searchParams: (text) => ({ name: text }),
+        // },
         {
             key: 'developerId',
             placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
@@ -308,25 +321,25 @@ function ProjectTaskListPage({ setSearchFilter }) {
             options: memberProject,
         },
         {
-            key: 'state',
-            placeholder: translate.formatMessage(commonMessage.state),
+            key: 'status',
+            placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        {
-            key: 'fromDate',
-            type: FieldTypes.DATE,
-            format: DATE_FORMAT_DISPLAY,
-            placeholder: translate.formatMessage(commonMessage.fromDate),
-            colSpan: 3,
-        },
-        {
-            key: 'toDate',
-            type: FieldTypes.DATE,
-            format: DATE_FORMAT_DISPLAY,
-            placeholder: translate.formatMessage(commonMessage.toDate),
-            colSpan: 3,
-        },
+        // {
+        //     key: 'fromDate',
+        //     type: FieldTypes.DATE,
+        //     format: DATE_FORMAT_DISPLAY,
+        //     placeholder: translate.formatMessage(commonMessage.fromDate),
+        //     colSpan: 3,
+        // },
+        // {
+        //     key: 'toDate',
+        //     type: FieldTypes.DATE,
+        //     format: DATE_FORMAT_DISPLAY,
+        //     placeholder: translate.formatMessage(commonMessage.toDate),
+        //     colSpan: 3,
+        // },
     ].filter(Boolean);
     const initialFilterValues = useMemo(() => {
         const initialFilterValues = {
@@ -349,7 +362,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
             path: routes.projectListPage.path,
         },
         {
-            breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+            breadcrumbName: projectName,
             path: routes.projectTabPage.path+`?projectId=${projectId}&storyId=${storyId}&active=${active}&projectName=${projectName}`,
         },
         {
@@ -364,6 +377,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                     fields: searchFields,
                     className: styles.search,
                     activeTab: activeProjectTab,
+                    initialFilterValues:initialFilterValues,
                 })}
                 actionBar={active && mixinFuncs.renderActionBar()}
                 baseTable={

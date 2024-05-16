@@ -28,7 +28,7 @@ const CompanySeekListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const stateValues = translate.formatKeys(companySeekOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFiter, serializeParams } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter, serializeParams } = useListBase({
         apiConfig: apiConfig.companySeek,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -138,7 +138,7 @@ const CompanySeekListPage = () => {
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.companySeek) }]}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 //actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

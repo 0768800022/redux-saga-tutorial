@@ -44,6 +44,10 @@ function RegistrationSavePage() {
             funcs.prepareUpdateData = (data) => {
                 return {
                     id: detail.id,
+                    isIntern: detail?.isIntern,
+                    moneyState: detail?.moneyState,
+                    isIssuedCertify: detail?.isIssuedCertify,
+                    status: detail?.status,
                     ...data,
                 };
             };

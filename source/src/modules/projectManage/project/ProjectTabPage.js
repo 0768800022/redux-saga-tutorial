@@ -66,14 +66,14 @@ const ProjectTabPage = () => {
             path: routes.projectListPage.path,
         },
         {
-            breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+            breadcrumbName: projectName,
         },
     ];
 
     return (
         <PageWrapper routes={breadcrumbs}>
             <ListPage
-                title={<div style={{ fontWeight: 'normal' }}>{projectName}</div>}
+                // title={<div style={{ fontWeight: 'normal' }}>{projectName}</div>}
                 baseTable={
                     <Tabs
                         style={{ marginTop: 20 }}

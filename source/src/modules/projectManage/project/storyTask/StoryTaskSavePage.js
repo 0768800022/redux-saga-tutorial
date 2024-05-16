@@ -42,12 +42,14 @@ function StoryTaskSavePage() {
                     ...data,
                     id: detail.id,
                     projectId: projectIdInt,
+                    status:1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
                     projectId: projectId,
+                    status:1,
                 };
             };
             funcs.onSaveError = (err) => {
@@ -71,13 +73,13 @@ function StoryTaskSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                breadcrumbName: projectName,
                 path:
                     routes.projectTabPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                breadcrumbName: projectName,
                 path: routes.projectTabPage.path + `?projectId=${projectId}&projectName=${projectName}`,
             });
         }

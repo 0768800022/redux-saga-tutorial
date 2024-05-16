@@ -14,7 +14,7 @@ import {
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { projectTaskState, storyTaskState } from '@constants/masterData';
+import { projectTaskState, storyState, storyTaskState } from '@constants/masterData';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
@@ -53,7 +53,7 @@ function StoryTaskListPage({ setSearchFilter }) {
     const projectId = queryParameters.get('projectId');
     const projectName = queryParameters.get('projectName');
     const active = queryParameters.get('active');
-    const stateValues = translate.formatKeys(storyTaskState, ['label']);
+    const stateValues = translate.formatKeys(storyState, ['label']);
     const location = useLocation();
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     localStorage.setItem('pathPrev', location.search);
@@ -175,6 +175,18 @@ function StoryTaskListPage({ setSearchFilter }) {
                         </BaseTooltip>
                     ),
                 });
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, projectId });
+                };
+                funcs.changeFilter = (filter) => {
+                    const projectId = queryParams.get('projectId');
+                    const storyId = queryParams.get('storyId');
+                    const projectName = queryParams.get('projectName');
+                    const storyName = queryParams.get('storyName');
+                   
+                    mixinFuncs.setQueryParams(serializeParams({ projectId, projectName, ...filter }));
+                };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
                 funcs.handleFilterSearchChange = (values) => {
                     if (values.toDate == null && values.fromDate == null) {
@@ -212,52 +224,45 @@ function StoryTaskListPage({ setSearchFilter }) {
     const columns = [
         {
             title: <FormattedMessage defaultMessage="Tên story" />,
-            width: 200,
             dataIndex: 'storyName',
         },
-        // {
-        //     title: <FormattedMessage defaultMessage="Người thực hiện" />,
-        //     width: 200,
-        //     dataIndex: ['developerInfo','account','fullName'],
-        //     render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
-        // },
+        {
+            title: <FormattedMessage defaultMessage="Danh mục" />,
+            width: 120,
+            dataIndex: ['projectCategoryDto','projectCategoryName'],
+        },
+        {
+            title: <FormattedMessage defaultMessage="Người thực hiện" />,
+            width: 250,
+            dataIndex: ['developerInfo','account','fullName'],
+            render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
+        },
         {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
-            width: 200,
-            align: 'center',
+            width: 170,
+            render: (date) => {
+                const createdDate = convertUtcToLocalTime(date, DEFAULT_FORMAT,DEFAULT_FORMAT);
+                return <div >{createdDate}</div>;
+            },
         },
         {
-            title: 'Ngày hoàn thành',
-            dataIndex: 'dateComplete',
-            width: 180,
-            render: (dateComplete) => {
-                const modifiedDateComplete = convertStringToDateTime(dateComplete, DEFAULT_FORMAT, DEFAULT_FORMAT)?.add(
-                    7,
-                    'hour',
-                );
-                const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
-            },
+            title: 'Tình trạng',
+            dataIndex: 'state',
             align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateValues?.find((item) => item?.value == dataRow);
+                return (
+                    <Tag color={state?.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
+                    </Tag>
+                );
+            },
         },
-        // {
-        //     title: 'Trạng thái',
-        //     dataIndex: 'status',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const state = stateValues?.find((item) => item?.value == dataRow);
-        //         return (
-        //             <Tag color={state?.color}>
-        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state?.label}</div>
-        //             </Tag>
-        //         );
-        //     },
-        // },
 
         active &&
-            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '180px' }),
+            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -339,12 +344,19 @@ function StoryTaskListPage({ setSearchFilter }) {
     return (
         <div>
             <ListPage
+                title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
-                    className: styles.search,
                     activeTab: activeProjectTab,
                 })}
-                actionBar={active && mixinFuncs.renderActionBar()}
+                actionBar={<div style={{
+                    position: "absolute",
+                    top: '-88px',
+                    right: '-26px',
+                    zIndex: 999,
+                }}>
+                    {mixinFuncs.renderActionBar()}
+                </div>}
                 baseTable={
                     <BaseTable
                         onRow={(record) => ({

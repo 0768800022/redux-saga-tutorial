@@ -35,22 +35,15 @@ function ProjectMemberSavePage() {
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
-                    id: detail.id,
-                    schedule: data.schedule,
-                    roleId: data?.projectRole?.id,
-                    // teamId: data?.team?.id,
+                    ...data,
                     status: 1,
+                    id: detail.id,
                 };
             };
             funcs.prepareCreateData = (data) => {
-                console.log(data);
                 return {
+                    ...data,
                     projectId: projectId,
-                    developerId: data?.developer?.accountDto?.fullName,
-                    projectRoleId: data?.projectRole?.id,
-                    schedule: data.schedule,
-                    contractSign : "contractSign",
-                    // teamId: data.team.id,
                 };
             };
         },
@@ -67,12 +60,12 @@ function ProjectMemberSavePage() {
 
         if (active) {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                breadcrumbName: projectName,
                 path: routes.projectTabPage.path + pathDefault + `&active=${active}`,
             });
         } else {
             breadRoutes.push({
-                breadcrumbName: translate.formatMessage(commonMessage.generalManage),
+                breadcrumbName: projectName,
                 path: routes.projectTabPage.path + pathDefault,
             });
         }

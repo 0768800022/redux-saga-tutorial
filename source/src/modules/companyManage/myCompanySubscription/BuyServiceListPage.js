@@ -41,7 +41,7 @@ const BuyServiceListPage = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [parentData, setParentData] = useState({});
     const moneyUnit = useMoneyUnit();
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
         apiConfig: {
             getList: apiConfig.serviceCompanySubscription.getListServiceActive,
             create: apiConfig.serviceCompanySubscription.create,
@@ -189,7 +189,7 @@ const BuyServiceListPage = () => {
                 ]}
             >
                 <ListPage
-                    searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                    searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                     baseTable={
                         <BaseTable
                             onChange={mixinFuncs.changePagination}

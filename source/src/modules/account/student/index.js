@@ -28,7 +28,7 @@ const StudentListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
-    const { data, mixinFuncs, loading, pagination, queryFiter } = useListBase({
+    const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
         apiConfig: apiConfig.student,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
@@ -44,14 +44,14 @@ const StudentListPage = () => {
                 }
             };
             funcs.additionalActionColumnButtons = () => ({
-                task: ({ id, fullName }) => (
+                task: ({ id, account }) => (
                     <BaseTooltip title={translate.formatMessage(commonMessage.course)}>
                         <Button
                             type="link"
                             style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${fullName}`);
+                                navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${account?.fullName}`);
                                 // navigate(route.studentCourseListPage.path);
                                 // navigate(`./course/${id}`);
                                 // navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
@@ -126,7 +126,7 @@ const StudentListPage = () => {
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.student) }]}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFiter })}
+                searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

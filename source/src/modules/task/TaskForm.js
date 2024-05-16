@@ -55,7 +55,7 @@ const TaskForm = (props) => {
 
         form.setFieldsValue({
             ...dataDetail,
-            studentId: dataDetail?.student?.fullName,
+            studentId: dataDetail?.student?.account?.fullName,
         });
     }, [dataDetail]);
     return (

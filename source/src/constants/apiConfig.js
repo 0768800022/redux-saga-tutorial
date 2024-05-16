@@ -1504,6 +1504,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        checkExist:{
+            baseURL: `${apiTenantUrl}v1/salary-period/check-exist`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     salaryPeriodDetail: {
         getList: {
@@ -1532,6 +1538,14 @@ const apiConfig = {
         },
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/salary-period-detail/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    salaryPeriodDetailLog: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/salary-period-detail-log/list`,
             method: 'GET',
             headers: baseHeader,
             isRequiredTenantId: true,

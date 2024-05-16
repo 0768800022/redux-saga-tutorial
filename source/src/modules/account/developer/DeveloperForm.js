@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { commonMessage } from '@locales/intl';
 import ScheduleTable from '@components/common/table/ScheduleTable';
-import { AppConstants, DATE_FORMAT_VALUE, TIME_FORMAT_DISPLAY } from '@constants';
+import { AppConstants, DATE_FORMAT_VALUE, TIME_FORMAT_DISPLAY, categoryKinds } from '@constants';
 import dayjs from 'dayjs';
 import { daysOfWeekSchedule as daysOfWeekScheduleOptions } from '@constants/masterData';
 import NumericField from '@components/common/form/NumericField';
@@ -81,7 +81,7 @@ const DeveloperForm = (props) => {
             }, {});
         values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
         values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
-        return mixinFuncs.handleSubmit({ ...values, avatar:imageUrl });
+        return mixinFuncs.handleSubmit({ ...values, avatar:imageUrl, developerRoleId:values.developerRole.id  });
     };
     function addFrameTime(data) {
         const result = {};
@@ -185,7 +185,7 @@ const DeveloperForm = (props) => {
             fullName : dataDetail?.accountDto?.fullName,
             phone : dataDetail?.accountDto?.phone,
             email: dataDetail?.accountDto?.email,
-            leaderId: dataDetail?.leader?.id,
+            leaderId: dataDetail?.leader?.accountDto?.id,
         });
 
         setImageUrl(dataDetail.accountDto?.avatar);
@@ -287,6 +287,15 @@ const DeveloperForm = (props) => {
             },
         });
     };
+
+    const checkPhone = (_, value) => {
+        const phoneRegex = /^[0-9]{10}$/; // Regex để kiểm tra số điện thoại có 10 chữ số
+        if (!phoneRegex.test(value)) {
+            return Promise.reject('Số điện thoại không hợp lệ, vui lòng nhập lại');
+        }
+        return Promise.resolve();
+    };
+    
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onFieldsChange={onFieldsChange} size="1100px">
             <Card className="card-form" bordered={false}>
@@ -299,7 +308,6 @@ const DeveloperForm = (props) => {
                                 imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                                 aspect={1 / 1}
                                 uploadFile={uploadFile}
-                                disabled={isEditing}
                             />
                         </Col>
                     </Row>
@@ -330,8 +338,60 @@ const DeveloperForm = (props) => {
                         <Col span={12}>
                             <TextField
                                 label={translate.formatMessage(commonMessage.phone)}
-                                type="number"
+                                type="phone"
                                 name="phone"
+                                required={isEditing ? false : true}
+                                rules={[
+                                    {
+                                        validator: checkPhone,
+                                    },
+                                ]}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <TextField
+                                label={translate.formatMessage(commonMessage.email)}
+                                type="email"
+                                name="email"
+                                required={isEditing ? false : true}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <NumericField
+                                label={translate.formatMessage(commonMessage.hourlySalary)}
+                                name="hourlySalary"
+                                min={0}
+                                max={100000000000000}
+                                addonAfter="$"
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <NumericField
+                                label={translate.formatMessage(commonMessage.salary)}
+                                name="salary"
+                                min={0}
+                                max={100000000000000}
+                                addonAfter="$"
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Leader" />}
+                                name='leaderId'
+                                apiConfig={apiConfig.developer.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.account.fullName })}
+                                initialSearchParams={{ pageNumber: 0 }}
+                                searchParams={(text) => ({ leaderName: text })}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Vai trò dự án" />}
+                                name={['developerRole','id']}
+                                apiConfig={apiConfig.category.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                                initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
+                                searchParams={(text) => ({ categoryName: text })}
                                 required={isEditing ? false : true}
                             />
                         </Col>
@@ -347,14 +407,6 @@ const DeveloperForm = (props) => {
                                 required={isEditing ? false : true}
                                 name="password"
                                 type="password"
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <TextField
-                                label={translate.formatMessage(commonMessage.email)}
-                                type="email"
-                                name="email"
-                                required={isEditing ? false : true}
                             />
                         </Col>
                     </Row>
