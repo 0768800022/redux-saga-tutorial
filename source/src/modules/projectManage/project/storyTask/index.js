@@ -351,9 +351,9 @@ function StoryTaskListPage({ setSearchFilter }) {
                     fields: searchFields,
                     activeTab: activeProjectTab,
                 })}
-                actionBar={active && <div style={{
+                actionBar={<div style={{
                     position: "absolute",
-                    top: '-98px',
+                    top: '-88px',
                     right: '-26px',
                     zIndex: 999,
                 }}>

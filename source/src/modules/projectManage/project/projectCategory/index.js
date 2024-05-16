@@ -108,7 +108,7 @@ const ProjectCategoryListPage = ({ setSearchFilter }) => {
             })}
             actionBar={<div style={{
                 position: "absolute",
-                top: '-78px',
+                top: '-88px',
                 right: '-26px',
                 zIndex: 999,
             }}>

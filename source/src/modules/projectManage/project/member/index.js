@@ -150,7 +150,7 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
             //     activeTab: activeProjectTab,
             // })}
             title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
-            actionBar={active && <div style={{
+            actionBar={<div style={{
                 position: "absolute",
                 top: '-88px',
                 right: '-26px',
