@@ -1543,6 +1543,14 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+    salaryPeriodDetailLog: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/salary-period-detail-log/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
     income: {
         fixSalary: {
             baseURL: `${apiTenantUrl}v1/income/calculate-income-fix-salary`,

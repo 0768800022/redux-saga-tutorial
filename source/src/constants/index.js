@@ -139,6 +139,11 @@ export const DEFAULT_GET_ALL_LIST = 1000;
 export const DEFAULT_TIME = '01/01/2023 00:00:00';
 export const PAYMENT_UNPAID = 0;
 export const PAYMENT_PAID = 1;
+export const FIXED_SALARY = 1;
+export const PROJECT_SALARY = 2;
+export const REFER_MONEY = 3;
+export const BUG_MONEY = 4;
+export const DAY_OFF = 5;
 export const commonStatus = {
     PENDING: 0,
     ACTIVE: 1,
@@ -438,6 +443,14 @@ export const TASK_KIND_LEADER = 2;
 export const PaymentState = [
     { value: PAYMENT_UNPAID, label: commonMessage.paymentUnpaid, color: 'green' },
     { value: PAYMENT_PAID, label: commonMessage.paymentPaid, color: 'blue' },
+];
+
+export const salaryPeriodKInd = [
+    { value: FIXED_SALARY, label: commonMessage.fixed_salary, color: '#d07d3e' },
+    { value: PROJECT_SALARY, label: commonMessage.projectSalary, color: 'blue' },
+    { value: REFER_MONEY, label: commonMessage.refer_money, color: '#69bdd2' },
+    { value: BUG_MONEY, label: commonMessage.bug_money, color: '#e07b39' },
+    { value: DAY_OFF, label: commonMessage.day_off, color: 'red' },
 ];
 
 

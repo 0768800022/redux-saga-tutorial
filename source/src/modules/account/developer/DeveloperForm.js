@@ -385,6 +385,17 @@ const DeveloperForm = (props) => {
                             />
                         </Col>
                         <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Vai trò dự án" />}
+                                name={['developerRole','id']}
+                                apiConfig={apiConfig.category.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                                initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
+                                searchParams={(text) => ({ categoryName: text })}
+                                required={isEditing ? false : true}
+                            />
+                        </Col>
+                        <Col span={12}>
                             <TextField
                                 label={translate.formatMessage(commonMessage.password)}
                                 rules={[
@@ -396,18 +407,6 @@ const DeveloperForm = (props) => {
                                 required={isEditing ? false : true}
                                 name="password"
                                 type="password"
-                            />
-                        </Col>
-                        
-                        <Col span={12}>
-                            <AutoCompleteField
-                                label={<FormattedMessage defaultMessage="Vai trò dự án" />}
-                                name={['developerRole','id']}
-                                apiConfig={apiConfig.category.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
-                                initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
-                                searchParams={(text) => ({ categoryName: text })}
-                                required={isEditing ? false : true}
                             />
                         </Col>
                     </Row>
