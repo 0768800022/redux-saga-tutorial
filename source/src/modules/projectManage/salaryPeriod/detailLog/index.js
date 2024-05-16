@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { AppConstants, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, PaymentState } from '@constants';
+import { AppConstants, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, PaymentState, salaryPeriodKInd } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { salaryPeriodState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -22,18 +22,19 @@ import { render } from '@testing-library/react';
 import useMoneyUnit from '@hooks/useMoneyUnit';
 import { formatMoney } from '@utils';
 const message = defineMessages({
-    objectName: 'Chi tiết kỳ lương',
+    objectName: 'Chi tiết nhật kí kỳ lương',
 });
-const SalaryPeriodDetailListPage = () => {
+const SalaryPeriodDetailLogListPage = () => {
     const moneyUnit = useMoneyUnit();
     const translate = useTranslate();
     const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const salaryPeriodId = queryParameters.get('salaryPeriodId');
-    const stateValues = translate.formatKeys(PaymentState, ['label']);
+    const salaryPeriodDetailId = queryParameters.get('detailId');
+    const stateValues = translate.formatKeys(salaryPeriodKInd, ['label']);
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
-            apiConfig: apiConfig.salaryPeriodDetail,
+            apiConfig: apiConfig.salaryPeriodDetailLog,
             options: {
                 pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
@@ -47,14 +48,11 @@ const SalaryPeriodDetailListPage = () => {
                         };
                     }
                 };
-                funcs.getCreateLink = () => {
-                    return `${routes.salaryPeriodDetailListPage.path}/create?salaryPeriodId=${salaryPeriodId}`;
-                };
                 const prepareGetListParams = funcs.prepareGetListParams;
                 funcs.prepareGetListParams = (params) => {
                     return {
                         ...prepareGetListParams(params),
-                        salaryPeriodId,
+                        salaryPeriodId: salaryPeriodDetailId,
                     };
                 };
                 funcs.changeFilter = (filter) => {
@@ -95,40 +93,14 @@ const SalaryPeriodDetailListPage = () => {
     ].filter(Boolean);
     const columns = [
         {
-            title: '#',
-            dataIndex: ['developer', 'account', 'avatar'],
-            align: 'center',
-            width: 80,
-            render: (avatar) => (
-                <AvatarField
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                />
-            ),
-        },
-        {
             title: translate.formatMessage(commonMessage.developer),
-            dataIndex: ['developer', 'account', 'fullName'],
-        },
-        {
-            title: <FormattedMessage defaultMessage={'Lương ref'}/>,
-            dataIndex: 'refSalary',
-            align: 'center',
-            width: 120,
-            render: (refSalary) => {
-                const formattedValue = formatMoney(refSalary, {
-                    groupSeparator: ',',
-                    decimalSeparator: '.',
-                    currentcy: moneyUnit,
-                    currentDecimal: '0',
-                });
-                return <div>{formattedValue}</div>;
+            render: (record) => {
+                return <span>{record.devName || record.sourceDevName}</span>;
             },
         },
         {
             title: translate.formatMessage(commonMessage.salary),
-            dataIndex: 'salary',
+            dataIndex: 'money',
             align: 'center',
             render: (salary) => {
                 const formattedValue = formatMoney(salary, {
@@ -141,40 +113,45 @@ const SalaryPeriodDetailListPage = () => {
             },
         },
         {
-            title: translate.formatMessage(commonMessage.totalTimeWorking),
-            dataIndex: 'totalTimeWorking',
-            align: 'center',
-            width: 200,
-            // render(totalTimeWorking) {
-            //     if (totalTimeWorking) return <div>{Math.ceil((totalTimeWorking / 60) * 10) / 10} h</div>;
-            // },
-        },
-        
-        {
-            title: translate.formatMessage(commonMessage.totalTimeOff),
-            dataIndex: 'totalTimeOff',
-            align: 'center',
-            width: 180,
-            // render(totalTimeOff) {
-            //     if (totalTimeOff) return <div>{Math.ceil((totalTimeOff / 60) * 10) / 10} h</div>;
-            // },
-        },
-        {
-            title: translate.formatMessage(commonMessage.payoutStatus),
-            dataIndex: 'payoutStatus',
+            title: translate.formatMessage(commonMessage.kind),
+            dataIndex: 'kind',
             align: 'center',
             width: 120,
-            render(payoutStatus) {
-                const state = stateValues.find((item) => item.value == payoutStatus);
+            render(kind) {
+                const state = stateValues.find((item) => item.value == kind);
                 return (
                     <div>
                         <Tag color={state?.color}>
-                            <div style={{ padding: '0 1px', fontSize: 14 }}>
-                                {state?.label}
-                            </div>
+                            <div style={{ padding: '0 1px', fontSize: 14 }}>{state?.label}</div>
                         </Tag>
                     </div>
                 );
+            },
+        },
+        {
+            title: <FormattedMessage defaultMessage={'Tiền refer'} />,
+            align: 'center',
+            render: (refSalary) => {
+                const formattedValue = formatMoney(refSalary, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
+            title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
+            align: 'center',
+            render: (refSalary) => {
+                const formattedValue = formatMoney(refSalary, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
             },
         },
         mixinFuncs.renderActionColumn(
@@ -191,18 +168,19 @@ const SalaryPeriodDetailListPage = () => {
             path: routes.salaryPeriodListPage.path,
         },
         {
+            breadcrumbName: <FormattedMessage defaultMessage={'Chi tiết kì lương'} />,
+            path: routes.salaryPeriodDetailListPage.path + `?salaryPeriodId=${salaryPeriodId}`,
+        },
+        {
             breadcrumbName: translate.formatMessage(message.objectName),
         },
     ];
-    const handleOnClick = (event, record) => {
-        navigate(routes.salaryPeriodDetailLogListPage.path + `?salaryPeriodId=${salaryPeriodId}&detailId=${record.id}`);
-    };
     return (
         <PageWrapper routes={breadcrumbs}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                })}
+                // searchForm={mixinFuncs.renderSearchForm({
+                //     fields: searchFields,
+                // })}
                 // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -211,12 +189,6 @@ const SalaryPeriodDetailListPage = () => {
                         loading={loading}
                         dataSource={data}
                         columns={columns}
-                        onRow={(record, rowIndex) => ({
-                            onClick: (e) => {
-                                e.stopPropagation();
-                                handleOnClick(e,record);
-                            },
-                        })}
                     />
                 }
             />
@@ -224,4 +196,4 @@ const SalaryPeriodDetailListPage = () => {
     );
 };
 
-export default SalaryPeriodDetailListPage;
+export default SalaryPeriodDetailLogListPage;

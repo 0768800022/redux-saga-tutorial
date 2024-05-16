@@ -248,8 +248,8 @@ const SalaryPeriodListPage = () => {
         // ),
         mixinFuncs.renderActionColumn(
             {
-                edit: true,
-                delete: true,
+                edit: false,
+                delete: false,
             },
             { width: '100px' },
         ),
