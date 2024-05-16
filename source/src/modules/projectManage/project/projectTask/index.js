@@ -276,7 +276,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
         },
 
         active &&
-            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
+            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '150px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
