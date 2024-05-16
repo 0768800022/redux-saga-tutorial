@@ -185,7 +185,7 @@ const DeveloperForm = (props) => {
             fullName : dataDetail?.accountDto?.fullName,
             phone : dataDetail?.accountDto?.phone,
             email: dataDetail?.accountDto?.email,
-            leaderId: dataDetail?.leader?.id,
+            leaderId: dataDetail?.leader?.accountDto?.id,
         });
 
         setImageUrl(dataDetail.accountDto?.avatar);
@@ -308,7 +308,6 @@ const DeveloperForm = (props) => {
                                 imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                                 aspect={1 / 1}
                                 uploadFile={uploadFile}
-                                disabled={isEditing}
                             />
                         </Col>
                     </Row>
@@ -364,8 +363,6 @@ const DeveloperForm = (props) => {
                                 min={0}
                                 max={100000000000000}
                                 addonAfter="$"
-                                // defaultValue={0}
-                                required
                             />
                         </Col>
                         <Col span={12}>
@@ -375,8 +372,27 @@ const DeveloperForm = (props) => {
                                 min={0}
                                 max={100000000000000}
                                 addonAfter="$"
-                                // defaultValue={0}
-                                required
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Leader" />}
+                                name='leaderId'
+                                apiConfig={apiConfig.developer.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.account.fullName })}
+                                initialSearchParams={{ pageNumber: 0 }}
+                                searchParams={(text) => ({ leaderName: text })}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Vai trò dự án" />}
+                                name={['developerRole','id']}
+                                apiConfig={apiConfig.category.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                                initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
+                                searchParams={(text) => ({ categoryName: text })}
+                                required={isEditing ? false : true}
                             />
                         </Col>
                         <Col span={12}>
@@ -391,25 +407,6 @@ const DeveloperForm = (props) => {
                                 required={isEditing ? false : true}
                                 name="password"
                                 type="password"
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <TextField
-                                label={translate.formatMessage(commonMessage.email)}
-                                type="email"
-                                name="email"
-                                required={isEditing ? false : true}
-                            />
-                        </Col>
-                        <Col span={12}>
-                            <AutoCompleteField
-                                label={<FormattedMessage defaultMessage="Vai trò dự án" />}
-                                name={['developerRole','id']}
-                                apiConfig={apiConfig.category.autocomplete}
-                                mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
-                                initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
-                                searchParams={(text) => ({ categoryName: text })}
-                                required
                             />
                         </Col>
                     </Row>

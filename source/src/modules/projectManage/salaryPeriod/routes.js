@@ -3,6 +3,7 @@ import SalaryPeriodListPage from '.';
 import SalaryPeriodSavePage from './SalaryPeriodSavePage';
 import SalaryPeriodDetailListPage from './detail';
 import SalaryPeriodDetailSavePage from './detail/SalaryPeriodDetailSavePage';
+import SalaryPeriodDetailLogListPage from './detailLog';
 
 export default {
     salaryPeriodListPage: {
@@ -32,5 +33,12 @@ export default {
         auth: true,
         component: SalaryPeriodDetailSavePage,
         permissions: [apiConfig.salaryPeriodDetail.create.baseURL],
+    },
+    salaryPeriodDetailLogListPage: {
+        path: '/salary-period/salary-period-detail/log',
+        title: 'Salary Period Detail Log',
+        auth: true,
+        component: SalaryPeriodDetailLogListPage,
+        // permissions: [apiConfig.salaryPeriodDetailLog.getList.baseURL],
     },
 };

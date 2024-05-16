@@ -42,12 +42,14 @@ function StoryTaskSavePage() {
                     ...data,
                     id: detail.id,
                     projectId: projectIdInt,
+                    status:1,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
                     projectId: projectId,
+                    status:1,
                 };
             };
             funcs.onSaveError = (err) => {

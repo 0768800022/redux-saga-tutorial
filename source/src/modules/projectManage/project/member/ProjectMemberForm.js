@@ -275,7 +275,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
             <Card className="card-form" bordered={false}>
                 <div style={{ width: '980px' }}>
                     <Row gutter={16}>
-                        <Col span={8}>
+                        <Col span={12}>
                             <AutoCompleteField
                                 disabled={isEditing}
                                 required
@@ -290,7 +290,7 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 searchParams={(text) => ({ name: text })}
                             />
                         </Col>
-                        <Col span={8}>
+                        <Col span={12}>
                             <AutoCompleteField
                                 required
                                 label={translate.formatMessage(commonMessage.role)}
@@ -304,13 +304,13 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                 searchParams={(text) => ({ name: text })}
                             />
                         </Col>
-                        <Col span={8}>
+                        {/* <Col span={8}>
                             <TextField
                                 label={<FormattedMessage defaultMessage="Sign" />}
                                 disabled={isEditing}
                                 name={['contractSign']}
                             />
-                        </Col>
+                        </Col> */}
                     </Row>
                     <Row gutter={16}>
                         <Col span={12}>

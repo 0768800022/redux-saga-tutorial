@@ -175,13 +175,17 @@ function StoryTaskListPage({ setSearchFilter }) {
                         </BaseTooltip>
                     ),
                 });
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({ ...params, projectId });
+                };
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
                     const storyId = queryParams.get('storyId');
                     const projectName = queryParams.get('projectName');
                     const storyName = queryParams.get('storyName');
                    
-                    mixinFuncs.setQueryParams(serializeParams({ projectId, storyId, projectName,storyName ,...filter }));
+                    mixinFuncs.setQueryParams(serializeParams({ projectId, projectName, ...filter }));
                 };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
                 funcs.handleFilterSearchChange = (values) => {
@@ -220,22 +224,25 @@ function StoryTaskListPage({ setSearchFilter }) {
     const columns = [
         {
             title: <FormattedMessage defaultMessage="Tên story" />,
-            width: 200,
             dataIndex: 'storyName',
         },
         {
+            title: <FormattedMessage defaultMessage="Danh mục" />,
+            width: 120,
+            dataIndex: ['projectCategoryDto','projectCategoryName'],
+        },
+        {
             title: <FormattedMessage defaultMessage="Người thực hiện" />,
-            width: 200,
+            width: 250,
             dataIndex: ['developerInfo','account','fullName'],
             render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
         },
         {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
-            width: 100,
-            align: 'center',
+            width: 170,
             render: (date) => {
-                const createdDate = convertUtcToLocalTime(date, DATE_FORMAT_DISPLAY,DATE_FORMAT_DISPLAY);
+                const createdDate = convertUtcToLocalTime(date, DEFAULT_FORMAT,DEFAULT_FORMAT);
                 return <div >{createdDate}</div>;
             },
         },
@@ -255,7 +262,7 @@ function StoryTaskListPage({ setSearchFilter }) {
         },
 
         active &&
-            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '80px' }),
+            mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -289,8 +296,8 @@ function StoryTaskListPage({ setSearchFilter }) {
             options: memberProject,
         },
         {
-            key: 'status',
-            placeholder: translate.formatMessage(commonMessage.status),
+            key: 'state',
+            placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
         },
@@ -337,12 +344,19 @@ function StoryTaskListPage({ setSearchFilter }) {
     return (
         <div>
             <ListPage
+                title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
-                    className: styles.search,
                     activeTab: activeProjectTab,
                 })}
-                actionBar={active && mixinFuncs.renderActionBar()}
+                actionBar={<div style={{
+                    position: "absolute",
+                    top: '-88px',
+                    right: '-26px',
+                    zIndex: 999,
+                }}>
+                    {mixinFuncs.renderActionBar()}
+                </div>}
                 baseTable={
                     <BaseTable
                         onRow={(record) => ({

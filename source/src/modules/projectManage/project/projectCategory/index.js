@@ -88,7 +88,7 @@ const ProjectCategoryListPage = ({ setSearchFilter }) => {
                 edit: true,
                 delete: true,
             },
-            { width: '150px' },
+            { width: '120px' },
         ),
     ].filter(Boolean);
 
@@ -101,11 +101,19 @@ const ProjectCategoryListPage = ({ setSearchFilter }) => {
 
     return (
         <ListPage
+            title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
             searchForm={mixinFuncs.renderSearchForm({
                 fields: searchFields,
                 activeTab: activeProjectTab,
             })}
-            actionBar={mixinFuncs.renderActionBar()}
+            actionBar={<div style={{
+                position: "absolute",
+                top: '-88px',
+                right: '-26px',
+                zIndex: 999,
+            }}>
+                {mixinFuncs.renderActionBar()}
+            </div>}
             baseTable={
                 <BaseTable
                     onChange={changePagination}

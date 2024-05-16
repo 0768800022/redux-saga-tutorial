@@ -46,7 +46,7 @@ const StoryTaskForm = (props) => {
         if (!isEditing > 0) {
             form.setFieldsValue({
                 status: statusValues[1].value,
-                state: stateValues[0].value,
+                state: stateValues[1].value,
                 kind: projectTaskKind[0].value,
                 memKind: valueSelect,
             });
@@ -169,15 +169,6 @@ const StoryTaskForm = (props) => {
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
                             options={stateValues}
-                        />
-                    </Col>
-                    <Col span={12}>
-                        <SelectField
-                            required
-                            name="status"
-                            label={<FormattedMessage defaultMessage="Trạng thái" />}
-                            allowClear={false}
-                            options={statusValues}
                         />
                     </Col>
                     <Col span={12}>

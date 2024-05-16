@@ -381,7 +381,7 @@ const ProjectListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
             },
             width: 140,
-            align: 'center',
+            align: 'start',
         },
         {
             title: translate.formatMessage(commonMessage.endDate),
@@ -390,7 +390,7 @@ const ProjectListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
             },
             width: 140,
-            align: 'center',
+            align: 'start',
         },
         {
             title: 'Tình trạng',
@@ -406,7 +406,6 @@ const ProjectListPage = () => {
                 );
             },
         },
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
                 // salaryPeriod: true,
@@ -414,7 +413,7 @@ const ProjectListPage = () => {
                 edit: true,
                 delete: true,
             },
-            { width: '220px' },
+            { width: '120px' },
         ),
     ].filter(Boolean);
     return (
