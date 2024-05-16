@@ -233,7 +233,7 @@ function StoryTaskListPage({ setSearchFilter }) {
         },
         {
             title: <FormattedMessage defaultMessage="Người thực hiện" />,
-            width: 200,
+            width: 250,
             dataIndex: ['developerInfo','account','fullName'],
             render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
         },
