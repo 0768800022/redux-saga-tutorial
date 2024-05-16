@@ -105,7 +105,14 @@ const ProjectCategoryListPage = ({ setSearchFilter }) => {
                 fields: searchFields,
                 activeTab: activeProjectTab,
             })}
-            actionBar={mixinFuncs.renderActionBar()}
+            actionBar={<div style={{
+                position: "absolute",
+                top: '-78px',
+                right: '-26px',
+                zIndex: 999,
+            }}>
+                {mixinFuncs.renderActionBar()}
+            </div>}
             baseTable={
                 <BaseTable
                     onChange={changePagination}
