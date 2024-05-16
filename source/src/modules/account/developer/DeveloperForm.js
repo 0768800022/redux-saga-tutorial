@@ -398,14 +398,7 @@ const DeveloperForm = (props) => {
                                 type="password"
                             />
                         </Col>
-                        <Col span={12}>
-                            <TextField
-                                label={translate.formatMessage(commonMessage.email)}
-                                type="email"
-                                name="email"
-                                required={isEditing ? false : true}
-                            />
-                        </Col>
+                        
                         <Col span={12}>
                             <AutoCompleteField
                                 label={<FormattedMessage defaultMessage="Vai trò dự án" />}
