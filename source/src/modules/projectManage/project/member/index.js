@@ -118,7 +118,6 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
             title: translate.formatMessage(commonMessage.role),
             dataIndex: ['projectRole', 'projectRoleName'],
             width: 120,
-            align:'center', 
         },
 
         {

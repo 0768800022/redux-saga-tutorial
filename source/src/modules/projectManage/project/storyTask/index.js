@@ -233,18 +233,16 @@ function StoryTaskListPage({ setSearchFilter }) {
         },
         {
             title: <FormattedMessage defaultMessage="Người thực hiện" />,
-            width: 200,
-            align: 'center',
+            width: 250,
             dataIndex: ['developerInfo','account','fullName'],
             render: (_, record) => record?.developerInfo?.account?.fullName || record?.leader?.leaderName,
         },
         {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
-            width: 100,
-            align: 'center',
+            width: 170,
             render: (date) => {
-                const createdDate = convertUtcToLocalTime(date, DATE_FORMAT_DISPLAY,DATE_FORMAT_DISPLAY);
+                const createdDate = convertUtcToLocalTime(date, DEFAULT_FORMAT,DEFAULT_FORMAT);
                 return <div >{createdDate}</div>;
             },
         },
@@ -298,8 +296,8 @@ function StoryTaskListPage({ setSearchFilter }) {
             options: memberProject,
         },
         {
-            key: 'status',
-            placeholder: translate.formatMessage(commonMessage.status),
+            key: 'state',
+            placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
         },
