@@ -150,7 +150,14 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
             //     activeTab: activeProjectTab,
             // })}
             title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{projectName}</span>}
-            actionBar={active && mixinFuncs.renderActionBar()}
+            actionBar={active && <div style={{
+                position: "absolute",
+                top: '-88px',
+                right: '-26px',
+                zIndex: 999,
+            }}>
+                {mixinFuncs.renderActionBar()}
+            </div>}
             baseTable={
                 <BaseTable
                     onChange={changePagination}

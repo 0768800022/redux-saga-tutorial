@@ -23,6 +23,7 @@ const BaseTable = ({
         loading={loading}
         rowKey={rowKey}
         rowSelection={rowSelection}
+        rowHoverable={false}
         // scroll={{ x: 'max-content' }}
         {...props}
         className={classNames(styles.baseTable, className)}

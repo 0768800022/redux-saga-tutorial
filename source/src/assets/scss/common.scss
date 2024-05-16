@@ -18,13 +18,18 @@ body {
 #root {
     min-height: 100vh;
 }
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
 
 .paging-item {
     button {
         padding: 1px;
     }
 }
-
+.ant-table-cell-row-hover{
+    background: none !important;
+}
 /* CSS for form */
 .img-uploaded {
     height: 86px;

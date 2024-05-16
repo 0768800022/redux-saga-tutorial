@@ -227,6 +227,11 @@ function StoryTaskListPage({ setSearchFilter }) {
             dataIndex: 'storyName',
         },
         {
+            title: <FormattedMessage defaultMessage="Danh mục" />,
+            width: 120,
+            dataIndex: ['projectCategoryDto','projectCategoryName'],
+        },
+        {
             title: <FormattedMessage defaultMessage="Người thực hiện" />,
             width: 200,
             align: 'center',
@@ -346,7 +351,14 @@ function StoryTaskListPage({ setSearchFilter }) {
                     fields: searchFields,
                     activeTab: activeProjectTab,
                 })}
-                actionBar={active && mixinFuncs.renderActionBar()}
+                actionBar={active && <div style={{
+                    position: "absolute",
+                    top: '-98px',
+                    right: '-26px',
+                    zIndex: 999,
+                }}>
+                    {mixinFuncs.renderActionBar()}
+                </div>}
                 baseTable={
                     <BaseTable
                         onRow={(record) => ({
