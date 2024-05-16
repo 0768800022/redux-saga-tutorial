@@ -292,3 +292,10 @@ tr:nth-child(even) {
     border-bottom-right-radius: 6px;
     border-bottom-left-radius: 6px;
 }
+
+tr:nth-child(even) {
+    background-color: #f4f2f2;
+}
+.ant-table-cell-row-hover{
+    background: none !important;
+}
