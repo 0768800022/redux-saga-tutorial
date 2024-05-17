@@ -146,7 +146,7 @@ function SearchForm({
                 {fields.map((field) => {
                     const { key, colSpan, className, ...props } = field;
                     return (
-                        <Col key={key} span={colSpan || 4} className={className}>
+                        <Col key={key} span={colSpan || 3} className={className}>
                             {renderField({ ...props, key })}
                         </Col>
                     );
