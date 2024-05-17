@@ -51,6 +51,7 @@ function ProjectTaskSavePage() {
                     ...data,
                     projectId: projectId,
                     storyId: storyId,
+                    status: 1,
                 };
             };
             funcs.onSaveError = (err) => {

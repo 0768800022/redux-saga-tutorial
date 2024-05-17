@@ -256,11 +256,6 @@ function ProjectTaskListPage({ setSearchFilter }) {
             render: (_, record) => record?.developer?.account?.fullName || record?.leader?.leaderName,
         },
         {
-            title: translate.formatMessage(commonMessage.projectCategory),
-            dataIndex: ['projectCategoryInfo', 'projectCategoryName'],
-            width: 150,
-        },
-        {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
             width: 200,
