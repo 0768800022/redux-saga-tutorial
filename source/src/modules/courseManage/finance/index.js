@@ -59,10 +59,10 @@ const FinanceListPage = () => {
             apiConfig: apiConfig.student.autocomplete,
             mappingOptions: (item) => ({
                 value: item.id,
-                label: item.fullName,
+                label: item.account.fullName,
             }),
             searchParams: (text) => ({ name: text }),
-            colSpan: 5,
+            colSpan: 4,
         },
         {
             key: 'courseId',
@@ -74,7 +74,7 @@ const FinanceListPage = () => {
                 label: item.name,
             }),
             searchParams: (text) => ({ name: text }),
-            colSpan: 5,
+            colSpan: 4,
         },
     ];
 
