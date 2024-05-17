@@ -3,7 +3,7 @@ import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import { AppConstants, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, TIME_FORMAT_DISPLAY } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { levelOptionSelect, statusOptions } from '@constants/masterData';
+import { SalaryOptions, levelOptionSelect, statusOptions } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -29,6 +29,8 @@ const DeveloperListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
+    const salaryValues = translate.formatKeys(SalaryOptions, ['label']);
+
     const [projectRole, setProjectROle] = useState([]);
 
     const { data, mixinFuncs, loading, pagination, queryFilter, serializeParams } = useListBase({
@@ -95,19 +97,33 @@ const DeveloperListPage = () => {
             dataIndex: ['accountDto', 'phone'],
             width: 120,
         },
-        {
-            title: 'Trình độ',
-            dataIndex: 'level',
-            width: 100,
-            render: (level) => {
-                const levelLabel = levelOptionSelect.map((item) => {
-                    if (level === item.value) {
-                        return item.label;
-                    }
-                });
-                return <div>{levelLabel}</div>;
-            },
-        },
+        // {
+        //     title: 'Kiểu trả lương',
+        //     dataIndex: 'salaryKind',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         const state = salaryValues.find((item) => item.value == dataRow);
+        //         return (
+        //             <Tag color={state.color}>
+        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+        //             </Tag>
+        //         );
+        //     },
+        // },
+        // {
+        //     title: 'Trình độ',
+        //     dataIndex: 'level',
+        //     width: 100,
+        //     render: (level) => {
+        //         const levelLabel = levelOptionSelect.map((item) => {
+        //             if (level === item.value) {
+        //                 return item.label;
+        //             }
+        //         });
+        //         return <div>{levelLabel}</div>;
+        //     },
+        // },
         // {
         //     title: 'Ngày tạo',
         //     dataIndex: 'createdDate',
@@ -135,12 +151,12 @@ const DeveloperListPage = () => {
             key: 'name',
             placeholder: translate.formatMessage(commonMessage.name),
         },
-        // {
-        //     key: 'roleId',
-        //     placeholder: translate.formatMessage(commonMessage.role),
-        //     type: FieldTypes.SELECT,
-        //     options: projectRole,
-        // },
+        {
+            key: 'salaryKind',
+            placeholder: translate.formatMessage(commonMessage.salary),
+            type: FieldTypes.SELECT,
+            options: salaryValues,
+        },
         {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
