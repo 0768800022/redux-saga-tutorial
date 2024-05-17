@@ -1,27 +1,22 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
+import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, AppConstants, DATE_FORMAT_VALUE } from '@constants';
 import { IconCategory, IconReportMoney } from '@tabler/icons-react';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { UserOutlined } from '@ant-design/icons';
-import { Button, Avatar, Tag, Modal } from 'antd';
+import { Button, Avatar, Tag, Modal, Card, Row, Col, Form } from 'antd';
 import { IconBrandTeams } from '@tabler/icons-react';
 import { generatePath, useLocation, useNavigate } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import routes from '@routes';
 import route from '@modules/projectManage/project/projectTask/routes';
-import {
-    DollarOutlined,
-    TeamOutlined,
-    WomanOutlined,
-    ExclamationCircleOutlined,
-} from '@ant-design/icons';
+import { DollarOutlined, TeamOutlined, WomanOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { statusOptions, projectTaskState } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import AvatarField from '@components/common/form/AvatarField';
@@ -33,6 +28,13 @@ import styles from './project.module.scss';
 import useFetch from '@hooks/useFetch';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import useNotification from '@hooks/useNotification';
+import { BaseForm } from '@components/common/form/BaseForm';
+import AutoCompleteField from '@components/common/form/AutoCompleteField';
+import NumericField from '@components/common/form/NumericField';
+import TextField from '@components/common/form/TextField';
+import useDisclosure from '@hooks/useDisclosure';
+import DatePickerField from '@components/common/form/DatePickerField';
+import { formatDateString } from '@utils';
 const message = defineMessages({
     objectName: 'Dự án',
 });
@@ -48,26 +50,59 @@ const ProjectListPage = () => {
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
-    const [dataApply, setDataApply] = useState([]);
+    const [projectId, setProjectId] = useState();
     localStorage.setItem('pathPrev', location.search);
     const [parentData, setParentData] = useState({});
     const notification = useNotification();
     const [hasError, setHasError] = useState(false);
     const [visible, setVisible] = useState(true);
     const [openModalSalaryPeriod, setOpenModalSalaryPeriod] = useState(false);
+    // const [openModalCaculateSalary, setOpenModalCaculateSalary] = useState(false);
     const { data: salaryPeriodAutoComplete, execute: executeGetSalaryPeriod } = useFetch(
         apiConfig.salaryPeriod.autocomplete,
         { mappingData: (data) => data.data.content },
     );
-    const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.income.calculateProjectSalary);
-    const {  data: isCheckExist } = useFetch(apiConfig.salaryPeriod.checkExist, { 
-        immediate:true,
+    // const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.income.calculateProjectSalary);
+    const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.salaryPeriod.calculateProjectSalary);
+    const { data: isCheckExist } = useFetch(apiConfig.salaryPeriod.checkExist, {
+        immediate: true,
         mappingData: ({ data }) => {
             console.log(data);
             return data;
         },
-
     });
+    const [openedModalCaculateSalary, handlerModalCaculateSalary] = useDisclosure(false);
+    const [form] = Form.useForm();
+    const handleFinish = (values) => {
+        values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
+        executeCalculateProjectSalary({
+            data: { ...values },
+            onCompleted: () => {
+                notification({
+                    type: 'success',
+                    message: translate.formatMessage(
+                        commonMessage.selectPeriodSalarySuccess,
+                    ),
+                });
+                handlerModalCaculateSalary.close();
+            },
+            onError: (error) => {
+                console.log(error);
+                notification({
+                    type: 'error',
+                    message: error?.response?.data?.message,
+                });
+                handlerModalCaculateSalary.close();
+            },
+        });
+    };
+    const validateDueDate = (_, value) => {
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+        if (date && value && value.isBefore(date)) {
+            return Promise.reject('Ngày kết thúc phải lớn hơn hoặc bằng ngày hiện tại');
+        }
+        return Promise.resolve();
+    };
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.project,
@@ -125,29 +160,6 @@ const ProjectListPage = () => {
                                             onRow={(record) => ({
                                                 onClick: (e) => {
                                                     e.stopPropagation();
-                                                    executeCalculateProjectSalary({
-                                                        data: {
-                                                            projectId: id,
-                                                            salaryPeriodId: record?.id,
-                                                        },
-                                                        onCompleted: () => {
-                                                            notification({
-                                                                type: 'success',
-                                                                message: translate.formatMessage(
-                                                                    commonMessage.selectPeriodSalarySuccess,
-                                                                ),
-                                                            });
-                                                            setOpenModalSalaryPeriod(false);
-                                                        },
-                                                        onError: (error) => {
-                                                            console.log(error);
-                                                            notification({
-                                                                type: 'error',
-                                                                message: error?.response?.data?.message,
-                                                            });
-                                                            setOpenModalSalaryPeriod(false);
-                                                        },
-                                                    });
                                                 },
                                             })}
                                             dataSource={salaryPeriodAutoComplete?.filter((item) => item.state == 2)}
@@ -230,7 +242,7 @@ const ProjectListPage = () => {
                     ),
                     moneyForDev: ({ id, accountDto }) => {
                         return (
-                            <BaseTooltip title={translate.formatMessage(commonMessage.moneyForMember)}>
+                            <BaseTooltip title={translate.formatMessage(commonMessage.caculateSalary)}>
                                 <Button
                                     disabled={!isCheckExist}
                                     type="link"
@@ -241,11 +253,55 @@ const ProjectListPage = () => {
                                         //     routes.developerProjectListPage.path +
                                         //         `?developerId=${id}&developerName=${accountDto?.fullName}`,
                                         // );
+                                        handlerModalCaculateSalary.open();
                                         console.log('Money for dev');
                                     }}
                                 >
-                                    <IconReportMoney size={'18px'}/>
+                                    <IconReportMoney size={'18px'} />
                                 </Button>
+                                <Modal
+                                    title={<span>Tính lương dự án</span>}
+                                    open={openedModalCaculateSalary}
+                                    onOk={() => form.submit()}
+                                    onCancel={() => handlerModalCaculateSalary.close()}
+                                >
+                                    <BaseForm form={form} onFinish={(values) => {
+                                        values.projectId = id;
+                                        handleFinish(values);
+                                    }} size="100%">
+                                        <Card>
+                                            {/* <Col span={24}>
+                                                <AutoCompleteField
+                                                    name="projectRoleId"
+                                                    label={<FormattedMessage defaultMessage="Dự án" />}
+                                                    apiConfig={apiConfig.projectRole.autocomplete}
+                                                    mappingOptions={(item) => ({
+                                                        value: item.id,
+                                                        label: item.projectRoleName,
+                                                    })}
+                                                    initialSearchParams={{}}
+                                                    searchParams={(text) => ({ name: text })}
+                                                    required
+                                                />
+                                            </Col> */}
+                                            <Col span={24}>
+                                                <DatePickerField
+                                                    showTime={false}
+                                                    label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                                                    name="dueDate"
+                                                    // placeholder="Ngày kết thúc"
+                                                    rules={[
+                                                        {
+                                                            validator: validateDueDate,
+                                                        },
+                                                    ]}
+                                                    format={DEFAULT_FORMAT}
+                                                    style={{ width: '100%' }}
+                                                />
+                                            </Col>
+                                        </Card>
+                                    </BaseForm>
+                                </Modal>
                             </BaseTooltip>
                         );
                     },

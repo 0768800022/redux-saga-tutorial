@@ -1510,6 +1510,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        calculateProjectSalary: {
+            baseURL: `${apiTenantUrl}v1/salary-period/calculate-project-salary`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     salaryPeriodDetail: {
         getList: {
