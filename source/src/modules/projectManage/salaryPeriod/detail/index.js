@@ -98,7 +98,7 @@ const SalaryPeriodDetailListPage = () => {
             title: '#',
             dataIndex: ['developer', 'account', 'avatar'],
             align: 'center',
-            width: 80,
+            width: 40,
             render: (avatar) => (
                 <AvatarField
                     size="large"
@@ -112,7 +112,45 @@ const SalaryPeriodDetailListPage = () => {
             dataIndex: ['developer', 'account', 'fullName'],
         },
         {
-            title: <FormattedMessage defaultMessage={'Lương ref'}/>,
+            title: translate.formatMessage(commonMessage.totalTimeWorking),
+            dataIndex: 'totalTimeWorking',
+            align: 'center',
+            width: 130,
+            // render(totalTimeWorking) {
+            //     if (totalTimeWorking) return <div>{Math.ceil((totalTimeWorking / 60) * 10) / 10} h</div>;
+            // },
+        },
+        {
+            title: translate.formatMessage(commonMessage.salary),
+            dataIndex: 'fixSalary',
+            align: 'center',
+            width: 120,
+            render: (fixSalary) => {
+                const formattedValue = formatMoney(fixSalary ? fixSalary : 0, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
+            title: translate.formatMessage(commonMessage.projectSalary),
+            dataIndex: 'projectSalary',
+            align: 'center',
+            render: (projectSalary) => {
+                const formattedValue = formatMoney(projectSalary ? projectSalary : 0, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
+            title: <FormattedMessage defaultMessage={'Lương ref'} />,
             dataIndex: 'refSalary',
             align: 'center',
             width: 120,
@@ -126,12 +164,23 @@ const SalaryPeriodDetailListPage = () => {
                 return <div>{formattedValue}</div>;
             },
         },
+
         {
-            title: translate.formatMessage(commonMessage.salary),
-            dataIndex: 'salary',
+            title: translate.formatMessage(commonMessage.totalTimeOff),
+            dataIndex: 'totalTimeOff',
             align: 'center',
-            render: (salary) => {
-                const formattedValue = formatMoney(salary, {
+            width: 120,
+            // render(totalTimeOff) {
+            //     if (totalTimeOff) return <div>{Math.ceil((totalTimeOff / 60) * 10) / 10} h</div>;
+            // },
+        },
+        {
+            title: <FormattedMessage defaultMessage={'Tiền bug'} />,
+            dataIndex: 'bugMoney',
+            align: 'center',
+            width: 120,
+            render: (bugMoney) => {
+                const formattedValue = formatMoney(bugMoney ? bugMoney : 0, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
@@ -140,41 +189,43 @@ const SalaryPeriodDetailListPage = () => {
                 return <div>{formattedValue}</div>;
             },
         },
+        // {
+        //     title: translate.formatMessage(commonMessage.payoutStatus),
+        //     dataIndex: 'payoutStatus',
+        //     align: 'center',
+        //     width: 120,
+        //     render(payoutStatus) {
+        //         const state = stateValues.find((item) => item.value == payoutStatus);
+        //         return (
+        //             <div>
+        //                 <Tag color={state?.color}>
+        //                     <div style={{ padding: '0 1px', fontSize: 14 }}>
+        //                         {state?.label}
+        //                     </div>
+        //                 </Tag>
+        //             </div>
+        //         );
+        //     },
+        // },
         {
-            title: translate.formatMessage(commonMessage.totalTimeWorking),
-            dataIndex: 'totalTimeWorking',
-            align: 'center',
-            width: 200,
-            // render(totalTimeWorking) {
-            //     if (totalTimeWorking) return <div>{Math.ceil((totalTimeWorking / 60) * 10) / 10} h</div>;
-            // },
-        },
-        
-        {
-            title: translate.formatMessage(commonMessage.totalTimeOff),
-            dataIndex: 'totalTimeOff',
-            align: 'center',
-            width: 180,
-            // render(totalTimeOff) {
-            //     if (totalTimeOff) return <div>{Math.ceil((totalTimeOff / 60) * 10) / 10} h</div>;
-            // },
-        },
-        {
-            title: translate.formatMessage(commonMessage.payoutStatus),
-            dataIndex: 'payoutStatus',
+            title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
+            // dataIndex: 'refSalary',
             align: 'center',
             width: 120,
-            render(payoutStatus) {
-                const state = stateValues.find((item) => item.value == payoutStatus);
-                return (
-                    <div>
-                        <Tag color={state?.color}>
-                            <div style={{ padding: '0 1px', fontSize: 14 }}>
-                                {state?.label}
-                            </div>
-                        </Tag>
-                    </div>
-                );
+            render: (record) => {
+                console.log(record);
+                let sum =
+                    (record?.fixSalary ?? 0) +
+                    (record?.projectSalary ?? 0) +
+                    (record?.refSalary ?? 0) -
+                    (record?.bugMoney ?? 0);
+                const formattedValue = formatMoney(sum, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '0',
+                });
+                return <div>{formattedValue}</div>;
             },
         },
         mixinFuncs.renderActionColumn(
@@ -214,7 +265,7 @@ const SalaryPeriodDetailListPage = () => {
                         onRow={(record, rowIndex) => ({
                             onClick: (e) => {
                                 e.stopPropagation();
-                                handleOnClick(e,record);
+                                handleOnClick(e, record);
                             },
                         })}
                     />
