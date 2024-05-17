@@ -20,9 +20,9 @@ import AvatarField from '@components/common/form/AvatarField';
 import { FieldTypes } from '@constants/formConfig';
 import { render } from '@testing-library/react';
 import useMoneyUnit from '@hooks/useMoneyUnit';
-import { formatMoney } from '@utils';
+import { formatMoney, moneyTotal, referMoneyTotal, sumMoney } from '@utils';
 const message = defineMessages({
-    objectName: 'Chi tiết nhật kí kỳ lương',
+    objectName: 'Chi tiết nhật ký kỳ lương',
 });
 const SalaryPeriodDetailLogListPage = () => {
     const moneyUnit = useMoneyUnit();
@@ -99,20 +99,6 @@ const SalaryPeriodDetailLogListPage = () => {
             },
         },
         {
-            title: translate.formatMessage(commonMessage.salary),
-            dataIndex: 'money',
-            align: 'center',
-            render: (salary) => {
-                const formattedValue = formatMoney(salary, {
-                    groupSeparator: ',',
-                    decimalSeparator: '.',
-                    currentcy: moneyUnit,
-                    currentDecimal: '0',
-                });
-                return <div>{formattedValue}</div>;
-            },
-        },
-        {
             title: translate.formatMessage(commonMessage.kind),
             dataIndex: 'kind',
             align: 'center',
@@ -129,10 +115,11 @@ const SalaryPeriodDetailLogListPage = () => {
             },
         },
         {
-            title: <FormattedMessage defaultMessage={'Tiền refer'} />,
+            title: translate.formatMessage(commonMessage.salary),
+            dataIndex: 'money',
             align: 'center',
-            render: (refSalary) => {
-                const formattedValue = formatMoney(refSalary, {
+            render: (salary) => {
+                const formattedValue = formatMoney(salary, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
@@ -141,19 +128,32 @@ const SalaryPeriodDetailLogListPage = () => {
                 return <div>{formattedValue}</div>;
             },
         },
-        {
-            title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
-            align: 'center',
-            render: (refSalary) => {
-                const formattedValue = formatMoney(refSalary, {
-                    groupSeparator: ',',
-                    decimalSeparator: '.',
-                    currentcy: moneyUnit,
-                    currentDecimal: '0',
-                });
-                return <div>{formattedValue}</div>;
-            },
-        },
+        // {
+        //     title: <FormattedMessage defaultMessage={'Tiền giới thiệu'} />,
+        //     align: 'center',
+        //     render: (refSalary) => {
+        //         const formattedValue = formatMoney(refSalary, {
+        //             groupSeparator: ',',
+        //             decimalSeparator: '.',
+        //             currentcy: moneyUnit,
+        //             currentDecimal: '0',
+        //         });
+        //         return <div>{formattedValue}</div>;
+        //     },
+        // },
+        // {
+        //     title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
+        //     align: 'center',
+        //     render: (refSalary) => {
+        //         const formattedValue = formatMoney(refSalary, {
+        //             groupSeparator: ',',
+        //             decimalSeparator: '.',
+        //             currentcy: moneyUnit,
+        //             currentDecimal: '0',
+        //         });
+        //         return <div>{formattedValue}</div>;
+        //     },
+        // },
         mixinFuncs.renderActionColumn(
             {
                 delete: false,
@@ -175,9 +175,32 @@ const SalaryPeriodDetailLogListPage = () => {
             breadcrumbName: translate.formatMessage(message.objectName),
         },
     ];
+    const formatMoneyValue = (value) => {
+        return formatMoney(value ? value : 0, {
+            groupSeparator: ',',
+            decimalSeparator: '.',
+            currentcy: moneyUnit,
+            currentDecimal: '0',
+        });
+    };
     return (
         <PageWrapper routes={breadcrumbs}>
             <ListPage
+                title={
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div></div>
+                        <div>
+                            <span style={{ marginLeft: '5px' }}>
+                                {/* Tổng nhận: {moneySum && formatMoneyValue(moneySum[0]?.totalMoneyInput || 0)} */}
+                                Tiền giới thiệu: { data ? formatMoneyValue(referMoneyTotal(data)) : formatMoneyValue(0)}
+                            </span>
+                            <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
+                            <span style={{ marginLeft: '5px' }}>
+                                Tổng tiền: { data ? formatMoneyValue(sumMoney(data)) : formatMoneyValue(0)}
+                            </span>
+                        </div>
+                    </div>
+                }
                 // searchForm={mixinFuncs.renderSearchForm({
                 //     fields: searchFields,
                 // })}

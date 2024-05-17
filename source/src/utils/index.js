@@ -393,3 +393,25 @@ export const deleteSearchFilterInLocationSearch = (locationSearch, searchFilter 
     searchFilter.forEach((value) => searchParams.delete(value));
     return `?${searchParams.toString()}`;
 };
+
+export const referMoneyTotal = function (arr) {
+    return arr.reduce((sum, item) => {
+        return item.kind === 3 ? sum + (item.money ?? 0) : sum;
+    }, 0);
+};
+
+export const sumMoney = function (arr) {
+    return arr.reduce((sum, item) => {
+        if (!item) return sum;
+
+        const money = item.money ?? 0;
+        if (item.kind === 4 || item.kind === 5) {
+            return sum - money;
+        } else if (item.kind === 1 || item.kind === 2 || item.kind === 3) {
+            return sum + money;
+        }
+
+        // For kinds other than 1, 2, 3, 4, or 5, we just return the current sum
+        return sum;
+    }, 0);
+};
