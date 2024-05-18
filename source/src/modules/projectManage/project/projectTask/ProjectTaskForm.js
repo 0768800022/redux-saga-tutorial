@@ -223,21 +223,7 @@ const ProjectTaskForm = (props) => {
                             </Space.Compact>
                         </Space>
                     </Col>
-                    <Col span={12}>
-                        <AutoCompleteField
-                            required
-                            label={<FormattedMessage defaultMessage="Danh mục" />}
-                            name="projectCategoryId"
-                            apiConfig={apiConfig.projectCategory.autocomplete}
-                            mappingOptions={(item) => ({
-                                value: item.id,
-                                label: item.projectCategoryName,
-                            })}
-                            searchParams={(text) => ({ name: text })}
-                            optionsParams={{ projectId: projectId }}
-                            initialSearchParams={{ projectId: projectId }}
-                        />
-                    </Col>
+                  
                     <Col span={12}>
                         <SelectField
                             required
