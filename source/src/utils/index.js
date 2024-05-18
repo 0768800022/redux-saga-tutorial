@@ -178,7 +178,7 @@ export const randomString = (length = 4) => {
     return result;
 };
 
-export const formatMoney = (value, setting = {}) => {
+export const formatMoney = (value=0, setting = {}) => {
     if ((value || value === 0) && !isNaN(value)) {
         const groupSeparator = setting.groupSeparator || '.';
         const decimalSeparator = setting.decimalSeparator || ',';
