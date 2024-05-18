@@ -150,7 +150,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                                     e.stopPropagation();
                                     navigate(
                                         routes.ProjectTaskListPage.path +
-                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}`,
+                                            `/task-log?projectId=${projectId}&projectName=${projectName}&projectTaskId=${id}&task=${taskName}&active=${active}&storyName=${storyName}&storyId=${storyId}`,
                                         {
                                             state: { action: 'projectTaskLog', prevPath: location.pathname },
                                         },
@@ -187,8 +187,9 @@ function ProjectTaskListPage({ setSearchFilter }) {
                     const storyId = queryParams.get('storyId');
                     const projectName = queryParams.get('projectName');
                     const storyName = queryParams.get('storyName');
-                   
-                    mixinFuncs.setQueryParams(serializeParams({ projectId, projectName, storyId, storyName, ...filter }));
+                    const active = queryParams.get('active');
+
+                    mixinFuncs.setQueryParams(serializeParams({ projectId,active,projectName, storyId, storyName, ...filter }));
                 };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
 
@@ -316,8 +317,8 @@ function ProjectTaskListPage({ setSearchFilter }) {
             options: memberProject,
         },
         {
-            key: 'status',
-            placeholder: translate.formatMessage(commonMessage.status),
+            key: 'state',
+            placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
         },

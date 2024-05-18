@@ -117,7 +117,7 @@ const SalaryPeriodDetailLogListPage = () => {
         {
             title: translate.formatMessage(commonMessage.salary),
             dataIndex: 'money',
-            align: 'center',
+            align: 'right',
             render: (salary) => {
                 const formattedValue = formatMoney(salary, {
                     groupSeparator: ',',
