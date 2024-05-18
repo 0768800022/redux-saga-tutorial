@@ -293,6 +293,10 @@ tr:nth-child(even) {
     border-bottom-left-radius: 6px;
 }
 
+tr{
+    height: 73px;
+}
+
 tr:nth-child(even) {
     background-color: #f4f2f2;
 }
