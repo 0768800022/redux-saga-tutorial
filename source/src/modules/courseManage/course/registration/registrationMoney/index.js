@@ -161,7 +161,7 @@ function RegistrationMoneyListPage() {
                         routes.registrationListPage.path +
                         `?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                 },
-                { breadcrumbName: translate.formatMessage(message.money) },
+                { breadcrumbName: translate.formatMessage(commonMessage.moneyHistory) },
             ]}
         >
             <ListPage
