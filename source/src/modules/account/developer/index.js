@@ -95,7 +95,7 @@ const DeveloperListPage = () => {
         {
             title: 'Số điện thoại',
             dataIndex: ['accountDto', 'phone'],
-            width: 120,
+            width: 150,
         },
         // {
         //     title: 'Kiểu trả lương',
