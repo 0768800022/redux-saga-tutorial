@@ -82,7 +82,8 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
         event.preventDefault();
         navigate(
             routes.memberActivityProjectListPage.path +
-                `?projectId=${record?.project?.id}&studentId=${record?.developer.studentInfo?.id}&studentName=${record?.developer.studentInfo?.fullName}`,
+                `?projectId=${record?.project?.id}&developerId=${record?.developer.accountDto?.id}&studentName=${record?.developer.accountDto?.fullName}
+                &projectName=${record?.project?.name}`,
         );
     };
 

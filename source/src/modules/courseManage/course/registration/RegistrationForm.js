@@ -537,7 +537,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                 <div style={{ width: '980px' }}>
                     <Row gutter={16}>
                         {!dataLocation && (
-                            <Col span={8}>
+                            <Col span={12}>
                                 <AutoCompleteField
                                     disabled={isEditing}
                                     required
@@ -552,7 +552,7 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                 />
                             </Col>
                         )}
-                        <Col span={dataLocation ? 13 : 8} style={dataLocation && { paddingRight: '14px' }}>
+                        <Col span={dataLocation ? 13 : 12} style={dataLocation && { paddingRight: '14px' }}>
                             <SelectField
                                 disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
                                 defaultValue={registrationStateFilter[0]}
@@ -561,14 +561,14 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                 options={registrationStateFilter}
                             />
                         </Col>
-                        <Col span={8}>
+                        {/* <Col span={8}>
                             <TextField
                                 label={<FormattedMessage defaultMessage="Sign" />}
                                 required
                                 disabled={isEditing}
                                 name={['contractSign']}
                             />
-                        </Col>
+                        </Col> */}
                         <Col span={12}>
                             <CheckboxField
                                 className={styles.customCheckbox}

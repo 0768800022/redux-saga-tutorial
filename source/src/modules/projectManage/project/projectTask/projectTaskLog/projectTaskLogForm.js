@@ -63,6 +63,7 @@ const ProjectTaskLogForm = (props) => {
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
                             options={KindTaskLog}
+                            disabled
                         />
                     </Col>
                     <Col span={12}>

@@ -1,7 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, AppConstants, DATE_FORMAT_VALUE } from '@constants';
+import {
+    DEFAULT_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DEFAULT_TABLE_ITEM_SIZE,
+    AppConstants,
+    DATE_FORMAT_VALUE,
+} from '@constants';
 import { IconCategory, IconReportMoney } from '@tabler/icons-react';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
@@ -35,6 +41,7 @@ import TextField from '@components/common/form/TextField';
 import useDisclosure from '@hooks/useDisclosure';
 import DatePickerField from '@components/common/form/DatePickerField';
 import { formatDateString } from '@utils';
+import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
 const message = defineMessages({
     objectName: 'Dự án',
 });
@@ -77,24 +84,20 @@ const ProjectListPage = () => {
         values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
         executeCalculateProjectSalary({
             data: { ...values },
-            onCompleted: () => {
-                notification({
-                    type: 'success',
-                    message: translate.formatMessage(
-                        commonMessage.selectPeriodSalarySuccess,
-                    ),
-                });
+            onCompleted: (response) => {
                 handlerModalCaculateSalary.close();
+                if (response?.result == true) {
+                    showSucsessMessage(translate.formatMessage(commonMessage.selectPeriodSalarySuccess));
+                }
             },
             onError: (error) => {
-                console.log(error);
-                notification({
-                    type: 'error',
-                    message: error?.response?.data?.message,
-                });
                 handlerModalCaculateSalary.close();
+                if (error) {
+                    showErrorMessage(translate.formatMessage(commonMessage.selectPeriodSalaryFail));
+                }
             },
         });
+        form.resetFields();
     };
     const validateDueDate = (_, value) => {
         const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
@@ -254,7 +257,6 @@ const ProjectListPage = () => {
                                         //         `?developerId=${id}&developerName=${accountDto?.fullName}`,
                                         // );
                                         handlerModalCaculateSalary.open();
-                                        console.log('Money for dev');
                                     }}
                                 >
                                     <IconReportMoney size={'18px'} />
@@ -265,10 +267,14 @@ const ProjectListPage = () => {
                                     onOk={() => form.submit()}
                                     onCancel={() => handlerModalCaculateSalary.close()}
                                 >
-                                    <BaseForm form={form} onFinish={(values) => {
-                                        values.projectId = id;
-                                        handleFinish(values);
-                                    }} size="100%">
+                                    <BaseForm
+                                        form={form}
+                                        onFinish={(values) => {
+                                            values.projectId = id;
+                                            handleFinish(values);
+                                        }}
+                                        size="100%"
+                                    >
                                         <Card>
                                             {/* <Col span={24}>
                                                 <AutoCompleteField
