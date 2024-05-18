@@ -12,6 +12,7 @@ import apiConfig from '@constants/apiConfig';
 import { defineMessages } from 'react-intl';
 import { Button, Tag } from 'antd';
 import { commonMessage } from '@locales/intl';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'Loại',
@@ -57,6 +58,14 @@ const CategoryListPageCommon = ({ routes, kind }) => {
                     ...prepareGetListParams(params),
                     kind,
                 };
+            };
+            funcs.handleDeleteItemError = (err) => {
+                if(err.response.data.code =="ERROR-CATEGORY-ERROR-0002"){
+                    showErrorMessage('Không xoá được khi đã có sinh viên');
+                }
+                else if(err.response.data.code =="ERROR-CATEGORY-ERROR-0003"){
+                    showErrorMessage('Không xoá được khi đã có lập trình viên');
+                }
             };
         },
     });

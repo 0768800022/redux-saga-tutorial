@@ -43,7 +43,7 @@ const DeveloperSavePage = () => {
                 };
             };
             funcs.onSaveError = (err) => {
-                if (err.code === 'ERROR-DEVELOPER-ERROR-0001') {
+                if (err.response.data.code === 'ERROR-ACCOUNT-ERROR-0001') {
                     showErrorMessage('Lập trình viên đã tồn tại');
                     mixinFuncs.setSubmit(false);
                 } else {

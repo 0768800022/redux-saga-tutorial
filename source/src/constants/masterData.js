@@ -446,3 +446,16 @@ export const memberTaskKind = [
         label: "Leader",
     },
 ];
+
+export const isPaidValues = [
+    {
+        value: true,
+        label: "Có trả lương",
+        color: 'green',
+    },
+    {
+        value: false,
+        label: "Không trả lương",
+        color: 'yellow',
+    },
+];

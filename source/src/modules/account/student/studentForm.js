@@ -120,7 +120,6 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             imageUrl={imageUrl && `${AppConstants.contentRootUrl}${imageUrl}`}
                             aspect={1 / 1}
                             uploadFile={uploadFile}
-                            disabled={isEditing}
                         />
                     </Col>
                 </Row>
@@ -209,6 +208,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             initialSearchParams={{
                                 kind: kindOfEdu,
                             }}
+                            optionsParams={{ kind: kindOfEdu }}
                             searchParams={(text) => ({ name: text })}
                             onFocus={handleFocus}
                             required
@@ -224,6 +224,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             initialSearchParams={{
                                 kind: kindOfGen,
                             }}
+                            optionsParams={{ kind: kindOfGen }}
                             searchParams={(text) => ({ name: text })}
                             required
                         />
