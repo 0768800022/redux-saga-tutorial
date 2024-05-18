@@ -100,7 +100,8 @@ function MemberActivityProjectListPage() {
                     const projectId = queryParams.get('projectId');
                     const developerId = queryParams.get('developerId');
                     const studentName = queryParams.get('studentName');
-                    mixinFuncs.setQueryParams(serializeParams({ projectId, developerId, studentName, ...filter }));
+                    const projectName = queryParams.get('projectName');
+                    mixinFuncs.setQueryParams(serializeParams({ projectId, developerId, studentName,projectName, ...filter }));
                 };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
                 funcs.handleFilterSearchChange = (values) => {

@@ -11,6 +11,7 @@ import SelectField from './SelectField';
 import dayjs from 'dayjs';
 import AutoCompleteField from './AutoCompleteField';
 import styles from './SearchForm.module.scss';
+import { isObject } from 'lodash';
 // import InputPhoneField from './InputPhoneField';
 
 const disabledDate = (current) => {
@@ -98,8 +99,16 @@ function SearchForm({
 
     useEffect(() => {
       
-       
-        form.setFieldsValue(initialValues);
+        const normalizeValues = { ...initialValues };
+        
+        Object.keys(normalizeValues).forEach((key) => {
+          
+            if (!isNaN(normalizeValues[key]) && !isObject(normalizeValues[key])) {
+                normalizeValues[key] = Number(normalizeValues[key]);
+            }
+        });
+        form.setFieldsValue(normalizeValues);
+     
     }, [initialValues]);
 
     return (
