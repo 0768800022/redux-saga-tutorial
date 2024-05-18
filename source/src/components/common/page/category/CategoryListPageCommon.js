@@ -63,7 +63,9 @@ const CategoryListPageCommon = ({ routes, kind }) => {
                 if(err.response.data.code =="ERROR-CATEGORY-ERROR-0002"){
                     showErrorMessage('Không xoá được khi đã có sinh viên');
                 }
-           
+                else if(err.response.data.code =="ERROR-CATEGORY-ERROR-0003"){
+                    showErrorMessage('Không xoá được khi đã có lập trình viên');
+                }
             };
         },
     });
