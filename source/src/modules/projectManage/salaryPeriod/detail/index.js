@@ -116,9 +116,9 @@ const SalaryPeriodDetailListPage = () => {
             dataIndex: 'totalTimeWorking',
             align: 'center',
             width: 130,
-            // render(totalTimeWorking) {
-            //     if (totalTimeWorking) return <div>{Math.ceil((totalTimeWorking / 60) * 10) / 10} h</div>;
-            // },
+            render: (dataRow) => {
+                return <div>{Math.round(dataRow/8)}</div>;
+            },
         },
         {
             title: translate.formatMessage(commonMessage.salary),
@@ -212,14 +212,13 @@ const SalaryPeriodDetailListPage = () => {
             // dataIndex: 'refSalary',
             align: 'center',
             width: 120,
-            render: (record) => {
-                console.log(record);
-                let sum =
-                    (record?.fixSalary ?? 0) +
-                    (record?.projectSalary ?? 0) +
-                    (record?.refSalary ?? 0) -
-                    (record?.bugMoney ?? 0);
-                const formattedValue = formatMoney(sum, {
+            render: (dataRow) => {
+                const hoursPerDay = 8;
+                const workingDaysPerMonth = 24;
+                const fixedSalaryProportion = dataRow.fixSalary * ((dataRow.totalTimeWorking / hoursPerDay) / workingDaysPerMonth);
+                const totalSalary = fixedSalaryProportion + dataRow.projectSalary + dataRow.refSalary - dataRow.bugMoney;
+                
+                const formattedValue = formatMoney(totalSalary||0, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
