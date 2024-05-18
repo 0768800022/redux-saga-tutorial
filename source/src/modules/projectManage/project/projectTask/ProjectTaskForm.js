@@ -51,7 +51,7 @@ const ProjectTaskForm = (props) => {
         if (!isEditing > 0) {
             form.setFieldsValue({
                 status: statusValues[1].value,
-                state: stateValues[0].value,
+                state: stateValues[1].value,
                 kind: projectTaskKind[0].value,
                 memKind: valueSelect,
             });
@@ -247,7 +247,7 @@ const ProjectTaskForm = (props) => {
                             options={stateValues}
                         />
                     </Col>
-                    <Col span={12}>
+                    {/* <Col span={12}>
                         <SelectField
                             required
                             name="status"
@@ -255,7 +255,7 @@ const ProjectTaskForm = (props) => {
                             allowClear={false}
                             options={statusValues}
                         />
-                    </Col>
+                    </Col> */}
                     <Col span={12}>
                         <DatePickerField
                             showTime={true}
