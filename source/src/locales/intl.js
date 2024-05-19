@@ -116,6 +116,9 @@ export const commonMessage = defineMessages({
     generatePeriodDetailSuccess: 'Hoàn thành tạo chi tiết kỳ lương',
     selectPeriodSalarySuccess: 'Tính kỳ lương thành công',
     selectPeriodSalaryFail: 'Tính kỳ lương thất bại',
+
+    registerPeriodSalarySuccess: 'Đăng ký kỳ lương thành công',
+    registerPeriodSalaryFail: 'Đăng ký Kỳ lương đã tồn tại ',
     isPaid: 'Được trả lương',
     moneyForMember: 'Lương thành viên',
     caculateSalary: 'Tính lương',
@@ -128,4 +131,5 @@ export const commonMessage = defineMessages({
     refer_money: 'Tiền giới thiệu',
     bug_money: 'Tiền fix bug',
     day_off: 'Ngày nghỉ',
+    dueDate : "Ngày kết thúc",
 });

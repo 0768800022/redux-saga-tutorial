@@ -1517,6 +1517,7 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+
     salaryPeriodDetail: {
         getList: {
             baseURL: `${apiTenantUrl}v1/salary-period-detail/list`,
@@ -1548,6 +1549,21 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+    },
+    registerSalaryPeriod: {
+        create: {
+            baseURL: `${apiTenantUrl}v1/register-salary-period/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getList: {
+            baseURL: `${apiTenantUrl}v1/register-salary-period/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        
     },
     salaryPeriodDetailLog: {
         getList: {
