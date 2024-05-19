@@ -70,7 +70,7 @@ const ProjectListPage = () => {
         { mappingData: (data) => data.data.content },
     );
     // const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.income.calculateProjectSalary);
-    const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.salaryPeriod.calculateProjectSalary);
+    const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.registerSalaryPeriod.create);
     const { data: isCheckExist } = useFetch(apiConfig.salaryPeriod.checkExist, {
         immediate: true,
         mappingData: ({ data }) => {
@@ -87,14 +87,16 @@ const ProjectListPage = () => {
             onCompleted: (response) => {
                 handlerModalCaculateSalary.close();
                 if (response?.result == true) {
-                    showSucsessMessage(translate.formatMessage(commonMessage.selectPeriodSalarySuccess));
+                    showSucsessMessage(translate.formatMessage(commonMessage.registerPeriodSalarySuccess));
                 }
+             
             },
             onError: (error) => {
                 handlerModalCaculateSalary.close();
                 if (error) {
-                    showErrorMessage(translate.formatMessage(commonMessage.selectPeriodSalaryFail));
+                    showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail));
                 }
+               
             },
         });
         form.resetFields();
@@ -245,7 +247,7 @@ const ProjectListPage = () => {
                     ),
                     moneyForDev: ({ id, accountDto }) => {
                         return (
-                            <BaseTooltip title={translate.formatMessage(commonMessage.caculateSalary)}>
+                            <BaseTooltip title={translate.formatMessage(commonMessage.registerPayout)}>
                                 <Button
                                     disabled={!isCheckExist}
                                     type="link"
@@ -262,7 +264,7 @@ const ProjectListPage = () => {
                                     <IconReportMoney size={'18px'} />
                                 </Button>
                                 <Modal
-                                    title={<span>Tính lương dự án</span>}
+                                    title={<span>Đăng ký tính lương dự án</span>}
                                     open={openedModalCaculateSalary}
                                     onOk={() => form.submit()}
                                     onCancel={() => handlerModalCaculateSalary.close()}
@@ -276,20 +278,7 @@ const ProjectListPage = () => {
                                         size="100%"
                                     >
                                         <Card>
-                                            {/* <Col span={24}>
-                                                <AutoCompleteField
-                                                    name="projectRoleId"
-                                                    label={<FormattedMessage defaultMessage="Dự án" />}
-                                                    apiConfig={apiConfig.projectRole.autocomplete}
-                                                    mappingOptions={(item) => ({
-                                                        value: item.id,
-                                                        label: item.projectRoleName,
-                                                    })}
-                                                    initialSearchParams={{}}
-                                                    searchParams={(text) => ({ name: text })}
-                                                    required
-                                                />
-                                            </Col> */}
+                                            
                                             <Col span={24}>
                                                 <DatePickerField
                                                     showTime={false}
