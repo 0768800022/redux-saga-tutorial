@@ -132,4 +132,5 @@ export const commonMessage = defineMessages({
     bug_money: 'Tiền fix bug',
     day_off: 'Ngày nghỉ',
     dueDate : "Ngày kết thúc",
+    registerPayout : "Đăng ký kỳ lương",
 });

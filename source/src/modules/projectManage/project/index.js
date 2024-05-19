@@ -247,7 +247,7 @@ const ProjectListPage = () => {
                     ),
                     moneyForDev: ({ id, accountDto }) => {
                         return (
-                            <BaseTooltip title={translate.formatMessage(commonMessage.caculateSalary)}>
+                            <BaseTooltip title={translate.formatMessage(commonMessage.registerPayout)}>
                                 <Button
                                     disabled={!isCheckExist}
                                     type="link"

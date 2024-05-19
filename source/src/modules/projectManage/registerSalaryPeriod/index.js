@@ -21,7 +21,7 @@ const message = defineMessages({
 const RegisterSalaryPeriodListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
-    const stateValues = translate.formatKeys(salaryPeriodState, ['label']);
+ 
  
 
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
@@ -81,28 +81,7 @@ const RegisterSalaryPeriodListPage = () => {
             width: 180,
             align: 'center',
         },
-        // {
-        //     title: translate.formatMessage(commonMessage.endDate),
-        //     dataIndex: 'end',
-        //     render: (endDate) => {
-        //         return (
-        //             <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate, DATE_FORMAT_DISPLAY)}</div>
-        //         );
-        //     },
-        //     width: 180,
-        //     align: 'center',
-        // },
-        // {
-        //     title: translate.formatMessage(commonMessage.createdDate),
-        //     dataIndex: 'createdDate',
-        //     render: (createdDate) => {
-        //         return (
-        //             <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(createdDate, DEFAULT_FORMAT, 7)}</div>
-        //         );
-        //     },
-        //     width: 180,
-        //     align: 'center',
-        // },
+    
      
       
         mixinFuncs.renderActionColumn(
@@ -122,10 +101,10 @@ const RegisterSalaryPeriodListPage = () => {
     return (
         <PageWrapper routes={breadcrumbs}>
             <ListPage
-                searchForm={mixinFuncs.renderSearchForm({
-                    fields: searchFields,
-                    initialValues: queryFilter,
-                })}
+                // searchForm={mixinFuncs.renderSearchForm({
+                //     fields: searchFields,
+                //     initialValues: queryFilter,
+                // })}
                 // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable
@@ -137,7 +116,7 @@ const RegisterSalaryPeriodListPage = () => {
                         onRow={(record, rowIndex) => ({
                             onClick: (e) => {
                                 e.stopPropagation();
-                                handleOnClick(e,record);
+                               
                             },
                         })}
                     />
