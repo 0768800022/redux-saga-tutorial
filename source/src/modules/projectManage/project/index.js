@@ -245,7 +245,7 @@ const ProjectListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    moneyForDev: ({ id, accountDto }) => {
+                    moneyForDev: ({ id }) => {
                         return (
                             <BaseTooltip title={translate.formatMessage(commonMessage.registerPayout)}>
                                 <Button
@@ -258,45 +258,13 @@ const ProjectListPage = () => {
                                         //     routes.developerProjectListPage.path +
                                         //         `?developerId=${id}&developerName=${accountDto?.fullName}`,
                                         // );
+                                        setProjectId(id);
                                         handlerModalCaculateSalary.open();
                                     }}
                                 >
                                     <IconReportMoney size={'18px'} />
                                 </Button>
-                                <Modal
-                                    title={<span>Đăng ký tính lương dự án</span>}
-                                    open={openedModalCaculateSalary}
-                                    onOk={() => form.submit()}
-                                    onCancel={() => handlerModalCaculateSalary.close()}
-                                >
-                                    <BaseForm
-                                        form={form}
-                                        onFinish={(values) => {
-                                            values.projectId = id;
-                                            handleFinish(values);
-                                        }}
-                                        size="100%"
-                                    >
-                                        <Card>
-                                            
-                                            <Col span={24}>
-                                                <DatePickerField
-                                                    showTime={false}
-                                                    label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
-                                                    name="dueDate"
-                                                    // placeholder="Ngày kết thúc"
-                                                    rules={[
-                                                        {
-                                                            validator: validateDueDate,
-                                                        },
-                                                    ]}
-                                                    format={DEFAULT_FORMAT}
-                                                    style={{ width: '100%' }}
-                                                />
-                                            </Col>
-                                        </Card>
-                                    </BaseForm>
-                                </Modal>
+                                
                             </BaseTooltip>
                         );
                     },
@@ -501,6 +469,41 @@ const ProjectListPage = () => {
                     <p>Chưa có sinh viên nào trong dự án, vui lòng kiểm tra lại</p>
                 </Modal>
             )}
+            <Modal
+                title={<span>Đăng ký tính lương dự án</span>}
+                open={openedModalCaculateSalary}
+                onOk={() => form.submit()}
+                onCancel={() => handlerModalCaculateSalary.close()}
+            >
+                <BaseForm
+                    form={form}
+                    onFinish={(values) => {
+                        
+                       
+                        handleFinish({ ... values , projectId : projectId });
+                    }}
+                    size="100%"
+                >
+                    <Card>
+                                            
+                        <Col span={24}>
+                            <DatePickerField
+                                showTime={false}
+                                label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                                name="dueDate"
+                                // placeholder="Ngày kết thúc"
+                                rules={[
+                                    {
+                                        validator: validateDueDate,
+                                    },
+                                ]}
+                                format={DEFAULT_FORMAT}
+                                style={{ width: '100%' }}
+                            />
+                        </Col>
+                    </Card>
+                </BaseForm>
+            </Modal>
         </PageWrapper>
     );
 };
