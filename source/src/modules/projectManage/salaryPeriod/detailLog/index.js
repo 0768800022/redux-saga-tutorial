@@ -93,15 +93,23 @@ const SalaryPeriodDetailLogListPage = () => {
     ].filter(Boolean);
     const columns = [
         {
+            title: translate.formatMessage(commonMessage.salaryPeriodName),
+            dataIndex: ['salaryPeriodDetail','salaryPeriod','name'],
+            width: 140,
+
+        },
+        
+        {
+            title: translate.formatMessage(commonMessage.projectName),
+            dataIndex: 'projectName',
+            width: 200,
+
+        },
+        {
             title: translate.formatMessage(commonMessage.developer),
             render: (record) => {
                 return <span>{record.devName || record.sourceDevName}</span>;
             },
-        },
-        {
-            title: translate.formatMessage(commonMessage.projectName),
-            dataIndex: 'projectName',
-            
         },
         {
             title: translate.formatMessage(commonMessage.kind),
@@ -123,12 +131,13 @@ const SalaryPeriodDetailLogListPage = () => {
             title: translate.formatMessage(commonMessage.salary),
             dataIndex: 'money',
             align: 'right',
+            width: 140,
             render: (salary) => {
                 const formattedValue = formatMoney(salary, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
-                    currentDecimal: '0',
+                    currentDecimal: '2',
                 });
                 return <div>{formattedValue}</div>;
             },
@@ -185,7 +194,7 @@ const SalaryPeriodDetailLogListPage = () => {
             groupSeparator: ',',
             decimalSeparator: '.',
             currentcy: moneyUnit,
-            currentDecimal: '0',
+            currentDecimal: '2',
         });
     };
     return (

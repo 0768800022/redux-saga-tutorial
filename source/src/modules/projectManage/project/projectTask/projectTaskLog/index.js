@@ -182,6 +182,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
             title: translate.formatMessage(commonMessage.modifiedDate),
             width: 180,
             dataIndex: 'modifiedDate',
+            align: 'right',
             render: (modifiedDate) => {
                 const modifiedDateLocal = convertUtcToLocalTime(modifiedDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
                 return <div>{modifiedDateLocal}</div>;

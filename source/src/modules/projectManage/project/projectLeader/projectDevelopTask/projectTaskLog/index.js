@@ -151,7 +151,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
             title: translate.formatMessage(commonMessage.createdDate),
             width: 180,
             dataIndex: 'createdDate',
-            align: 'center',
+            align: 'right',
             render: (createdDate) => {
                 const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
                 return <div>{createdDateLocal}</div>;
@@ -180,6 +180,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
             title: translate.formatMessage(commonMessage.modifiedDate),
             width: 180,
             dataIndex: 'modifiedDate',
+            align: 'right',
             render: (modifiedDate) => {
                 const modifiedDateLocal = convertUtcToLocalTime(modifiedDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
                 return <div>{modifiedDateLocal}</div>;

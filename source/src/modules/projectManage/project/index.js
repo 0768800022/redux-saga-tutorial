@@ -374,7 +374,7 @@ const ProjectListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
             },
             width: 140,
-            align: 'start',
+            align: 'right',
         },
         {
             title: translate.formatMessage(commonMessage.endDate),
@@ -383,7 +383,7 @@ const ProjectListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
             },
             width: 140,
-            align: 'start',
+            align: 'right',
         },
         {
             title: 'Tình trạng',

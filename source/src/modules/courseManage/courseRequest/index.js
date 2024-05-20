@@ -85,7 +85,7 @@ const CourseRequestListPage = () => {
                 const modifiedcreatedDateTimeString = convertDateTimeToString(modifiedcreatedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedcreatedDateTimeString}</div>;
             },
-            align: 'center',
+            align: 'right',
         },
         {
             title: translate.formatMessage(message.state),

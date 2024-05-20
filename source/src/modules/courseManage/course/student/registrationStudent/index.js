@@ -102,7 +102,7 @@ function RegistrationStudentListPage() {
         {
             title: translate.formatMessage(message.createDate),
             dataIndex: 'createdDate',
-            align: 'center',
+            align: 'right',
             width: 200,
         },
         {

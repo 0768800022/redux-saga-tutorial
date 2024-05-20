@@ -121,7 +121,7 @@ const SubjectListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
             width: 180,
-            align: 'center',
+            align: 'right',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),

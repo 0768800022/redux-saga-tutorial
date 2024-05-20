@@ -235,7 +235,7 @@ function ProjectLeaderTaskListPage() {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
             width: 200,
-            align: 'center',
+            align: 'right',
         },
         {
             title: 'Ngày hoàn thành',
@@ -249,7 +249,7 @@ function ProjectLeaderTaskListPage() {
                 const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
             },
-            align: 'center',
+            align: 'right',
         },
 
         mixinFuncs.renderStatusColumn({ width: '120px' }),

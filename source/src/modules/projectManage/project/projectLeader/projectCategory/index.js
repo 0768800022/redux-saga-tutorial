@@ -92,6 +92,7 @@ const ProjectCategoryListPage = () => {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
             width: 170,
+            align: 'right',
             render: (createdDate) => {
                 const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
                 return <div>{createdDateLocal}</div>;
