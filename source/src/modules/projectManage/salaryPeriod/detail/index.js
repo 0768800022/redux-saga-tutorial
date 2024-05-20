@@ -132,17 +132,17 @@ const SalaryPeriodDetailListPage = () => {
         },
         {
             title: translate.formatMessage(commonMessage.projectSalary),
-            dataIndex: 'projectSalary',
+            // dataIndex: 'projectSalary',
             align: 'right',
             width: 140,
-            render: (projectSalary) => {
-                const formattedValue = formatMoney(projectSalary ? projectSalary : 0, {
+            render: (dataRow) => {
+                const formattedValue = formatMoney(dataRow?.projectSalary ? dataRow.projectSalary : 0, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
                     currentDecimal: '2',
                 });
-                return <div>{formattedValue}</div>;
+                return <Tooltip placement='bottom' title={`Tổng giờ làm: ${(dataRow?.totalTimeProjectIsPaid/60).toFixed(2)}h`}>{formattedValue}</Tooltip>;
             },
         },
         {
@@ -168,37 +168,36 @@ const SalaryPeriodDetailListPage = () => {
             width: 140,
             render: (dataRow) => {
                 let result = dataRow.totalTimeOff / 60;
-                let dayOff = result/24;
-                let money = result * dataRow.fixSalary;
+                let dayOff = result;
                 if (result % 1 !== 0) {
                     dayOff = parseFloat(result.toFixed(2));
                 } else {
                     dayOff = result.toFixed(0);
                 }
-                const formattedValue = formatMoney(money ? money : 0, {
+                const formattedValue = formatMoney(dataRow?.dayOffSalary ? dataRow.dayOffSalary : 0, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
                     currentDecimal: '2',
                 });
-                return <Tooltip title={`Số ngày nghỉ: ${dayOff}`} placement='bottom'>
+                return <Tooltip title={`Số giờ nghỉ: ${dayOff}h`} placement='bottom'>
                     {formattedValue}
                 </Tooltip>;
             },
         },
         {
             title: <span style={{ color:'red' }}><FormattedMessage defaultMessage={'Tiền phạt bug'} /></span>,
-            dataIndex: 'bugMoney',
+            // dataIndex: 'bugMoney',
             align: 'right',
             width: 140,
-            render: (bugMoney) => {
-                const formattedValue = formatMoney(bugMoney ? bugMoney : 0, {
+            render: (dataRow) => {
+                const formattedValue = formatMoney(dataRow?.bugMoney ? dataRow.bugMoney : 0, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
                     currentDecimal: '2',
                 });
-                return <div>{formattedValue}</div>;
+                return <Tooltip title={`Tổng số giờ: ${(dataRow.totalTimeBug/60).toFixed(2)}h`} placement='bottom'>{formattedValue}</Tooltip>;
             },
         },
         {

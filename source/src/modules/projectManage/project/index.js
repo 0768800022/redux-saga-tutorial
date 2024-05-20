@@ -58,6 +58,8 @@ const ProjectListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const [projectId, setProjectId] = useState();
+    const [registerSalaryItem, setRegisterSalaryItem] = useState();
+
     localStorage.setItem('pathPrev', location.search);
     const [parentData, setParentData] = useState({});
     const notification = useNotification();
@@ -71,14 +73,17 @@ const ProjectListPage = () => {
     );
     // const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.income.calculateProjectSalary);
     const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.registerSalaryPeriod.create);
+    const { execute: executeUpdateCalculateProjectSalary } = useFetch(apiConfig.registerSalaryPeriod.update);
+
     const { data: isCheckExist } = useFetch(apiConfig.salaryPeriod.checkExist, {
         immediate: true,
         mappingData: ({ data }) => {
-            console.log(data);
             return data;
         },
     });
     const [openedModalCaculateSalary, handlerModalCaculateSalary] = useDisclosure(false);
+    const [openedModalUpdateCaculateSalary, handlerModalUpdateCaculateSalary] = useDisclosure(false);
+
     const [form] = Form.useForm();
     const handleFinish = (values) => {
         values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
@@ -88,13 +93,44 @@ const ProjectListPage = () => {
                 handlerModalCaculateSalary.close();
                 if (response?.result == true) {
                     showSucsessMessage(translate.formatMessage(commonMessage.registerPeriodSalarySuccess));
+                    mixinFuncs.getList();
                 }
              
             },
             onError: (error) => {
                 handlerModalCaculateSalary.close();
-                if (error) {
+                let errorCode = error.response.data.code;
+                if (errorCode =='ERROR-REGISTER-SALARY-PERIOD-ERROR-0000') {
                     showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail));
+                }
+                else if (errorCode =='ERROR-SALARY-PERIOD-ERROR-0002') {
+                    showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail_2));
+                }
+            },
+        });
+        form.resetFields();
+    };
+
+    const handleUpdate = (values) => {
+        values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
+        executeUpdateCalculateProjectSalary({
+            data: { ...values },
+            onCompleted: (response) => {
+                handlerModalUpdateCaculateSalary.close();
+                if (response?.result == true) {
+                    showSucsessMessage(translate.formatMessage(commonMessage.registerPeriodSalarySuccess_1));
+                    mixinFuncs.getList();
+                }
+
+            },
+            onError: (error) => {
+                handlerModalUpdateCaculateSalary.close();
+                let errorCode = error.response.data.code;
+                if (errorCode =='ERROR-REGISTER-SALARY-PERIOD-ERROR-0001') {
+                    showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail_1));
+                }
+                else if (errorCode =='ERROR-SALARY-PERIOD-ERROR-0002') {
+                    showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail_2));
                 }
                
             },
@@ -245,19 +281,34 @@ const ProjectListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    moneyForDev: ({ id }) => {
+                    moneyForDev: ({ id, isRegisteredSalaryPeriod,registerSalaryPeriod }) => {
+                        if(isRegisteredSalaryPeriod){
+                            return (
+                                <BaseTooltip title={translate.formatMessage(commonMessage.updateRegisterPayout)}>
+                                    <Button
+                                        disabled={isCheckExist}
+                                        type="link"
+                                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setRegisterSalaryItem(registerSalaryPeriod);
+                                            handlerModalUpdateCaculateSalary.open();
+                                        }}
+                                    >
+                                        <IconReportMoney size={'18px'} color={isCheckExist ? 'gray' : 'orange'}/>
+                                    </Button>
+                                    
+                                </BaseTooltip>
+                            );
+                        }
                         return (
                             <BaseTooltip title={translate.formatMessage(commonMessage.registerPayout)}>
                                 <Button
-                                    // disabled={isCheckExist}
+                                    disabled={isCheckExist}
                                     type="link"
                                     style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        // navigate(
-                                        //     routes.developerProjectListPage.path +
-                                        //         `?developerId=${id}&developerName=${accountDto?.fullName}`,
-                                        // );
                                         setProjectId(id);
                                         handlerModalCaculateSalary.open();
                                     }}
@@ -435,6 +486,9 @@ const ProjectListPage = () => {
             { width: '120px' },
         ),
     ].filter(Boolean);
+    console.log(registerSalaryItem?.dueDate);
+
+    console.log(dayjs(registerSalaryItem?.dueDate,DEFAULT_FORMAT));
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
@@ -497,6 +551,42 @@ const ProjectListPage = () => {
                                         validator: validateDueDate,
                                     },
                                 ]}
+                                format={DEFAULT_FORMAT}
+                                style={{ width: '100%' }}
+                            />
+                        </Col>
+                    </Card>
+                </BaseForm>
+            </Modal>
+            <Modal
+                title={<span>Cập nhật tính lương dự án</span>}
+                open={openedModalUpdateCaculateSalary}
+                onOk={() => form.submit()}
+                onCancel={() => handlerModalUpdateCaculateSalary.close()}
+                okText='Cập nhật'
+            >
+                <BaseForm
+                    form={form}
+                    onFinish={(values) => {
+                        handleUpdate({ ... values , id : registerSalaryItem.id });
+                    }}
+                    size="100%"
+                >
+                    <Card>
+                        <Col span={24}>
+                            <DatePickerField
+                                showTime={false}
+                                label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                                name="dueDate"
+                                rules={[
+                                    {
+                                        validator: validateDueDate,
+                                    },
+                                ]}
+                                fieldProps={{
+                                    defaultValue: dayjs(registerSalaryItem?.dueDate,DEFAULT_FORMAT),
+
+                                }}
                                 format={DEFAULT_FORMAT}
                                 style={{ width: '100%' }}
                             />

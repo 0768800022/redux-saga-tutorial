@@ -211,7 +211,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
                 );
             },
         },
-        renderAction === false ? '' : mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        // renderAction === false ? '' : mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const searchFields = [
@@ -284,7 +284,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
                         className: styles.search,
                         initialValues: initialFilterValues,
                     })}
-                    actionBar={mixinFuncs.renderActionBar()}
+                    // actionBar={mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}
