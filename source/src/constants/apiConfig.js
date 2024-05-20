@@ -1516,6 +1516,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        approve: {
+            baseURL: `${apiTenantUrl}v1/salary-period/approve`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
 
     salaryPeriodDetail: {
@@ -1554,6 +1560,12 @@ const apiConfig = {
         create: {
             baseURL: `${apiTenantUrl}v1/register-salary-period/create`,
             method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/register-salary-period/update`,
+            method: 'PUT',
             headers: baseHeader,
             isRequiredTenantId: true,
         },
