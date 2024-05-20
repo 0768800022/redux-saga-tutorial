@@ -85,14 +85,14 @@ const ProjectListPage = () => {
         executeCalculateProjectSalary({
             data: { ...values },
             onCompleted: (response) => {
-                handlerModalCaculateSalary.close();
                 if (response?.result == true) {
+                    handlerModalCaculateSalary.close();
                     showSucsessMessage(translate.formatMessage(commonMessage.selectPeriodSalarySuccess));
                 }
             },
             onError: (error) => {
-                handlerModalCaculateSalary.close();
                 if (error) {
+                    handlerModalCaculateSalary.close();
                     showErrorMessage(translate.formatMessage(commonMessage.selectPeriodSalaryFail));
                 }
             },
@@ -172,30 +172,6 @@ const ProjectListPage = () => {
                             </BaseTooltip>
                         );
                     },
-                    member: ({ id, name, status }) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.member)}>
-                            <Button
-                                type="link"
-                                style={{ padding: '0' }}
-                                // disabled={status === -1}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (status == 1) {
-                                        navigate(
-                                            routes.projectMemberListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
-                                        );
-                                    } else {
-                                        navigate(
-                                            routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
-                                        );
-                                    }
-                                }}
-                            >
-                                <UserOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
                     team: ({ id, name, status, leaderInfo }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
@@ -257,57 +233,11 @@ const ProjectListPage = () => {
                                         //         `?developerId=${id}&developerName=${accountDto?.fullName}`,
                                         // );
                                         handlerModalCaculateSalary.open();
+                                        setProjectId(id);
                                     }}
                                 >
-                                    <IconReportMoney size={'18px'} />
+                                    <DollarOutlined />
                                 </Button>
-                                <Modal
-                                    title={<span>Tính lương dự án</span>}
-                                    open={openedModalCaculateSalary}
-                                    onOk={() => form.submit()}
-                                    onCancel={() => handlerModalCaculateSalary.close()}
-                                >
-                                    <BaseForm
-                                        form={form}
-                                        onFinish={(values) => {
-                                            values.projectId = id;
-                                            handleFinish(values);
-                                        }}
-                                        size="100%"
-                                    >
-                                        <Card>
-                                            {/* <Col span={24}>
-                                                <AutoCompleteField
-                                                    name="projectRoleId"
-                                                    label={<FormattedMessage defaultMessage="Dự án" />}
-                                                    apiConfig={apiConfig.projectRole.autocomplete}
-                                                    mappingOptions={(item) => ({
-                                                        value: item.id,
-                                                        label: item.projectRoleName,
-                                                    })}
-                                                    initialSearchParams={{}}
-                                                    searchParams={(text) => ({ name: text })}
-                                                    required
-                                                />
-                                            </Col> */}
-                                            <Col span={24}>
-                                                <DatePickerField
-                                                    showTime={false}
-                                                    label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
-                                                    name="dueDate"
-                                                    // placeholder="Ngày kết thúc"
-                                                    rules={[
-                                                        {
-                                                            validator: validateDueDate,
-                                                        },
-                                                    ]}
-                                                    format={DEFAULT_FORMAT}
-                                                    style={{ width: '100%' }}
-                                                />
-                                            </Col>
-                                        </Card>
-                                    </BaseForm>
-                                </Modal>
                             </BaseTooltip>
                         );
                     },
@@ -512,6 +442,39 @@ const ProjectListPage = () => {
                     <p>Chưa có sinh viên nào trong dự án, vui lòng kiểm tra lại</p>
                 </Modal>
             )}
+            <Modal
+                title={<span>Tính lương dự án</span>}
+                open={openedModalCaculateSalary}
+                onOk={() => form.submit()}
+                onCancel={() => handlerModalCaculateSalary.close()}
+            >
+                <BaseForm
+                    form={form}
+                    onFinish={(values) => {
+                        values.projectId = projectId;
+                        handleFinish(values);
+                    }}
+                    size="100%"
+                >
+                    <Card>
+                        <Col span={24}>
+                            <DatePickerField
+                                showTime={false}
+                                label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                                name="dueDate"
+                                // placeholder="Ngày kết thúc"
+                                rules={[
+                                    {
+                                        validator: validateDueDate,
+                                    },
+                                ]}
+                                format={DEFAULT_FORMAT}
+                                style={{ width: '100%' }}
+                            />
+                        </Col>
+                    </Card>
+                </BaseForm>
+            </Modal>
         </PageWrapper>
     );
 };
