@@ -91,11 +91,11 @@ const ProjectListPage = () => {
             data: { ...values },
             onCompleted: (response) => {
                 handlerModalCaculateSalary.close();
+
                 if (response?.result == true) {
                     showSucsessMessage(translate.formatMessage(commonMessage.registerPeriodSalarySuccess));
                     mixinFuncs.getList();
                 }
-             
             },
             onError: (error) => {
                 handlerModalCaculateSalary.close();
@@ -210,30 +210,6 @@ const ProjectListPage = () => {
                             </BaseTooltip>
                         );
                     },
-                    member: ({ id, name, status }) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.member)}>
-                            <Button
-                                type="link"
-                                style={{ padding: '0' }}
-                                // disabled={status === -1}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (status == 1) {
-                                        navigate(
-                                            routes.projectMemberListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
-                                        );
-                                    } else {
-                                        navigate(
-                                            routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
-                                        );
-                                    }
-                                }}
-                            >
-                                <UserOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
                     team: ({ id, name, status, leaderInfo }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
@@ -311,11 +287,11 @@ const ProjectListPage = () => {
                                         e.stopPropagation();
                                         setProjectId(id);
                                         handlerModalCaculateSalary.open();
+                                        setProjectId(id);
                                     }}
                                 >
-                                    <IconReportMoney size={'18px'} />
+                                    <DollarOutlined />
                                 </Button>
-                                
                             </BaseTooltip>
                         );
                     },
@@ -532,14 +508,12 @@ const ProjectListPage = () => {
                 <BaseForm
                     form={form}
                     onFinish={(values) => {
-                        
-                       
-                        handleFinish({ ... values , projectId : projectId });
+                        values.projectId = projectId;
+                        handleFinish(values);
                     }}
                     size="100%"
                 >
                     <Card>
-                                            
                         <Col span={24}>
                             <DatePickerField
                                 showTime={false}
