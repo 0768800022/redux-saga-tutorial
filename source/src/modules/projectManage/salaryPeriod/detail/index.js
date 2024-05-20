@@ -215,16 +215,7 @@ const SalaryPeriodDetailListPage = () => {
                 //Tổng tiền = (lương cứng * (số ngày làm việc / 24)  + lương dự án + lương refer) - lương bug
                 
                 const fixedSalaryProportion = dataRow.fixSalary * (totalDayWorking / workingDaysPerMonth);
-                const totalSalary = fixedSalaryProportion + dataRow.projectSalary + dataRow.refSalary - dataRow.bugMoney;
-                if(dataRow.id=='7439007368445952'){
-                    console.log('fixedSalaryProportion',fixedSalaryProportion);
-                    console.log('dataRow.projectSalary',dataRow.projectSalary);
-                    console.log('dataRow.refSalary',dataRow.refSalary);
-                    console.log('dataRow.bugMoney',dataRow.bugMoney);
-                    console.log('totalSalary',totalSalary);
-
-                    console.log(fixedSalaryProportion+dataRow.projectSalary+ dataRow.refSalary - 0);
-                }
+                const totalSalary = Number(fixedSalaryProportion.toFixed(2)) + Number(dataRow.projectSalary.toFixed(2)) + Number(dataRow.refSalary.toFixed(2)) - Number(dataRow.bugMoney.toFixed(2));
 
                 const formattedValue = formatMoney(totalSalary||0, {
                     groupSeparator: ',',
