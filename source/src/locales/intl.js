@@ -118,7 +118,7 @@ export const commonMessage = defineMessages({
     selectPeriodSalaryFail: 'Đăng ký kỳ lương không thành công',
 
     registerPeriodSalarySuccess: 'Đăng ký kỳ lương thành công',
-    registerPeriodSalaryFail: 'Đăng ký Kỳ lương đã tồn tại ',
+    registerPeriodSalaryFail: 'Đăng ký Kỳ lương không thành công',
     isPaid: 'Được trả lương',
     moneyForMember: 'Lương thành viên',
     caculateSalary: 'Tính lương',
