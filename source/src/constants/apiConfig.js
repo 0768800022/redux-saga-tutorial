@@ -1516,6 +1516,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        approve: {
+            baseURL: `${apiTenantUrl}v1/salary-period/approve`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
 
     salaryPeriodDetail: {

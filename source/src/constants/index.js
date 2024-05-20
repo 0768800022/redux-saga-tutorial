@@ -65,6 +65,13 @@ export const DATE_FORMAT_DISPLAY = 'DD/MM/YYYY';
 export const DEFAULT_FORMAT = 'DD/MM/YYYY HH:mm:ss';
 export const DATE_FORMAT_ZERO_TIME = 'DD/MM/YYYY 00:00:00';
 export const DATE_FORMAT_END_OF_DAY_TIME = 'DD/MM/YYYY 23:59:59';
+export const DEFAULT_EXCEL_DATE = 'DDMMYYHHmmss';
+
+export const PAYOUT_PERIOD_STATE_PENDING = 0;
+export const PAYOUT_PERIOD_STATE_CALCULATED = 1;
+export const PAYOUT_PERIOD_STATE_DONE = 2;
+export const PAYOUT_PERIOD_STATE_CANCEL = 3;
+
 export const navigateTypeEnum = {
     PUSH: 'PUSH',
     POP: 'POP',

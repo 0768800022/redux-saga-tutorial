@@ -118,9 +118,8 @@ export const commonMessage = defineMessages({
     selectPeriodSalaryFail: 'Đăng ký kỳ lương không thành công',
 
     registerPeriodSalarySuccess: 'Đăng ký kỳ lương thành công',
+    registerPeriodSalaryFail: 'Đăng ký Kỳ lương không thành công',
     registerPeriodSalarySuccess_1: 'cập nhật kỳ lương thành công',
-
-    registerPeriodSalaryFail: 'Đăng ký Kỳ lương đã tồn tại ',
     registerPeriodSalaryFail_1: 'Không tìm thấy kỳ lương',
     registerPeriodSalaryFail_2: 'Đã có kỳ lương k thể taọ hoặc cập nhật',
 
