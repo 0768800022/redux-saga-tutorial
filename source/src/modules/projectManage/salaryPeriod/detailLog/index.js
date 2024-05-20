@@ -99,6 +99,11 @@ const SalaryPeriodDetailLogListPage = () => {
             },
         },
         {
+            title: translate.formatMessage(commonMessage.projectName),
+            dataIndex: 'projectName',
+            
+        },
+        {
             title: translate.formatMessage(commonMessage.kind),
             dataIndex: 'kind',
             align: 'center',

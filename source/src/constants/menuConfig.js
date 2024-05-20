@@ -86,12 +86,12 @@ const navMenuConfig = [
                 path: generatePath(routes.salaryPeriodListPage.path, {}),
                 permission: apiConfig.salaryPeriod.getList.baseURL,
             },
-            {
-                label: <FormattedMessage defaultMessage="Quản lý đăng ký kỳ lương" />,
-                key: 'register-salary-period',
-                path: generatePath(routes.RegisterSalaryPeriodList.path, {}),
-                permission: apiConfig.registerSalaryPeriod.getList.baseURL,
-            },
+            // {
+            //     label: <FormattedMessage defaultMessage="Quản lý đăng ký kỳ lương" />,
+            //     key: 'register-salary-period',
+            //     path: generatePath(routes.RegisterSalaryPeriodList.path, {}),
+            //     permission: apiConfig.registerSalaryPeriod.getList.baseURL,
+            // },
         ],
     },
     {
