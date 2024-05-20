@@ -114,8 +114,8 @@ export const commonMessage = defineMessages({
     projectSalary: 'Lương dự án',
     generatePeriodDetail: 'Tạo chi tiết kỳ lương',
     generatePeriodDetailSuccess: 'Hoàn thành tạo chi tiết kỳ lương',
-    selectPeriodSalarySuccess: 'Tính kỳ lương thành công',
-    selectPeriodSalaryFail: 'Tính kỳ lương thất bại',
+    selectPeriodSalarySuccess: 'Đăng ký kỳ lương thành công',
+    selectPeriodSalaryFail: 'Đăng ký kỳ lương không thành công',
 
     registerPeriodSalarySuccess: 'Đăng ký kỳ lương thành công',
     registerPeriodSalaryFail: 'Đăng ký Kỳ lương đã tồn tại ',
