@@ -180,11 +180,19 @@ export const randomString = (length = 4) => {
 
 export const formatMoney = (value=0, setting = {}) => {
     if ((value || value === 0) && !isNaN(value)) {
+        
         const groupSeparator = setting.groupSeparator || '.';
         const decimalSeparator = setting.decimalSeparator || ',';
         const currentcy = setting.currentcy || '€';
         const currentcyPosition = setting.currentcyPosition || CurrentcyPositions.BACK;
-        value = setting.currentDecimal ? (+value).toFixed(setting.currentDecimal) : (+value).toFixed(2);
+        if (value % 1 !== 0) {
+            if(setting.currentDecimal){
+                value= parseFloat(value.toFixed(setting.currentDecimal));
+            }
+        } else {
+            value = value.toFixed(0);
+        }
+        // value = setting.currentDecimal ? (+value).toFixed(setting.currentDecimal) : (+value).toFixed(2);
         // value = (+value).toFixed(0);
         const decimalPosition = value.toString().indexOf('.');
         if (decimalPosition > 0) {
@@ -197,6 +205,7 @@ export const formatMoney = (value=0, setting = {}) => {
         if (currentcyPosition === CurrentcyPositions.FRONT) {
             return `${currentcy} ${value}`;
         } else {
+           
             return `${value} ${currentcy}`;
         }
     }
