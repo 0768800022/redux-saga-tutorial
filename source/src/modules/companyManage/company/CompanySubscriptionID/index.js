@@ -128,7 +128,7 @@ const CompanySubscriptionIdListPage = () => {
                     </div>
                 );
             },
-            align: 'center',
+            align: 'right',
         },
         {
             title: 'Ngày kết thúc',
@@ -141,7 +141,7 @@ const CompanySubscriptionIdListPage = () => {
                     </div>
                 );
             },
-            align: 'center',
+            align: 'right',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),

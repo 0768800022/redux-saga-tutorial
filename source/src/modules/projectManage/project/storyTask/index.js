@@ -240,6 +240,7 @@ function StoryTaskListPage({ setSearchFilter }) {
         {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
+            align: 'right',
             width: 170,
             render: (date) => {
                 const createdDate = convertUtcToLocalTime(date, DEFAULT_FORMAT,DEFAULT_FORMAT);
