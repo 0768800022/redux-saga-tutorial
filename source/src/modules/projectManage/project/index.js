@@ -223,7 +223,7 @@ const ProjectListPage = () => {
                         return (
                             <BaseTooltip title={translate.formatMessage(commonMessage.registerPayout)}>
                                 <Button
-                                    disabled={isCheckExist}
+                                    // disabled={isCheckExist}
                                     type="link"
                                     style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                     onClick={(e) => {
