@@ -119,7 +119,7 @@ function RegistrationMoneyListPage() {
                 );
             },
             width: 130,
-            align: 'center',
+            align: 'right',
         },
 
         {

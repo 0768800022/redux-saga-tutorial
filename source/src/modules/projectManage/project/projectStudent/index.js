@@ -229,7 +229,7 @@ const ProjectStudentListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
             },
             width: 140,
-            align: 'center',
+            align: 'right',
         },
         {
             title: translate.formatMessage(commonMessage.endDate),
@@ -238,7 +238,7 @@ const ProjectStudentListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
             },
             width: 140,
-            align: 'center',
+            align: 'right',
         },
         {
             title: 'Tình trạng',

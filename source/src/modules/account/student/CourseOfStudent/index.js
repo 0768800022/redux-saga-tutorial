@@ -134,6 +134,7 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
+            align:'right',
             width: 150,
             render: (createdDate) => {
                 return (
@@ -142,7 +143,6 @@ const CourseListPage = () => {
                     </div>
                 );
             },
-            align: 'center',
         },
         {
             title: translate.formatMessage(commonMessage.state),

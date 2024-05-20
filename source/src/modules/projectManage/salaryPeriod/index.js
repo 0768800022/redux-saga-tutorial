@@ -200,18 +200,18 @@ const SalaryPeriodListPage = () => {
                 );
             },
             width: 180,
-            align: 'center',
+            align: 'right',
         },
         {
             title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'end',
+            align: 'right',
             render: (endDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate, DATE_FORMAT_DISPLAY)}</div>
                 );
             },
             width: 180,
-            align: 'center',
         },
         {
             title: translate.formatMessage(commonMessage.createdDate),
@@ -222,7 +222,7 @@ const SalaryPeriodListPage = () => {
                 );
             },
             width: 180,
-            align: 'center',
+            align: 'right',
         },
         {
             title: 'Tình trạng',

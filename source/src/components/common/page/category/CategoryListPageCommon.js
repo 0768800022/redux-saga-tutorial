@@ -78,7 +78,7 @@ const CategoryListPageCommon = ({ routes, kind }) => {
         {
             title: translate.formatMessage(message.createDate),
             dataIndex: 'createdDate',
-            align: 'center',
+            align: 'right',
             width: 180,
         },
         // {

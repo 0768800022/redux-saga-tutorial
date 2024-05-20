@@ -270,12 +270,14 @@ function ProjectTaskListPage({ setSearchFilter }) {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
             width: 200,
-            align: 'center',
+            align: 'right',
         },
         {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
             width: 200,
+            align: 'right',
+
         },
         {
             title: 'Tình trạng',
