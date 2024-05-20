@@ -77,21 +77,11 @@ const SalaryPeriodDetailListPage = () => {
             apiConfig: apiConfig.developer.autocomplete,
             mappingOptions: (item) => ({
                 value: item.id,
-                label: item.studentInfo.fullName,
+                label: item.account.fullName,
             }),
             searchParams: (text) => ({ name: text }),
         },
-        {
-            key: 'projectId',
-            placeholder: <FormattedMessage defaultMessage={'Tên dự án'} />,
-            type: FieldTypes.AUTOCOMPLETE,
-            apiConfig: apiConfig.project.autocomplete,
-            mappingOptions: (item) => ({
-                value: item.id,
-                label: item.name,
-            }),
-            searchParams: (text) => ({ name: text }),
-        },
+      
     ].filter(Boolean);
     const columns = [
         {
@@ -123,7 +113,7 @@ const SalaryPeriodDetailListPage = () => {
         {
             title: translate.formatMessage(commonMessage.salary),
             dataIndex: 'fixSalary',
-            align: 'center',
+            align: 'right',
             width: 120,
             render: (fixSalary) => {
                 const formattedValue = formatMoney(fixSalary ? fixSalary : 0, {
@@ -138,7 +128,7 @@ const SalaryPeriodDetailListPage = () => {
         {
             title: translate.formatMessage(commonMessage.projectSalary),
             dataIndex: 'projectSalary',
-            align: 'center',
+            align: 'right',
             render: (projectSalary) => {
                 const formattedValue = formatMoney(projectSalary ? projectSalary : 0, {
                     groupSeparator: ',',
@@ -152,7 +142,7 @@ const SalaryPeriodDetailListPage = () => {
         {
             title: <FormattedMessage defaultMessage={'Lương ref'} />,
             dataIndex: 'refSalary',
-            align: 'center',
+            align: 'right',
             width: 120,
             render: (refSalary) => {
                 const formattedValue = formatMoney(refSalary, {
@@ -177,7 +167,7 @@ const SalaryPeriodDetailListPage = () => {
         {
             title: <FormattedMessage defaultMessage={'Tiền bug'} />,
             dataIndex: 'bugMoney',
-            align: 'center',
+            align: 'right',
             width: 120,
             render: (bugMoney) => {
                 const formattedValue = formatMoney(bugMoney ? bugMoney : 0, {
@@ -210,7 +200,7 @@ const SalaryPeriodDetailListPage = () => {
         {
             title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
             // dataIndex: 'refSalary',
-            align: 'center',
+            align: 'right',
             width: 120,
             render: (dataRow) => {
                 const hoursPerDay = 8;

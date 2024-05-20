@@ -11,6 +11,7 @@ import SelectField from './SelectField';
 import dayjs from 'dayjs';
 import AutoCompleteField from './AutoCompleteField';
 import styles from './SearchForm.module.scss';
+import { isObject } from 'lodash';
 // import InputPhoneField from './InputPhoneField';
 
 const disabledDate = (current) => {
@@ -49,20 +50,7 @@ function SearchForm({
 
     const handleSearchSubmit = useCallback(
         (values) => {
-            // const dateRangeValues = Object.keys(dateRangeKey.current).reduce((acc, key) => {
-            //     if (!values[key]) return acc;
-
-            //     acc[dateRangeKey.current[key][1]] = formatDateToUtc(values[key][0]) + ' 00:00:00';
-            //     acc[dateRangeKey.current[key][2]] = formatDateToUtc(values[key][1]) + ' 23:59:59';
-
-            //     delete values[key];
-
-            //     console.log('acc', acc);
-
-            //     return acc;
-            // }, {});
-            // onSearch?.({ ...values, ...dateRangeValues });
-            // console.log(values);
+            
             onSearch?.({ ...searchParams, ...values });
         },
         [form, onSearch],
@@ -110,34 +98,17 @@ function SearchForm({
     }, [form]);
 
     useEffect(() => {
-        // fields.forEach((field) => {
-        //     if (field.type === FieldTypes.DATE_RANGE) {
-        //         dateRangeKey.current[field.key[0]] = field.key;
-        //     }
-        // });
-
-        // const dateRangeValues = Object.keys(dateRangeKey.current).reduce((acc, key) => {
-        //     if (!initialValues[dateRangeKey.current[key][1]] || !initialValues[dateRangeKey.current[key][2]]) return acc;
-
-        //     acc[key] = [
-        //         dayjs(formatDateToLocal(initialValues[dateRangeKey.current[key][1]]), DATE_FORMAT_DISPLAY),
-        //         dayjs(formatDateToLocal(initialValues[dateRangeKey.current[key][2]]), DATE_FORMAT_DISPLAY),
-        //     ];
-
-        //     return acc;
-        // }, {});
-
-        // form.setFieldsValue({
-        //     ...initialValues,
-        //     ...dateRangeValues,
-        // });
+      
         const normalizeValues = { ...initialValues };
+        
         Object.keys(normalizeValues).forEach((key) => {
-            if (!isNaN(normalizeValues[key])) {
+          
+            if (!isNaN(normalizeValues[key]) && !isObject(normalizeValues[key])) {
                 normalizeValues[key] = Number(normalizeValues[key]);
             }
         });
         form.setFieldsValue(normalizeValues);
+     
     }, [initialValues]);
 
     return (

@@ -70,7 +70,7 @@ const ProjectListPage = () => {
         { mappingData: (data) => data.data.content },
     );
     // const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.income.calculateProjectSalary);
-    const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.salaryPeriod.calculateProjectSalary);
+    const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.registerSalaryPeriod.create);
     const { data: isCheckExist } = useFetch(apiConfig.salaryPeriod.checkExist, {
         immediate: true,
         mappingData: ({ data }) => {
@@ -219,11 +219,11 @@ const ProjectListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    moneyForDev: ({ id, accountDto }) => {
+                    moneyForDev: ({ id }) => {
                         return (
-                            <BaseTooltip title={translate.formatMessage(commonMessage.caculateSalary)}>
+                            <BaseTooltip title={translate.formatMessage(commonMessage.registerPayout)}>
                                 <Button
-                                    disabled={!isCheckExist}
+                                    disabled={isCheckExist}
                                     type="link"
                                     style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                     onClick={(e) => {
@@ -232,6 +232,7 @@ const ProjectListPage = () => {
                                         //     routes.developerProjectListPage.path +
                                         //         `?developerId=${id}&developerName=${accountDto?.fullName}`,
                                         // );
+                                        setProjectId(id);
                                         handlerModalCaculateSalary.open();
                                         setProjectId(id);
                                     }}
@@ -443,7 +444,7 @@ const ProjectListPage = () => {
                 </Modal>
             )}
             <Modal
-                title={<span>Tính lương dự án</span>}
+                title={<span>Đăng ký tính lương dự án</span>}
                 open={openedModalCaculateSalary}
                 onOk={() => form.submit()}
                 onCancel={() => handlerModalCaculateSalary.close()}

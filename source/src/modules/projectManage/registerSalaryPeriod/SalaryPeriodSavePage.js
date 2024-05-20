@@ -1,50 +1,41 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
+import apiConfig from '@constants/apiConfig';
 import useSaveBase from '@hooks/useSaveBase';
+import useTranslate from '@hooks/useTranslate';
 import React from 'react';
 import { defineMessages } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
-import { generatePath } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
+import SalaryPeriodForm from './SalaryPeriodForm';
 import routes from './routes';
-import apiConfig from '@constants/apiConfig';
-import DeveloperForm from './DeveloperForm';
 import { showErrorMessage } from '@services/notifyService';
-import { commonMessage } from '@locales/intl';
-import useFetch from '@hooks/useFetch';
-import { commonStatus } from '@constants';
 
 const messages = defineMessages({
-    objectName: 'Lập trình viên',
+    objectName: 'Kỳ lương',
 });
 
-const DeveloperSavePage = () => {
+const SalaryPeriodSavePage = () => {
     const translate = useTranslate();
     const { detail, mixinFuncs, loading, setIsChangedFormValues, isEditing, title } = useSaveBase({
-        apiConfig: {
-            getById: apiConfig.developer.getById,
-            create: apiConfig.developer.create,
-            update: apiConfig.developer.update,
-        },
+        apiConfig: apiConfig.salaryPeriod,
         options: {
-            getListUrl: generatePath(routes.developerListPage.path, {}),
+            getListUrl: generatePath(routes.salaryPeriodListPage.path),
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
-                    developerId: detail.id,
-                    status: commonStatus.ACTIVE,
+                    id: detail.id,
                 };
             };
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
-                    status: commonStatus.ACTIVE,
                 };
             };
             funcs.onSaveError = (err) => {
-                if (err.response.data.code === 'ERROR-ACCOUNT-ERROR-0001') {
-                    showErrorMessage('Lập trình viên đã tồn tại');
+                if (err.code === 'ERROR-SALARY-PERIOD-ERROR-0001') {
+                    showErrorMessage('Khoảng thời gian đã trùng với kỳ khác !');
                     mixinFuncs.setSubmit(false);
                 } else {
                     mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
@@ -54,22 +45,19 @@ const DeveloperSavePage = () => {
         },
     });
 
-    const { execute: executeLeaderRefer } = useFetch(apiConfig.developer.leaderRefer, { immediate: false });
-
-
     return (
         <PageWrapper
             loading={loading}
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(commonMessage.developer),
-                    path: generatePath(routes.developerListPage.path, {}),
+                    breadcrumbName: translate.formatMessage(messages.objectName),
+                    path: generatePath(routes.salaryPeriodListPage.path),
                 },
                 { breadcrumbName: title },
             ]}
             title={title}
         >
-            <DeveloperForm
+            <SalaryPeriodForm
                 setIsChangedFormValues={setIsChangedFormValues}
                 dataDetail={detail ? detail : {}}
                 formId={mixinFuncs.getFormId()}
@@ -81,4 +69,4 @@ const DeveloperSavePage = () => {
     );
 };
 
-export default DeveloperSavePage;
+export default SalaryPeriodSavePage;
