@@ -187,10 +187,11 @@ export const formatMoney = (value=0, setting = {}) => {
         const currentcyPosition = setting.currentcyPosition || CurrentcyPositions.BACK;
         if (value % 1 !== 0) {
             if(setting.currentDecimal){
-                value= parseFloat(value.toFixed(setting.currentDecimal));
+                value = parseFloat(value.toFixed(setting.currentDecimal));
             }
-        } else {
-            value = value.toFixed(0);
+            else{
+                value = (+value).toFixed(2);
+            }
         }
         // value = setting.currentDecimal ? (+value).toFixed(setting.currentDecimal) : (+value).toFixed(2);
         // value = (+value).toFixed(0);
