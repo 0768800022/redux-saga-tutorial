@@ -1557,6 +1557,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        update: {
+            baseURL: `${apiTenantUrl}v1/register-salary-period/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
         getList: {
             baseURL: `${apiTenantUrl}v1/register-salary-period/list`,
             method: 'GET',
