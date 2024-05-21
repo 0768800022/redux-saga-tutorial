@@ -505,34 +505,30 @@ const ProjectListPage = () => {
                 onOk={() => form.submit()}
                 onCancel={() => handlerModalCaculateSalary.close()}
             >
-                <fieldset>
-                    <legend >Ngày kết thúc</legend>
-                    <BaseForm
-                        form={form}
-                        onFinish={(values) => {
-                            values.projectId = projectId;
-                            handleFinish(values);
-                        }}
-                        size="100%"
-                    >
-                        
-                        <DatePickerField
-                            showTime={false}
-                            // label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
-                            name="dueDate"
-                            // placeholder="Ngày kết thúc"
-                            rules={[
-                                {
-                                    validator: validateDueDate,
-                                },
-                            ]}
-                            format={DEFAULT_FORMAT}
-                            style={{ width: '100%' }}
-                        />
+                <BaseForm
+                    form={form}
+                    onFinish={(values) => {
+                        values.projectId = projectId;
+                        handleFinish(values);
+                    }}
+                    size="100%"
+                >
                     
-                    </BaseForm>
-                </fieldset>
-
+                    <DatePickerField
+                        showTime={false}
+                        label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                        name="dueDate"
+                        // placeholder="Ngày kết thúc"
+                        rules={[
+                            {
+                                validator: validateDueDate,
+                            },
+                        ]}
+                        format={DEFAULT_FORMAT}
+                        style={{ width: '100%' }}
+                    />
+                
+                </BaseForm>
             </Modal>
             <Modal
                 title={<span>Cập nhật tính lương dự án</span>}
@@ -541,35 +537,32 @@ const ProjectListPage = () => {
                 onCancel={() => handlerModalUpdateCaculateSalary.close()}
                 okText='Cập nhật'
             >
-                <fieldset>
-                    <legend >Ngày kết thúc</legend>
-                    <BaseForm
-                        form={form}
-                        onFinish={(values) => {
-                            handleUpdate({ ... values , id : registerSalaryItem.id });
-                        }}
-                        size="100%"
-                    >
-                        <Col span={24}>
-                            <DatePickerField
-                                showTime={false}
-                                label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
-                                name="dueDate"
-                                rules={[
-                                    {
-                                        validator: validateDueDate,
-                                    },
-                                ]}
-                                fieldProps={{
-                                    defaultValue: dayjs(registerSalaryItem?.dueDate,DEFAULT_FORMAT),
+                <BaseForm
+                    form={form}
+                    onFinish={(values) => {
+                        handleUpdate({ ... values , id : registerSalaryItem.id });
+                    }}
+                    size="100%"
+                >
+                    <Col span={24}>
+                        <DatePickerField
+                            showTime={false}
+                            label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                            name="dueDate"
+                            rules={[
+                                {
+                                    validator: validateDueDate,
+                                },
+                            ]}
+                            fieldProps={{
+                                defaultValue: dayjs(registerSalaryItem?.dueDate,DEFAULT_FORMAT),
 
-                                }}
-                                format={DEFAULT_FORMAT}
-                                style={{ width: '100%' }}
-                            />
-                        </Col>
-                    </BaseForm>
-                </fieldset>
+                            }}
+                            format={DEFAULT_FORMAT}
+                            style={{ width: '100%' }}
+                        />
+                    </Col>
+                </BaseForm>
             </Modal>
         </PageWrapper>
     );
