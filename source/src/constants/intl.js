@@ -95,6 +95,7 @@ export const lectureStateMessage = defineMessages({
 export const taskKindMessage = defineMessages({
     feature: 'Tính năng',
     bug: 'Bug',
+    testCase: 'Test case',
 });
 
 export const taskStateMessage = defineMessages({

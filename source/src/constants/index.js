@@ -139,6 +139,7 @@ export const STATE_PROJECT_STORY_DONE = 3;
 export const STATE_PROJECT_STORY_CANCEL = 4;
 export const TASK_KIND_FEATURE = 1;
 export const TASK_KIND_BUG = 2;
+export const TASK_KIND_TESTCASE = 3;
 
 export const DEFAULT_TABLE_ITEM_SIZE = 20;
 export const DEFAULT_TABLE_PAGE_START = 0;
