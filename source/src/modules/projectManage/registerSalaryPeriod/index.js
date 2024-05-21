@@ -116,7 +116,7 @@ const RegisterSalaryPeriodListPage = () => {
                 edit: true,
                 delete: true,
             },
-            { width: '100px' },
+            { width: '60px' },
         ),
     ].filter(Boolean);
 
