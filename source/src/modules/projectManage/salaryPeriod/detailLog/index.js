@@ -53,6 +53,7 @@ const SalaryPeriodDetailLogListPage = () => {
                     return {
                         ...prepareGetListParams(params),
                         salaryPeriodId: salaryPeriodDetailId,
+                        ignoreKind: 6,
                     };
                 };
                 funcs.changeFilter = (filter) => {
@@ -98,7 +99,20 @@ const SalaryPeriodDetailLogListPage = () => {
             width: 140,
 
         },
-        
+        {
+            title: translate.formatMessage(commonMessage.createdDate),
+            dataIndex: 'createdDate',
+            render: (createdDate) => {
+                const modifiedDate = convertStringToDateTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT).add(
+                    7,
+                    'hour',
+                );
+                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
+            },
+            width: 180,
+            align: 'right',
+        },
         {
             title: translate.formatMessage(commonMessage.projectName),
             dataIndex: 'projectName',

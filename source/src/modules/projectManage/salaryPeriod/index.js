@@ -24,6 +24,7 @@ import axios from 'axios';
 import { getCacheAccessToken } from '@services/userService';
 import { formatDateString, formatMoney } from '@utils';
 import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 const message = defineMessages({
     objectName: 'Kỳ lương',
 });
@@ -38,6 +39,7 @@ const notificationMessage = defineMessages({
 const SalaryPeriodListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const moneyUnit = useMoneyUnit();
     const stateValues = translate.formatKeys(salaryPeriodState, ['label']);
     const { execute: executeFixSalary } = useFetch(apiConfig.income.fixSalary);
     const { execute: executeProjectSalary } = useFetch(apiConfig.income.projectSalary);
@@ -364,22 +366,22 @@ const SalaryPeriodListPage = () => {
                 );
             },
         },
-        // {
-        //     title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
-        //     // dataIndex: 'money',
-        //     align: 'right',
-        //     width: 140,
-        //     render: (dataRow) => {
+        {
+            title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
+            dataIndex: 'totalMoney',
+            align: 'right',
+            width: 150,
+            render: (dataRow) => {
               
-        //         var formattedValue = formatMoney(dataRow.money, {
-        //             groupSeparator: ',',
-        //             decimalSeparator: '.',
-        //             currentcy: moneyUnit,
-        //             currentDecimal: '2',
-        //         });
-        //         return <div>{formattedValue}</div>;
-        //     },
-        // },
+                var formattedValue = formatMoney(dataRow, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '2',
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
         mixinFuncs.renderActionColumn(
             {
                 edit: false,
