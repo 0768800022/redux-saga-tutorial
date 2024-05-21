@@ -1,4 +1,4 @@
-import { CalendarOutlined, CheckOutlined } from '@ant-design/icons';
+import { CalendarOutlined, CheckOutlined, BugOutlined } from '@ant-design/icons';
 import { BaseForm } from '@components/common/form/BaseForm';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import NumericField from '@components/common/form/NumericField';
@@ -147,6 +147,27 @@ function ProjectTaskListPage({ setSearchFilter }) {
                     return `${routes.ProjectTaskListPage.path}/${dataRow.id}?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}`;
                 };
                 funcs.additionalActionColumnButtons = () => ({
+                    bug: ({ id, taskName, kind }) => (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.createBug)}>
+                            <Button
+                                disabled={kind === 2}
+                                type="link"
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        routes.ProjectTaskListPage.path +
+                                            `/create?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}&isTaskBug=${true}`,
+                                        {
+                                            state: { action: 'projectTaskLog', prevPath: location.pathname },
+                                        },
+                                    );
+                                }}
+                            >
+                                <BugOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    ),
                     taskLog: ({ id, taskName }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.taskLog)}>
                             <Button
@@ -297,7 +318,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
         },
 
         active &&
-            mixinFuncs.renderActionColumn({ taskLog: mixinFuncs.hasPermission([apiConfig.taskLog.getList?.baseURL]), state: true, edit: true, delete: true }, { width: '180px' }),
+            mixinFuncs.renderActionColumn({ bug: mixinFuncs.hasPermission([apiConfig.task.create?.baseURL]), state: true, edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -382,7 +403,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
             path: routes.projectTabPage.path+`?projectId=${projectId}&storyId=${storyId}&active=${active}&projectName=${projectName}`,
         },
         {
-            breadcrumbName: storyName,
+            breadcrumbName: `Story (${storyName})`,
         },
     ];
 

@@ -69,8 +69,6 @@ const StudentForm = (props) => {
         });
     };
 
-    console.log(imageUrl);
-
     const validateStartDate = (_, value) => {
         const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
         if (date && value && value.isBefore(date)) {

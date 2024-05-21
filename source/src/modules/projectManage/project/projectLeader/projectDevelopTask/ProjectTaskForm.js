@@ -95,7 +95,6 @@ const ProjectTaskForm = (props) => {
             description: insertBaseURL(dataDetail?.description),
             memKind: value,
         });
-        console.log(dataDetail);
     }, [dataDetail]);
 
     const validateDueDate = (_, value) => {
