@@ -143,13 +143,19 @@ const SalaryPeriodDetailListPage = () => {
                 } else {
                     timeOff = result.toFixed(0);
                 }
-                const formattedValue = formatMoney(dataRow?.projectSalary ? dataRow.projectSalary : 0, {
-                    groupSeparator: ',',
-                    decimalSeparator: '.',
-                    currentcy: moneyUnit,
-                    currentDecimal: '2',
-                });
-                return <Tooltip placement='bottom' title={`Tổng giờ làm: ${timeOff}h`}>{formattedValue}</Tooltip>;
+
+                const format = ( money ) => {
+                    return  formatMoney(money ? money : 0, {
+                        groupSeparator: ',',
+                        decimalSeparator: '.',
+                        currentcy: moneyUnit,
+                        currentDecimal: '2',
+                    });
+                };
+
+                const formattedValue = format(dataRow?.projectSalary);
+                const formattedMoneyProject = format(dataRow?.projectSalary);
+                return <Tooltip placement='bottom' title={`Tổng giờ làm: ${timeOff}h | Lương một giờ: ${formattedMoneyProject}`}>{formattedValue}</Tooltip>;
             },
         },
         {
