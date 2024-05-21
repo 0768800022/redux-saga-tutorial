@@ -489,5 +489,5 @@ export const isPaidValues = [
 
 export const projectRoleKind = [
     { value: LEADER_KIND_PROJECT, label: 'Leader' },
-    { value: DEV_KIND_PROJECT, label: 'Developer' },
+    { value: DEV_KIND_PROJECT, label: 'Member' },
 ];
