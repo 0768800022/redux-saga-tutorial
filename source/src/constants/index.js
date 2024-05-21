@@ -17,15 +17,15 @@ export const brandName = 'CMS';
 export const appName = 'cms-elms-app';
 
 export const storageKeys = {
-    USER_ACCESS_TOKEN: `${appName}-user-access-token`,
-    USER_REFRESH_TOKEN: `${appName}-user-refresh-token`,
-    USER_KIND: `${appName}-user-kind`,
-    TENANT_ID: `${appName}-tenant-id`,
-    RESTAURANT_ID: `${appName}-restaurant-id`,
+    USER_ACCESS_TOKEN: `${appName}-${process.env.REACT_APP_ENV}-user-access-token`,
+    USER_REFRESH_TOKEN: `${appName}-${process.env.REACT_APP_ENV}-user-refresh-token`,
+    USER_KIND: `${appName}-${process.env.REACT_APP_ENV}-user-kind`,
+    TENANT_ID: `${appName}-${process.env.REACT_APP_ENV}-tenant-id`,
+    RESTAURANT_ID: `${appName}-${process.env.REACT_APP_ENV}-restaurant-id`,
     TENANT_HEADER: `X-tenant`,
-    TENANT_API_URL: `${appName}-tenant-api-url`,
-    USER_PROJECT_ACCESS_TOKEN: `${appName}-user-project-access-token`,
-    PROJECT_PERMISSION: `${appName}-project-permission`,
+    TENANT_API_URL: `${appName}-${process.env.REACT_APP_ENV}-tenant-api-url`,
+    USER_PROJECT_ACCESS_TOKEN: `${appName}-${process.env.REACT_APP_ENV}-user-project-access-token`,
+    PROJECT_PERMISSION: `${appName}-${process.env.REACT_APP_ENV}-project-permission`,
 };
 
 export const baseHeader = {
