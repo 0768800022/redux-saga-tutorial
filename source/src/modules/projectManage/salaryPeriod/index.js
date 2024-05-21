@@ -22,7 +22,7 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 import { FileExcelOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { getCacheAccessToken } from '@services/userService';
-import { formatDateString } from '@utils';
+import { formatDateString, formatMoney } from '@utils';
 import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
 const message = defineMessages({
     objectName: 'Kỳ lương',
@@ -197,7 +197,7 @@ const SalaryPeriodListPage = () => {
                             </BaseTooltip>
                         ),
                     export: ({ id, state, excelName }) =>
-                        (
+                        state === PAYOUT_PERIOD_STATE_DONE && (
                             <BaseTooltip title={<FormattedMessage defaultMessage={'Export'}/>}>
                                 <Button
                                     // disabled={state === PAYOUT_PERIOD_STATE_DONE}
@@ -274,6 +274,7 @@ const SalaryPeriodListPage = () => {
             },
             onCompleted: (res) => {
                 showSucsessMessage(translate.formatMessage(commonMessage.registerPeriodSalarySuccess));
+                mixinFuncs.getList();
             },
             onError: (error) => {
                 showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail));
@@ -363,6 +364,22 @@ const SalaryPeriodListPage = () => {
                 );
             },
         },
+        // {
+        //     title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
+        //     // dataIndex: 'money',
+        //     align: 'right',
+        //     width: 140,
+        //     render: (dataRow) => {
+              
+        //         var formattedValue = formatMoney(dataRow.money, {
+        //             groupSeparator: ',',
+        //             decimalSeparator: '.',
+        //             currentcy: moneyUnit,
+        //             currentDecimal: '2',
+        //         });
+        //         return <div>{formattedValue}</div>;
+        //     },
+        // },
         mixinFuncs.renderActionColumn(
             {
                 edit: false,
@@ -371,7 +388,7 @@ const SalaryPeriodListPage = () => {
                 approve: mixinFuncs.hasPermission([apiConfig.salaryPeriod.approve?.baseURL]),
                 export: true,
             },
-            { width: '100px' },
+            { width: '150px' },
         ),
     ].filter(Boolean);
 
