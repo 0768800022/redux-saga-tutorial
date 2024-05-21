@@ -41,7 +41,6 @@ const ProjectRoleSavePage = () => {
                     // avatarPath: data.avatar,
                     ...data,
                     id: id,
-                    projectRoleKind: detail?.projectRoleKind,
                 };
             };
             funcs.prepareCreateData = (data) => {

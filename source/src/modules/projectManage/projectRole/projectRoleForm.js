@@ -3,13 +3,17 @@ import React, { useEffect, useState } from 'react';
 import useBasicForm from '@hooks/useBasicForm';
 import useTranslate from '@hooks/useTranslate';
 import TextField from '@components/common/form/TextField';
-import { defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { BaseForm } from '@components/common/form/BaseForm';
-import { statusOptions } from '@constants/masterData';
+import { projectRoleKind, statusOptions } from '@constants/masterData';
 import SelectField from '@components/common/form/SelectField';
 import { commonMessage } from '@locales/intl';
+import AutoCompleteField from '@components/common/form/AutoCompleteField';
+import apiConfig from '@constants/apiConfig';
 
 const ProjectRoleForm = (props) => {
+    const translate = useTranslate();
+    // const projectRoleKind = translate.formatKeys(projectRoleKind, [ 'label' ]);
     const {
         formId,
         actions,
@@ -53,8 +57,11 @@ const ProjectRoleForm = (props) => {
        
         form.setFieldsValue({
             ...dataDetail,
+            projectRoleKind: dataDetail?.projectRoleKind,
         });
     }, [dataDetail]);
+
+    console.log(dataDetail);
 
     useEffect(() => {
         if (permissions.length !== 0) getGroupPermission();
@@ -76,7 +83,12 @@ const ProjectRoleForm = (props) => {
                         <TextField label="Name" required name="projectRoleName" />
                     </Col>
                     <Col span={12}>
-                        <TextField label="Mô tả" type="textarea" name="description" />
+                        <SelectField name="projectRoleKind" label="Loại" allowClear={false} options={projectRoleKind}/>
+                    </Col>
+                </Row>
+                <Row gutter={16}>
+                    <Col span={24}>
+                        <TextField label="Mô tả" type="textarea" name="description" />                       
                     </Col>
                 </Row>
 
