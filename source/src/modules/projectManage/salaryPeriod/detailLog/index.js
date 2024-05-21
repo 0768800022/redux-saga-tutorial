@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { AppConstants, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, PaymentState, salaryPeriodKInd } from '@constants';
+import { AppConstants, BUG_MONEY, DAY_OFF, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, FIXED_SALARY, PaymentState, salaryPeriodKInd } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { salaryPeriodState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -53,6 +53,7 @@ const SalaryPeriodDetailLogListPage = () => {
                     return {
                         ...prepareGetListParams(params),
                         salaryPeriodId: salaryPeriodDetailId,
+                        ignoreKind: 6,
                     };
                 };
                 funcs.changeFilter = (filter) => {
@@ -92,10 +93,63 @@ const SalaryPeriodDetailLogListPage = () => {
         },
     ].filter(Boolean);
     const columns = [
+        
         {
-            title: translate.formatMessage(commonMessage.developer),
+            title: translate.formatMessage(commonMessage.createdDate),
+            dataIndex: 'createdDate',
+            render: (createdDate) => {
+                const modifiedDate = convertStringToDateTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT).add(
+                    7,
+                    'hour',
+                );
+                const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
+                return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
+            },
+            width: 180,
+            align: 'start',
+        },
+        {
+            title: translate.formatMessage(commonMessage.projectName),
+            dataIndex: 'projectName',
+            width: 200,
+
+        },
+        
+       
+        {
+            title: translate.formatMessage(commonMessage.totalTimeWorking),
+            dataIndex: 'totalTime',
+            width: 120,
+
             render: (record) => {
-                return <span>{record.devName || record.sourceDevName}</span>;
+                if(!record)return <span></span>;
+
+                let result = record / 60;
+                let time = result;
+                if (result % 1 !== 0) {
+                    time = parseFloat(result.toFixed(2));
+                } else {
+                    time = result.toFixed(0);
+                }
+
+                return <span>{time}h</span>;
+            },
+        },
+        {
+            title: translate.formatMessage(commonMessage.hourlySalary),
+            dataIndex: 'devHourlySalary',
+            align: 'right',
+            width: 140,
+            render: (dataRow) => {
+                if(!dataRow)return <span></span>;
+
+                var formattedValue = formatMoney(dataRow, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '2',
+                });
+                return <div>{formattedValue}</div>;
             },
         },
         {
@@ -116,44 +170,38 @@ const SalaryPeriodDetailLogListPage = () => {
         },
         {
             title: translate.formatMessage(commonMessage.salary),
-            dataIndex: 'money',
-            align: 'center',
-            render: (salary) => {
-                const formattedValue = formatMoney(salary, {
+            // dataIndex: 'money',
+            align: 'right',
+            width: 140,
+            render: (dataRow) => {
+                var money = dataRow.money;
+                if(dataRow?.kind == BUG_MONEY ||dataRow?.kind ==DAY_OFF){
+                    money = money *(-1);
+                }
+                var formattedValue = formatMoney(money, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
-                    currentDecimal: '0',
+                    currentDecimal: '2',
                 });
                 return <div>{formattedValue}</div>;
             },
         },
         // {
-        //     title: <FormattedMessage defaultMessage={'Tiền giới thiệu'} />,
-        //     align: 'center',
-        //     render: (refSalary) => {
-        //         const formattedValue = formatMoney(refSalary, {
-        //             groupSeparator: ',',
-        //             decimalSeparator: '.',
-        //             currentcy: moneyUnit,
-        //             currentDecimal: '0',
-        //         });
-        //         return <div>{formattedValue}</div>;
-        //     },
-        // },
-        // {
         //     title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
-        //     align: 'center',
-        //     render: (refSalary) => {
-        //         const formattedValue = formatMoney(refSalary, {
+        //     align: 'right',
+        //     width: 140,
+        //     render: (dataRow) => {
+        //         var formattedValue = formatMoney(dataRow.devHourlySalary*(dataRow.totalTime/60), {
         //             groupSeparator: ',',
         //             decimalSeparator: '.',
         //             currentcy: moneyUnit,
-        //             currentDecimal: '0',
+        //             currentDecimal: '2',
         //         });
         //         return <div>{formattedValue}</div>;
         //     },
         // },
+       
         mixinFuncs.renderActionColumn(
             {
                 delete: false,
@@ -180,7 +228,7 @@ const SalaryPeriodDetailLogListPage = () => {
             groupSeparator: ',',
             decimalSeparator: '.',
             currentcy: moneyUnit,
-            currentDecimal: '0',
+            currentDecimal: '2',
         });
     };
     return (
@@ -188,7 +236,8 @@ const SalaryPeriodDetailLogListPage = () => {
             <ListPage
                 title={
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <div></div>
+                        <span style={{ fontWeight: 'normal' }}>{data?.[0]?.devName} - {data?.[0]?.salaryPeriodDetail.salaryPeriod.name}</span>
+
                         <div>
                             <span style={{ marginLeft: '5px' }}>
                                 {/* Tổng nhận: {moneySum && formatMoneyValue(moneySum[0]?.totalMoneyInput || 0)} */}

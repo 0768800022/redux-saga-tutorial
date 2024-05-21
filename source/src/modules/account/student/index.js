@@ -51,7 +51,10 @@ const StudentListPage = () => {
                             style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                navigate(route.studentCourseListPage.path + `?studentId=${id}&studentName=${account?.fullName}`);
+                                navigate(
+                                    route.studentCourseListPage.path +
+                                        `?studentId=${id}&studentName=${account?.fullName}`,
+                                );
                                 // navigate(route.studentCourseListPage.path);
                                 // navigate(`./course/${id}`);
                                 // navigate(route.taskListPage.path + `?courseId=${id}&courseName=${name}`);
@@ -68,7 +71,7 @@ const StudentListPage = () => {
     const columns = [
         {
             title: '#',
-            dataIndex: ["account",'avatar'],
+            dataIndex: ['account', 'avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -81,11 +84,11 @@ const StudentListPage = () => {
         },
         {
             title: <FormattedMessage defaultMessage="Họ và tên" />,
-            dataIndex: ["account",'fullName'],
+            dataIndex: ['account', 'fullName'],
         },
         {
             title: <FormattedMessage defaultMessage="Ngày sinh" />,
-            dataIndex:["account", 'birthday'],
+            dataIndex: ['account', 'birthday'],
             render: (birthday) => {
                 const result = convertUtcToLocalTime(birthday, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
                 return <div>{result}</div>;
@@ -93,11 +96,11 @@ const StudentListPage = () => {
         },
         {
             title: <FormattedMessage defaultMessage="Số điện thoại" />,
-            dataIndex: ["account",'phone'],
+            dataIndex: ['account', 'phone'],
         },
         {
             title: <FormattedMessage defaultMessage="Email" />,
-            dataIndex:["account", 'email'],
+            dataIndex: ['account', 'email'],
         },
         {
             title: <FormattedMessage defaultMessage="Trường" />,
@@ -108,7 +111,10 @@ const StudentListPage = () => {
             dataIndex: ['studyClass', 'categoryName'],
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ task: true, edit: true, delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn(
+            { task: mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]), edit: true, delete: true },
+            { width: '120px' },
+        ),
     ];
 
     const searchFields = [

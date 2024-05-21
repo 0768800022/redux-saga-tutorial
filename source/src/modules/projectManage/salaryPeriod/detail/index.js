@@ -13,9 +13,9 @@ import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelp
 import React from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
-
+import styles from './index.module.scss';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { Button, Tag } from 'antd';
+import { Button, Tag, Tooltip } from 'antd';
 import AvatarField from '@components/common/form/AvatarField';
 import { FieldTypes } from '@constants/formConfig';
 import { render } from '@testing-library/react';
@@ -77,21 +77,11 @@ const SalaryPeriodDetailListPage = () => {
             apiConfig: apiConfig.developer.autocomplete,
             mappingOptions: (item) => ({
                 value: item.id,
-                label: item.studentInfo.fullName,
+                label: item.account.fullName,
             }),
             searchParams: (text) => ({ name: text }),
         },
-        {
-            key: 'projectId',
-            placeholder: <FormattedMessage defaultMessage={'Tên dự án'} />,
-            type: FieldTypes.AUTOCOMPLETE,
-            apiConfig: apiConfig.project.autocomplete,
-            mappingOptions: (item) => ({
-                value: item.id,
-                label: item.name,
-            }),
-            searchParams: (text) => ({ name: text }),
-        },
+      
     ].filter(Boolean);
     const columns = [
         {
@@ -115,51 +105,64 @@ const SalaryPeriodDetailListPage = () => {
             title: translate.formatMessage(commonMessage.totalTimeWorking),
             dataIndex: 'totalTimeWorking',
             align: 'center',
-            width: 130,
-            // render(totalTimeWorking) {
-            //     if (totalTimeWorking) return <div>{Math.ceil((totalTimeWorking / 60) * 10) / 10} h</div>;
-            // },
+            width: 140,
+            render: (dataRow) => {
+                let result = dataRow / 60;
+                if (result % 1 !== 0) {
+                    return <span>{parseFloat(result.toFixed(2))}h</span>;
+                } else {
+                    return <span>{result.toFixed(0)}h</span>;
+                }
+            },
         },
         {
             title: translate.formatMessage(commonMessage.salary),
             dataIndex: 'fixSalary',
-            align: 'center',
-            width: 120,
+            align: 'right',
+            width: 140,
             render: (fixSalary) => {
                 const formattedValue = formatMoney(fixSalary ? fixSalary : 0, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
-                    currentDecimal: '0',
+                    currentDecimal: '2',
                 });
                 return <div>{formattedValue}</div>;
             },
         },
         {
             title: translate.formatMessage(commonMessage.projectSalary),
-            dataIndex: 'projectSalary',
-            align: 'center',
-            render: (projectSalary) => {
-                const formattedValue = formatMoney(projectSalary ? projectSalary : 0, {
+            // dataIndex: 'projectSalary',
+            align: 'right',
+            width: 140,
+            render: (dataRow) => {
+                let result = dataRow.totalTimeProjectIsPaid / 60;
+                let timeOff = result;
+                if (result % 1 !== 0) {
+                    timeOff = parseFloat(result.toFixed(2));
+                } else {
+                    timeOff = result.toFixed(0);
+                }
+                const formattedValue = formatMoney(dataRow?.projectSalary ? dataRow.projectSalary : 0, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
-                    currentDecimal: '0',
+                    currentDecimal: '2',
                 });
-                return <div>{formattedValue}</div>;
+                return <Tooltip placement='bottom' title={`Tổng giờ làm: ${timeOff}h`}>{formattedValue}</Tooltip>;
             },
         },
         {
             title: <FormattedMessage defaultMessage={'Lương ref'} />,
             dataIndex: 'refSalary',
-            align: 'center',
-            width: 120,
+            align: 'right',
+            width: 140,
             render: (refSalary) => {
                 const formattedValue = formatMoney(refSalary, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
-                    currentDecimal: '0',
+                    currentDecimal: '2',
                 });
                 return <div>{formattedValue}</div>;
             },
@@ -167,63 +170,75 @@ const SalaryPeriodDetailListPage = () => {
 
         {
             title: translate.formatMessage(commonMessage.totalTimeOff),
-            dataIndex: 'totalTimeOff',
-            align: 'center',
-            width: 120,
-            // render(totalTimeOff) {
-            //     if (totalTimeOff) return <div>{Math.ceil((totalTimeOff / 60) * 10) / 10} h</div>;
-            // },
-        },
-        {
-            title: <FormattedMessage defaultMessage={'Tiền bug'} />,
-            dataIndex: 'bugMoney',
-            align: 'center',
-            width: 120,
-            render: (bugMoney) => {
-                const formattedValue = formatMoney(bugMoney ? bugMoney : 0, {
+            // dataIndex: 'totalTimeOff',
+            align: 'right',
+            width: 140,
+            render: (dataRow) => {
+                let result = dataRow.totalTimeOff / 60;
+                let timeOff = result;
+                if (result % 1 !== 0) {
+                    timeOff = parseFloat(result.toFixed(2));
+                } else {
+                    timeOff = result.toFixed(0);
+                }
+                const formattedValue = formatMoney(dataRow?.dayOffSalary ? dataRow.dayOffSalary*(-1) : 0, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
-                    currentDecimal: '0',
+                    currentDecimal: '2',
                 });
-                return <div>{formattedValue}</div>;
+                return <Tooltip title={`Số giờ nghỉ: ${timeOff}h`} placement='bottom'>
+                    {formattedValue}
+                </Tooltip>;
             },
         },
-        // {
-        //     title: translate.formatMessage(commonMessage.payoutStatus),
-        //     dataIndex: 'payoutStatus',
-        //     align: 'center',
-        //     width: 120,
-        //     render(payoutStatus) {
-        //         const state = stateValues.find((item) => item.value == payoutStatus);
-        //         return (
-        //             <div>
-        //                 <Tag color={state?.color}>
-        //                     <div style={{ padding: '0 1px', fontSize: 14 }}>
-        //                         {state?.label}
-        //                     </div>
-        //                 </Tag>
-        //             </div>
-        //         );
-        //     },
-        // },
         {
-            title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
-            // dataIndex: 'refSalary',
-            align: 'center',
-            width: 120,
-            render: (record) => {
-                console.log(record);
-                let sum =
-                    (record?.fixSalary ?? 0) +
-                    (record?.projectSalary ?? 0) +
-                    (record?.refSalary ?? 0) -
-                    (record?.bugMoney ?? 0);
-                const formattedValue = formatMoney(sum, {
+            title: <span style={{ color:'red' }}><FormattedMessage defaultMessage={'Tiền phạt bug'} /></span>,
+            // dataIndex: 'bugMoney',
+            align: 'right',
+            width: 140,
+            render: (dataRow) => {
+                let result = dataRow.totalTimeBug / 60;
+                let timeOff = result;
+                if (result % 1 !== 0) {
+                    timeOff = parseFloat(result.toFixed(2));
+                } else {
+                    timeOff = result.toFixed(0);
+                }
+
+                const formattedValue = formatMoney(dataRow?.bugMoney ? dataRow.bugMoney*(-1) : 0, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
-                    currentDecimal: '0',
+                    currentDecimal: '2',
+                });
+
+                
+                return <Tooltip title={`Tổng số giờ: ${timeOff}h`} placement='bottom'>{formattedValue}</Tooltip>;
+            },
+        },
+        {
+            title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
+            align: 'right',
+            width: 140,
+            render: (dataRow) => {
+                const totalSalary = sumMoneyItem(dataRow);
+                // const hoursPerDay = 8;
+                // const workingDaysPerMonth = 24;
+                // const _totalTimeOff = dataRow.totalTimeOff / 60; //Đổi ra giờ
+                // const totalDayOff = _totalTimeOff / hoursPerDay; // Số ngày nghỉ = _totalTimeOff / 8
+                
+                // const totalDayWorking = workingDaysPerMonth - totalDayOff; //Số ngày làm việc = 24 - só ngày nghỉ
+                // //Tổng tiền = (lương cứng * (số ngày làm việc / 24)  + lương dự án + lương refer) - lương bug
+                
+                // const fixedSalaryProportion = dataRow.fixSalary * (totalDayWorking / workingDaysPerMonth);
+                // const totalSalary = Number(fixedSalaryProportion.toFixed(2)) + Number(dataRow.projectSalary.toFixed(2)) + Number(dataRow.refSalary.toFixed(2)) - Number(dataRow.bugMoney.toFixed(2));
+
+                const formattedValue = formatMoney(totalSalary||0, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '2',
                 });
                 return <div>{formattedValue}</div>;
             },
@@ -235,6 +250,18 @@ const SalaryPeriodDetailListPage = () => {
             { width: '120px' },
         ),
     ].filter(Boolean);
+
+    const sumMoneyItem = (data) => {
+        const hoursPerDay = 8;
+        const workingDaysPerMonth = 24;
+        const _totalTimeOff = data.totalTimeOff / 60; //Đổi ra giờ
+        const totalDayOff = _totalTimeOff / hoursPerDay; // Số ngày nghỉ = _totalTimeOff / 8
+        const totalDayWorking = workingDaysPerMonth - totalDayOff; //Số ngày làm việc = 24 - só ngày nghỉ
+        //Tổng tiền = (lương cứng * (số ngày làm việc / 24)  + lương dự án + lương refer) - lương bug
+        const fixedSalaryProportion = data.fixSalary * (totalDayWorking / workingDaysPerMonth);
+        const totalSalary = Number(fixedSalaryProportion.toFixed(2)) + Number(data.projectSalary.toFixed(2)) + Number(data.refSalary.toFixed(2)) - Number(data.bugMoney.toFixed(2));
+        return totalSalary;
+    };
 
     const breadcrumbs = [
         {
@@ -248,12 +275,40 @@ const SalaryPeriodDetailListPage = () => {
     const handleOnClick = (event, record) => {
         navigate(routes.salaryPeriodDetailLogListPage.path + `?salaryPeriodId=${salaryPeriodId}&detailId=${record.id}`);
     };
+
+    const formatMoneyValue = (value) => {
+        return formatMoney(value ? value : 0, {
+            groupSeparator: ',',
+            decimalSeparator: '.',
+            currentcy: moneyUnit,
+            currentDecimal: '2',
+        });
+    };
+
+    const sumMoney = (data) => {
+        const totalAmount = data?.reduce((accumulator, item) => {
+            return accumulator + sumMoneyItem(item);
+        }, 0);
+
+        return totalAmount;
+    };
+
     return (
         <PageWrapper routes={breadcrumbs}>
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({
                     fields: searchFields,
                 })}
+                title={
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }} className={styles.title}>
+                        <div></div>
+                        <div>
+                            <span style={{ marginLeft: '5px' }}>
+                                Tổng tiền: { data ? formatMoneyValue(sumMoney(data)) : formatMoneyValue(0)}
+                            </span>
+                        </div>
+                    </div>
+                }
                 // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
                     <BaseTable

@@ -43,6 +43,10 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
     const queryParameters = new URLSearchParams(window.location.search);
     const taskName = queryParameters.get('task');
     const projectName = queryParameters.get('projectName');
+    const storyName = queryParameters.get('storyName');
+    const projectId = queryParameters.get('projectId');
+    const storyId = queryParameters.get('storyId');
+    const active = queryParameters.get('active');
 
     const KindTaskLog = translate.formatKeys(TaskLogKindOptions, ['label']);
     const state = location?.state?.prevPath;
@@ -124,10 +128,12 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
                     const projectId = queryParams.get('projectId');
                     const projectName = queryParams.get('projectName');
                     const projectTaskId = queryParams.get('projectTaskId');
+                    const storyName = queryParams.get('storyName');
+                    const storyId = queryParams.get('storyId');
                     const task = queryParams.get('task');
                     const active = queryParams.get('active');
                     mixinFuncs.setQueryParams(
-                        serializeParams({ projectId, projectName, projectTaskId, task, active, ...filter }),
+                        serializeParams({ projectId, projectName,storyId,storyName, projectTaskId, task, active, ...filter }),
                     );
                 };
             },
@@ -148,7 +154,6 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
             title: translate.formatMessage(commonMessage.createdDate),
             width: 180,
             dataIndex: 'createdDate',
-            align: 'center',
             render: (createdDate) => {
                 const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
                 return <div>{createdDateLocal}</div>;
@@ -161,7 +166,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
         {
             title: translate.formatMessage(message.gitCommitUrl),
             dataIndex: 'gitCommitUrl',
-            width: 180,
+            width: 200,
             render: (gitUrl) => {
                 return (
                     gitUrl && (
@@ -177,6 +182,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
             title: translate.formatMessage(commonMessage.modifiedDate),
             width: 180,
             dataIndex: 'modifiedDate',
+            align: 'right',
             render: (modifiedDate) => {
                 const modifiedDateLocal = convertUtcToLocalTime(modifiedDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
                 return <div>{modifiedDateLocal}</div>;
@@ -205,7 +211,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
                 );
             },
         },
-        renderAction === false ? '' : mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        // renderAction === false ? '' : mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const searchFields = [
@@ -234,18 +240,31 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
 
         return initialFilterValues;
     }, [queryFilter?.fromDate, queryFilter?.toDate]);
+
+    
+    const breadcrumbs = [
+        {
+            breadcrumbName: translate.formatMessage(commonMessage.project),
+            path: routes.projectListPage.path,
+        },
+        {
+            breadcrumbName: projectName,
+            path: routes.projectTabPage.path+`?projectId=${projectId}&storyId=${storyId}&active=${active}&projectName=${projectName}`,
+        },
+        {
+            breadcrumbName: storyName,
+            path: routes.ProjectTaskListPage.path+`?projectId=${projectId}&storyId=${storyId}&active=${active}&projectName=${projectName}&storyName=${storyName}&storyId=${storyId}`,
+
+        },
+        {
+            breadcrumbName: taskName,
+        },
+    ];
+
     return (
         <PageWrapper
             routes={
-                setBreadCrumbName
-                    ? setBreadCrumbName(['fromDate', 'toDate'])
-                    : routes.ProjectTaskLogListPage.breadcrumbs(
-                        commonMessage,
-                        paramHead,
-                        routes.projectTabPage.path,
-                        deleteSearchFilterInLocationSearch(search, ['fromDate', 'toDate']),
-                        true,
-                    )
+                breadcrumbs
             }
         >
             <div>
@@ -265,7 +284,7 @@ function ProjectTaskLogListPage({ setBreadCrumbName, renderAction, createPermiss
                         className: styles.search,
                         initialValues: initialFilterValues,
                     })}
-                    actionBar={mixinFuncs.renderActionBar()}
+                    // actionBar={mixinFuncs.renderActionBar()}
                     baseTable={
                         <BaseTable
                             onChange={changePagination}

@@ -120,21 +120,11 @@ const CourseListPage = () => {
     };
     const searchFields = [
         {
-            key: 'name',
-            placeholder: translate.formatMessage(commonMessage.name),
-        },
-        {
             key: 'state',
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
         },
-        // {
-        //     key: 'status',
-        //     placeholder: translate.formatMessage(commonMessage.status),
-        //     type: FieldTypes.SELECT,
-        //     options: statusValues,
-        // },
     ];
     const columns = [
         {
@@ -144,6 +134,7 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
+            align:'right',
             width: 150,
             render: (createdDate) => {
                 return (
@@ -152,7 +143,6 @@ const CourseListPage = () => {
                     </div>
                 );
             },
-            align: 'center',
         },
         {
             title: translate.formatMessage(commonMessage.state),

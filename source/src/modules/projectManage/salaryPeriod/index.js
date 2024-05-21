@@ -2,7 +2,7 @@ import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import { FileSearchOutlined } from '@ant-design/icons';
-import { DATE_FORMAT_DISPLAY, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
+import { DATE_FORMAT_DISPLAY, DEFAULT_EXCEL_DATE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, PAYOUT_PERIOD_STATE_CALCULATED, PAYOUT_PERIOD_STATE_DONE, apiTenantUrl, apiUrl } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { salaryPeriodState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -11,27 +11,43 @@ import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import React from 'react';
-import { defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import styles from './salaryPeriod.module.scss';
-import { BsWrenchAdjustableCircle } from 'react-icons/bs';
-import { TbReportMoney } from 'react-icons/tb';
-import { GrMoney } from 'react-icons/gr';
 import useNotification from '@hooks/useNotification';
-import { Button, Tag } from 'antd';
+import { Button, Modal, Tag } from 'antd';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import useFetch from '@hooks/useFetch';
+import { IconCheck, IconX } from '@tabler/icons-react';
+import { FileExcelOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import { getCacheAccessToken } from '@services/userService';
+import { formatDateString, formatMoney } from '@utils';
+import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 const message = defineMessages({
     objectName: 'Kỳ lương',
+});
+const notificationMessage = defineMessages({
+    rejectSuccess: 'Huỷ {objectName} thành công',
+    rejectTitle: 'Bạn muốn huỷ {objectName} này?',
+    approveSuccess: 'Chấp nhận {objectName} thành công',
+    approveTitle: 'Bạn muốn chấn nhận {objectName} này?',
+    ok: 'Đồng ý',
+    cancel: 'Hủy',
 });
 const SalaryPeriodListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
+    const moneyUnit = useMoneyUnit();
     const stateValues = translate.formatKeys(salaryPeriodState, ['label']);
     const { execute: executeFixSalary } = useFetch(apiConfig.income.fixSalary);
     const { execute: executeProjectSalary } = useFetch(apiConfig.income.projectSalary);
     const { execute: executeGeneratePeriodDetail } = useFetch(apiConfig.income.generatePeriodDetail);
+    const { execute: approvePayout, loading: loadingApprove } = useFetch(apiConfig.salaryPeriod.approve);
     const notification = useNotification();
+    const userAccessToken = getCacheAccessToken();
+    const intl = useIntl();
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.salaryPeriod,
@@ -149,6 +165,55 @@ const SalaryPeriodListPage = () => {
                     //         </BaseTooltip>
                     //     );
                     // },
+                    reject: ({ id, state }) =>
+                        state === PAYOUT_PERIOD_STATE_CALCULATED && (
+                            <BaseTooltip title={<FormattedMessage defaultMessage={'Từ chối'}/>}>
+                                <Button
+                                    type="link"
+                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        showRejectItemConfirm(id);
+                                    }}
+                                >
+                                    <IconX color={state === PAYOUT_PERIOD_STATE_CALCULATED ? 'red' : 'gray'} size={16} />
+                                </Button>
+                            </BaseTooltip>
+                        ),
+                    approve: ({ id, state }) =>
+                        state === PAYOUT_PERIOD_STATE_CALCULATED && (
+                            <BaseTooltip title={<FormattedMessage defaultMessage={'Chấp nhận'}/>}>
+                                <Button
+                                    type="link"
+                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        showApproveItemConfirm(id, state);
+                                    }}
+                                >
+                                    <IconCheck
+                                        color={state === PAYOUT_PERIOD_STATE_CALCULATED ? 'green' : 'gray'}
+                                        size={16}
+                                    />
+                                </Button>
+                            </BaseTooltip>
+                        ),
+                    export: ({ id, state, excelName }) =>
+                        state === PAYOUT_PERIOD_STATE_DONE && (
+                            <BaseTooltip title={<FormattedMessage defaultMessage={'Export'}/>}>
+                                <Button
+                                    // disabled={state === PAYOUT_PERIOD_STATE_DONE}
+                                    type="link"
+                                    style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        // exportToExcel(id, excelName);
+                                    }}
+                                >
+                                    <FileExcelOutlined  style={{ color:'green' }} size={16}/>
+                                </Button>
+                            </BaseTooltip>
+                        ),
                 });
             },
         });
@@ -170,26 +235,89 @@ const SalaryPeriodListPage = () => {
         // console.log(record);
     };
 
+    const exportToExcel = (value, nameExcel) => {
+        axios({
+            url: `${apiTenantUrl}v1/period-detail/export-to-excel/${value}`,
+            method: 'GET',
+            responseType: 'blob',
+            // withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${userAccessToken}`, // Sử dụng token từ state
+            },
+        })
+            .then((response) => {
+                // const fileName="uy_nhiem_chi";
+                const date = new Date();
+                const day = formatDateString(date, DEFAULT_EXCEL_DATE);
+
+                const excelBlob = new Blob([response.data], {
+                    type: response.headers['content-type'],
+                });
+
+                const link = document.createElement('a');
+
+                link.href = URL.createObjectURL(excelBlob);
+                link.download = `${nameExcel}-${day}.xlsx`;
+                link.click();
+                showSucsessMessage('Tạo tệp ủy nhiệm chi thành công');
+            })
+            .catch((error) => {
+                console.log(error);
+                // Xử lý lỗi tải file ở đây
+            });
+    };
+
+    const handleApprovepayout = (id,state) => {
+        approvePayout({
+            data: {
+                id,
+                state: 2,
+                // ...(refcode && { referralCode: refcode }),
+            },
+            onCompleted: (res) => {
+                showSucsessMessage(translate.formatMessage(commonMessage.registerPeriodSalarySuccess));
+                mixinFuncs.getList();
+            },
+            onError: (error) => {
+                showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail));
+            },
+        });
+    };
+
+    const showRejectItemConfirm = (id) => {
+        Modal.confirm({
+            title: intl.formatMessage(notificationMessage.rejectTitle, {
+                objectName: translate.formatMessage(message.objectName),
+            }),
+            content: '',
+            okText: intl.formatMessage(notificationMessage.ok),
+            cancelText: intl.formatMessage(notificationMessage.cancel),
+            centered: true,
+            onOk: () => {
+                // handleRejectPayout(id);
+            },
+        });
+    };
+    const showApproveItemConfirm = (id, state) => {
+        Modal.confirm({
+            title: intl.formatMessage(notificationMessage.approveTitle, {
+                objectName: translate.formatMessage(message.objectName),
+            }),
+            content: '',
+            okText: intl.formatMessage(notificationMessage.ok),
+            cancelText: intl.formatMessage(notificationMessage.cancel),
+            centered: true,
+            onOk: () => {
+                handleApprovepayout(id,state);
+            },
+        });
+    };
+
     const columns = [
         {
             title: translate.formatMessage(commonMessage.salaryPeriodName),
             dataIndex: 'name',
             width: 300,
-            // render: (name, record) => {
-            //     const processJson = JSON.parse(record?.process);
-            //     let active = false;
-            //     if (processJson.fixSalaryState && processJson.projectSalaryState && processJson.generatePeriodDetail) {
-            //         active = true;
-            //     }
-            //     return (
-            //         <div
-            //             onClick={(event) => active && handleOnClick(event, record)}
-            //             className={active && styles.customDiv}
-            //         >
-            //             {name}
-            //         </div>
-            //     );
-            // },
         },
         {
             title: translate.formatMessage(commonMessage.startDate),
@@ -200,18 +328,18 @@ const SalaryPeriodListPage = () => {
                 );
             },
             width: 180,
-            align: 'center',
+            align: 'right',
         },
         {
             title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'end',
+            align: 'right',
             render: (endDate) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate, DATE_FORMAT_DISPLAY)}</div>
                 );
             },
             width: 180,
-            align: 'center',
         },
         {
             title: translate.formatMessage(commonMessage.createdDate),
@@ -222,7 +350,7 @@ const SalaryPeriodListPage = () => {
                 );
             },
             width: 180,
-            align: 'center',
+            align: 'right',
         },
         {
             title: 'Tình trạng',
@@ -238,20 +366,31 @@ const SalaryPeriodListPage = () => {
                 );
             },
         },
-        // mixinFuncs.renderActionColumn(
-        //     {
-        //         fixSalary: true,
-        //         projectSalary: true,
-        //         generatePeriodDetail: true,
-        //     },
-        //     { width: '150px', title: translate.formatMessage(commonMessage.calculateSalaryPeriod) },
-        // ),
+        {
+            title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
+            dataIndex: 'totalMoney',
+            align: 'right',
+            width: 150,
+            render: (dataRow) => {
+              
+                var formattedValue = formatMoney(dataRow, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '2',
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
         mixinFuncs.renderActionColumn(
             {
                 edit: false,
                 delete: false,
+                reject: false,    
+                approve: mixinFuncs.hasPermission([apiConfig.salaryPeriod.approve?.baseURL]),
+                export: true,
             },
-            { width: '100px' },
+            { width: '150px' },
         ),
     ].filter(Boolean);
 

@@ -10,9 +10,9 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import routes from '@routes';
-import { Avatar } from 'antd';
+import { Avatar, Tag } from 'antd';
 import React, { useEffect } from 'react';
-import { defineMessages } from 'react-intl';
+import { FormattedMessage, defineMessages } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './member.module.scss';
 import AvatarField from '@components/common/form/AvatarField';
@@ -82,7 +82,8 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
         event.preventDefault();
         navigate(
             routes.memberActivityProjectListPage.path +
-                `?projectId=${record?.project?.id}&studentId=${record?.developer.studentInfo?.id}&studentName=${record?.developer.studentInfo?.fullName}`,
+                `?projectId=${record?.project?.id}&developerId=${record?.developer.accountDto?.id}&studentName=${record?.developer.accountDto?.fullName}
+                &projectName=${record?.project?.name}`,
         );
     };
 
@@ -119,7 +120,21 @@ const ProjectMemberListPage = ({ setSearchFilter }) => {
             dataIndex: ['projectRole', 'projectRoleName'],
             width: 120,
         },
-
+        {
+            title: <FormattedMessage defaultMessage={'Trả lương'} />,
+            dataIndex: ['isPaid'],
+            width: 120,
+            align: 'center',
+            render(dataRow) {
+                return (
+                    dataRow === true ? <Tag color={'green'}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>Có trả lương</div>
+                    </Tag> : <Tag color={'yellow'}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>Không trả lương</div>
+                    </Tag> 
+                );
+            },
+        },
         {
             title: 'Lịch trình',
             dataIndex: 'schedule',

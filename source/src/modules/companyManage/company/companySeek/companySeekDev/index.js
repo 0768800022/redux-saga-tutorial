@@ -128,7 +128,7 @@ const CompanySeekDevListPage = () => {
                 return <div>{roleName}</div>;
             },
         },
-        mixinFuncs.renderActionColumn({ preview: true }, { width: 160 }),
+        mixinFuncs.renderActionColumn({ preview: mixinFuncs.hasPermission([apiConfig.companySeek.getByIdDev?.baseURL]) }, { width: 160 }),
     ];
 
     return (

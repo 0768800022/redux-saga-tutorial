@@ -381,7 +381,7 @@ const DeveloperForm = (props) => {
                                 apiConfig={apiConfig.developer.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.account.fullName })}
                                 initialSearchParams={{ pageNumber: 0 }}
-                                searchParams={(text) => ({ leaderName: text })}
+                                searchParams={(text) => ({ name: text })}
                             />
                         </Col>
                         <Col span={12}>

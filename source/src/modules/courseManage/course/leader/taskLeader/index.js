@@ -203,7 +203,7 @@ function TaskListPage() {
                     const modifiedstartDateTimeString = convertDateTimeToString(modifiedstartDate, DEFAULT_FORMAT);
                     return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedstartDateTimeString}</div>;
                 },
-                align: 'center',
+                align: 'right',
             },
             {
                 title: 'Ngày kết thúc',
@@ -214,7 +214,7 @@ function TaskListPage() {
                     const modifieddueDateTimeString = convertDateTimeToString(modifieddueDate, DEFAULT_FORMAT);
                     return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifieddueDateTimeString}</div>;
                 },
-                align: 'center',
+                align: 'right',
             },
             {
                 title: 'Ngày hoàn thành',
@@ -232,7 +232,7 @@ function TaskListPage() {
                     );
                     return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
                 },
-                align: 'center',
+                align: 'right',
             },
             {
                 title: translate.formatMessage(commonMessage.state),

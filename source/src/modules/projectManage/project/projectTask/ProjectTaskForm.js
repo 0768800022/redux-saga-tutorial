@@ -4,7 +4,7 @@ import DatePickerField from '@components/common/form/DatePickerField';
 import RichTextField, { insertBaseURL, removeBaseURL } from '@components/common/form/RichTextField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT, TASK_KIND_BUG } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { memberTaskKind, projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
@@ -51,7 +51,7 @@ const ProjectTaskForm = (props) => {
         if (!isEditing > 0) {
             form.setFieldsValue({
                 status: statusValues[1].value,
-                state: stateValues[0].value,
+                state: stateValues[1].value,
                 kind: projectTaskKind[0].value,
                 memKind: valueSelect,
             });
@@ -146,11 +146,10 @@ const ProjectTaskForm = (props) => {
                                     allowClear={false}
                                     options={projectTaskKind}
                                     onChange={(value) => {
-                                        console.log(value);
-                                        if (value == 1) {
-                                            setIsTaskBug(false);
-                                        } else {
+                                        if (value == TASK_KIND_BUG) {
                                             setIsTaskBug(true);
+                                        } else {
+                                            setIsTaskBug(false);
                                         }
                                     }}
                                 />
@@ -223,21 +222,7 @@ const ProjectTaskForm = (props) => {
                             </Space.Compact>
                         </Space>
                     </Col>
-                    <Col span={12}>
-                        <AutoCompleteField
-                            required
-                            label={<FormattedMessage defaultMessage="Danh mục" />}
-                            name="projectCategoryId"
-                            apiConfig={apiConfig.projectCategory.autocomplete}
-                            mappingOptions={(item) => ({
-                                value: item.id,
-                                label: item.projectCategoryName,
-                            })}
-                            searchParams={(text) => ({ name: text })}
-                            optionsParams={{ projectId: projectId }}
-                            initialSearchParams={{ projectId: projectId }}
-                        />
-                    </Col>
+                  
                     <Col span={12}>
                         <SelectField
                             required
@@ -247,7 +232,7 @@ const ProjectTaskForm = (props) => {
                             options={stateValues}
                         />
                     </Col>
-                    <Col span={12}>
+                    {/* <Col span={12}>
                         <SelectField
                             required
                             name="status"
@@ -255,7 +240,7 @@ const ProjectTaskForm = (props) => {
                             allowClear={false}
                             options={statusValues}
                         />
-                    </Col>
+                    </Col> */}
                     <Col span={12}>
                         <DatePickerField
                             showTime={true}

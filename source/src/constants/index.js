@@ -25,6 +25,7 @@ export const storageKeys = {
     TENANT_HEADER: `X-tenant`,
     TENANT_API_URL: `${appName}-tenant-api-url`,
     USER_PROJECT_ACCESS_TOKEN: `${appName}-user-project-access-token`,
+    PROJECT_PERMISSION: `${appName}-project-permission`,
 };
 
 export const baseHeader = {
@@ -65,6 +66,13 @@ export const DATE_FORMAT_DISPLAY = 'DD/MM/YYYY';
 export const DEFAULT_FORMAT = 'DD/MM/YYYY HH:mm:ss';
 export const DATE_FORMAT_ZERO_TIME = 'DD/MM/YYYY 00:00:00';
 export const DATE_FORMAT_END_OF_DAY_TIME = 'DD/MM/YYYY 23:59:59';
+export const DEFAULT_EXCEL_DATE = 'DDMMYYHHmmss';
+
+export const PAYOUT_PERIOD_STATE_PENDING = 0;
+export const PAYOUT_PERIOD_STATE_CALCULATED = 1;
+export const PAYOUT_PERIOD_STATE_DONE = 2;
+export const PAYOUT_PERIOD_STATE_CANCEL = 3;
+
 export const navigateTypeEnum = {
     PUSH: 'PUSH',
     POP: 'POP',
@@ -98,8 +106,8 @@ export const STATUS_DELETE = -2;
 export const FIX_SALARY = 1;
 export const HOUR_SALARY = 2;
 
-export const STATE_ORDER_PENDING = 0;
-export const STATE_ORDER_DONE = 1;
+export const DEV_KIND_PROJECT = 2;
+export const LEADER_KIND_PROJECT = 1;
 export const STATE_ORDER_CANCEL = -1;
 export const ORDER_TYPE_PICK_UP = 1;
 export const ORDER_TYPE_DELIVER = 2;
@@ -132,6 +140,7 @@ export const STATE_PROJECT_STORY_DONE = 3;
 export const STATE_PROJECT_STORY_CANCEL = 4;
 export const TASK_KIND_FEATURE = 1;
 export const TASK_KIND_BUG = 2;
+export const TASK_KIND_TESTCASE = 3;
 
 export const DEFAULT_TABLE_ITEM_SIZE = 20;
 export const DEFAULT_TABLE_PAGE_START = 0;
@@ -447,9 +456,9 @@ export const PaymentState = [
 
 export const salaryPeriodKInd = [
     { value: FIXED_SALARY, label: commonMessage.fixed_salary, color: '#d07d3e' },
-    { value: PROJECT_SALARY, label: commonMessage.projectSalary, color: 'blue' },
+    { value: PROJECT_SALARY, label: commonMessage.task, color: 'blue' },
     { value: REFER_MONEY, label: commonMessage.refer_money, color: '#69bdd2' },
-    { value: BUG_MONEY, label: commonMessage.bug_money, color: '#e07b39' },
+    { value: BUG_MONEY, label: commonMessage.bug, color: '#e07b39' },
     { value: DAY_OFF, label: commonMessage.day_off, color: 'red' },
 ];
 

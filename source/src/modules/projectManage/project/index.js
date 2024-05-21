@@ -1,7 +1,13 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT, DATE_FORMAT_DISPLAY, DEFAULT_TABLE_ITEM_SIZE, AppConstants, DATE_FORMAT_VALUE } from '@constants';
+import {
+    DEFAULT_FORMAT,
+    DATE_FORMAT_DISPLAY,
+    DEFAULT_TABLE_ITEM_SIZE,
+    AppConstants,
+    DATE_FORMAT_VALUE,
+} from '@constants';
 import { IconCategory, IconReportMoney } from '@tabler/icons-react';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
@@ -35,6 +41,7 @@ import TextField from '@components/common/form/TextField';
 import useDisclosure from '@hooks/useDisclosure';
 import DatePickerField from '@components/common/form/DatePickerField';
 import { formatDateString } from '@utils';
+import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
 const message = defineMessages({
     objectName: 'Dự án',
 });
@@ -51,6 +58,8 @@ const ProjectListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const developerName = queryParameters.get('developerName');
     const [projectId, setProjectId] = useState();
+    const [registerSalaryItem, setRegisterSalaryItem] = useState();
+
     localStorage.setItem('pathPrev', location.search);
     const [parentData, setParentData] = useState({});
     const notification = useNotification();
@@ -63,38 +72,70 @@ const ProjectListPage = () => {
         { mappingData: (data) => data.data.content },
     );
     // const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.income.calculateProjectSalary);
-    const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.salaryPeriod.calculateProjectSalary);
+    const { execute: executeCalculateProjectSalary } = useFetch(apiConfig.registerSalaryPeriod.create);
+    const { execute: executeUpdateCalculateProjectSalary } = useFetch(apiConfig.registerSalaryPeriod.update);
+
     const { data: isCheckExist } = useFetch(apiConfig.salaryPeriod.checkExist, {
         immediate: true,
         mappingData: ({ data }) => {
-            console.log(data);
             return data;
         },
     });
     const [openedModalCaculateSalary, handlerModalCaculateSalary] = useDisclosure(false);
+    const [openedModalUpdateCaculateSalary, handlerModalUpdateCaculateSalary] = useDisclosure(false);
+
     const [form] = Form.useForm();
     const handleFinish = (values) => {
         values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
         executeCalculateProjectSalary({
             data: { ...values },
-            onCompleted: () => {
-                notification({
-                    type: 'success',
-                    message: translate.formatMessage(
-                        commonMessage.selectPeriodSalarySuccess,
-                    ),
-                });
+            onCompleted: (response) => {
                 handlerModalCaculateSalary.close();
+
+                if (response?.result == true) {
+                    showSucsessMessage(translate.formatMessage(commonMessage.registerPeriodSalarySuccess));
+                    mixinFuncs.getList();
+                }
             },
             onError: (error) => {
-                console.log(error);
-                notification({
-                    type: 'error',
-                    message: error?.response?.data?.message,
-                });
                 handlerModalCaculateSalary.close();
+                let errorCode = error.response.data.code;
+                if (errorCode =='ERROR-REGISTER-SALARY-PERIOD-ERROR-0000') {
+                    showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail));
+                }
+                else if (errorCode =='ERROR-SALARY-PERIOD-ERROR-0002') {
+                    showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail_2));
+                }
             },
         });
+        form.resetFields();
+    };
+
+    const handleUpdate = (values) => {
+        values.dueDate = values.dueDate && formatDateString(values.dueDate, DEFAULT_FORMAT);
+        executeUpdateCalculateProjectSalary({
+            data: { ...values },
+            onCompleted: (response) => {
+                handlerModalUpdateCaculateSalary.close();
+                if (response?.result == true) {
+                    showSucsessMessage(translate.formatMessage(commonMessage.registerPeriodSalarySuccess_1));
+                    mixinFuncs.getList();
+                }
+
+            },
+            onError: (error) => {
+                handlerModalUpdateCaculateSalary.close();
+                let errorCode = error.response.data.code;
+                if (errorCode =='ERROR-REGISTER-SALARY-PERIOD-ERROR-0001') {
+                    showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail_1));
+                }
+                else if (errorCode =='ERROR-SALARY-PERIOD-ERROR-0002') {
+                    showErrorMessage(translate.formatMessage(commonMessage.registerPeriodSalaryFail_2));
+                }
+               
+            },
+        });
+        form.resetFields();
     };
     const validateDueDate = (_, value) => {
         const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
@@ -169,30 +210,6 @@ const ProjectListPage = () => {
                             </BaseTooltip>
                         );
                     },
-                    member: ({ id, name, status }) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.member)}>
-                            <Button
-                                type="link"
-                                style={{ padding: '0' }}
-                                // disabled={status === -1}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    if (status == 1) {
-                                        navigate(
-                                            routes.projectMemberListPage.path +
-                                                `?projectId=${id}&projectName=${name}&active=${true}`,
-                                        );
-                                    } else {
-                                        navigate(
-                                            routes.projectMemberListPage.path + `?projectId=${id}&projectName=${name}`,
-                                        );
-                                    }
-                                }}
-                            >
-                                <UserOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
                     team: ({ id, name, status, leaderInfo }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.team)}>
                             <Button
@@ -240,68 +257,41 @@ const ProjectListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    moneyForDev: ({ id, accountDto }) => {
+                    moneyForDev: ({ id, isRegisteredSalaryPeriod,registerSalaryPeriod }) => {
+                        if(isRegisteredSalaryPeriod){
+                            return (
+                                <BaseTooltip title={translate.formatMessage(commonMessage.updateRegisterPayout)}>
+                                    <Button
+                                        // disabled={isCheckExist}
+                                        type="link"
+                                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setRegisterSalaryItem(registerSalaryPeriod);
+                                            handlerModalUpdateCaculateSalary.open();
+                                        }}
+                                    >
+                                        <IconReportMoney size={'18px'} color={isCheckExist ? 'gray' : 'orange'}/>
+                                    </Button>
+                                    
+                                </BaseTooltip>
+                            );
+                        }
                         return (
-                            <BaseTooltip title={translate.formatMessage(commonMessage.caculateSalary)}>
+                            <BaseTooltip title={translate.formatMessage(commonMessage.registerPayout)}>
                                 <Button
-                                    disabled={!isCheckExist}
+                                    // disabled={isCheckExist}
                                     type="link"
                                     style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        // navigate(
-                                        //     routes.developerProjectListPage.path +
-                                        //         `?developerId=${id}&developerName=${accountDto?.fullName}`,
-                                        // );
+                                        setProjectId(id);
                                         handlerModalCaculateSalary.open();
-                                        console.log('Money for dev');
+                                        setProjectId(id);
                                     }}
                                 >
-                                    <IconReportMoney size={'18px'} />
+                                    <DollarOutlined />
                                 </Button>
-                                <Modal
-                                    title={<span>Tính lương dự án</span>}
-                                    open={openedModalCaculateSalary}
-                                    onOk={() => form.submit()}
-                                    onCancel={() => handlerModalCaculateSalary.close()}
-                                >
-                                    <BaseForm form={form} onFinish={(values) => {
-                                        values.projectId = id;
-                                        handleFinish(values);
-                                    }} size="100%">
-                                        <Card>
-                                            {/* <Col span={24}>
-                                                <AutoCompleteField
-                                                    name="projectRoleId"
-                                                    label={<FormattedMessage defaultMessage="Dự án" />}
-                                                    apiConfig={apiConfig.projectRole.autocomplete}
-                                                    mappingOptions={(item) => ({
-                                                        value: item.id,
-                                                        label: item.projectRoleName,
-                                                    })}
-                                                    initialSearchParams={{}}
-                                                    searchParams={(text) => ({ name: text })}
-                                                    required
-                                                />
-                                            </Col> */}
-                                            <Col span={24}>
-                                                <DatePickerField
-                                                    showTime={false}
-                                                    label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
-                                                    name="dueDate"
-                                                    // placeholder="Ngày kết thúc"
-                                                    rules={[
-                                                        {
-                                                            validator: validateDueDate,
-                                                        },
-                                                    ]}
-                                                    format={DEFAULT_FORMAT}
-                                                    style={{ width: '100%' }}
-                                                />
-                                            </Col>
-                                        </Card>
-                                    </BaseForm>
-                                </Modal>
                             </BaseTooltip>
                         );
                     },
@@ -437,7 +427,7 @@ const ProjectListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
             },
             width: 140,
-            align: 'start',
+            align: 'right',
         },
         {
             title: translate.formatMessage(commonMessage.endDate),
@@ -446,7 +436,7 @@ const ProjectListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
             },
             width: 140,
-            align: 'start',
+            align: 'right',
         },
         {
             title: 'Tình trạng',
@@ -465,13 +455,17 @@ const ProjectListPage = () => {
         mixinFuncs.renderActionColumn(
             {
                 // salaryPeriod: true,
-                moneyForDev: true,
+                // moneyForDev: true,
+                moneyForDev: mixinFuncs.hasPermission([apiConfig.registerSalaryPeriod.create?.baseURL, apiConfig.registerSalaryPeriod.update?.baseURL]),
                 edit: true,
                 delete: true,
             },
             { width: '120px' },
         ),
     ].filter(Boolean);
+    console.log(registerSalaryItem?.dueDate);
+
+    console.log(dayjs(registerSalaryItem?.dueDate,DEFAULT_FORMAT));
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage
@@ -506,6 +500,71 @@ const ProjectListPage = () => {
                     <p>Chưa có sinh viên nào trong dự án, vui lòng kiểm tra lại</p>
                 </Modal>
             )}
+            <Modal
+                title={<span>Đăng ký tính lương dự án</span>}
+                open={openedModalCaculateSalary}
+                onOk={() => form.submit()}
+                onCancel={() => handlerModalCaculateSalary.close()}
+            >
+                <BaseForm
+                    form={form}
+                    onFinish={(values) => {
+                        values.projectId = projectId;
+                        handleFinish(values);
+                    }}
+                    size="100%"
+                >
+                    
+                    <DatePickerField
+                        showTime={false}
+                        label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                        name="dueDate"
+                        // placeholder="Ngày kết thúc"
+                        rules={[
+                            {
+                                validator: validateDueDate,
+                            },
+                        ]}
+                        format={DEFAULT_FORMAT}
+                        style={{ width: '100%' }}
+                    />
+                
+                </BaseForm>
+            </Modal>
+            <Modal
+                title={<span>Cập nhật tính lương dự án</span>}
+                open={openedModalUpdateCaculateSalary}
+                onOk={() => form.submit()}
+                onCancel={() => handlerModalUpdateCaculateSalary.close()}
+                okText='Cập nhật'
+            >
+                <BaseForm
+                    form={form}
+                    onFinish={(values) => {
+                        handleUpdate({ ... values , id : registerSalaryItem.id });
+                    }}
+                    size="100%"
+                >
+                    <Col span={24}>
+                        <DatePickerField
+                            showTime={false}
+                            label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                            name="dueDate"
+                            rules={[
+                                {
+                                    validator: validateDueDate,
+                                },
+                            ]}
+                            fieldProps={{
+                                defaultValue: dayjs(registerSalaryItem?.dueDate,DEFAULT_FORMAT),
+
+                            }}
+                            format={DEFAULT_FORMAT}
+                            style={{ width: '100%' }}
+                        />
+                    </Col>
+                </BaseForm>
+            </Modal>
         </PageWrapper>
     );
 };

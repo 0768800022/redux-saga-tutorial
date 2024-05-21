@@ -240,6 +240,7 @@ function StoryTaskListPage({ setSearchFilter }) {
         {
             title: 'Ngày tạo',
             dataIndex: 'createdDate',
+            align: 'right',
             width: 170,
             render: (date) => {
                 const createdDate = convertUtcToLocalTime(date, DEFAULT_FORMAT,DEFAULT_FORMAT);
@@ -294,6 +295,7 @@ function StoryTaskListPage({ setSearchFilter }) {
             placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
             options: memberProject,
+            colSpan: 3,
         },
         {
             key: 'state',

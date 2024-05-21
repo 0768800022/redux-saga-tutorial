@@ -177,12 +177,13 @@ function ProjectStudentMyTaskListPage() {
             title: 'Ngày bắt đầu',
             dataIndex: 'startDate',
             width: 200,
-            align: 'center',
+            align: 'right',
         },
         {
             title: 'Ngày kết thúc',
             dataIndex: 'dueDate',
             width: 200,
+            align: 'right',
         },
         {
             title: 'Ngày hoàn thành',
@@ -196,7 +197,7 @@ function ProjectStudentMyTaskListPage() {
                 const modifiedDateCompleteTimeString = convertDateTimeToString(modifiedDateComplete, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateCompleteTimeString}</div>;
             },
-            align: 'center',
+            align: 'right',
         },
         {
             title: 'Tình trạng',
@@ -213,7 +214,12 @@ function ProjectStudentMyTaskListPage() {
             },
         },
         mixinFuncs.renderActionColumn(
-            { notifyDone: true, taskLog: true, edit: false, delete: true },
+            {
+                notifyDone: mixinFuncs.hasPermission([apiConfig.projectTask.notifyDone?.baseURL]),
+                taskLog: mixinFuncs.hasPermission([apiConfig.taskLog.getList?.baseURL]),
+                edit: false,
+                delete: true,
+            },
             { width: '150px' },
         ),
     ].filter(Boolean);

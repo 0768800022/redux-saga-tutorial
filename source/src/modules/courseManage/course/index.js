@@ -279,9 +279,9 @@ const CourseListPage = () => {
         !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                review:true,
-                registration: !leaderName && true,
-                task: true,
+                review:mixinFuncs.hasPermission([apiConfig.review.star?.baseURL, apiConfig.review.listReviews?.baseURL]),
+                registration: !leaderName && mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]),
+                task: mixinFuncs.hasPermission([apiConfig.task.getList?.baseURL]),
                 edit: !leaderName && true,
                 delete: !leaderName && true,
             },

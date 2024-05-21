@@ -213,7 +213,7 @@ const GeneralSettingPage = ({ groupName }) => {
                 }
             },
         },
-        mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '100px' }),
+        mixinFuncs.renderActionColumn({ editSetting: mixinFuncs.hasPermission([apiConfig.settings.update?.baseURL]), delete: false }, { width: '100px' }),
     ];
 
     const columnRevenue = [
@@ -233,7 +233,7 @@ const GeneralSettingPage = ({ groupName }) => {
                 } else return <div>{valueData}</div>;
             },
         },
-        mixinFuncs.renderActionColumn({ editSetting: true, delete: false }, { width: '100px' }),
+        mixinFuncs.renderActionColumn({ editSetting: mixinFuncs.hasPermission([apiConfig.settings.update?.baseURL]), delete: false }, { width: '100px' }),
     ];
 
     const columnGeneral = [
@@ -282,7 +282,14 @@ const GeneralSettingPage = ({ groupName }) => {
                 } else return <div>{valueData}</div>;
             },
         },
-        mixinFuncs.renderActionColumn({ booleanSetting: true, editSetting: true, delete: false }, { width: '100px' }),
+        mixinFuncs.renderActionColumn(
+            {
+                booleanSetting: mixinFuncs.hasPermission([apiConfig.settings.update?.baseURL]),
+                editSetting: mixinFuncs.hasPermission([apiConfig.settings.update?.baseURL]),
+                delete: false,
+            },
+            { width: '100px' },
+        ),
     ];
 
     const columnsSlider = [
@@ -307,7 +314,10 @@ const GeneralSettingPage = ({ groupName }) => {
             width: '400px',
         },
 
-        mixinFuncs.renderActionColumn({ editSetting: true, delete: true }, { width: '60px' }),
+        mixinFuncs.renderActionColumn(
+            { editSetting: mixinFuncs.hasPermission([apiConfig.settings.update?.baseURL]), delete: true },
+            { width: '60px' },
+        ),
     ];
     const { execute: executeUpdate } = useFetch(apiConfig.settings.update, { immediate: false });
     const { execute: executeGetDataSetting } = useFetch(apiConfig.settings.settings, {

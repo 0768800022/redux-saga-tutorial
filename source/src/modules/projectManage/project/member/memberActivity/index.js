@@ -56,7 +56,8 @@ function MemberActivityProjectListPage() {
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
-    const studentId = queryParameters.get('studentId');
+    const projectName = queryParameters.get('projectName');
+    const developerId = queryParameters.get('developerId');
     const studentName = queryParameters.get('studentName');
     const archived = queryParameters.get('archived');
     const dispatch = useDispatch();
@@ -93,13 +94,14 @@ function MemberActivityProjectListPage() {
                 };
                 funcs.getList = () => {
                     const params = mixinFuncs.prepareGetListParams(queryFilter);
-                    mixinFuncs.handleFetchList({ ...params, studentId, projectId, studentName: null });
+                    mixinFuncs.handleFetchList({ ...params, developerId, projectId, studentName: null });
                 };
                 funcs.changeFilter = (filter) => {
                     const projectId = queryParams.get('projectId');
-                    const studentId = queryParams.get('studentId');
+                    const developerId = queryParams.get('developerId');
                     const studentName = queryParams.get('studentName');
-                    mixinFuncs.setQueryParams(serializeParams({ projectId, studentId, studentName, ...filter }));
+                    const projectName = queryParams.get('projectName');
+                    mixinFuncs.setQueryParams(serializeParams({ projectId, developerId, studentName,projectName, ...filter }));
                 };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
                 funcs.handleFilterSearchChange = (values) => {
@@ -243,35 +245,15 @@ function MemberActivityProjectListPage() {
                 );
             },
         },
-        {
-            title: translate.formatMessage(commonMessage.reset),
-            dataIndex: ['archived'],
-            align: 'center',
-            width: 80,
-            render(dataRow) {
-                if (dataRow === 1)
-                    return (
-                        <div>
-                            <img src={reset} height="30px" width="30px" />
-                        </div>
-                    );
-                if (dataRow === 0)
-                    return (
-                        <div>
-                            <img src={noReset} height="30px" width="30px" />
-                        </div>
-                    );
-            },
-        },
     ].filter(Boolean);
     const { data: timeSum, execute: executeGetTime } = useFetch(apiConfig.projectTaskLog.getSum, {
         immediate: false,
-        params: { projectId, studentId },
+        params: { projectId, studentId: developerId },
         mappingData: ({ data }) => data.content,
     });
 
     useEffect(() => {
-        executeGetTime({ params: { archived: archived, projectId, studentId } });
+        executeGetTime({ params: { archived: archived, projectId, studentId : developerId } });
     }, [archived]);
 
     const searchFields = [
@@ -305,8 +287,9 @@ function MemberActivityProjectListPage() {
         };
 
         return initialFilterValues;
-    }, [queryFilter?.fromDate, queryFilter?.toDate]);
-
+    }, [queryFilter?.fromDate , queryFilter?.toDate]);
+    console.log(queryFilter);
+    console.log({ initialFilterValues : initialFilterValues });
     const handleAchiveAll = () => {
         Modal.confirm({
             title: translate.formatMessage(message.title),
@@ -315,7 +298,7 @@ function MemberActivityProjectListPage() {
             cancelText: translate.formatMessage(message.cancel),
             onOk: () => {
                 execute({
-                    data: { projectId, devId: studentId },
+                    data: { projectId, devId: developerId },
                     onCompleted: () => {
                         showSucsessMessage(translate.formatMessage(message.reset));
                         executeGetTime();
@@ -338,7 +321,7 @@ function MemberActivityProjectListPage() {
                 {
                     breadcrumbName:
                         getData(storageKeys.USER_KIND) === UserTypes.MANAGER
-                            ? translate.formatMessage(commonMessage.generalManage)
+                            ? projectName
                             : translate.formatMessage(commonMessage.member),
                     path:
                         getData(storageKeys.USER_KIND) === UserTypes.MANAGER
@@ -368,13 +351,13 @@ function MemberActivityProjectListPage() {
                                     <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
                                 </span>
                             </span>
-                            <span style={{ marginLeft: '10px' }}>
+                            {/* <span style={{ marginLeft: '10px' }}>
                                 <IconAlarmOff style={{ marginBottom: '-5px', color: 'red' }} /> :{' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                     {timeSum ? Math.ceil((timeSum[0]?.totalTimeOff / 60) * 10) / 10 : 0}h
                                 </span>
                                 <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
-                            </span>
+                            </span> */}
                             <span style={{ marginLeft: '10px' }}>
                                 <IconBug style={{ marginBottom: '-5px', color: 'red' }} /> :{' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px', color: 'red' }}>

@@ -1516,7 +1516,14 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        approve: {
+            baseURL: `${apiTenantUrl}v1/salary-period/approve`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
+
     salaryPeriodDetail: {
         getList: {
             baseURL: `${apiTenantUrl}v1/salary-period-detail/list`,
@@ -1548,6 +1555,27 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+    },
+    registerSalaryPeriod: {
+        create: {
+            baseURL: `${apiTenantUrl}v1/register-salary-period/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/register-salary-period/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getList: {
+            baseURL: `${apiTenantUrl}v1/register-salary-period/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        
     },
     salaryPeriodDetailLog: {
         getList: {
@@ -1659,6 +1687,38 @@ const apiConfig = {
         update: {
             baseURL: `${apiTenantUrl}v1/story/update`,
             method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    dayOffLog: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/day-off-log/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/day-off-log/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/day-off-log/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/day-off-log/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/day-off-log/auto-complete`,
+            method: 'GET',
             headers: baseHeader,
             isRequiredTenantId: true,
         },
