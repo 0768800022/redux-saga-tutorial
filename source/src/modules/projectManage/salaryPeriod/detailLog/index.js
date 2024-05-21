@@ -110,9 +110,12 @@ const SalaryPeriodDetailLogListPage = () => {
         },
         {
             title: translate.formatMessage(commonMessage.projectName),
-            dataIndex: 'projectName',
             width: 500,
-
+            render: (dataRow) => {
+                return (
+                    dataRow.kind === 3 ? `Ref: ${dataRow.sourceDevName}` : dataRow.projectName
+                );
+            },
         },
         
         {
