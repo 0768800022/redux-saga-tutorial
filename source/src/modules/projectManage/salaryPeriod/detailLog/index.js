@@ -111,15 +111,30 @@ const SalaryPeriodDetailLogListPage = () => {
         {
             title: translate.formatMessage(commonMessage.projectName),
             dataIndex: 'projectName',
-            width: 200,
+            width: 500,
 
         },
         
-       
+        {
+            title: translate.formatMessage(commonMessage.kind),
+            dataIndex: 'kind',
+            align: 'center',
+            width: 80,
+            render(kind) {
+                const state = stateValues.find((item) => item.value == kind);
+                return (
+                    <div>
+                        <Tag color={state?.color}>
+                            <div style={{ padding: '0 1px', fontSize: 14 }}>{state?.label}</div>
+                        </Tag>
+                    </div>
+                );
+            },
+        },
         {
             title: translate.formatMessage(commonMessage.totalTimeWorking),
             dataIndex: 'totalTime',
-            width: 120,
+            width: 80,
 
             render: (record) => {
                 if(!record)return <span></span>;
@@ -134,45 +149,14 @@ const SalaryPeriodDetailLogListPage = () => {
 
                 return <span>{time}h</span>;
             },
+       
         },
-        {
-            title: translate.formatMessage(commonMessage.hourlySalary),
-            dataIndex: 'devHourlySalary',
-            align: 'right',
-            width: 140,
-            render: (dataRow) => {
-                if(!dataRow)return <span></span>;
-
-                var formattedValue = formatMoney(dataRow, {
-                    groupSeparator: ',',
-                    decimalSeparator: '.',
-                    currentcy: moneyUnit,
-                    currentDecimal: '2',
-                });
-                return <div>{formattedValue}</div>;
-            },
-        },
-        {
-            title: translate.formatMessage(commonMessage.kind),
-            dataIndex: 'kind',
-            align: 'center',
-            width: 120,
-            render(kind) {
-                const state = stateValues.find((item) => item.value == kind);
-                return (
-                    <div>
-                        <Tag color={state?.color}>
-                            <div style={{ padding: '0 1px', fontSize: 14 }}>{state?.label}</div>
-                        </Tag>
-                    </div>
-                );
-            },
-        },
+       
         {
             title: translate.formatMessage(commonMessage.salary),
             // dataIndex: 'money',
             align: 'right',
-            width: 140,
+            width: 80,
             render: (dataRow) => {
                 var money = dataRow.money;
                 if(dataRow?.kind == BUG_MONEY ||dataRow?.kind ==DAY_OFF){
@@ -187,20 +171,7 @@ const SalaryPeriodDetailLogListPage = () => {
                 return <div>{formattedValue}</div>;
             },
         },
-        // {
-        //     title: <FormattedMessage defaultMessage={'Tổng tiền'} />,
-        //     align: 'right',
-        //     width: 140,
-        //     render: (dataRow) => {
-        //         var formattedValue = formatMoney(dataRow.devHourlySalary*(dataRow.totalTime/60), {
-        //             groupSeparator: ',',
-        //             decimalSeparator: '.',
-        //             currentcy: moneyUnit,
-        //             currentDecimal: '2',
-        //         });
-        //         return <div>{formattedValue}</div>;
-        //     },
-        // },
+    
        
         mixinFuncs.renderActionColumn(
             {
