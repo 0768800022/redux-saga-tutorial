@@ -60,7 +60,6 @@ const SubjectListPage = () => {
             //     }
             // };
             funcs.handleDeleteItemError=(error) => {
-                console.log(error);
                 if (error.response?.data?.code === 'ERROR-COURSE-ERROR-0001') {
                     showErrorMessage('Môn học đã được liên kết với khóa học');
                     // mixinFuncs.setSubmit(false);

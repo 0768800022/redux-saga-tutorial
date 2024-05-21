@@ -26,8 +26,9 @@ const ProjectTaskForm = (props) => {
     const queryParameters = new URLSearchParams(window.location.search);
     const projectId = queryParameters.get('projectId');
     const storyId = queryParameters.get('storyId');
+    const isTaskBug = queryParameters.get('isTaskBug');
     const [valueSelect, setValueSelect] = useState(1);
-    const [isTaskBug, setIsTaskBug] = useState(false);
+    // const [isTaskBug, setIsTaskBug] = useState(false);
 
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
@@ -52,7 +53,7 @@ const ProjectTaskForm = (props) => {
             form.setFieldsValue({
                 status: statusValues[1].value,
                 state: stateValues[1].value,
-                kind: projectTaskKind[0].value,
+                kind: isTaskBug ? projectTaskKind[1].value : projectTaskKind[0].value,
                 memKind: valueSelect,
             });
         }
@@ -97,7 +98,6 @@ const ProjectTaskForm = (props) => {
             description: insertBaseURL(dataDetail?.description),
             memKind: value,
         });
-        console.log(dataDetail);
     }, [dataDetail]);
 
     const validateDueDate = (_, value) => {
@@ -145,12 +145,13 @@ const ProjectTaskForm = (props) => {
                                     name="kind"
                                     allowClear={false}
                                     options={projectTaskKind}
+                                    disabled={isTaskBug || isEditing}
                                     onChange={(value) => {
-                                        if (value == TASK_KIND_BUG) {
-                                            setIsTaskBug(true);
-                                        } else {
-                                            setIsTaskBug(false);
-                                        }
+                                        // if (value == TASK_KIND_BUG) {
+                                        //     setIsTaskBug(true);
+                                        // } else {
+                                        //     setIsTaskBug(false);
+                                        // }
                                     }}
                                 />
                                 <TextField

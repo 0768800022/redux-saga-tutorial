@@ -13,6 +13,7 @@ import { showErrorMessage } from '@services/notifyService';
 
 const messages = defineMessages({
     objectName: 'Task',
+    objectNameBug: 'Task Bug',
 });
 
 function ProjectTaskSavePage() {
@@ -23,6 +24,7 @@ function ProjectTaskSavePage() {
     const active = queryParameters.get('active');
     const storyId = queryParameters.get('storyId');
     const storyName = queryParameters.get('storyName');
+    const isTaskBug = queryParameters.get('isTaskBug');
     const projectTaskId = useParams();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -35,7 +37,9 @@ function ProjectTaskSavePage() {
                 routes.ProjectTaskListPage.path,
                 active ? { projectId, projectName, active } : { projectId, projectName },
             ),
-            objectName: translate.formatMessage(messages.objectName),
+            objectName: isTaskBug
+                ? translate.formatMessage(messages.objectNameBug)
+                : translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
             funcs.prepareUpdateData = (data) => {
@@ -65,6 +69,7 @@ function ProjectTaskSavePage() {
             };
         },
     });
+    console.log(detail?.kind);
     const setBreadRoutes = () => {
         const breadRoutes = [
             {
@@ -74,26 +79,33 @@ function ProjectTaskSavePage() {
         ];
 
         if (active) {
-            breadRoutes.push({
-                breadcrumbName: projectName,
-                path:
-                    routes.projectTabPage.path + `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
-            },
-            {
-                breadcrumbName: storyName,
-                path:
-                    routes.ProjectTaskListPage.path + `?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}`,
-            });
+            breadRoutes.push(
+                {
+                    breadcrumbName: projectName,
+                    path:
+                        routes.projectTabPage.path +
+                        `?projectId=${projectId}&projectName=${projectName}&active=${active}`,
+                },
+                {
+                    breadcrumbName: `Story (${storyName})`,
+                    path:
+                        routes.ProjectTaskListPage.path +
+                        `?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}`,
+                },
+            );
         } else {
-            breadRoutes.push({
-                breadcrumbName: projectName,
-                path: routes.projectTabPage.path + `?projectId=${projectId}&projectName=${projectName}`,
-            },
-            {
-                breadcrumbName: storyName,
-                path:
-                    routes.ProjectTaskListPage.path + `?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}`,
-            });
+            breadRoutes.push(
+                {
+                    breadcrumbName: projectName,
+                    path: routes.projectTabPage.path + `?projectId=${projectId}&projectName=${projectName}`,
+                },
+                {
+                    breadcrumbName: `Story (${storyName})`,
+                    path:
+                        routes.ProjectTaskListPage.path +
+                        `?projectId=${projectId}&storyId=${storyId}&storyName=${storyName}&active=${active}&projectName=${projectName}`,
+                },
+            );
         }
         breadRoutes.push({ breadcrumbName: title });
 

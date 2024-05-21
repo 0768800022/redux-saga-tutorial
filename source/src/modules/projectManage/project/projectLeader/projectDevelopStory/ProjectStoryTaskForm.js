@@ -91,7 +91,6 @@ const ProjectStoryTaskForm = (props) => {
             memKind: value,
             status:dataDetail?.status,
         });
-        console.log(dataDetail);
     }, [dataDetail]);
 
     const validateDueDate = (_, value) => {

@@ -47,7 +47,6 @@ function AutoCompleteField({
                     ...(searchParams ? searchParams(searchText) : {}),
                 },
                 onCompleted: (res) => {
-                    console.log(res);
                     onCompleted(res.data?.content?.map(mappingOptions));
                 },
                 onError,
