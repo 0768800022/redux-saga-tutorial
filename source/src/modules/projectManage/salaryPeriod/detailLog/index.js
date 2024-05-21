@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { AppConstants, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, FIXED_SALARY, PaymentState, salaryPeriodKInd } from '@constants';
+import { AppConstants, BUG_MONEY, DAY_OFF, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, FIXED_SALARY, PaymentState, salaryPeriodKInd } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { salaryPeriodState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -93,12 +93,7 @@ const SalaryPeriodDetailLogListPage = () => {
         },
     ].filter(Boolean);
     const columns = [
-        {
-            title: translate.formatMessage(commonMessage.salaryPeriodName),
-            dataIndex: ['salaryPeriodDetail','salaryPeriod','name'],
-            width: 140,
-
-        },
+        
         {
             title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
@@ -179,6 +174,9 @@ const SalaryPeriodDetailLogListPage = () => {
             align: 'right',
             width: 140,
             render: (dataRow) => {
+                if(dataRow?.kind == BUG_MONEY ||dataRow?.kind ==DAY_OFF){
+                    dataRow.money = dataRow.money *(-1);
+                }
                 var formattedValue = formatMoney(dataRow.money, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
