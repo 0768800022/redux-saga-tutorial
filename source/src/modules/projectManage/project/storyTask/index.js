@@ -295,7 +295,7 @@ function StoryTaskListPage({ setSearchFilter }) {
             placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
             options: memberProject,
-            colSpan: 4,
+            colSpan: 3,
         },
         {
             key: 'state',

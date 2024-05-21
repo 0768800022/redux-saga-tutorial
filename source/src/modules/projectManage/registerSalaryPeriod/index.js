@@ -79,15 +79,15 @@ const RegisterSalaryPeriodListPage = () => {
                 );
             },
             width: 180,
-            align: 'center',
+            align: 'end',
         },
     
      
       
         mixinFuncs.renderActionColumn(
             {
-                edit: false,
-                delete: false,
+                edit: true,
+                delete: true,
             },
             { width: '100px' },
         ),

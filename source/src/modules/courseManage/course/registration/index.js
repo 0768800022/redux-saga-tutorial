@@ -132,7 +132,7 @@ function RegistrationListPage() {
                 );
             },
         },
-        courseStatus == 1 && mixinFuncs.renderActionColumn({ money: true, edit: true, delete: true }, { width: 180 }),
+        courseStatus == 1 && mixinFuncs.renderActionColumn({ money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]), edit: true, delete: true }, { width: 180 }),
     ].filter(Boolean);
 
     const searchFields = [

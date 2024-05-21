@@ -368,7 +368,7 @@ const SalaryPeriodListPage = () => {
                 edit: false,
                 delete: false,
                 reject: true,    
-                approve: true,
+                approve: mixinFuncs.hasPermission([apiConfig.salaryPeriod.approve?.baseURL]),
                 export: true,
             },
             { width: '100px' },

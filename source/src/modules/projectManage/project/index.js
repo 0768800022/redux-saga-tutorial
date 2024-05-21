@@ -455,7 +455,8 @@ const ProjectListPage = () => {
         mixinFuncs.renderActionColumn(
             {
                 // salaryPeriod: true,
-                moneyForDev: true,
+                // moneyForDev: true,
+                moneyForDev: mixinFuncs.hasPermission([apiConfig.registerSalaryPeriod.create?.baseURL, apiConfig.registerSalaryPeriod.update?.baseURL]),
                 edit: true,
                 delete: true,
             },
