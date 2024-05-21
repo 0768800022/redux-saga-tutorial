@@ -40,6 +40,8 @@ import {
     STATE_PROJECT_STORY_PROCESSING,
     STATE_PROJECT_STORY_DONE,
     STATE_PROJECT_STORY_CANCEL,
+    DEV_KIND_PROJECT,
+    LEADER_KIND_PROJECT,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -458,4 +460,9 @@ export const isPaidValues = [
         label: "Không trả lương",
         color: 'yellow',
     },
+];
+
+export const projectRoleKind = [
+    { value: DEV_KIND_PROJECT, label: 'Developer' },
+    { value: LEADER_KIND_PROJECT, label: 'Leader' },
 ];

@@ -250,7 +250,7 @@ const ProjectLeaderListPage = () => {
                 edit: true,
                 team: true,
                 member: true,
-                task: true,
+                task: mixinFuncs.hasPermission(apiConfig.task?.getList?.baseURL),
             },
             { width: '160px' },
         ),
