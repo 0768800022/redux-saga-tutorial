@@ -122,6 +122,10 @@ function StudentActivityCourseListPage() {
             width: 180,
         },
         {
+            title: translate.formatMessage(commonMessage.task),
+            dataIndex: ['task', 'lecture', 'lectureName'],
+        },
+        {
             title: translate.formatMessage(commonMessage.message),
             dataIndex: 'message',
         },

@@ -8,7 +8,7 @@ import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { convertUtcToLocalTime, formatDateString } from '@utils';
+import { convertUtcToLocalTime, formatDateString, formatMoney } from '@utils';
 import { Avatar, Button, Card, Col, Form, Modal, Row, Tag } from 'antd';
 import { ProjectOutlined, UserOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
@@ -25,6 +25,7 @@ import useDisclosure from '@hooks/useDisclosure';
 import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
 import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
+import useMoneyUnit from '@hooks/useMoneyUnit';
 
 const message = defineMessages({
     objectName: 'Lập trình viên',
@@ -123,6 +124,7 @@ const DeveloperListPage = () => {
             });
         },
     });
+    const moneyUnit = useMoneyUnit();
     const columns = [
         {
             title: '#',
@@ -142,46 +144,41 @@ const DeveloperListPage = () => {
             dataIndex: ['accountDto', 'fullName'],
         },
         {
+            title: 'Lương cứng',
+            dataIndex: ['salary'],
+            align: 'right',
+            width: 150,
+            render: (salary) => {
+                const formattedValue = formatMoney(salary, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '2',
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
+            title: 'Lương theo giờ',
+            dataIndex: ['hourlySalary'],
+            align: 'right',
+            width: 150,
+            render: (salary) => {
+                const formattedValue = formatMoney(salary, {
+                    groupSeparator: ',',
+                    decimalSeparator: '.',
+                    currentcy: moneyUnit,
+                    currentDecimal: '2',
+                });
+                return <div>{formattedValue}</div>;
+            },
+        },
+        {
             title: 'Số điện thoại',
             dataIndex: ['accountDto', 'phone'],
             width: 150,
         },
-        // {
-        //     title: 'Kiểu trả lương',
-        //     dataIndex: 'salaryKind',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const state = salaryValues.find((item) => item.value == dataRow);
-        //         return (
-        //             <Tag color={state.color}>
-        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-        //             </Tag>
-        //         );
-        //     },
-        // },
-        // {
-        //     title: 'Trình độ',
-        //     dataIndex: 'level',
-        //     width: 100,
-        //     render: (level) => {
-        //         const levelLabel = levelOptionSelect.map((item) => {
-        //             if (level === item.value) {
-        //                 return item.label;
-        //             }
-        //         });
-        //         return <div>{levelLabel}</div>;
-        //     },
-        // },
-        // {
-        //     title: 'Ngày tạo',
-        //     dataIndex: 'createdDate',
-        //     width: 170,
-        //     render: (createdDate) => {
-        //         const createdDateLocal = convertUtcToLocalTime(createdDate, DEFAULT_FORMAT, DEFAULT_FORMAT);
-        //         return <div>{createdDateLocal}</div>;
-        //     },
-        // },
+       
         {
             title: 'Lịch trình',
             dataIndex: 'schedule',
