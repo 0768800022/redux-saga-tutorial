@@ -1575,7 +1575,18 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        
+        getById: {
+            baseURL: `${apiTenantUrl}v1/register-salary-period/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/register-salary-period/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     salaryPeriodDetailLog: {
         getList: {
