@@ -111,7 +111,7 @@ const SalaryPeriodDetailLogListPage = () => {
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
             width: 180,
-            align: 'right',
+            align: 'start',
         },
         {
             title: translate.formatMessage(commonMessage.projectName),
@@ -237,7 +237,7 @@ const SalaryPeriodDetailLogListPage = () => {
             <ListPage
                 title={
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ fontWeight: 'normal' }}>{data?.[0]?.devName}</span>
+                        <span style={{ fontWeight: 'normal' }}>{data?.[0]?.devName} - {data?.[0]?.salaryPeriodDetail.salaryPeriod.name}</span>
 
                         <div>
                             <span style={{ marginLeft: '5px' }}>
