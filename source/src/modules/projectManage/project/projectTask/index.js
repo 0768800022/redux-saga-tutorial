@@ -11,10 +11,13 @@ import {
     DATE_FORMAT_ZERO_TIME,
     DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
+    TASK_KIND_BUG,
+    TASK_KIND_FEATURE,
+    TASK_KIND_TESTCASE,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { projectTaskState } from '@constants/masterData';
+import { projectTaskKind, projectTaskKind_1, projectTaskState } from '@constants/masterData';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
@@ -35,6 +38,7 @@ import styles from '../project.module.scss';
 import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProjectModal';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { showErrorMessage } from '@services/notifyService';
+import testCase from '../../../../assets/icons/testCase.svg';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -58,6 +62,8 @@ function ProjectTaskListPage({ setSearchFilter }) {
     const storyName = queryParameters.get('storyName');
     const storyId = queryParameters.get('storyId');
     const stateValues = translate.formatKeys(projectTaskState, ['label']);
+    const kindValues = translate.formatKeys(projectTaskKind_1, ['label']);
+
     const location = useLocation();
     const activeProjectTab = localStorage.getItem('activeProjectTab');
     localStorage.setItem('pathPrev', location.search);
@@ -231,16 +237,22 @@ function ProjectTaskListPage({ setSearchFilter }) {
             dataIndex: 'kind',
             width: 15,
             render(dataRow) {
-                if (dataRow === 1)
+                if (dataRow === TASK_KIND_FEATURE)
                     return (
                         <div>
                             <img src={feature} height="30px" width="30px" />
                         </div>
                     );
-                if (dataRow === 2)
+                if (dataRow === TASK_KIND_BUG)
                     return (
                         <div>
                             <img src={bug} height="30px" width="30px" />
+                        </div>
+                    );
+                if (dataRow === TASK_KIND_TESTCASE)
+                    return (
+                        <div>
+                            <img src={testCase} height="30px" width="30px" />
                         </div>
                     );
             },
@@ -285,7 +297,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
         },
 
         active &&
-            mixinFuncs.renderActionColumn({ taskLog: true, state: true, edit: true, delete: true }, { width: '180px' }),
+            mixinFuncs.renderActionColumn({ taskLog: mixinFuncs.hasPermission([apiConfig.taskLog.getList?.baseURL]), state: true, edit: true, delete: true }, { width: '180px' }),
     ].filter(Boolean);
 
     const { data: memberProject } = useFetch(apiConfig.memberProject.autocomplete, {
@@ -323,6 +335,12 @@ function ProjectTaskListPage({ setSearchFilter }) {
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
+        },
+        {
+            key: 'kind',
+            placeholder: translate.formatMessage(commonMessage.kind),
+            type: FieldTypes.SELECT,
+            options: kindValues,
         },
         // {
         //     key: 'fromDate',

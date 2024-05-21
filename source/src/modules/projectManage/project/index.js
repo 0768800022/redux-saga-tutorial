@@ -262,7 +262,7 @@ const ProjectListPage = () => {
                             return (
                                 <BaseTooltip title={translate.formatMessage(commonMessage.updateRegisterPayout)}>
                                     <Button
-                                        disabled={isCheckExist}
+                                        // disabled={isCheckExist}
                                         type="link"
                                         style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                         onClick={(e) => {
@@ -280,7 +280,7 @@ const ProjectListPage = () => {
                         return (
                             <BaseTooltip title={translate.formatMessage(commonMessage.registerPayout)}>
                                 <Button
-                                    disabled={isCheckExist}
+                                    // disabled={isCheckExist}
                                     type="link"
                                     style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                     onClick={(e) => {
@@ -455,7 +455,8 @@ const ProjectListPage = () => {
         mixinFuncs.renderActionColumn(
             {
                 // salaryPeriod: true,
-                moneyForDev: true,
+                // moneyForDev: true,
+                moneyForDev: mixinFuncs.hasPermission([apiConfig.registerSalaryPeriod.create?.baseURL, apiConfig.registerSalaryPeriod.update?.baseURL]),
                 edit: true,
                 delete: true,
             },
@@ -505,32 +506,34 @@ const ProjectListPage = () => {
                 onOk={() => form.submit()}
                 onCancel={() => handlerModalCaculateSalary.close()}
             >
-                <BaseForm
-                    form={form}
-                    onFinish={(values) => {
-                        values.projectId = projectId;
-                        handleFinish(values);
-                    }}
-                    size="100%"
-                >
-                    <Card>
-                        <Col span={24}>
-                            <DatePickerField
-                                showTime={false}
-                                label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
-                                name="dueDate"
-                                // placeholder="Ngày kết thúc"
-                                rules={[
-                                    {
-                                        validator: validateDueDate,
-                                    },
-                                ]}
-                                format={DEFAULT_FORMAT}
-                                style={{ width: '100%' }}
-                            />
-                        </Col>
-                    </Card>
-                </BaseForm>
+                <fieldset>
+                    <legend >Ngày kết thúc</legend>
+                    <BaseForm
+                        form={form}
+                        onFinish={(values) => {
+                            values.projectId = projectId;
+                            handleFinish(values);
+                        }}
+                        size="100%"
+                    >
+                        
+                        <DatePickerField
+                            showTime={false}
+                            // label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
+                            name="dueDate"
+                            // placeholder="Ngày kết thúc"
+                            rules={[
+                                {
+                                    validator: validateDueDate,
+                                },
+                            ]}
+                            format={DEFAULT_FORMAT}
+                            style={{ width: '100%' }}
+                        />
+                    
+                    </BaseForm>
+                </fieldset>
+
             </Modal>
             <Modal
                 title={<span>Cập nhật tính lương dự án</span>}
@@ -539,14 +542,15 @@ const ProjectListPage = () => {
                 onCancel={() => handlerModalUpdateCaculateSalary.close()}
                 okText='Cập nhật'
             >
-                <BaseForm
-                    form={form}
-                    onFinish={(values) => {
-                        handleUpdate({ ... values , id : registerSalaryItem.id });
-                    }}
-                    size="100%"
-                >
-                    <Card>
+                <fieldset>
+                    <legend >Ngày kết thúc</legend>
+                    <BaseForm
+                        form={form}
+                        onFinish={(values) => {
+                            handleUpdate({ ... values , id : registerSalaryItem.id });
+                        }}
+                        size="100%"
+                    >
                         <Col span={24}>
                             <DatePickerField
                                 showTime={false}
@@ -565,8 +569,8 @@ const ProjectListPage = () => {
                                 style={{ width: '100%' }}
                             />
                         </Col>
-                    </Card>
-                </BaseForm>
+                    </BaseForm>
+                </fieldset>
             </Modal>
         </PageWrapper>
     );

@@ -184,7 +184,13 @@ function MyTaskStudentListPage() {
                     );
                 },
             },
-            mixinFuncs.renderActionColumn({ notifyDone: true, taskLog: true }, { width: '150px' }),
+            mixinFuncs.renderActionColumn(
+                {
+                    notifyDone: mixinFuncs.hasPermission([apiConfig.task.notifyDone?.baseURL]),
+                    taskLog: mixinFuncs.hasPermission([apiConfig.taskLog.getList?.baseURL]),
+                },
+                { width: '150px' },
+            ),
         ];
         return columns;
     };

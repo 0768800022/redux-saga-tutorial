@@ -94,7 +94,7 @@ const CompanyListPage = () => {
             dataIndex: 'email',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '150px' }),
+        mixinFuncs.renderActionColumn({ registration: mixinFuncs.hasPermission([apiConfig.company.getList?.baseURL]), edit: true, delete: true }, { width: '150px' }),
     ];
 
     const searchFields = [

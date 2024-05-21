@@ -101,7 +101,7 @@ const CourseRequestListPage = () => {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ registration: true, edit: true, delete: true }, { width: '170px' }),
+        mixinFuncs.renderActionColumn({ registration: mixinFuncs.hasPermission([apiConfig.registration.create.baseURL,apiConfig.registration.update.baseURL]), edit: true, delete: true }, { width: '170px' }),
     ];
     const searchFields = [
         {

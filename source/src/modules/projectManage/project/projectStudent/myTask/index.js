@@ -184,7 +184,6 @@ function ProjectStudentMyTaskListPage() {
             dataIndex: 'dueDate',
             width: 200,
             align: 'right',
-
         },
         {
             title: 'Ngày hoàn thành',
@@ -215,7 +214,12 @@ function ProjectStudentMyTaskListPage() {
             },
         },
         mixinFuncs.renderActionColumn(
-            { notifyDone: true, taskLog: true, edit: false, delete: true },
+            {
+                notifyDone: mixinFuncs.hasPermission([apiConfig.projectTask.notifyDone?.baseURL]),
+                taskLog: mixinFuncs.hasPermission([apiConfig.taskLog.getList?.baseURL]),
+                edit: false,
+                delete: true,
+            },
             { width: '150px' },
         ),
     ].filter(Boolean);

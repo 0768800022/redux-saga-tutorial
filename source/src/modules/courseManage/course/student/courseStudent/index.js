@@ -233,9 +233,9 @@ const CourseStudentListPage = () => {
         },
         mixinFuncs.renderActionColumn(
             {
-                review: true,
-                registration: true,
-                task: true,
+                review:mixinFuncs.hasPermission([apiConfig.review.star?.baseURL, apiConfig.review.listReviews?.baseURL]),
+                registration: mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]),
+                task: mixinFuncs.hasPermission([apiConfig.task.getList?.baseURL]),
                 edit: true,
                 delete: true,
             },
