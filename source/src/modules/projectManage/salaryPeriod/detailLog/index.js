@@ -174,10 +174,11 @@ const SalaryPeriodDetailLogListPage = () => {
             align: 'right',
             width: 140,
             render: (dataRow) => {
+                var money = dataRow.money;
                 if(dataRow?.kind == BUG_MONEY ||dataRow?.kind ==DAY_OFF){
-                    dataRow.money = dataRow.money *(-1);
+                    money = money *(-1);
                 }
-                var formattedValue = formatMoney(dataRow.money, {
+                var formattedValue = formatMoney(money, {
                     groupSeparator: ',',
                     decimalSeparator: '.',
                     currentcy: moneyUnit,
