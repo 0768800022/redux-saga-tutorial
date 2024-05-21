@@ -150,7 +150,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                     bug: ({ id, taskName, kind }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.createBug)}>
                             <Button
-                                disabled={kind === 2}
+                                disabled={kind === 2 || kind === 3}
                                 type="link"
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
