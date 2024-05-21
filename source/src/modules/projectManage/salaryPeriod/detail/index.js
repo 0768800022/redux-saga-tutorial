@@ -154,7 +154,7 @@ const SalaryPeriodDetailListPage = () => {
                 };
 
                 const formattedValue = format(dataRow?.projectSalary);
-                const formattedMoneyProject = format(dataRow?.projectSalary);
+                const formattedMoneyProject = format(dataRow?.hourlySalary);
                 return <Tooltip placement='bottom' title={`Tổng giờ làm: ${timeOff}h | Lương một giờ: ${formattedMoneyProject}`}>{formattedValue}</Tooltip>;
             },
         },

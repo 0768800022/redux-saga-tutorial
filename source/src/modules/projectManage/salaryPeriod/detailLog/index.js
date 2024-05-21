@@ -137,6 +137,7 @@ const SalaryPeriodDetailLogListPage = () => {
         {
             title: translate.formatMessage(commonMessage.totalTimeWorking),
             dataIndex: 'totalTime',
+            align: 'right',
             width: 80,
 
             render: (record) => {
