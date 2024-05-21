@@ -25,7 +25,7 @@ import AutoCompleteField from '@components/common/form/AutoCompleteField';
 import dayjs from 'dayjs';
 import { formatDateString } from '@utils';
 
-const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
+const RegisterSalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const stateValues = translate.formatKeys(salaryPeriodState, ['label']);
@@ -67,7 +67,7 @@ const SalaryPeriodForm = ({ isEditing, formId, actions, dataDetail, onSubmit, se
                     <Col span={12}>
                         <SelectField
                             defaultValue={stateValues[0]}
-                            name="state"
+                            name="status"
                             label={<FormattedMessage defaultMessage="Tình trạng" />}
                             allowClear={false}
                             options={stateValues}
@@ -121,4 +121,4 @@ const formatDateToEndOfDayTime = (date) => {
     return dayjs(dateString, DEFAULT_FORMAT).format(DATE_FORMAT_END_OF_DAY_TIME);
 };
 
-export default SalaryPeriodForm;
+export default RegisterSalaryPeriodForm;
