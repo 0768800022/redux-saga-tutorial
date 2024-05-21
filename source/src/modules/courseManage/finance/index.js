@@ -62,7 +62,6 @@ const FinanceListPage = () => {
                 label: item.account.fullName,
             }),
             searchParams: (text) => ({ name: text }),
-            colSpan: 4,
         },
         {
             key: 'courseId',
@@ -74,7 +73,6 @@ const FinanceListPage = () => {
                 label: item.name,
             }),
             searchParams: (text) => ({ name: text }),
-            colSpan: 4,
         },
     ];
 

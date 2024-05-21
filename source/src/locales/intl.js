@@ -138,6 +138,8 @@ export const commonMessage = defineMessages({
     dueDate : "Ngày kết thúc",
     registerPayout : "Đăng ký kỳ lương",
     updateRegisterPayout : "Cập nhật kỳ lương",
+    success_day_off: 'Tạo ngày nghỉ thành công',
+    error_day_off: 'Tạo ngày nghỉ thất bại',
+    take_off:'Xin nghỉ phép',
     bug:'Bug',
-
 });

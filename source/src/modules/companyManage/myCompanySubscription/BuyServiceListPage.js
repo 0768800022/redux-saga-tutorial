@@ -142,7 +142,7 @@ const BuyServiceListPage = () => {
             align: 'center',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ buyService: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ buyService: mixinFuncs.hasPermission([apiConfig.companySubscription.buyService?.baseURL]) }, { width: '120px' }),
     ];
 
     const {

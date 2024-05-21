@@ -211,7 +211,7 @@ function TaskListPage() {
         },
         !leaderName &&
             courseStatus == 1 &&
-            mixinFuncs.renderActionColumn({ taskLog: true, edit: true, delete: true }, { width: '120px' }),
+            mixinFuncs.renderActionColumn({ taskLog: mixinFuncs.hasPermission([apiConfig.taskLog.getList?.baseURL]), edit: true, delete: true }, { width: '120px' }),
     ].filter(Boolean);
 
     const setBreadRoutes = () => {

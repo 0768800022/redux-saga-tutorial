@@ -263,7 +263,10 @@ function TaskStudentListPage() {
         ];
         columns.push(
             mixinFuncs.renderActionColumn(
-                { notifyDone: true, taskLog: true, edit: true, delete: true },
+                { 
+                    notifyDone: mixinFuncs.hasPermission([apiConfig.task.notifyDone?.baseURL]),
+                    taskLog: mixinFuncs.hasPermission([apiConfig.taskLog.getList?.baseURL]),
+                    edit: true, delete: true },
                 { width: '160px' },
             ),
         );
