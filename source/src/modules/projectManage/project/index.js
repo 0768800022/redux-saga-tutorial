@@ -463,9 +463,7 @@ const ProjectListPage = () => {
             { width: '120px' },
         ),
     ].filter(Boolean);
-    console.log(registerSalaryItem?.dueDate);
-
-    console.log(dayjs(registerSalaryItem?.dueDate,DEFAULT_FORMAT));
+    
     return (
         <PageWrapper routes={setBreadRoutes()}>
             <ListPage

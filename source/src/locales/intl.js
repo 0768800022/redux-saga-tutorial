@@ -142,4 +142,5 @@ export const commonMessage = defineMessages({
     error_day_off: 'Tạo ngày nghỉ thất bại',
     take_off:'Xin nghỉ phép',
     bug:'Bug',
+    createBug:'Tạo Bug',
 });

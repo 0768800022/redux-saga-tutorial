@@ -58,9 +58,7 @@ const RegisterSalaryPeriodListPage = () => {
         },
     ].filter(Boolean);
     const handleOnClick = (event, record) => {
-        // event.preventDefault();
         navigate(routes.salaryPeriodDetailListPage.path + `?salaryPeriodId=${record.id}`);
-        // console.log(record);
     };
 
     const columns = [

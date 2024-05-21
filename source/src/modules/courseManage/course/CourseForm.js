@@ -73,7 +73,6 @@ const CourseForm = (props) => {
             ...dataDetail,
             subjectId: dataDetail?.subject?.subjectName,
         });
-        console.log(dataDetail);
     }, [dataDetail]);
 
     useEffect(() => {
@@ -247,7 +246,7 @@ const CourseForm = (props) => {
                         <AutoCompleteField
                             // disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             required
-                            label={<FormattedMessage defaultMessage="Lập trình viên" />}
+                            label={<FormattedMessage defaultMessage="Leader" />}
                             name="leaderId"
                             apiConfig={apiConfig.developer.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item?.account?.fullName })}

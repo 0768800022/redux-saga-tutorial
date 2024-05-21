@@ -288,8 +288,7 @@ function MemberActivityProjectListPage() {
 
         return initialFilterValues;
     }, [queryFilter?.fromDate , queryFilter?.toDate]);
-    console.log(queryFilter);
-    console.log({ initialFilterValues : initialFilterValues });
+    
     const handleAchiveAll = () => {
         Modal.confirm({
             title: translate.formatMessage(message.title),

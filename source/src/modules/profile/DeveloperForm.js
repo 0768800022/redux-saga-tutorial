@@ -81,8 +81,6 @@ const DeveloperForm = (props) => {
         });
     };
 
-    console.log(imageUrl);
-
     return (
         <Card className="card-form" bordered={false} style={{ minHeight: 'calc(100vh - 190px)' }}>
             <Form
