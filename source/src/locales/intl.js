@@ -138,5 +138,6 @@ export const commonMessage = defineMessages({
     dueDate : "Ngày kết thúc",
     registerPayout : "Đăng ký kỳ lương",
     updateRegisterPayout : "Cập nhật kỳ lương",
+    bug:'Bug',
 
 });

@@ -454,9 +454,9 @@ export const PaymentState = [
 
 export const salaryPeriodKInd = [
     { value: FIXED_SALARY, label: commonMessage.fixed_salary, color: '#d07d3e' },
-    { value: PROJECT_SALARY, label: commonMessage.projectSalary, color: 'blue' },
+    { value: PROJECT_SALARY, label: commonMessage.task, color: 'blue' },
     { value: REFER_MONEY, label: commonMessage.refer_money, color: '#69bdd2' },
-    { value: BUG_MONEY, label: commonMessage.bug_money, color: '#e07b39' },
+    { value: BUG_MONEY, label: commonMessage.bug, color: '#e07b39' },
     { value: DAY_OFF, label: commonMessage.day_off, color: 'red' },
 ];
 
