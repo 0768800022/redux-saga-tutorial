@@ -42,6 +42,7 @@ import {
     STATE_PROJECT_STORY_CANCEL,
     DEV_KIND_PROJECT,
     LEADER_KIND_PROJECT,
+    TASK_KIND_TESTCASE,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -72,6 +73,7 @@ import {
 import React from 'react';
 import feature from '../assets/images/feature.png';
 import bug from '../assets/images/bug.jpg';
+import testcase from '../assets/icons/testCase.svg';
 
 export const languageOptions = [
     { value: 1, label: 'EN' },
@@ -148,6 +150,29 @@ export const projectTaskKind = [
                 <img src={bug} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
             </div>
         ),
+    },
+    {
+        value: TASK_KIND_TESTCASE,
+        label: (
+            <div>
+                <img src={testcase} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
+            </div>
+        ),
+    },
+];
+
+export const projectTaskKind_1 = [
+    {
+        value: TASK_KIND_FEATURE,
+        label: taskKindMessage.feature,
+    },
+    {
+        value: TASK_KIND_BUG,
+        label: taskKindMessage.bug,
+    },
+    {
+        value: TASK_KIND_TESTCASE,
+        label: taskKindMessage.testCase,
     },
 ];
 
@@ -463,6 +488,6 @@ export const isPaidValues = [
 ];
 
 export const projectRoleKind = [
-    { value: DEV_KIND_PROJECT, label: 'Developer' },
     { value: LEADER_KIND_PROJECT, label: 'Leader' },
+    { value: DEV_KIND_PROJECT, label: 'Developer' },
 ];

@@ -106,8 +106,8 @@ export const STATUS_DELETE = -2;
 export const FIX_SALARY = 1;
 export const HOUR_SALARY = 2;
 
-export const DEV_KIND_PROJECT = 1;
-export const LEADER_KIND_PROJECT = 2;
+export const DEV_KIND_PROJECT = 2;
+export const LEADER_KIND_PROJECT = 1;
 export const STATE_ORDER_CANCEL = -1;
 export const ORDER_TYPE_PICK_UP = 1;
 export const ORDER_TYPE_DELIVER = 2;
@@ -140,6 +140,7 @@ export const STATE_PROJECT_STORY_DONE = 3;
 export const STATE_PROJECT_STORY_CANCEL = 4;
 export const TASK_KIND_FEATURE = 1;
 export const TASK_KIND_BUG = 2;
+export const TASK_KIND_TESTCASE = 3;
 
 export const DEFAULT_TABLE_ITEM_SIZE = 20;
 export const DEFAULT_TABLE_PAGE_START = 0;

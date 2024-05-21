@@ -4,7 +4,7 @@ import DatePickerField from '@components/common/form/DatePickerField';
 import RichTextField, { insertBaseURL, removeBaseURL } from '@components/common/form/RichTextField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT, TASK_KIND_BUG } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { memberTaskKind, projectTaskKind, projectTaskState, statusOptions } from '@constants/masterData';
 import useBasicForm from '@hooks/useBasicForm';
@@ -146,11 +146,10 @@ const ProjectTaskForm = (props) => {
                                     allowClear={false}
                                     options={projectTaskKind}
                                     onChange={(value) => {
-                                        console.log(value);
-                                        if (value == 1) {
-                                            setIsTaskBug(false);
-                                        } else {
+                                        if (value == TASK_KIND_BUG) {
                                             setIsTaskBug(true);
+                                        } else {
+                                            setIsTaskBug(false);
                                         }
                                     }}
                                 />
