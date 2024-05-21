@@ -292,7 +292,6 @@ function ProjectLeaderTaskListPage() {
     const handleOnClick = (event, record) => {
         event.preventDefault();
         localStorage.setItem(routes.projectTabPage.keyActiveTab, translate.formatMessage(commonMessage.task));
-        console.log(record);
         navigate(
             routes.projectDevelopTask.path +
                 `?projectId=${projectId}&storyId=${record.id}&storyName=${record?.storyName}&active=${!!record.status == 1}&projectName=${projectName}`,

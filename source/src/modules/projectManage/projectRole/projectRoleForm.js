@@ -61,8 +61,6 @@ const ProjectRoleForm = (props) => {
         });
     }, [dataDetail]);
 
-    console.log(dataDetail);
-
     useEffect(() => {
         if (permissions.length !== 0) getGroupPermission();
     }, [permissions]);

@@ -15,7 +15,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined, UserOutlined,CommentOutlined } from '@ant-design/icons';
-import { Avatar, Button, Tag } from 'antd';
+import { Avatar, Button, Flex, Tag } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import route from '@modules/task/routes';
@@ -31,6 +31,7 @@ import useFetch from '@hooks/useFetch';
 import ReviewListModal from '@modules/review/student/ReviewListModal';
 import styles from './course.module.scss';
 import useMoneyUnit from '@hooks/useMoneyUnit';
+import { render } from '@testing-library/react';
 const message = defineMessages({
     objectName: 'Khoá học',
 });
@@ -202,6 +203,16 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(commonMessage.courseName),
             dataIndex: 'name',
+        },
+        {
+            title: translate.formatMessage(commonMessage.subjectName),
+            // dataIndex: 'name',
+            render: (dataRow) => {
+                return <Flex vertical>
+                    <span>JavaScripts</span>
+                    <span>{dataRow?.leader?.account?.fullName}</span>
+                </Flex>;
+            },
         },
         // {
         //     title: translate.formatMessage(commonMessage.leader),
