@@ -198,7 +198,7 @@ const SalaryPeriodListPage = () => {
                                 </Button>
                             </BaseTooltip>
                         ),
-                    export: ({ id, state, excelName }) =>
+                    export: ({ id, state, name }) =>
                         state === PAYOUT_PERIOD_STATE_DONE && (
                             <BaseTooltip title={<FormattedMessage defaultMessage={'Export'}/>}>
                                 <Button
@@ -207,7 +207,7 @@ const SalaryPeriodListPage = () => {
                                     style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        // exportToExcel(id, excelName);
+                                        exportToExcel(id, name);
                                     }}
                                 >
                                     <FileExcelOutlined  style={{ color:'green' }} size={16}/>
@@ -234,8 +234,9 @@ const SalaryPeriodListPage = () => {
     };
 
     const exportToExcel = (value, nameExcel) => {
+        console.log("name", nameExcel);
         axios({
-            url: `${apiTenantUrl}v1/period-detail/export-to-excel/${value}`,
+            url: `https://elms-tenant-api.developteam.net/v1/salary-period/export-to-excel/${value}`,
             method: 'GET',
             responseType: 'blob',
             // withCredentials: true,
