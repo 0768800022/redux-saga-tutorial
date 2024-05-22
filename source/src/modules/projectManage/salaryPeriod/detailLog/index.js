@@ -20,7 +20,7 @@ import AvatarField from '@components/common/form/AvatarField';
 import { FieldTypes } from '@constants/formConfig';
 import { render } from '@testing-library/react';
 import useMoneyUnit from '@hooks/useMoneyUnit';
-import { formatMoney, moneyTotal, referMoneyTotal, sumMoney } from '@utils';
+import { formatMoney, moneyTotal, orderNumber, referMoneyTotal, sumMoney } from '@utils';
 const message = defineMessages({
     objectName: 'Chi tiết nhật ký kỳ lương',
 });
@@ -97,7 +97,9 @@ const SalaryPeriodDetailLogListPage = () => {
             title: '#',
             dataIndex: 'index',
             key: 'id',
-            render: (text, record, index) => index + 1,
+            render: (text, record, index) => {
+                return orderNumber(pagination,index);
+            },
             width: 50,
         },
         {
