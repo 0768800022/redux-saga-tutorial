@@ -234,7 +234,6 @@ const SalaryPeriodListPage = () => {
     };
 
     const exportToExcel = (value, nameExcel) => {
-        console.log("name", nameExcel);
         axios({
             url: `https://elms-tenant-api.developteam.net/v1/salary-period/export-to-excel/${value}`,
             method: 'GET',
@@ -256,7 +255,7 @@ const SalaryPeriodListPage = () => {
                 const link = document.createElement('a');
 
                 link.href = URL.createObjectURL(excelBlob);
-                link.download = `${nameExcel}-${day}.xlsx`;
+                link.download = `KyLuong_${nameExcel}.xlsx`;
                 link.click();
                 showSucsessMessage('Tạo tệp ủy nhiệm chi thành công');
             })
