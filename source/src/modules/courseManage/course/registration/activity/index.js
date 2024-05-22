@@ -24,7 +24,7 @@ import styles from '../Registration.module.scss';
 import useAuth from '@hooks/useAuth';
 import { IconAlarm, IconAlarmOff } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { convertUtcToLocalTime, formatDateString } from '@utils';
+import { convertUtcToLocalTime, formatDateString, orderNumber } from '@utils';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 const message = defineMessages({
     objectName: 'Hoạt động của tôi',
@@ -108,6 +108,15 @@ function StudentActivityCourseListPage() {
         });
 
     const columns = [
+        {
+            title: '#',
+            dataIndex: 'index',
+            key: 'id',
+            render: (text, record, index) => {
+                return orderNumber(pagination,index);
+            },
+            width: 50,
+        },
         {
             title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',

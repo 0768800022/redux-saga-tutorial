@@ -30,7 +30,7 @@ import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelp
 import { commonMessage } from '@locales/intl';
 import { CalendarOutlined } from '@ant-design/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString } from '@utils';
+import { convertLocalTimeToUtc, convertUtcToLocalTime, formatDateString, orderNumber } from '@utils';
 import styles from './task.module.scss';
 const message = defineMessages({
     objectName: 'Task',
@@ -151,6 +151,15 @@ function TaskListPage() {
         });
 
     const columns = [
+        {
+            title: '#',
+            dataIndex: 'index',
+            key: 'id',
+            render: (text, record, index) => {
+                return orderNumber(pagination,index);
+            },
+            width: 50,
+        },
         {
             title: translate.formatMessage(commonMessage.task),
             dataIndex: ['lecture', 'lectureName'],

@@ -25,7 +25,7 @@ import useNotification from '@hooks/useNotification';
 import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import routes from '@routes';
-import { convertUtcToLocalTime, formatDateString } from '@utils';
+import { convertUtcToLocalTime, formatDateString, orderNumber } from '@utils';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import { Button, Col, Modal, Row, Tag } from 'antd';
 import dayjs from 'dayjs';
@@ -258,7 +258,9 @@ function ProjectTaskListPage({ setSearchFilter }) {
             title: '#',
             dataIndex: 'index',
             key: 'id',
-            render: (text, record, index) => index + 1,
+            render: (text, record, index) => {
+                return orderNumber(pagination,index);
+            },
             width: 50,
         },
         {
