@@ -93,7 +93,13 @@ const SalaryPeriodDetailLogListPage = () => {
         },
     ].filter(Boolean);
     const columns = [
-        
+        {
+            title: '#',
+            dataIndex: 'index',
+            key: 'id',
+            render: (text, record, index) => index + 1,
+            width: 50,
+        },
         {
             title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
@@ -110,14 +116,17 @@ const SalaryPeriodDetailLogListPage = () => {
         },
         {
             title: translate.formatMessage(commonMessage.projectName),
-            width: 500,
+            width: 200,
             render: (dataRow) => {
                 return (
                     dataRow.kind === 3 ? `Ref: ${dataRow.sourceDevName}` : dataRow.projectName
                 );
             },
         },
-        
+        {
+            title: translate.formatMessage(commonMessage.task),
+            dataIndex: 'taskName',
+        },
         {
             title: translate.formatMessage(commonMessage.kind),
             dataIndex: 'kind',
@@ -138,7 +147,7 @@ const SalaryPeriodDetailLogListPage = () => {
             title: translate.formatMessage(commonMessage.totalTimeWorking),
             dataIndex: 'totalTime',
             align: 'right',
-            width: 80,
+            width: 150,
 
             render: (record) => {
                 if(!record)return <span></span>;
@@ -160,7 +169,7 @@ const SalaryPeriodDetailLogListPage = () => {
             title: translate.formatMessage(commonMessage.salary),
             // dataIndex: 'money',
             align: 'right',
-            width: 80,
+            width: 150,
             render: (dataRow) => {
                 var money = dataRow.money;
                 if(dataRow?.kind == BUG_MONEY ||dataRow?.kind ==DAY_OFF){
