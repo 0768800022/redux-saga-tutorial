@@ -255,6 +255,13 @@ function ProjectTaskListPage({ setSearchFilter }) {
         });
     const columns = [
         {
+            title: '#',
+            dataIndex: 'index',
+            key: 'id',
+            render: (text, record, index) => index + 1,
+            width: 50,
+        },
+        {
             dataIndex: 'kind',
             width: 15,
             render(dataRow) {

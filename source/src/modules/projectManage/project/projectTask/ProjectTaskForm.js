@@ -178,8 +178,8 @@ const ProjectTaskForm = (props) => {
                                 label: item.taskName,
                             })}
                             searchParams={(text) => ({ taskName: text })}
-                            optionsParams={{ storyId: storyId }}
-                            initialSearchParams={{ storyId: storyId }}
+                            optionsParams={{ storyId: storyId, kind:1 }}
+                            initialSearchParams={{ storyId: storyId, kind:1 }}
                             // options={developers}
                             // required
                         />

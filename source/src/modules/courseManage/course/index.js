@@ -226,7 +226,7 @@ const CourseListPage = () => {
             align: 'right',
             render: (fee) => {
                 const formattedValue = formatMoney(fee, {
-                    currentcy: moneyUnit,
+                    currentcy: 'đ',
                     currentDecimal: '0',
                     groupSeparator: ',',
                 });
