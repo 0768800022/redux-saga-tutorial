@@ -119,7 +119,7 @@ function StudentActivityCourseListPage() {
                 const modifiedDateTimeString = convertDateTimeToString(modifiedDate, DEFAULT_FORMAT);
                 return <div style={{ padding: '0 4px', fontSize: 14 }}>{modifiedDateTimeString}</div>;
             },
-            width: 180,
+            width: 170,
         },
         {
             title: translate.formatMessage(commonMessage.task),
@@ -128,11 +128,12 @@ function StudentActivityCourseListPage() {
         {
             title: "Khóa học",
             dataIndex: ["task","lecture","subject","subjectName"],
-            width: 200,
+            width: 170,
         },
         {
             title: translate.formatMessage(commonMessage.message),
             dataIndex: 'message',
+            width: 150,
         },
         {
             title: translate.formatMessage(commonMessage.totalTime),
@@ -147,7 +148,7 @@ function StudentActivityCourseListPage() {
             title: 'Loại',
             dataIndex: 'kind',
             align: 'center',
-            width: 120,
+            width: 60,
             render(dataRow) {
                 const kindLog = KindTaskLog.find((item) => item.value == dataRow);
                 return (
