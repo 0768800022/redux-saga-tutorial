@@ -5,6 +5,7 @@ import {
     DATE_FORMAT_DISPLAY,
     DATE_SHORT_MONTH_FORMAT,
     DEFAULT_FORMAT,
+    DEFAULT_TABLE_ITEM_SIZE,
     THEMES,
     apiTenantUrl,
     apiUrl,
@@ -424,4 +425,9 @@ export const sumMoney = function (arr) {
         // For kinds other than 1, 2, 3, 4, or 5, we just return the current sum
         return sum;
     }, 0);
+};
+
+export const orderNumber = (pagination, index) => {
+    const page = (pagination?.current ? pagination.current - 1 : 1);
+    return (page*DEFAULT_TABLE_ITEM_SIZE)+(index+1);
 };
