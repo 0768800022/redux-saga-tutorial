@@ -128,12 +128,11 @@ function StudentActivityCourseListPage() {
         {
             title: "Khóa học",
             dataIndex: ["task","lecture","subject","subjectName"],
-            width: 170,
+            width: 150,
         },
         {
             title: translate.formatMessage(commonMessage.message),
             dataIndex: 'message',
-            width: 150,
         },
         {
             title: translate.formatMessage(commonMessage.totalTime),
