@@ -1,5 +1,6 @@
 REACT_APP_API = https://ilms-auth.developteam.net/
 REACT_APP_API_MEDIA = https://ilms-media.developteam.net/
+REACT_APP_API_TENANT = https://elms-tenant-api.developteam.net/
 REACT_APP_ENV = prod
 GENERATE_SOURCEMAP = true
 CI = false

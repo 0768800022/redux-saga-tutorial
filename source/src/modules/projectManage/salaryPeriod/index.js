@@ -235,7 +235,7 @@ const SalaryPeriodListPage = () => {
 
     const exportToExcel = (value, nameExcel) => {
         axios({
-            url: `https://elms-tenant-api.developteam.net/v1/salary-period/export-to-excel/${value}`,
+            url: `${process.env.REACT_APP_API_TENANT}v1/salary-period/export-to-excel/${value}`,
             method: 'GET',
             responseType: 'blob',
             // withCredentials: true,
