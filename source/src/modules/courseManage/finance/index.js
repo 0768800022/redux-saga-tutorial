@@ -80,7 +80,7 @@ const FinanceListPage = () => {
         return formatMoney(value, {
             groupSeparator: ',',
             decimalSeparator: '.',
-            currentcy: moneyUnit,
+            currentcy: 'đ',
             currentDecimal: '0',
         });
     };

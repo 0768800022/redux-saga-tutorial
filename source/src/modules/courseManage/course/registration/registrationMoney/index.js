@@ -100,7 +100,7 @@ function RegistrationMoneyListPage() {
 
             render: (price) => {
                 const formattedValue = formatMoney(price, {
-                    currentcy: moneyUnit,
+                    currentcy: 'đ',
                     currentDecimal: '0',
                     groupSeparator: ',',
                 });
