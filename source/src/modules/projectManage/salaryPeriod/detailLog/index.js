@@ -36,7 +36,7 @@ const SalaryPeriodDetailLogListPage = () => {
         useListBase({
             apiConfig: apiConfig.salaryPeriodDetailLog,
             options: {
-                pageSize: DEFAULT_TABLE_ITEM_SIZE,
+                // pageSize: DEFAULT_TABLE_ITEM_SIZE,
                 objectName: translate.formatMessage(message.objectName),
             },
             override: (funcs) => {
