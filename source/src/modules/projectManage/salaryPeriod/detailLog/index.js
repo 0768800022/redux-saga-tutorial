@@ -2,7 +2,7 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { AppConstants, BUG_MONEY, DAY_OFF, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, FIXED_SALARY, PaymentState, salaryPeriodKInd } from '@constants';
+import { AppConstants, BUG_MONEY, DAY_OFF, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, FIXED_SALARY, PaymentState, salaryPeriodKInd, storageKeys } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { salaryPeriodState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -21,6 +21,12 @@ import { FieldTypes } from '@constants/formConfig';
 import { render } from '@testing-library/react';
 import useMoneyUnit from '@hooks/useMoneyUnit';
 import { formatMoney, moneyTotal, orderNumber, referMoneyTotal, sumMoney } from '@utils';
+import { getData } from '@utils/localStorage';
+import { getCacheAccessToken } from '@services/userService';
+import { showSucsessMessage } from '@services/notifyService';
+import { FileExcelOutlined } from '@ant-design/icons';
+
+import axios from 'axios';
 const message = defineMessages({
     objectName: 'Chi tiết nhật ký kỳ lương',
 });
@@ -32,6 +38,7 @@ const SalaryPeriodDetailLogListPage = () => {
     const salaryPeriodId = queryParameters.get('salaryPeriodId');
     const salaryPeriodDetailId = queryParameters.get('detailId');
     const stateValues = translate.formatKeys(salaryPeriodKInd, ['label']);
+    const userAccessToken = getCacheAccessToken();
     let { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.salaryPeriodDetailLog,
@@ -217,6 +224,36 @@ const SalaryPeriodDetailLogListPage = () => {
             currentDecimal: '2',
         });
     };
+    const exportToExcel = (value, nameExcel) => {
+        axios({
+            url: `${getData(storageKeys.TENANT_API_URL)}/v1/salary-period-detail/export-to-excel/${value}`,
+            method: 'GET',
+            responseType: 'blob',
+            // withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${userAccessToken}`, // Sử dụng token từ state
+            },
+        })
+            .then((response) => {
+                // const fileName="uy_nhiem_chi";
+                const date = new Date();
+
+                const excelBlob = new Blob([response.data], {
+                    type: response.headers['content-type'],
+                });
+
+                const link = document.createElement('a');
+
+                link.href = URL.createObjectURL(excelBlob);
+                link.download = `KyLuong_${nameExcel}.xlsx`;
+                link.click();
+                showSucsessMessage('Tạo tệp ủy nhiệm chi thành công');
+            })
+            .catch((error) => {
+                console.log(error);
+                // Xử lý lỗi tải file ở đây
+            });
+    };
     return (
         <PageWrapper routes={breadcrumbs}>
             <ListPage
@@ -232,6 +269,21 @@ const SalaryPeriodDetailLogListPage = () => {
                             <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
                             <span style={{ marginLeft: '5px' }}>
                                 Tổng tiền: { data ? formatMoneyValue(sumMoney(data)) : formatMoneyValue(0)}
+                            </span>
+                            <span style={{ marginLeft: '5px' }}>
+                                <BaseTooltip title={<FormattedMessage defaultMessage={'Export'}/>}>
+                                    <Button
+                                    // disabled={state === PAYOUT_PERIOD_STATE_DONE}
+                                        type="link"
+                                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            exportToExcel(salaryPeriodDetailId, data?.[0]?.salaryPeriodDetail.salaryPeriod.name);
+                                        }}
+                                    >
+                                        <FileExcelOutlined  style={{ color:'green' }} size={16}/>
+                                    </Button>
+                                </BaseTooltip>
                             </span>
                         </div>
                     </div>

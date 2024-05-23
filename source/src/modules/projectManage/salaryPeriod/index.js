@@ -236,7 +236,7 @@ const SalaryPeriodListPage = () => {
 
     const exportToExcel = (value, nameExcel) => {
         axios({
-            url: `${getData(storageKeys.TENANT_API_URL)}v1/salary-period/export-to-excel/${value}`,
+            url: `${getData(storageKeys.TENANT_API_URL)}/v1/salary-period/export-to-excel/${value}`,
             method: 'GET',
             responseType: 'blob',
             // withCredentials: true,
