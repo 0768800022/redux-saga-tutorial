@@ -278,25 +278,23 @@ const SalaryPeriodDetailLogListPage = () => {
                             <span style={{ marginLeft: '5px' }}>
                                 Tổng tiền: {data ? formatMoneyValue(sumMoney(data)) : formatMoneyValue(0)}
                             </span>
-                            <span style={{ marginLeft: '5px' }}>
-                                <BaseTooltip title={<FormattedMessage defaultMessage={'Export'} />}>
-                                    <Button
-                                        // disabled={state === PAYOUT_PERIOD_STATE_DONE}
-                                        type="link"
-                                        style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            exportToExcel(
-                                                salaryPeriodDetailId,
-                                                data?.[0]?.salaryPeriodDetail.salaryPeriod.name,
-                                                data?.[0]?.devName,
-                                            );
-                                        }}
-                                    >
-                                        <FileExcelOutlined style={{ color: 'green' }} size={16} />
-                                    </Button>
-                                </BaseTooltip>
-                            </span>
+                            <BaseTooltip title={<FormattedMessage defaultMessage={'Export'} />}>
+                                <Button
+                                    // disabled={state === PAYOUT_PERIOD_STATE_DONE}
+                                    type="link"
+                                    style={{ paddingLeft:10, paddingTop:0, display: 'table-cell', verticalAlign: 'middle' }}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        exportToExcel(
+                                            salaryPeriodDetailId,
+                                            data?.[0]?.salaryPeriodDetail.salaryPeriod.name,
+                                            data?.[0]?.devName,
+                                        );
+                                    }}
+                                >
+                                    <FileExcelOutlined style={{ color: 'green', fontSize:'18px' }} />
+                                </Button>
+                            </BaseTooltip>
                         </div>
                     </div>
                 }
