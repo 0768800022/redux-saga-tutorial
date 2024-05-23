@@ -11,7 +11,7 @@ import {
     TASK_KIND_TESTCASE,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { TaskLogKindOptions, archivedOption, projectTaskKind_2 } from '@constants/masterData';
+import { TaskLogKindOptions, archivedOption, columnProjectTaskKind } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
@@ -174,7 +174,7 @@ function MyActivityProjectListPage() {
             width: 80,
             align: 'center',
             render(dataRow) {
-                const res = projectTaskKind_2?.find((item) => item.value == dataRow);
+                const res = columnProjectTaskKind?.find((item) => item.value == dataRow);
                 return res.label;
             },
         },

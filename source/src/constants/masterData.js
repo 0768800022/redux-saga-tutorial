@@ -493,7 +493,7 @@ export const projectRoleKind = [
 ];
 
 
-export const projectTaskKind_2 = [
+export const columnProjectTaskKind = [
     {
         value: TASK_KIND_FEATURE,
         label: (

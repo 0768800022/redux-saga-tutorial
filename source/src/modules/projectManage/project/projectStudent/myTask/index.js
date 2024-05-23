@@ -3,7 +3,7 @@ import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { projectTaskKind_2, projectTaskState } from '@constants/masterData';
+import { columnProjectTaskKind, projectTaskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { Tag } from 'antd';
@@ -145,7 +145,7 @@ function ProjectStudentMyTaskListPage() {
             dataIndex: 'kind',
             width: 15,
             render(dataRow) {
-                const res = projectTaskKind_2?.find((item) => item.value == dataRow);
+                const res = columnProjectTaskKind?.find((item) => item.value == dataRow);
                 return res.label;
             },
         },

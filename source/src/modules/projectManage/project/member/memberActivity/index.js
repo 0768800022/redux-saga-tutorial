@@ -15,7 +15,7 @@ import {
     storageKeys,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { TaskLogKindOptions, archivedOption, projectTaskKind_2 } from '@constants/masterData';
+import { TaskLogKindOptions, archivedOption, columnProjectTaskKind } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useNotification from '@hooks/useNotification';
@@ -188,7 +188,7 @@ function MemberActivityProjectListPage() {
             align: 'center',
             width: 80,
             render(dataRow) {
-                const res = projectTaskKind_2?.find((item) => item.value == dataRow);
+                const res = columnProjectTaskKind?.find((item) => item.value == dataRow);
                 return res.label;
                 
             },
