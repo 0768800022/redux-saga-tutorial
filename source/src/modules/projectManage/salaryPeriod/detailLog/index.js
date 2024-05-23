@@ -2,7 +2,17 @@ import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { AppConstants, BUG_MONEY, DAY_OFF, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, FIXED_SALARY, PaymentState, salaryPeriodKInd, storageKeys } from '@constants';
+import {
+    AppConstants,
+    BUG_MONEY,
+    DAY_OFF,
+    DEFAULT_FORMAT,
+    DEFAULT_TABLE_ITEM_SIZE,
+    FIXED_SALARY,
+    PaymentState,
+    salaryPeriodKInd,
+    storageKeys,
+} from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { salaryPeriodState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -20,7 +30,7 @@ import AvatarField from '@components/common/form/AvatarField';
 import { FieldTypes } from '@constants/formConfig';
 import { render } from '@testing-library/react';
 import useMoneyUnit from '@hooks/useMoneyUnit';
-import { formatMoney, moneyTotal, orderNumber, referMoneyTotal, sumMoney } from '@utils';
+import { convertToCamelCase, formatMoney, moneyTotal, orderNumber, referMoneyTotal, sumMoney } from '@utils';
 import { getData } from '@utils/localStorage';
 import { getCacheAccessToken } from '@services/userService';
 import { showSucsessMessage } from '@services/notifyService';
@@ -105,7 +115,7 @@ const SalaryPeriodDetailLogListPage = () => {
             dataIndex: 'index',
             key: 'id',
             render: (text, record, index) => {
-                return orderNumber(pagination,index);
+                return orderNumber(pagination, index);
             },
             width: 50,
         },
@@ -127,9 +137,7 @@ const SalaryPeriodDetailLogListPage = () => {
             title: translate.formatMessage(commonMessage.projectName),
             width: 200,
             render: (dataRow) => {
-                return (
-                    dataRow.kind === 3 ? `Ref: ${dataRow.sourceDevName}` : dataRow.projectName
-                );
+                return dataRow.kind === 3 ? `Ref: ${dataRow.sourceDevName}` : dataRow.projectName;
             },
         },
         {
@@ -159,7 +167,7 @@ const SalaryPeriodDetailLogListPage = () => {
             width: 150,
 
             render: (record) => {
-                if(!record)return <span></span>;
+                if (!record) return <span></span>;
 
                 let result = record / 60;
                 let time = result;
@@ -171,9 +179,8 @@ const SalaryPeriodDetailLogListPage = () => {
 
                 return <span>{time}h</span>;
             },
-       
         },
-       
+
         {
             title: translate.formatMessage(commonMessage.salary),
             // dataIndex: 'money',
@@ -181,8 +188,8 @@ const SalaryPeriodDetailLogListPage = () => {
             width: 150,
             render: (dataRow) => {
                 var money = dataRow.money;
-                if(dataRow?.kind == BUG_MONEY ||dataRow?.kind ==DAY_OFF){
-                    money = money *(-1);
+                if (dataRow?.kind == BUG_MONEY || dataRow?.kind == DAY_OFF) {
+                    money = money * -1;
                 }
                 var formattedValue = formatMoney(money, {
                     groupSeparator: ',',
@@ -193,8 +200,7 @@ const SalaryPeriodDetailLogListPage = () => {
                 return <div>{formattedValue}</div>;
             },
         },
-    
-       
+
         mixinFuncs.renderActionColumn(
             {
                 delete: false,
@@ -224,7 +230,7 @@ const SalaryPeriodDetailLogListPage = () => {
             currentDecimal: '2',
         });
     };
-    const exportToExcel = (value, nameExcel) => {
+    const exportToExcel = (value, nameExcel, nameLog) => {
         axios({
             url: `${getData(storageKeys.TENANT_API_URL)}/v1/salary-period-detail/export-to-excel/${value}`,
             method: 'GET',
@@ -245,7 +251,7 @@ const SalaryPeriodDetailLogListPage = () => {
                 const link = document.createElement('a');
 
                 link.href = URL.createObjectURL(excelBlob);
-                link.download = `KyLuong_${nameExcel}.xlsx`;
+                link.download = `KyLuong_${nameExcel}_${convertToCamelCase(nameLog)}.xlsx`;
                 link.click();
                 showSucsessMessage('Tạo tệp ủy nhiệm chi thành công');
             })
@@ -259,29 +265,35 @@ const SalaryPeriodDetailLogListPage = () => {
             <ListPage
                 title={
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <span style={{ fontWeight: 'normal' }}>{data?.[0]?.devName} - {data?.[0]?.salaryPeriodDetail.salaryPeriod.name}</span>
+                        <span style={{ fontWeight: 'normal' }}>
+                            {data?.[0]?.devName} - {data?.[0]?.salaryPeriodDetail.salaryPeriod.name}
+                        </span>
 
                         <div>
                             <span style={{ marginLeft: '5px' }}>
                                 {/* Tổng nhận: {moneySum && formatMoneyValue(moneySum[0]?.totalMoneyInput || 0)} */}
-                                Tiền giới thiệu: { data ? formatMoneyValue(referMoneyTotal(data)) : formatMoneyValue(0)}
+                                Tiền giới thiệu: {data ? formatMoneyValue(referMoneyTotal(data)) : formatMoneyValue(0)}
                             </span>
                             <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>| </span>
                             <span style={{ marginLeft: '5px' }}>
-                                Tổng tiền: { data ? formatMoneyValue(sumMoney(data)) : formatMoneyValue(0)}
+                                Tổng tiền: {data ? formatMoneyValue(sumMoney(data)) : formatMoneyValue(0)}
                             </span>
                             <span style={{ marginLeft: '5px' }}>
-                                <BaseTooltip title={<FormattedMessage defaultMessage={'Export'}/>}>
+                                <BaseTooltip title={<FormattedMessage defaultMessage={'Export'} />}>
                                     <Button
-                                    // disabled={state === PAYOUT_PERIOD_STATE_DONE}
+                                        // disabled={state === PAYOUT_PERIOD_STATE_DONE}
                                         type="link"
                                         style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            exportToExcel(salaryPeriodDetailId, data?.[0]?.salaryPeriodDetail.salaryPeriod.name);
+                                            exportToExcel(
+                                                salaryPeriodDetailId,
+                                                data?.[0]?.salaryPeriodDetail.salaryPeriod.name,
+                                                data?.[0]?.devName,
+                                            );
                                         }}
                                     >
-                                        <FileExcelOutlined  style={{ color:'green' }} size={16}/>
+                                        <FileExcelOutlined style={{ color: 'green' }} size={16} />
                                     </Button>
                                 </BaseTooltip>
                             </span>
