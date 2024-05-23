@@ -15,7 +15,7 @@ import {
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { FieldTypes } from '@constants/formConfig';
-import { projectTaskKind_2, projectTaskState } from '@constants/masterData';
+import { columnProjectTaskKind, projectTaskState } from '@constants/masterData';
 import useDisclosure from '@hooks/useDisclosure';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
@@ -236,7 +236,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
             dataIndex: 'kind',
             width: 15,
             render(dataRow) {
-                const res = projectTaskKind_2?.find((item) => item.value == dataRow);
+                const res = columnProjectTaskKind?.find((item) => item.value == dataRow);
                 return res.label;
             },
         },
