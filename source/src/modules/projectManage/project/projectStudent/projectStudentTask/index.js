@@ -9,7 +9,7 @@ import {
     DEFAULT_TABLE_ITEM_SIZE,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { projectTaskState } from '@constants/masterData';
+import { projectTaskKind_2, projectTaskState } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
@@ -227,18 +227,8 @@ function ProjectStudentTaskListPage() {
             dataIndex: 'kind',
             width: 15,
             render(dataRow) {
-                if (dataRow === 1)
-                    return (
-                        <div>
-                            <img src={feature} height="30px" width="30px" />
-                        </div>
-                    );
-                if (dataRow === 2)
-                    return (
-                        <div>
-                            <img src={bug} height="30px" width="30px" />
-                        </div>
-                    );
+                const res = projectTaskKind_2?.find((item) => item.value == dataRow);
+                return res.label;
             },
         },
         {

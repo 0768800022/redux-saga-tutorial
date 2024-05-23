@@ -8,11 +8,14 @@ import {
     DATE_FORMAT_ZERO_TIME,
     DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
+    TASK_KIND_BUG,
+    TASK_KIND_FEATURE,
+    TASK_KIND_TESTCASE,
     UserTypes,
     storageKeys,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { TaskLogKindOptions, archivedOption } from '@constants/masterData';
+import { TaskLogKindOptions, archivedOption, projectTaskKind_2 } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useNotification from '@hooks/useNotification';
@@ -37,6 +40,8 @@ import { getData } from '@utils/localStorage';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
 import feature from '@assets/images/feature.png';
 import bug from '@assets/images/bug.jpg';
+import testCase from '@assets/icons/testCase.svg';
+
 import reset from '@assets/images/reset.svg';
 import noReset from '@assets/images/not_reset.svg';
 import { convertUtcToLocalTime, formatDateString } from '@utils';
@@ -183,18 +188,9 @@ function MemberActivityProjectListPage() {
             align: 'center',
             width: 80,
             render(dataRow) {
-                if (dataRow === 1)
-                    return (
-                        <div>
-                            <img src={feature} height="30px" width="30px" />
-                        </div>
-                    );
-                if (dataRow === 2)
-                    return (
-                        <div>
-                            <img src={bug} height="30px" width="30px" />
-                        </div>
-                    );
+                const res = projectTaskKind_2?.find((item) => item.value == dataRow);
+                return res.label;
+                
             },
         },
         {
@@ -340,14 +336,6 @@ function MemberActivityProjectListPage() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
                         <span style={{ fontWeight: 'normal' }}>{studentName}</span>
                         <span>
-                            {mixinFuncs.hasPermission(apiConfig.projectTaskLog.archiveAll.baseURL) && (
-                                <Button onClick={handleAchiveAll} style={{ marginRight: '1rem' }}>
-                                    <BaseTooltip title={translate.formatMessage(message.reset)}>
-                                        <ReloadOutlined />
-                                    </BaseTooltip>
-                                </Button>
-                            )}
-
                             <span style={{ marginLeft: '5px' }}>
                                 <IconAlarm style={{ marginBottom: '-5px' }} /> :{' '}
                                 <span style={{ fontWeight: 'bold', fontSize: '17px' }}>

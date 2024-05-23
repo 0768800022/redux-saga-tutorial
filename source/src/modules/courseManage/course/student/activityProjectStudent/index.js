@@ -6,9 +6,12 @@ import {
     DATE_FORMAT_ZERO_TIME,
     DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
+    TASK_KIND_BUG,
+    TASK_KIND_FEATURE,
+    TASK_KIND_TESTCASE,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { TaskLogKindOptions, archivedOption } from '@constants/masterData';
+import { TaskLogKindOptions, archivedOption, projectTaskKind_2 } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
@@ -35,6 +38,8 @@ import reset from '@assets/images/reset.svg';
 import noReset from '@assets/images/not_reset.svg';
 
 import bug from '@assets/images/bug.jpg';
+import testCase from '@assets/icons/testCase.svg';
+
 import { convertUtcToLocalTime, formatDateString } from '@utils';
 import dayjs from 'dayjs';
 const message = defineMessages({
@@ -169,18 +174,8 @@ function MyActivityProjectListPage() {
             width: 80,
             align: 'center',
             render(dataRow) {
-                if (dataRow === 1)
-                    return (
-                        <div>
-                            <img src={feature} height="30px" width="30px" />
-                        </div>
-                    );
-                if (dataRow === 2)
-                    return (
-                        <div>
-                            <img src={bug} height="30px" width="30px" />
-                        </div>
-                    );
+                const res = projectTaskKind_2?.find((item) => item.value == dataRow);
+                return res.label;
             },
         },
 

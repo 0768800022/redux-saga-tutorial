@@ -491,3 +491,31 @@ export const projectRoleKind = [
     { value: LEADER_KIND_PROJECT, label: 'Leader' },
     { value: DEV_KIND_PROJECT, label: 'Member' },
 ];
+
+
+export const projectTaskKind_2 = [
+    {
+        value: TASK_KIND_FEATURE,
+        label: (
+            <div>
+                <img src={feature} height="30px" width="30px" style={{ marginTop: '10px', marginLeft: '5px' }} />
+            </div>
+        ),
+    },
+    {
+        value: TASK_KIND_BUG,
+        label: (
+            <div>
+                <img src={bug} height="30px" width="30px" style={{ marginTop: '10px', marginLeft: '5px' }} />
+            </div>
+        ),
+    },
+    {
+        value: TASK_KIND_TESTCASE,
+        label: (
+            <div>
+                <img src={testcase} height="30px" width="30px" style={{ marginTop: '10px', marginLeft: '5px' }} />
+            </div>
+        ),
+    },
+];
