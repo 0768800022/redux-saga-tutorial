@@ -103,7 +103,7 @@ function AutoCompleteField({
 
     useEffect(() => {
         getInitialOptions();
-    }, []);
+    }, [form?.getFieldValue(name)]);
 
     return (
         <SelectField
@@ -123,7 +123,7 @@ function AutoCompleteField({
             renderCustomOption={renderCustomOption}
             onChange={onChange}
             onFocus={handleFocus}
-            onClear={() => handleOnSearch('')}
+            onClear={() => handleOnSearch(null)}
             {...props}
         />
     );

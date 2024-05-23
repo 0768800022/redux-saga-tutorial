@@ -340,13 +340,13 @@ function MemberActivityProjectListPage() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
                         <span style={{ fontWeight: 'normal' }}>{studentName}</span>
                         <span>
-                            {mixinFuncs.hasPermission(apiConfig.projectTaskLog.archiveAll.baseURL) && (
+                            {/* {mixinFuncs.hasPermission(apiConfig.projectTaskLog.archiveAll.baseURL) && (
                                 <Button onClick={handleAchiveAll} style={{ marginRight: '1rem' }}>
                                     <BaseTooltip title={translate.formatMessage(message.reset)}>
                                         <ReloadOutlined />
                                     </BaseTooltip>
                                 </Button>
-                            )}
+                            )} */}
 
                             <span style={{ marginLeft: '5px' }}>
                                 <IconAlarm style={{ marginBottom: '-5px' }} /> :{' '}
