@@ -2,7 +2,7 @@ import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import { FileSearchOutlined } from '@ant-design/icons';
-import { DATE_FORMAT_DISPLAY, DEFAULT_EXCEL_DATE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, PAYOUT_PERIOD_STATE_CALCULATED, PAYOUT_PERIOD_STATE_DONE, apiTenantUrl, apiUrl } from '@constants';
+import { DATE_FORMAT_DISPLAY, DEFAULT_EXCEL_DATE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, PAYOUT_PERIOD_STATE_CALCULATED, PAYOUT_PERIOD_STATE_DONE, apiTenantUrl, apiUrl, storageKeys } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { salaryPeriodState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -25,6 +25,7 @@ import { getCacheAccessToken } from '@services/userService';
 import { formatDateString, formatMoney } from '@utils';
 import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
 import useMoneyUnit from '@hooks/useMoneyUnit';
+import { getData } from '@utils/localStorage';
 const message = defineMessages({
     objectName: 'Kỳ lương',
 });
@@ -235,7 +236,7 @@ const SalaryPeriodListPage = () => {
 
     const exportToExcel = (value, nameExcel) => {
         axios({
-            url: `${process.env.REACT_APP_API_TENANT}v1/salary-period/export-to-excel/${value}`,
+            url: `${getData(storageKeys.TENANT_API_URL)}v1/salary-period/export-to-excel/${value}`,
             method: 'GET',
             responseType: 'blob',
             // withCredentials: true,

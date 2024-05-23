@@ -197,6 +197,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setDetail(item);
+                                    handlersModal.close();
                                     handlersStateTaskModal.open();
                                 }}
                             >
@@ -432,7 +433,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                             onClick: (e) => {
                                 e.stopPropagation();
                                 handleFetchDetail(record.id);
-
+                                handlersStateTaskModal.close();
                                 handlersModal.open();
                             },
                         })}
