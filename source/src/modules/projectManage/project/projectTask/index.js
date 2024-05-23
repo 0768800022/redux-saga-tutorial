@@ -197,6 +197,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setDetail(item);
+                                    handlersModal.close();
                                     handlersStateTaskModal.open();
                                 }}
                             >
@@ -359,18 +360,21 @@ function ProjectTaskListPage({ setSearchFilter }) {
             placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
             options: memberProject,
+            submitOnChanged: true,
         },
         {
             key: 'state',
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
+            submitOnChanged: true,
         },
         {
             key: 'kind',
             placeholder: translate.formatMessage(commonMessage.kind),
             type: FieldTypes.SELECT,
             options: kindValues,
+            submitOnChanged: true,
         },
         // {
         //     key: 'fromDate',
@@ -432,7 +436,7 @@ function ProjectTaskListPage({ setSearchFilter }) {
                             onClick: (e) => {
                                 e.stopPropagation();
                                 handleFetchDetail(record.id);
-
+                                handlersStateTaskModal.close();
                                 handlersModal.open();
                             },
                         })}

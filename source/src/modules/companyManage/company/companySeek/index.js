@@ -127,12 +127,14 @@ const CompanySeekListPage = () => {
             placeholder: translate.formatMessage(commonMessage.role),
             type: FieldTypes.SELECT,
             options: projectRoles,
+            submitOnChanged: true,
         },
         {
             key: 'state',
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
+            submitOnChanged: true,
         },
     ];
     return (

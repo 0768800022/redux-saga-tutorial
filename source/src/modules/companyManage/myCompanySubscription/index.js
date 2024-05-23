@@ -150,6 +150,7 @@ const CompanySubscriptionListPage = () => {
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
+            submitOnChanged: true,
         },
     ];
     const {

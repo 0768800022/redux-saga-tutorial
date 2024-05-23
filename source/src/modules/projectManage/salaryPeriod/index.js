@@ -2,7 +2,7 @@ import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
 import { FileSearchOutlined } from '@ant-design/icons';
-import { DATE_FORMAT_DISPLAY, DEFAULT_EXCEL_DATE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, PAYOUT_PERIOD_STATE_CALCULATED, PAYOUT_PERIOD_STATE_DONE, apiTenantUrl, apiUrl } from '@constants';
+import { DATE_FORMAT_DISPLAY, DEFAULT_EXCEL_DATE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, PAYOUT_PERIOD_STATE_CALCULATED, PAYOUT_PERIOD_STATE_DONE, apiTenantUrl, apiUrl, storageKeys } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import { salaryPeriodState, statusOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
@@ -25,6 +25,7 @@ import { getCacheAccessToken } from '@services/userService';
 import { formatDateString, formatMoney } from '@utils';
 import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
 import useMoneyUnit from '@hooks/useMoneyUnit';
+import { getData } from '@utils/localStorage';
 const message = defineMessages({
     objectName: 'Kỳ lương',
 });
@@ -198,7 +199,7 @@ const SalaryPeriodListPage = () => {
                                 </Button>
                             </BaseTooltip>
                         ),
-                    export: ({ id, state, excelName }) =>
+                    export: ({ id, state, name }) =>
                         state === PAYOUT_PERIOD_STATE_DONE && (
                             <BaseTooltip title={<FormattedMessage defaultMessage={'Export'}/>}>
                                 <Button
@@ -207,7 +208,7 @@ const SalaryPeriodListPage = () => {
                                     style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        // exportToExcel(id, excelName);
+                                        exportToExcel(id, name);
                                     }}
                                 >
                                     <FileExcelOutlined  style={{ color:'green' }} size={16}/>
@@ -235,7 +236,7 @@ const SalaryPeriodListPage = () => {
 
     const exportToExcel = (value, nameExcel) => {
         axios({
-            url: `${apiTenantUrl}v1/period-detail/export-to-excel/${value}`,
+            url: `${getData(storageKeys.TENANT_API_URL)}v1/salary-period/export-to-excel/${value}`,
             method: 'GET',
             responseType: 'blob',
             // withCredentials: true,
@@ -255,7 +256,7 @@ const SalaryPeriodListPage = () => {
                 const link = document.createElement('a');
 
                 link.href = URL.createObjectURL(excelBlob);
-                link.download = `${nameExcel}-${day}.xlsx`;
+                link.download = `KyLuong_${nameExcel}.xlsx`;
                 link.click();
                 showSucsessMessage('Tạo tệp ủy nhiệm chi thành công');
             })

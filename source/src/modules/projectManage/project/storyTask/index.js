@@ -296,12 +296,14 @@ function StoryTaskListPage({ setSearchFilter }) {
             type: FieldTypes.SELECT,
             options: memberProject,
             colSpan: 3,
+            submitOnChanged: true,
         },
         {
             key: 'state',
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
+            submitOnChanged: true,
         },
         {
             key: 'fromDate',

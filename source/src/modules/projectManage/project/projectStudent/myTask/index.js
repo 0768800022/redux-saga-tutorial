@@ -230,12 +230,14 @@ function ProjectStudentMyTaskListPage() {
             placeholder: translate.formatMessage(commonMessage.projectName),
             type: FieldTypes.SELECT,
             options: projects,
+            submitOnChanged: true,
         },
         {
             key: 'state',
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
+            submitOnChanged: true,
         },
     ];
     return (

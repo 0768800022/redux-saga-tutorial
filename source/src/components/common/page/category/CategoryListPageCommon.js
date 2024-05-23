@@ -106,6 +106,7 @@ const CategoryListPageCommon = ({ routes, kind }) => {
             placeholder: translate.formatMessage(message.status),
             type: FieldTypes.SELECT,
             options: statusValues,
+            submitOnChanged: true,
         },
     ];
 

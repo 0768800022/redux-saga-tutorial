@@ -380,12 +380,14 @@ const ProjectListPage = () => {
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
+            submitOnChanged: true,
         },
         {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
+            submitOnChanged: true,
         },
     ].filter(Boolean);
     const handleOnClick = (event, record) => {
@@ -523,7 +525,7 @@ const ProjectListPage = () => {
                                 validator: validateDueDate,
                             },
                         ]}
-                        format={DEFAULT_FORMAT}
+                        format={DATE_FORMAT_DISPLAY}
                         style={{ width: '100%' }}
                     />
                 
@@ -554,10 +556,10 @@ const ProjectListPage = () => {
                                 },
                             ]}
                             fieldProps={{
-                                defaultValue: dayjs(registerSalaryItem?.dueDate,DEFAULT_FORMAT),
+                                defaultValue: dayjs(registerSalaryItem?.dueDate,DATE_FORMAT_DISPLAY),
 
                             }}
-                            format={DEFAULT_FORMAT}
+                            format={DATE_FORMAT_DISPLAY}
                             style={{ width: '100%' }}
                         />
                     </Col>

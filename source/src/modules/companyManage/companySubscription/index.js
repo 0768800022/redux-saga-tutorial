@@ -169,6 +169,7 @@ const CompanySubscriptionListPage = () => {
             placeholder: translate.formatMessage(commonMessage.companyName),
             type: FieldTypes.SELECT,
             options: companyOptions,
+            submitOnChanged: true,
 
         },
         {
@@ -176,6 +177,7 @@ const CompanySubscriptionListPage = () => {
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
+            submitOnChanged: true,
         },
     ];
     const {

@@ -101,7 +101,9 @@ function MemberActivityProjectListPage() {
                     const developerId = queryParams.get('developerId');
                     const studentName = queryParams.get('studentName');
                     const projectName = queryParams.get('projectName');
-                    mixinFuncs.setQueryParams(serializeParams({ projectId, developerId, studentName,projectName, ...filter }));
+                    mixinFuncs.setQueryParams(
+                        serializeParams({ projectId, developerId, studentName, projectName, ...filter }),
+                    );
                 };
                 const handleFilterSearchChange = funcs.handleFilterSearchChange;
                 funcs.handleFilterSearchChange = (values) => {
@@ -215,10 +217,12 @@ function MemberActivityProjectListPage() {
             align: 'center',
             width: 200,
             render: (gitUrl) => {
-                return (
+                return gitUrl ? (
                     <div className={style.customDiv} onClick={() => handleOnClickReview(gitUrl)}>
                         <BaseTooltip title={gitUrl}>Review</BaseTooltip>
                     </div>
+                ) : (
+                    'Review'
                 );
             },
         },
@@ -253,7 +257,7 @@ function MemberActivityProjectListPage() {
     });
 
     useEffect(() => {
-        executeGetTime({ params: { archived: archived, projectId, studentId : developerId } });
+        executeGetTime({ params: { archived: archived, projectId, studentId: developerId } });
     }, [archived]);
 
     const searchFields = [
@@ -262,6 +266,7 @@ function MemberActivityProjectListPage() {
             placeholder: <FormattedMessage defaultMessage={'Archived'} />,
             type: FieldTypes.SELECT,
             options: archivedOptions,
+            submitOnChanged: true,
         },
         {
             key: 'fromDate',
@@ -287,8 +292,8 @@ function MemberActivityProjectListPage() {
         };
 
         return initialFilterValues;
-    }, [queryFilter?.fromDate , queryFilter?.toDate]);
-    
+    }, [queryFilter?.fromDate, queryFilter?.toDate]);
+
     const handleAchiveAll = () => {
         Modal.confirm({
             title: translate.formatMessage(message.title),
