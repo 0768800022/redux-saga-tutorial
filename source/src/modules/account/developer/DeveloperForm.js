@@ -380,7 +380,7 @@ const DeveloperForm = (props) => {
                                 name='leaderId'
                                 apiConfig={apiConfig.developer.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.account.fullName })}
-                                initialSearchParams={{ pageNumber: 0 }}
+                                // initialSearchParams={{ pageNumber: 0 }}
                                 searchParams={(text) => ({ name: text })}
                             />
                         </Col>
