@@ -87,12 +87,14 @@ const CompanySeekDevListPage = () => {
                 value ? setIsHasValueSearch(true) : setIsHasValueSearch(false);
             },
             options: projectRoles,
+            submitOnChanged: true,
         },
         {
             key: 'expYear',
             type: FieldTypes.SELECT,
             placeholder: translate.formatMessage(message.expYear),
             options: expYearValues,
+            submitOnChanged: true,
         },
     ];
     const columns = [

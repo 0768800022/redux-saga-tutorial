@@ -360,18 +360,21 @@ function ProjectTaskListPage({ setSearchFilter }) {
             placeholder: <FormattedMessage defaultMessage={'Lập trình viên'} />,
             type: FieldTypes.SELECT,
             options: memberProject,
+            submitOnChanged: true,
         },
         {
             key: 'state',
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
+            submitOnChanged: true,
         },
         {
             key: 'kind',
             placeholder: translate.formatMessage(commonMessage.kind),
             type: FieldTypes.SELECT,
             options: kindValues,
+            submitOnChanged: true,
         },
         // {
         //     key: 'fromDate',

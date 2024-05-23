@@ -83,6 +83,7 @@ const SubjectListPage = () => {
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValue,
+            submitOnChanged: true,
         },
     ];
     const handleOnClick = (event, record) => {

@@ -210,12 +210,14 @@ const DeveloperListPage = () => {
             placeholder: translate.formatMessage(commonMessage.salary),
             type: FieldTypes.SELECT,
             options: salaryValues,
+            submitOnChanged: true,
         },
         {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
+            submitOnChanged: true,
         },
     ];
     const { data: projectroles, execute: executesprojectroles } = useFetch(apiConfig.projectRole.autocomplete, {

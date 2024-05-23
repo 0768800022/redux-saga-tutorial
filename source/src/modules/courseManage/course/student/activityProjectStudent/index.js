@@ -271,12 +271,14 @@ function MyActivityProjectListPage() {
             placeholder: translate.formatMessage(message.selectProject),
             type: FieldTypes.SELECT,
             options: myProject,
+            submitOnChanged: true,
         },
         {
             key: 'archived',
             placeholder: <FormattedMessage defaultMessage={'Archived'} />,
             type: FieldTypes.SELECT,
             options: archivedOptions,
+            submitOnChanged: true,
         },
         {
             key: 'fromDate',

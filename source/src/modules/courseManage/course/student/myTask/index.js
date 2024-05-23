@@ -210,12 +210,14 @@ function MyTaskStudentListPage() {
             placeholder: translate.formatMessage(commonMessage.courseName),
             type: FieldTypes.SELECT,
             options: courses,
+            submitOnChanged: true,
         },
         {
             key: 'taskState',
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
+            submitOnChanged: true,
         },
     ];
 

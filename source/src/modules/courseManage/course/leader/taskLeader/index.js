@@ -276,6 +276,7 @@ function TaskListPage() {
             placeholder: <FormattedMessage defaultMessage={'Sinh viên'} />,
             type: FieldTypes.SELECT,
             options: memberCourse,
+            submitOnChanged: true,
         },
         {
             key: 'fromDate',
@@ -283,6 +284,7 @@ function TaskListPage() {
             format: DATE_FORMAT_DISPLAY,
             placeholder: translate.formatMessage(commonMessage.fromDate),
             colSpan: 3,
+            submitOnChanged: true,
         },
         {
             key: 'toDate',
