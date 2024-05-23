@@ -157,6 +157,7 @@ const ProjectStudentMemberListPage = () => {
             placeholder: translate.formatMessage(commonMessage.team),
             type: FieldTypes.SELECT,
             options: teamData,
+            submitOnChanged: true,
         },
     ];
 

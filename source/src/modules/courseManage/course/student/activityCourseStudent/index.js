@@ -157,6 +157,7 @@ function MyActivityCourseListPage() {
             placeholder: translate.formatMessage(message.selectCourse),
             type: FieldTypes.SELECT,
             options: myCourse,
+            submitOnChanged: true,
         },
         {
             key: 'fromDate',
@@ -164,6 +165,7 @@ function MyActivityCourseListPage() {
             format: DATE_FORMAT_DISPLAY,
             placeholder: translate.formatMessage(commonMessage.fromDate),
             colSpan: 3,
+            submitOnChanged: true,
         },
         {
             key: 'toDate',

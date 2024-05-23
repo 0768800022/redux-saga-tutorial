@@ -124,6 +124,7 @@ const CourseListPage = () => {
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: stateValues,
+            submitOnChanged: true,
         },
     ];
     const columns = [

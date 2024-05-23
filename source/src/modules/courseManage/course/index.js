@@ -153,6 +153,7 @@ const CourseListPage = () => {
             placeholder: translate.formatMessage(commonMessage.status),
             type: FieldTypes.SELECT,
             options: statusValues,
+            submitOnChanged: true,
         },
     ].filter(Boolean);
 
@@ -210,7 +211,7 @@ const CourseListPage = () => {
             render: (dataRow) => {
                 return <Flex vertical>
                     <span>JavaScripts</span>
-                    <span>{dataRow?.leader?.account?.fullName}</span>
+                    <span style={{ fontSize:12 }}>Leader: {dataRow?.leader?.account?.fullName}</span>
                 </Flex>;
             },
         },

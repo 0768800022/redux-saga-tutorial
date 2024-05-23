@@ -109,6 +109,7 @@ const CourseRequestListPage = () => {
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
             options: [stateValues[0]],
+            submitOnChanged: true,
         },
     ];
     return (
