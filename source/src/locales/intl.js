@@ -143,4 +143,10 @@ export const commonMessage = defineMessages({
     take_off:'Xin nghỉ phép',
     bug:'Bug',
     createBug:'Tạo Bug',
+    trainingResult: 'Kết quả training',
+    totalTimeBug: 'Tổng thời gian bug',
+    totalAssignedCourseTime: 'Thời gian được giao',
+    totalLearnCourseTime:'Thời gian học',
+    returnFee:'Phí hoàn trả',
+    totalReturnMoney:'Tổng tiền hoàn trả',
 });

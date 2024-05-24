@@ -144,6 +144,8 @@ export const stateCourseRequestMessage = defineMessages({
 export const taskLog = defineMessages({
     working: 'Làm việc',
     off: 'Nghỉ phép',
+    bug: 'Bug',
+
 });
 
 export const companySeek = defineMessages({
