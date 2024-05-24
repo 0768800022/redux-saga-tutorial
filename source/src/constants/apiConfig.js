@@ -1747,6 +1747,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        myTraniningResult: {
+            baseURL: `${apiTenantUrl}v1/training-result/my-training-result`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
 };
 export default apiConfig;

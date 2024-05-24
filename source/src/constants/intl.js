@@ -170,3 +170,7 @@ export const salaryMessage = defineMessages({
     fix: 'Lương cố định',
     hour: 'Lương theo giờ',
 });
+export const returnFeeMessage = defineMessages({
+    returnFeeTrue: 'Được hoàn trả',
+    returnMoneyFalse: 'Không được hoàn trả',
+});

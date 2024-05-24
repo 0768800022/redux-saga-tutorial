@@ -12,7 +12,7 @@ import { UserOutlined, BookOutlined } from '@ant-design/icons';
 import route from '@modules/account/student/routes';
 import { useNavigate } from 'react-router-dom';
 import { Button, Tag, Avatar } from 'antd';
-import { statusOptions } from '@constants/masterData';
+import { returnFeeOption, stateResgistrationOptions, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { AppConstants } from '@constants';
 import { CourseIcon } from '@assets/icons';
@@ -32,7 +32,7 @@ const TrainingResultListPage = () => {
     const queryParameters = new URLSearchParams(window.location.search);
     const studentId = queryParameters.get('studentId');
     const studentName = queryParameters.get('studentName');
-
+    const returnFeeState = translate.formatKeys(returnFeeOption, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
         apiConfig: apiConfig.trainingResult,
@@ -129,13 +129,13 @@ const TrainingResultListPage = () => {
             dataIndex: 'returnFee',
             align: 'center',
             width: 140,
-            render: (dataRow) => {
-                let result = dataRow / 60;
-                if (result % 1 !== 0) {
-                    return <span>{parseFloat(result.toFixed(2))}h</span>;
-                } else {
-                    return <span>{result.toFixed(0)}h</span>;
-                }
+            render(dataRow) {
+                const state = returnFeeState.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
             },
         },
         {
@@ -155,11 +155,11 @@ const TrainingResultListPage = () => {
             },
         },
         
-        mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn(
-            { task: mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]), edit: true, delete: true },
-            { width: '120px' },
-        ),
+        // mixinFuncs.renderStatusColumn({ width: '120px' }),
+        // mixinFuncs.renderActionColumn(
+        //     // { task: mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]), edit: true, delete: true },
+        //     { width: '120px' },
+        // ),
     ];
 
  
