@@ -19,6 +19,7 @@ import { CourseIcon } from '@assets/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
+import routes from '@routes';
 
 const message = defineMessages({
     objectName: 'Sinh viên',
@@ -142,6 +143,15 @@ const StudentListPage = () => {
                         dataSource={data}
                         loading={loading}
                         pagination={pagination}
+                        onRow={(record) => ({
+                            onClick: (e) => {
+                                e.stopPropagation();
+                                navigate(
+                                    routes.trainingResultListPage.path +
+                                        `?studentId=${record.id}&studentName=${record.account.fullName}`,
+                                );
+                            },
+                        })}
                     />
                 }
             ></ListPage>

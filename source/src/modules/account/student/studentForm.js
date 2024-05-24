@@ -5,7 +5,7 @@ import useTranslate from '@hooks/useTranslate';
 import TextField from '@components/common/form/TextField';
 import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
-import { DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants/index';
+import { DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants/index';
 import { formatDateString } from '@utils/index';
 import dayjs from 'dayjs';
 import AutoCompleteField from '@components/common/form/AutoCompleteField';
@@ -75,6 +75,8 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
     useEffect(() => {
         dataDetail.birthday = dataDetail?.account?.birthday && dayjs(dataDetail?.account?.birthday, DATE_FORMAT_VALUE);
         setImageUrl(dataDetail.account?.avatar);
+        dataDetail.fromDate = dataDetail.fromDate && dayjs(dataDetail.fromDate, DEFAULT_FORMAT);
+        dataDetail.endDate = dataDetail.endDate && dayjs(dataDetail.endDate, DEFAULT_FORMAT);
         form.setFieldsValue({
             ...dataDetail,
             // university: dataDetail?.category?.categoryName,
@@ -82,13 +84,16 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             phone : dataDetail?.account?.phone,
             email: dataDetail?.account?.email,
             universityId: dataDetail?.university?.categoryName,
-            studyClass: dataDetail?.studyClass?.categoryName,
+            studyClassId: dataDetail?.studyClass?.categoryName,
         });
         setImageUrl(dataDetail?.account?.avatar);
     }, [dataDetail]);
 
     const handleSubmit = (values) => {
         values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
+        values.fromDate = formatDateString(values.fromDate, DEFAULT_FORMAT);
+        values.endDate = formatDateString(values.endDate, DEFAULT_FORMAT);
+        
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl });
     };
 
@@ -107,7 +112,20 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
         }
         return Promise.resolve();
     };
-
+    const validateStartDate = (_, value) => {
+        const date = dayjs(formatDateString(new Date(), DEFAULT_FORMAT), DATE_FORMAT_VALUE);
+        if (date && value && value.isBefore(date)) {
+            return Promise.reject('Ngày bắt đầu phải lớn hơn hoặc bằng ngày hiện tại');
+        }
+        return Promise.resolve();
+    };
+    const validateDueDate = (_, value) => {
+        const { startDate } = form.getFieldValue();
+        if (startDate && value && value.isBefore(startDate)) {
+            return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
+        }
+        return Promise.resolve();
+    };
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>
@@ -216,7 +234,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                     <Col span={12}>
                         <AutoCompleteField
                             label={<FormattedMessage defaultMessage="Hệ" />}
-                            name="studyClass"
+                            name="studyClassId"
                             disabled={isEditing}
                             apiConfig={apiConfig.category.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
@@ -229,6 +247,42 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                         />
                     </Col>
                     <Col span={12}>
+                        <DatePickerField
+                            name="fromDate"
+                            label={<FormattedMessage defaultMessage="Ngày bắt đầu training" />}
+                            placeholder="Ngày bắt đầu training"
+                            format={DATE_FORMAT_DISPLAY}
+                            style={{ width: '100%' }}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày bắt đầu',
+                                },
+                                {
+                                    validator: validateStartDate,
+                                },
+                            ]}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <DatePickerField
+                            label={<FormattedMessage defaultMessage="Ngày kết thúc training" />}
+                            name="endDate"
+                            placeholder="Ngày kết thúc training"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Vui lòng chọn ngày kết thúc',
+                                },
+                                {
+                                    validator: validateDueDate,
+                                },
+                            ]}
+                            format={DATE_FORMAT_DISPLAY}
+                            style={{ width: '100%' }}
+                        />
+                    </Col>
+                    <Col span={12}>
                         <SelectField
                             required
                             label={<FormattedMessage defaultMessage="Trạng thái" />}
@@ -236,6 +290,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             options={statusValues}
                         />
                     </Col>
+                    
                 </Row>
                 <div className="footer-card-form">{actions}</div>
             </Card>
