@@ -442,6 +442,7 @@ export const REGISTRATION_MONEY_RETURN = 2;
 
 export const TASK_LOG_WORKING = 1;
 export const TASK_LOG_OFF = 100;
+export const TASK_LOG_BUG = 200;
 
 export const COMPANY_SEEK_STATE_LOOKING = 1;
 export const COMPANY_SEEK_STATE_ACCEPT = 2;
