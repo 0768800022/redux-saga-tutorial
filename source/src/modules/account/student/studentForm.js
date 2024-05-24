@@ -83,8 +83,8 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             fullName : dataDetail?.account?.fullName,
             phone : dataDetail?.account?.phone,
             email: dataDetail?.account?.email,
-            universityId: dataDetail?.university?.categoryName,
-            studyClassId: dataDetail?.studyClass?.categoryName,
+            universityId: dataDetail?.university?.id,
+            studyClassId: dataDetail?.studyClass?.id,
         });
         setImageUrl(dataDetail?.account?.avatar);
     }, [dataDetail]);
