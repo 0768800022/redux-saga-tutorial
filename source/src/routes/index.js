@@ -27,6 +27,7 @@ import SalaryPeriodRoutes from '@modules/projectManage/salaryPeriod/routes';
 import StoryTaskRoutes from '@modules/projectManage/project/storyTask/routes';
 import categoryRoutesRole from '@modules/category/categoryRole/routes';
 import registerSalaryPeriod from "@modules/projectManage/registerSalaryPeriod/routes";
+import TrainingResultRouter from '@modules/TrainingResult/routes';
 /*
     auth
         + null: access login and not login
@@ -83,6 +84,7 @@ const routes = {
     ...StoryTaskRoutes,
     ...categoryRoutesRole,
     ...registerSalaryPeriod,
+    ...TrainingResultRouter,
     // keep this at last
     //
     notFound: {
