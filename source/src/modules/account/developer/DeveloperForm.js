@@ -47,7 +47,6 @@ const DeveloperForm = (props) => {
     const handleSubmit = (values) => {
         if (isEditing) {
             delete values.roleName;
-            delete values.studentId;
         }
         if (!values.level) {
             values.level = 1;
@@ -81,7 +80,7 @@ const DeveloperForm = (props) => {
             }, {});
         values.schedule = values.schedule && JSON.stringify(filterNewSchedule);
         values.birthday = formatDateString(values?.birthday, DATE_FORMAT_VALUE) + ' 00:00:00';
-        return mixinFuncs.handleSubmit({ ...values, avatar:imageUrl, developerRoleId:values.developerRole.id  });
+        return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl, developerRoleId: values.developerRole.id });
     };
     function addFrameTime(data) {
         const result = {};
@@ -138,7 +137,7 @@ const DeveloperForm = (props) => {
         }
         return result;
     };
-  
+
     useEffect(() => {
         let data = dataDetail?.schedule && JSON.parse(dataDetail?.schedule);
         if (data) {
@@ -179,13 +178,15 @@ const DeveloperForm = (props) => {
         }
 
         dataDetail.schedule = data || dataDefault;
-        dataDetail.birthday = dataDetail?.accountDto?.birthday && dayjs(dataDetail?.accountDto?.birthday, DATE_FORMAT_VALUE);
+        dataDetail.birthday =
+            dataDetail?.accountDto?.birthday && dayjs(dataDetail?.accountDto?.birthday, DATE_FORMAT_VALUE);
         form.setFieldsValue({
             ...dataDetail,
-            fullName : dataDetail?.accountDto?.fullName,
-            phone : dataDetail?.accountDto?.phone,
+            fullName: dataDetail?.accountDto?.fullName,
+            phone: dataDetail?.accountDto?.phone,
             email: dataDetail?.accountDto?.email,
             leaderId: dataDetail?.leader?.accountDto?.id,
+            studentId: dataDetail?.student?.account?.id,
         });
 
         setImageUrl(dataDetail.accountDto?.avatar);
@@ -295,11 +296,11 @@ const DeveloperForm = (props) => {
         }
         return Promise.resolve();
     };
-    
+
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onFieldsChange={onFieldsChange} size="1100px">
             <Card className="card-form" bordered={false}>
-                <div style={{ width : "980px" }}>
+                <div style={{ width: '980px' }}>
                     <Row gutter={16}>
                         <Col span={12}>
                             <CropImageField
@@ -377,7 +378,7 @@ const DeveloperForm = (props) => {
                         <Col span={12}>
                             <AutoCompleteField
                                 label={<FormattedMessage defaultMessage="Leader" />}
-                                name='leaderId'
+                                name="leaderId"
                                 apiConfig={apiConfig.developer.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.account.fullName })}
                                 // initialSearchParams={{ pageNumber: 0 }}
@@ -387,12 +388,23 @@ const DeveloperForm = (props) => {
                         <Col span={12}>
                             <AutoCompleteField
                                 label={<FormattedMessage defaultMessage="Vai trò dự án" />}
-                                name={['developerRole','id']}
+                                name={['developerRole', 'id']}
                                 apiConfig={apiConfig.category.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
                                 initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
                                 searchParams={(text) => ({ categoryName: text })}
                                 required={isEditing ? false : true}
+                            />
+                        </Col>
+                        <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Sinh viên" />}
+                                name={['studentId']}
+                                apiConfig={apiConfig.student.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.account.fullName })}
+                                // initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
+                                // searchParams={(text) => ({ categoryName: text })}
+                                onChange={(value) => console.log(value)}
                             />
                         </Col>
                         <Col span={12}>
