@@ -403,7 +403,7 @@ const DeveloperForm = (props) => {
                                 apiConfig={apiConfig.student.autocomplete}
                                 mappingOptions={(item) => ({ value: item.id, label: item.account.fullName })}
                                 // initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
-                                // searchParams={(text) => ({ categoryName: text })}
+                                searchParams={(text) => ({ fullName: text })}
                                 onChange={(value) => console.log(value)}
                             />
                         </Col>
