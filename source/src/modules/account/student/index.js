@@ -143,15 +143,15 @@ const StudentListPage = () => {
                         dataSource={data}
                         loading={loading}
                         pagination={pagination}
-                        onRow={(record) => ({
-                            onClick: (e) => {
-                                e.stopPropagation();
-                                navigate(
-                                    routes.trainingResultListPage.path +
-                                        `?studentId=${record.id}&studentName=${record.account.fullName}`,
-                                );
-                            },
-                        })}
+                        // onRow={(record) => ({
+                        //     onClick: (e) => {
+                        //         e.stopPropagation();
+                        //         navigate(
+                        //             routes.trainingResultListPage.path +
+                        //                 `?studentId=${record.id}&studentName=${record.account.fullName}`,
+                        //         );
+                        //     },
+                        // })}
                     />
                 }
             ></ListPage>
