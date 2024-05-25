@@ -1,26 +1,18 @@
-import PageWrapper from '@components/common/layout/PageWrapper';
 import ListPage from '@components/common/layout/ListPage';
+import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import useListBase from '@hooks/useListBase';
 import apiConfig from '@constants/apiConfig';
-import React from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
-import { DATE_FORMAT_VALUE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
-import { convertUtcToLocalTime, formatMoney } from '@utils/index';
-import { UserOutlined, BookOutlined } from '@ant-design/icons';
-import route from '@modules/account/student/routes';
-import { useNavigate } from 'react-router-dom';
-import { Button, Tag, Avatar } from 'antd';
+import { DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
 import { returnFeeOption, stateResgistrationOptions, statusOptions } from '@constants/masterData';
-import { FieldTypes } from '@constants/formConfig';
-import { AppConstants } from '@constants';
-import { CourseIcon } from '@assets/icons';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import AvatarField from '@components/common/form/AvatarField';
+import useListBase from '@hooks/useListBase';
+import useMoneyUnit from '@hooks/useMoneyUnit';
+import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import routes from '@routes';
-import useMoneyUnit from '@hooks/useMoneyUnit';
+import { formatMoney } from '@utils/index';
+import { Tag } from 'antd';
+import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 
 const message = defineMessages({
     objectName: 'Kết quả training',
@@ -35,7 +27,10 @@ const TrainingResultListPage = () => {
     const returnFeeState = translate.formatKeys(returnFeeOption, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
-        apiConfig: apiConfig.trainingResult,
+        apiConfig: {
+            
+            
+            getList : apiConfig.trainingResult.getList },
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -45,8 +40,8 @@ const TrainingResultListPage = () => {
             funcs.mappingData = (response) => {
                 if (response.result === true) {
                     return {
-                        data: response.data.content,
-                        total: response.data.totalElements,
+                        data: response?.data?.content,
+                        total: response?.data?.totalElements,
                     };
                 }
             };
@@ -61,7 +56,12 @@ const TrainingResultListPage = () => {
     });
 
     const columns = [
-        
+        {
+            title: <FormattedMessage defaultMessage="Tên sinh viên" />,
+            dataIndex: ['student',"account","fullName"],
+           
+            width: 200,
+        },
         {
             title: <FormattedMessage defaultMessage="Tổng dự án" />,
             dataIndex: ['totalProject'],
@@ -124,6 +124,7 @@ const TrainingResultListPage = () => {
                 }
             },
         },
+       
         {
             title: translate.formatMessage(commonMessage.returnFee),
             dataIndex: 'returnFee',
@@ -154,17 +155,19 @@ const TrainingResultListPage = () => {
                 return <div>{formattedValue}</div>;
             },
         },
-        
+       
         // mixinFuncs.renderStatusColumn({ width: '120px' }),
         // mixinFuncs.renderActionColumn(
-        //     // { task: mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]), edit: true, delete: true },
+        //     { task: mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]), edit: true, delete: true },
         //     { width: '120px' },
         // ),
     ];
 
  
     return (
-        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.student), path: routes.studentListPage.path },{ breadcrumbName: translate.formatMessage(commonMessage.trainingResult) }]}>
+        <PageWrapper  routes={[
+            { breadcrumbName: translate.formatMessage(commonMessage.resultTraining) },
+        ]}>
             <ListPage
                 title={
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
