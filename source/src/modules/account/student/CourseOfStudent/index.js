@@ -8,7 +8,7 @@ import useTranslate from '@hooks/useTranslate';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { TeamOutlined, BookOutlined } from '@ant-design/icons';
+import { TeamOutlined, BookOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
 import { useNavigate, generatePath, useParams, useLocation } from 'react-router-dom';
 import route from '@modules/task/routes';
@@ -58,8 +58,8 @@ const CourseListPage = () => {
                 return `${pagePath}/${dataRow.id}?studentId=${stuId}`;
             };
             funcs.additionalActionColumnButtons = () => ({
-                registration: ({ id, name, state }) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
+                registration: ({ id, courseInfo, state }) => (
+                    <BaseTooltip title={translate.formatMessage(commonMessage.registrationProject)}>
                         <Button
                             type="link"
                             disabled={state === 1}
@@ -68,12 +68,12 @@ const CourseListPage = () => {
                                 e.stopPropagation();
                                 state !== 1 &&
                                     navigate(
-                                        routes.registrationListPage.path +
-                                            `?courseId=${id}&courseName=${name}&courseState=${state}`,
+                                        routes.studentCourseRegistrationProjectListPage.path +
+                                            `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseInfo.name}&courseState=${state}`,
                                     );
                             }}
                         >
-                            <TeamOutlined />
+                            <PlusSquareOutlined />
                         </Button>
                     </BaseTooltip>
                 ),
@@ -129,13 +129,13 @@ const CourseListPage = () => {
     ];
     const columns = [
         {
-            title: translate.formatMessage(commonMessage.name),
+            title: translate.formatMessage(commonMessage.courseName),
             dataIndex: ['courseInfo', 'name'],
         },
         {
             title: translate.formatMessage(commonMessage.createdDate),
             dataIndex: 'createdDate',
-            align:'right',
+            align: 'right',
             width: 150,
             render: (createdDate) => {
                 return (
@@ -159,7 +159,7 @@ const CourseListPage = () => {
                 );
             },
         },
-        mixinFuncs.renderActionColumn({ delete: true }, { width: '120px' }),
+        mixinFuncs.renderActionColumn({ registration: true, delete: true }, { width: '120px' }),
     ];
 
     return (
