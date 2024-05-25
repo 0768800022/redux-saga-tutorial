@@ -70,6 +70,7 @@ import {
     taskKindMessage,
     salaryPeriodStateMessage,
     salaryMessage,
+    returnFeeMessage,
 } from './intl';
 import React from 'react';
 import feature from '../assets/images/feature.png';
@@ -221,7 +222,15 @@ export const stateResgistrationOptions = [
     { value: 3, label: stateResgistrationMessage.finished, color: 'green' },
     { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
 ];
-
+export const returnFeeOption = [
+    {
+        value: true,
+        label: returnFeeMessage.returnFeeTrue,
+        color: 'green',
+    },
+    { value: false, label: returnFeeMessage.returnMoneyFalse, color: 'red' },
+    
+];
 export const lectureKindOptions = [
     {
         value: LECTURE_LESSION,

@@ -149,4 +149,5 @@ export const commonMessage = defineMessages({
     totalLearnCourseTime:'Thời gian học',
     returnFee:'Phí hoàn trả',
     totalReturnMoney:'Tổng tiền hoàn trả',
+    resultTraining : "Kết quả đào tạo",
 });

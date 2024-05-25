@@ -83,8 +83,8 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
             fullName : dataDetail?.account?.fullName,
             phone : dataDetail?.account?.phone,
             email: dataDetail?.account?.email,
-            universityId: dataDetail?.university?.categoryName,
-            studyClassId: dataDetail?.studyClass?.categoryName,
+            universityId: dataDetail?.university?.id,
+            studyClassId: dataDetail?.studyClass?.id,
         });
         setImageUrl(dataDetail?.account?.avatar);
     }, [dataDetail]);
@@ -253,14 +253,13 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             placeholder="Ngày bắt đầu training"
                             format={DATE_FORMAT_DISPLAY}
                             style={{ width: '100%' }}
+                            
                             rules={[
                                 {
                                     required: true,
                                     message: 'Vui lòng chọn ngày bắt đầu',
                                 },
-                                {
-                                    validator: validateStartDate,
-                                },
+                                
                             ]}
                         />
                     </Col>
@@ -269,6 +268,7 @@ const StudentForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsCh
                             label={<FormattedMessage defaultMessage="Ngày kết thúc training" />}
                             name="endDate"
                             placeholder="Ngày kết thúc training"
+                        
                             rules={[
                                 {
                                     required: true,
