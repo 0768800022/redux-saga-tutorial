@@ -287,6 +287,38 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+    registrationProject: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/registration-project/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/registration-project/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/registration-project/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/registration-project/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/registration-project/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
     registrationMoney: {
         getList: {
             baseURL: `${apiTenantUrl}v1/registration-money-history/list`,
@@ -576,8 +608,8 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
-  
-    
+
+
     lecture: {
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/lecture/auto-complete`,
@@ -766,8 +798,8 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        
-  
+
+
     },
     projectTask: {
         getList: {
