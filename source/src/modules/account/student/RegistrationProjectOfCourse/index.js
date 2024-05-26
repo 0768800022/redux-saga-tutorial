@@ -16,7 +16,7 @@ import { DATE_FORMAT_DISPLAY } from '@constants';
 import { commonMessage } from '@locales/intl';
 import styles from '../student.module.scss';
 import AvatarField from '@components/common/form/AvatarField';
-import { UserOutlined,DeleteOutlined } from '@ant-design/icons';
+import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Tag } from 'antd';
 
 const message = defineMessages({
@@ -58,6 +58,7 @@ const RegistrationProjectListPage = () => {
             funcs.additionalActionColumnButtons = () => {
                 return {
                     deleteItem: ({ buttonProps, ...dataRow }) => {
+                        if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
                         return (
                             <Button
                                 {...buttonProps}
@@ -162,6 +163,7 @@ const RegistrationProjectListPage = () => {
         },
         mixinFuncs.renderActionColumn(
             {
+                // delete: true,
                 deleteItem: true,
             },
             { width: '120px' },
