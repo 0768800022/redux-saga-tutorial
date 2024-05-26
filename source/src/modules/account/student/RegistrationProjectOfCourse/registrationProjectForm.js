@@ -16,6 +16,7 @@ const RegistrationProjectForm = ({
     onSubmit,
     setIsChangedFormValues,
     handleFocus,
+    developerId,
 }) => {
     const translate = useTranslate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
@@ -47,17 +48,16 @@ const RegistrationProjectForm = ({
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>
                 <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={24}>
                         <AutoCompleteField
                             label={<FormattedMessage defaultMessage="Dự án" />}
-                            name="leaderId"
+                            name="projectId"
                             disabled={isEditing}
                             apiConfig={apiConfig.project.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.name })}
-                            initialSearchParams={{}}
-                            // optionsParams={{ kind: kindOfEdu }}
-                            // searchParams={(text) => ({ name: text })}
-                            // onFocus={handleFocus}
+                            // optionsParams={{ developerId: developerId }}
+                            searchParams={(text) => ({ name: text })}
+                            onFocus={handleFocus}
                             required
                         />
                     </Col>

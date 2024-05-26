@@ -9,6 +9,7 @@ import { generatePath, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import RegistrationProjectForm from './registrationProjectForm';
 import { commonMessage } from '@locales/intl';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'Dự án',
@@ -46,6 +47,15 @@ const RegistrationProjectSavePage = () => {
                     registrationId: registrationId,
                 };
             };
+            funcs.onSaveError = (err) => {
+                if (err.response.data.code === 'ERROR-REGISTRATION-PROJECT-ERROR-0000') {
+                    showErrorMessage('Dự án đăng ký đã tồn tại!');
+                    mixinFuncs.setSubmit(false);
+                } else {
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
+            };
         },
     });
     const setBreadRoutes = () => {
@@ -80,6 +90,7 @@ const RegistrationProjectSavePage = () => {
                 setIsChangedFormValues={setIsChangedFormValues}
                 isError={errors}
                 isEditing={isEditing}
+                developerId={stuId}
             />
         </PageWrapper>
     );
