@@ -28,14 +28,14 @@ export default {
         permissions: [apiConfig.course.getList.baseURL],
     },
     studentCourseRegistrationProjectListPage: {
-        path: '/student/course/registration-project',
+        path: '/course/registration-project',
         title: 'Student Course Registration Project List Page',
         auth: true,
         component: RegistrationProjectListPage,
         permissions: [apiConfig.registrationProject.getList.baseURL],
     },
     studentCourseRegistrationProjectSavePage: {
-        path: '/student/course/registration-project/:id',
+        path: '/course/registration-project/:id',
         title: 'Student Course Registration Project Save Page',
         auth: true,
         component: RegistrationProjectSavePage,
