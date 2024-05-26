@@ -123,7 +123,7 @@ function AutoCompleteField({
             renderCustomOption={renderCustomOption}
             onChange={onChange}
             onFocus={handleFocus}
-            onClear={() => handleOnSearch(null)}
+            onClear={() => handleOnSearch("")}
             {...props}
         />
     );
