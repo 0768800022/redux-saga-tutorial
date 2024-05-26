@@ -99,9 +99,14 @@ const FinanceListPage = () => {
                 />
             ),
         },
+      
         {
             title: translate.formatMessage(commonMessage.studentName),
             dataIndex: 'studentName',
+        },
+        {
+            title: translate.formatMessage(commonMessage.courseName),
+            dataIndex: 'courseName',
         },
         {
             title: translate.formatMessage(commonMessage.moneyReceived),
