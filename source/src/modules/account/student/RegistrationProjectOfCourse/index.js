@@ -55,26 +55,25 @@ const RegistrationProjectListPage = () => {
                     registrationId: registrationId,
                 };
             };
-            funcs.additionalActionColumnButtons = () => {
-                return {
-                    deleteItem: ({ buttonProps, ...dataRow }) => {
-                        if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
-                        return (
-                            <Button
-                                {...buttonProps}
-                                type="link"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    mixinFuncs.showDeleteItemConfirm(dataRow.project.id);
-                                }}
-                                style={{ padding: 0 }}
-                            >
-                                <DeleteOutlined style={{ color: 'red' }} />
-                            </Button>
-                        );
-                    },
-                };
-            };
+            // funcs.additionalActionColumnButtons = () => {
+            //     return {
+            //         deleteItem: (dataRow) => {
+            //             if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
+            //             return (
+            //                 <Button
+            //                     type="link"
+            //                     onClick={(e) => {
+            //                         e.stopPropagation();
+            //                         mixinFuncs.showDeleteItemConfirm(dataRow.registration.id);
+            //                     }}
+            //                     style={{ padding: 0 }}
+            //                 >
+            //                     <DeleteOutlined style={{ color: 'red' }} />
+            //                 </Button>
+            //             );
+            //         },
+            //     };
+            // };
         },
     });
     const convertDate = (date) => {
@@ -163,8 +162,8 @@ const RegistrationProjectListPage = () => {
         },
         mixinFuncs.renderActionColumn(
             {
-                // delete: true,
-                deleteItem: true,
+                delete: true,
+                // deleteItem: true,
             },
             { width: '120px' },
         ),
