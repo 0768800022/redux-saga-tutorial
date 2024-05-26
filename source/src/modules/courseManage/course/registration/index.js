@@ -80,7 +80,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.registrationMoneyListPage.path +
-                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}`,
+                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                                 );
                             }}
                         >
