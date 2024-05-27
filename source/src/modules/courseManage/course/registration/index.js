@@ -17,7 +17,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
-import { CheckCircleOutlined, DollarOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, DollarOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import style from './Registration.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -88,6 +88,26 @@ function RegistrationListPage() {
                         </Button>
                     </BaseTooltip>
                 ),
+                registration: ({ id, courseInfo, state, studentInfo }) => (
+                    <BaseTooltip title={translate.formatMessage(commonMessage.registrationProject)}>
+                        <Button
+                            type="link"
+                            disabled={state === 1}
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                state !== 1 &&
+                                    navigate(
+                                        routes.courseRegistrationProjectListPage.path +
+                                            `?registrationId=${id}&courseId=${courseId}&courseName=${courseInfo.name}&courseState=${state}&courseStatus=${courseStatus}&studentId=${studentInfo.id}&studentName=${studentInfo.account.fullName}
+                                            `,
+                                    );
+                            }}
+                        >
+                            <PlusSquareOutlined />
+                        </Button>
+                    </BaseTooltip>
+                ),
             });
         },
     });
@@ -102,7 +122,7 @@ function RegistrationListPage() {
     const columns = [
         {
             title: translate.formatMessage(commonMessage.studentName),
-            dataIndex: ['studentInfo', 'account',"fullName"],
+            dataIndex: ['studentInfo', 'account', 'fullName'],
             render: (fullName, record) => (
                 <div onClick={(event) => handleOnClick(event, record)} className={style.customDiv}>
                     {fullName}
@@ -132,7 +152,16 @@ function RegistrationListPage() {
                 );
             },
         },
-        courseStatus == 1 && mixinFuncs.renderActionColumn({ money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]), edit: true, delete: true }, { width: 180 }),
+        courseStatus == 1 &&
+            mixinFuncs.renderActionColumn(
+                {
+                    registration: mixinFuncs.hasPermission([apiConfig.registrationProject.getList?.baseURL]),
+                    money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]),
+                    edit: true,
+                    delete: true,
+                },
+                { width: 180 },
+            ),
     ].filter(Boolean);
 
     const searchFields = [

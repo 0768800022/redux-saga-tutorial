@@ -39,6 +39,7 @@ export const commonMessage = defineMessages({
     projectRole: 'Vai trò dự án',
     projectRoleName: 'Tên vai trò dự án',
     registration: 'Đăng ký',
+    registrationProject: 'Đăng ký dự án',
     required: 'Không được để trống',
     role: 'Vai trò',
     schedule: 'Lịch trình',

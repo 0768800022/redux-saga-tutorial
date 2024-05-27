@@ -2,7 +2,8 @@ import apiConfig from "@constants/apiConfig";
 import StudentListPage from ".";
 import StudentSavePage from "./studentSavePage";
 import CourseListPage from "@modules/account/student/CourseOfStudent/index";
-import TrainingResultListPage from "./TrainingResult";
+import RegistrationProjectListPage from "./RegistrationProjectOfCourse";
+import RegistrationProjectSavePage from "./RegistrationProjectOfCourse/registrationProjectSavePage";
 
 export default {
     studentListPage: {
@@ -26,11 +27,18 @@ export default {
         component: CourseListPage,
         permissions: [apiConfig.course.getList.baseURL],
     },
-    trainingResultListPage: {
-        path: '/student/training-result',
-        title: 'Training result',
+    studentCourseRegistrationProjectListPage: {
+        path: '/student/registration-project',
+        title: 'Student Course Registration Project List Page',
         auth: true,
-        component: TrainingResultListPage,
-        permissions: [apiConfig.trainingResult.getList.baseURL],
+        component: RegistrationProjectListPage,
+        permissions: [apiConfig.registrationProject.getList.baseURL],
+    },
+    studentCourseRegistrationProjectSavePage: {
+        path: '/student/registration-project/:id',
+        title: 'Student Course Registration Project Save Page',
+        auth: true,
+        component: RegistrationProjectSavePage,
+        permissions: [apiConfig.registrationProject.create.baseURL],
     },
 };

@@ -48,12 +48,12 @@ const navMenuConfig = [
                 path: generatePath(routes.courseRequestListPage.path, {}),
                 permission: apiConfig.subject.getList.baseURL,
             },
-            {
-                label: <FormattedMessage defaultMessage="Kết quả đào tạo" />,
-                key: "result-traning",
-                path: generatePath(routes.trainingResultListPage.path, {}),
-                permission: apiConfig.trainingResult.getList.baseURL,
-            },
+            // {
+            //     label: <FormattedMessage defaultMessage="Kết quả đào tạo" />,
+            //     key: "result-traning",
+            //     path: generatePath(routes.trainingResultListPage.path, {}),
+            //     permission: apiConfig.trainingResult.getList.baseURL,
+            // },
         ],
     },
     {
