@@ -99,7 +99,8 @@ function RegistrationListPage() {
                                 state !== 1 &&
                                     navigate(
                                         routes.courseRegistrationProjectListPage.path +
-                                            `?registrationId=${id}&courseId=${courseId}&courseName=${courseInfo.name}&courseState=${state}&courseStatus=${courseStatus}&studentName=${studentInfo.account.fullName}`,
+                                            `?registrationId=${id}&courseId=${courseId}&courseName=${courseInfo.name}&courseState=${state}&courseStatus=${courseStatus}&studentId=${studentInfo.id}&studentName=${studentInfo.account.fullName}
+                                            `,
                                     );
                             }}
                         >
