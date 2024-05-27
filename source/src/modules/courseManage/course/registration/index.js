@@ -24,6 +24,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import routers from './routes';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
+import { formatMoney } from '@utils';
 
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
@@ -88,20 +89,18 @@ function RegistrationListPage() {
                         </Button>
                     </BaseTooltip>
                 ),
-                registration: ({ id, courseInfo, state, studentInfo }) => (
+                registration: ({ id, studentId, studentName }) => (
                     <BaseTooltip title={translate.formatMessage(commonMessage.registrationProject)}>
                         <Button
                             type="link"
-                            disabled={state === 1}
                             style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                state !== 1 &&
-                                    navigate(
-                                        routes.courseRegistrationProjectListPage.path +
-                                            `?registrationId=${id}&courseId=${courseId}&courseName=${courseInfo.name}&courseState=${state}&courseStatus=${courseStatus}&studentId=${studentInfo.id}&studentName=${studentInfo.account.fullName}
+                                navigate(
+                                    routes.courseRegistrationProjectListPage.path +
+                                        `?registrationId=${id}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&studentId=${studentId}&studentName=${studentName}
                                             `,
-                                    );
+                                );
                             }}
                         >
                             <PlusSquareOutlined />
@@ -115,19 +114,62 @@ function RegistrationListPage() {
         event.preventDefault();
         navigate(
             routes.studentActivityCourseListPage.path +
-                `?courseId=${record?.courseInfo?.id}&studentId=${record?.studentInfo?.id}&studentName=${record?.studentInfo?.account?.fullName}`,
+                `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
         );
     };
 
     const columns = [
         {
             title: translate.formatMessage(commonMessage.studentName),
-            dataIndex: ['studentInfo', 'account', 'fullName'],
-            render: (fullName, record) => (
+            dataIndex: ['studentName'],
+            render: (studentName, record) => (
                 <div onClick={(event) => handleOnClick(event, record)} className={style.customDiv}>
-                    {fullName}
+                    {studentName}
                 </div>
             ),
+        },
+        {
+            title: 'Tỉ lệ project ',
+            align: 'center',
+            dataIndex: 'totalProject',
+            // render: (record) => {
+            //     let value;
+            //     if (record.totalTimeWorking === 0) {
+            //         return <div>{formatPercentValue(0)}</div>;
+            //     }
+            //     else {
+            //         value = record.totalProject/record.totalTimeWorking*100;
+            //         return <div>{formatPercentValue(parseFloat(value))}</div>;
+            //     }
+            // },
+        },
+        {
+            title: 'Tỉ lệ traning ',
+            align: 'center',
+            render: (record) => {
+                let value;
+                if (record.totalAssignedCourseTime === 0) {
+                    return <div>{formatPercentValue(0)}</div>;
+                }
+                else {
+                    value = (record.totalLearnCourseTime/record.totalAssignedCourseTime)*100;
+                    return <div>{formatPercentValue(parseFloat(value))}</div>;
+                }
+            },
+        },
+        {
+            title: 'Tỉ lệ bug ',
+            align: 'center',
+            render: (record) => {
+                let value;
+                if (record.totalTimeWorking === 0) {
+                    return <div>{formatPercentValue(0)}</div>;
+                }
+                else {
+                    value = (record.totalTimeBug/record.totalTimeWorking)*100;
+                    return <div>{formatPercentValue(parseFloat(value))}</div>;
+                }
+            },
         },
         {
             title: 'Lịch trình',
@@ -170,6 +212,15 @@ function RegistrationListPage() {
             placeholder: translate.formatMessage(commonMessage.studentName),
         },
     ];
+
+    const formatPercentValue = (value) => {
+        return formatMoney(value, {
+            groupSeparator: ',',
+            decimalSeparator: '.',
+            currentcy: '%',
+            currentDecimal: '0',
+        });
+    };
 
     return (
         <PageWrapper
