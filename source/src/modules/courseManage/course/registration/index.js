@@ -131,16 +131,17 @@ function RegistrationListPage() {
         {
             title: 'Tỉ lệ project ',
             align: 'center',
-            render: (record) => {
-                let value;
-                if (record.totalTimeWorking === 0) {
-                    return <div>{formatPercentValue(0)}</div>;
-                }
-                else {
-                    value = record.totalProject/record.totalTimeWorking*100;
-                    return <div>{formatPercentValue(parseFloat(value))}</div>;
-                }
-            },
+            dataIndex: 'totalProject',
+            // render: (record) => {
+            //     let value;
+            //     if (record.totalTimeWorking === 0) {
+            //         return <div>{formatPercentValue(0)}</div>;
+            //     }
+            //     else {
+            //         value = record.totalProject/record.totalTimeWorking*100;
+            //         return <div>{formatPercentValue(parseFloat(value))}</div>;
+            //     }
+            // },
         },
         {
             title: 'Tỉ lệ traning ',
@@ -151,7 +152,7 @@ function RegistrationListPage() {
                     return <div>{formatPercentValue(0)}</div>;
                 }
                 else {
-                    value = record.totalLearnCourseTime/record.totalAssignedCourseTime*100;
+                    value = (record.totalLearnCourseTime/record.totalAssignedCourseTime)*100;
                     return <div>{formatPercentValue(parseFloat(value))}</div>;
                 }
             },
@@ -165,7 +166,7 @@ function RegistrationListPage() {
                     return <div>{formatPercentValue(0)}</div>;
                 }
                 else {
-                    value = record.totalTimeBug/record.totalTimeWorking*100;
+                    value = (record.totalTimeBug/record.totalTimeWorking)*100;
                     return <div>{formatPercentValue(parseFloat(value))}</div>;
                 }
             },
