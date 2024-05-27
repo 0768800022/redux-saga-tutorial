@@ -21,6 +21,7 @@ import { Button, Tag } from 'antd';
 
 const message = defineMessages({
     objectName: 'Dự án',
+    registration: 'Danh sách sinh viên đăng kí khóa học',
 });
 
 const RegistrationProjectListPage = () => {
@@ -28,7 +29,10 @@ const RegistrationProjectListPage = () => {
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const stuId = queryParameters.get('studentId');
+    const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
+    const courseState = queryParameters.get('courseState');
+    const courseStatus = queryParameters.get('courseStatus');
     const studentName = queryParameters.get('studentName');
     const registrationId = queryParameters.get('registrationId');
     const stateValues = translate.formatKeys(lectureState, ['label']);
@@ -82,13 +86,25 @@ const RegistrationProjectListPage = () => {
     };
     const setBreadRoutes = () => {
         const pathDefault = `?studentId=${stuId}&studentName=${studentName}`;
+        const pathDefault2 = `?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
 
         const breadRoutes = [];
-        breadRoutes.push({
-            breadcrumbName: translate.formatMessage(commonMessage.student),
-            path: routes.studentListPage.path,
-        });
-        if (courseName) {
+        if (courseId) {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.course),
+                path: '/course',
+            });
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(message.registration),
+                path: routes.registrationListPage.path + pathDefault2,
+            });
+        } else {
+            breadRoutes.push({
+                breadcrumbName: translate.formatMessage(commonMessage.student),
+                path: routes.studentListPage.path,
+            });
+        }
+        if (stuId) {
             breadRoutes.push({
                 breadcrumbName: courseName,
                 path: routes.studentCourseListPage.path + pathDefault,
