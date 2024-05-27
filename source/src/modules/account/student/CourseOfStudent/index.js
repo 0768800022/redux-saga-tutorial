@@ -73,7 +73,7 @@ const CourseListPage = () => {
                                     routes.studentCourseRegistrationProjectListPage.path +
                                             `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
                                 );
-                                console.log("1");
+                               
                             }}
                         >
                             <PlusSquareOutlined />
