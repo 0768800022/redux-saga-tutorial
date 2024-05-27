@@ -52,7 +52,7 @@ const RegistrationProjectListPage = () => {
                 return `${pagePath}/${dataRow.id}?studentId=${stuId}`;
             };
             funcs.getCreateLink = (dataRow) => {
-                return `${pagePath}/create?studentId=${stuId}&studentName=${studentName}&registrationId=${registrationId}&courseName=${courseName}`;
+                return `${pagePath}/create?studentId=${stuId}&studentName=${studentName}&registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
             };
             funcs.prepareGetListPathParams = () => {
                 return {
@@ -87,9 +87,8 @@ const RegistrationProjectListPage = () => {
     const setBreadRoutes = () => {
         const pathDefault = `?studentId=${stuId}&studentName=${studentName}`;
         const pathDefault2 = `?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
-
         const breadRoutes = [];
-        if (courseId) {
+        if (courseId != 'null' && courseId != null) {
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.course),
                 path: '/course',
@@ -103,8 +102,6 @@ const RegistrationProjectListPage = () => {
                 breadcrumbName: translate.formatMessage(commonMessage.student),
                 path: routes.studentListPage.path,
             });
-        }
-        if (stuId) {
             breadRoutes.push({
                 breadcrumbName: courseName,
                 path: routes.studentCourseListPage.path + pathDefault,

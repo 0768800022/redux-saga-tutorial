@@ -55,7 +55,8 @@ const RegistrationProjectForm = ({
                             disabled={isEditing}
                             apiConfig={apiConfig.project.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item.name })}
-                            // optionsParams={{ developerId: developerId }}
+                            initialSearchParams={{ studentId: developerId, ignoreRegisteredProject: true }}
+                            optionsParams={{ studentId: developerId, ignoreRegisteredProject: true }}
                             searchParams={(text) => ({ name: text })}
                             onFocus={handleFocus}
                             required
