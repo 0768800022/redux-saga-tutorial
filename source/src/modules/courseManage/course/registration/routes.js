@@ -5,6 +5,8 @@ import RegistrationMoneyListPage from './registrationMoney';
 import RegistrationMoneySavePage from './registrationMoney/RegistrationMoneySavePage';
 import StudentActivityCourseListPage from './activity';
 import StudentActivityCourseLeaderListPage from '../leader/registrationLeader/studentActivity';
+import RegistrationProjectListPage from '@modules/account/student/RegistrationProjectOfCourse';
+import RegistrationProjectSavePage from '@modules/account/student/RegistrationProjectOfCourse/registrationProjectSavePage';
 export default {
     registrationListPage: {
         path: '/course/registration',
@@ -47,5 +49,19 @@ export default {
         auth: true,
         component: StudentActivityCourseLeaderListPage,
         permissions: [apiConfig.taskLog.getList.baseURL],
+    },
+    courseRegistrationProjectListPage: {
+        path: '/course/registration-project',
+        title: 'Student Course Registration Project List Page',
+        auth: true,
+        component: RegistrationProjectListPage,
+        permissions: [apiConfig.registrationProject.getList.baseURL],
+    },
+    courseRegistrationProjectSavePage: {
+        path: '/course/registration-project/:id',
+        title: 'Student Course Registration Project Save Page',
+        auth: true,
+        component: RegistrationProjectSavePage,
+        permissions: [apiConfig.registrationProject.create.baseURL],
     },
 };

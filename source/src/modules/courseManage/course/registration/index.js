@@ -98,7 +98,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 state !== 1 &&
                                     navigate(
-                                        routes.studentCourseRegistrationProjectListPage.path +
+                                        routes.courseRegistrationProjectListPage.path +
                                             `?registrationId=${id}&courseId=${courseId}&courseName=${courseInfo.name}&courseState=${state}&courseStatus=${courseStatus}&studentName=${studentInfo.account.fullName}`,
                                     );
                             }}
