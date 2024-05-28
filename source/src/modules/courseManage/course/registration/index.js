@@ -10,7 +10,7 @@ import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { Avatar, Button, Tag } from 'antd';
+import { Avatar, Button, Tag, Tooltip } from 'antd';
 import React from 'react';
 import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -24,7 +24,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import routers from './routes';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
-import { formatMoney } from '@utils';
+import { convertMinuteToHour, formatMoney } from '@utils';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
 
@@ -132,19 +132,9 @@ function RegistrationListPage() {
             ),
         },
         {
-            title: 'Tỉ lệ project ',
+            title: 'Tổng project',
             align: 'center',
             dataIndex: 'totalProject',
-            // render: (record) => {
-            //     let value;
-            //     if (record.totalTimeWorking === 0) {
-            //         return <div>{formatPercentValue(0)}</div>;
-            //     }
-            //     else {
-            //         value = record.totalProject/record.totalTimeWorking*100;
-            //         return <div>{formatPercentValue(parseFloat(value))}</div>;
-            //     }
-            // },
         },
         {
             title: 'Tỉ lệ traning ',
@@ -152,13 +142,34 @@ function RegistrationListPage() {
             render: (record) => {
                 let value;
                 if (record.totalAssignedCourseTime === 0) {
-                    return <div>{formatPercentValue(0)}</div>;
+                    return <Tooltip placement='bottom' title={
+                        <div>
+                            <span style={{ display: 'block' }}>
+                                Tổng thời gian học khoá học: {convertMinuteToHour(record.totalLearnCourseTime)}
+                            </span>
+                            <span style={{ display: 'block' }}>
+                                Tổng thời gian khoá học được chỉ định: {convertMinuteToHour(record.totalAssignedCourseTime)}
+                            </span>
+                        </div>
+                    }>{formatPercentValue(0)}</Tooltip>;
                 } else {
                     value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
+                    
                     return (
-                        <div className={classNames(value > trainingUnit && style.customPercent)}>
-                            {formatPercentValue(parseFloat(value))}
-                        </div>
+                        <Tooltip style={{ width: 500 }} placement='bottom' title={
+                            <div>
+                                <span style={{ display: 'block' }}>
+                                    Tổng thời gian học khoá học: {convertMinuteToHour(record.totalLearnCourseTime)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    Tổng thời gian khoá học được chỉ định: {convertMinuteToHour(record.totalAssignedCourseTime)}
+                                </span>
+                            </div>
+                        }>
+                            <div className={classNames(value > trainingUnit && style.customPercent)}>
+                                {formatPercentValue(parseFloat(value))}
+                            </div>
+                        </Tooltip>
                     );
                 }
             },
@@ -169,10 +180,34 @@ function RegistrationListPage() {
             render: (record) => {
                 let value;
                 if (record.totalTimeWorking === 0) {
-                    return <div>{formatPercentValue(0)}</div>;
+                    return(
+                        <Tooltip placement='bottom' title={
+                            <div>
+                                <span style={{ display: 'block' }}>
+                                    Tổng thời gian bug: {convertMinuteToHour(record.totalTimeBug)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    Tổng thời gian làm việc: {convertMinuteToHour(record.totalTimeWorking)}
+                                </span>
+                            </div>
+                        }>
+                            <div>{formatPercentValue(0)}</div>
+                        </Tooltip>
+                    );
                 } else {
                     value = (record.totalTimeBug / record.totalTimeWorking) * 100;
-                    return <div>{formatPercentValue(parseFloat(value))}</div>;
+                    return <Tooltip placement='bottom' title={
+                        <div>
+                            <span style={{ display: 'block' }}>
+                                Tổng thời gian bug: {convertMinuteToHour(record.totalTimeBug)}
+                            </span>
+                            <span style={{ display: 'block' }}>
+                                Tổng thời gian làm việc: {convertMinuteToHour(record.totalTimeWorking)}
+                            </span>
+                        </div>
+                    }>
+                        <div>{formatPercentValue(parseFloat(value))}</div>
+                    </Tooltip>;
                 }
             },
         },

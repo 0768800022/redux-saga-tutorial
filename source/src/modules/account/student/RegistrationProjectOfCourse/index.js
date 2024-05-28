@@ -141,38 +141,25 @@ const RegistrationProjectListPage = () => {
             render: (name, record) => <div className={styles.customDiv}>{name}</div>,
         },
 
-        {
-            title: translate.formatMessage(commonMessage.startDate),
-            dataIndex: ['project', 'startDate'],
-            render: (startDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
-            },
-            width: 140,
-            align: 'right',
-        },
-        {
-            title: translate.formatMessage(commonMessage.endDate),
-            dataIndex: ['project', 'endDate'],
-            render: (endDate) => {
-                return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
-            },
-            width: 140,
-            align: 'right',
-        },
-        {
-            title: 'Tình trạng',
-            dataIndex: ['project', 'state'],
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
-                return (
-                    <Tag color={state.color}>
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                    </Tag>
-                );
-            },
-        },
+        // {
+        //     title: translate.formatMessage(commonMessage.startDate),
+        //     dataIndex: ['project', 'startDate'],
+        //     render: (startDate) => {
+        //         return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
+        //     },
+        //     width: 140,
+        //     align: 'right',
+        // },
+        // {
+        //     title: translate.formatMessage(commonMessage.endDate),
+        //     dataIndex: ['project', 'endDate'],
+        //     render: (endDate) => {
+        //         return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
+        //     },
+        //     width: 140,
+        //     align: 'right',
+        // },
+       
         mixinFuncs.renderActionColumn(
             {
                 delete: true,
