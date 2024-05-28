@@ -19,10 +19,10 @@ import routes from '@routes';
 import { DATE_FORMAT_DISPLAY } from '@constants';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
-import styles from '../student.module.scss';
+// import styles from '../student.module.scss';
 import { convertMinuteToHour, formatMoney } from '@utils';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
-import style from './index.module.scss';
+import styles from './index.module.scss';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
 
@@ -169,7 +169,9 @@ const CourseListPage = () => {
                                 {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
                             </span>
                         </div>
-                    }>{formatPercentValue(0)}</Tooltip>;
+                    }>
+                        <div className={styles.customPercentGreen}>{formatPercentValue(0)}</div>
+                    </Tooltip>;
                 } else {
                     value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
                     
@@ -184,7 +186,7 @@ const CourseListPage = () => {
                                 </span>
                             </div>
                         }>
-                            <div className={classNames(value > trainingUnit && style.customPercent)}>
+                            <div className={classNames(value > trainingUnit ? styles.customPercent : styles.customPercentGreen)}>
                                 {formatPercentValue(parseFloat(value))}
                             </div>
                         </Tooltip>

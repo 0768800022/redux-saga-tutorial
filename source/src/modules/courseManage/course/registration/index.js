@@ -18,7 +18,7 @@ import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
 import { CheckCircleOutlined, DollarOutlined, PlusSquareOutlined } from '@ant-design/icons';
-import style from './Registration.module.scss';
+import styles from './Registration.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import routers from './routes';
@@ -126,7 +126,7 @@ function RegistrationListPage() {
             title: translate.formatMessage(commonMessage.studentName),
             dataIndex: ['studentName'],
             render: (studentName, record) => (
-                <div onClick={(event) => handleOnClick(event, record)} className={style.customDiv}>
+                <div onClick={(event) => handleOnClick(event, record)} className={styles.customDiv}>
                     {studentName}
                 </div>
             ),
@@ -151,7 +151,9 @@ function RegistrationListPage() {
                                 {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
                             </span>
                         </div>
-                    }>{formatPercentValue(0)}</Tooltip>;
+                    }>
+                        <div className={styles.customPercentGreen}>{formatPercentValue(0)}</div>
+                    </Tooltip>;
                 } else {
                     value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
                     
@@ -166,7 +168,7 @@ function RegistrationListPage() {
                                 </span>
                             </div>
                         }>
-                            <div className={classNames(value > trainingUnit && style.customPercent)}>
+                            <div className={classNames(value > trainingUnit ? styles.customPercent : styles.customPercentGreen)}>
                                 {formatPercentValue(parseFloat(value))}
                             </div>
                         </Tooltip>
