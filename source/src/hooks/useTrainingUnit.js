@@ -4,8 +4,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 const useTrainingUnit = () => {
     const settingSystem = useSelector(settingSystemSelector);
-    const moneyUnit = settingSystem?.find((item) => item?.keyName === settingKeyName.TRAINING_UNIT);
-    return moneyUnit?.valueData;
+    const trainingUnit = settingSystem?.find((item) => item?.keyName === settingKeyName.TRAINING_UNIT);
+    return trainingUnit?.valueData;
 };
 
 export default useTrainingUnit;

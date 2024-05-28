@@ -26,6 +26,7 @@ import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
 import { formatMoney } from '@utils';
 import useTrainingUnit from '@hooks/useTrainingUnit';
+import classNames from 'classnames';
 
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
@@ -154,10 +155,10 @@ function RegistrationListPage() {
                     return <div>{formatPercentValue(0)}</div>;
                 } else {
                     value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
-                    return value < trainingUnit ? (
-                        <div>{formatPercentValue(parseFloat(value))}</div>
-                    ) : (
-                        <div style={{ color: 'red' }}>{formatPercentValue(parseFloat(value))}</div>
+                    return (
+                        <div className={classNames(value > trainingUnit && style.customPercent)}>
+                            {formatPercentValue(parseFloat(value))}
+                        </div>
                     );
                 }
             },
