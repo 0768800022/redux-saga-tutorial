@@ -581,3 +581,12 @@ export function convertToCamelCase(str) {
     const englishText = vietnameseToEnglish(noDiacritics);
     return capitalizeWords(englishText);
 }
+
+export const convertMinuteToHour = (minu) => { 
+    let result = minu / 60;
+    if (result % 1 !== 0) {
+        return `${parseFloat(result.toFixed(2))}h`;
+    } else {
+        return `${result.toFixed(0)}h`;
+    }
+};
