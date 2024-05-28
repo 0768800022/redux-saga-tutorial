@@ -25,6 +25,7 @@ import routers from './routes';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
 import { formatMoney } from '@utils';
+import useTrainingUnit from '@hooks/useTrainingUnit';
 
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
@@ -42,6 +43,7 @@ function RegistrationListPage() {
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
+    const trainingUnit = useTrainingUnit();
     localStorage.setItem('pathPrev', location.search);
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
@@ -150,10 +152,13 @@ function RegistrationListPage() {
                 let value;
                 if (record.totalAssignedCourseTime === 0) {
                     return <div>{formatPercentValue(0)}</div>;
-                }
-                else {
-                    value = (record.totalLearnCourseTime/record.totalAssignedCourseTime)*100;
-                    return <div>{formatPercentValue(parseFloat(value))}</div>;
+                } else {
+                    value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
+                    return value < trainingUnit ? (
+                        <div>{formatPercentValue(parseFloat(value))}</div>
+                    ) : (
+                        <div style={{ color: 'red' }}>{formatPercentValue(parseFloat(value))}</div>
+                    );
                 }
             },
         },
@@ -164,9 +169,8 @@ function RegistrationListPage() {
                 let value;
                 if (record.totalTimeWorking === 0) {
                     return <div>{formatPercentValue(0)}</div>;
-                }
-                else {
-                    value = (record.totalTimeBug/record.totalTimeWorking)*100;
+                } else {
+                    value = (record.totalTimeBug / record.totalTimeWorking) * 100;
                     return <div>{formatPercentValue(parseFloat(value))}</div>;
                 }
             },
