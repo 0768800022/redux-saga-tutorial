@@ -406,7 +406,7 @@ export const dataTypeSetting = {
 
 export const settingKeyName = {
     MONEY_UNIT: 'money_unit',
-    TRAINING_UNIT: 'training_percent',
+    TRAINING_UNIT: 'training_project_percent',
 };
 
 export const registrationMoneyKind = [

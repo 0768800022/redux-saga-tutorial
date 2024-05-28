@@ -9,7 +9,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
 import { TeamOutlined, BookOutlined, PlusSquareOutlined } from '@ant-design/icons';
-import { Button, Tag } from 'antd';
+import { Button, Tag, Tooltip } from 'antd';
 import { useNavigate, generatePath, useParams, useLocation } from 'react-router-dom';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
@@ -19,10 +19,10 @@ import routes from '@routes';
 import { DATE_FORMAT_DISPLAY } from '@constants';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
-import styles from '../student.module.scss';
-import { formatMoney } from '@utils';
+// import styles from '../student.module.scss';
+import { convertMinuteToHour, formatMoney } from '@utils';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
-import style from './index.module.scss';
+import styles from './index.module.scss';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
 
@@ -150,47 +150,84 @@ const CourseListPage = () => {
             render: (courseName, record) => <div>{courseName}</div>,
         },
         {
-            title: 'Tỉ lệ project ',
+            title:  translate.formatMessage(commonMessage.totalProject),
             align: 'center',
             dataIndex: 'totalProject',
-            // render: (record) => {
-            //     let value;
-            //     if (record.totalTimeWorking === 0) {
-            //         return <div>{formatPercentValue(0)}</div>;
-            //     }
-            //     else {
-            //         value = record.totalProject/record.totalTimeWorking*100;
-            //         return <div>{formatPercentValue(parseFloat(value))}</div>;
-            //     }
-            // },
         },
         {
-            title: 'Tỉ lệ traning ',
+            title:  translate.formatMessage(commonMessage.rateTraining),
             align: 'center',
             render: (record) => {
                 let value;
-                if (record.totalAssignedCourseTime === 0) {
-                    return <div>{formatPercentValue(0)}</div>;
+                if (record.totalLearnCourseTime === 0 || record.totalAssignedCourseTime === 0) {
+                    return <Tooltip placement='bottom' title={
+                        <div>
+                            <span style={{ display: 'block' }}>
+                                {translate.formatMessage(commonMessage.totalLearnCourseTime)}: {convertMinuteToHour(record.totalLearnCourseTime)}
+                            </span>
+                            <span style={{ display: 'block' }}>
+                                {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
+                            </span>
+                        </div>
+                    }>
+                        <div className={styles.customPercentGreen}>{formatPercentValue(0)}</div>
+                    </Tooltip>;
                 } else {
                     value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
+                    
                     return (
-                        <div className={classNames(value > trainingUnit && style.customPercent)}>
-                            {formatPercentValue(parseFloat(value))}
-                        </div>
+                        <Tooltip style={{ width: 500 }} placement='bottom' title={
+                            <div>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.totalLearnCourseTime)}: {convertMinuteToHour(record.totalLearnCourseTime)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
+                                </span>
+                            </div>
+                        }>
+                            <div className={classNames(value > trainingUnit ? styles.customPercent : styles.customPercentGreen)}>
+                                {formatPercentValue(parseFloat(value))}
+                            </div>
+                        </Tooltip>
                     );
                 }
             },
         },
         {
-            title: 'Tỉ lệ bug ',
+            title:  translate.formatMessage(commonMessage.rateBug),
             align: 'center',
             render: (record) => {
                 let value;
-                if (record.totalTimeWorking === 0) {
-                    return <div>{formatPercentValue(0)}</div>;
+                if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
+                    return(
+                        <Tooltip placement='bottom' title={
+                            <div>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.totalTimeBug)}: {convertMinuteToHour(record.totalTimeBug)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.totalTimeWorking)}: {convertMinuteToHour(record.totalTimeWorking)}
+                                </span>
+                            </div>
+                        }>
+                            <div>{formatPercentValue(0)}</div>
+                        </Tooltip>
+                    );
                 } else {
                     value = (record.totalTimeBug / record.totalTimeWorking) * 100;
-                    return <div>{formatPercentValue(parseFloat(value))}</div>;
+                    return <Tooltip placement='bottom' title={
+                        <div>
+                            <span style={{ display: 'block' }}>
+                                {translate.formatMessage(commonMessage.totalTimeBug)}: {convertMinuteToHour(record.totalTimeBug)}
+                            </span>
+                            <span style={{ display: 'block' }}>
+                                {translate.formatMessage(commonMessage.totalTimeWorking)}: {convertMinuteToHour(record.totalTimeWorking)}
+                            </span>
+                        </div>
+                    }>
+                        <div>{formatPercentValue(parseFloat(value))}</div>
+                    </Tooltip>;
                 }
             },
         },
