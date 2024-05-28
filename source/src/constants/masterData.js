@@ -145,14 +145,15 @@ export const projectTaskKind = [
             </div>
         ),
     },
-    // {
-    //     value: TASK_KIND_BUG,
-    //     label: (
-    //         <div>
-    //             <img src={bug} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
-    //         </div>
-    //     ),
-    // },
+    {
+        value: TASK_KIND_BUG,
+        label: (
+            <div>
+                <img src={bug} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
+            </div>
+        ),
+        disabled: true,
+    },
     {
         value: TASK_KIND_TESTCASE,
         label: (
