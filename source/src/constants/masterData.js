@@ -392,6 +392,7 @@ export const settingGroups = {
     GENERAL: 'general',
     PAGE: 'page_config',
     REVENUE: 'revenue_config',
+    TRAINING: 'training_config',
 };
 
 export const dataTypeSetting = {
