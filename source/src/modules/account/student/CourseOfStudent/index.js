@@ -22,6 +22,10 @@ import { commonMessage } from '@locales/intl';
 import styles from '../student.module.scss';
 import { formatMoney } from '@utils';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
+import style from './index.module.scss';
+import useTrainingUnit from '@hooks/useTrainingUnit';
+import classNames from 'classnames';
+
 const message = defineMessages({
     objectName: 'course',
 });
@@ -37,6 +41,7 @@ const CourseListPage = () => {
     const studentName = queryParameters.get('studentName');
     const leaderName = queryParameters.get('leaderName');
     const stateValues = translate.formatKeys(lectureState, ['label']);
+    const trainingUnit = useTrainingUnit();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -68,12 +73,11 @@ const CourseListPage = () => {
                             style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                
+
                                 navigate(
                                     routes.studentCourseRegistrationProjectListPage.path +
-                                            `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
+                                        `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
                                 );
-                               
                             }}
                         >
                             <PlusSquareOutlined />
@@ -143,11 +147,7 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(commonMessage.studentName),
             dataIndex: ['courseName'],
-            render: (courseName, record) => (
-                <div >
-                    {courseName}
-                </div>
-            ),
+            render: (courseName, record) => <div>{courseName}</div>,
         },
         {
             title: 'Tỉ lệ project ',
@@ -171,10 +171,13 @@ const CourseListPage = () => {
                 let value;
                 if (record.totalAssignedCourseTime === 0) {
                     return <div>{formatPercentValue(0)}</div>;
-                }
-                else {
-                    value = (record.totalLearnCourseTime/record.totalAssignedCourseTime)*100;
-                    return <div>{formatPercentValue(parseFloat(value))}</div>;
+                } else {
+                    value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
+                    return (
+                        <div className={classNames(value > trainingUnit && style.customPercent)}>
+                            {formatPercentValue(parseFloat(value))}
+                        </div>
+                    );
                 }
             },
         },
@@ -185,9 +188,8 @@ const CourseListPage = () => {
                 let value;
                 if (record.totalTimeWorking === 0) {
                     return <div>{formatPercentValue(0)}</div>;
-                }
-                else {
-                    value = (record.totalTimeBug/record.totalTimeWorking)*100;
+                } else {
+                    value = (record.totalTimeBug / record.totalTimeWorking) * 100;
                     return <div>{formatPercentValue(parseFloat(value))}</div>;
                 }
             },
@@ -216,7 +218,7 @@ const CourseListPage = () => {
             },
         },
         // courseStatus == 1 &&
-        
+
         mixinFuncs.renderActionColumn({ registration: true, delete: true }, { width: '120px' }),
     ];
 
