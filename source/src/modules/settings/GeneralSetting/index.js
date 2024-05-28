@@ -319,6 +319,27 @@ const GeneralSettingPage = ({ groupName }) => {
             { width: '60px' },
         ),
     ];
+
+    const columnTraining = [
+        {
+            title: <FormattedMessage defaultMessage="Tên" />,
+            dataIndex: 'keyName',
+            width: 200,
+        },
+        {
+            title: <FormattedMessage defaultMessage="Giá trị" />,
+            dataIndex: 'valueData',
+            width: 500,
+            align: 'center',
+            render: (valueData, record) => {
+                if (valueData > 0) {
+                    return <div>{valueData} %</div>;
+                } else return <div>{valueData}</div>;
+            },
+        },
+        mixinFuncs.renderActionColumn({ editSetting: mixinFuncs.hasPermission([apiConfig.settings.update?.baseURL]), delete: false }, { width: '100px' }),
+    ];
+
     const { execute: executeUpdate } = useFetch(apiConfig.settings.update, { immediate: false });
     const { execute: executeGetDataSetting } = useFetch(apiConfig.settings.settings, {
         immediate: false,
@@ -352,6 +373,8 @@ const GeneralSettingPage = ({ groupName }) => {
             return columnPage;
         } else if (groupName == settingGroups.REVENUE) {
             return columnRevenue;
+        } else if (groupName == settingGroups.TRAINING) {
+            return columnTraining;
         }
     };
 

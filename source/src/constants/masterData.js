@@ -392,6 +392,7 @@ export const settingGroups = {
     GENERAL: 'general',
     PAGE: 'page_config',
     REVENUE: 'revenue_config',
+    TRAINING: 'training_config',
 };
 
 export const dataTypeSetting = {
@@ -404,6 +405,7 @@ export const dataTypeSetting = {
 
 export const settingKeyName = {
     MONEY_UNIT: 'money_unit',
+    TRAINING_UNIT: 'training_percent',
 };
 
 export const registrationMoneyKind = [
