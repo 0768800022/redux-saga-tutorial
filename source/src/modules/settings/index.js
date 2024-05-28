@@ -11,6 +11,7 @@ const message = defineMessages({
     generalSetting: 'Cài đặt chung',
     pageSetting: 'Cài đặt trang',
     generalRevenue: 'Lợi nhuận chia sẻ',
+    trainingConfig: 'Cấu hình đào tạo',
 });
 
 const SettingPage = () => {
@@ -45,6 +46,11 @@ const SettingPage = () => {
                             key: settingGroups.REVENUE,
                             label: translate.formatMessage(message.generalRevenue),
                             children: activeTab == settingGroups.REVENUE &&  <GeneralSettingPage groupName={settingGroups.REVENUE} />,
+                        },
+                        {
+                            key: settingGroups.TRAINING,
+                            label: translate.formatMessage(message.trainingConfig),
+                            children: activeTab == settingGroups.TRAINING &&  <GeneralSettingPage groupName={settingGroups.TRAINING} />,
                         },
                     ]}
                 />
