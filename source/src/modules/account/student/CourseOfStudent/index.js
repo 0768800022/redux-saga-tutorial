@@ -13,13 +13,19 @@ import { Button, Tag } from 'antd';
 import { useNavigate, generatePath, useParams, useLocation } from 'react-router-dom';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
-import { formSize, lectureState, statusOptions } from '@constants/masterData';
+import { formSize, lectureState, stateResgistrationOptions, statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import routes from '@routes';
 import { DATE_FORMAT_DISPLAY } from '@constants';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import { commonMessage } from '@locales/intl';
 import styles from '../student.module.scss';
+import { formatMoney } from '@utils';
+import ScheduleFile from '@components/common/elements/ScheduleFile';
+import style from './index.module.scss';
+import useTrainingUnit from '@hooks/useTrainingUnit';
+import classNames from 'classnames';
+
 const message = defineMessages({
     objectName: 'course',
 });
@@ -35,6 +41,7 @@ const CourseListPage = () => {
     const studentName = queryParameters.get('studentName');
     const leaderName = queryParameters.get('leaderName');
     const stateValues = translate.formatKeys(lectureState, ['label']);
+    const trainingUnit = useTrainingUnit();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -58,19 +65,19 @@ const CourseListPage = () => {
                 return `${pagePath}/${dataRow.id}?studentId=${stuId}`;
             };
             funcs.additionalActionColumnButtons = () => ({
-                registration: ({ id, courseInfo, state }) => (
+                registration: ({ id, courseName, state }) => (
                     <BaseTooltip title={translate.formatMessage(commonMessage.registrationProject)}>
                         <Button
                             type="link"
-                            disabled={state === 1}
+                            // disabled={state === 1}
                             style={{ padding: 0 }}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                state !== 1 &&
-                                    navigate(
-                                        routes.studentCourseRegistrationProjectListPage.path +
-                                            `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseInfo.name}&courseState=${state}`,
-                                    );
+
+                                navigate(
+                                    routes.studentCourseRegistrationProjectListPage.path +
+                                        `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
+                                );
                             }}
                         >
                             <PlusSquareOutlined />
@@ -127,23 +134,74 @@ const CourseListPage = () => {
             submitOnChanged: true,
         },
     ];
+    const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
+    const formatPercentValue = (value) => {
+        return formatMoney(value, {
+            groupSeparator: ',',
+            decimalSeparator: '.',
+            currentcy: '%',
+            currentDecimal: '0',
+        });
+    };
     const columns = [
         {
-            title: translate.formatMessage(commonMessage.courseName),
-            dataIndex: ['courseInfo', 'name'],
+            title: translate.formatMessage(commonMessage.studentName),
+            dataIndex: ['courseName'],
+            render: (courseName, record) => <div>{courseName}</div>,
         },
         {
-            title: translate.formatMessage(commonMessage.createdDate),
-            dataIndex: 'createdDate',
-            align: 'right',
-            width: 150,
-            render: (createdDate) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(createdDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
+            title: 'Tỉ lệ project ',
+            align: 'center',
+            dataIndex: 'totalProject',
+            // render: (record) => {
+            //     let value;
+            //     if (record.totalTimeWorking === 0) {
+            //         return <div>{formatPercentValue(0)}</div>;
+            //     }
+            //     else {
+            //         value = record.totalProject/record.totalTimeWorking*100;
+            //         return <div>{formatPercentValue(parseFloat(value))}</div>;
+            //     }
+            // },
+        },
+        {
+            title: 'Tỉ lệ traning ',
+            align: 'center',
+            render: (record) => {
+                let value;
+                if (record.totalAssignedCourseTime === 0) {
+                    return <div>{formatPercentValue(0)}</div>;
+                } else {
+                    value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
+                    return (
+                        <div className={classNames(value > trainingUnit && style.customPercent)}>
+                            {formatPercentValue(parseFloat(value))}
+                        </div>
+                    );
+                }
             },
+        },
+        {
+            title: 'Tỉ lệ bug ',
+            align: 'center',
+            render: (record) => {
+                let value;
+                if (record.totalTimeWorking === 0) {
+                    return <div>{formatPercentValue(0)}</div>;
+                } else {
+                    value = (record.totalTimeBug / record.totalTimeWorking) * 100;
+                    return <div>{formatPercentValue(parseFloat(value))}</div>;
+                }
+            },
+        },
+        {
+            title: 'Lịch trình',
+            dataIndex: 'schedule',
+            align: 'center',
+            render: (schedule) => {
+                return <ScheduleFile schedule={schedule} />;
+            },
+            width: 180,
         },
         {
             title: translate.formatMessage(commonMessage.state),
@@ -151,7 +209,7 @@ const CourseListPage = () => {
             align: 'center',
             width: 120,
             render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
+                const state = stateRegistration.find((item) => item.value == dataRow);
                 return (
                     <Tag color={state.color}>
                         <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
@@ -159,6 +217,8 @@ const CourseListPage = () => {
                 );
             },
         },
+        // courseStatus == 1 &&
+
         mixinFuncs.renderActionColumn({ registration: true, delete: true }, { width: '120px' }),
     ];
 

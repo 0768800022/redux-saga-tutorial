@@ -145,14 +145,15 @@ export const projectTaskKind = [
             </div>
         ),
     },
-    // {
-    //     value: TASK_KIND_BUG,
-    //     label: (
-    //         <div>
-    //             <img src={bug} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
-    //         </div>
-    //     ),
-    // },
+    {
+        value: TASK_KIND_BUG,
+        label: (
+            <div>
+                <img src={bug} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
+            </div>
+        ),
+        disabled: true,
+    },
     {
         value: TASK_KIND_TESTCASE,
         label: (
@@ -392,6 +393,7 @@ export const settingGroups = {
     GENERAL: 'general',
     PAGE: 'page_config',
     REVENUE: 'revenue_config',
+    TRAINING: 'training_config',
 };
 
 export const dataTypeSetting = {
@@ -404,6 +406,7 @@ export const dataTypeSetting = {
 
 export const settingKeyName = {
     MONEY_UNIT: 'money_unit',
+    TRAINING_UNIT: 'training_percent',
 };
 
 export const registrationMoneyKind = [
