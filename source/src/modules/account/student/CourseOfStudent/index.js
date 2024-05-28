@@ -159,7 +159,7 @@ const CourseListPage = () => {
             align: 'center',
             render: (record) => {
                 let value;
-                if (record.totalAssignedCourseTime === 0) {
+                if (record.totalLearnCourseTime === 0 || record.totalAssignedCourseTime === 0) {
                     return <Tooltip placement='bottom' title={
                         <div>
                             <span style={{ display: 'block' }}>
@@ -197,7 +197,7 @@ const CourseListPage = () => {
             align: 'center',
             render: (record) => {
                 let value;
-                if (record.totalTimeWorking === 0) {
+                if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
                     return(
                         <Tooltip placement='bottom' title={
                             <div>
