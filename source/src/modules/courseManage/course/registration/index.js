@@ -24,7 +24,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import routers from './routes';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
-import { convertMinuteToHour, formatMoney } from '@utils';
+import { convertMinuteToHour, formatMoney, formatMoneyValue } from '@utils';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
 
@@ -163,7 +163,7 @@ function RegistrationListPage() {
                     );
                 } else {
                     value = (record.totalLearnCourseTime / record.totalAssignedCourseTime) * 100;
-
+                    console.log(value);
                     return (
                         <Tooltip
                             style={{ width: 500 }}
@@ -183,10 +183,11 @@ function RegistrationListPage() {
                         >
                             <div
                                 className={classNames(
-                                    value > trainingUnit ? styles.customPercent : styles.customPercentGreen,
+                                    value > trainingUnit + 100 ? styles.customPercent : styles.customPercentGreen,
                                 )}
                             >
                                 {formatPercentValue(parseFloat(value))}
+                                {record.minusTrainingMoney > 0 &&  <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>  }   
                             </div>
                         </Tooltip>
                     );
@@ -216,6 +217,7 @@ function RegistrationListPage() {
                             }
                         >
                             <div className={styles.customPercentGreen}>{formatPercentValue(0)}</div>
+
                         </Tooltip>
                     );
                 } else {
@@ -242,6 +244,7 @@ function RegistrationListPage() {
                                 )}
                             >
                                 {formatPercentValue(parseFloat(value))}
+                                {  record.minusTrainingProjectMoney && <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>    }    
                             </div>
                         </Tooltip>
                     );
