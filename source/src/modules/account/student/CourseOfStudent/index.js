@@ -150,22 +150,12 @@ const CourseListPage = () => {
             render: (courseName, record) => <div>{courseName}</div>,
         },
         {
-            title: 'Tổng project ',
+            title:  translate.formatMessage(commonMessage.totalProject),
             align: 'center',
             dataIndex: 'totalProject',
-            // render: (record) => {
-            //     let value;
-            //     if (record.totalTimeWorking === 0) {
-            //         return <div>{formatPercentValue(0)}</div>;
-            //     }
-            //     else {
-            //         value = record.totalProject/record.totalTimeWorking*100;
-            //         return <div>{formatPercentValue(parseFloat(value))}</div>;
-            //     }
-            // },
         },
         {
-            title: 'Tỉ lệ traning ',
+            title:  translate.formatMessage(commonMessage.rateTraining),
             align: 'center',
             render: (record) => {
                 let value;
@@ -173,10 +163,10 @@ const CourseListPage = () => {
                     return <Tooltip placement='bottom' title={
                         <div>
                             <span style={{ display: 'block' }}>
-                                Tổng thời gian học khoá học: {convertMinuteToHour(record.totalLearnCourseTime)}
+                                {translate.formatMessage(commonMessage.totalLearnCourseTime)}: {convertMinuteToHour(record.totalLearnCourseTime)}
                             </span>
                             <span style={{ display: 'block' }}>
-                                Tổng thời gian khoá học được chỉ định: {convertMinuteToHour(record.totalAssignedCourseTime)}
+                                {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
                             </span>
                         </div>
                     }>{formatPercentValue(0)}</Tooltip>;
@@ -187,10 +177,10 @@ const CourseListPage = () => {
                         <Tooltip style={{ width: 500 }} placement='bottom' title={
                             <div>
                                 <span style={{ display: 'block' }}>
-                                    Tổng thời gian học khoá học: {convertMinuteToHour(record.totalLearnCourseTime)}
+                                    {translate.formatMessage(commonMessage.totalLearnCourseTime)}: {convertMinuteToHour(record.totalLearnCourseTime)}
                                 </span>
                                 <span style={{ display: 'block' }}>
-                                    Tổng thời gian khoá học được chỉ định: {convertMinuteToHour(record.totalAssignedCourseTime)}
+                                    {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
                                 </span>
                             </div>
                         }>
@@ -203,7 +193,7 @@ const CourseListPage = () => {
             },
         },
         {
-            title: 'Tỉ lệ bug ',
+            title:  translate.formatMessage(commonMessage.rateBug),
             align: 'center',
             render: (record) => {
                 let value;
@@ -212,10 +202,10 @@ const CourseListPage = () => {
                         <Tooltip placement='bottom' title={
                             <div>
                                 <span style={{ display: 'block' }}>
-                                    Tổng thời gian bug: {convertMinuteToHour(record.totalTimeBug)}
+                                    {translate.formatMessage(commonMessage.totalTimeBug)}: {convertMinuteToHour(record.totalTimeBug)}
                                 </span>
                                 <span style={{ display: 'block' }}>
-                                    Tổng thời gian làm việc: {convertMinuteToHour(record.totalTimeWorking)}
+                                    {translate.formatMessage(commonMessage.totalTimeWorking)}: {convertMinuteToHour(record.totalTimeWorking)}
                                 </span>
                             </div>
                         }>
@@ -227,10 +217,10 @@ const CourseListPage = () => {
                     return <Tooltip placement='bottom' title={
                         <div>
                             <span style={{ display: 'block' }}>
-                                Tổng thời gian bug: {convertMinuteToHour(record.totalTimeBug)}
+                                {translate.formatMessage(commonMessage.totalTimeBug)}: {convertMinuteToHour(record.totalTimeBug)}
                             </span>
                             <span style={{ display: 'block' }}>
-                                Tổng thời gian làm việc: {convertMinuteToHour(record.totalTimeWorking)}
+                                {translate.formatMessage(commonMessage.totalTimeWorking)}: {convertMinuteToHour(record.totalTimeWorking)}
                             </span>
                         </div>
                     }>

@@ -132,12 +132,12 @@ function RegistrationListPage() {
             ),
         },
         {
-            title: 'Tổng project',
+            title: translate.formatMessage(commonMessage.totalProject),
             align: 'center',
             dataIndex: 'totalProject',
         },
         {
-            title: 'Tỉ lệ traning ',
+            title: translate.formatMessage(commonMessage.rateTraining),
             align: 'center',
             render: (record) => {
                 let value;
@@ -145,10 +145,10 @@ function RegistrationListPage() {
                     return <Tooltip placement='bottom' title={
                         <div>
                             <span style={{ display: 'block' }}>
-                                Tổng thời gian học khoá học: {convertMinuteToHour(record.totalLearnCourseTime)}
+                                {translate.formatMessage(commonMessage.totalLearnCourseTime)}: {convertMinuteToHour(record.totalLearnCourseTime)}
                             </span>
                             <span style={{ display: 'block' }}>
-                                Tổng thời gian khoá học được chỉ định: {convertMinuteToHour(record.totalAssignedCourseTime)}
+                                {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
                             </span>
                         </div>
                     }>{formatPercentValue(0)}</Tooltip>;
@@ -159,10 +159,10 @@ function RegistrationListPage() {
                         <Tooltip style={{ width: 500 }} placement='bottom' title={
                             <div>
                                 <span style={{ display: 'block' }}>
-                                    Tổng thời gian học khoá học: {convertMinuteToHour(record.totalLearnCourseTime)}
+                                    {translate.formatMessage(commonMessage.totalLearnCourseTime)}: {convertMinuteToHour(record.totalLearnCourseTime)}
                                 </span>
                                 <span style={{ display: 'block' }}>
-                                    Tổng thời gian khoá học được chỉ định: {convertMinuteToHour(record.totalAssignedCourseTime)}
+                                    {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
                                 </span>
                             </div>
                         }>
@@ -175,7 +175,7 @@ function RegistrationListPage() {
             },
         },
         {
-            title: 'Tỉ lệ bug ',
+            title: translate.formatMessage(commonMessage.rateBug),
             align: 'center',
             render: (record) => {
                 let value;
@@ -184,10 +184,10 @@ function RegistrationListPage() {
                         <Tooltip placement='bottom' title={
                             <div>
                                 <span style={{ display: 'block' }}>
-                                    Tổng thời gian bug: {convertMinuteToHour(record.totalTimeBug)}
+                                    {translate.formatMessage(commonMessage.totalTimeBug)}: {convertMinuteToHour(record.totalTimeBug)}
                                 </span>
                                 <span style={{ display: 'block' }}>
-                                    Tổng thời gian làm việc: {convertMinuteToHour(record.totalTimeWorking)}
+                                    {translate.formatMessage(commonMessage.totalTimeWorking)}: {convertMinuteToHour(record.totalTimeWorking)}
                                 </span>
                             </div>
                         }>
@@ -199,10 +199,10 @@ function RegistrationListPage() {
                     return <Tooltip placement='bottom' title={
                         <div>
                             <span style={{ display: 'block' }}>
-                                Tổng thời gian bug: {convertMinuteToHour(record.totalTimeBug)}
+                                {translate.formatMessage(commonMessage.totalTimeBug)}: {convertMinuteToHour(record.totalTimeBug)}
                             </span>
                             <span style={{ display: 'block' }}>
-                                Tổng thời gian làm việc: {convertMinuteToHour(record.totalTimeWorking)}
+                                {translate.formatMessage(commonMessage.totalTimeWorking)}: {convertMinuteToHour(record.totalTimeWorking)}
                             </span>
                         </div>
                     }>
