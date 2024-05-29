@@ -230,7 +230,7 @@ export const returnFeeOption = [
         color: 'green',
     },
     { value: false, label: returnFeeMessage.returnMoneyFalse, color: 'red' },
-    
+
 ];
 export const lectureKindOptions = [
     {
@@ -300,6 +300,11 @@ export const categoryKind = {
         title: 'Danh mục chuyên ngành',
         path: 'major',
         value: CATEGORY_KIND_MAJOR,
+    },
+    knowledge: {
+        title: 'Danh mục kiến thức',
+        path: 'knowledge',
+        value: CATEGORY_KIND_KNOWLEDGE,
     },
 };
 

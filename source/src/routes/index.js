@@ -2,6 +2,8 @@ import PageNotFound from '@components/common/page/PageNotFound';
 import categoryRoutesEdu from '@modules/category/categoryEdu/routes';
 import categoryRoutesGen from '@modules/category/categoryGen/routes';
 import categoryRoutesMajor from '@modules/category/categoryMajor/routes';
+import categoryRoutesKnowledge from '@modules/category/categoryKnowledge/routes';
+
 import studentRoutes from '@modules/account/student/routes';
 import Dashboard from '@modules/entry';
 import LoginPage from '@modules/login/index';
@@ -65,6 +67,7 @@ const routes = {
     ...categoryRoutesEdu,
     ...categoryRoutesGen,
     ...categoryRoutesMajor,
+    ...categoryRoutesKnowledge,
     ...registrationRoutes,
     ...studentRoutes,
     ...leaderRoutes,
