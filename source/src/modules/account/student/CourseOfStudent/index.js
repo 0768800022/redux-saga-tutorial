@@ -192,6 +192,7 @@ const CourseListPage = () => {
                             )}
                         >
                             {formatPercentValue(parseFloat(value))}
+                            {record.minusTrainingMoney > 0 &&  <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>  }   
                         </div>
                     </Tooltip>
                 );
@@ -233,7 +234,7 @@ const CourseListPage = () => {
                             )}
                         >
                             {formatPercentValue(parseFloat(value))}
-                            {/* {record.minusTrainingProjectMoney ? <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>:<></>}     */}
+                            {record.minusTrainingProjectMoney ? <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>:<></>}    
                         </div>
                     </Tooltip>
                 );
