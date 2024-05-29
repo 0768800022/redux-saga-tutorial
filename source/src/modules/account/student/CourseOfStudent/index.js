@@ -145,7 +145,7 @@ const CourseListPage = () => {
     };
     const columns = [
         {
-            title: translate.formatMessage(commonMessage.studentName),
+            title: translate.formatMessage(commonMessage.courseName),
             dataIndex: ['courseName'],
             render: (courseName, record) => <div>{courseName}</div>,
         },
