@@ -135,11 +135,10 @@ function RegistrationListPage() {
             align: 'center',
             render: (record) => {
                 let value;
-                if(record.totalLearnCourseTime === 0 || record.totalAssignedCourseTime === 0){
+                if (record.totalLearnCourseTime === 0 || record.totalAssignedCourseTime === 0) {
                     value = 0;
-                }
-                else{
-                    value = (record.totalLearnCourseTime / record.totalAssignedCourseTime) * 100;
+                } else {
+                    value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
                 }
                 return (
                     <Tooltip
@@ -164,11 +163,17 @@ function RegistrationListPage() {
                     >
                         <div
                             className={classNames(
-                                value > trainingUnit + 100 ? styles.customPercent : styles.customPercentGreen,
+                                value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
                         >
-                            {formatPercentValue(parseFloat(value))}
-                            {record.minusTrainingMoney > 0 &&  <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>  }   
+                            {value > 0 ? (
+                                `-${formatPercentValue(parseFloat(value))}`
+                            ) : (
+                                <div className={styles.customPercentGreen}>Tốt</div>
+                            )}
+                            {record.minusTrainingMoney > 0 && (
+                                <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>
+                            )}
                         </div>
                     </Tooltip>
                 );
@@ -179,9 +184,9 @@ function RegistrationListPage() {
             align: 'center',
             render: (record) => {
                 let value;
-                if(record.totalTimeBug === 0 || record.totalTimeWorking === 0){
+                if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
                     value = 0;
-                }else{
+                } else {
                     value = (record.totalTimeBug / record.totalTimeWorking) * 100;
                 }
                 return (
@@ -204,13 +209,17 @@ function RegistrationListPage() {
                             </div>
                         }
                     >
-                        <div
-                            className={classNames(
-                                value > bugUnit ? styles.customPercent : styles.customPercentGreen,
+                        <div className={classNames(value > bugUnit ? styles.customPercent : styles.customPercentOrange)}>
+                            {value > 0 ? (
+                                `-${formatPercentValue(parseFloat(value))}`
+                            ) : (
+                                <div className={styles.customPercentGreen}>Tốt</div>
                             )}
-                        >
-                            {formatPercentValue(parseFloat(value))}
-                            {record.minusTrainingProjectMoney ? <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>:<></>}    
+                            {record.minusTrainingProjectMoney ? (
+                                <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </Tooltip>
                 );
