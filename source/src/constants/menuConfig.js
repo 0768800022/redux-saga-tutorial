@@ -73,7 +73,7 @@ const navMenuConfig = [
                 path: generatePath(routes.developerListPage.path, {}),
                 permission: apiConfig.developer.getList.baseURL,
             },
-            
+
             {
                 label: <FormattedMessage defaultMessage="Dự án" />,
                 key: 'project-management',
@@ -147,6 +147,13 @@ const navMenuConfig = [
                 key: 'generation-category',
                 path: generatePath(routes.categoryListPageGen.path, {
                     kind: categoryKind.generation.value,
+                }),
+            },
+            {
+                label: categoryKind.knowledge.title,
+                key: 'knowledge-category',
+                path: generatePath(routes.categoryListPageKnowledge.path, {
+                    kind: categoryKind.knowledge.value,
                 }),
             },
             {
