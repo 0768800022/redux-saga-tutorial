@@ -192,7 +192,6 @@ const CourseListPage = () => {
                             )}
                         >
                             {formatPercentValue(parseFloat(value))}
-                            {record.minusTrainingMoney > 0 &&  <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>  }   
                         </div>
                     </Tooltip>
                 );

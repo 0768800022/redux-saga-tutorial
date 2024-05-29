@@ -1,19 +1,14 @@
-import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { FieldTypes } from '@constants/formConfig';
 import { stateResgistrationOptions, statusOptions } from '@constants/masterData';
-import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Avatar, Button, Tag, Tooltip } from 'antd';
 import React from 'react';
 import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
-import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
@@ -21,7 +16,6 @@ import { CheckCircleOutlined, DollarOutlined, PlusSquareOutlined } from '@ant-de
 import styles from './Registration.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import routers from './routes';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
 import { convertMinuteToHour, formatMoney, formatMoneyValue } from '@utils';
@@ -174,7 +168,6 @@ function RegistrationListPage() {
                             )}
                         >
                             {formatPercentValue(parseFloat(value))}
-                            {/* {record.minusTrainingMoney > 0 &&  <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>  }    */}
                         </div>
                     </Tooltip>
                 );
@@ -216,7 +209,6 @@ function RegistrationListPage() {
                             )}
                         >
                             {formatPercentValue(parseFloat(value))}
-                            {record.minusTrainingProjectMoney ? <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>:<></>}    
                         </div>
                     </Tooltip>
                 );
