@@ -590,3 +590,12 @@ export const convertMinuteToHour = (minu) => {
         return `${result.toFixed(0)}h`;
     }
 };
+export const formatMoneyValue = (value) => {
+    return formatMoney(value, {
+        groupSeparator: ',',
+        decimalSeparator: '.',
+        currentcy: 'Đ',
+        currentcyPosition: 'BACK',
+        currentDecimal: '2',
+    });
+};

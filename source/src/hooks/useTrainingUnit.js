@@ -4,8 +4,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 const useTrainingUnit = () => {
     const settingSystem = useSelector(settingSystemSelector);
-    const trainingUnit = settingSystem?.find((item) => item?.keyName === settingKeyName.TRAINING_UNIT);
-    return trainingUnit?.valueData;
+    const training = settingSystem?.find((item) => item?.keyName === settingKeyName.TRAINING_UNIT);
+    const bug = settingSystem?.find((item) => item?.keyName === settingKeyName.BUG_UNIT);
+    return {
+        trainingUnit: training?.valueData,
+        bugUnit: bug?.valueData,
+    };
 };
 
 export default useTrainingUnit;

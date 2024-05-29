@@ -1,19 +1,14 @@
-import { UserOutlined } from '@ant-design/icons';
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import DragDropTableV2 from '@components/common/table/DragDropTableV2';
 import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { FieldTypes } from '@constants/formConfig';
 import { stateResgistrationOptions, statusOptions } from '@constants/masterData';
-import useDrapDropTableItem from '@hooks/useDrapDropTableItem';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Avatar, Button, Tag, Tooltip } from 'antd';
 import React from 'react';
 import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
-import { DeleteOutlined } from '@ant-design/icons';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
 import BaseTable from '@components/common/table/BaseTable';
@@ -21,10 +16,9 @@ import { CheckCircleOutlined, DollarOutlined, PlusSquareOutlined } from '@ant-de
 import styles from './Registration.module.scss';
 import { useNavigate } from 'react-router-dom';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import routers from './routes';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { commonMessage } from '@locales/intl';
-import { convertMinuteToHour, formatMoney } from '@utils';
+import { convertMinuteToHour, formatMoney, formatMoneyValue } from '@utils';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
 
@@ -44,7 +38,7 @@ function RegistrationListPage() {
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
-    const trainingUnit = useTrainingUnit();
+    const { trainingUnit, bugUnit } = useTrainingUnit();
     localStorage.setItem('pathPrev', location.search);
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
@@ -141,39 +135,43 @@ function RegistrationListPage() {
             align: 'center',
             render: (record) => {
                 let value;
-                if (record.totalLearnCourseTime === 0 || record.totalAssignedCourseTime === 0) {
-                    return <Tooltip placement='bottom' title={
-                        <div>
-                            <span style={{ display: 'block' }}>
-                                {translate.formatMessage(commonMessage.totalLearnCourseTime)}: {convertMinuteToHour(record.totalLearnCourseTime)}
-                            </span>
-                            <span style={{ display: 'block' }}>
-                                {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
-                            </span>
-                        </div>
-                    }>
-                        <div className={styles.customPercentGreen}>{formatPercentValue(0)}</div>
-                    </Tooltip>;
-                } else {
-                    value = (record.totalLearnCourseTime / record.totalAssignedCourseTime - 1) * 100;
-                    
-                    return (
-                        <Tooltip style={{ width: 500 }} placement='bottom' title={
+                if(record.totalLearnCourseTime === 0 || record.totalAssignedCourseTime === 0){
+                    value = 0;
+                }
+                else{
+                    value = (record.totalLearnCourseTime / record.totalAssignedCourseTime) * 100;
+                }
+                return (
+                    <Tooltip
+                        style={{ width: 500 }}
+                        placement="bottom"
+                        title={
                             <div>
                                 <span style={{ display: 'block' }}>
-                                    {translate.formatMessage(commonMessage.totalLearnCourseTime)}: {convertMinuteToHour(record.totalLearnCourseTime)}
+                                    {translate.formatMessage(commonMessage.totalLearnCourseTime)}:{' '}
+                                    {convertMinuteToHour(record.totalLearnCourseTime)}
                                 </span>
                                 <span style={{ display: 'block' }}>
-                                    {translate.formatMessage(commonMessage.totalAssignedCourseTime)}: {convertMinuteToHour(record.totalAssignedCourseTime)}
+                                    {translate.formatMessage(commonMessage.totalAssignedCourseTime)}:{' '}
+                                    {convertMinuteToHour(record.totalAssignedCourseTime)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.rateAllowable)}:{' '}
+                                    {formatPercentValue(parseFloat(trainingUnit))}
                                 </span>
                             </div>
-                        }>
-                            <div className={classNames(value > trainingUnit ? styles.customPercent : styles.customPercentGreen)}>
-                                {formatPercentValue(parseFloat(value))}
-                            </div>
-                        </Tooltip>
-                    );
-                }
+                        }
+                    >
+                        <div
+                            className={classNames(
+                                value > trainingUnit + 100 ? styles.customPercent : styles.customPercentGreen,
+                            )}
+                        >
+                            {formatPercentValue(parseFloat(value))}
+                            {record.minusTrainingMoney > 0 &&  <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>  }   
+                        </div>
+                    </Tooltip>
+                );
             },
         },
         {
@@ -181,36 +179,41 @@ function RegistrationListPage() {
             align: 'center',
             render: (record) => {
                 let value;
-                if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
-                    return(
-                        <Tooltip placement='bottom' title={
+                if(record.totalTimeBug === 0 || record.totalTimeWorking === 0){
+                    value = 0;
+                }else{
+                    value = (record.totalTimeBug / record.totalTimeWorking) * 100;
+                }
+                return (
+                    <Tooltip
+                        placement="bottom"
+                        title={
                             <div>
                                 <span style={{ display: 'block' }}>
-                                    {translate.formatMessage(commonMessage.totalTimeBug)}: {convertMinuteToHour(record.totalTimeBug)}
+                                    {translate.formatMessage(commonMessage.totalTimeBug)}:{' '}
+                                    {convertMinuteToHour(record.totalTimeBug)}
                                 </span>
                                 <span style={{ display: 'block' }}>
-                                    {translate.formatMessage(commonMessage.totalTimeWorking)}: {convertMinuteToHour(record.totalTimeWorking)}
+                                    {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
+                                    {convertMinuteToHour(record.totalTimeWorking)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.rateAllowable)}:{' '}
+                                    {formatPercentValue(parseFloat(bugUnit))}
                                 </span>
                             </div>
-                        }>
-                            <div>{formatPercentValue(0)}</div>
-                        </Tooltip>
-                    );
-                } else {
-                    value = (record.totalTimeBug / record.totalTimeWorking) * 100;
-                    return <Tooltip placement='bottom' title={
-                        <div>
-                            <span style={{ display: 'block' }}>
-                                {translate.formatMessage(commonMessage.totalTimeBug)}: {convertMinuteToHour(record.totalTimeBug)}
-                            </span>
-                            <span style={{ display: 'block' }}>
-                                {translate.formatMessage(commonMessage.totalTimeWorking)}: {convertMinuteToHour(record.totalTimeWorking)}
-                            </span>
+                        }
+                    >
+                        <div
+                            className={classNames(
+                                value > bugUnit ? styles.customPercent : styles.customPercentGreen,
+                            )}
+                        >
+                            {formatPercentValue(parseFloat(value))}
+                            {record.minusTrainingProjectMoney ? <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>:<></>}    
                         </div>
-                    }>
-                        <div>{formatPercentValue(parseFloat(value))}</div>
-                    </Tooltip>;
-                }
+                    </Tooltip>
+                );
             },
         },
         {

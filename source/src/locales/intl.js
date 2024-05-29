@@ -154,4 +154,5 @@ export const commonMessage = defineMessages({
     totalProject: 'Tổng dự án',
     rateBug: 'Tỉ lệ bug',
     rateTraining: 'Tỉ lệ training',
+    rateAllowable: 'Tỉ lệ cho phép',
 });
