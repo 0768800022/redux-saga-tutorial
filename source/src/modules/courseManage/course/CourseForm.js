@@ -72,6 +72,7 @@ const CourseForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
             subjectId: dataDetail?.subject?.subjectName,
+            knowledgeId: dataDetail?.knowledge?.id,
         });
     }, [dataDetail]);
 
@@ -250,8 +251,19 @@ const CourseForm = (props) => {
                             name="leaderId"
                             apiConfig={apiConfig.developer.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item?.account?.fullName })}
-                            initialSearchParams={{}}
                             searchParams={(text) => ({ name: text })}
+                        />
+                    </Col>
+                    <Col span={12}>
+                        <AutoCompleteField
+                            // disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
+                            required
+                            label={<FormattedMessage defaultMessage="Kiến thức" />}
+                            name="knowledgeId"
+                            apiConfig={apiConfig.category.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item?.categoryName })}
+                            searchParams={(text) => ({ name: text, kind: 5 })}
+                            initialSearchParams={{ kind:5 }}
                         />
                     </Col>
                     <Col span={12}>
@@ -264,8 +276,6 @@ const CourseForm = (props) => {
                             options={lectureStateFilter}
                         />
                     </Col>
-                </Row>
-                <Row gutter={10}>
                     <Col span={12}>
                         <NumericField
                             required
@@ -286,6 +296,7 @@ const CourseForm = (props) => {
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             addonAfter={'đ'}
                             min={0}
+                            defaultValue={0}
                         />
                     </Col>
                     <Col span={12}>
