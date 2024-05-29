@@ -168,6 +168,7 @@ function RegistrationListPage() {
                             )}
                         >
                             {formatPercentValue(parseFloat(value))}
+                            {record.minusTrainingMoney > 0 &&  <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>  }   
                         </div>
                     </Tooltip>
                 );
@@ -209,6 +210,7 @@ function RegistrationListPage() {
                             )}
                         >
                             {formatPercentValue(parseFloat(value))}
+                            {record.minusTrainingProjectMoney ? <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>:<></>}    
                         </div>
                     </Tooltip>
                 );
