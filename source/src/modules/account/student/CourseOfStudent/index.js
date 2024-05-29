@@ -159,57 +159,42 @@ const CourseListPage = () => {
             align: 'center',
             render: (record) => {
                 let value;
-                if (record.totalLearnCourseTime === 0 || record.totalAssignedCourseTime === 0) {
-                    return (
-                        <Tooltip
-                            placement="bottom"
-                            title={
-                                <div>
-                                    <span style={{ display: 'block' }}>
-                                        {translate.formatMessage(commonMessage.totalLearnCourseTime)}:{' '}
-                                        {convertMinuteToHour(record.totalLearnCourseTime)}
-                                    </span>
-                                    <span style={{ display: 'block' }}>
-                                        {translate.formatMessage(commonMessage.totalAssignedCourseTime)}:{' '}
-                                        {convertMinuteToHour(record.totalAssignedCourseTime)}
-                                    </span>
-                                </div>
-                            }
-                        >
-                            <div className={styles.customPercentGreen}>{formatPercentValue(0)}</div>
-                        </Tooltip>
-                    );
-                } else {
-                    value = (record.totalLearnCourseTime / record.totalAssignedCourseTime) * 100;
-                    console.log(value);
-                    return (
-                        <Tooltip
-                            style={{ width: 500 }}
-                            placement="bottom"
-                            title={
-                                <div>
-                                    <span style={{ display: 'block' }}>
-                                        {translate.formatMessage(commonMessage.totalLearnCourseTime)}:{' '}
-                                        {convertMinuteToHour(record.totalLearnCourseTime)}
-                                    </span>
-                                    <span style={{ display: 'block' }}>
-                                        {translate.formatMessage(commonMessage.totalAssignedCourseTime)}:{' '}
-                                        {convertMinuteToHour(record.totalAssignedCourseTime)}
-                                    </span>
-                                </div>
-                            }
-                        >
-                            <div
-                                className={classNames(
-                                    value > trainingUnit + 100 ? styles.customPercent : styles.customPercentGreen,
-                                )}
-                            >
-                                {formatPercentValue(parseFloat(value))}
-                                {record.minusTrainingMoney > 0 &&  <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>  }   
-                            </div>
-                        </Tooltip>
-                    );
+                if(record.totalLearnCourseTime === 0 || record.totalAssignedCourseTime === 0){
+                    value = 0;
                 }
+                else{
+                    value = (record.totalLearnCourseTime / record.totalAssignedCourseTime) * 100;
+                }
+                return (
+                    <Tooltip
+                        style={{ width: 500 }}
+                        placement="bottom"
+                        title={
+                            <div>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.totalLearnCourseTime)}:{' '}
+                                    {convertMinuteToHour(record.totalLearnCourseTime)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.totalAssignedCourseTime)}:{' '}
+                                    {convertMinuteToHour(record.totalAssignedCourseTime)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.rateAllowable)}:{' '}
+                                    {formatPercentValue(parseFloat(trainingUnit))}
+                                </span>
+                            </div>
+                        }
+                    >
+                        <div
+                            className={classNames(
+                                value > trainingUnit + 100 ? styles.customPercent : styles.customPercentGreen,
+                            )}
+                        >
+                            {formatPercentValue(parseFloat(value))}
+                        </div>
+                    </Tooltip>
+                );
             },
         },
         {
@@ -217,56 +202,41 @@ const CourseListPage = () => {
             align: 'center',
             render: (record) => {
                 let value;
-                if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
-                    return (
-                        <Tooltip
-                            placement="bottom"
-                            title={
-                                <div>
-                                    <span style={{ display: 'block' }}>
-                                        {translate.formatMessage(commonMessage.totalTimeBug)}:{' '}
-                                        {convertMinuteToHour(record.totalTimeBug)}
-                                    </span>
-                                    <span style={{ display: 'block' }}>
-                                        {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
-                                        {convertMinuteToHour(record.totalTimeWorking)}
-                                    </span>
-                                </div>
-                            }
-                        >
-                            <div className={styles.customPercentGreen}>{formatPercentValue(0)}</div>
-
-                        </Tooltip>
-                    );
-                } else {
+                if(record.totalTimeBug === 0 || record.totalTimeWorking === 0){
+                    value = 0;
+                }else{
                     value = (record.totalTimeBug / record.totalTimeWorking) * 100;
-                    return (
-                        <Tooltip
-                            placement="bottom"
-                            title={
-                                <div>
-                                    <span style={{ display: 'block' }}>
-                                        {translate.formatMessage(commonMessage.totalTimeBug)}:{' '}
-                                        {convertMinuteToHour(record.totalTimeBug)}
-                                    </span>
-                                    <span style={{ display: 'block' }}>
-                                        {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
-                                        {convertMinuteToHour(record.totalTimeWorking)}
-                                    </span>
-                                </div>
-                            }
-                        >
-                            <div
-                                className={classNames(
-                                    value > bugUnit ? styles.customPercent : styles.customPercentGreen,
-                                )}
-                            >
-                                {formatPercentValue(parseFloat(value))}
-                                {  record.minusTrainingProjectMoney && <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>    }    
-                            </div>
-                        </Tooltip>
-                    );
                 }
+                return (
+                    <Tooltip
+                        placement="bottom"
+                        title={
+                            <div>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.totalTimeBug)}:{' '}
+                                    {convertMinuteToHour(record.totalTimeBug)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.totalTimeWorking)}:{' '}
+                                    {convertMinuteToHour(record.totalTimeWorking)}
+                                </span>
+                                <span style={{ display: 'block' }}>
+                                    {translate.formatMessage(commonMessage.rateAllowable)}:{' '}
+                                    {formatPercentValue(parseFloat(bugUnit))}
+                                </span>
+                            </div>
+                        }
+                    >
+                        <div
+                            className={classNames(
+                                value > bugUnit ? styles.customPercent : styles.customPercentGreen,
+                            )}
+                        >
+                            {formatPercentValue(parseFloat(value))}
+                            {/* {record.minusTrainingProjectMoney ? <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>:<></>}     */}
+                        </div>
+                    </Tooltip>
+                );
             },
         },
         {
