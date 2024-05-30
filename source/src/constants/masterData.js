@@ -413,6 +413,7 @@ export const settingKeyName = {
     MONEY_UNIT: 'money_unit',
     TRAINING_UNIT: 'training_percent',
     BUG_UNIT: 'training_project_percent',
+    NUMBER_OF_TRAINING_PROJECT: 'number_of_training_projects',
 };
 
 export const registrationMoneyKind = [
