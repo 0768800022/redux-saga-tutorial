@@ -3,7 +3,7 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT, categoryKinds } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
@@ -262,7 +262,7 @@ const CourseForm = (props) => {
                             name="knowledgeId"
                             apiConfig={apiConfig.category.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item?.categoryName })}
-                            searchParams={(text) => ({ name: text, kind: 5 })}
+                            searchParams={(text) => ({ name: text, kind: categoryKinds.CATEGORY_KIND_KNOWLEDGE })}
                             initialSearchParams={{ kind:5 }}
                         />
                     </Col>
