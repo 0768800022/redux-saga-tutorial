@@ -223,23 +223,13 @@ const CourseListPage = () => {
                     value = (record.totalTimeBug / record.totalTimeWorking - 1) * 100;
                 }
                 return (
-                    <div
-                        className={classNames(
-                            record.totalProject < numberProject
-                                ? styles.customPercentOrange
-                                : styles.customPercentGreen,
+                    <div className={classNames(record.totalProject < numberProject ? styles.customPercentOrange : styles.customPercentGreen)}>
+                        <div>{record.totalProject}/{numberProject}</div>
+                        <div> {record.minusTrainingProjectMoney && value < bugUnit ? (
+                            <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                        ) : (
+                            <></>
                         )}
-                    >
-                        <div>
-                            {record.totalProject}/{numberProject}
-                        </div>
-                        <div>
-                            {' '}
-                            {record.minusTrainingProjectMoney && value < bugUnit ? (
-                                <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
-                            ) : (
-                                <></>
-                            )}
                         </div>
                     </div>
                 );
@@ -289,7 +279,7 @@ const CourseListPage = () => {
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
                             {record.minusTrainingMoney > 0 && (
-                                <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>
+                                <span>-{formatMoneyValue(record.minusTrainingMoney)}</span>
                             )}
                         </div>
                     </Tooltip>
@@ -338,16 +328,14 @@ const CourseListPage = () => {
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
-                            {value > bugUnit && (
-                                <div>
-                                    {' '}
-                                    {record.minusTrainingProjectMoney ? (
-                                        <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
-                                    ) : (
-                                        <></>
-                                    )}
-                                </div>
-                            )}
+                            {value > bugUnit &&
+                                <div> {record.minusTrainingProjectMoney ? (
+                                    <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                                ) : (
+                                    <></>
+                                )}
+                                </div>}
+
                         </div>
                     </Tooltip>
                 );
