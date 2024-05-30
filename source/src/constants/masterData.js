@@ -76,6 +76,7 @@ import React from 'react';
 import feature from '../assets/images/feature.png';
 import bug from '../assets/images/bug.jpg';
 import testcase from '../assets/icons/testCase.svg';
+import { commonMessage } from '@locales/intl';
 
 export const languageOptions = [
     { value: 1, label: 'EN' },
@@ -222,6 +223,14 @@ export const stateResgistrationOptions = [
     { value: 2, label: stateResgistrationMessage.learning, color: 'blue' },
     { value: 3, label: stateResgistrationMessage.finished, color: 'green' },
     { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
+];
+export const kindTask = [
+    {
+        value: 1,
+        label: commonMessage.task,
+        color: 'green',
+    },
+    { value: 200, label: commonMessage.bug, color: 'red' },
 ];
 export const returnFeeOption = [
     {

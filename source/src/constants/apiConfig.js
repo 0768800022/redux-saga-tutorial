@@ -609,7 +609,6 @@ const apiConfig = {
         },
     },
 
-
     lecture: {
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/lecture/auto-complete`,
@@ -798,8 +797,6 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-
-
     },
     projectTask: {
         getList: {
@@ -1298,6 +1295,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        findAllTrackingLog: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/tracking-logs`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     companySeek: {
         getList: {
@@ -1536,7 +1539,7 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        checkExist:{
+        checkExist: {
             baseURL: `${apiTenantUrl}v1/salary-period/check-exist`,
             method: 'GET',
             headers: baseHeader,
@@ -1641,7 +1644,7 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        calculateProjectSalary:{
+        calculateProjectSalary: {
             baseURL: `${apiTenantUrl}v1/income/calculate-income-project-salary`,
             method: 'POST',
             headers: baseHeader,
