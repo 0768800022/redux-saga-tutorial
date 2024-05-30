@@ -39,12 +39,12 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
             return [
                 {
                     title: translate.formatMessage(commonMessage.developerName),
-                    dataIndex: ['projectTaskInfo', 'developer', 'account', 'fullName'],
+                    dataIndex: ['studentName'],
                     width: 200,
                 },
                 {
                     title: translate.formatMessage(commonMessage.course),
-                    // dataIndex: ['projectTaskInfo', 'taskName'],
+                    dataIndex: ['courseName'],
                 },
                 {
                     title: translate.formatMessage(commonMessage.task),
@@ -52,7 +52,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                 },
                 {
                     title: translate.formatMessage(commonMessage.assignedCourseTime),
-                    dataIndex: 'totalTime',
+                    dataIndex: 'assignedCourseTime',
                     align: 'center',
                     width: 150,
                     render(totalTime) {
@@ -61,7 +61,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                 },
                 {
                     title: translate.formatMessage(commonMessage.learnCourseTime),
-                    dataIndex: 'totalTime',
+                    dataIndex: 'learnCourseTime',
                     align: 'center',
                     width: 170,
                     render(totalTime) {
@@ -70,11 +70,26 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                 },
                 {
                     title: <FormattedMessage defaultMessage={'Chênh lệnh'} />,
-                    dataIndex: 'totalTime',
                     align: 'center',
                     width: 150,
-                    render(totalTime) {
-                        return <div>{Math.ceil((totalTime / 60) * 10) / 10} h</div>;
+                    render(record) {
+                        let value;
+                        if (record.assignedCourseTime === 0 || record.learnCourseTime === 0) {
+                            value = 0;
+                        } else {
+                            value = record.assignedCourseTime - record.learnCourseTime;
+                        }
+                        return (
+                            <div
+                                className={classNames(
+                                    record.assignedCourseTime < record.learnCourseTime
+                                        ? styles.customPercent
+                                        : styles.customPercentGreen,
+                                )}
+                            >
+                                {value}
+                            </div>
+                        );
                     },
                 },
             ];

@@ -51,6 +51,9 @@ const CourseListPage = () => {
     const { execute: executeFindTracking } = useFetch(apiConfig.projectTaskLog.findAllTrackingLog, {
         immediate: false,
     });
+    const { execute: executeTrainingTracking } = useFetch(apiConfig.task.studentDetailCourseTask, {
+        immediate: false,
+    });
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -177,28 +180,27 @@ const CourseListPage = () => {
     };
     const handleOnClickTraining = (record, event, value) => {
         // event.preventDefault();
-        // executeFindTracking({
-        //     params: {
-        //         courseId: record?.courseId,
-        //         studentId: record?.studentId,
-        //     },
-        //     onCompleted: (res) => {
-        //         if (res?.data) {
-        //             const updatedData = res.data.map((item) => ({
-        //                 ...item,
-        //                 courseId: record?.courseId,
-        //                 studentId: record?.studentId,
-        //             }));
-        //             setDetail(updatedData);
-        //         }
-        //         handlersStatisticsModal.open();
-        //     },
-        //     onError: (error) => {
-        //         console.log(error);
-        //     },
-        // });
         setisTraining(true);
-        handlersStatisticsModal.open();
+        executeTrainingTracking({
+            params: {
+                courseId: record?.courseId,
+                studentId: record?.studentId,
+            },
+            onCompleted: (res) => {
+                if (res?.data) {
+                    const updatedData = res.data.map((item) => ({
+                        ...item,
+                        courseId: record?.courseId,
+                        studentId: record?.studentId,
+                    }));
+                    setDetail(updatedData);
+                }
+                handlersStatisticsModal.open();
+            },
+            onError: (error) => {
+                console.log(error);
+            },
+        });
     };
     const handlerCancel = () => {
         setDetail([]);

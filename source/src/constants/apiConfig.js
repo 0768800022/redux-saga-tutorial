@@ -733,6 +733,13 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+
+        studentDetailCourseTask: {
+            baseURL: `${apiTenantUrl}v1/task/tracking-logs`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     project: {
         getList: {
