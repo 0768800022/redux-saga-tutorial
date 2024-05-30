@@ -84,7 +84,7 @@ const StatisticsTaskModal = ({ detail, open, close }) => {
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
                             {record.minusTrainingMoney > 0 && (
-                                <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>
+                                <span>-{formatMoneyValue(record.minusTrainingMoney)}</span>
                             )}
                         </div>
                     </Tooltip>
@@ -132,7 +132,7 @@ const StatisticsTaskModal = ({ detail, open, close }) => {
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
                             {record.minusTrainingProjectMoney ? (
-                                <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                                <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
                             ) : (
                                 <></>
                             )}
