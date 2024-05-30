@@ -40,7 +40,7 @@ function RegistrationListPage() {
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
-    const { trainingUnit, bugUnit } = useTrainingUnit();
+    const { trainingUnit, bugUnit, numberProject } = useTrainingUnit();
     localStorage.setItem('pathPrev', location.search);
     const navigate = useNavigate();
     const [openedStatisticsModal, handlersStatisticsModal] = useDisclosure(false);
@@ -131,7 +131,26 @@ function RegistrationListPage() {
         {
             title: translate.formatMessage(commonMessage.totalProject),
             align: 'center',
-            dataIndex: 'totalProject',
+            // dataIndex: 'totalProject',
+            render: (record) => {
+                let value;
+                if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
+                    value = 0;
+                } else {
+                    value = (record.totalTimeBug / record.totalTimeWorking - 1) * 100;
+                }
+                return (
+                    <div className={classNames(record.totalProject < numberProject ? styles.customPercentOrange : styles.customPercentGreen)}>
+                        <div>{record.totalProject}/{numberProject}</div>
+                        <div> {record.minusTrainingProjectMoney && value < bugUnit ? (
+                            <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                        ) : (
+                            <></>
+                        )}
+                        </div>
+                    </div>
+                );
+            },
         },
         {
             title: translate.formatMessage(commonMessage.rateTraining),
@@ -192,7 +211,7 @@ function RegistrationListPage() {
                 if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
                     value = 0;
                 } else {
-                    value = (record.totalTimeBug / record.totalTimeWorking) * 100;
+                    value = (record.totalTimeBug / record.totalTimeWorking - 1) * 100;
                 }
                 return (
                     <Tooltip
@@ -226,11 +245,14 @@ function RegistrationListPage() {
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
-                            {record.minusTrainingProjectMoney ? (
-                                <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
-                            ) : (
-                                <></>
-                            )}
+                            {value > bugUnit &&
+                                <div> {record.minusTrainingProjectMoney ? (
+                                    <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                                ) : (
+                                    <></>
+                                )}
+                                </div>}
+
                         </div>
                     </Tooltip>
                 );
