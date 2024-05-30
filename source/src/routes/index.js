@@ -30,6 +30,8 @@ import StoryTaskRoutes from '@modules/projectManage/project/storyTask/routes';
 import categoryRoutesRole from '@modules/category/categoryRole/routes';
 import registerSalaryPeriod from "@modules/projectManage/registerSalaryPeriod/routes";
 import TrainingResultRouter from '@modules/TrainingResult/routes';
+import permissionKnowledgeRouter from '@modules/permissionManage/knowledge/routes';
+
 /*
     auth
         + null: access login and not login
@@ -88,6 +90,7 @@ const routes = {
     ...categoryRoutesRole,
     ...registerSalaryPeriod,
     ...TrainingResultRouter,
+    ...permissionKnowledgeRouter,
     // keep this at last
     //
     notFound: {
