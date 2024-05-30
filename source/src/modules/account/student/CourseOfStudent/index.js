@@ -25,6 +25,8 @@ import ScheduleFile from '@components/common/elements/ScheduleFile';
 import styles from './index.module.scss';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
+import useDisclosure from '@hooks/useDisclosure';
+import StatisticsTaskModal from '@components/common/elements/StatisticsTaskModal';
 
 const message = defineMessages({
     objectName: 'course',
@@ -42,6 +44,7 @@ const CourseListPage = () => {
     const leaderName = queryParameters.get('leaderName');
     const stateValues = translate.formatKeys(lectureState, ['label']);
     const { trainingUnit, bugUnit } = useTrainingUnit();
+    const [openedStatisticsModal, handlersStatisticsModal] = useDisclosure(false);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -76,7 +79,7 @@ const CourseListPage = () => {
 
                                 navigate(
                                     routes.studentCourseRegistrationProjectListPage.path +
-                                    `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
+                                        `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
                                 );
                             }}
                         >
@@ -187,8 +190,10 @@ const CourseListPage = () => {
                     >
                         <div
                             className={classNames(
+                                styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
+                            onClick={() => handlersStatisticsModal.open()}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -233,7 +238,13 @@ const CourseListPage = () => {
                             </div>
                         }
                     >
-                        <div className={classNames(value > bugUnit ? styles.customPercent : styles.customPercentOrange)}>
+                        <div
+                            className={classNames(
+                                styles.customDiv,
+                                value > bugUnit ? styles.customPercent : styles.customPercentOrange,
+                            )}
+                            onClick={() => handlersStatisticsModal.open()}
+                        >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
@@ -298,6 +309,7 @@ const CourseListPage = () => {
                     }
                 />
             </div>
+            <StatisticsTaskModal open={openedStatisticsModal} close={() => handlersStatisticsModal.close()} detail={data}/>
         </PageWrapper>
     );
 };
