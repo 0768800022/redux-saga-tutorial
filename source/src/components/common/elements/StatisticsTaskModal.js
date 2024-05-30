@@ -96,7 +96,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
         else
             return [
                 {
-                    title: translate.formatMessage(commonMessage.developerName),
+                    title: translate.formatMessage(commonMessage.developer),
                     dataIndex: ['projectTaskInfo', 'developer', 'account', 'fullName'],
                     width: 200,
                 },
