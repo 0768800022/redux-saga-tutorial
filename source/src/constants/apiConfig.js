@@ -609,7 +609,6 @@ const apiConfig = {
         },
     },
 
-
     lecture: {
         autocomplete: {
             baseURL: `${apiTenantUrl}v1/lecture/auto-complete`,
@@ -798,8 +797,6 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-
-
     },
     projectTask: {
         getList: {
@@ -1536,7 +1533,7 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        checkExist:{
+        checkExist: {
             baseURL: `${apiTenantUrl}v1/salary-period/check-exist`,
             method: 'GET',
             headers: baseHeader,
@@ -1641,7 +1638,7 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
-        calculateProjectSalary:{
+        calculateProjectSalary: {
             baseURL: `${apiTenantUrl}v1/income/calculate-income-project-salary`,
             method: 'POST',
             headers: baseHeader,
@@ -1782,6 +1779,38 @@ const apiConfig = {
         myTraniningResult: {
             baseURL: `${apiTenantUrl}v1/training-result/my-training-result`,
             method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    knowledgePermission: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/delete/:id`,
+            method: 'DELETE',
             headers: baseHeader,
             isRequiredTenantId: true,
         },

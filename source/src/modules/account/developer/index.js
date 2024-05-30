@@ -10,7 +10,7 @@ import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { convertUtcToLocalTime, formatDateString, formatMoney } from '@utils';
 import { Avatar, Button, Card, Col, Form, Modal, Row, Tag } from 'antd';
-import { ProjectOutlined, UserOutlined } from '@ant-design/icons';
+import { ProjectOutlined, UserOutlined, ReadOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage, defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +20,7 @@ import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
-import { IconAlarmOff } from '@tabler/icons-react';
+import { IconAlarmOff, IconShieldCog } from '@tabler/icons-react';
 import useDisclosure from '@hooks/useDisclosure';
 import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
 import { BaseForm } from '@components/common/form/BaseForm';
@@ -87,6 +87,25 @@ const DeveloperListPage = () => {
                 mixinFuncs.setQueryParams(serializeParams(filter));
             };
             funcs.additionalActionColumnButtons = () => ({
+                permission: ({ id, accountDto }) => {
+                    return (
+                        <BaseTooltip title={translate.formatMessage(commonMessage.knowledge)}>
+                            <Button
+                                type="link"
+                                style={{ padding: 0, display: 'table-cell', verticalAlign: 'middle' }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(
+                                        routes.developerPermissionListPageKnowledge.path +
+                                            `?developerId=${id}&developerName=${accountDto?.fullName}`,
+                                    );
+                                }}
+                            >
+                                <ReadOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    );
+                },
                 project: ({ id, accountDto }) => {
                     return (
                         <BaseTooltip title={translate.formatMessage(commonMessage.project)}>
@@ -178,7 +197,7 @@ const DeveloperListPage = () => {
             dataIndex: ['accountDto', 'phone'],
             width: 150,
         },
-       
+
         {
             title: 'Lịch trình',
             dataIndex: 'schedule',
@@ -191,6 +210,7 @@ const DeveloperListPage = () => {
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
+                permission: mixinFuncs.hasPermission([apiConfig.knowledgePermission.getList?.baseURL]),
                 project: mixinFuncs.hasPermission([apiConfig.project.getList?.baseURL]),
                 dayoff: mixinFuncs.hasPermission([apiConfig.dayOffLog.create?.baseURL]),
                 edit: true,
