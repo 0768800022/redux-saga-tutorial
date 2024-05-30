@@ -76,7 +76,7 @@ const CourseListPage = () => {
 
                                 navigate(
                                     routes.studentCourseRegistrationProjectListPage.path +
-                                        `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
+                                    `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
                                 );
                             }}
                         >
@@ -191,7 +191,7 @@ const CourseListPage = () => {
                             )}
                         >
                             {value > 0 ? (
-                                `-${formatPercentValue(parseFloat(value))}`
+                                <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
@@ -235,7 +235,7 @@ const CourseListPage = () => {
                     >
                         <div className={classNames(value > bugUnit ? styles.customPercent : styles.customPercentOrange)}>
                             {value > 0 ? (
-                                `-${formatPercentValue(parseFloat(value))}`
+                                <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}

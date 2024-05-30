@@ -78,7 +78,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.registrationMoneyListPage.path +
-                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
+                                    `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                                 );
                             }}
                         >
@@ -95,7 +95,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.courseRegistrationProjectListPage.path +
-                                        `?registrationId=${id}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&studentId=${studentId}&studentName=${studentName}
+                                    `?registrationId=${id}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&studentId=${studentId}&studentName=${studentName}
                                             `,
                                 );
                             }}
@@ -111,7 +111,7 @@ function RegistrationListPage() {
         event.preventDefault();
         navigate(
             routes.studentActivityCourseListPage.path +
-                `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
+            `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
         );
     };
 
@@ -165,9 +165,10 @@ function RegistrationListPage() {
                             className={classNames(
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
+
                         >
                             {value > 0 ? (
-                                `-${formatPercentValue(parseFloat(value))}`
+                                <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
@@ -211,7 +212,7 @@ function RegistrationListPage() {
                     >
                         <div className={classNames(value > bugUnit ? styles.customPercent : styles.customPercentOrange)}>
                             {value > 0 ? (
-                                `-${formatPercentValue(parseFloat(value))}`
+                                <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
@@ -249,15 +250,15 @@ function RegistrationListPage() {
             },
         },
         courseStatus == 1 &&
-            mixinFuncs.renderActionColumn(
-                {
-                    registration: mixinFuncs.hasPermission([apiConfig.registrationProject.getList?.baseURL]),
-                    money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]),
-                    edit: true,
-                    delete: true,
-                },
-                { width: 180 },
-            ),
+        mixinFuncs.renderActionColumn(
+            {
+                registration: mixinFuncs.hasPermission([apiConfig.registrationProject.getList?.baseURL]),
+                money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]),
+                edit: true,
+                delete: true,
+            },
+            { width: 180 },
+        ),
     ].filter(Boolean);
 
     const searchFields = [
