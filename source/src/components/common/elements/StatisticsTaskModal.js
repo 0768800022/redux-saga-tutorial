@@ -38,7 +38,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
         if (isTraining)
             return [
                 {
-                    title: translate.formatMessage(commonMessage.developerName),
+                    title: translate.formatMessage(commonMessage.developer),
                     dataIndex: ['studentName'],
                     width: 200,
                 },
@@ -48,7 +48,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                 },
                 {
                     title: translate.formatMessage(commonMessage.task),
-                    dataIndex: ['projectTaskInfo', 'taskName'],
+                    dataIndex: ['lectureName'],
                 },
                 {
                     title: translate.formatMessage(commonMessage.assignedCourseTime),
@@ -87,7 +87,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                                         : styles.customPercentGreen,
                                 )}
                             >
-                                {value}
+                                {Math.ceil((value / 60) * 10) / 10} h
                             </div>
                         );
                     },
@@ -197,7 +197,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                             </Button>
                         </Tooltip>
                     </div>
-                    {detail?.length !== 0 && (
+                    {!isTraining && (
                         <div
                             style={{
                                 display: 'flex',
