@@ -21,6 +21,8 @@ import { commonMessage } from '@locales/intl';
 import { convertMinuteToHour, formatMoney, formatMoneyValue } from '@utils';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
+import useDisclosure from '@hooks/useDisclosure';
+import StatisticsTaskModal from '@components/common/elements/StatisticsTaskModal';
 
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
@@ -41,6 +43,7 @@ function RegistrationListPage() {
     const { trainingUnit, bugUnit, numberProject } = useTrainingUnit();
     localStorage.setItem('pathPrev', location.search);
     const navigate = useNavigate();
+    const [openedStatisticsModal, handlersStatisticsModal] = useDisclosure(false);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
         options: {
@@ -78,7 +81,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.registrationMoneyListPage.path +
-                                    `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
+                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                                 );
                             }}
                         >
@@ -95,7 +98,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.courseRegistrationProjectListPage.path +
-                                    `?registrationId=${id}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&studentId=${studentId}&studentName=${studentName}
+                                        `?registrationId=${id}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&studentId=${studentId}&studentName=${studentName}
                                             `,
                                 );
                             }}
@@ -111,7 +114,7 @@ function RegistrationListPage() {
         event.preventDefault();
         navigate(
             routes.studentActivityCourseListPage.path +
-            `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
+                `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
         );
     };
 
@@ -182,9 +185,10 @@ function RegistrationListPage() {
                     >
                         <div
                             className={classNames(
+                                styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-
+                            onClick={() => handlersStatisticsModal.open()}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -229,7 +233,13 @@ function RegistrationListPage() {
                             </div>
                         }
                     >
-                        <div className={classNames(value > bugUnit ? styles.customPercent : styles.customPercentOrange)}>
+                        <div
+                            className={classNames(
+                                styles.customDiv,
+                                value > bugUnit ? styles.customPercent : styles.customPercentOrange,
+                            )}
+                            onClick={() => handlersStatisticsModal.open()}
+                        >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
@@ -272,15 +282,15 @@ function RegistrationListPage() {
             },
         },
         courseStatus == 1 &&
-        mixinFuncs.renderActionColumn(
-            {
-                registration: mixinFuncs.hasPermission([apiConfig.registrationProject.getList?.baseURL]),
-                money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]),
-                edit: true,
-                delete: true,
-            },
-            { width: 180 },
-        ),
+            mixinFuncs.renderActionColumn(
+                {
+                    registration: mixinFuncs.hasPermission([apiConfig.registrationProject.getList?.baseURL]),
+                    money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]),
+                    edit: true,
+                    delete: true,
+                },
+                { width: 180 },
+            ),
     ].filter(Boolean);
 
     const searchFields = [
@@ -331,6 +341,11 @@ function RegistrationListPage() {
                         columns={columns}
                     />
                 }
+            />
+            <StatisticsTaskModal
+                open={openedStatisticsModal}
+                close={() => handlersStatisticsModal.close()}
+                detail={data}
             />
         </PageWrapper>
     );
