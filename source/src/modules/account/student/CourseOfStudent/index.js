@@ -25,6 +25,8 @@ import ScheduleFile from '@components/common/elements/ScheduleFile';
 import styles from './index.module.scss';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
+import useDisclosure from '@hooks/useDisclosure';
+import StatisticsTaskModal from '@components/common/elements/StatisticsTaskModal';
 
 const message = defineMessages({
     objectName: 'course',
@@ -41,7 +43,8 @@ const CourseListPage = () => {
     const studentName = queryParameters.get('studentName');
     const leaderName = queryParameters.get('leaderName');
     const stateValues = translate.formatKeys(lectureState, ['label']);
-    const { trainingUnit, bugUnit } = useTrainingUnit();
+    const { trainingUnit, bugUnit,numberProject } = useTrainingUnit();
+    const [openedStatisticsModal, handlersStatisticsModal] = useDisclosure(false);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -76,7 +79,7 @@ const CourseListPage = () => {
 
                                 navigate(
                                     routes.studentCourseRegistrationProjectListPage.path +
-                                    `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
+                                        `?studentId=${stuId}&studentName=${studentName}&registrationId=${id}&courseName=${courseName}&courseState=${state}`,
                                 );
                             }}
                         >
@@ -152,7 +155,26 @@ const CourseListPage = () => {
         {
             title: translate.formatMessage(commonMessage.totalProject),
             align: 'center',
-            dataIndex: 'totalProject',
+            // dataIndex: 'totalProject',
+            render: (record) => {
+                let value;
+                if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
+                    value = 0;
+                } else {
+                    value = (record.totalTimeBug / record.totalTimeWorking - 1) * 100;
+                }
+                return (
+                    <div className={classNames(record.totalProject < numberProject ? styles.customPercentOrange : styles.customPercentGreen)}>
+                        <div>{record.totalProject}/{numberProject}</div>
+                        <div> {record.minusTrainingProjectMoney && value < bugUnit ? (
+                            <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                        ) : (
+                            <></>
+                        )}
+                        </div>
+                    </div>
+                );
+            },
         },
         {
             title: translate.formatMessage(commonMessage.rateTraining),
@@ -187,8 +209,10 @@ const CourseListPage = () => {
                     >
                         <div
                             className={classNames(
+                                styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
+                            onClick={() => handlersStatisticsModal.open()}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -196,7 +220,7 @@ const CourseListPage = () => {
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
                             {record.minusTrainingMoney > 0 && (
-                                <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>
+                                <span>-{formatMoneyValue(record.minusTrainingMoney)}</span>
                             )}
                         </div>
                     </Tooltip>
@@ -211,7 +235,7 @@ const CourseListPage = () => {
                 if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
                     value = 0;
                 } else {
-                    value = (record.totalTimeBug / record.totalTimeWorking) * 100;
+                    value = (record.totalTimeBug / record.totalTimeWorking - 1) * 100;
                 }
                 return (
                     <Tooltip
@@ -233,17 +257,26 @@ const CourseListPage = () => {
                             </div>
                         }
                     >
-                        <div className={classNames(value > bugUnit ? styles.customPercent : styles.customPercentOrange)}>
+                        <div
+                            className={classNames(
+                                styles.customDiv,
+                                value > bugUnit ? styles.customPercent : styles.customPercentOrange,
+                            )}
+                            onClick={() => handlersStatisticsModal.open()}
+                        >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
-                            {record.minusTrainingProjectMoney ? (
-                                <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
-                            ) : (
-                                <></>
-                            )}
+                            {value > bugUnit &&
+                                <div> {record.minusTrainingProjectMoney ? (
+                                    <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                                ) : (
+                                    <></>
+                                )}
+                                </div>}
+
                         </div>
                     </Tooltip>
                 );
@@ -298,6 +331,7 @@ const CourseListPage = () => {
                     }
                 />
             </div>
+            <StatisticsTaskModal open={openedStatisticsModal} close={() => handlersStatisticsModal.close()} detail={data}/>
         </PageWrapper>
     );
 };
