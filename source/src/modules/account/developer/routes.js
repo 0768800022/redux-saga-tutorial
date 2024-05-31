@@ -4,6 +4,7 @@ import DeveloperListPage from '.';
 import ProjectListPage from '@modules/projectManage/project';
 import ProjectTaskListPage from '@modules/projectManage/project/projectTask';
 import TeamListPage from '@modules/projectManage/project/team';
+import KnowledgePermissionListPage from './knowledge';
 
 export default {
     developerListPage: {
@@ -40,5 +41,12 @@ export default {
         auth: true,
         component: ProjectTaskListPage,
         permissions: [apiConfig.projectTask.getList.baseURL],
+    },
+    developerPermissionListPageKnowledge: {
+        path: '/developer/permission-knowledge-category',
+        title: 'Permission knowledge',
+        auth: true,
+        component: KnowledgePermissionListPage,
+        // permissions: apiConfig.knowledgePermission.getList.baseURL,
     },
 };
