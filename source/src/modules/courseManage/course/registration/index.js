@@ -128,8 +128,8 @@ function RegistrationListPage() {
         );
     };
     const handleOnClickProject = (record) => {
-        mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL])
-            ? executeFindTracking({
+        mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
+            executeFindTracking({
                 params: {
                     courseId: record?.courseId,
                     studentId: record?.studentId,
@@ -148,13 +148,12 @@ function RegistrationListPage() {
                 onError: (error) => {
                     console.log(error);
                 },
-            })
-            : showErrorMessage('Access is Denied!!');
+            });
     };
     const handleOnClickTraining = (record) => {
         setisTraining(true);
-        mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL])
-            ? executeTrainingTracking({
+        mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+            executeTrainingTracking({
                 params: {
                     courseId: record?.courseId,
                     studentId: record?.studentId,
@@ -173,8 +172,7 @@ function RegistrationListPage() {
                 onError: (error) => {
                     console.log(error);
                 },
-            })
-            : showErrorMessage('Access is Denied!!');
+            });
     };
     const handlerCancel = () => {
         setDetail([]);
@@ -260,7 +258,7 @@ function RegistrationListPage() {
                         <div
                             className={classNames(
                                 mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
-                                styles.customDiv,
+                                    styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
                             onClick={() => handleOnClickTraining(record)}
@@ -311,7 +309,7 @@ function RegistrationListPage() {
                         <div
                             className={classNames(
                                 mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
-                                styles.customDiv,
+                                    styles.customDiv,
                                 value > bugUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
                             onClick={() => handleOnClickProject(record)}
