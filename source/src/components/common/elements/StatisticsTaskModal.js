@@ -20,6 +20,7 @@ import axios from 'axios';
 import classNames from 'classnames';
 
 const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTraining = false }) => {
+    console.log(detail);
     const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
     const translate = useTranslate();
     const stateRegistration = translate.formatKeys(kindTask, ['label']);

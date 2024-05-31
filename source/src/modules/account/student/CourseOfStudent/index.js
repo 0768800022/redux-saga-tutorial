@@ -164,8 +164,8 @@ const CourseListPage = () => {
                     studentId: record?.studentId,
                 },
                 onCompleted: (res) => {
-                    if (res?.data?.content) {
-                        const updatedData = res.data.content.map((item) => ({
+                    if (res?.data && res?.data?.length > 0) {
+                        const updatedData = res.data.map((item) => ({
                             ...item,
                             courseId: record?.courseId,
                             studentId: record?.studentId,
@@ -188,7 +188,7 @@ const CourseListPage = () => {
                     studentId: record?.studentId,
                 },
                 onCompleted: (res) => {
-                    if (res?.data?.content) {
+                    if (res?.data?.content && res?.data?.content?.length > 0) {
                         const updatedData = res.data.content.map((item) => ({
                             ...item,
                             courseId: record?.courseId,
