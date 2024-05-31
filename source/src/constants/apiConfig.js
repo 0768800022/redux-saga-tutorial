@@ -1796,5 +1796,75 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+    courseReviewHistory: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        approve: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/approve`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        reject: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/reject`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        resetRejected: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/reset-rejected`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        submit: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/submit`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    knowledgePermission: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        autocomplete: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/auto-complete`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        create: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/create`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        update: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/update`,
+            method: 'PUT',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        delete: {
+            baseURL: `${apiTenantUrl}v1/knowledge-permission/delete/:id`,
+            method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
 };
 export default apiConfig;

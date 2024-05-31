@@ -24,6 +24,7 @@ import classNames from 'classnames';
 import useDisclosure from '@hooks/useDisclosure';
 import StatisticsTaskModal from '@components/common/elements/StatisticsTaskModal';
 import useFetch from '@hooks/useFetch';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
@@ -127,49 +128,51 @@ function RegistrationListPage() {
         );
     };
     const handleOnClickProject = (record) => {
-        executeFindTracking({
-            params: {
-                courseId: record?.courseId,
-                studentId: record?.studentId,
-            },
-            onCompleted: (res) => {
-                if (res?.data) {
-                    const updatedData = res.data.map((item) => ({
-                        ...item,
-                        courseId: record?.courseId,
-                        studentId: record?.studentId,
-                    }));
-                    setDetail(updatedData);
-                }
-                handlersStatisticsModal.open();
-            },
-            onError: (error) => {
-                console.log(error);
-            },
-        });
+        mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
+            executeFindTracking({
+                params: {
+                    courseId: record?.courseId,
+                    studentId: record?.studentId,
+                },
+                onCompleted: (res) => {
+                    if (res?.data?.content) {
+                        const updatedData = res.data.content.map((item) => ({
+                            ...item,
+                            courseId: record?.courseId,
+                            studentId: record?.studentId,
+                        }));
+                        setDetail(updatedData);
+                    }
+                    handlersStatisticsModal.open();
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            });
     };
     const handleOnClickTraining = (record) => {
         setisTraining(true);
-        executeTrainingTracking({
-            params: {
-                courseId: record?.courseId,
-                studentId: record?.studentId,
-            },
-            onCompleted: (res) => {
-                if (res?.data?.content) {
-                    const updatedData = res.data.content.map((item) => ({
-                        ...item,
-                        courseId: record?.courseId,
-                        studentId: record?.studentId,
-                    }));
-                    setDetail(updatedData);
-                }
-                handlersStatisticsModal.open();
-            },
-            onError: (error) => {
-                console.log(error);
-            },
-        });
+        mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+            executeTrainingTracking({
+                params: {
+                    courseId: record?.courseId,
+                    studentId: record?.studentId,
+                },
+                onCompleted: (res) => {
+                    if (res?.data?.content) {
+                        const updatedData = res.data.content.map((item) => ({
+                            ...item,
+                            courseId: record?.courseId,
+                            studentId: record?.studentId,
+                        }));
+                        setDetail(updatedData);
+                    }
+                    handlersStatisticsModal.open();
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            });
     };
     const handlerCancel = () => {
         setDetail([]);
@@ -254,7 +257,8 @@ function RegistrationListPage() {
                     >
                         <div
                             className={classNames(
-                                styles.customDiv,
+                                mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+                                    styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
                             onClick={() => handleOnClickTraining(record)}
@@ -304,7 +308,8 @@ function RegistrationListPage() {
                     >
                         <div
                             className={classNames(
-                                styles.customDiv,
+                                mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
+                                    styles.customDiv,
                                 value > bugUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
                             onClick={() => handleOnClickProject(record)}

@@ -1,6 +1,6 @@
 import { BulbOutlined } from '@ant-design/icons';
 import routes from '@routes';
-import { IconBuildingCommunity, IconClipboardText, IconSchool, IconSettings, IconUserBolt } from '@tabler/icons-react';
+import { IconBuildingCommunity, IconClipboardText, IconSchool, IconSettings, IconUserBolt, IconBook2 } from '@tabler/icons-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { generatePath } from 'react-router-dom';
@@ -47,6 +47,12 @@ const navMenuConfig = [
                 key: 'yeu-cau-khoa-hoc',
                 path: generatePath(routes.courseRequestListPage.path, {}),
                 permission: apiConfig.subject.getList.baseURL,
+            },
+            {
+                label: <FormattedMessage defaultMessage="Khoá học chờ xét duyệt" />,
+                key: 'khoa-hoc-cho-xet-duyet',
+                path: generatePath(routes.courseReviewHistoryListPage.path, {}),
+                permission: apiConfig.courseReviewHistory.getList.baseURL,
             },
             // {
             //     label: <FormattedMessage defaultMessage="Kết quả đào tạo" />,
@@ -149,13 +155,13 @@ const navMenuConfig = [
                     kind: categoryKind.generation.value,
                 }),
             },
-            {
-                label: categoryKind.knowledge.title,
-                key: 'knowledge-category',
-                path: generatePath(routes.categoryListPageKnowledge.path, {
-                    kind: categoryKind.knowledge.value,
-                }),
-            },
+            // {
+            //     label: categoryKind.knowledge.title,
+            //     key: 'knowledge-category',
+            //     path: generatePath(routes.categoryListPageKnowledge.path, {
+            //         kind: categoryKind.knowledge.value,
+            //     }),
+            // },
             {
                 label: <FormattedMessage defaultMessage="Cài đặt" />,
                 key: 'setting',
@@ -163,6 +169,30 @@ const navMenuConfig = [
             },
         ],
     },
+    {
+        label: <FormattedMessage defaultMessage="Quản lý kiến thức" />,
+        key: 'quan-ly-kien-thuc',
+        icon: <IconBook2 size={16} />,
+        permission: apiConfig.category.getList.baseURL,
+        children: [
+            {
+                label: categoryKind.knowledge.title,
+                key: 'knowledge-category',
+                path: generatePath(routes.categoryListPageKnowledge.path, {
+                    kind: categoryKind.knowledge.value,
+                }),
+            },
+            // {
+            //     label: <FormattedMessage defaultMessage="Phân quyền" />,
+            //     key: 'permission-knowledge-category',
+            //     path: generatePath(routes.permissionListPageKnowledge.path, {
+            //         kind: categoryKind.knowledge.value,
+            //     }),
+            // },
+        ],
+    },
+
+
 
     ///////////////////// LEADER MENU /////////////////////////////
     // {
