@@ -201,7 +201,6 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                 // Xử lý lỗi tải file ở đây
             });
     };
-    console.log(detail);
     return (
         <Modal
             title={
