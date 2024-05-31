@@ -28,6 +28,7 @@ import classNames from 'classnames';
 import useDisclosure from '@hooks/useDisclosure';
 import StatisticsTaskModal from '@components/common/elements/StatisticsTaskModal';
 import useFetch from '@hooks/useFetch';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'course',
@@ -155,52 +156,52 @@ const CourseListPage = () => {
             currentDecimal: '0',
         });
     };
-    const handleOnClickProject = (record, event, value) => {
-        // event.preventDefault();
-        executeFindTracking({
-            params: {
-                courseId: record?.courseId,
-                studentId: record?.studentId,
-            },
-            onCompleted: (res) => {
-                if (res?.data) {
-                    const updatedData = res.data.map((item) => ({
-                        ...item,
-                        courseId: record?.courseId,
-                        studentId: record?.studentId,
-                    }));
-                    setDetail(updatedData);
-                }
-                handlersStatisticsModal.open();
-            },
-            onError: (error) => {
-                console.log(error);
-            },
-        });
+    const handleOnClickProject = (record) => {
+        mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
+            executeFindTracking({
+                params: {
+                    courseId: record?.courseId,
+                    studentId: record?.studentId,
+                },
+                onCompleted: (res) => {
+                    if (res?.data?.content) {
+                        const updatedData = res.data.content.map((item) => ({
+                            ...item,
+                            courseId: record?.courseId,
+                            studentId: record?.studentId,
+                        }));
+                        setDetail(updatedData);
+                    }
+                    handlersStatisticsModal.open();
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            });
     };
-    const handleOnClickTraining = (record, event, value) => {
-        // event.preventDefault();
+    const handleOnClickTraining = (record) => {
         setisTraining(true);
-        executeTrainingTracking({
-            params: {
-                courseId: record?.courseId,
-                studentId: record?.studentId,
-            },
-            onCompleted: (res) => {
-                if (res?.data?.content) {
-                    const updatedData = res.data.content.map((item) => ({
-                        ...item,
-                        courseId: record?.courseId,
-                        studentId: record?.studentId,
-                    }));
-                    setDetail(updatedData);
-                }
-                handlersStatisticsModal.open();
-            },
-            onError: (error) => {
-                console.log(error);
-            },
-        });
+        mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+            executeTrainingTracking({
+                params: {
+                    courseId: record?.courseId,
+                    studentId: record?.studentId,
+                },
+                onCompleted: (res) => {
+                    if (res?.data?.content) {
+                        const updatedData = res.data.content.map((item) => ({
+                            ...item,
+                            courseId: record?.courseId,
+                            studentId: record?.studentId,
+                        }));
+                        setDetail(updatedData);
+                    }
+                    handlersStatisticsModal.open();
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            });
     };
     const handlerCancel = () => {
         setDetail([]);
@@ -225,13 +226,23 @@ const CourseListPage = () => {
                     value = (record.totalTimeBug / record.totalTimeWorking - 1) * 100;
                 }
                 return (
-                    <div className={classNames(record.totalProject < numberProject ? styles.customPercentOrange : styles.customPercentGreen)}>
-                        <div>{record.totalProject}/{numberProject}</div>
-                        <div> {record.minusTrainingProjectMoney && value < bugUnit ? (
-                            <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
-                        ) : (
-                            <></>
+                    <div
+                        className={classNames(
+                            record.totalProject < numberProject
+                                ? styles.customPercentOrange
+                                : styles.customPercentGreen,
                         )}
+                    >
+                        <div>
+                            {record.totalProject}/{numberProject}
+                        </div>
+                        <div>
+                            {' '}
+                            {record.minusTrainingProjectMoney && value < bugUnit ? (
+                                <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                 );
@@ -270,10 +281,11 @@ const CourseListPage = () => {
                     >
                         <div
                             className={classNames(
-                                styles.customDiv,
+                                mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+                                    styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={(event) => handleOnClickTraining(record, event, value)}
+                            onClick={() => handleOnClickTraining(record)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -320,24 +332,27 @@ const CourseListPage = () => {
                     >
                         <div
                             className={classNames(
-                                styles.customDiv,
+                                mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+                                    styles.customDiv,
                                 value > bugUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={(event) => handleOnClickProject(record, event, value)}
+                            onClick={() => handleOnClickProject(record)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
-                            {value > bugUnit &&
-                                <div> {record.minusTrainingProjectMoney ? (
-                                    <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
-                                ) : (
-                                    <></>
-                                )}
-                                </div>}
-
+                            {value > bugUnit && (
+                                <div>
+                                    {' '}
+                                    {record.minusTrainingProjectMoney ? (
+                                        <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </Tooltip>
                 );

@@ -24,6 +24,7 @@ import classNames from 'classnames';
 import useDisclosure from '@hooks/useDisclosure';
 import StatisticsTaskModal from '@components/common/elements/StatisticsTaskModal';
 import useFetch from '@hooks/useFetch';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
@@ -126,52 +127,52 @@ function RegistrationListPage() {
                 `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
         );
     };
-    const handleOnClickProject = (record, event, value) => {
-        // event.preventDefault();
-        executeFindTracking({
-            params: {
-                courseId: record?.courseId,
-                studentId: record?.studentId,
-            },
-            onCompleted: (res) => {
-                if (res?.data) {
-                    const updatedData = res.data.map((item) => ({
-                        ...item,
-                        courseId: record?.courseId,
-                        studentId: record?.studentId,
-                    }));
-                    setDetail(updatedData);
-                }
-                handlersStatisticsModal.open();
-            },
-            onError: (error) => {
-                console.log(error);
-            },
-        });
+    const handleOnClickProject = (record) => {
+        mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
+            executeFindTracking({
+                params: {
+                    courseId: record?.courseId,
+                    studentId: record?.studentId,
+                },
+                onCompleted: (res) => {
+                    if (res?.data?.content) {
+                        const updatedData = res.data.content.map((item) => ({
+                            ...item,
+                            courseId: record?.courseId,
+                            studentId: record?.studentId,
+                        }));
+                        setDetail(updatedData);
+                    }
+                    handlersStatisticsModal.open();
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            });
     };
-    const handleOnClickTraining = (record, event, value) => {
-        // event.preventDefault();
+    const handleOnClickTraining = (record) => {
         setisTraining(true);
-        executeTrainingTracking({
-            params: {
-                courseId: record?.courseId,
-                studentId: record?.studentId,
-            },
-            onCompleted: (res) => {
-                if (res?.data?.content) {
-                    const updatedData = res.data.content.map((item) => ({
-                        ...item,
-                        courseId: record?.courseId,
-                        studentId: record?.studentId,
-                    }));
-                    setDetail(updatedData);
-                }
-                handlersStatisticsModal.open();
-            },
-            onError: (error) => {
-                console.log(error);
-            },
-        });
+        mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+            executeTrainingTracking({
+                params: {
+                    courseId: record?.courseId,
+                    studentId: record?.studentId,
+                },
+                onCompleted: (res) => {
+                    if (res?.data?.content) {
+                        const updatedData = res.data.content.map((item) => ({
+                            ...item,
+                            courseId: record?.courseId,
+                            studentId: record?.studentId,
+                        }));
+                        setDetail(updatedData);
+                    }
+                    handlersStatisticsModal.open();
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            });
     };
     const handlerCancel = () => {
         setDetail([]);
@@ -256,10 +257,11 @@ function RegistrationListPage() {
                     >
                         <div
                             className={classNames(
-                                styles.customDiv,
+                                mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+                                    styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={(event) => handleOnClickTraining(record, event, value)}
+                            onClick={() => handleOnClickTraining(record)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -306,10 +308,11 @@ function RegistrationListPage() {
                     >
                         <div
                             className={classNames(
-                                styles.customDiv,
+                                mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
+                                    styles.customDiv,
                                 value > bugUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={(event) => handleOnClickProject(record, event, value)}
+                            onClick={() => handleOnClickProject(record)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
