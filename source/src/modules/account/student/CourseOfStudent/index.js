@@ -187,8 +187,8 @@ const CourseListPage = () => {
                 studentId: record?.studentId,
             },
             onCompleted: (res) => {
-                if (res?.data) {
-                    const updatedData = res.data.map((item) => ({
+                if (res?.data?.content) {
+                    const updatedData = res.data.content.map((item) => ({
                         ...item,
                         courseId: record?.courseId,
                         studentId: record?.studentId,
