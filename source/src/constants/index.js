@@ -464,3 +464,21 @@ export const salaryPeriodKInd = [
 ];
 
 
+export const VERSION_STATE_PROCESS_ERROR = -1;
+export const VERSION_STATE_INIT = 0;
+export const VERSION_STATE_SUBMIT = 1;
+export const VERSION_STATE_APPROVE = 2;
+export const VERSION_STATE_REJECT = 3;
+export const VERSION_STATE_PROCESS = 4;
+export const VERSION_STATE_DELETE = -2;
+export const VERSION_STATE_WAITING = 5;
+
+export const versionState = {
+    VERSION_STATE_PROCESS_ERROR,
+    VERSION_STATE_INIT,
+    VERSION_STATE_SUBMIT,
+    VERSION_STATE_APPROVE,
+    VERSION_STATE_REJECT,
+    VERSION_STATE_PROCESS,
+    VERSION_STATE_WAITING,
+};
