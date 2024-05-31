@@ -1,5 +1,5 @@
 import ListPage from '@components/common/layout/ListPage';
-import React from 'react';
+import React, { useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { DATE_DISPLAY_FORMAT, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
@@ -27,6 +27,7 @@ import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
 import useDisclosure from '@hooks/useDisclosure';
 import StatisticsTaskModal from '@components/common/elements/StatisticsTaskModal';
+import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
     objectName: 'course',
@@ -43,8 +44,16 @@ const CourseListPage = () => {
     const studentName = queryParameters.get('studentName');
     const leaderName = queryParameters.get('leaderName');
     const stateValues = translate.formatKeys(lectureState, ['label']);
-    const { trainingUnit, bugUnit,numberProject } = useTrainingUnit();
+    const { trainingUnit, bugUnit, numberProject } = useTrainingUnit();
     const [openedStatisticsModal, handlersStatisticsModal] = useDisclosure(false);
+    const [detail, setDetail] = useState([]);
+    const [isTraining, setisTraining] = useState(false);
+    const { execute: executeFindTracking } = useFetch(apiConfig.projectTaskLog.findAllTrackingLog, {
+        immediate: false,
+    });
+    const { execute: executeTrainingTracking } = useFetch(apiConfig.task.studentDetailCourseTask, {
+        immediate: false,
+    });
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -146,6 +155,56 @@ const CourseListPage = () => {
             currentDecimal: '0',
         });
     };
+    const handleOnClickProject = (record) => {
+        executeFindTracking({
+            params: {
+                courseId: record?.courseId,
+                studentId: record?.studentId,
+            },
+            onCompleted: (res) => {
+                if (res?.data) {
+                    const updatedData = res.data.map((item) => ({
+                        ...item,
+                        courseId: record?.courseId,
+                        studentId: record?.studentId,
+                    }));
+                    setDetail(updatedData);
+                }
+                handlersStatisticsModal.open();
+            },
+            onError: (error) => {
+                console.log(error);
+            },
+        });
+    };
+    const handleOnClickTraining = (record) => {
+        setisTraining(true);
+        executeTrainingTracking({
+            params: {
+                courseId: record?.courseId,
+                studentId: record?.studentId,
+            },
+            onCompleted: (res) => {
+                if (res?.data?.content) {
+                    const updatedData = res.data.content.map((item) => ({
+                        ...item,
+                        courseId: record?.courseId,
+                        studentId: record?.studentId,
+                    }));
+                    setDetail(updatedData);
+                }
+                handlersStatisticsModal.open();
+            },
+            onError: (error) => {
+                console.log(error);
+            },
+        });
+    };
+    const handlerCancel = () => {
+        setDetail([]);
+        setisTraining(false);
+        handlersStatisticsModal.close();
+    };
     const columns = [
         {
             title: translate.formatMessage(commonMessage.courseName),
@@ -212,7 +271,7 @@ const CourseListPage = () => {
                                 styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={() => handlersStatisticsModal.open()}
+                            onClick={() => handleOnClickTraining(record)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -262,7 +321,7 @@ const CourseListPage = () => {
                                 styles.customDiv,
                                 value > bugUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={() => handlersStatisticsModal.open()}
+                            onClick={() => handleOnClickProject(record)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -331,7 +390,12 @@ const CourseListPage = () => {
                     }
                 />
             </div>
-            <StatisticsTaskModal open={openedStatisticsModal} close={() => handlersStatisticsModal.close()} detail={data}/>
+            <StatisticsTaskModal
+                open={openedStatisticsModal}
+                close={() => handlerCancel()}
+                detail={detail}
+                isTraining={isTraining}
+            />
         </PageWrapper>
     );
 };

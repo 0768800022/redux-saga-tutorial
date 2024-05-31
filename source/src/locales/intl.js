@@ -155,4 +155,6 @@ export const commonMessage = defineMessages({
     rateBug: 'Tỉ lệ dự án',
     rateTraining: 'Tỉ lệ đào tạo',
     rateAllowable: 'Tỉ lệ cho phép',
+    assignedCourseTime: 'Thời gian yêu cầu',
+    learnCourseTime: 'Thời gian hoàn thành',
 });

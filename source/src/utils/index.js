@@ -599,3 +599,14 @@ export const formatMoneyValue = (value) => {
         currentDecimal: '2',
     });
 };
+
+export const calculateTimes = (data) => {
+    return data.reduce((acc, item) => {
+        if (item?.kind === 1) {
+            acc.upTime += item?.totalTime;
+        } else if (item?.kind === 200) {
+            acc.bugTime += item?.totalTime;
+        }
+        return acc;
+    }, { upTime: 0, bugTime: 0 });
+};
