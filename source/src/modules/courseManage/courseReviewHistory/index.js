@@ -117,23 +117,13 @@ const CourseReviewHistoryListPage = () => {
                 // }
                 // actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
-
                     <BaseTable
-                        style={{
-                            cursor: 'pointer',
-                        }}
                         onChange={mixinFuncs.changePagination}
                         columns={columns}
                         dataSource={data}
                         loading={loading}
-                        rowKey={(record) => record.id}
+                        // rowKey={(record) => record.id}
                         pagination={pagination}
-                        onRow={(record) => ({
-                            onClick: (e) => {
-                                e.stopPropagation();
-                                navigate(`/courses-review/${record?.version?.id}`);
-                            },
-                        })}
                         objectName={translate.formatMessage(message.objectName)}
 
                     />
