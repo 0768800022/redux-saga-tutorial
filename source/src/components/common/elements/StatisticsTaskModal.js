@@ -167,6 +167,41 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                 // Xử lý lỗi tải file ở đây
             });
     };
+    const exportToExcelTraining = ({ courseId, studentId, nameLog }) => {
+        axios({
+            url: `${getData(storageKeys.TENANT_API_URL)}/v1/task/export-to-excel`,
+            method: 'GET',
+            responseType: 'blob',
+            // withCredentials: true,
+            headers: {
+                Authorization: `Bearer ${userAccessToken}`, // Sử dụng token từ state
+            },
+            params: {
+                courseId: courseId,
+                studentId: studentId,
+            },
+        })
+            .then((response) => {
+                // const fileName="uy_nhiem_chi";
+                const date = new Date();
+
+                const excelBlob = new Blob([response.data], {
+                    type: response.headers['content-type'],
+                });
+
+                const link = document.createElement('a');
+
+                link.href = URL.createObjectURL(excelBlob);
+                link.download = `ThongKeTask_${convertToCamelCase(nameLog)}.xlsx`;
+                link.click();
+                showSucsessMessage('Tạo tệp thống kê thành công');
+            })
+            .catch((error) => {
+                console.log(error);
+                // Xử lý lỗi tải file ở đây
+            });
+    };
+    console.log(detail);
     return (
         <Modal
             title={
@@ -186,11 +221,17 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                                 }}
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    exportToExcel({
-                                        courseId: detail[0]?.courseId,
-                                        studentId: detail[0]?.studentId,
-                                        nameLog: detail[0].projectTaskInfo.developer.account.fullName,
-                                    });
+                                    isTraining
+                                        ? exportToExcelTraining({
+                                            courseId: detail[0]?.courseId,
+                                            studentId: detail[0]?.studentId,
+                                            nameLog: detail[0].studentName,
+                                        })
+                                        : exportToExcel({
+                                            courseId: detail[0]?.courseId,
+                                            studentId: detail[0]?.studentId,
+                                            nameLog: detail[0].projectTaskInfo.developer.account.fullName,
+                                        });
                                 }}
                             >
                                 <FileExcelOutlined style={{ color: 'green' }} size={18} />
