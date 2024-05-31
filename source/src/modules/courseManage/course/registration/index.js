@@ -7,7 +7,7 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Avatar, Button, Tag, Tooltip } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
@@ -23,6 +23,7 @@ import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
 import useDisclosure from '@hooks/useDisclosure';
 import StatisticsTaskModal from '@components/common/elements/StatisticsTaskModal';
+import useFetch from '@hooks/useFetch';
 
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
@@ -44,6 +45,14 @@ function RegistrationListPage() {
     localStorage.setItem('pathPrev', location.search);
     const navigate = useNavigate();
     const [openedStatisticsModal, handlersStatisticsModal] = useDisclosure(false);
+    const [detail, setDetail] = useState([]);
+    const [isTraining, setisTraining] = useState(false);
+    const { execute: executeFindTracking } = useFetch(apiConfig.projectTaskLog.findAllTrackingLog, {
+        immediate: false,
+    });
+    const { execute: executeTrainingTracking } = useFetch(apiConfig.task.studentDetailCourseTask, {
+        immediate: false,
+    });
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
         options: {
@@ -117,6 +126,58 @@ function RegistrationListPage() {
                 `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
         );
     };
+    const handleOnClickProject = (record, event, value) => {
+        // event.preventDefault();
+        executeFindTracking({
+            params: {
+                courseId: record?.courseId,
+                studentId: record?.studentId,
+            },
+            onCompleted: (res) => {
+                if (res?.data) {
+                    const updatedData = res.data.map((item) => ({
+                        ...item,
+                        courseId: record?.courseId,
+                        studentId: record?.studentId,
+                    }));
+                    setDetail(updatedData);
+                }
+                handlersStatisticsModal.open();
+            },
+            onError: (error) => {
+                console.log(error);
+            },
+        });
+    };
+    const handleOnClickTraining = (record, event, value) => {
+        // event.preventDefault();
+        setisTraining(true);
+        executeTrainingTracking({
+            params: {
+                courseId: record?.courseId,
+                studentId: record?.studentId,
+            },
+            onCompleted: (res) => {
+                if (res?.data?.content) {
+                    const updatedData = res.data.content.map((item) => ({
+                        ...item,
+                        courseId: record?.courseId,
+                        studentId: record?.studentId,
+                    }));
+                    setDetail(updatedData);
+                }
+                handlersStatisticsModal.open();
+            },
+            onError: (error) => {
+                console.log(error);
+            },
+        });
+    };
+    const handlerCancel = () => {
+        setDetail([]);
+        setisTraining(false);
+        handlersStatisticsModal.close();
+    };
 
     const columns = [
         {
@@ -140,13 +201,23 @@ function RegistrationListPage() {
                     value = (record.totalTimeBug / record.totalTimeWorking - 1) * 100;
                 }
                 return (
-                    <div className={classNames(record.totalProject < numberProject ? styles.customPercentOrange : styles.customPercentGreen)}>
-                        <div>{record.totalProject}/{numberProject}</div>
-                        <div> {record.minusTrainingProjectMoney && value < bugUnit ? (
-                            <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
-                        ) : (
-                            <></>
+                    <div
+                        className={classNames(
+                            record.totalProject < numberProject
+                                ? styles.customPercentOrange
+                                : styles.customPercentGreen,
                         )}
+                    >
+                        <div>
+                            {record.totalProject}/{numberProject}
+                        </div>
+                        <div>
+                            {' '}
+                            {record.minusTrainingProjectMoney && value < bugUnit ? (
+                                <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                            ) : (
+                                <></>
+                            )}
                         </div>
                     </div>
                 );
@@ -188,7 +259,7 @@ function RegistrationListPage() {
                                 styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={() => handlersStatisticsModal.open()}
+                            onClick={(event) => handleOnClickTraining(record, event, value)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -238,21 +309,23 @@ function RegistrationListPage() {
                                 styles.customDiv,
                                 value > bugUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={() => handlersStatisticsModal.open()}
+                            onClick={(event) => handleOnClickProject(record, event, value)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
-                            {value > bugUnit &&
-                                <div> {record.minusTrainingProjectMoney ? (
-                                    <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
-                                ) : (
-                                    <></>
-                                )}
-                                </div>}
-
+                            {value > bugUnit && (
+                                <div>
+                                    {' '}
+                                    {record.minusTrainingProjectMoney ? (
+                                        <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </Tooltip>
                 );
@@ -344,8 +417,9 @@ function RegistrationListPage() {
             />
             <StatisticsTaskModal
                 open={openedStatisticsModal}
-                close={() => handlersStatisticsModal.close()}
-                detail={data}
+                close={() => handlerCancel()}
+                detail={detail}
+                isTraining={isTraining}
             />
         </PageWrapper>
     );
