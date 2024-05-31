@@ -216,7 +216,7 @@ const DeveloperListPage = () => {
                 edit: true,
                 delete: true,
             },
-            { width: 160 },
+            { width: 200 },
         ),
     ];
 
