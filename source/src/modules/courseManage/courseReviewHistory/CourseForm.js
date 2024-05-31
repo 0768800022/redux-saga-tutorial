@@ -6,6 +6,7 @@ import CropImageField from '@components/common/form/CropImageField';
 import {
     AppConstants,
     COMBO_KIND,
+    LECTURE_SECTION,
     LESSON_KIND_SECTION,
     LESSON_STATE_DONE,
     LESSON_STATE_PROCESS,
@@ -107,7 +108,7 @@ const CourseDetailForm = (props) => {
             dataIndex: 'name',
             render: (name, record) => {
                 let styles;
-                if (record?.kind !== LESSON_KIND_SECTION) {
+                if (record?.kind != LECTURE_SECTION) {
                     styles = {
                         paddingLeft: '30px',
                     };
