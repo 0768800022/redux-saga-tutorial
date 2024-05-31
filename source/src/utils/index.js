@@ -429,7 +429,7 @@ export const orderNumber = (pagination, index) => {
     return page * DEFAULT_TABLE_ITEM_SIZE + (index + 1);
 };
 
-export function convertToCamelCase(str) {
+export function toNonAccentVietnamese(str) {
     const removeDiacritics = (text) => {
         return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
     };
@@ -580,6 +580,19 @@ export function convertToCamelCase(str) {
     const noDiacritics = removeDiacritics(str);
     const englishText = vietnameseToEnglish(noDiacritics);
     return capitalizeWords(englishText);
+}
+
+export function convertToCamelCase(str) {
+    str = str
+        .normalize('NFD') // chuyển chuỗi sang unicode tổ hợp
+        .replace(/[\u0300-\u036f]/g, ''); // xóa các ký tự dấu sau khi tách tổ hợp
+
+    str = str.replace(/[đĐ]/g, 'd');
+    str = str.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+    str = str.replace(/(\s+)/g, '');
+
+    // return
+    return str;
 }
 
 export const convertMinuteToHour = (minu) => { 
