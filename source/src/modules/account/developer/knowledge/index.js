@@ -18,7 +18,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 import style from './knowledge.module.scss';
 const message = defineMessages({
-    objectName: 'Phân quyền',
+    objectName: 'Phân quyền kiến thức',
     name: 'Tên kiến thức',
     home: 'Trang chủ',
     permission: 'Phân quyền kiến thức',
@@ -36,7 +36,6 @@ const KnowledgePermissionListPage = () => {
     const [showModal, setShowModal] = useState(false);
     const intl = useIntl();
     const [form] = useForm();
-    const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const developerId = queryParameters.get('developerId');
     const developerName = queryParameters.get('developerName');
@@ -85,12 +84,14 @@ const KnowledgePermissionListPage = () => {
             <div>
                 <ListPage
                     actionBar={
-                        <div style={{ display: 'flex', justifyContent: 'end' }}>
-                            <Button type="primary" style={style} onClick={() => setShowModal(true)}>
-                                <PlusOutlined />{' '}
-                                {intl.formatMessage(message.create, { objectName: message.objectName })}
-                            </Button>
-                        </div>
+                        mixinFuncs.hasPermission([apiConfig.knowledgePermission.create?.baseURL]) && (
+                            <div style={{ display: 'flex', justifyContent: 'end' }}>
+                                <Button type="primary" style={style} onClick={() => setShowModal(true)}>
+                                    <PlusOutlined />{' '}
+                                    {intl.formatMessage(message.create, { objectName: message.objectName })}
+                                </Button>
+                            </div>
+                        )
                     }
                     title={<span style={{ fontWeight: 'normal', fontSize: '18px' }}>{developerName}</span>}
                     baseTable={
@@ -104,7 +105,7 @@ const KnowledgePermissionListPage = () => {
                     }
                 />
                 <Modal
-                    title={<FormattedMessage defaultMessage="Thêm phân quyền" />}
+                    title={<FormattedMessage defaultMessage="Thêm phân quyền kiến thức" />}
                     open={showModal}
                     onOk={() => {
                         form.submit();
@@ -115,16 +116,16 @@ const KnowledgePermissionListPage = () => {
                                     knowledgeId: form.getFieldValue('knowledgedId'),
                                 },
                                 onCompleted: (result) => {
-                                    showSucsessMessage('Tạo phân quyền thành công!');
+                                    showSucsessMessage('Tạo phân quyền kiến thức thành công!');
                                     mixinFuncs.handleFetchList({ developerId });
                                     form.resetFields();
                                     setShowModal(false);
                                 },
                                 onError: (error) => {
                                     if (error.response.data.code === 'ERROR-KNOWLEDGE-PERMISSION-ERROR-0001') {
-                                        showErrorMessage('Phân quyền đã tồn tại');
+                                        showErrorMessage('Phân quyền kiến thức đã tồn tại');
                                     } else {
-                                        showErrorMessage('Tạo phân quyền thất bại!');
+                                        showErrorMessage('Tạo phân quyền kiến thức thất bại!');
                                     }
                                     setShowModal(false);
                                 },

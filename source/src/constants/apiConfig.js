@@ -1796,6 +1796,44 @@ const apiConfig = {
             isRequiredTenantId: true,
         },
     },
+    courseReviewHistory: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        approve: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/approve`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        reject: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/reject`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        resetRejected: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/reset-rejected`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        submit: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/submit`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
     knowledgePermission: {
         getList: {
             baseURL: `${apiTenantUrl}v1/knowledge-permission/list`,

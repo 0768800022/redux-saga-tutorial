@@ -44,6 +44,7 @@ import {
     LEADER_KIND_PROJECT,
     TASK_KIND_TESTCASE,
     TASK_LOG_BUG,
+    versionState,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -552,4 +553,12 @@ export const columnProjectTaskKind = [
             </div>
         ),
     },
+];
+export const versionStateOptions = [
+    { value: versionState.VERSION_STATE_PROCESS_ERROR, label: commonMessage.error, color: 'red' },
+    { value: versionState.VERSION_STATE_INIT, label: commonMessage.init, color: 'yellow' },
+    { value: versionState.VERSION_STATE_SUBMIT, label: commonMessage.submit, color: 'blue' },
+    { value: versionState.VERSION_STATE_APPROVE, label: commonMessage.approve, color: 'green' },
+    { value: versionState.VERSION_STATE_REJECT, label: commonMessage.reject, color: 'red' },
+    { value: versionState.VERSION_STATE_PROCESS, label: commonMessage.loading, color: 'orange' },
 ];
