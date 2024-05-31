@@ -126,8 +126,7 @@ function RegistrationListPage() {
                 `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
         );
     };
-    const handleOnClickProject = (record, event, value) => {
-        // event.preventDefault();
+    const handleOnClickProject = (record) => {
         executeFindTracking({
             params: {
                 courseId: record?.courseId,
@@ -149,8 +148,7 @@ function RegistrationListPage() {
             },
         });
     };
-    const handleOnClickTraining = (record, event, value) => {
-        // event.preventDefault();
+    const handleOnClickTraining = (record) => {
         setisTraining(true);
         executeTrainingTracking({
             params: {
@@ -259,7 +257,7 @@ function RegistrationListPage() {
                                 styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={(event) => handleOnClickTraining(record, event, value)}
+                            onClick={() => handleOnClickTraining(record)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -309,7 +307,7 @@ function RegistrationListPage() {
                                 styles.customDiv,
                                 value > bugUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-                            onClick={(event) => handleOnClickProject(record, event, value)}
+                            onClick={() => handleOnClickProject(record)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
