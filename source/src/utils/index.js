@@ -442,7 +442,7 @@ export function convertToCamelCase(str) {
     return str;
 }
 
-export const convertMinuteToHour = (minu) => { 
+export const convertMinuteToHour = (minu) => {
     let result = minu / 60;
     if (result % 1 !== 0) {
         return `${parseFloat(result.toFixed(2))}h`;
@@ -461,12 +461,28 @@ export const formatMoneyValue = (value) => {
 };
 
 export const calculateTimes = (data) => {
-    return data.reduce((acc, item) => {
-        if (item?.kind === 1) {
-            acc.upTime += item?.totalTime;
-        } else if (item?.kind === 200) {
-            acc.bugTime += item?.totalTime;
-        }
-        return acc;
-    }, { upTime: 0, bugTime: 0 });
+    return data.reduce(
+        (acc, item) => {
+            if (item?.kind === 1) {
+                acc.upTime += item?.totalTime;
+            } else if (item?.kind === 200) {
+                acc.bugTime += item?.totalTime;
+            }
+            return acc;
+        },
+        { upTime: 0, bugTime: 0 },
+    );
+};
+
+export const calculateTrainingTimes = (data) => {
+    return data.reduce(
+        (acc, item) => {
+            acc.completeTime += item?.learnCourseTime;
+            acc.assignedTime += item?.assignedCourseTime;
+            if (acc?.completeTime === 0 || acc?.assignedTime === 0) acc.differenceTime = 0;
+            else acc.differenceTime = acc?.assignedTime - acc?.completeTime;
+            return acc;
+        },
+        { completeTime: 0, assignedTime: 0, differenceTime: 0 },
+    );
 };

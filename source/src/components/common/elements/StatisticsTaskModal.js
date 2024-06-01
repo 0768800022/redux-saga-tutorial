@@ -1,4 +1,4 @@
-import { DATE_DISPLAY_FORMAT, DEFAULT_EXCEL_DATE, storageKeys } from '@constants';
+import { DATE_DISPLAY_FORMAT, DATE_FORMAT_VALUE, DEFAULT_EXCEL_DATE, DEFAULT_FORMAT, storageKeys } from '@constants';
 import useDisclosure from '@hooks/useDisclosure';
 import { Button, Flex, Modal, Space, Tag, Tooltip } from 'antd';
 import React from 'react';
@@ -7,7 +7,7 @@ import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import ListPage from '../layout/ListPage';
 import { kindTask, stateResgistrationOptions } from '@constants/masterData';
-import { calculateTimes, convertMinuteToHour, convertToCamelCase, formatMoney, formatMoneyValue } from '@utils';
+import { calculateTimes, calculateTrainingTimes, convertMinuteToHour, convertToCamelCase, convertUtcToLocalTime, formatMoney, formatMoneyValue } from '@utils';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import styles from './modal.module.scss';
 import { FileExcelOutlined } from '@ant-design/icons';
@@ -26,6 +26,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
     const { trainingUnit, bugUnit } = useTrainingUnit();
     const userAccessToken = getCacheAccessToken();
     const { upTime, bugTime } = calculateTimes(detail);
+    const { completeTime, assignedTime, differenceTime } = calculateTrainingTimes(detail);
     const formatPercentValue = (value) => {
         return formatMoney(value, {
             groupSeparator: ',',
@@ -38,13 +39,23 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
         if (isTraining)
             return [
                 {
+                    title: <FormattedMessage defaultMessage="Ngày tạo" />,
+                    dataIndex: ['createdDate'],
+                    render: (date) => {
+                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
+                        return <div>{result}</div>;
+                    },
+                    width:120,
+                },
+                {
                     title: translate.formatMessage(commonMessage.developer),
                     dataIndex: ['studentName'],
-                    width: 200,
+                    width: 150,
                 },
                 {
                     title: translate.formatMessage(commonMessage.course),
                     dataIndex: ['courseName'],
+                    width: 100,
                 },
                 {
                     title: translate.formatMessage(commonMessage.task),
@@ -96,6 +107,15 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
         else
             return [
                 {
+                    title: <FormattedMessage defaultMessage="Ngày tạo" />,
+                    dataIndex: ['createdDate'],
+                    render: (date) => {
+                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
+                        return <div>{result}</div>;
+                    },
+                    width:120,
+                },
+                {
                     title: translate.formatMessage(commonMessage.developer),
                     dataIndex: ['projectTaskInfo', 'developer', 'account', 'fullName'],
                     width: 200,
@@ -103,6 +123,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                 {
                     title: translate.formatMessage(commonMessage.project),
                     dataIndex: ['projectTaskInfo', 'project', 'name'],
+                    width: 120,
                 },
                 {
                     title: translate.formatMessage(commonMessage.task),
@@ -237,7 +258,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                             </Button>
                         </Tooltip>
                     </div>
-                    {!isTraining && (
+                    {!isTraining ? (
                         <div
                             style={{
                                 display: 'flex',
@@ -260,6 +281,42 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                                     <IconBugFilled style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
                                     <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
                                         {bugTime ? Math.ceil((bugTime / 60) * 10) / 10 : 0}h
+                                    </span>
+                                </span>
+                            </span>
+                        </div>
+                    ) : (
+                        <div
+                            style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'end',
+                                marginRight: 20,
+                            }}
+                        >
+                            <span>
+                                <span style={{ marginLeft: '10px' }}>
+                                    Yêu cầu:{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                        {assignedTime ? Math.ceil((assignedTime / 60) * 10) / 10 : 0}h{' '}
+                                        <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>
+                                            |{' '}
+                                        </span>
+                                    </span>
+                                </span>
+                                <span style={{ marginLeft: '5px' }}>
+                                    Hoàn thành:{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                        {completeTime ? Math.ceil((completeTime / 60) * 10) / 10 : 0}h{' '}
+                                        <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>
+                                            |{' '}
+                                        </span>
+                                    </span>
+                                </span>
+                                <span style={{ marginLeft: '10px' }}>
+                                    Chênh lệch:{' '}
+                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                        {differenceTime ? Math.ceil((differenceTime / 60) * 10) / 10 : 0}h
                                     </span>
                                 </span>
                             </span>

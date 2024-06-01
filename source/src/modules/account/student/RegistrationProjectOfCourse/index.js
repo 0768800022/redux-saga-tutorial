@@ -1,5 +1,5 @@
 import ListPage from '@components/common/layout/ListPage';
-import React from 'react';
+import React, { useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants, commonStatusColor, commonStatus } from '@constants';
 import apiConfig from '@constants/apiConfig';
@@ -16,43 +16,24 @@ import { DATE_FORMAT_DISPLAY } from '@constants';
 import { commonMessage } from '@locales/intl';
 import styles from '../student.module.scss';
 import AvatarField from '@components/common/form/AvatarField';
-import { UserOutlined, DeleteOutlined, CheckOutlined } from '@ant-design/icons';
-import { Button, Tag } from 'antd';
+import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Button, Modal, Tag } from 'antd';
+import useDisclosure from '@hooks/useDisclosure';
+import { CheckOutlined } from '@ant-design/icons';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import useFetch from '@hooks/useFetch';
+import useNotification from '@hooks/useNotification';
 
 const message = defineMessages({
     objectName: 'Dự án',
     registration: 'Danh sách sinh viên đăng kí khóa học',
-    status: 'Trạng thái',
-    tableColumn: {
-        action: {
-            id: 'hook.useListBase.tableColumn.action',
-            defaultMessage: 'Hành động',
-        },
-        status: {
-            title: {
-                id: 'hook.useListBase.tableColumn.status.title',
-                defaultMessage: 'Trạng thái',
-            },
-            [commonStatus.ACTIVE]: {
-                id: 'hook.useListBase.tableColumn.status.active',
-                defaultMessage: 'Hoạt động',
-            },
-            [commonStatus.PENDING]: {
-                id: 'hook.useListBase.tableColumn.status.pending',
-                defaultMessage: 'Đang chờ',
-            },
-            [commonStatus.INACTIVE]: {
-                id: 'hook.useListBase.tableColumn.status.lock',
-                defaultMessage: 'Khóa',
-            },
-        },
-    },
+    done: 'Cập nhật trạng thái dự án',
+    updateTaskSuccess: 'Cập nhật trạng thái thành công',
 });
 
 const RegistrationProjectListPage = () => {
-    const translate = useTranslate();
     const intl = useIntl();
+    const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
     const stuId = queryParameters.get('studentId');
@@ -63,6 +44,9 @@ const RegistrationProjectListPage = () => {
     const studentName = queryParameters.get('studentName');
     const registrationId = queryParameters.get('registrationId');
     const stateValues = translate.formatKeys(lectureState, ['label']);
+    const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
+    const [detail, setDetail] = useState();
+    const notification = useNotification();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -86,27 +70,26 @@ const RegistrationProjectListPage = () => {
                     registrationId: registrationId,
                 };
             };
-            funcs.additionalActionColumnButtons = () => {
-                return {
-                    done: (dataRow) => {
-                        // if (dataRow.project.status != commonStatus.PENDING ) return null;
-                        return (
-                            <BaseTooltip title={'Hoàn thành dự án'}>
-                                <Button
-                                    type="link"
-                                    // onClick={(e) => {
-                                    //     e.stopPropagation();
-                                    //     mixinFuncs.showDeleteItemConfirm(dataRow.registration.id);
-                                    // }}
-                                    style={{ padding: 0 }}
-                                >
-                                    <CheckOutlined style={{ color: 'green' }} />
-                                </Button>
-                            </BaseTooltip>
-                        );
-                    },
-                };
-            };
+            funcs.additionalActionColumnButtons = () => ({
+                changeState: (item) => {
+                    return (
+                        <BaseTooltip title={translate.formatMessage(message.done)}>
+                            <Button
+                                type="link"
+                                disabled={item.isDone}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDetail(item);
+                                    handlersStateTaskModal.open();
+                                }}
+                            >
+                                <CheckOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    );
+                },
+            });
         },
     });
     const setBreadRoutes = () => {
@@ -146,6 +129,36 @@ const RegistrationProjectListPage = () => {
             submitOnChanged: true,
         },
     ];
+    const { execute: executeUpdate } = useFetch(apiConfig.registrationProject.update, { immediate: false });
+    const handleOk = () => {
+        handlersStateTaskModal.close();
+        updateState(detail);
+    };
+    const updateState = (values) => {
+        executeUpdate({
+            data: {
+                isDone: true,
+                id: detail.id,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    mixinFuncs.getList();
+                    notification({
+                        message: intl.formatMessage(message.updateTaskSuccess),
+                    });
+                    handlersStateTaskModal.close();
+                }
+            },
+            onError: (error) => {
+                console.log(error?.response?.data?.code);
+                if (error?.response?.data?.code == 'ERROR-REGISTRATION-PROJECT-ERROR-0000') {
+                    notification({ type: 'error', message: 'Dự án đăng ký đã tồn tại! Không thể cập nhật!' });
+                } else {
+                    notification({ type: 'error', message: 'Lỗi' });
+                }
+            },
+        });
+    };
     const columns = [
         {
             title: '#',
@@ -165,21 +178,33 @@ const RegistrationProjectListPage = () => {
             dataIndex: ['project', 'name'],
             render: (name, record) => <div className={styles.customDiv}>{name}</div>,
         },
+
+        // {
+        //     title: translate.formatMessage(commonMessage.startDate),
+        //     dataIndex: ['project', 'startDate'],
+        //     render: (startDate) => {
+        //         return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(startDate)}</div>;
+        //     },
+        //     width: 140,
+        //     align: 'right',
+        // },
         {
-            title: intl.formatMessage(message.tableColumn.status.title),
-            dataIndex: ['project', 'status'],
+            title: translate.formatMessage(commonMessage.status),
+            dataIndex: ['isDone'],
+            render: (isDone) => {
+                return (
+                    <Tag style={{ padding: '0 4px', fontSize:'14px' }} color={isDone ? 'green' : 'yellow'}>
+                        {isDone ? 'Hoàn thành' : 'Chưa hoàn thành'}
+                    </Tag>
+                );
+            },
+            width: 140,
             align: 'center',
-            render: (status) => (
-                <Tag color={commonStatusColor[status]}>
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {intl.formatMessage(message.tableColumn.status[status])}
-                    </div>
-                </Tag>
-            ),
         },
+
         mixinFuncs.renderActionColumn(
             {
-                done: true,
+                changeState: mixinFuncs.hasPermission([apiConfig.registrationProject.update.baseURL]),
                 delete: true,
                 // deleteItem: true,
             },
@@ -208,6 +233,13 @@ const RegistrationProjectListPage = () => {
                     }
                 />
             </div>
+            <Modal
+                title="Thay đổi tình trạng hoàn thành"
+                open={openedStateTaskModal}
+                onOk={handleOk}
+                onCancel={() => handlersStateTaskModal.close()}
+                // data={detail || {}}
+            ></Modal>
         </PageWrapper>
     );
 };
