@@ -12,7 +12,7 @@ import { showErrorMessage } from '@services/notifyService';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
-    objectName: 'Danh sách Lịch sử trả phí',
+    objectName: 'Lịch sử trả phí',
     registration: 'Danh sách sinh viên đăng kí khóa học',
 });
 

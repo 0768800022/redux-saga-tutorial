@@ -14,3 +14,15 @@
     color: green;
     font-size: 18px;
 }
+.group-total{
+    margin-top: 10px;
+    display: flex;
+    list-style: none;
+    gap: 20px;
+    padding: 0;
+    justify-content: end;
+}
+.total-item{
+    border-right: 1px solid black;
+    padding-right: 20px;
+}

@@ -222,7 +222,7 @@ const CourseForm = (props) => {
                             ]}
                             style={{ width: '100%' }}
                             format={DATE_FORMAT_DISPLAY}
-                            required
+                            // required
                         />
                     </Col>
                 </Row>
@@ -292,7 +292,7 @@ const CourseForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <NumericField
-                            required
+                            // required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"

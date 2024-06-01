@@ -16,16 +16,15 @@ import apiConfig from '@constants/apiConfig';
 
 const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmit, setIsChangedFormValues }) => {
     const translate = useTranslate();
-    const [imageUrl, setImageUrl] = useState(null);  
+    const [imageUrl, setImageUrl] = useState(null);
     const queryParameters = new URLSearchParams(window.location.search);
     const registrationId = queryParameters.get('registrationId');
 
-    const [optionActive,setOptionActive] = useState();
+    const [optionActive, setOptionActive] = useState();
     const registrationMoneyKindValue = translate.formatKeys(registrationMoneyKind, ['label']);
     const { data: regisData } = useFetch(apiConfig.registration.getDetail, {
         immediate: true,
         pathParams: { id: registrationId },
-      
     });
     const { form, mixinFuncs, onValuesChange } = useBasicForm({
         onSubmit,
@@ -33,7 +32,7 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
     });
 
     const handleSubmit = (values) => {
-        if(values.kind == REGISTRATION_MONEY_RETURN){
+        if (values.kind == REGISTRATION_MONEY_RETURN) {
             values.money = regisData.data.totalReturnMoney;
         }
         return mixinFuncs.handleSubmit({ ...values });
@@ -58,24 +57,31 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
                     }}
                 />
                 {optionActive == REGISTRATION_MONEY_RETURN ? (
-                    <NumericField 
-                        label={<FormattedMessage defaultMessage="Số tiền" />} 
+                    <NumericField
+                        label={<FormattedMessage defaultMessage="Số tiền" />}
                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         readOnly
                         addonAfter={'đ'}
                         defaultValue={regisData.data.totalReturnMoney}
                         min={0}
                     />
-                ):(
-                    <NumericField 
-                        label={<FormattedMessage defaultMessage="Số tiền" />} 
+                ) : (
+                    <NumericField
+                        label={<FormattedMessage defaultMessage="Số tiền" />}
                         name={['money']}
                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         addonAfter={'đ'}
                         min={0}
                     />
                 )}
-               
+                <NumericField
+                    label={<FormattedMessage defaultMessage="Tiền khóa học" />}
+                    name={['money']}
+                    formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    addonAfter={'đ'}
+                    min={0}
+                />
+
                 <div className="footer-card-form">{actions}</div>
             </Card>
         </BaseForm>
