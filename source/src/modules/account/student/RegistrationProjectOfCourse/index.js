@@ -197,7 +197,7 @@ const RegistrationProjectListPage = () => {
             dataIndex: ['isDone'],
             render: (isDone) => {
                 return (
-                    <Tag style={{ padding: '0 4px' }} color={isDone ? 'green' : 'yellow'}>
+                    <Tag style={{ padding: '0 4px', fontSize:'14px' }} color={isDone ? 'green' : 'yellow'}>
                         {isDone ? 'Hoàn thành' : 'Chưa hoàn thành'}
                     </Tag>
                 );
