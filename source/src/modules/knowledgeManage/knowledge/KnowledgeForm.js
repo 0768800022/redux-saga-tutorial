@@ -43,14 +43,6 @@ const KnowledgeForm = (props) => {
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl, banner: bannerUrl });
     };
-    const {
-        data: subjects,
-        loading: getSubjectsLoading,
-        execute: executeGetSubjects,
-    } = useFetch(apiConfig.subject.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.subjectName })),
-    });
     useEffect(() => {
         lectureStateOptions.map((state, index) => {
             if (dataDetail?.state == state.value) {
@@ -263,7 +255,7 @@ const KnowledgeForm = (props) => {
                             apiConfig={apiConfig.category.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item?.categoryName })}
                             searchParams={(text) => ({ name: text, kind: categoryKinds.CATEGORY_KIND_KNOWLEDGE })}
-                            initialSearchParams={{ kind:5 }}
+                            initialSearchParams={{ kind: 5 }}
                         />
                     </Col>
                     <Col span={12}>
@@ -285,6 +277,17 @@ const KnowledgeForm = (props) => {
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             addonAfter={'đ'}
                             min={0}
+                            dependencies={['returnFee']}
+                            rules={[
+                                ({ getFieldValue }) => ({
+                                    validator(rule, value) {
+                                        if (getFieldValue('returnFee') >= value) {
+                                            return Promise.reject(['Học phí phải lớn hơn phí hoàn trả']);
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                }),
+                            ]}
                         />
                     </Col>
                     <Col span={12}>
@@ -297,6 +300,17 @@ const KnowledgeForm = (props) => {
                             addonAfter={'đ'}
                             min={0}
                             defaultValue={0}
+                            dependencies={['fee']}
+                            rules={[
+                                ({ getFieldValue }) => ({
+                                    validator(rule, value) {
+                                        if (getFieldValue('fee') < value) {
+                                            return Promise.reject(['Phí hoàn trả phải nhỏ hơn học phí']);
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                }),
+                            ]}
                         />
                     </Col>
                     <Col span={12}>
