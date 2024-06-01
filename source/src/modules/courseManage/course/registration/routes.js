@@ -64,4 +64,5 @@ export default {
         component: RegistrationProjectSavePage,
         permissions: [apiConfig.registrationProject.create.baseURL],
     },
+    
 };

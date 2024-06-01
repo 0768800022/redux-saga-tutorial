@@ -430,156 +430,16 @@ export const orderNumber = (pagination, index) => {
 };
 
 export function convertToCamelCase(str) {
-    const removeDiacritics = (text) => {
-        return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    };
+    str = str
+        .normalize('NFD') // chuyển chuỗi sang unicode tổ hợp
+        .replace(/[\u0300-\u036f]/g, ''); // xóa các ký tự dấu sau khi tách tổ hợp
 
-    // Bước 2: Thay thế các ký tự đặc biệt tiếng Việt bằng ký tự tiếng Anh
-    const vietnameseToEnglish = (text) => {
-        const vietnameseMap = {
-            À: 'A',
-            Á: 'A',
-            Â: 'A',
-            Ã: 'A',
-            È: 'E',
-            É: 'E',
-            Ê: 'E',
-            Ì: 'I',
-            Í: 'I',
-            Ò: 'O',
-            Ó: 'O',
-            Ô: 'O',
-            Õ: 'O',
-            Ù: 'U',
-            Ú: 'U',
-            Ý: 'Y',
-            Đ: 'D',
-            à: 'a',
-            á: 'a',
-            â: 'a',
-            ã: 'a',
-            è: 'e',
-            é: 'e',
-            ê: 'e',
-            ì: 'i',
-            í: 'i',
-            ò: 'o',
-            ó: 'o',
-            ô: 'o',
-            õ: 'o',
-            ù: 'u',
-            ú: 'u',
-            ý: 'y',
-            đ: 'd',
-            Ă: 'A',
-            ă: 'a',
-            Ĩ: 'I',
-            ĩ: 'i',
-            Ũ: 'U',
-            ũ: 'u',
-            Ơ: 'O',
-            ơ: 'o',
-            Ư: 'U',
-            ư: 'u',
-            Ạ: 'A',
-            ạ: 'a',
-            Ả: 'A',
-            ả: 'a',
-            Ấ: 'A',
-            ấ: 'a',
-            Ầ: 'A',
-            ầ: 'a',
-            Ẩ: 'A',
-            ẩ: 'a',
-            Ẫ: 'A',
-            ẫ: 'a',
-            Ậ: 'A',
-            ậ: 'a',
-            Ắ: 'A',
-            ắ: 'a',
-            Ằ: 'A',
-            ằ: 'a',
-            Ẳ: 'A',
-            ẳ: 'a',
-            Ẵ: 'A',
-            ẵ: 'a',
-            Ặ: 'A',
-            ặ: 'a',
-            Ẹ: 'E',
-            ẹ: 'e',
-            Ẻ: 'E',
-            ẻ: 'e',
-            Ẽ: 'E',
-            ẽ: 'e',
-            Ế: 'E',
-            ế: 'e',
-            Ề: 'E',
-            ề: 'e',
-            Ể: 'E',
-            ể: 'e',
-            Ễ: 'E',
-            ễ: 'e',
-            Ệ: 'E',
-            ệ: 'e',
-            Ỉ: 'I',
-            ỉ: 'i',
-            Ị: 'I',
-            ị: 'i',
-            Ọ: 'O',
-            ọ: 'o',
-            Ỏ: 'O',
-            ỏ: 'o',
-            Ố: 'O',
-            ố: 'o',
-            Ồ: 'O',
-            ồ: 'o',
-            Ổ: 'O',
-            ổ: 'o',
-            Ỗ: 'O',
-            ỗ: 'o',
-            Ộ: 'O',
-            ộ: 'o',
-            Ớ: 'O',
-            ớ: 'o',
-            Ờ: 'O',
-            ờ: 'o',
-            Ở: 'O',
-            ở: 'o',
-            Ỡ: 'O',
-            ỡ: 'o',
-            Ợ: 'O',
-            ợ: 'o',
-            Ụ: 'U',
-            ụ: 'u',
-            Ủ: 'U',
-            ủ: 'u',
-            Ứ: 'U',
-            ứ: 'u',
-            Ừ: 'U',
-            ừ: 'u',
-            Ử: 'U',
-            ử: 'u',
-            Ữ: 'U',
-            ữ: 'u',
-            Ự: 'U',
-            ự: 'u',
-        };
-        return text
-            .split('')
-            .map((char) => vietnameseMap[char] || char)
-            .join('');
-    };
+    str = str.replace(/[đĐ]/g, 'd');
+    str = str.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase());
+    str = str.replace(/(\s+)/g, '');
 
-    const capitalizeWords = (text) => {
-        return text
-            .split(' ')
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-            .join('');
-    };
-
-    const noDiacritics = removeDiacritics(str);
-    const englishText = vietnameseToEnglish(noDiacritics);
-    return capitalizeWords(englishText);
+    // return
+    return str;
 }
 
 export const convertMinuteToHour = (minu) => { 
@@ -598,4 +458,15 @@ export const formatMoneyValue = (value) => {
         currentcyPosition: 'BACK',
         currentDecimal: '2',
     });
+};
+
+export const calculateTimes = (data) => {
+    return data.reduce((acc, item) => {
+        if (item?.kind === 1) {
+            acc.upTime += item?.totalTime;
+        } else if (item?.kind === 200) {
+            acc.bugTime += item?.totalTime;
+        }
+        return acc;
+    }, { upTime: 0, bugTime: 0 });
 };

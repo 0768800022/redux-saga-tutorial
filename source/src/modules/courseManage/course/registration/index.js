@@ -7,7 +7,7 @@ import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
 import { Avatar, Button, Tag, Tooltip } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, generatePath, useLocation, useParams } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import { date } from 'yup/lib/locale';
@@ -21,6 +21,10 @@ import { commonMessage } from '@locales/intl';
 import { convertMinuteToHour, formatMoney, formatMoneyValue } from '@utils';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import classNames from 'classnames';
+import useDisclosure from '@hooks/useDisclosure';
+import StatisticsTaskModal from '@components/common/elements/StatisticsTaskModal';
+import useFetch from '@hooks/useFetch';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'Đăng kí khoá học',
@@ -38,9 +42,18 @@ function RegistrationListPage() {
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
-    const { trainingUnit, bugUnit } = useTrainingUnit();
+    const { trainingUnit, bugUnit, numberProject } = useTrainingUnit();
     localStorage.setItem('pathPrev', location.search);
     const navigate = useNavigate();
+    const [openedStatisticsModal, handlersStatisticsModal] = useDisclosure(false);
+    const [detail, setDetail] = useState([]);
+    const [isTraining, setisTraining] = useState(false);
+    const { execute: executeFindTracking } = useFetch(apiConfig.projectTaskLog.findAllTrackingLog, {
+        immediate: false,
+    });
+    const { execute: executeTrainingTracking } = useFetch(apiConfig.task.studentDetailCourseTask, {
+        immediate: false,
+    });
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: apiConfig.registration,
         options: {
@@ -78,7 +91,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.registrationMoneyListPage.path +
-                                    `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
+                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                                 );
                             }}
                         >
@@ -95,7 +108,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.courseRegistrationProjectListPage.path +
-                                    `?registrationId=${id}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&studentId=${studentId}&studentName=${studentName}
+                                        `?registrationId=${id}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&studentId=${studentId}&studentName=${studentName}
                                             `,
                                 );
                             }}
@@ -111,8 +124,60 @@ function RegistrationListPage() {
         event.preventDefault();
         navigate(
             routes.studentActivityCourseListPage.path +
-            `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
+                `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
         );
+    };
+    const handleOnClickProject = (record) => {
+        mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
+            executeFindTracking({
+                params: {
+                    courseId: record?.courseId,
+                    studentId: record?.studentId,
+                },
+                onCompleted: (res) => {
+                    if (res?.data?.content) {
+                        const updatedData = res.data.content.map((item) => ({
+                            ...item,
+                            courseId: record?.courseId,
+                            studentId: record?.studentId,
+                        }));
+                        setDetail(updatedData);
+                    }
+                    handlersStatisticsModal.open();
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            });
+    };
+    const handleOnClickTraining = (record) => {
+        setisTraining(true);
+        mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+            executeTrainingTracking({
+                params: {
+                    courseId: record?.courseId,
+                    studentId: record?.studentId,
+                },
+                onCompleted: (res) => {
+                    if (res?.data?.content) {
+                        const updatedData = res.data.content.map((item) => ({
+                            ...item,
+                            courseId: record?.courseId,
+                            studentId: record?.studentId,
+                        }));
+                        setDetail(updatedData);
+                    }
+                    handlersStatisticsModal.open();
+                },
+                onError: (error) => {
+                    console.log(error);
+                },
+            });
+    };
+    const handlerCancel = () => {
+        setDetail([]);
+        setisTraining(false);
+        handlersStatisticsModal.close();
     };
 
     const columns = [
@@ -128,7 +193,36 @@ function RegistrationListPage() {
         {
             title: translate.formatMessage(commonMessage.totalProject),
             align: 'center',
-            dataIndex: 'totalProject',
+            // dataIndex: 'totalProject',
+            render: (record) => {
+                let value;
+                if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
+                    value = 0;
+                } else {
+                    value = (record.totalTimeBug / record.totalTimeWorking - 1) * 100;
+                }
+                return (
+                    <div
+                        className={classNames(
+                            record.totalProject < numberProject
+                                ? styles.customPercentOrange
+                                : styles.customPercentGreen,
+                        )}
+                    >
+                        <div>
+                            {record.totalProject}/{numberProject}
+                        </div>
+                        <div>
+                            {' '}
+                            {record.minusTrainingProjectMoney && value < bugUnit ? (
+                                <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                            ) : (
+                                <></>
+                            )}
+                        </div>
+                    </div>
+                );
+            },
         },
         {
             title: translate.formatMessage(commonMessage.rateTraining),
@@ -163,9 +257,11 @@ function RegistrationListPage() {
                     >
                         <div
                             className={classNames(
+                                mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
+                                    styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
-
+                            onClick={() => handleOnClickTraining(record)}
                         >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
@@ -173,7 +269,7 @@ function RegistrationListPage() {
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
                             {record.minusTrainingMoney > 0 && (
-                                <span> Trừ: {formatMoneyValue(record.minusTrainingMoney)}</span>
+                                <span>-{formatMoneyValue(record.minusTrainingMoney)}</span>
                             )}
                         </div>
                     </Tooltip>
@@ -188,7 +284,7 @@ function RegistrationListPage() {
                 if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
                     value = 0;
                 } else {
-                    value = (record.totalTimeBug / record.totalTimeWorking) * 100;
+                    value = (record.totalTimeBug / record.totalTimeWorking - 1) * 100;
                 }
                 return (
                     <Tooltip
@@ -210,16 +306,28 @@ function RegistrationListPage() {
                             </div>
                         }
                     >
-                        <div className={classNames(value > bugUnit ? styles.customPercent : styles.customPercentOrange)}>
+                        <div
+                            className={classNames(
+                                mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
+                                    styles.customDiv,
+                                value > bugUnit ? styles.customPercent : styles.customPercentOrange,
+                            )}
+                            onClick={() => handleOnClickProject(record)}
+                        >
                             {value > 0 ? (
                                 <div>-{formatPercentValue(parseFloat(value))}</div>
                             ) : (
                                 <div className={styles.customPercentGreen}>Tốt</div>
                             )}
-                            {record.minusTrainingProjectMoney ? (
-                                <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
-                            ) : (
-                                <></>
+                            {value > bugUnit && (
+                                <div>
+                                    {' '}
+                                    {record.minusTrainingProjectMoney ? (
+                                        <span> Trừ: {formatMoneyValue(record.minusTrainingProjectMoney)}</span>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </div>
                             )}
                         </div>
                     </Tooltip>
@@ -250,15 +358,15 @@ function RegistrationListPage() {
             },
         },
         courseStatus == 1 &&
-        mixinFuncs.renderActionColumn(
-            {
-                registration: mixinFuncs.hasPermission([apiConfig.registrationProject.getList?.baseURL]),
-                money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]),
-                edit: true,
-                delete: true,
-            },
-            { width: 180 },
-        ),
+            mixinFuncs.renderActionColumn(
+                {
+                    registration: mixinFuncs.hasPermission([apiConfig.registrationProject.getList?.baseURL]),
+                    money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]),
+                    edit: true,
+                    delete: true,
+                },
+                { width: 180 },
+            ),
     ].filter(Boolean);
 
     const searchFields = [
@@ -309,6 +417,12 @@ function RegistrationListPage() {
                         columns={columns}
                     />
                 }
+            />
+            <StatisticsTaskModal
+                open={openedStatisticsModal}
+                close={() => handlerCancel()}
+                detail={detail}
+                isTraining={isTraining}
             />
         </PageWrapper>
     );

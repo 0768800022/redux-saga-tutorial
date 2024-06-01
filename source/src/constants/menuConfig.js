@@ -55,6 +55,12 @@ const navMenuConfig = [
                 path: generatePath(routes.courseRequestListPage.path, {}),
                 permission: apiConfig.subject.getList.baseURL,
             },
+            {
+                label: <FormattedMessage defaultMessage="Khoá học chờ xét duyệt" />,
+                key: 'khoa-hoc-cho-xet-duyet',
+                path: generatePath(routes.courseReviewHistoryListPage.path, {}),
+                permission: apiConfig.courseReviewHistory.getList.baseURL,
+            },
             // {
             //     label: <FormattedMessage defaultMessage="Kết quả đào tạo" />,
             //     key: "result-traning",

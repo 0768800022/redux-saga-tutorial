@@ -31,6 +31,8 @@ import categoryRoutesRole from '@modules/category/categoryRole/routes';
 import registerSalaryPeriod from "@modules/projectManage/registerSalaryPeriod/routes";
 import TrainingResultRouter from '@modules/TrainingResult/routes';
 import knowledgeManageRoutes from '@modules/knowledgeManage/routes';
+import CourseReviewHistoryRouter from '@modules/courseManage/courseReviewHistory/routes';
+import DeveloperKnowledgeRouter from '@modules/courseManage/course/developer/routes';
 
 /*
     auth
@@ -91,6 +93,8 @@ const routes = {
     ...registerSalaryPeriod,
     ...TrainingResultRouter,
     ...knowledgeManageRoutes,
+    ...CourseReviewHistoryRouter,
+    ...DeveloperKnowledgeRouter,
     // keep this at last
     //
     notFound: {

@@ -733,6 +733,13 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+
+        studentDetailCourseTask: {
+            baseURL: `${apiTenantUrl}v1/task/tracking-logs`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     project: {
         getList: {
@@ -1295,6 +1302,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        findAllTrackingLog: {
+            baseURL: `${apiTenantUrl}v1/project-task-log/tracking-logs`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     companySeek: {
         getList: {
@@ -1779,6 +1792,44 @@ const apiConfig = {
         myTraniningResult: {
             baseURL: `${apiTenantUrl}v1/training-result/my-training-result`,
             method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+    },
+    courseReviewHistory: {
+        getList: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/list`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        approve: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/approve`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        getById: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/get/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        reject: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/reject`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        resetRejected: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/reset-rejected`,
+            method: 'POST',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        submit: {
+            baseURL: `${apiTenantUrl}v1/course-review-history/submit`,
+            method: 'POST',
             headers: baseHeader,
             isRequiredTenantId: true,
         },

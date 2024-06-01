@@ -69,6 +69,28 @@ const CourseListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
+                    developer: ({ id, name, state, status,knowledge }) => {
+                        if(knowledge){
+                            return(
+                                <BaseTooltip title={translate.formatMessage(commonMessage.developer)}>
+                                    <Button
+                                        type="link"
+                                        style={{ padding: 0 }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(
+                                                routes.developerKnowledgeListPage.path +
+                                                    `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}&knowledgeId=${knowledge.id}`,
+                                            );
+                                        }}
+                                    >
+                                        <UserOutlined />
+                                    </Button>
+                                </BaseTooltip>
+                            );
+                        }
+                        
+                    },
                     registration: ({ id, name, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
                             <Button
@@ -291,6 +313,7 @@ const CourseListPage = () => {
         !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
+                developer:mixinFuncs.hasPermission([apiConfig.knowledgePermission.getList.baseURL]),
                 review:mixinFuncs.hasPermission([apiConfig.review.star?.baseURL, apiConfig.review.listReviews?.baseURL]),
                 registration: !leaderName && mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]),
                 task: mixinFuncs.hasPermission([apiConfig.task.getList?.baseURL]),
