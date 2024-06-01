@@ -27,7 +27,7 @@ import useNotification from '@hooks/useNotification';
 const message = defineMessages({
     objectName: 'Dự án',
     registration: 'Danh sách sinh viên đăng kí khóa học',
-    done: 'Cập nhật trạng thái dự án',
+    done: 'Hoàn thành dự án',
     updateTaskSuccess: 'Cập nhật trạng thái thành công',
 });
 
@@ -234,7 +234,7 @@ const RegistrationProjectListPage = () => {
                 />
             </div>
             <Modal
-                title="Thay đổi tình trạng hoàn thành"
+                title="Thay đổi trạng thái hoàn thành dự án"
                 open={openedStateTaskModal}
                 onOk={handleOk}
                 onCancel={() => handlersStateTaskModal.close()}

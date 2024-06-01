@@ -138,16 +138,17 @@ const CourseListPage = () => {
 
         return breadRoutes;
     };
+    const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const searchFields = [
         {
             key: 'state',
             placeholder: translate.formatMessage(commonMessage.state),
             type: FieldTypes.SELECT,
-            options: stateValues,
+            options: stateRegistration,
             submitOnChanged: true,
+            colSpan: 4,
         },
     ];
-    const stateRegistration = translate.formatKeys(stateResgistrationOptions, ['label']);
     const formatPercentValue = (value) => {
         return formatMoney(value, {
             groupSeparator: ',',
