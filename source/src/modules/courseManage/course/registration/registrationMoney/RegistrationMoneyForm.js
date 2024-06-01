@@ -74,13 +74,13 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
                         min={0}
                     />
                 )}
-                <NumericField
+                {/* <NumericField
                     label={<FormattedMessage defaultMessage="Tiền khóa học" />}
                     name={['money']}
                     formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     addonAfter={'đ'}
                     min={0}
-                />
+                /> */}
 
                 <div className="footer-card-form">{actions}</div>
             </Card>
