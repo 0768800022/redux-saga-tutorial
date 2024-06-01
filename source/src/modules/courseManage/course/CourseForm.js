@@ -277,17 +277,17 @@ const CourseForm = (props) => {
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             addonAfter={'đ'}
                             min={0}
-                            dependencies={['returnFee']}
-                            rules={[
-                                ({ getFieldValue }) => ({
-                                    validator(rule, value) {
-                                        if (getFieldValue('returnFee') >= value) {
-                                            return Promise.reject(['Học phí phải lớn hơn phí hoàn trả']);
-                                        }
-                                        return Promise.resolve();
-                                    },
-                                }),
-                            ]}
+                            // dependencies={['returnFee']}
+                            // rules={[
+                            //     ({ getFieldValue }) => ({
+                            //         validator(rule, value) {
+                            //             if (getFieldValue('returnFee') >= value) {
+                            //                 return Promise.reject(['Học phí phải lớn hơn phí hoàn trả']);
+                            //             }
+                            //             return Promise.resolve();
+                            //         },
+                            //     }),
+                            // ]}
                         />
                     </Col>
                     <Col span={12}>
@@ -300,17 +300,17 @@ const CourseForm = (props) => {
                             addonAfter={'đ'}
                             min={0}
                             defaultValue={0}
-                            // dependencies={['fee']}
-                            // rules={[
-                            //     ({ getFieldValue }) => ({
-                            //         validator(rule, value) {
-                            //             if (getFieldValue('fee') < value) {
-                            //                 return Promise.reject(['Phí hoàn trả phải nhỏ hơn học phí']);
-                            //             }
-                            //             return Promise.resolve();
-                            //         },
-                            //     }),
-                            // ]}
+                            dependencies={['fee']}
+                            rules={[
+                                ({ getFieldValue }) => ({
+                                    validator(rule, value) {
+                                        if (getFieldValue('fee') < value) {
+                                            return Promise.reject(['Phí hoàn trả phải nhỏ hơn học phí']);
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                }),
+                            ]}
                         />
                     </Col>
                     <Col span={12}>

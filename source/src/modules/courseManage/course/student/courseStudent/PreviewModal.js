@@ -138,6 +138,17 @@ const PreviewModal = ({ open, onCancel, detail }) => {
                                 isCurrency
                                 readOnly
                                 defaultValue={detail?.returnFee}
+                                dependencies={['fee']}
+                                rules={[
+                                    ({ getFieldValue }) => ({
+                                        validator(rule, value) {
+                                            if (getFieldValue('fee') < value) {
+                                                return Promise.reject(['Phí hoàn trả phải nhỏ hơn học phí']);
+                                            }
+                                            return Promise.resolve();
+                                        },
+                                    }),
+                                ]}
                             />
                         </Col>
                     </Row>
