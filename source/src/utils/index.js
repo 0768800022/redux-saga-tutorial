@@ -479,8 +479,10 @@ export const calculateTrainingTimes = (data) => {
         (acc, item) => {
             acc.completeTime += item?.learnCourseTime;
             acc.assignedTime += item?.assignedCourseTime;
-            if (acc?.completeTime === 0 || acc?.assignedTime === 0) acc.differenceTime = 0;
-            else acc.differenceTime = acc?.assignedTime - acc?.completeTime;
+            acc.differenceTime +=
+                item?.learnCourseTime === 0 || item?.assignedCourseTime === 0
+                    ? 0
+                    : item?.assignedCourseTime - item?.learnCourseTime;
             return acc;
         },
         { completeTime: 0, assignedTime: 0, differenceTime: 0 },
