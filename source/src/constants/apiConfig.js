@@ -286,6 +286,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getDetail: {
+            baseURL: `${apiTenantUrl}v1/registration/detail/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     registrationProject: {
         getList: {
