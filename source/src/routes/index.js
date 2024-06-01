@@ -2,7 +2,7 @@ import PageNotFound from '@components/common/page/PageNotFound';
 import categoryRoutesEdu from '@modules/category/categoryEdu/routes';
 import categoryRoutesGen from '@modules/category/categoryGen/routes';
 import categoryRoutesMajor from '@modules/category/categoryMajor/routes';
-import categoryRoutesKnowledge from '@modules/category/categoryKnowledge/routes';
+// import categoryRoutesKnowledge from '@modules/knowledgeManage/categoryKnowledge/routes';
 
 import studentRoutes from '@modules/account/student/routes';
 import Dashboard from '@modules/entry';
@@ -30,6 +30,8 @@ import StoryTaskRoutes from '@modules/projectManage/project/storyTask/routes';
 import categoryRoutesRole from '@modules/category/categoryRole/routes';
 import registerSalaryPeriod from "@modules/projectManage/registerSalaryPeriod/routes";
 import TrainingResultRouter from '@modules/TrainingResult/routes';
+import knowledgeManageRoutes from '@modules/knowledgeManage/routes';
+
 /*
     auth
         + null: access login and not login
@@ -67,7 +69,7 @@ const routes = {
     ...categoryRoutesEdu,
     ...categoryRoutesGen,
     ...categoryRoutesMajor,
-    ...categoryRoutesKnowledge,
+    // ...categoryRoutesKnowledge,
     ...registrationRoutes,
     ...studentRoutes,
     ...leaderRoutes,
@@ -88,6 +90,7 @@ const routes = {
     ...categoryRoutesRole,
     ...registerSalaryPeriod,
     ...TrainingResultRouter,
+    ...knowledgeManageRoutes,
     // keep this at last
     //
     notFound: {

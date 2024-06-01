@@ -1,6 +1,13 @@
 import { BulbOutlined } from '@ant-design/icons';
 import routes from '@routes';
-import { IconBuildingCommunity, IconClipboardText, IconSchool, IconSettings, IconUserBolt, IconBook2 } from '@tabler/icons-react';
+import {
+    IconBuildingCommunity,
+    IconClipboardText,
+    IconSchool,
+    IconSettings,
+    IconUserBolt,
+    IconBook2,
+} from '@tabler/icons-react';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { generatePath } from 'react-router-dom';
@@ -176,17 +183,13 @@ const navMenuConfig = [
                     kind: categoryKind.knowledge.value,
                 }),
             },
-            // {
-            //     label: <FormattedMessage defaultMessage="Phân quyền" />,
-            //     key: 'permission-knowledge-category',
-            //     path: generatePath(routes.permissionListPageKnowledge.path, {
-            //         kind: categoryKind.knowledge.value,
-            //     }),
-            // },
+            {
+                label: <FormattedMessage defaultMessage="Kiến thức" />,
+                key: 'knowledge',
+                path: generatePath(routes.knowledgeListPage.path, {}),
+            },
         ],
     },
-
-
 
     ///////////////////// LEADER MENU /////////////////////////////
     // {

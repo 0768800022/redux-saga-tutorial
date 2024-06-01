@@ -15,7 +15,6 @@ const message = defineMessages({
     objectName: 'Dự án',
     student: 'Dự án',
     registration: 'Danh sách sinh viên đăng kí khóa học',
-
 });
 
 const RegistrationProjectSavePage = () => {
@@ -29,6 +28,11 @@ const RegistrationProjectSavePage = () => {
     const courseStatus = queryParameters.get('courseStatus');
     const studentName = queryParameters.get('studentName');
     const registrationId = queryParameters.get('registrationId');
+    const pathStudent1 = `?studentId=${stuId}&studentName=${studentName}`;
+    const pathStudent2 = `?studentId=${stuId}&studentName=${studentName}&registrationId=${registrationId}&courseName=${courseName}`;
+    const pathCourse1 = `?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
+    const pathCourse2 = `?registrationId=${registrationId}&courseName=${courseName}&courseId=${courseId}&courseState=${courseState}&courseStatus=${courseStatus}`;
+
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
             getById: apiConfig.registrationProject.getById,
@@ -36,7 +40,10 @@ const RegistrationProjectSavePage = () => {
             update: apiConfig.registrationProject.update,
         },
         options: {
-            getListUrl: routes.studentCourseRegistrationProjectListPage.path,
+            getListUrl:
+                courseId != 'null'
+                    ? routes.courseRegistrationProjectListPage.path + pathCourse2
+                    : routes.studentCourseRegistrationProjectListPage.path + pathStudent2,
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
@@ -64,12 +71,6 @@ const RegistrationProjectSavePage = () => {
         },
     });
     const setBreadRoutes = () => {
-        const pathDefault = `?studentId=${stuId}&studentName=${studentName}`;
-        const pathDefault2 = `?studentId=${stuId}&studentName=${studentName}&registrationId=${registrationId}&courseName=${courseName}`;
-
-        const pathCourse1 = `?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
-        const pathCourse2 = `?registrationId=${registrationId}&courseName=${courseName}&courseId=${courseId}&courseState=${courseState}&courseStatus=${courseStatus}`;
-
         const breadRoutes = [];
         if (courseId != 'null') {
             breadRoutes.push({
@@ -91,11 +92,11 @@ const RegistrationProjectSavePage = () => {
             });
             breadRoutes.push({
                 breadcrumbName: courseName,
-                path: routes.studentCourseListPage.path + pathDefault,
+                path: routes.studentCourseListPage.path + pathStudent1,
             });
             breadRoutes.push({
                 breadcrumbName: translate.formatMessage(commonMessage.registrationProject),
-                path: routes.studentCourseRegistrationProjectListPage.path + pathDefault2,
+                path: routes.studentCourseRegistrationProjectListPage.path + pathStudent2,
             });
         }
         breadRoutes.push({

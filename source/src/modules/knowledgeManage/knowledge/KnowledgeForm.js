@@ -18,7 +18,7 @@ import useTranslate from '@hooks/useTranslate';
 import NumericField from '@components/common/form/NumericField';
 import CropImageField from '@components/common/form/CropImageField';
 
-const CourseForm = (props) => {
+const KnowledgeForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const translate = useTranslate();
     const [isDisableStartDate, setIsDisableStartDate] = useState(false);
@@ -317,4 +317,4 @@ const CourseForm = (props) => {
     );
 };
 
-export default CourseForm;
+export default KnowledgeForm;
