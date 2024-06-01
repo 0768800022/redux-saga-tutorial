@@ -58,6 +58,10 @@ function RegistrationMoneySavePage() {
                     showErrorMessage('Tiền nhận không được vượt quá tiền của khoá học');
                     mixinFuncs.setSubmit(false);
                 }
+                else{
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });
