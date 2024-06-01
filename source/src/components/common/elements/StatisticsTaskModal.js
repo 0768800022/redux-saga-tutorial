@@ -7,7 +7,15 @@ import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import ListPage from '../layout/ListPage';
 import { kindTask, stateResgistrationOptions } from '@constants/masterData';
-import { calculateTimes, calculateTrainingTimes, convertMinuteToHour, convertToCamelCase, convertUtcToLocalTime, formatMoney, formatMoneyValue } from '@utils';
+import {
+    calculateTimes,
+    calculateTrainingTimes,
+    convertMinuteToHour,
+    convertToCamelCase,
+    convertUtcToLocalTime,
+    formatMoney,
+    formatMoneyValue,
+} from '@utils';
 import useTrainingUnit from '@hooks/useTrainingUnit';
 import styles from './modal.module.scss';
 import { FileExcelOutlined } from '@ant-design/icons';
@@ -42,10 +50,10 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                     title: <FormattedMessage defaultMessage="Ngày tạo" />,
                     dataIndex: ['createdDate'],
                     render: (date) => {
-                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
+                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT,DEFAULT_FORMAT);
                         return <div>{result}</div>;
                     },
-                    width:120,
+                    width: 180,
                 },
                 {
                     title: translate.formatMessage(commonMessage.developer),
@@ -110,10 +118,10 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                     title: <FormattedMessage defaultMessage="Ngày tạo" />,
                     dataIndex: ['createdDate'],
                     render: (date) => {
-                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
+                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT,DEFAULT_FORMAT);
                         return <div>{result}</div>;
                     },
-                    width:120,
+                    width: 180,
                 },
                 {
                     title: translate.formatMessage(commonMessage.developer),
@@ -268,21 +276,25 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                             }}
                         >
                             <span>
-                                <span style={{ marginLeft: '5px' }}>
-                                    <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
-                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                        {upTime ? Math.ceil((upTime / 60) * 10) / 10 : 0}h{' '}
-                                        <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>
-                                            |{' '}
+                                <Tooltip title={'Tổng thời gian hoàn thành task'} placement="bottom">
+                                    <span style={{ marginLeft: '5px' }}>
+                                        <IconAlarm style={{ marginBottom: '-5px' }} />:{' '}
+                                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                            {upTime ? Math.ceil((upTime / 60) * 10) / 10 : 0}h{' '}
+                                            <span style={{ fontWeight: 'bold', fontSize: '17px', marginLeft: '15px' }}>
+                                                |{' '}
+                                            </span>
                                         </span>
                                     </span>
-                                </span>
-                                <span style={{ marginLeft: '10px' }}>
-                                    <IconBugFilled style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
-                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
-                                        {bugTime ? Math.ceil((bugTime / 60) * 10) / 10 : 0}h
+                                </Tooltip>
+                                <Tooltip title={'Tổng thời gian hoàn thành bug'} placement="bottom">
+                                    <span style={{ marginLeft: '10px' }}>
+                                        <IconBugFilled style={{ marginBottom: '-5px', color: 'red' }} />:{' '}
+                                        <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                            {bugTime ? Math.ceil((bugTime / 60) * 10) / 10 : 0}h
+                                        </span>
                                     </span>
-                                </span>
+                                </Tooltip>
                             </span>
                         </div>
                     ) : (
