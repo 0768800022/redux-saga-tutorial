@@ -1,53 +1,49 @@
+import { UserOutlined } from '@ant-design/icons';
+import AvatarField from '@components/common/form/AvatarField';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect,useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
+import BaseTable from '@components/common/table/BaseTable';
 import {
     AppConstants,
+    categoryKinds,
     DATE_DISPLAY_FORMAT,
     DATE_FORMAT_DISPLAY,
-    DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
 } from '@constants';
 import apiConfig from '@constants/apiConfig';
+import { FieldTypes } from '@constants/formConfig';
+import { statusOptions } from '@constants/masterData';
+import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import BaseTable from '@components/common/table/BaseTable';
-import dayjs from 'dayjs';
-import { TeamOutlined, BookOutlined, UserOutlined,CommentOutlined } from '@ant-design/icons';
-import { Avatar, Button, Flex, Tag } from 'antd';
-import { useLocation, useNavigate } from 'react-router-dom';
-import routes from '@routes';
-import route from '@modules/task/routes';
-import { convertDateTimeToString } from '@utils/dayHelper';
-import { formSize, lectureState, statusOptions } from '@constants/masterData';
-import { FieldTypes } from '@constants/formConfig';
-import { formatMoney } from '@utils';
-import { BaseTooltip } from '@components/common/form/BaseTooltip';
-import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
-import useDisclosure from '@hooks/useDisclosure';
-import useFetch from '@hooks/useFetch';
-import ReviewListModal from '@modules/review/student/ReviewListModal';
+import routes from '@routes';
+import { formatMoney } from '@utils';
+import { Button, Flex } from 'antd';
+import dayjs from 'dayjs';
+import React from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
 import styles from './knowledge.module.scss';
-import useMoneyUnit from '@hooks/useMoneyUnit';
-import { render } from '@testing-library/react';
 const message = defineMessages({
-    objectName: 'Khoá học',
+    objectName: 'Kiến thức',
 });
 
 const KnowledgeListPage = () => {
     const translate = useTranslate();
-    const stateValues = translate.formatKeys(lectureState, ['label']);
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const leaderName = queryParameters.get('leaderName');
-    const [checkReivew,setCheckReview] = useState(true);
-    const [courseId, setCourseId] = useState();
-    const moneyUnit = useMoneyUnit();
-    const [openReviewModal, handlersReviewModal] = useDisclosure(false);
 
-    const location = useLocation();
+    const { data: dataListKnowledge } = useFetch(apiConfig.category.getList, {
+        params: { kind: categoryKinds.CATEGORY_KIND_KNOWLEDGE },
+        immediate: true,
+        mappingData: (data) =>
+            data.data.content.map((item) => {
+                return { label: item.categoryName, value: item.id };
+            }),
+    });
     const navigate = useNavigate();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
@@ -57,6 +53,14 @@ const KnowledgeListPage = () => {
                 objectName: translate.formatMessage(message.objectName),
             },
             override: (funcs) => {
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({
+                        ...params,
+                        isKnowledge: true,
+                    });
+                };
+
                 funcs.changeFilter = (filter) => {
                     const leaderId = queryParams.get('leaderId');
                     const leaderName = queryParams.get('leaderName');
@@ -69,24 +73,27 @@ const KnowledgeListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
-                    review: ({ id, name, subject, state, status,item }) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
-                            <Button
-                                type="link"
-                                disabled={state !== 3}
-                                style={{ padding: 0 }}
-                                onClick={(e) => {
-                                    setCourseId(id);
-                                    getListReview(id);
-                                    getStarReview(id);
-                                    e.stopPropagation();
-                                    handlersReviewModal.open();
-                                }}
-                            >
-                                <CommentOutlined />
-                            </Button>
-                        </BaseTooltip>
-                    ),
+                    developer: ({ id, name, state, status, knowledge }) => {
+                        if (knowledge) {
+                            return (
+                                <BaseTooltip title={translate.formatMessage(commonMessage.developer)}>
+                                    <Button
+                                        type="link"
+                                        style={{ padding: 0 }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(
+                                                routes.developerKnowledgeListPage.path +
+                                                    `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}&knowledgeId=${knowledge.id}`,
+                                            );
+                                        }}
+                                    >
+                                        <UserOutlined />
+                                    </Button>
+                                </BaseTooltip>
+                            );
+                        }
+                    },
                 });
             },
         });
@@ -101,12 +108,13 @@ const KnowledgeListPage = () => {
             key: 'name',
             placeholder: translate.formatMessage(commonMessage.courseName),
         },
-        // {
-        //     key: 'state',
-        //     placeholder: translate.formatMessage(commonMessage.state),
-        //     type: FieldTypes.SELECT,
-        //     options: stateValues,
-        // },
+        {
+            key: 'knowledgeId',
+            type: FieldTypes.SELECT,
+            options: dataListKnowledge,
+            submitOnChanged: true,
+            placeholder: translate.formatMessage(commonMessage.catalogue),
+        },
         !leaderName && {
             key: 'status',
             placeholder: translate.formatMessage(commonMessage.status),
@@ -115,36 +123,6 @@ const KnowledgeListPage = () => {
             submitOnChanged: true,
         },
     ].filter(Boolean);
-
-
-    const { data: dataListReview, loading:dataListLoading, execute: listReview } = useFetch(
-        apiConfig.review.listReviews,
-        { immediate: false,
-            mappingData: ({ data }) => data.content,
-        });
-
-    const getListReview = (id) => {
-        listReview({
-            pathParams: {
-                courseId : id,
-            },
-        });
-    };
-
-    const { data: starData,loading:starDataLoading, execute: starReview } = useFetch(
-        apiConfig.review.star,
-        { immediate: false,
-            mappingData: ({ data }) => data.content,
-        });
-
-    const getStarReview = (id) => {
-        starReview({
-            pathParams: {
-                courseId : id,
-            },
-        });
-    };
-    const { loading:loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
 
     const columns = [
         {
@@ -168,11 +146,17 @@ const KnowledgeListPage = () => {
             title: translate.formatMessage(commonMessage.subjectName),
             // dataIndex: 'name',
             render: (dataRow) => {
-                return <Flex vertical>
-                    <span>JavaScripts</span>
-                    <span style={{ fontSize:12 }}>Leader: {dataRow?.leader?.account?.fullName}</span>
-                </Flex>;
+                return (
+                    <Flex vertical>
+                        <span>JavaScripts</span>
+                        <span style={{ fontSize: 12 }}>Leader: {dataRow?.leader?.account?.fullName}</span>
+                    </Flex>
+                );
             },
+        },
+        {
+            title: translate.formatMessage(commonMessage.catalogue),
+            dataIndex: ['knowledge', 'categoryName'],
         },
         {
             title: <FormattedMessage defaultMessage="Học phí" />,
@@ -191,6 +175,7 @@ const KnowledgeListPage = () => {
         {
             title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'dateEnd',
+            align: 'right',
             render: (dateEnd) => {
                 return (
                     <div style={{ padding: '0 4px', fontSize: 14 }}>
@@ -199,25 +184,11 @@ const KnowledgeListPage = () => {
                 );
             },
             width: 130,
-            align: 'center',
         },
-        // {
-        //     title: translate.formatMessage(commonMessage.state),
-        //     dataIndex: 'state',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const state = stateValues.find((item) => item.value == dataRow);
-        //         return (
-        //             <Tag color={state.color}>
-        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-        //             </Tag>
-        //         );
-        //     },
-        // },
         !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
+                developer: mixinFuncs.hasPermission([apiConfig.knowledgePermission.getList.baseURL]),
                 edit: !leaderName && true,
                 delete: !leaderName && true,
             },
@@ -244,17 +215,6 @@ const KnowledgeListPage = () => {
                         columns={columns}
                     />
                 }
-            />
-            <ReviewListModal
-                open={openReviewModal}
-                onCancel={() => handlersReviewModal.close()}
-                data={dataListReview || {}}
-                courseId = {courseId}
-                checkReivew={checkReivew}
-                star = {starData}
-                width={800}
-                loading={dataListLoading || starDataLoading || loadingData}
-
             />
         </PageWrapper>
     );

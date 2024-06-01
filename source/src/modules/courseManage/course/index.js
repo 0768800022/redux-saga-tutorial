@@ -57,6 +57,14 @@ const CourseListPage = () => {
                 objectName: translate.formatMessage(message.objectName),
             },
             override: (funcs) => {
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({
+                        ...params,
+                        isKnowledge: false,
+                    });
+
+                };
                 funcs.changeFilter = (filter) => {
                     const leaderId = queryParams.get('leaderId');
                     const leaderName = queryParams.get('leaderName');
@@ -89,7 +97,7 @@ const CourseListPage = () => {
                                 </BaseTooltip>
                             );
                         }
-                        
+
                     },
                     registration: ({ id, name, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
@@ -181,11 +189,11 @@ const CourseListPage = () => {
 
 
     const { data: dataListReview, loading:dataListLoading, execute: listReview } = useFetch(
-        apiConfig.review.listReviews, 
+        apiConfig.review.listReviews,
         { immediate: false,
             mappingData: ({ data }) => data.content,
         });
-    
+
     const getListReview = (id) => {
         listReview({
             pathParams: {
@@ -195,11 +203,11 @@ const CourseListPage = () => {
     };
 
     const { data: starData,loading:starDataLoading, execute: starReview } = useFetch(
-        apiConfig.review.star, 
+        apiConfig.review.star,
         { immediate: false,
             mappingData: ({ data }) => data.content,
         });
-    
+
     const getStarReview = (id) => {
         starReview({
             pathParams: {

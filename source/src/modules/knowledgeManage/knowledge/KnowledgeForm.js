@@ -257,7 +257,7 @@ const KnowledgeForm = (props) => {
                     <Col span={12}>
                         <AutoCompleteField
                             // disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
-                            // required
+                            required
                             label={<FormattedMessage defaultMessage="Kiến thức" />}
                             name="knowledgeId"
                             apiConfig={apiConfig.category.autocomplete}

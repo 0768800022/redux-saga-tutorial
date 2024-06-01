@@ -254,7 +254,7 @@ const CourseForm = (props) => {
                             searchParams={(text) => ({ name: text })}
                         />
                     </Col>
-                    <Col span={12}>
+                    {/* <Col span={12}>
                         <AutoCompleteField
                             // disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             // required
@@ -265,7 +265,7 @@ const CourseForm = (props) => {
                             searchParams={(text) => ({ name: text, kind: categoryKinds.CATEGORY_KIND_KNOWLEDGE })}
                             initialSearchParams={{ kind:5 }}
                         />
-                    </Col>
+                    </Col> */}
                     <Col span={12}>
                         <SelectField
                             disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}

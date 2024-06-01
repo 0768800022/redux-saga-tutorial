@@ -1,19 +1,18 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import apiConfig from '@constants/apiConfig';
 import useSaveBase from '@hooks/useSaveBase';
+import useTranslate from '@hooks/useTranslate';
 import React from 'react';
 import { defineMessages } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
 import CourseForm from './KnowledgeForm';
 
-import { generatePath, useParams } from 'react-router-dom';
-import { showErrorMessage } from '@services/notifyService';
 import { commonMessage } from '@locales/intl';
-import useFetch from '@hooks/useFetch';
+import { showErrorMessage } from '@services/notifyService';
+import { generatePath, useParams } from 'react-router-dom';
 import routes from '../routes';
 
 const messages = defineMessages({
-    objectName: 'khoá học',
+    objectName: 'kiến thức',
 });
 
 const KnowledgeSavePage = () => {
@@ -42,8 +41,10 @@ const KnowledgeSavePage = () => {
                 };
             };
             funcs.onSaveError = (err) => {
-                if (err.code === 'ERROR-COURSE-ERROR-0001') {
-                    showErrorMessage('Khoá học đã tồn tại');
+                if (err.response.data.code === 'ERROR-COURSE-ERROR-0001') {
+                    showErrorMessage('Kiến thức đã tồn tại');
+                } else if (err.response.data.code === 'ERROR-COURSE-ERROR-0010') {
+                    showErrorMessage('Học phí phải lớn hơn phí hoàn trả');
                 } else {
                     mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
                 }
@@ -59,7 +60,7 @@ const KnowledgeSavePage = () => {
             loading={loading}
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(commonMessage.course),
+                    breadcrumbName: translate.formatMessage(commonMessage.knowledge),
                     path: generatePath(routes.knowledgeListPage.path, { courseId }),
                 },
                 { breadcrumbName: title },
