@@ -1,11 +1,11 @@
 import ListPage from '@components/common/layout/ListPage';
-import React from 'react';
+import React, { useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants, commonStatusColor, commonStatus } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
-import { defineMessages } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import { useLocation } from 'react-router-dom';
 import { convertDateTimeToString, convertStringToDateTime } from '@utils/dayHelper';
@@ -17,14 +17,22 @@ import { commonMessage } from '@locales/intl';
 import styles from '../student.module.scss';
 import AvatarField from '@components/common/form/AvatarField';
 import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button, Tag } from 'antd';
+import { Button, Modal, Tag } from 'antd';
+import useDisclosure from '@hooks/useDisclosure';
+import { CheckOutlined } from '@ant-design/icons';
+import { BaseTooltip } from '@components/common/form/BaseTooltip';
+import useFetch from '@hooks/useFetch';
+import useNotification from '@hooks/useNotification';
 
 const message = defineMessages({
     objectName: 'Dự án',
     registration: 'Danh sách sinh viên đăng kí khóa học',
+    done: 'Cập nhật trạng thái dự án',
+    updateTaskSuccess: 'Cập nhật trạng thái thành công',
 });
 
 const RegistrationProjectListPage = () => {
+    const intl = useIntl();
     const translate = useTranslate();
     const { pathname: pagePath } = useLocation();
     const queryParameters = new URLSearchParams(window.location.search);
@@ -36,6 +44,9 @@ const RegistrationProjectListPage = () => {
     const studentName = queryParameters.get('studentName');
     const registrationId = queryParameters.get('registrationId');
     const stateValues = translate.formatKeys(lectureState, ['label']);
+    const [openedStateTaskModal, handlersStateTaskModal] = useDisclosure(false);
+    const [detail, setDetail] = useState();
+    const notification = useNotification();
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             // getList : apiConfig.student.getAllCourse,
@@ -59,31 +70,28 @@ const RegistrationProjectListPage = () => {
                     registrationId: registrationId,
                 };
             };
-            // funcs.additionalActionColumnButtons = () => {
-            //     return {
-            //         deleteItem: (dataRow) => {
-            //             if (!mixinFuncs.hasPermission(apiConfig.delete?.baseURL)) return null;
-            //             return (
-            //                 <Button
-            //                     type="link"
-            //                     onClick={(e) => {
-            //                         e.stopPropagation();
-            //                         mixinFuncs.showDeleteItemConfirm(dataRow.registration.id);
-            //                     }}
-            //                     style={{ padding: 0 }}
-            //                 >
-            //                     <DeleteOutlined style={{ color: 'red' }} />
-            //                 </Button>
-            //             );
-            //         },
-            //     };
-            // };
+            funcs.additionalActionColumnButtons = () => ({
+                changeState: (item) => {
+                    return (
+                        <BaseTooltip title={translate.formatMessage(message.done)}>
+                            <Button
+                                type="link"
+                                disabled={item.isDone}
+                                style={{ padding: 0 }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setDetail(item);
+                                    handlersStateTaskModal.open();
+                                }}
+                            >
+                                <CheckOutlined />
+                            </Button>
+                        </BaseTooltip>
+                    );
+                },
+            });
         },
     });
-    const convertDate = (date) => {
-        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
-        return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
-    };
     const setBreadRoutes = () => {
         const pathDefault = `?studentId=${stuId}&studentName=${studentName}`;
         const pathDefault2 = `?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
@@ -121,6 +129,36 @@ const RegistrationProjectListPage = () => {
             submitOnChanged: true,
         },
     ];
+    const { execute: executeUpdate } = useFetch(apiConfig.registrationProject.update, { immediate: false });
+    const handleOk = () => {
+        handlersStateTaskModal.close();
+        updateState(detail);
+    };
+    const updateState = (values) => {
+        executeUpdate({
+            data: {
+                isDone: true,
+                id: detail.id,
+            },
+            onCompleted: (response) => {
+                if (response.result === true) {
+                    mixinFuncs.getList();
+                    notification({
+                        message: intl.formatMessage(message.updateTaskSuccess),
+                    });
+                    handlersStateTaskModal.close();
+                }
+            },
+            onError: (error) => {
+                console.log(error?.response?.data?.code);
+                if (error?.response?.data?.code == 'ERROR-REGISTRATION-PROJECT-ERROR-0000') {
+                    notification({ type: 'error', message: 'Dự án đăng ký đã tồn tại! Không thể cập nhật!' });
+                } else {
+                    notification({ type: 'error', message: 'Lỗi' });
+                }
+            },
+        });
+    };
     const columns = [
         {
             title: '#',
@@ -150,18 +188,23 @@ const RegistrationProjectListPage = () => {
         //     width: 140,
         //     align: 'right',
         // },
-        // {
-        //     title: translate.formatMessage(commonMessage.endDate),
-        //     dataIndex: ['project', 'endDate'],
-        //     render: (endDate) => {
-        //         return <div style={{ padding: '0 4px', fontSize: 14 }}>{convertDate(endDate)}</div>;
-        //     },
-        //     width: 140,
-        //     align: 'right',
-        // },
-       
+        {
+            title: translate.formatMessage(commonMessage.status),
+            dataIndex: ['isDone'],
+            render: (isDone) => {
+                return (
+                    <Tag style={{ padding: '0 4px', fontSize:'14px' }} color={isDone ? 'green' : 'yellow'}>
+                        {isDone ? 'Hoàn thành' : 'Chưa hoàn thành'}
+                    </Tag>
+                );
+            },
+            width: 140,
+            align: 'center',
+        },
+
         mixinFuncs.renderActionColumn(
             {
+                changeState: mixinFuncs.hasPermission([apiConfig.registrationProject.update.baseURL]),
                 delete: true,
                 // deleteItem: true,
             },
@@ -190,6 +233,13 @@ const RegistrationProjectListPage = () => {
                     }
                 />
             </div>
+            <Modal
+                title="Thay đổi tình trạng hoàn thành"
+                open={openedStateTaskModal}
+                onOk={handleOk}
+                onCancel={() => handlersStateTaskModal.close()}
+                // data={detail || {}}
+            ></Modal>
         </PageWrapper>
     );
 };

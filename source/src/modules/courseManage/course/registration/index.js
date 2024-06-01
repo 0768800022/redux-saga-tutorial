@@ -42,7 +42,6 @@ function RegistrationListPage() {
     const courseName = queryParameters.get('courseName');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
-    const { trainingUnit, bugUnit, numberProject } = useTrainingUnit();
     localStorage.setItem('pathPrev', location.search);
     const navigate = useNavigate();
     const [openedStatisticsModal, handlersStatisticsModal] = useDisclosure(false);
@@ -135,8 +134,8 @@ function RegistrationListPage() {
                     studentId: record?.studentId,
                 },
                 onCompleted: (res) => {
-                    if (res?.data?.content) {
-                        const updatedData = res.data.content.map((item) => ({
+                    if (res?.data && res?.data?.length > 0) {
+                        const updatedData = res.data.map((item) => ({
                             ...item,
                             courseId: record?.courseId,
                             studentId: record?.studentId,
@@ -159,7 +158,7 @@ function RegistrationListPage() {
                     studentId: record?.studentId,
                 },
                 onCompleted: (res) => {
-                    if (res?.data?.content) {
+                    if (res?.data?.content && res?.data?.content?.length > 0) {
                         const updatedData = res.data.content.map((item) => ({
                             ...item,
                             courseId: record?.courseId,
@@ -195,6 +194,8 @@ function RegistrationListPage() {
             align: 'center',
             // dataIndex: 'totalProject',
             render: (record) => {
+                const trainingLimitConfig = JSON.parse(record.trainingLimitConfig);
+
                 let value;
                 if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
                     value = 0;
@@ -204,17 +205,17 @@ function RegistrationListPage() {
                 return (
                     <div
                         className={classNames(
-                            record.totalProject < numberProject
+                            record.totalProject < trainingLimitConfig.numberOfTrainingProject
                                 ? styles.customPercentOrange
                                 : styles.customPercentGreen,
                         )}
                     >
                         <div>
-                            {record.totalProject}/{numberProject}
+                            {record.totalProject}/{trainingLimitConfig.numberOfTrainingProject}
                         </div>
                         <div>
                             {' '}
-                            {record.minusTrainingProjectMoney && value < bugUnit ? (
+                            {record.minusTrainingProjectMoney && value <trainingLimitConfig.trainingProjectPercent ? (
                                 <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
                             ) : (
                                 <></>
@@ -228,6 +229,8 @@ function RegistrationListPage() {
             title: translate.formatMessage(commonMessage.rateTraining),
             align: 'center',
             render: (record) => {
+                const trainingUnit = JSON.parse(record.trainingLimitConfig).trainingPercent;
+
                 let value;
                 if (record.totalLearnCourseTime === 0 || record.totalAssignedCourseTime === 0) {
                     value = 0;
@@ -280,6 +283,8 @@ function RegistrationListPage() {
             title: translate.formatMessage(commonMessage.rateBug),
             align: 'center',
             render: (record) => {
+                const bugUnit = JSON.parse(record.trainingLimitConfig).trainingProjectPercent;
+
                 let value;
                 if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
                     value = 0;
