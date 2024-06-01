@@ -5,6 +5,7 @@ export const commonMessage = defineMessages({
     address: 'Địa chỉ',
     asignAll: 'Tạo task',
     avatar: 'Avatar',
+    catalogue:'Danh mục',
     company: 'Công ty',
     companySeek: 'Ứng viên đã lưu',
     companyName: 'Tên công ty',

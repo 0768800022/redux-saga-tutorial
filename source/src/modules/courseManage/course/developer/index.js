@@ -13,6 +13,7 @@ import BaseTable from '@components/common/table/BaseTable';
 import { commonMessage } from '@locales/intl';
 import AvatarField from '@components/common/form/AvatarField';
 import {  UserOutlined } from '@ant-design/icons';
+import routes from '@routes';
 
 const message = defineMessages({
     objectName: 'Developer',
@@ -32,7 +33,7 @@ function DeveloperCourseKnowledgeListPage() {
     const knowledgeId = queryParameters.get('knowledgeId');
 
     localStorage.setItem('pathPrev', location.search);
-   
+
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination } = useListBase({
         apiConfig: {
             getList:apiConfig.knowledgePermission.getList,
@@ -90,15 +91,15 @@ function DeveloperCourseKnowledgeListPage() {
             dataIndex: ['developer','accountDto','phone'],
             width: 150,
         },
-       
+
     ].filter(Boolean);
 
     return (
         <PageWrapper
             routes={[
                 {
-                    breadcrumbName: translate.formatMessage(commonMessage.course),
-                    path: '/course',
+                    breadcrumbName: translate.formatMessage(commonMessage.knowledge),
+                    path: routes.knowledgeListPage.path,
                 },
                 { breadcrumbName: translate.formatMessage(message.developer) },
             ]}
@@ -125,7 +126,7 @@ function DeveloperCourseKnowledgeListPage() {
                     />
                 }
             />
-          
+
         </PageWrapper>
     );
 }

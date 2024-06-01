@@ -18,7 +18,7 @@ import useTranslate from '@hooks/useTranslate';
 import NumericField from '@components/common/form/NumericField';
 import CropImageField from '@components/common/form/CropImageField';
 
-const CourseForm = (props) => {
+const KnowledgeForm = (props) => {
     const { formId, actions, onSubmit, dataDetail, setIsChangedFormValues, isEditing } = props;
     const translate = useTranslate();
     const [isDisableStartDate, setIsDisableStartDate] = useState(false);
@@ -254,10 +254,10 @@ const CourseForm = (props) => {
                             searchParams={(text) => ({ name: text })}
                         />
                     </Col>
-                    {/* <Col span={12}>
+                    <Col span={12}>
                         <AutoCompleteField
                             // disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
-                            // required
+                            required
                             label={<FormattedMessage defaultMessage="Kiến thức" />}
                             name="knowledgeId"
                             apiConfig={apiConfig.category.autocomplete}
@@ -265,7 +265,7 @@ const CourseForm = (props) => {
                             searchParams={(text) => ({ name: text, kind: categoryKinds.CATEGORY_KIND_KNOWLEDGE })}
                             initialSearchParams={{ kind:5 }}
                         />
-                    </Col> */}
+                    </Col>
                     <Col span={12}>
                         <SelectField
                             disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
@@ -317,4 +317,4 @@ const CourseForm = (props) => {
     );
 };
 
-export default CourseForm;
+export default KnowledgeForm;
