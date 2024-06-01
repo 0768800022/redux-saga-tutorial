@@ -277,17 +277,17 @@ const KnowledgeForm = (props) => {
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             addonAfter={'đ'}
                             min={0}
-                            dependencies={['returnFee']}
-                            rules={[
-                                ({ getFieldValue }) => ({
-                                    validator(rule, value) {
-                                        if (getFieldValue('returnFee') >= value) {
-                                            return Promise.reject(['Học phí phải lớn hơn phí hoàn trả']);
-                                        }
-                                        return Promise.resolve();
-                                    },
-                                }),
-                            ]}
+                            // dependencies={['returnFee']}
+                            // rules={[
+                            //     ({ getFieldValue }) => ({
+                            //         validator(rule, value) {
+                            //             if (getFieldValue('returnFee') >= value) {
+                            //                 return Promise.reject(['Học phí phải lớn hơn phí hoàn trả']);
+                            //             }
+                            //             return Promise.resolve();
+                            //         },
+                            //     }),
+                            // ]}
                         />
                     </Col>
                     <Col span={12}>
