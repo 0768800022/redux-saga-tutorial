@@ -114,6 +114,26 @@ const navMenuConfig = [
         ],
     },
     {
+        label: <FormattedMessage defaultMessage="Quản lý kiến thức" />,
+        key: 'quan-ly-kien-thuc',
+        icon: <IconBook2 size={16} />,
+        permission: apiConfig.category.getList.baseURL,
+        children: [
+            {
+                label: categoryKind.knowledge.title,
+                key: 'knowledge-category',
+                path: generatePath(routes.categoryListPageKnowledge.path, {
+                    kind: categoryKind.knowledge.value,
+                }),
+            },
+            {
+                label: <FormattedMessage defaultMessage="Kiến thức" />,
+                key: 'knowledge',
+                path: generatePath(routes.knowledgeListPage.path, {}),
+            },
+        ],
+    },
+    {
         label: <FormattedMessage defaultMessage="Quản lý công ty" />,
         key: 'quan-ly-cong-ty',
         icon: <IconBuildingCommunity size={16} />,
@@ -176,26 +196,7 @@ const navMenuConfig = [
             },
         ],
     },
-    {
-        label: <FormattedMessage defaultMessage="Quản lý kiến thức" />,
-        key: 'quan-ly-kien-thuc',
-        icon: <IconBook2 size={16} />,
-        permission: apiConfig.category.getList.baseURL,
-        children: [
-            {
-                label: categoryKind.knowledge.title,
-                key: 'knowledge-category',
-                path: generatePath(routes.categoryListPageKnowledge.path, {
-                    kind: categoryKind.knowledge.value,
-                }),
-            },
-            {
-                label: <FormattedMessage defaultMessage="Kiến thức" />,
-                key: 'knowledge',
-                path: generatePath(routes.knowledgeListPage.path, {}),
-            },
-        ],
-    },
+
 
     ///////////////////// LEADER MENU /////////////////////////////
     // {
