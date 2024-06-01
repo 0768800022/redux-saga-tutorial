@@ -137,6 +137,7 @@ const PreviewModal = ({ open, onCancel, detail }) => {
                                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                                 isCurrency
                                 readOnly
+                                min={0}
                                 defaultValue={detail?.returnFee}
                                 dependencies={['fee']}
                                 rules={[

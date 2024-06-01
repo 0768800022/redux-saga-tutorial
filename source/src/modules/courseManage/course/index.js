@@ -172,19 +172,19 @@ const CourseListPage = () => {
             key: 'name',
             placeholder: translate.formatMessage(commonMessage.courseName),
         },
-        {
-            key: 'state',
-            placeholder: translate.formatMessage(commonMessage.state),
-            type: FieldTypes.SELECT,
-            options: stateValues,
-        },
-        !leaderName && {
-            key: 'status',
-            placeholder: translate.formatMessage(commonMessage.status),
-            type: FieldTypes.SELECT,
-            options: statusValues,
-            submitOnChanged: true,
-        },
+        // {
+        //     key: 'state',
+        //     placeholder: translate.formatMessage(commonMessage.state),
+        //     type: FieldTypes.SELECT,
+        //     options: stateValues,
+        // },
+        // !leaderName && {
+        //     key: 'status',
+        //     placeholder: translate.formatMessage(commonMessage.status),
+        //     type: FieldTypes.SELECT,
+        //     options: statusValues,
+        //     submitOnChanged: true,
+        // },
     ].filter(Boolean);
 
 
@@ -304,21 +304,21 @@ const CourseListPage = () => {
             width: 130,
             align: 'center',
         },
-        {
-            title: translate.formatMessage(commonMessage.state),
-            dataIndex: 'state',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
-                return (
-                    <Tag color={state.color}>
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                    </Tag>
-                );
-            },
-        },
-        !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
+        // {
+        //     title: translate.formatMessage(commonMessage.state),
+        //     dataIndex: 'state',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         const state = stateValues.find((item) => item.value == dataRow);
+        //         return (
+        //             <Tag color={state.color}>
+        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+        //             </Tag>
+        //         );
+        //     },
+        // },
+        // !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
                 developer:mixinFuncs.hasPermission([apiConfig.knowledgePermission.getList.baseURL]),

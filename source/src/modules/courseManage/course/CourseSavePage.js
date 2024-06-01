@@ -41,7 +41,7 @@ const CourseSavePage = () => {
             };
             funcs.onSaveError = (err) => {
                 if (err.response.data.code === 'ERROR-COURSE-ERROR-0001') {
-                    showErrorMessage('Kiến thức đã tồn tại');
+                    showErrorMessage('Khóa học đã tồn tại');
                 } else if (err.response.data.code === 'ERROR-COURSE-ERROR-0010') {
                     showErrorMessage('Học phí phải lớn hơn phí hoàn trả');
                 } else {
