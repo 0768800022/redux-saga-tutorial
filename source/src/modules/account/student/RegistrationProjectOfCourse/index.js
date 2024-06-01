@@ -1,7 +1,7 @@
 import ListPage from '@components/common/layout/ListPage';
 import React, { useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
-import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants } from '@constants';
+import { DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, AppConstants, commonStatusColor, commonStatus } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
@@ -92,10 +92,6 @@ const RegistrationProjectListPage = () => {
             });
         },
     });
-    const convertDate = (date) => {
-        const dateConvert = convertStringToDateTime(date, DEFAULT_FORMAT, DATE_FORMAT_DISPLAY);
-        return convertDateTimeToString(dateConvert, DATE_FORMAT_DISPLAY);
-    };
     const setBreadRoutes = () => {
         const pathDefault = `?studentId=${stuId}&studentName=${studentName}`;
         const pathDefault2 = `?courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;

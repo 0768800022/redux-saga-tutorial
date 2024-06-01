@@ -3,11 +3,11 @@ import apiConfig from '@constants/apiConfig';
 import useSaveBase from '@hooks/useSaveBase';
 import React from 'react';
 import { generatePath, useParams } from 'react-router-dom';
-import routes from './routes';
 import CategoryForm from './CategoryForm';
 import useTranslate from '@hooks/useTranslate';
 import { defineMessages } from 'react-intl';
 import { categoryKinds } from '@constants';
+import routes from '../routes';
 
 const messages = defineMessages({
     objectName: 'loại',
