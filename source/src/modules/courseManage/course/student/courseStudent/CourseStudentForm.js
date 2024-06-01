@@ -293,6 +293,17 @@ const CourseStudentForm = (props) => {
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             isCurrency
                             min={0}
+                            dependencies={['fee']}
+                            rules={[
+                                ({ getFieldValue }) => ({
+                                    validator(rule, value) {
+                                        if (getFieldValue('fee') < value) {
+                                            return Promise.reject(['Phí hoàn trả phải nhỏ hơn học phí']);
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                }),
+                            ]}
                         />
                     </Col>
                     <Col span={12}>
