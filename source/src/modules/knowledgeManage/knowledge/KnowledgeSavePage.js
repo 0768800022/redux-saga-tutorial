@@ -29,6 +29,16 @@ const KnowledgeSavePage = () => {
             objectName: translate.formatMessage(messages.objectName),
         },
         override: (funcs) => {
+            const onSave = funcs.onSave;
+            funcs.onSave = (values) => {
+                if (values.fee > values.returnFee) {
+                    return {
+                        ...onSave(values),
+                    };
+                } else {
+                    showErrorMessage('Học phí phải lớn hơn phí hoàn trả');
+                }
+            };
             funcs.prepareUpdateData = (data) => {
                 return {
                     ...data,
