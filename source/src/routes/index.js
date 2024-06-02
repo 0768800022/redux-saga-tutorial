@@ -2,6 +2,8 @@ import PageNotFound from '@components/common/page/PageNotFound';
 import categoryRoutesEdu from '@modules/category/categoryEdu/routes';
 import categoryRoutesGen from '@modules/category/categoryGen/routes';
 import categoryRoutesMajor from '@modules/category/categoryMajor/routes';
+// import categoryRoutesKnowledge from '@modules/knowledgeManage/categoryKnowledge/routes';
+
 import studentRoutes from '@modules/account/student/routes';
 import Dashboard from '@modules/entry';
 import LoginPage from '@modules/login/index';
@@ -28,6 +30,10 @@ import StoryTaskRoutes from '@modules/projectManage/project/storyTask/routes';
 import categoryRoutesRole from '@modules/category/categoryRole/routes';
 import registerSalaryPeriod from "@modules/projectManage/registerSalaryPeriod/routes";
 import TrainingResultRouter from '@modules/TrainingResult/routes';
+import knowledgeManageRoutes from '@modules/knowledgeManage/routes';
+import CourseReviewHistoryRouter from '@modules/courseManage/courseReviewHistory/routes';
+import DeveloperKnowledgeRouter from '@modules/courseManage/course/developer/routes';
+
 /*
     auth
         + null: access login and not login
@@ -65,6 +71,7 @@ const routes = {
     ...categoryRoutesEdu,
     ...categoryRoutesGen,
     ...categoryRoutesMajor,
+    // ...categoryRoutesKnowledge,
     ...registrationRoutes,
     ...studentRoutes,
     ...leaderRoutes,
@@ -85,6 +92,9 @@ const routes = {
     ...categoryRoutesRole,
     ...registerSalaryPeriod,
     ...TrainingResultRouter,
+    ...knowledgeManageRoutes,
+    ...CourseReviewHistoryRouter,
+    ...DeveloperKnowledgeRouter,
     // keep this at last
     //
     notFound: {

@@ -57,6 +57,14 @@ const CourseListPage = () => {
                 objectName: translate.formatMessage(message.objectName),
             },
             override: (funcs) => {
+                funcs.getList = () => {
+                    const params = mixinFuncs.prepareGetListParams(queryFilter);
+                    mixinFuncs.handleFetchList({
+                        ...params,
+                        isKnowledge: false,
+                    });
+
+                };
                 funcs.changeFilter = (filter) => {
                     const leaderId = queryParams.get('leaderId');
                     const leaderName = queryParams.get('leaderName');
@@ -69,6 +77,28 @@ const CourseListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
+                    developer: ({ id, name, state, status,knowledge }) => {
+                        if(knowledge){
+                            return(
+                                <BaseTooltip title={translate.formatMessage(commonMessage.developer)}>
+                                    <Button
+                                        type="link"
+                                        style={{ padding: 0 }}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            navigate(
+                                                routes.developerKnowledgeListPage.path +
+                                                    `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}&knowledgeId=${knowledge.id}`,
+                                            );
+                                        }}
+                                    >
+                                        <UserOutlined />
+                                    </Button>
+                                </BaseTooltip>
+                            );
+                        }
+
+                    },
                     registration: ({ id, name, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
                             <Button
@@ -142,28 +172,28 @@ const CourseListPage = () => {
             key: 'name',
             placeholder: translate.formatMessage(commonMessage.courseName),
         },
-        {
-            key: 'state',
-            placeholder: translate.formatMessage(commonMessage.state),
-            type: FieldTypes.SELECT,
-            options: stateValues,
-        },
-        !leaderName && {
-            key: 'status',
-            placeholder: translate.formatMessage(commonMessage.status),
-            type: FieldTypes.SELECT,
-            options: statusValues,
-            submitOnChanged: true,
-        },
+        // {
+        //     key: 'state',
+        //     placeholder: translate.formatMessage(commonMessage.state),
+        //     type: FieldTypes.SELECT,
+        //     options: stateValues,
+        // },
+        // !leaderName && {
+        //     key: 'status',
+        //     placeholder: translate.formatMessage(commonMessage.status),
+        //     type: FieldTypes.SELECT,
+        //     options: statusValues,
+        //     submitOnChanged: true,
+        // },
     ].filter(Boolean);
 
 
     const { data: dataListReview, loading:dataListLoading, execute: listReview } = useFetch(
-        apiConfig.review.listReviews, 
+        apiConfig.review.listReviews,
         { immediate: false,
             mappingData: ({ data }) => data.content,
         });
-    
+
     const getListReview = (id) => {
         listReview({
             pathParams: {
@@ -173,11 +203,11 @@ const CourseListPage = () => {
     };
 
     const { data: starData,loading:starDataLoading, execute: starReview } = useFetch(
-        apiConfig.review.star, 
+        apiConfig.review.star,
         { immediate: false,
             mappingData: ({ data }) => data.content,
         });
-    
+
     const getStarReview = (id) => {
         starReview({
             pathParams: {
@@ -274,23 +304,24 @@ const CourseListPage = () => {
             width: 130,
             align: 'center',
         },
-        {
-            title: translate.formatMessage(commonMessage.state),
-            dataIndex: 'state',
-            align: 'center',
-            width: 120,
-            render(dataRow) {
-                const state = stateValues.find((item) => item.value == dataRow);
-                return (
-                    <Tag color={state.color}>
-                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-                    </Tag>
-                );
-            },
-        },
-        !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
+        // {
+        //     title: translate.formatMessage(commonMessage.state),
+        //     dataIndex: 'state',
+        //     align: 'center',
+        //     width: 120,
+        //     render(dataRow) {
+        //         const state = stateValues.find((item) => item.value == dataRow);
+        //         return (
+        //             <Tag color={state.color}>
+        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+        //             </Tag>
+        //         );
+        //     },
+        // },
+        // !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
+                developer:mixinFuncs.hasPermission([apiConfig.knowledgePermission.getList.baseURL]),
                 review:mixinFuncs.hasPermission([apiConfig.review.star?.baseURL, apiConfig.review.listReviews?.baseURL]),
                 registration: !leaderName && mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]),
                 task: mixinFuncs.hasPermission([apiConfig.task.getList?.baseURL]),

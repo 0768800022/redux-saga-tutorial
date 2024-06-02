@@ -8,6 +8,10 @@
     bottom: 0;
 }
 
+.sidebar::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
 .logo {
     display: flex;
     align-items: center;

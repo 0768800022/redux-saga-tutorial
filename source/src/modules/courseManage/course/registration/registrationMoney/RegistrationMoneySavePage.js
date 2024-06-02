@@ -8,10 +8,11 @@ import { defineMessages } from 'react-intl';
 import RegistrationMoneyForm from './RegistrationMoneyForm';
 import { useLocation } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
+import { showErrorMessage } from '@services/notifyService';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
-    objectName: 'Danh sách Lịch sử trả phí',
+    objectName: 'Lịch sử trả phí',
     registration: 'Danh sách sinh viên đăng kí khóa học',
 });
 
@@ -48,6 +49,19 @@ function RegistrationMoneySavePage() {
                     ...data,
                     registrationId: registrationId,
                 };
+            };
+            funcs.onSaveError = (err) => {
+                if (err.response.data.code === 'ERROR-REGISTRATION-MONEY-HISTORY-ERROR-0003') {
+                    showErrorMessage('Tiền hoàn lại không được cao hơn tiền thực nhận');
+                    mixinFuncs.setSubmit(false);
+                } else if(err.response.data.code === 'ERROR-REGISTRATION-MONEY-HISTORY-ERROR-0004') {
+                    showErrorMessage('Tiền nhận không được vượt quá tiền của khoá học');
+                    mixinFuncs.setSubmit(false);
+                }
+                else{
+                    mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
+                    mixinFuncs.setSubmit(false);
+                }
             };
         },
     });

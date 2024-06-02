@@ -3,7 +3,7 @@ import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
 import SelectField from '@components/common/form/SelectField';
 import TextField from '@components/common/form/TextField';
-import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT } from '@constants';
+import { AppConstants, DATE_FORMAT_DISPLAY, DATE_FORMAT_VALUE, DEFAULT_FORMAT, categoryKinds } from '@constants';
 import apiConfig from '@constants/apiConfig';
 import useBasicForm from '@hooks/useBasicForm';
 import useFetch from '@hooks/useFetch';
@@ -43,14 +43,6 @@ const CourseForm = (props) => {
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
         return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl, banner: bannerUrl });
     };
-    const {
-        data: subjects,
-        loading: getSubjectsLoading,
-        execute: executeGetSubjects,
-    } = useFetch(apiConfig.subject.autocomplete, {
-        immediate: true,
-        mappingData: ({ data }) => data.content.map((item) => ({ value: item.id, label: item.subjectName })),
-    });
     useEffect(() => {
         lectureStateOptions.map((state, index) => {
             if (dataDetail?.state == state.value) {
@@ -72,6 +64,7 @@ const CourseForm = (props) => {
         form.setFieldsValue({
             ...dataDetail,
             subjectId: dataDetail?.subject?.subjectName,
+            knowledgeId: dataDetail?.knowledge?.id,
         });
     }, [dataDetail]);
 
@@ -229,7 +222,7 @@ const CourseForm = (props) => {
                             ]}
                             style={{ width: '100%' }}
                             format={DATE_FORMAT_DISPLAY}
-                            required
+                            // required
                         />
                     </Col>
                 </Row>
@@ -250,10 +243,21 @@ const CourseForm = (props) => {
                             name="leaderId"
                             apiConfig={apiConfig.developer.autocomplete}
                             mappingOptions={(item) => ({ value: item.id, label: item?.account?.fullName })}
-                            initialSearchParams={{}}
                             searchParams={(text) => ({ name: text })}
                         />
                     </Col>
+                    {/* <Col span={12}>
+                        <AutoCompleteField
+                            // disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
+                            // required
+                            label={<FormattedMessage defaultMessage="Kiến thức" />}
+                            name="knowledgeId"
+                            apiConfig={apiConfig.category.autocomplete}
+                            mappingOptions={(item) => ({ value: item.id, label: item?.categoryName })}
+                            searchParams={(text) => ({ name: text, kind: categoryKinds.CATEGORY_KIND_KNOWLEDGE })}
+                            initialSearchParams={{ kind:5 }}
+                        />
+                    </Col> */}
                     <Col span={12}>
                         <SelectField
                             disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}
@@ -264,8 +268,6 @@ const CourseForm = (props) => {
                             options={lectureStateFilter}
                         />
                     </Col>
-                </Row>
-                <Row gutter={10}>
                     <Col span={12}>
                         <NumericField
                             required
@@ -275,17 +277,40 @@ const CourseForm = (props) => {
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             addonAfter={'đ'}
                             min={0}
+                            // dependencies={['returnFee']}
+                            // rules={[
+                            //     ({ getFieldValue }) => ({
+                            //         validator(rule, value) {
+                            //             if (getFieldValue('returnFee') >= value) {
+                            //                 return Promise.reject(['Học phí phải lớn hơn phí hoàn trả']);
+                            //             }
+                            //             return Promise.resolve();
+                            //         },
+                            //     }),
+                            // ]}
                         />
                     </Col>
                     <Col span={12}>
                         <NumericField
-                            required
+                            // required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             addonAfter={'đ'}
                             min={0}
+                            defaultValue={0}
+                            dependencies={['fee']}
+                            rules={[
+                                ({ getFieldValue }) => ({
+                                    validator(rule, value) {
+                                        if (getFieldValue('fee') < value) {
+                                            return Promise.reject(['Phí hoàn trả phải nhỏ hơn học phí']);
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                }),
+                            ]}
                         />
                     </Col>
                     <Col span={12}>

@@ -11,6 +11,7 @@ import {
     DATE_FORMAT_ZERO_TIME,
     DEFAULT_FORMAT,
     DEFAULT_TABLE_ITEM_SIZE,
+    STATE_PROJECT_TASK_DONE,
     TASK_KIND_BUG,
     TASK_KIND_FEATURE,
     TASK_KIND_TESTCASE,
@@ -39,6 +40,7 @@ import DetailMyTaskProjectModal from '../projectStudent/myTask/DetailMyTaskProje
 import PageWrapper from '@components/common/layout/PageWrapper';
 import { showErrorMessage } from '@services/notifyService';
 import testCase from '../../../../assets/icons/testCase.svg';
+import { EditOutlined } from '@ant-design/icons';
 
 const message = defineMessages({
     objectName: 'Task',
@@ -204,6 +206,21 @@ function ProjectTaskListPage({ setSearchFilter }) {
                                 <CheckOutlined />
                             </Button>
                         </BaseTooltip>
+                    ),
+                    edit: (item) => (
+                        <Button
+                            type="link"
+                            disabled={item.state === STATE_PROJECT_TASK_DONE}
+                            style={{ padding: 0 }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(mixinFuncs.getItemDetailLink(item), {
+                                    state: { action: 'edit', prevPath: location.pathname },
+                                });
+                            }}
+                        >
+                            <EditOutlined />
+                        </Button>
                     ),
                 });
                 funcs.getList = () => {

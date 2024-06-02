@@ -286,13 +286,24 @@ const CourseStudentForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <NumericField
-                            required
+                            // required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             isCurrency
                             min={0}
+                            dependencies={['fee']}
+                            rules={[
+                                ({ getFieldValue }) => ({
+                                    validator(rule, value) {
+                                        if (getFieldValue('fee') < value) {
+                                            return Promise.reject(['Phí hoàn trả phải nhỏ hơn học phí']);
+                                        }
+                                        return Promise.resolve();
+                                    },
+                                }),
+                            ]}
                         />
                     </Col>
                     <Col span={12}>

@@ -1,15 +1,14 @@
 import PageWrapper from '@components/common/layout/PageWrapper';
 import apiConfig from '@constants/apiConfig';
 import useSaveBase from '@hooks/useSaveBase';
+import useTranslate from '@hooks/useTranslate';
+import { commonMessage } from '@locales/intl';
+import { showErrorMessage } from '@services/notifyService';
 import React from 'react';
 import { defineMessages } from 'react-intl';
-import useTranslate from '@hooks/useTranslate';
+import { generatePath, useParams } from 'react-router-dom';
 import CourseForm from './CourseForm';
 import routes from './routes';
-import { generatePath, useParams } from 'react-router-dom';
-import { showErrorMessage } from '@services/notifyService';
-import { commonMessage } from '@locales/intl';
-import useFetch from '@hooks/useFetch';
 
 const messages = defineMessages({
     objectName: 'khoá học',
@@ -41,8 +40,10 @@ const CourseSavePage = () => {
                 };
             };
             funcs.onSaveError = (err) => {
-                if (err.code === 'ERROR-COURSE-ERROR-0001') {
-                    showErrorMessage('Khoá học đã tồn tại');
+                if (err.response.data.code === 'ERROR-COURSE-ERROR-0001') {
+                    showErrorMessage('Khóa học đã tồn tại');
+                } else if (err.response.data.code === 'ERROR-COURSE-ERROR-0010') {
+                    showErrorMessage('Học phí phải lớn hơn phí hoàn trả');
                 } else {
                     mixinFuncs.handleShowErrorMessage(err, showErrorMessage);
                 }

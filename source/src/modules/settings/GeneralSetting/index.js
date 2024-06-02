@@ -17,7 +17,7 @@ import useNotification from '@hooks/useNotification';
 import IntroduceModal from './IntroduceModal';
 import ColumnGroup from 'antd/es/table/ColumnGroup';
 import AvatarField from '@components/common/form/AvatarField';
-import { dataTypeSetting, settingGroups } from '@constants/masterData';
+import { dataTypeSetting, settingGroups, settingKeyName } from '@constants/masterData';
 import { actions } from '@store/actions/app';
 import { useDispatch } from 'react-redux';
 import RichTextField from '@components/common/form/RichTextField';
@@ -117,7 +117,7 @@ const GeneralSettingPage = ({ groupName }) => {
                                     });
                                 }
                             },
-                            onError: (err) => {},
+                            onError: (err) => { },
                         });
                     };
                     if (item?.dataType == dataTypeSetting.BOOLEAN) {
@@ -186,7 +186,7 @@ const GeneralSettingPage = ({ groupName }) => {
                     mixinFuncs.getList();
                 }
             },
-            onError: (err) => {},
+            onError: (err) => { },
         });
     };
     const columnPage = [
@@ -319,6 +319,33 @@ const GeneralSettingPage = ({ groupName }) => {
             { width: '60px' },
         ),
     ];
+
+    const columnTraining = [
+        {
+            title: <FormattedMessage defaultMessage="Tên" />,
+            dataIndex: 'keyName',
+            width: 200,
+        },
+        {
+            title: <FormattedMessage defaultMessage="Giá trị" />,
+            dataIndex: 'valueData',
+            width: 500,
+            align: 'center',
+            render: (valueData, record) => {
+                console.log(record);
+                if (record.keyName == settingKeyName.NUMBER_OF_TRAINING_PROJECT) {
+                    if (valueData > 0) {
+                        return <div>{valueData} </div>;
+                    } else return <div>{valueData}</div>;
+                }
+                if (valueData > 0) {
+                    return <div>{valueData} %</div>;
+                } else return <div>{valueData}</div>;
+            },
+        },
+        mixinFuncs.renderActionColumn({ editSetting: mixinFuncs.hasPermission([apiConfig.settings.update?.baseURL]), delete: false }, { width: '100px' }),
+    ];
+
     const { execute: executeUpdate } = useFetch(apiConfig.settings.update, { immediate: false });
     const { execute: executeGetDataSetting } = useFetch(apiConfig.settings.settings, {
         immediate: false,
@@ -352,6 +379,8 @@ const GeneralSettingPage = ({ groupName }) => {
             return columnPage;
         } else if (groupName == settingGroups.REVENUE) {
             return columnRevenue;
+        } else if (groupName == settingGroups.TRAINING) {
+            return columnTraining;
         }
     };
 

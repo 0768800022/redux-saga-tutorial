@@ -44,6 +44,7 @@ import {
     LEADER_KIND_PROJECT,
     TASK_KIND_TESTCASE,
     TASK_LOG_BUG,
+    versionState,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -76,6 +77,7 @@ import React from 'react';
 import feature from '../assets/images/feature.png';
 import bug from '../assets/images/bug.jpg';
 import testcase from '../assets/icons/testCase.svg';
+import { commonMessage } from '@locales/intl';
 
 export const languageOptions = [
     { value: 1, label: 'EN' },
@@ -145,14 +147,15 @@ export const projectTaskKind = [
             </div>
         ),
     },
-    // {
-    //     value: TASK_KIND_BUG,
-    //     label: (
-    //         <div>
-    //             <img src={bug} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
-    //         </div>
-    //     ),
-    // },
+    {
+        value: TASK_KIND_BUG,
+        label: (
+            <div>
+                <img src={bug} height="20px" width="20px" style={{ marginTop: '10px', marginLeft: '5px' }} />
+            </div>
+        ),
+        disabled: true,
+    },
     {
         value: TASK_KIND_TESTCASE,
         label: (
@@ -222,6 +225,14 @@ export const stateResgistrationOptions = [
     { value: 3, label: stateResgistrationMessage.finished, color: 'green' },
     { value: 4, label: stateResgistrationMessage.canceled, color: 'red' },
 ];
+export const kindTask = [
+    {
+        value: 1,
+        label: commonMessage.task,
+        color: 'green',
+    },
+    { value: 200, label: commonMessage.bug, color: 'red' },
+];
 export const returnFeeOption = [
     {
         value: true,
@@ -229,7 +240,7 @@ export const returnFeeOption = [
         color: 'green',
     },
     { value: false, label: returnFeeMessage.returnMoneyFalse, color: 'red' },
-    
+
 ];
 export const lectureKindOptions = [
     {
@@ -299,6 +310,11 @@ export const categoryKind = {
         title: 'Danh mục chuyên ngành',
         path: 'major',
         value: CATEGORY_KIND_MAJOR,
+    },
+    knowledge: {
+        title: 'Danh mục kiến thức',
+        path: 'knowledge',
+        value: CATEGORY_KIND_KNOWLEDGE,
     },
 };
 
@@ -392,6 +408,7 @@ export const settingGroups = {
     GENERAL: 'general',
     PAGE: 'page_config',
     REVENUE: 'revenue_config',
+    TRAINING: 'training_config',
 };
 
 export const dataTypeSetting = {
@@ -404,6 +421,9 @@ export const dataTypeSetting = {
 
 export const settingKeyName = {
     MONEY_UNIT: 'money_unit',
+    TRAINING_UNIT: 'training_percent',
+    BUG_UNIT: 'training_project_percent',
+    NUMBER_OF_TRAINING_PROJECT: 'number_of_training_projects',
 };
 
 export const registrationMoneyKind = [
@@ -533,4 +553,12 @@ export const columnProjectTaskKind = [
             </div>
         ),
     },
+];
+export const versionStateOptions = [
+    { value: versionState.VERSION_STATE_PROCESS_ERROR, label: commonMessage.error, color: 'red' },
+    { value: versionState.VERSION_STATE_INIT, label: commonMessage.init, color: 'yellow' },
+    { value: versionState.VERSION_STATE_SUBMIT, label: commonMessage.submit, color: 'blue' },
+    { value: versionState.VERSION_STATE_APPROVE, label: commonMessage.approve, color: 'green' },
+    { value: versionState.VERSION_STATE_REJECT, label: commonMessage.reject, color: 'red' },
+    { value: versionState.VERSION_STATE_PROCESS, label: commonMessage.loading, color: 'orange' },
 ];
