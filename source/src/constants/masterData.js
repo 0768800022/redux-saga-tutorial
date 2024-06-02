@@ -134,7 +134,7 @@ export const projectTaskState = [
 export const salaryPeriodState = [
     { value: 0, label: salaryPeriodStateMessage.create, color: 'yellow' },
     { value: 1, label: salaryPeriodStateMessage.processing, color: 'yellow' },
-    { value: 2, label: salaryPeriodStateMessage.done, color: 'blue' },
+    { value: 2, label: salaryPeriodStateMessage.done, color: 'green' },
     { value: 3, label: salaryPeriodStateMessage.done, color: 'green' },
 ];
 
