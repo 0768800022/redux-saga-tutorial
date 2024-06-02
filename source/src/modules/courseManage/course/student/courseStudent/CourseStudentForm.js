@@ -292,7 +292,7 @@ const CourseStudentForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <NumericField
-                            // required
+                            required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"
