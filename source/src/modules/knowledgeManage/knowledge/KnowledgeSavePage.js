@@ -38,6 +38,7 @@ const KnowledgeSavePage = () => {
             funcs.prepareCreateData = (data) => {
                 return {
                     ...data,
+                    returnFee: data.returnFee ? data.returnFee : 0,
                 };
             };
             funcs.onSaveError = (err) => {
