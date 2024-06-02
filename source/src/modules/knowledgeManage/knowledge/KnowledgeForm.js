@@ -152,7 +152,13 @@ const KnowledgeForm = (props) => {
         return rules;
     };
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
+        <BaseForm
+            formId={formId}
+            onFinish={handleSubmit}
+            form={form}
+            onValuesChange={onValuesChange}
+            initialValues={{ returnFee: 0 }}
+        >
             <Card className="card-form" bordered={false}>
                 <Row>
                     <Col span={12}>
@@ -292,7 +298,7 @@ const KnowledgeForm = (props) => {
                     </Col>
                     <Col span={12}>
                         <NumericField
-                            // required
+                            required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
                             label={<FormattedMessage defaultMessage="Phí hoàn trả" />}
                             name="returnFee"
