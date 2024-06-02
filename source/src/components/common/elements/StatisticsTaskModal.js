@@ -50,7 +50,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                     title: <FormattedMessage defaultMessage="Ngày tạo" />,
                     dataIndex: ['createdDate'],
                     render: (date) => {
-                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT,DEFAULT_FORMAT);
+                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
                         return <div>{result}</div>;
                     },
                     width: 180,
@@ -118,7 +118,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                     title: <FormattedMessage defaultMessage="Ngày tạo" />,
                     dataIndex: ['createdDate'],
                     render: (date) => {
-                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT,DEFAULT_FORMAT);
+                        const result = convertUtcToLocalTime(date, DEFAULT_FORMAT, DEFAULT_FORMAT);
                         return <div>{result}</div>;
                     },
                     width: 180,
@@ -272,7 +272,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'end',
-                                marginRight: 20,
+                                marginRight: 25,
                             }}
                         >
                             <span>
@@ -303,7 +303,7 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'end',
-                                marginRight: 20,
+                                marginRight: 25,
                             }}
                         >
                             <span>
@@ -327,7 +327,13 @@ const StatisticsTaskModal = ({ detail = [], open, close, detailTraing = [], isTr
                                 </span>
                                 <span style={{ marginLeft: '10px' }}>
                                     Chênh lệch:{' '}
-                                    <span style={{ fontWeight: 'bold', fontSize: '17px' }}>
+                                    <span
+                                        style={{
+                                            fontWeight: 'bold',
+                                            fontSize: '17px',
+                                            color: differenceTime < 0 && 'red',
+                                        }}
+                                    >
                                         {differenceTime ? Math.ceil((differenceTime / 60) * 10) / 10 : 0}h
                                     </span>
                                 </span>

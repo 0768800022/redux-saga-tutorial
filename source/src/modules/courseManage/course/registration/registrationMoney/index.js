@@ -9,12 +9,13 @@ import { stateResgistrationOptions } from '@constants/masterData';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import { formatMoney } from '@utils';
-import { Tag } from 'antd';
+import { Col, Row, Tag } from 'antd';
 import React from 'react';
-import { defineMessages } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { useLocation } from 'react-router-dom';
 import routes from '../routes';
 import dayjs from 'dayjs';
+import styles from './Registration.module.scss';
 import { projectTaskState, statusOptions, registrationMoneyKind } from '@constants/masterData';
 import { commonMessage } from '@locales/intl';
 import {
@@ -58,8 +59,8 @@ function RegistrationMoneyListPage() {
                 try {
                     if (response.result === true) {
                         return {
-                            data: response.data.content,
-                            total: response.data.totalElements,
+                            data: response.data,
+                            total: response.data.registrationMoneyHistories.totalElements,
                         };
                     }
                 } catch (error) {
@@ -74,10 +75,12 @@ function RegistrationMoneyListPage() {
             };
         },
     });
+    console.log('🚀 ~ RegistrationMoneyListPage ~ data:', data);
+
     const columns = [
         {
             title: '#',
-            dataIndex: ['registrationInfo', 'studentInfo', 'account',"avatar"],
+            dataIndex: ['registrationInfo', 'studentInfo', 'account', 'avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -90,7 +93,7 @@ function RegistrationMoneyListPage() {
         },
         {
             title: translate.formatMessage(commonMessage.studentName),
-            dataIndex: ['registrationInfo', 'studentInfo',"account", 'fullName'],
+            dataIndex: ['registrationInfo', 'studentInfo', 'account', 'fullName'],
         },
 
         {
@@ -166,15 +169,59 @@ function RegistrationMoneyListPage() {
         >
             <ListPage
                 title={
-                    <span
-                        style={
-                            courseState != 5
-                                ? { fontWeight: 'normal', fontSize: '16px' }
-                                : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
-                        }
-                    >
-                        {courseName}
-                    </span>
+                    <>
+                        <span
+                            style={
+                                courseState != 5
+                                    ? { fontWeight: 'normal', fontSize: '16px' }
+                                    : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
+                            }
+                        >
+                            {courseName}
+                        </span>
+                        <ul className={styles.groupTotal}>
+                            <li className={styles.totalItem}>
+                                <FormattedMessage defaultMessage="Giá khóa học" />
+                                <div>
+                                    {formatMoney(data?.totalMoney?.courseFee, {
+                                        currentcy: 'đ',
+                                        currentDecimal: '0',
+                                        groupSeparator: ',',
+                                    })}
+                                </div>
+                            </li>
+                            <li className={styles.totalItem}>
+                                <FormattedMessage defaultMessage="Tiền hoàn trả" />
+                                <div>
+                                    {formatMoney(data?.totalMoney?.courseReturnFee, {
+                                        currentcy: 'đ',
+                                        currentDecimal: '0',
+                                        groupSeparator: ',',
+                                    })}
+                                </div>
+                            </li>
+                            <li className={styles.totalItem}>
+                                <FormattedMessage defaultMessage="Tổng tiền nhận" />
+                                <div>
+                                    {formatMoney(data?.totalMoney?.totalMoneyInput, {
+                                        currentcy: 'đ',
+                                        currentDecimal: '0',
+                                        groupSeparator: ',',
+                                    })}
+                                </div>
+                            </li>
+                            <li style={{ paddingRight: '20px' }}>
+                                <FormattedMessage defaultMessage="Tổng tiền hoàn trả" />
+                                <div>
+                                    {formatMoney(data?.totalMoney?.totalMoneyReturn, {
+                                        currentcy: 'đ',
+                                        currentDecimal: '0',
+                                        groupSeparator: ',',
+                                    })}
+                                </div>
+                            </li>
+                        </ul>
+                    </>
                 }
                 actionBar={mixinFuncs.renderActionBar()}
                 baseTable={
@@ -182,7 +229,7 @@ function RegistrationMoneyListPage() {
                         onChange={changePagination}
                         pagination={pagination}
                         loading={loading}
-                        dataSource={data}
+                        dataSource={data.registrationMoneyHistories?.content}
                         columns={columns}
                     />
                 }
