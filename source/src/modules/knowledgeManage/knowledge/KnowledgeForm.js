@@ -41,7 +41,8 @@ const KnowledgeForm = (props) => {
         }
         values.dateRegister = formatDateString(values.dateRegister, DATE_FORMAT_VALUE) + ' 00:00:00';
         values.dateEnd = formatDateString(values.dateEnd, DATE_FORMAT_VALUE) + ' 00:00:00';
-        return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl, banner: bannerUrl });
+        return mixinFuncs.handleSubmit({ ...values, avatar: imageUrl, banner: bannerUrl, fee: 0,
+            returnFee:0 });
     };
     useEffect(() => {
         lectureStateOptions.map((state, index) => {
@@ -65,6 +66,7 @@ const KnowledgeForm = (props) => {
             ...dataDetail,
             subjectId: dataDetail?.subject?.subjectName,
             knowledgeId: dataDetail?.knowledge?.id,
+           
         });
     }, [dataDetail]);
 
@@ -193,7 +195,7 @@ const KnowledgeForm = (props) => {
                     <Col span={12}>
                         <AutoCompleteField
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
-                            required
+                            // required
                             label={<FormattedMessage defaultMessage="Môn học" />}
                             name="subjectId"
                             apiConfig={apiConfig.subject.autocomplete}
@@ -274,7 +276,7 @@ const KnowledgeForm = (props) => {
                             options={lectureStateFilter}
                         />
                     </Col>
-                    <Col span={12}>
+                    {/* <Col span={12}>
                         <NumericField
                             required
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
@@ -283,17 +285,6 @@ const KnowledgeForm = (props) => {
                             formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                             addonAfter={'đ'}
                             min={0}
-                            // dependencies={['returnFee']}
-                            // rules={[
-                            //     ({ getFieldValue }) => ({
-                            //         validator(rule, value) {
-                            //             if (getFieldValue('returnFee') >= value) {
-                            //                 return Promise.reject(['Học phí phải lớn hơn phí hoàn trả']);
-                            //             }
-                            //             return Promise.resolve();
-                            //         },
-                            //     }),
-                            // ]}
                         />
                     </Col>
                     <Col span={12}>
@@ -318,7 +309,7 @@ const KnowledgeForm = (props) => {
                                 }),
                             ]}
                         />
-                    </Col>
+                    </Col> */}
                     <Col span={12}>
                         <SelectField
                             disabled={dataDetail?.state === 3 || (dataDetail?.state === 4 && true)}

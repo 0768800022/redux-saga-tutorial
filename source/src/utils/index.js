@@ -454,7 +454,7 @@ export const formatMoneyValue = (value) => {
     return formatMoney(value, {
         groupSeparator: ',',
         decimalSeparator: '.',
-        currentcy: 'Đ',
+        currentcy: 'đ',
         currentcyPosition: 'BACK',
         currentDecimal: '2',
     });
