@@ -152,7 +152,13 @@ const CourseForm = (props) => {
         return rules;
     };
     return (
-        <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
+        <BaseForm
+            formId={formId}
+            onFinish={handleSubmit}
+            form={form}
+            onValuesChange={onValuesChange}
+            initialValues={{ returnFee: 0 }}
+        >
             <Card className="card-form" bordered={false}>
                 <Row>
                     <Col span={12}>
@@ -222,7 +228,7 @@ const CourseForm = (props) => {
                             ]}
                             style={{ width: '100%' }}
                             format={DATE_FORMAT_DISPLAY}
-                            required
+                            // required
                         />
                     </Col>
                 </Row>
