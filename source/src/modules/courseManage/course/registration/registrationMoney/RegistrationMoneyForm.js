@@ -41,6 +41,7 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
         form.setFieldsValue({
             ...dataDetail,
         });
+        setOptionActive(dataDetail?.kind);
     }, [dataDetail]);
 
     return (
