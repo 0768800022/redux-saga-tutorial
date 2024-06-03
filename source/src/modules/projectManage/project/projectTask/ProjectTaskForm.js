@@ -250,6 +250,7 @@ const ProjectTaskForm = (props) => {
                             placeholder="Ngày bắt đầu"
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
+                            required
                         />
                     </Col>
                     <Col span={12}>
@@ -265,6 +266,7 @@ const ProjectTaskForm = (props) => {
                             ]}
                             format={DEFAULT_FORMAT}
                             style={{ width: '100%' }}
+                            required
                         />
                     </Col>
                 </Row>
