@@ -475,14 +475,16 @@ export const calculateTimes = (data) => {
 };
 
 export const calculateTrainingTimes = (data) => {
+    let value = 0;
     return data.reduce(
         (acc, item) => {
             acc.completeTime += item?.learnCourseTime;
             acc.assignedTime += item?.assignedCourseTime;
-            acc.differenceTime +=
+            value +=
                 item?.learnCourseTime === 0 || item?.assignedCourseTime === 0
                     ? 0
                     : item?.assignedCourseTime - item?.learnCourseTime;
+            acc.differenceTime = value < 0 ? value : 0;
             return acc;
         },
         { completeTime: 0, assignedTime: 0, differenceTime: 0 },

@@ -18,6 +18,7 @@ import classNames from 'classnames';
 import { statusOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { commonMessage } from '@locales/intl';
+import { showErrorMessage } from '@services/notifyService';
 
 const message = defineMessages({
     objectName: 'Vai trò dự án',
@@ -44,6 +45,13 @@ const ProjectRoleListPage = () => {
                     }
                 } catch (error) {
                     return [];
+                }
+            };
+            funcs.handleDeleteItemError = (err) => {
+                if (err.response.data.code === 'ERROR-PROJECT-ROLE-ERROR-0002') {
+                    showErrorMessage('Vai trò dự án đang được sử dụng!');
+                } else {
+                    mixinFuncs.handleDeleteItemError(err);
                 }
             };
         },
