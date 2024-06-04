@@ -19,8 +19,10 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
     const [imageUrl, setImageUrl] = useState(null);
     const queryParameters = new URLSearchParams(window.location.search);
     const registrationId = queryParameters.get('registrationId');
-
+    const courseFee = queryParameters.get('courseFee');
+    const totalMoneyInput = queryParameters.get('totalMoneyInput');
     const [optionActive, setOptionActive] = useState();
+    
     const registrationMoneyKindValue = translate.formatKeys(registrationMoneyKind, ['label']);
     const { data: regisData } = useFetch(apiConfig.registration.getDetail, {
         immediate: true,
@@ -44,6 +46,13 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
         setOptionActive(dataDetail?.kind);
     }, [dataDetail]);
 
+    const validateReturnFee = (_, value) => {
+        if (value > courseFee-totalMoneyInput) {
+            return Promise.reject('Tiền hoàn lại không được cao hơn tiền thực nhận');
+        }
+        return Promise.resolve();
+    };
+
     return (
         <BaseForm formId={formId} onFinish={handleSubmit} form={form} onValuesChange={onValuesChange}>
             <Card>
@@ -65,6 +74,7 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
                         addonAfter={'đ'}
                         defaultValue={regisData.data.totalReturnMoney}
                         min={0}
+                        
                     />
                 ) : (
                     <NumericField
@@ -73,6 +83,11 @@ const RegistrationMoneyForm = ({ isEditing, formId, actions, dataDetail, onSubmi
                         formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         addonAfter={'đ'}
                         min={0}
+                        rules={[
+                            {
+                                validator: validateReturnFee,
+                            },
+                        ]}
                     />
                 )}
                 {/* <NumericField

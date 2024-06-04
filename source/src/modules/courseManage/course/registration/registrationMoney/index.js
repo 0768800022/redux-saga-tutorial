@@ -26,6 +26,7 @@ import {
     DEFAULT_TABLE_ITEM_SIZE,
 } from '@constants';
 import useMoneyUnit from '@hooks/useMoneyUnit';
+import useFetch from '@hooks/useFetch';
 const message = defineMessages({
     objectName: 'Lịch sử trả phí',
     registration: 'Danh sách sinh viên đăng kí khóa học',
@@ -68,34 +69,47 @@ function RegistrationMoneyListPage() {
                 }
             };
             funcs.getCreateLink = () => {
-                return `${pagePath}/create?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
+                return `${pagePath}/create?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&courseFee=${data?.totalMoney?.courseFee}&totalMoneyInput=${data?.totalMoney?.totalMoneyInput}`;
             };
             funcs.getItemDetailLink = (dataRow) => {
-                return `${pagePath}/${dataRow.id}?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`;
+                return `${pagePath}/${dataRow.id}?registrationId=${registrationId}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&courseFee=${data?.totalMoney?.courseFee}`;
             };
         },
     });
-    console.log('🚀 ~ RegistrationMoneyListPage ~ data:', data);
 
     const columns = [
+        
+        // {
+        //     title: '#',
+        //     dataIndex: ['registrationInfo', 'studentInfo', 'account', 'avatar'],
+        //     align: 'center',
+        //     width: 80,
+        //     render: (avatar) => (
+        //         <AvatarField
+        //             size="large"
+        //             icon={<UserOutlined />}
+        //             src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
+        //         />
+        //     ),
+        // },
+    
+        // {
+        //     title: translate.formatMessage(commonMessage.studentName),
+        //     dataIndex: ['registrationInfo', 'studentInfo', 'account', 'fullName'],
+        // },
         {
-            title: '#',
-            dataIndex: ['registrationInfo', 'studentInfo', 'account', 'avatar'],
-            align: 'center',
-            width: 80,
-            render: (avatar) => (
-                <AvatarField
-                    size="large"
-                    icon={<UserOutlined />}
-                    src={avatar ? `${AppConstants.contentRootUrl}${avatar}` : null}
-                />
-            ),
+            title: translate.formatMessage(commonMessage.createdDate),
+            dataIndex: 'createdDate',
+            render: (createdDate) => {
+                return (
+                    <div style={{ padding: '0 4px', fontSize: 14 }}>
+                        {dayjs(createdDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
+                    </div>
+                );
+            },
+            width: 130,
+            // align: 'right',
         },
-        {
-            title: translate.formatMessage(commonMessage.studentName),
-            dataIndex: ['registrationInfo', 'studentInfo', 'account', 'fullName'],
-        },
-
         {
             title: translate.formatMessage(message.money),
             dataIndex: 'money',
@@ -111,19 +125,7 @@ function RegistrationMoneyListPage() {
             },
             width: 130,
         },
-        {
-            title: translate.formatMessage(commonMessage.createdDate),
-            dataIndex: 'createdDate',
-            render: (createdDate) => {
-                return (
-                    <div style={{ padding: '0 4px', fontSize: 14 }}>
-                        {dayjs(createdDate, DATE_DISPLAY_FORMAT).format(DATE_FORMAT_DISPLAY)}
-                    </div>
-                );
-            },
-            width: 130,
-            align: 'right',
-        },
+       
 
         {
             title: translate.formatMessage(message.kind),
@@ -141,7 +143,7 @@ function RegistrationMoneyListPage() {
         },
 
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: 110 }),
+        mixinFuncs.renderActionColumn({ edit: false, delete: true }, { width: 110 }),
     ];
 
     const searchFields = [
@@ -177,7 +179,7 @@ function RegistrationMoneyListPage() {
                                     : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
                             }
                         >
-                            {courseName}
+                            {data?.registrationMoneyHistories?.content[0]?.registrationInfo?.studentInfo?.account?.fullName} - {courseName}
                         </span>
                         <ul className={styles.groupTotal}>
                             <li className={styles.totalItem}>

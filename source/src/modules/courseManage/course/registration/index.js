@@ -92,7 +92,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.registrationMoneyListPage.path +
-                                        `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
+                                    `?registrationId=${id}&projectName=${name}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}`,
                                 );
                             }}
                         >
@@ -109,7 +109,7 @@ function RegistrationListPage() {
                                 e.stopPropagation();
                                 navigate(
                                     routes.courseRegistrationProjectListPage.path +
-                                        `?registrationId=${id}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&studentId=${studentId}&studentName=${studentName}
+                                    `?registrationId=${id}&courseId=${courseId}&courseName=${courseName}&courseState=${courseState}&courseStatus=${courseStatus}&studentId=${studentId}&studentName=${studentName}
                                             `,
                                 );
                             }}
@@ -125,7 +125,7 @@ function RegistrationListPage() {
         event.preventDefault();
         navigate(
             routes.studentActivityCourseListPage.path +
-                `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
+            `?courseId=${record?.courseId}&studentId=${record?.studentId}&studentName=${record?.studentName}`,
         );
     };
     const handleOnClickProject = (record) => {
@@ -217,7 +217,7 @@ function RegistrationListPage() {
                         </div>
                         <div>
                             {' '}
-                            {record.minusTrainingProjectMoney && value <trainingUnit ? (
+                            {record.minusTrainingProjectMoney && value < trainingUnit ? (
                                 <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
                             ) : (
                                 <></>
@@ -261,7 +261,7 @@ function RegistrationListPage() {
                         <div
                             className={classNames(
                                 mixinFuncs.hasPermission([apiConfig.task.studentDetailCourseTask?.baseURL]) &&
-                                    styles.customDiv,
+                                styles.customDiv,
                                 value > trainingUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
                             onClick={() => handleOnClickTraining(record)}
@@ -312,7 +312,7 @@ function RegistrationListPage() {
                         <div
                             className={classNames(
                                 mixinFuncs.hasPermission([apiConfig.projectTaskLog.findAllTrackingLog?.baseURL]) &&
-                                    styles.customDiv,
+                                styles.customDiv,
                                 value > bugUnit ? styles.customPercent : styles.customPercentOrange,
                             )}
                             onClick={() => handleOnClickProject(record)}
@@ -361,15 +361,15 @@ function RegistrationListPage() {
             },
         },
         courseStatus == 1 &&
-            mixinFuncs.renderActionColumn(
-                {
-                    registration: mixinFuncs.hasPermission([apiConfig.registrationProject.getList?.baseURL]),
-                    money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]),
-                    edit: true,
-                    delete: true,
-                },
-                { width: 180 },
-            ),
+        mixinFuncs.renderActionColumn(
+            {
+                registration: mixinFuncs.hasPermission([apiConfig.registrationProject.getList?.baseURL]),
+                money: mixinFuncs.hasPermission([apiConfig.registrationMoney.getList?.baseURL]),
+                edit: true,
+                delete: true,
+            },
+            { width: 180 },
+        ),
     ].filter(Boolean);
 
     const searchFields = [

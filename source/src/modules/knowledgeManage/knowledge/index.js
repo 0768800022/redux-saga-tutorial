@@ -84,7 +84,7 @@ const KnowledgeListPage = () => {
                                             e.stopPropagation();
                                             navigate(
                                                 routes.developerKnowledgeListPage.path +
-                                                    `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}&knowledgeId=${knowledge.id}`,
+                                                `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}&knowledgeId=${knowledge.id}`,
                                             );
                                         }}
                                     >
@@ -158,20 +158,7 @@ const KnowledgeListPage = () => {
             title: translate.formatMessage(commonMessage.catalogue),
             dataIndex: ['knowledge', 'categoryName'],
         },
-        {
-            title: <FormattedMessage defaultMessage="Học phí" />,
-            dataIndex: 'fee',
-            width: 150,
-            align: 'right',
-            render: (fee) => {
-                const formattedValue = formatMoney(fee, {
-                    currentcy: 'đ',
-                    currentDecimal: '0',
-                    groupSeparator: ',',
-                });
-                return <div>{formattedValue}</div>;
-            },
-        },
+
         {
             title: translate.formatMessage(commonMessage.endDate),
             dataIndex: 'dateEnd',
