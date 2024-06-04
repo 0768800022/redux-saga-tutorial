@@ -432,7 +432,6 @@ const CourseDetailForm = (props) => {
 
                 <div className="footer-card-form" style={{ display: 'flex', justifyContent: 'end' }}>
                     <Button
-                        size="large"
                         danger
                         key="cancel"
                         onClick={(e) => {
@@ -446,7 +445,6 @@ const CourseDetailForm = (props) => {
 
                     {dataDetail?.state == versionState.VERSION_STATE_SUBMIT && (
                         <Button
-                            size="large"
                             type="primary"
                             key="cancel"
                             danger
@@ -461,7 +459,6 @@ const CourseDetailForm = (props) => {
                         </Button>)
                     }
                     {dataDetail?.state == versionState.VERSION_STATE_SUBMIT && (<Button
-                        size="large"
                         type="primary"
                         key="submit"
                         onClick={(e) => {
