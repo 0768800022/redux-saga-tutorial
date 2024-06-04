@@ -193,9 +193,9 @@ function RegistrationMoneyListPage() {
                                 </div>
                             </li>
                             <li className={styles.totalItem}>
-                                <FormattedMessage defaultMessage="Tiền hoàn trả" />
+                                <FormattedMessage defaultMessage="Tiền thực nhận" />
                                 <div>
-                                    {formatMoney(data?.totalMoney?.courseReturnFee, {
+                                    {formatMoney(data?.totalMoney?.totalMoneyReturn, {
                                         currentcy: 'đ',
                                         currentDecimal: '0',
                                         groupSeparator: ',',
