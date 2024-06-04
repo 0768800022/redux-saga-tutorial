@@ -4,11 +4,13 @@ import useSaveBase from '@hooks/useSaveBase';
 import useTranslate from '@hooks/useTranslate';
 import { commonMessage } from '@locales/intl';
 import { showErrorMessage } from '@services/notifyService';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 import { generatePath, useParams } from 'react-router-dom';
 import CourseForm from './CourseForm';
 import routes from './routes';
+import useFetch from '@hooks/useFetch';
+import { VERSION_STATE_REJECT } from '@constants';
 
 const messages = defineMessages({
     objectName: 'khoá học',
@@ -52,7 +54,19 @@ const CourseSavePage = () => {
         },
     });
 
-    // const { execute: executeUpdateLeader } = useFetch(apiConfig.course.updateLeaderCourse, { immediate: false });
+    const { execute: executeResetRejected } = useFetch(apiConfig.courseReviewHistory.resetRejected, {
+        immediate: false,
+    });
+
+    useEffect(() => {
+        if (detail?.courseReviewHistory?.state === VERSION_STATE_REJECT) {
+            executeResetRejected({
+                data: {
+                    id: detail?.courseReviewHistory?.id,
+                },
+            });
+        }
+    }, [ detail ]);
 
     return (
         <PageWrapper

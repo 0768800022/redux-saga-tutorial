@@ -20,7 +20,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
-import { formSize, lectureState, statusOptions } from '@constants/masterData';
+import { formSize, lectureState, statusOptions, versionStateOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { formatMoney } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -49,6 +49,7 @@ const CourseListPage = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
+    const stateReviewCourse = translate.formatKeys(versionStateOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.course,
@@ -150,12 +151,12 @@ const CourseListPage = () => {
             key: 'name',
             placeholder: translate.formatMessage(commonMessage.courseName),
         },
-        // {
-        //     key: 'state',
-        //     placeholder: translate.formatMessage(commonMessage.state),
-        //     type: FieldTypes.SELECT,
-        //     options: stateValues,
-        // },
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(commonMessage.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
         // !leaderName && {
         //     key: 'status',
         //     placeholder: translate.formatMessage(commonMessage.status),
@@ -282,20 +283,20 @@ const CourseListPage = () => {
             width: 130,
             align: 'center',
         },
-        // {
-        //     title: translate.formatMessage(commonMessage.state),
-        //     dataIndex: 'state',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const state = stateValues.find((item) => item.value == dataRow);
-        //         return (
-        //             <Tag color={state.color}>
-        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-        //             </Tag>
-        //         );
-        //     },
-        // },
+        {
+            title: translate.formatMessage(commonMessage.state),
+            dataIndex: ['courseReviewHistory','state'],
+            align: 'center',
+            width: 120,
+            render(dataRow) {
+                const state = stateReviewCourse.find((item) => item.value == dataRow);
+                return (
+                    <Tag color={state.color}>
+                        <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
+                    </Tag>
+                );
+            },
+        },
         // !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
