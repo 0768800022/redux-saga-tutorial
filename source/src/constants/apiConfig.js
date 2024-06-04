@@ -368,6 +368,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        checkRefund: {
+            baseURL: `${apiTenantUrl}v1/registration-money-history/check-refund/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     organize: {
         getList: {

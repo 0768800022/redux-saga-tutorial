@@ -6,9 +6,10 @@ import routes from '@routes';
 import React from 'react';
 import { defineMessages } from 'react-intl';
 import RegistrationMoneyForm from './RegistrationMoneyForm';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { commonMessage } from '@locales/intl';
 import { showErrorMessage } from '@services/notifyService';
+import useFetch from '@hooks/useFetch';
 // import routes from '@modules/course/routes';
 
 const messages = defineMessages({
@@ -18,12 +19,21 @@ const messages = defineMessages({
 
 function RegistrationMoneySavePage() {
     const translate = useTranslate();
+    const navigate = useNavigate();
     const queryParameters = new URLSearchParams(window.location.search);
     const courseId = queryParameters.get('courseId');
     const courseName = queryParameters.get('courseName');
     const registrationId = queryParameters.get('registrationId');
     const courseState = queryParameters.get('courseState');
     const courseStatus = queryParameters.get('courseStatus');
+  
+    const { data: detailCheckRefund } = useFetch(apiConfig.registrationMoney.checkRefund, {
+        immediate: true,
+        pathParams: {
+            id: registrationId,
+        },
+    });
+
     const { pathname: pagePath } = useLocation();
     const { detail, onSave, mixinFuncs, setIsChangedFormValues, isEditing, errors, loading, title } = useSaveBase({
         apiConfig: {
@@ -53,6 +63,7 @@ function RegistrationMoneySavePage() {
             funcs.onSaveError = (err) => {
                 if (err.response.data.code === 'ERROR-REGISTRATION-MONEY-HISTORY-ERROR-0003') {
                     showErrorMessage('Tiền hoàn lại không được cao hơn tiền thực nhận');
+                    navigate(-1);
                     mixinFuncs.setSubmit(false);
                 } else if(err.response.data.code === 'ERROR-REGISTRATION-MONEY-HISTORY-ERROR-0004') {
                     showErrorMessage('Tiền nhận không được vượt quá tiền của khoá học');
