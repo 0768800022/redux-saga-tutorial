@@ -183,6 +183,14 @@ const KnowledgeListPage = () => {
         ),
     ].filter(Boolean);
 
+    const handleOnClick = (event, record) => {
+        event.preventDefault();
+        navigate(
+            routes.lectureKnowledgeListPage.path +
+                `?knowledgeId=${record.id}`,
+        );
+    };
+
     return (
         <PageWrapper routes={leaderName ? breadLeaderRoutes : breadRoutes}>
             <ListPage
@@ -200,6 +208,13 @@ const KnowledgeListPage = () => {
                         loading={loading}
                         dataSource={data}
                         columns={columns}
+                        onRow={(record) => ({
+                            onClick: (e) => {
+                                e.stopPropagation();
+                                handleOnClick(e,record);
+                                // handleFetchDetail(record.id);
+                            },
+                        })}
                     />
                 }
             />

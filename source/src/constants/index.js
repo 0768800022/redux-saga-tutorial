@@ -436,6 +436,8 @@ export const formSize = {
 
 export const LECTURE_SECTION = 1;
 export const LECTURE_LESSION = 2;
+export const LECTURE_VIDEO = 3;
+
 
 export const REGISTRATION_MONEY_RECEIVED = 1;
 export const REGISTRATION_MONEY_RETURN = 2;
