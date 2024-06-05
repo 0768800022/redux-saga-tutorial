@@ -172,4 +172,6 @@ export const commonMessage = defineMessages({
     approveSuccess:'Duyệt khoá học thành công',
     listLesson:'Danh sách bài học',
     rejectSuccess:'Huỷ khoá học thành công',
+    isCharged: 'Bị trừ tiền',
+    lesson: 'Bài học',
 });

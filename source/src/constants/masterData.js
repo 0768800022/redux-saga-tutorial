@@ -45,6 +45,7 @@ import {
     TASK_KIND_TESTCASE,
     TASK_LOG_BUG,
     versionState,
+    LECTURE_VIDEO,
 } from '@constants';
 import {
     dateFilterMessage,
@@ -244,13 +245,18 @@ export const returnFeeOption = [
 ];
 export const lectureKindOptions = [
     {
-        value: LECTURE_LESSION,
-        label: lectureKindMessage.lesson,
-        color: '#00A648',
+        value: LECTURE_SECTION,
+        label: lectureKindMessage.chapter,
+        color: 'yellow',
     },
     {
-        value: LECTURE_SECTION,
-        label: lectureKindMessage.section,
+        value: LECTURE_LESSION,
+        label: lectureKindMessage.lesson,
+        color: 'green',
+    },
+    {
+        value: LECTURE_VIDEO,
+        label: lectureKindMessage.video,
         color: '#FFBF00',
     },
 ];

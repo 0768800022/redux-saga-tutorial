@@ -316,7 +316,6 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                         <Col span={12}>
                             <CheckboxField
                                 className={styles.customCheckbox}
-                                required
                                 label={translate.formatMessage(commonMessage.isPaid)}
                                 name="isPaid"
                                 checked={isChecked}

@@ -20,7 +20,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
 import route from '@modules/task/routes';
 import { convertDateTimeToString } from '@utils/dayHelper';
-import { formSize, lectureState, statusOptions } from '@constants/masterData';
+import { formSize, lectureState, statusOptions, versionStateOptions } from '@constants/masterData';
 import { FieldTypes } from '@constants/formConfig';
 import { formatMoney } from '@utils';
 import { BaseTooltip } from '@components/common/form/BaseTooltip';
@@ -49,6 +49,7 @@ const CourseListPage = () => {
 
     const location = useLocation();
     const navigate = useNavigate();
+    const stateReviewCourse = translate.formatKeys(versionStateOptions, ['label']);
     const { data, mixinFuncs, queryFilter, loading, pagination, changePagination, queryParams, serializeParams } =
         useListBase({
             apiConfig: apiConfig.course,
@@ -77,28 +78,6 @@ const CourseListPage = () => {
                     }
                 };
                 funcs.additionalActionColumnButtons = () => ({
-                    developer: ({ id, name, state, status,knowledge }) => {
-                        if(knowledge){
-                            return(
-                                <BaseTooltip title={translate.formatMessage(commonMessage.developer)}>
-                                    <Button
-                                        type="link"
-                                        style={{ padding: 0 }}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            navigate(
-                                                routes.developerKnowledgeListPage.path +
-                                                    `?courseId=${id}&courseName=${name}&courseState=${state}&courseStatus=${status}&knowledgeId=${knowledge.id}`,
-                                            );
-                                        }}
-                                    >
-                                        <UserOutlined />
-                                    </Button>
-                                </BaseTooltip>
-                            );
-                        }
-
-                    },
                     registration: ({ id, name, state, status }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.registration)}>
                             <Button
@@ -172,12 +151,12 @@ const CourseListPage = () => {
             key: 'name',
             placeholder: translate.formatMessage(commonMessage.courseName),
         },
-        // {
-        //     key: 'state',
-        //     placeholder: translate.formatMessage(commonMessage.state),
-        //     type: FieldTypes.SELECT,
-        //     options: stateValues,
-        // },
+        {
+            key: 'state',
+            placeholder: translate.formatMessage(commonMessage.state),
+            type: FieldTypes.SELECT,
+            options: stateValues,
+        },
         // !leaderName && {
         //     key: 'status',
         //     placeholder: translate.formatMessage(commonMessage.status),
@@ -304,24 +283,9 @@ const CourseListPage = () => {
             width: 130,
             align: 'center',
         },
-        // {
-        //     title: translate.formatMessage(commonMessage.state),
-        //     dataIndex: 'state',
-        //     align: 'center',
-        //     width: 120,
-        //     render(dataRow) {
-        //         const state = stateValues.find((item) => item.value == dataRow);
-        //         return (
-        //             <Tag color={state.color}>
-        //                 <div style={{ padding: '0 4px', fontSize: 14 }}>{state.label}</div>
-        //             </Tag>
-        //         );
-        //     },
-        // },
         // !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                developer:mixinFuncs.hasPermission([apiConfig.knowledgePermission.getList.baseURL]),
                 review:mixinFuncs.hasPermission([apiConfig.review.star?.baseURL, apiConfig.review.listReviews?.baseURL]),
                 registration: !leaderName && mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]),
                 task: mixinFuncs.hasPermission([apiConfig.task.getList?.baseURL]),

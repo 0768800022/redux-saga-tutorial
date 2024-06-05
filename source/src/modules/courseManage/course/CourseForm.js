@@ -193,7 +193,7 @@ const CourseForm = (props) => {
                     <Col span={12}>
                         <AutoCompleteField
                             disabled={dataDetail.state !== undefined && dataDetail.state !== 1}
-                            required
+                            // required
                             label={<FormattedMessage defaultMessage="Môn học" />}
                             name="subjectId"
                             apiConfig={apiConfig.subject.autocomplete}

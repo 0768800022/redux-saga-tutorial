@@ -26,7 +26,8 @@ import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
 import { BaseForm } from '@components/common/form/BaseForm';
 import DatePickerField from '@components/common/form/DatePickerField';
 import useMoneyUnit from '@hooks/useMoneyUnit';
-
+import CheckboxField from '@components/common/form/CheckboxField';
+import styles from './index.module.scss';
 const message = defineMessages({
     objectName: 'Lập trình viên',
 });
@@ -39,10 +40,13 @@ const DeveloperListPage = () => {
 
     const [projectRole, setProjectROle] = useState([]);
     const [studentId, setStudentId] = useState();
+    const [isChecked, setIsChecked] = useState(false);
+
     const { execute: executeTakeDayOff } = useFetch(apiConfig.dayOffLog.create);
     const [openedModalCaculateSalary, handlerModalCaculateSalary] = useDisclosure(false);
     const [form] = Form.useForm();
     const handleFinish = (values) => {
+        values.isCharged = isChecked;
         values.startDate = values.startDate && formatDateString(values.startDate, DEFAULT_FORMAT);
         values.endDate = values.endDate && formatDateString(values.endDate, DEFAULT_FORMAT);
         executeTakeDayOff({
@@ -253,7 +257,9 @@ const DeveloperListPage = () => {
             setProjectROle(projectroles);
         }
     }, [projectroles]);
-
+    const handleOnChangeCheckBox = () => {
+        setIsChecked(!isChecked);
+    };
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.developer) }]}>
             <ListPage
@@ -307,6 +313,17 @@ const DeveloperListPage = () => {
                                     ]}
                                     format={DEFAULT_FORMAT}
                                     style={{ width: '100%' }}
+                                />
+                            </Col>
+                        </Row>
+                        <Row gutter={16}>
+                            <Col span={24}>
+                                <CheckboxField
+                                    className={styles.customCheckbox}
+                                    label={translate.formatMessage(commonMessage.isCharged)}
+                                    name="isCharged"
+                                    checked={isChecked}
+                                    onChange={handleOnChangeCheckBox}
                                 />
                             </Col>
                         </Row>

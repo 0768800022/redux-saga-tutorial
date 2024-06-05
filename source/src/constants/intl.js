@@ -82,6 +82,8 @@ export const statePromotion = defineMessages({
 export const lectureKindMessage = defineMessages({
     section: 'Chương',
     lesson: 'Bài học',
+    chapter: 'Chương',
+    video: 'Video',
 });
 
 export const lectureStateMessage = defineMessages({

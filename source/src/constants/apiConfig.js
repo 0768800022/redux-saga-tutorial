@@ -248,6 +248,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getDetails: {
+            baseURL: `${apiTenantUrl}v1/course/get-detail/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     registration: {
         getList: {
@@ -365,6 +371,12 @@ const apiConfig = {
         delete: {
             baseURL: `${apiTenantUrl}v1/registration-money-history/delete/:id`,
             method: 'DELETE',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
+        checkRefund: {
+            baseURL: `${apiTenantUrl}v1/registration-money-history/check-refund/:id`,
+            method: 'GET',
             headers: baseHeader,
             isRequiredTenantId: true,
         },
