@@ -248,6 +248,12 @@ const apiConfig = {
             headers: baseHeader,
             isRequiredTenantId: true,
         },
+        getDetails: {
+            baseURL: `${apiTenantUrl}v1/course/get-detail/:id`,
+            method: 'GET',
+            headers: baseHeader,
+            isRequiredTenantId: true,
+        },
     },
     registration: {
         getList: {

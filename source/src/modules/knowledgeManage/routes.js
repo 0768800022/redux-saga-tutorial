@@ -3,6 +3,7 @@ import KnowledgeListPage from "./knowledge";
 import KnowledgeSavePage from "./knowledge/KnowledgeSavePage";
 import CategoryListPage from "./categoryKnowledge";
 import CategorySavePage from "./categoryKnowledge/CategorySavePage";
+import LectureKnowledgeListPage from "./lectureKnowledge";
 
 export default {
     knowledgeListPage: {
@@ -11,6 +12,13 @@ export default {
         auth: true,
         component: KnowledgeListPage,
         permissions: [apiConfig.course.getList.baseURL],
+    },
+    lectureKnowledgeListPage: {
+        path: '/knowledge/lecture',
+        title: 'Lecture Knowledge List Page',
+        auth: true,
+        component: LectureKnowledgeListPage,
+        permissions: [apiConfig.course.getDetails.baseURL],
     },
     knowledgeSavePage: {
         path: '/knowledge/:id',

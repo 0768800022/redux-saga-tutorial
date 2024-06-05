@@ -173,4 +173,5 @@ export const commonMessage = defineMessages({
     listLesson:'Danh sách bài học',
     rejectSuccess:'Huỷ khoá học thành công',
     isCharged: 'Bị trừ tiền',
+    lesson: 'Bài học',
 });
