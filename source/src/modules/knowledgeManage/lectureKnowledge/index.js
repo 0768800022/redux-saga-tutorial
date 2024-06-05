@@ -175,7 +175,7 @@ const LectureKnowledgeListPage = () => {
             align: 'right',
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
-        mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
+        // mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
 
     return (
