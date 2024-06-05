@@ -1,3 +1,9 @@
+@import "@assets/scss/global";
+
+.action-bar {
+    text-align: right;
+}
+
 .customCheckbox {
     :global .ant-form-item-label {
         display: flex !important;
