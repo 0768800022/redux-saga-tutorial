@@ -75,7 +75,7 @@ const KnowledgePermissionListPage = () => {
     const columns = [
         {
             title: translate.formatMessage(message.name),
-            dataIndex: ['knowledge', 'categoryName'],
+            dataIndex: ['knowledge', 'name'],
         },
         mixinFuncs.renderActionColumn({ edit: true, delete: true }, { width: '120px' }),
     ];
@@ -109,11 +109,11 @@ const KnowledgePermissionListPage = () => {
                     open={showModal}
                     onOk={() => {
                         form.submit();
-                        if (form.getFieldValue('knowledgedId')) {
+                        if (form.getFieldValue('courseId')) {
                             executeCreateKnowledgePermission({
                                 data: {
                                     developerId: parseInt(developerId),
-                                    knowledgeId: form.getFieldValue('knowledgedId'),
+                                    courseId: form.getFieldValue('courseId'),
                                 },
                                 onCompleted: (result) => {
                                     showSucsessMessage('Tạo phân quyền kiến thức thành công!');
@@ -144,15 +144,16 @@ const KnowledgePermissionListPage = () => {
                             <Form.Item>
                                 <AutoCompleteField
                                     label={<FormattedMessage defaultMessage="Kiến thức" />}
-                                    name="knowledgedId"
-                                    apiConfig={apiConfig.category.autocomplete}
-                                    mappingOptions={(item) => ({ value: item.id, label: item.categoryName })}
+                                    name="courseId"
+                                    apiConfig={apiConfig.course.autocomplete}
+                                    mappingOptions={(item) => ({ value: item.id, label: item.name })}
                                     searchParams={(text) => ({ name: text })}
                                     required
                                     initialSearchParams={{
-                                        kind: categoryKinds.CATEGORY_KIND_KNOWLEDGE,
+                                        // kind: categoryKinds.CATEGORY_KIND_KNOWLEDGE,
+                                        isKnowledge: true,
                                     }}
-                                    optionsParams={{ kind: categoryKinds.CATEGORY_KIND_KNOWLEDGE }}
+                                    optionsParams={{ isKnowledge: true }}
                                 />
                             </Form.Item>
                         </Form>
