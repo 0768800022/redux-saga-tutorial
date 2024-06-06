@@ -176,3 +176,7 @@ export const returnFeeMessage = defineMessages({
     returnFeeTrue: 'Được hoàn trả',
     returnMoneyFalse: 'Không được hoàn trả',
 });
+export const dayOffLogMessage = defineMessages({
+    noCharge : 'Không trừ tiền',
+    charge: 'Trừ tiền',
+});

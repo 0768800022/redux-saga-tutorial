@@ -22,7 +22,6 @@ import { commonMessage } from '@locales/intl';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { IconAlarmOff, IconShieldCog } from '@tabler/icons-react';
 import useMoneyUnit from '@hooks/useMoneyUnit';
-import styles from './index.module.scss';
 const message = defineMessages({
     objectName: 'Lập trình viên',
 });

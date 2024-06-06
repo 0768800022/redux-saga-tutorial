@@ -73,6 +73,7 @@ import {
     salaryPeriodStateMessage,
     salaryMessage,
     returnFeeMessage,
+    dayOffLogMessage,
 } from './intl';
 import React from 'react';
 import feature from '../assets/images/feature.png';
@@ -572,12 +573,12 @@ export const versionStateOptions = [
 export const dayOfflogOptions = [
     {
         value: false,
-        label: 'Không trừ tiền',
+        label: dayOffLogMessage.noCharge,
         color: 'green',
     },
     {
         value: true,
-        label: 'Trừ tiền',
+        label: dayOffLogMessage.charge,
         color: 'yellow',
     },
  
