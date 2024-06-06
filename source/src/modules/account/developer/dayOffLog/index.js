@@ -51,7 +51,8 @@ function DayOffLogListPage({ setBreadCrumbName }) {
     const developerName = queryParameters.get('developerName');
     const developerId = queryParameters.get('developerId');
     const [openedModalDayOffLog, handlerModalDayOffLog] = useDisclosure(false);
-    
+    const dayOffLogKind = translate.formatKeys(dayOfflogOptions, ['label']);
+
     const search = location.search;
     const [isChecked, setIsChecked] = useState(false);
     const { execute: executeTakeDayOff } = useFetch(apiConfig.dayOffLog.create);
@@ -184,7 +185,7 @@ function DayOffLogListPage({ setBreadCrumbName }) {
             align: 'center',
             width: 120,
             render(dataRow) {
-                const kindLog = dayOfflogOptions.find((item) => item.value == dataRow);
+                const kindLog = dayOffLogKind.find((item) => item.value == dataRow);
                 return (
                     <Tag color={kindLog?.color}>
                         <div style={{ padding: '0 4px', fontSize: 14 }}>{kindLog?.label}</div>
