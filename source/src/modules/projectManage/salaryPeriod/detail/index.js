@@ -105,7 +105,7 @@ const SalaryPeriodDetailListPage = () => {
             title: translate.formatMessage(commonMessage.totalTimeWorking),
             dataIndex: 'totalTimeWorking',
             align: 'center',
-            width: 140,
+            width: 100,
             render: (dataRow) => {
                 let result = dataRow / 60;
                 if (result % 1 !== 0) {
@@ -119,7 +119,7 @@ const SalaryPeriodDetailListPage = () => {
             title: translate.formatMessage(commonMessage.salary),
             dataIndex: 'fixSalary',
             align: 'right',
-            width: 140,
+            width: 100,
             render: (fixSalary) => {
                 const formattedValue = formatMoney(fixSalary ? fixSalary : 0, {
                     groupSeparator: ',',
@@ -134,7 +134,7 @@ const SalaryPeriodDetailListPage = () => {
             title: translate.formatMessage(commonMessage.projectSalary),
             // dataIndex: 'projectSalary',
             align: 'right',
-            width: 140,
+            width: 120,
             render: (dataRow) => {
                 let result = dataRow.totalTimeProjectIsPaid / 60;
                 let timeOff = result;
