@@ -1,18 +1,18 @@
 import ListPage from '@components/common/layout/ListPage';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import BaseTable from '@components/common/table/BaseTable';
-import { AppConstants, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE, TIME_FORMAT_DISPLAY } from '@constants';
+import { AppConstants, DEFAULT_TABLE_ITEM_SIZE } from '@constants';
 import apiConfig from '@constants/apiConfig';
-import { SalaryOptions, levelOptionSelect, statusOptions } from '@constants/masterData';
+import { SalaryOptions,  statusOptions } from '@constants/masterData';
 import useFetch from '@hooks/useFetch';
 import useListBase from '@hooks/useListBase';
 import useTranslate from '@hooks/useTranslate';
 import routes from '@routes';
-import { convertUtcToLocalTime, formatDateString, formatMoney } from '@utils';
-import { Avatar, Button, Card, Col, Form, Modal, Row, Tag } from 'antd';
-import { ProjectOutlined, UserOutlined, ReadOutlined } from '@ant-design/icons';
+import { formatMoney } from '@utils';
+import { Button } from 'antd';
+import { UserOutlined, ReadOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
-import { FormattedMessage, defineMessages } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import FolderIcon from '@assets/icons';
 import { FieldTypes } from '@constants/formConfig';
@@ -21,12 +21,7 @@ import AvatarField from '@components/common/form/AvatarField';
 import { commonMessage } from '@locales/intl';
 import ScheduleFile from '@components/common/elements/ScheduleFile';
 import { IconAlarmOff, IconShieldCog } from '@tabler/icons-react';
-import useDisclosure from '@hooks/useDisclosure';
-import { showErrorMessage, showSucsessMessage } from '@services/notifyService';
-import { BaseForm } from '@components/common/form/BaseForm';
-import DatePickerField from '@components/common/form/DatePickerField';
 import useMoneyUnit from '@hooks/useMoneyUnit';
-import CheckboxField from '@components/common/form/CheckboxField';
 import styles from './index.module.scss';
 const message = defineMessages({
     objectName: 'Lập trình viên',
@@ -39,38 +34,6 @@ const DeveloperListPage = () => {
     const salaryValues = translate.formatKeys(SalaryOptions, ['label']);
 
     const [projectRole, setProjectROle] = useState([]);
-    const [studentId, setStudentId] = useState();
-    const [isChecked, setIsChecked] = useState(false);
-
-    const { execute: executeTakeDayOff } = useFetch(apiConfig.dayOffLog.create);
-    const [openedModalCaculateSalary, handlerModalCaculateSalary] = useDisclosure(false);
-    const [form] = Form.useForm();
-    const handleFinish = (values) => {
-        values.isCharged = isChecked;
-        values.startDate = values.startDate && formatDateString(values.startDate, DEFAULT_FORMAT);
-        values.endDate = values.endDate && formatDateString(values.endDate, DEFAULT_FORMAT);
-        executeTakeDayOff({
-            data: { ...values },
-            onCompleted: (response) => {
-                handlerModalCaculateSalary.close();
-                if (response?.result == true) {
-                    showSucsessMessage(translate.formatMessage(commonMessage.success_day_off));
-                }
-            },
-            onError: (error) => {
-                handlerModalCaculateSalary.close();
-                showErrorMessage(translate.formatMessage(commonMessage.error_day_off));
-            },
-        });
-        form.resetFields();
-    };
-    const validateDueDate = (_, value) => {
-        const { startDate } = form.getFieldValue();
-        if (startDate && value && value.isBefore(startDate)) {
-            return Promise.reject('Ngày kết thúc phải lớn hơn ngày bắt đầu');
-        }
-        return Promise.resolve();
-    };
 
     const { data, mixinFuncs, loading, pagination, queryFilter, serializeParams } = useListBase({
         apiConfig: apiConfig.developer,
@@ -129,15 +92,17 @@ const DeveloperListPage = () => {
                         </BaseTooltip>
                     );
                 },
-                dayoff: ({ id, name, status }) => (
-                    <BaseTooltip title={translate.formatMessage(commonMessage.take_off)}>
+                dayoff: ({ id, accountDto }) => (
+                    <BaseTooltip title={translate.formatMessage(commonMessage.dayOffLog)}>
                         <Button
                             type="link"
                             style={{ padding: '0' }}
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setStudentId(id);
-                                handlerModalCaculateSalary.open();
+                                navigate(
+                                    routes.dayOffLogListPage.path +
+                                        `?developerId=${id}&developerName=${accountDto?.fullName}`,
+                                );
                             }}
                         >
                             <IconAlarmOff color="#2e85ff" size={17} style={{ marginBottom: '-2px' }} />
@@ -165,6 +130,7 @@ const DeveloperListPage = () => {
         {
             title: 'Họ và tên',
             dataIndex: ['accountDto', 'fullName'],
+            width: 180,
         },
         {
             title: 'Lương cứng',
@@ -257,9 +223,7 @@ const DeveloperListPage = () => {
             setProjectROle(projectroles);
         }
     }, [projectroles]);
-    const handleOnChangeCheckBox = () => {
-        setIsChecked(!isChecked);
-    };
+   
     return (
         <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.developer) }]}>
             <ListPage
@@ -275,61 +239,7 @@ const DeveloperListPage = () => {
                     />
                 }
             ></ListPage>
-            <Modal
-                title={<span>Xin nghỉ phép</span>}
-                open={openedModalCaculateSalary}
-                onOk={() => form.submit()}
-                onCancel={() => handlerModalCaculateSalary.close()}
-            >
-                <BaseForm
-                    form={form}
-                    onFinish={(values) => {
-                        values.developerId = studentId;
-                        handleFinish(values);
-                    }}
-                    size="100%"
-                >
-                    <Card>
-                        <Row gutter={16}>
-                            <Col span={12}>
-                                <DatePickerField
-                                    showTime={true}
-                                    label={<FormattedMessage defaultMessage="Ngày bắt đầu" />}
-                                    name="startDate"
-                                    format={DEFAULT_FORMAT}
-                                    style={{ width: '100%' }}
-                                />
-                            </Col>
-                            <Col span={12}>
-                                <DatePickerField
-                                    showTime={true}
-                                    label={<FormattedMessage defaultMessage="Ngày kết thúc" />}
-                                    name="endDate"
-                                    // placeholder="Ngày kết thúc"
-                                    rules={[
-                                        {
-                                            validator: validateDueDate,
-                                        },
-                                    ]}
-                                    format={DEFAULT_FORMAT}
-                                    style={{ width: '100%' }}
-                                />
-                            </Col>
-                        </Row>
-                        <Row gutter={16}>
-                            <Col span={24}>
-                                <CheckboxField
-                                    className={styles.customCheckbox}
-                                    label={translate.formatMessage(commonMessage.isCharged)}
-                                    name="isCharged"
-                                    checked={isChecked}
-                                    onChange={handleOnChangeCheckBox}
-                                />
-                            </Col>
-                        </Row>
-                    </Card>
-                </BaseForm>
-            </Modal>
+          
         </PageWrapper>
     );
 };

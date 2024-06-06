@@ -568,3 +568,17 @@ export const versionStateOptions = [
     { value: versionState.VERSION_STATE_REJECT, label: commonMessage.reject, color: 'red' },
     { value: versionState.VERSION_STATE_PROCESS, label: commonMessage.loading, color: 'orange' },
 ];
+
+export const dayOfflogOptions = [
+    {
+        value: false,
+        label: 'Không trừ tiền',
+        color: 'green',
+    },
+    {
+        value: true,
+        label: 'Trừ tiền',
+        color: 'yellow',
+    },
+ 
+];
