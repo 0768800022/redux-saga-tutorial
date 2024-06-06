@@ -153,6 +153,8 @@ function RegistrationMoneyListPage() {
         },
     ];
 
+    let giveBackMoney = data?.totalMoney ? data?.totalMoney?.courseReturnFee ?? 0 - data?.totalMoney?.totalMinusMoney ?? 0 : 0;
+
     return (
         <PageWrapper
             routes={[
@@ -179,7 +181,6 @@ function RegistrationMoneyListPage() {
                                     : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
                             }
                         >
-                            123
                             {data?.registrationMoneyHistories?.registrationInfo?.studentInfo?.account?.fullName} - {courseName}
                         </span>}
                         <ul className={styles.groupTotal}>
@@ -194,9 +195,9 @@ function RegistrationMoneyListPage() {
                                 </div>
                             </li>
                             <li className={styles.totalItem}>
-                                <FormattedMessage defaultMessage="Tiền thực nhận" />
+                                <FormattedMessage defaultMessage="Giá trị hoàn trả" />
                                 <div>
-                                    {formatMoney(data?.totalMoney?.totalMoneyReturn, {
+                                    {formatMoney(data?.totalMoney?.courseReturnFee, {
                                         currentcy: 'đ',
                                         currentDecimal: '0',
                                         groupSeparator: ',',
@@ -204,9 +205,9 @@ function RegistrationMoneyListPage() {
                                 </div>
                             </li>
                             <li className={styles.totalItem}>
-                                <FormattedMessage defaultMessage="Tổng tiền nhận" />
+                                <FormattedMessage defaultMessage="Tiền bị phạt" />
                                 <div>
-                                    {formatMoney(data?.totalMoney?.totalMoneyInput, {
+                                    {formatMoney(data?.totalMoney?.totalMinusMoney, {
                                         currentcy: 'đ',
                                         currentDecimal: '0',
                                         groupSeparator: ',',
@@ -214,9 +215,9 @@ function RegistrationMoneyListPage() {
                                 </div>
                             </li>
                             <li style={{ paddingRight: '20px' }}>
-                                <FormattedMessage defaultMessage="Tổng tiền hoàn trả" />
+                                <FormattedMessage defaultMessage="Trả lại" />
                                 <div>
-                                    {formatMoney(data?.totalMoney?.totalMoneyReturn, {
+                                    {formatMoney(giveBackMoney, {
                                         currentcy: 'đ',
                                         currentDecimal: '0',
                                         groupSeparator: ',',
