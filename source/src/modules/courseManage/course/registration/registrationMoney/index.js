@@ -172,15 +172,16 @@ function RegistrationMoneyListPage() {
             <ListPage
                 title={
                     <>
-                        <span
+                        {data?.registrationMoneyHistories  && <span
                             style={
                                 courseState != 5
                                     ? { fontWeight: 'normal', fontSize: '16px' }
                                     : { fontWeight: 'normal', fontSize: '16px', position: 'absolute' }
                             }
                         >
-                            {data?.registrationMoneyHistories?.content[0]?.registrationInfo?.studentInfo?.account?.fullName} - {courseName}
-                        </span>
+                            123
+                            {data?.registrationMoneyHistories?.registrationInfo?.studentInfo?.account?.fullName} - {courseName}
+                        </span>}
                         <ul className={styles.groupTotal}>
                             <li className={styles.totalItem}>
                                 <FormattedMessage defaultMessage="Giá khóa học" />
