@@ -194,8 +194,10 @@ function RegistrationListPage() {
             align: 'center',
             // dataIndex: 'totalProject',
             render: (record) => {
-                // const trainingLimitConfig = JSON.parse(record.trainingLimitConfig);
-                const trainingLimitConfig = JSON.parse(record.trainingLimitConfig);
+                const numberProject = JSON.parse(record.trainingLimitConfig).numberOfTrainingProject;
+                const trainingUnit = JSON.parse(record.trainingLimitConfig).trainingPercent;
+
+                console.log(trainingUnit);
 
                 let value;
                 if (record.totalTimeBug === 0 || record.totalTimeWorking === 0) {
@@ -206,17 +208,17 @@ function RegistrationListPage() {
                 return (
                     <div
                         className={classNames(
-                            record.totalProject < trainingLimitConfig.numberOfTrainingProject
+                            record.totalProject < numberProject
                                 ? styles.customPercentOrange
                                 : styles.customPercentGreen,
                         )}
                     >
                         <div>
-                            {record.totalProject}/{trainingLimitConfig.numberOfTrainingProject}
+                            {record.totalProject}/{numberProject}
                         </div>
                         <div>
                             {' '}
-                            {record.minusTrainingProjectMoney && value < trainingLimitConfig.trainingProjectPercent ? (
+                            {record.minusTrainingProjectMoney && value < trainingUnit ? (
                                 <span>-{formatMoneyValue(record.minusTrainingProjectMoney)}</span>
                             ) : (
                                 <></>
