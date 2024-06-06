@@ -5,6 +5,7 @@ import ProjectListPage from '@modules/projectManage/project';
 import ProjectTaskListPage from '@modules/projectManage/project/projectTask';
 import TeamListPage from '@modules/projectManage/project/team';
 import KnowledgePermissionListPage from './knowledge';
+import DayOffLogListPage from './dayOffLog';
 
 export default {
     developerListPage: {
@@ -47,6 +48,13 @@ export default {
         title: 'Permission knowledge',
         auth: true,
         component: KnowledgePermissionListPage,
+        // permissions: apiConfig.knowledgePermission.getList.baseURL,
+    },
+    dayOffLogListPage: {
+        path: '/developer/day-off-log',
+        title: 'Day off log ',
+        auth: true,
+        component: DayOffLogListPage,
         // permissions: apiConfig.knowledgePermission.getList.baseURL,
     },
 };
