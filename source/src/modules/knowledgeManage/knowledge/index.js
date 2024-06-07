@@ -58,6 +58,7 @@ const KnowledgeListPage = () => {
                     mixinFuncs.handleFetchList({
                         ...params,
                         isKnowledge: true,
+                        status: 1,
                     });
                 };
 
