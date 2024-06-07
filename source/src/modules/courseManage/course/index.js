@@ -1,5 +1,5 @@
 import ListPage from '@components/common/layout/ListPage';
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PageWrapper from '@components/common/layout/PageWrapper';
 import {
     AppConstants,
@@ -14,7 +14,7 @@ import useTranslate from '@hooks/useTranslate';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import BaseTable from '@components/common/table/BaseTable';
 import dayjs from 'dayjs';
-import { TeamOutlined, BookOutlined, UserOutlined,CommentOutlined } from '@ant-design/icons';
+import { TeamOutlined, BookOutlined, UserOutlined, CommentOutlined } from '@ant-design/icons';
 import { Avatar, Button, Flex, Tag } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import routes from '@routes';
@@ -42,7 +42,7 @@ const CourseListPage = () => {
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const queryParameters = new URLSearchParams(window.location.search);
     const leaderName = queryParameters.get('leaderName');
-    const [checkReivew,setCheckReview] = useState(true);
+    const [checkReivew, setCheckReview] = useState(true);
     const [courseId, setCourseId] = useState();
     const moneyUnit = useMoneyUnit();
     const [openReviewModal, handlersReviewModal] = useDisclosure(false);
@@ -63,8 +63,8 @@ const CourseListPage = () => {
                     mixinFuncs.handleFetchList({
                         ...params,
                         isKnowledge: false,
+                        status: 1,
                     });
-
                 };
                 funcs.changeFilter = (filter) => {
                     const leaderId = queryParams.get('leaderId');
@@ -99,9 +99,15 @@ const CourseListPage = () => {
                     ),
 
                     task: ({ id, name, subject, state, status }) => (
-                        <BaseTooltip title={translate.formatMessage(commonMessage.task)}>
+                        <BaseTooltip
+                            title={
+                                subject
+                                    ? translate.formatMessage(commonMessage.task)
+                                    : translate.formatMessage(commonMessage.noSubject)
+                            }
+                        >
                             <Button
-                                disabled={state === 1 || state === 5}
+                                disabled={state === 1 || state === 5 || !subject}
                                 type="link"
                                 style={{ padding: 0 }}
                                 onClick={(e) => {
@@ -119,7 +125,7 @@ const CourseListPage = () => {
                             </Button>
                         </BaseTooltip>
                     ),
-                    review: ({ id, name, subject, state, status,item }) => (
+                    review: ({ id, name, subject, state, status, item }) => (
                         <BaseTooltip title={translate.formatMessage(commonMessage.review)}>
                             <Button
                                 type="link"
@@ -166,35 +172,34 @@ const CourseListPage = () => {
         // },
     ].filter(Boolean);
 
-
-    const { data: dataListReview, loading:dataListLoading, execute: listReview } = useFetch(
-        apiConfig.review.listReviews,
-        { immediate: false,
-            mappingData: ({ data }) => data.content,
-        });
+    const {
+        data: dataListReview,
+        loading: dataListLoading,
+        execute: listReview,
+    } = useFetch(apiConfig.review.listReviews, { immediate: false, mappingData: ({ data }) => data.content });
 
     const getListReview = (id) => {
         listReview({
             pathParams: {
-                courseId : id,
+                courseId: id,
             },
         });
     };
 
-    const { data: starData,loading:starDataLoading, execute: starReview } = useFetch(
-        apiConfig.review.star,
-        { immediate: false,
-            mappingData: ({ data }) => data.content,
-        });
+    const {
+        data: starData,
+        loading: starDataLoading,
+        execute: starReview,
+    } = useFetch(apiConfig.review.star, { immediate: false, mappingData: ({ data }) => data.content });
 
     const getStarReview = (id) => {
         starReview({
             pathParams: {
-                courseId : id,
+                courseId: id,
             },
         });
     };
-    const { loading:loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview,{ immediate: false });
+    const { loading: loadingData, execute: myListReview } = useFetch(apiConfig.review.myReview, { immediate: false });
 
     const columns = [
         {
@@ -218,10 +223,12 @@ const CourseListPage = () => {
             title: translate.formatMessage(commonMessage.subjectName),
             // dataIndex: 'name',
             render: (dataRow) => {
-                return <Flex vertical>
-                    <span>JavaScripts</span>
-                    <span style={{ fontSize:12 }}>Leader: {dataRow?.leader?.account?.fullName}</span>
-                </Flex>;
+                return (
+                    <Flex vertical>
+                        <span>JavaScripts</span>
+                        <span style={{ fontSize: 12 }}>Leader: {dataRow?.leader?.account?.fullName}</span>
+                    </Flex>
+                );
             },
         },
         // {
@@ -286,7 +293,10 @@ const CourseListPage = () => {
         // !leaderName && mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
             {
-                review:mixinFuncs.hasPermission([apiConfig.review.star?.baseURL, apiConfig.review.listReviews?.baseURL]),
+                review: mixinFuncs.hasPermission([
+                    apiConfig.review.star?.baseURL,
+                    apiConfig.review.listReviews?.baseURL,
+                ]),
                 registration: !leaderName && mixinFuncs.hasPermission([apiConfig.registration.getList?.baseURL]),
                 task: mixinFuncs.hasPermission([apiConfig.task.getList?.baseURL]),
                 edit: !leaderName && true,
@@ -320,12 +330,11 @@ const CourseListPage = () => {
                 open={openReviewModal}
                 onCancel={() => handlersReviewModal.close()}
                 data={dataListReview || {}}
-                courseId = {courseId}
+                courseId={courseId}
                 checkReivew={checkReivew}
-                star = {starData}
+                star={starData}
                 width={800}
                 loading={dataListLoading || starDataLoading || loadingData}
-
             />
         </PageWrapper>
     );

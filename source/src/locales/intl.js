@@ -175,4 +175,5 @@ export const commonMessage = defineMessages({
     isCharged: 'Bị trừ tiền',
     lesson: 'Bài học',
     dayOffLog:'Nhật ký nghỉ',
+    noSubject:'Chưa có môn học',
 });
