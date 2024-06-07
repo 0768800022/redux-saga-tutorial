@@ -140,7 +140,7 @@ const KnowledgeListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(commonMessage.courseName),
+            title: translate.formatMessage(commonMessage.knowledgeName),
             dataIndex: 'name',
         },
         {
