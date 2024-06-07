@@ -37,6 +37,7 @@ export const commonMessage = defineMessages({
     price: 'Giá',
     project: 'Dự án',
     knowledge: 'Kiến thức',
+    knowledgeName: 'Tên kiến thức',
     projectName: 'Tên dự án',
     projectRole: 'Vai trò dự án',
     projectRoleName: 'Tên vai trò dự án',

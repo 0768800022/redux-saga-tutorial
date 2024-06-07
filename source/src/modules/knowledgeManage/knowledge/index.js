@@ -58,6 +58,7 @@ const KnowledgeListPage = () => {
                     mixinFuncs.handleFetchList({
                         ...params,
                         isKnowledge: true,
+                        status: 1,
                     });
                 };
 
@@ -139,7 +140,7 @@ const KnowledgeListPage = () => {
             ),
         },
         {
-            title: translate.formatMessage(commonMessage.courseName),
+            title: translate.formatMessage(commonMessage.knowledgeName),
             dataIndex: 'name',
         },
         {
