@@ -18,7 +18,6 @@ const message = defineMessages({
 });
 
 const RegistrationProjectSavePage = () => {
-    const studentId = useParams();
     const translate = useTranslate();
     const queryParameters = new URLSearchParams(window.location.search);
     const stuId = queryParameters.get('studentId');
@@ -40,10 +39,7 @@ const RegistrationProjectSavePage = () => {
             update: apiConfig.registrationProject.update,
         },
         options: {
-            getListUrl:
-                courseId != 'null'
-                    ? routes.courseRegistrationProjectListPage.path + pathCourse2
-                    : routes.studentCourseRegistrationProjectListPage.path + pathStudent2,
+            getListUrl: generatePath(routes.courseRegistrationProjectListPage.path),
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
