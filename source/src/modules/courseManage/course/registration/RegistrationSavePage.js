@@ -111,6 +111,7 @@ function RegistrationSavePage() {
                 actions={mixinFuncs.renderActions()}
                 onSubmit={onSave}
                 isError={errors}
+                courseId={courseId}
             />
         </PageWrapper>
     );

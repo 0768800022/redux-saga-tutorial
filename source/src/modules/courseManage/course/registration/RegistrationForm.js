@@ -39,7 +39,7 @@ const messages = defineMessages({
     copyPasswordWarning: 'Không có mật khẩu để sao chép',
 });
 
-function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing }) {
+function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedFormValues, isEditing, courseId }) {
     const location = useLocation();
     const { data: dataLocation } = location.state;
     const translate = useTranslate();
@@ -547,8 +547,8 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                     mappingOptions={(item) => {
                                         return { value: item.id, label: item?.account?.fullName };
                                     }}
-                                    initialSearchParams={{ pageNumber: 0,  ignoreRegistration: true }}
-                                    searchParams={(text) => ({ fullName: text, ignoreRegistration: true })}
+                                    initialSearchParams={{ pageNumber: 0,  ignoreRegistration: true, courseId: courseId }}
+                                    searchParams={(text) => ({ fullName: text, ignoreRegistration: true, courseId: courseId })}
                                 />
                             </Col>
                         )}
