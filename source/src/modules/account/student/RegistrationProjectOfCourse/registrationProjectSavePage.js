@@ -39,7 +39,7 @@ const RegistrationProjectSavePage = () => {
             update: apiConfig.registrationProject.update,
         },
         options: {
-            getListUrl: generatePath(routes.courseRegistrationProjectListPage.path),
+            getListUrl: generatePath(routes.studentCourseRegistrationProjectListPage.path),
             objectName: translate.formatMessage(message.objectName),
         },
         override: (funcs) => {
