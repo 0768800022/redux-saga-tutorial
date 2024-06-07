@@ -286,8 +286,8 @@ function ProjectMemberForm({ formId, actions, dataDetail, onSubmit, setIsChanged
                                     value: item.id,
                                     label: item.account.fullName,
                                 })}
-                                initialSearchParams={{ pageNumber: 0,  ignoreMemberProject: true }}
-                                searchParams={(text) => ({ name: text, ignoreMemberProject: true })}
+                                initialSearchParams={{ pageNumber: 0,  ignoreMemberProject: true, projectId: projectId }}
+                                searchParams={(text) => ({ name: text, ignoreMemberProject: true, projectId: projectId })}
                             />
                         </Col>
                         <Col span={12}>
