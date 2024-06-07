@@ -255,11 +255,11 @@ export const lectureKindOptions = [
         label: lectureKindMessage.lesson,
         color: 'green',
     },
-    {
-        value: LECTURE_VIDEO,
-        label: lectureKindMessage.video,
-        color: '#FFBF00',
-    },
+    // {
+    //     value: LECTURE_VIDEO,
+    //     label: lectureKindMessage.video,
+    //     color: '#FFBF00',
+    // },
 ];
 
 export const commonStatusOptions = [
