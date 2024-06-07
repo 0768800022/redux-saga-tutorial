@@ -547,8 +547,8 @@ function RegistrationForm({ formId, actions, dataDetail, onSubmit, setIsChangedF
                                     mappingOptions={(item) => {
                                         return { value: item.id, label: item?.account?.fullName };
                                     }}
-                                    initialSearchParams={{ pageNumber: 0 }}
-                                    searchParams={(text) => ({ name: text })}
+                                    initialSearchParams={{ pageNumber: 0,  ignoreRegistration: true }}
+                                    searchParams={(text) => ({ fullName: text, ignoreRegistration: true })}
                                 />
                             </Col>
                         )}
