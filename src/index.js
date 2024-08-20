@@ -5,15 +5,18 @@ import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 import reducers from './reducers';
 import {Provider} from 'react-redux';
-import {createStore} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
+import createSagaMiddleware from 'redux-saga';
+import rootSaga from './sagas';
 
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://mithril-rem.fly.dev/api';
-//axios.defaults.baseURL = 'https://cors-anywhere.herokuapp.com/https://rem.dbwebb.se/api';
-//axios.get('/users');
 
+const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(reducers);
+const store = createStore(reducers, applyMiddleware(sagaMiddleware));
+
+sagaMiddleware.run(rootSaga);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

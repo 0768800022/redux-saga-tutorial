@@ -5,8 +5,9 @@ import * as api from '../api/users';
 function* getUsers(){
     try {
         const result = yield call(api.getUsers);
+        console.log(result);
     } catch (e) {
-        console.log(e);
+        
     }
 }
 
@@ -14,9 +15,9 @@ function* watchGetUsersRequest(){
     yield takeEvery(actions.Types.GET_USERS_REQUEST, getUsers);
 }
 
-const userSagas = [
+const usersSagas = [
     fork(watchGetUsersRequest)
 ];
 
 
-export default userSagas;
+export default usersSagas;
