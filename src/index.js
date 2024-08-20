@@ -11,11 +11,11 @@ import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-axios.defaults.withCredentials = true;
+
+axios.defaults.withCredentials = false;
 axios.defaults.baseURL = 'http://mithril-rem.fly.dev/api';
 
 const sagaMiddleware = createSagaMiddleware();
-
 const store = createStore(reducers, applyMiddleware(sagaMiddleware));
 
 sagaMiddleware.run(rootSaga);
