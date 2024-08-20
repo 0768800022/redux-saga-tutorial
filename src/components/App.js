@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getUserRequest, createUserRequest } from '../actions/users';
+import { getUserRequest, createUserRequest, deleteUserRequest } from '../actions/users';
 import UsersList from './UsersList';
 import NewUserForm from './NewUserForm';
 
@@ -19,7 +19,7 @@ class App extends Component {
   };
 
   handleDeleteUserClick = (userId) => {
-    
+    this.props.deleteUserRequest(userId)
   };
 
   render() {
@@ -36,5 +36,6 @@ class App extends Component {
 
 export default connect(({users}) => ({users}), {
   getUserRequest,
-  createUserRequest
+  createUserRequest,
+  deleteUserRequest
 })(App);
