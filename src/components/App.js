@@ -25,7 +25,7 @@ class App extends Component {
         lastName: user.lastName
     });
     this.setState({ editUserId: null, editUser: null });
-};
+  };
 
 
   handleDeleteUserClick = (userId) => {

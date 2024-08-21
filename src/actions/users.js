@@ -34,7 +34,8 @@ export const updateUserRequest = (userId, {firstName, lastName}) => ({
         firstName,
         lastName,
     }
-})
+});
+
 
 export const deleteUserRequest = (userId) => ({
     type: Types.DELETE_USER_REQUEST,

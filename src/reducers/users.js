@@ -23,13 +23,14 @@ export default function users(state=INITIAL_STATE, action) {
         }
         case Types.UPDATE_USER_REQUEST: {
             const updatedItems = state.items.map(user => 
-                user.id === action.payload.id ? { ...user, ...action.payload } : user
+                user.id === action.payload.userId ? { ...user, firstName: action.payload.firstName, lastName: action.payload.lastName } : user
             );
             return {
                 ...state,
                 items: updatedItems,
-            }
+            };
         }
+        
         case Types.DELETE_USER_REQUEST: {
             const newName = [...state.items]
             newName.splice(action.payload, 1)

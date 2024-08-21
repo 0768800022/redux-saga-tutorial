@@ -41,12 +41,11 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
 
     const handleEdit = (values) => {
         if (editUser) {
-            onEditUser(editUser.id, values);
-            hideEditModal();
+          onEditUser(editUser.id, values); 
+          hideEditModal();
         }
-
-        
-    };
+      };
+    
 
     return (
         <List>
@@ -96,11 +95,6 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                 <Modal
                                     title="Chỉnh sửa người dùng"
                                     open={editModalOpen && editUser?.id === user.id}
-                                    onOk={() => {
-                                        handleEdit();
-                                        onEditUser(user.id);
-                                        hideModal();
-                                    }}
                                     onCancel={hideEditModal}
                                     footer={null}
                                 >
@@ -108,11 +102,6 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                         form={form}
                                         layout="vertical"
                                         onFinish={handleEdit}
-                                        // onFinish={() => {
-                                        //     handleEdit();
-                                        //     onEditUser(user.id);
-                                        //     hideModal();
-                                        // }}
                                     >
                                         <Form.Item
                                             label="First Name"
@@ -129,7 +118,7 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                             <Input />
                                         </Form.Item>
                                         <Form.Item>
-                                            <Button onClick={hideEditModal} type="primary" htmlType="submit">
+                                            <Button type="primary" htmlType="submit">
                                                 Save
                                             </Button>
                                             <Button onClick={hideEditModal} style={{ marginLeft: '10px' }}>
