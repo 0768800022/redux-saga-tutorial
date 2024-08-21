@@ -27,13 +27,9 @@ export const createUserRequest = ({firstName, lastName}) => ({
     }
 });
 
-export const updateUserRequest = (userId, {firstName, lastName}) => ({
+export const updateUserRequest = (updatedUser) => ({
     type: Types.UPDATE_USER_REQUEST,
-    payload: {
-        userId,
-        firstName,
-        lastName,
-    }
+    payload: updatedUser
 });
 
 

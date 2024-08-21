@@ -22,14 +22,19 @@ export default function users(state=INITIAL_STATE, action) {
             }
         }
         case Types.UPDATE_USER_REQUEST: {
-            const updatedItems = state.items.map(user => 
-                user.id === action.payload.userId ? { ...user, firstName: action.payload.firstName, lastName: action.payload.lastName } : user
+            console.log('Updating User:', action.payload);
+            const updatedItems = state.items.map((item) =>
+                item.id === action.payload.id
+                    ? { ...item, ...action.payload }
+                    : item
             );
+            console.log('Updated Items:', updatedItems);
             return {
                 ...state,
                 items: updatedItems,
             };
         }
+        
         
         case Types.DELETE_USER_REQUEST: {
             const newName = [...state.items]

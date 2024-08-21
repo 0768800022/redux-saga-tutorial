@@ -3,10 +3,10 @@ import React, { useState } from "react";
 
 const UsersList = ({ users, onDeleteUser, onEditUser }) => {
     const [open, setOpen] = useState(false);
-    const [editModalOpen, setEditModalOpen] = useState(false);
     const [deleteInModal, setDeleteInModal] = useState(null);
-    const [editUser, setEditUser] = useState(null);
-    const [form] = Form.useForm();
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [editInModal, setEditInModal] = useState(null);
+    const [editForm] = Form.useForm();
 
     const showModal = (userId) => {
         setDeleteInModal(userId);
@@ -26,25 +26,28 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
     };
 
     const showEditModal = (user) => {
-        setEditUser(user);
-        form.setFieldsValue({
-            firstName: user.firstName,
-            lastName: user.lastName,
-        });
-        setEditModalOpen(true);
+        setEditInModal(user);
+        setOpenEditModal(true);
+        editForm.setFieldsValue(user);
     };
 
     const hideEditModal = () => {
-        setEditUser(null);
-        setEditModalOpen(false);
+        setEditInModal(null);
+        setOpenEditModal(false);
     };
 
     const handleEdit = (values) => {
-        if (editUser) {
-          onEditUser(editUser.id, values); 
-          hideEditModal();
+        console.log('Edit Values:', values);
+        if (editInModal) {
+            console.log('Editing User:', editInModal);
+            onEditUser({
+                ...editInModal,
+                firstName: values.firstName,
+                lastName: values.lastName,
+            });
+            hideEditModal();
         }
-      };
+    };
     
 
     return (
@@ -88,18 +91,23 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                     <p>  </p>
                                 </Modal>
                             </div>
+
                             <div style={{ marginRight: '5px' }}>
                                 <Button type="primary" onClick={() => showEditModal(user)}>
                                     Edit
                                 </Button>
                                 <Modal
-                                    title="Chỉnh sửa người dùng"
-                                    open={editModalOpen && editUser?.id === user.id}
+                                    title="Chỉnh sửa thông tin người dùng"
+                                    open={openEditModal && editInModal?.id === user.id}
+                                    onOk={() => {
+                                        editForm.submit(); // Nộp dữ liệu từ form chỉnh sửa
+                                    }}
                                     onCancel={hideEditModal}
-                                    footer={null}
+                                    okText="Save"
+                                    cancelText="Cancel"
                                 >
                                     <Form
-                                        form={form}
+                                        form={editForm}
                                         layout="vertical"
                                         onFinish={handleEdit}
                                     >
@@ -116,14 +124,6 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                             rules={[{ required: true, message: 'Please input last name!' }]}
                                         >
                                             <Input />
-                                        </Form.Item>
-                                        <Form.Item>
-                                            <Button type="primary" htmlType="submit">
-                                                Save
-                                            </Button>
-                                            <Button onClick={hideEditModal} style={{ marginLeft: '10px' }}>
-                                                Cancel
-                                            </Button>
                                         </Form.Item>
                                     </Form>
                                 </Modal>

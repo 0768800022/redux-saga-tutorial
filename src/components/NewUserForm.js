@@ -29,10 +29,10 @@ class NewUserForm extends Component {
             lastName: this.state.lastName,
         })
 
-        this.setState({
-            firstName: '',
-            lastName: '',
-        })
+        // this.setState({
+        //     firstName: '',
+        //     lastName: '',
+        // })
     }
 
     render() {
@@ -54,7 +54,7 @@ class NewUserForm extends Component {
                 </Form.Item>
                 <Form.Item>
                     <Button block type="primary" htmlType="submit">
-                        {this.props.userId ? 'Update' : 'Create'}
+                        Create
                     </Button>
                 </Form.Item>
             </Form>        

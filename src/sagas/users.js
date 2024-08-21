@@ -19,7 +19,7 @@ function* createUser(action){
     try {
         console.log(action);
         
-        yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
+        // yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
         // yield call(getUsers);
     } catch (e) {
         yield put(actions.usersSuccess({
@@ -39,13 +39,13 @@ function* watchCreateUserRequest(){
 
 function* updateUser(action) {
     try {
-        yield call(api.updateUser, action.payload.userId, {
-            firstName: action.payload.firstName,
-            lastName: action.payload.lastName
-        });
-        const updatedUser = yield call(api.getUsers, action.payload.userId);
-        yield put(actions.usersSuccess({ success: 'User updated successfully' }));
-        yield put(actions.updateUserRequest({ userId: updatedUser.id, firstName: updatedUser.firstName, lastName: updatedUser.lastName })); // Update state with fetched data
+        //     yield call(api.updateUser, action.payload.userId, {
+        //     firstName: action.payload.firstName,
+        //     lastName: action.payload.lastName
+        // });
+        // const updatedUser = yield call(api.getUsers, action.payload.userId);
+        // yield put(actions.usersSuccess({ success: 'User updated successfully' }));
+        // yield put(actions.updateUserRequest({ userId: updatedUser.id, firstName: updatedUser.firstName, lastName: updatedUser.lastName })); 
     } catch (e) {
         // Handle error...
     }
@@ -58,8 +58,8 @@ function* watchUpdateUserRequest(){
 
 function* deleteUser({userId}){
     try {
-        yield call(api.deleteUser, userId)
-        yield call(getUsers);
+        // yield call(api.deleteUser, userId)
+        // yield call(getUsers);
     } catch (e) {
         yield put(actions.usersSuccess({
             success: 'You have successfully deleted the user'

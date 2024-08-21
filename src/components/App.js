@@ -6,30 +6,27 @@ import NewUserForm from './NewUserForm';
 import { Alert } from 'antd';
 
 class App extends Component {
-  state = {
-    editUserId: null,
-    editUser: null
-  };
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+    
     this.props.getUserRequest();
   }
 
-  handleSubmit = (values) => {
-    this.props.createUserRequest(values);
+  handleSubmit = ({firstName, lastName}) => {
+    this.props.createUserRequest({
+      firstName,
+      lastName
+    });
   };
 
-  handleUpdateUser = (user) => {
-    this.props.updateUserRequest({
-        firstName: user.firstName,
-        lastName: user.lastName
-    });
-    this.setState({ editUserId: null, editUser: null });
-  };
+  handleUpdateUser = (updatedUser) => {
+    this.props.updateUserRequest(updatedUser);
+  }
 
 
   handleDeleteUserClick = (userId) => {
-    this.props.deleteUserRequest(userId);
+    this.props.deleteUserRequest(userId)
   };
 
   handleCloseAlert = () => {
@@ -38,13 +35,9 @@ class App extends Component {
     });
   };
 
-  showEditForm = (user) => {
-    this.setState({ editUserId: user.id, editUser: user });
-  };
 
   render() {
     const { users } = this.props;
-    const { editUserId, editUser } = this.state;
     
     return (
       <div style={{ margin: '0 auto', padding: '20px', maxWidth: '600px' }}>
@@ -58,16 +51,8 @@ class App extends Component {
             onClose={this.handleCloseAlert}
           />
         )}
-        <NewUserForm
-          onSubmit={editUserId ? this.handleUpdateUser : this.handleSubmit}
-          userId={editUserId}
-          initialValues={editUser}
-        />
-        <UsersList
-          onDeleteUser={this.handleDeleteUserClick}
-          onEditUser={this.showEditForm}
-          users={users.items}
-        />
+        <NewUserForm onSubmit={this.handleSubmit}/>
+        <UsersList onEditUser={this.handleUpdateUser} onDeleteUser={this.handleDeleteUserClick} users={users.items}/>
       </div>
     );
   }
