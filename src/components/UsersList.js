@@ -17,15 +17,15 @@ const UsersList = ({users, onDeleteUser}) => {
                 }
             }).map((user) => {
                 return (
-                    <List.Item key={user.id}>
+                    <List.Item key={user.id} style={{border: '1px solid #333', borderRadius: '20px'}}>
                         <section style={{display: 'flex', alignItems: 'center', width: '100%'}}>
                             <div style={{flex: 1}}>
-                                <span>{user.firstName}</span>
+                                <span style={{marginLeft: '5px'}}>{user.firstName}</span>
                                 <span style={{marginLeft: '5px'}}>
                                     {user.lastName}
                                 </span>
                             </div>
-                            <div >
+                            <div style={{marginRight: '5px'}}>
                                 <Button type="primary" danger onClick={() => onDeleteUser(user.id)}>
                                     Delete
                                 </Button>
