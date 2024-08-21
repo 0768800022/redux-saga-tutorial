@@ -2,7 +2,8 @@ import { Types } from "../actions/users";
 
 const INITIAL_STATE = {
     items: [],
-    error: ''
+    error: '',
+    success: ''
 };
 
 export default function users(state=INITIAL_STATE, action) {
@@ -17,7 +18,7 @@ export default function users(state=INITIAL_STATE, action) {
             console.log(action.payload);
             return {
                 ...state,
-                items: [...state.items, action.payload]
+                items: [...state.items, action.payload],
             }
         }
         case Types.DELETE_USER_REQUEST: {
@@ -25,13 +26,19 @@ export default function users(state=INITIAL_STATE, action) {
             newName.splice(action.payload, 1)
             return {
                 ...state,
-                items: newName
+                items: newName,
+            }
+        }
+        case Types.USERS_SUCESS: {
+            return {
+                ...state,
+                success: action.payload.success,
             }
         }
         case Types.USERS_ERROR: {
             return {
                 ...state,
-                error: action.payload.error
+                error: action.payload.error,
             }
         }
         default: {

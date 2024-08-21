@@ -1,8 +1,8 @@
-import { Button, ListGroup, ListGroupItem } from "reactstrap";
+import { Button, Flex, List } from "antd";
 
 const UsersList = ({users, onDeleteUser}) => {
     return (
-        <ListGroup>
+        <List>
             {users.sort((a, b) => {
                 if(a.firstName > b.firstName){
                     return 1;
@@ -17,21 +17,24 @@ const UsersList = ({users, onDeleteUser}) => {
                 }
             }).map((user) => {
                 return (
-                    <ListGroupItem key={user.id}>
-                        <section style={{display: 'flex'}}>
-                            <div style={{flexGrow: '1', margin: 'auto 0'}}>
-                                {user.firstName} {user.lastName}
+                    <List.Item key={user.id}>
+                        <section style={{display: 'flex', alignItems: 'center', width: '100%'}}>
+                            <div style={{flex: 1}}>
+                                <span>{user.firstName}</span>
+                                <span style={{marginLeft: '5px'}}>
+                                    {user.lastName}
+                                </span>
                             </div>
-                            <div>
-                                <Button outline color="danger" onClick={() => onDeleteUser(user.id)}>
+                            <div >
+                                <Button type="primary" danger onClick={() => onDeleteUser(user.id)}>
                                     Delete
                                 </Button>
                             </div>
                         </section>
-                    </ListGroupItem>
+                    </List.Item>
                 );
             })}
-        </ListGroup> 
+        </List> 
     )
 }
 

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import { Button, Form, FormGroup, Input, Label } from "reactstrap";
+import { Form, Button, Input} from 'antd';
 
 class NewUserForm extends Component {
 
@@ -22,7 +22,7 @@ class NewUserForm extends Component {
 
     //xử lý dữ liệu form
     handleSubmit = e => {
-        e.preventDefault();
+        // e.preventDefault();
 
         this.props.onSubmit({
             firstName: this.state.firstName,
@@ -37,35 +37,31 @@ class NewUserForm extends Component {
 
     render() {
         return (
-            <Form onSubmit={this.handleSubmit}>
-                <FormGroup>
-                    <Label>
-                        FirstName
-                    </Label>
+            <Form onFinish={this.handleSubmit}>
+                <Form.Item label = "First Name" name = "firstName" rules={[{ required: true, message: 'Please input your first name!' }]}>
                     <Input 
                         required
                         placeholder="First Name" 
                         onChange={this.handleFirstNameChange}
                         value={this.state.firstName}/>
-                </FormGroup>
-                <FormGroup>
-                    <Label>
-                        LastName
-                    </Label>
+                </Form.Item>
+                <Form.Item label = "Last Name" name = "lastName" rules={[{ required: true, message: 'Please input your last name!' }]}>
                     <Input 
                         required
                         placeholder="Last Name" 
                         onChange={this.handleLastNameChange} 
                         value={this.state.lastName}/>
-                </FormGroup>
-                <FormGroup>
-                    <Button block outline type="submit" color="primary">
+                </Form.Item>
+                <Form.Item>
+                    <Button block type="primary" htmlType="submit">
                         Create
                     </Button>
-                </FormGroup>
+                </Form.Item>
             </Form>        
         )
     }
 }
 
 export default NewUserForm;
+
+
