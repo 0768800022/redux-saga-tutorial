@@ -54,7 +54,7 @@ class NewUserForm extends Component {
                 </Form.Item>
                 <Form.Item>
                     <Button block type="primary" htmlType="submit">
-                        Create
+                        {this.props.userId ? 'Update' : 'Create'}
                     </Button>
                 </Form.Item>
             </Form>        

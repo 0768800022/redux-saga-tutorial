@@ -17,8 +17,10 @@ function* getUsers(){
 
 function* createUser(action){
     try {
-        yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
-        yield call(getUsers);
+        // console.log(action);
+        
+        // yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
+        // yield call(getUsers);
     } catch (e) {
         yield put(actions.usersSuccess({
             // error: 'An error occurred when trying to create the user'
@@ -33,6 +35,24 @@ function* watchGetUsersRequest(){
 
 function* watchCreateUserRequest(){
     yield takeLatest(actions.Types.CREATE_USER_REQUEST, createUser);
+}
+
+function* updateUser(action) {
+    try {
+        console.log(action);
+        yield call(api.updateUser, {firstName: action.payload, lastName: action.payload})
+        yield call(getUsers);
+    } catch (e) {
+        yield put(actions.usersError({
+            error: 'An error occurred when trying to update the user'
+        }));
+    }
+}
+
+
+
+function* watchUpdateUserRequest(){
+    yield takeLatest(actions.Types.UPDATE_USER_REQUEST, updateUser)
 }
 
 function* deleteUser({userId}){
@@ -58,7 +78,8 @@ function* watchDeleteUserRequest(){
 const usersSagas = [
     fork(watchGetUsersRequest),
     fork(watchCreateUserRequest),
-    fork(watchDeleteUserRequest)
+    fork(watchUpdateUserRequest),
+    fork(watchDeleteUserRequest),
 ];
 
 
