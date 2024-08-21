@@ -17,9 +17,9 @@ function* getUsers(){
 
 function* createUser(action){
     try {
-        console.log(action);
-        yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
-        yield call(getUsers);
+        // console.log(action);
+        // yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
+        // yield call(getUsers);
     } catch (e) {
         yield put(actions.usersError({
             error: 'An error occurred when trying to create the user'
@@ -37,8 +37,8 @@ function* watchCreateUserRequest(){
 
 function* deleteUser({userId}){
     try {
-        yield call(api.deleteUser, userId)
-        yield call(getUsers);
+        // yield call(api.deleteUser, userId)
+        // yield call(getUsers);
     } catch (e) {
         yield put(actions.usersError({
             error: 'An error when trying delete user'
