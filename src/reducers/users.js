@@ -13,9 +13,22 @@ export default function users(state=INITIAL_STATE, action) {
                 items: action.payload.items
             }
         }
+        case Types.CREATE_USER_REQUEST: {
+            console.log(action.payload);
+            return {
+                ...state,
+                items: [...state.items, action.payload]
+            }
+        }
+        case Types.DELETE_USER_REQUEST: {
+            const newName = [...state.items]
+            newName.splice(action.payload, 1)
+            return {
+                ...state,
+                items: newName
+            }
+        }
         case Types.USERS_ERROR: {
-            console.log(action.payload.error);
-            
             return {
                 ...state,
                 error: action.payload.error

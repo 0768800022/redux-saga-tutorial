@@ -17,11 +17,12 @@ function* getUsers(){
 
 function* createUser(action){
     try {
-        yield call(api.createUser, {firstName: action.payload.firstName, lastName: action.payload.lastName});
+        console.log(action);
+        yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
         yield call(getUsers);
     } catch (e) {
         yield put(actions.usersError({
-            error: 'An error when trying create the user'
+            error: 'An error occurred when trying to create the user'
         }));
     }
 }

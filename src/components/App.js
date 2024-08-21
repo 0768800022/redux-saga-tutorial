@@ -49,3 +49,4 @@ export default connect(({users}) => ({users}), {
   deleteUserRequest,
   usersError
 })(App);
+

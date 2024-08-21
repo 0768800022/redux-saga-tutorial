@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
+
 import axios from 'axios';
 import reducers from './reducers';
 import {Provider} from 'react-redux';
@@ -13,7 +14,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://mithril-rem.fly.dev/api';
+axios.defaults.baseURL = 'https://mithril-rem.fly.dev/api';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducers, applyMiddleware(sagaMiddleware));
