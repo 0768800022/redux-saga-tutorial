@@ -1,5 +1,5 @@
 import { Button, List, Modal, Input, Form } from "antd";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const UsersList = ({ users, onDeleteUser, onEditUser }) => {
     const [open, setOpen] = useState(false);

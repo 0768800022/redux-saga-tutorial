@@ -1,65 +1,55 @@
-import React, {Component} from "react";
 import { Form, Button, Input} from 'antd';
+import { useState } from 'react';
 
-class NewUserForm extends Component {
+function NewUserForm({onSubmit}) {
 
-    state = {
-        firstName: '',
-        lastName: '',
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+ 
+    const handleFirstNameChange = e => {
+        setFirstName(e.target.value);
     }
 
-    handleFirstNameChange = e => {
-        this.setState({
-            firstName: e.target.value
-        });
-    }
-
-    handleLastNameChange = e => {
-        this.setState({
-            lastName: e.target.value
-        })
+    const handleLastNameChange = e => {
+        setLastName(e.target.value);
     }
 
     //xử lý dữ liệu form
-    handleSubmit = e => {
+    const handleSubmit = e => {
         // e.preventDefault();
 
-        this.props.onSubmit({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
+        onSubmit({
+            firstName,
+            lastName
         })
 
-        // this.setState({
-        //     firstName: '',
-        //     lastName: '',
-        // })
+        setFirstName('');
+        setLastName('');
     }
 
-    render() {
-        return (
-            <Form onFinish={this.handleSubmit}>
-                <Form.Item label = "First Name" name = "firstName" rules={[{ required: true, message: 'Please input your first name!' }]}>
-                    <Input 
-                        required
-                        placeholder="First Name" 
-                        onChange={this.handleFirstNameChange}
-                        value={this.state.firstName}/>
-                </Form.Item>
-                <Form.Item label = "Last Name" name = "lastName" rules={[{ required: true, message: 'Please input your last name!' }]}>
-                    <Input 
-                        required
-                        placeholder="Last Name" 
-                        onChange={this.handleLastNameChange} 
-                        value={this.state.lastName}/>
-                </Form.Item>
-                <Form.Item>
-                    <Button block type="primary" htmlType="submit">
-                        Create
-                    </Button>
-                </Form.Item>
-            </Form>        
-        )
-    }
+    return (
+        <Form onFinish={handleSubmit}>
+            <Form.Item label = "First Name" name = "firstName" rules={[{ required: true, message: 'Please input your first name!' }]}>
+                <Input 
+                    required
+                    placeholder="First Name" 
+                    onChange={handleFirstNameChange}
+                    value={firstName}/>
+            </Form.Item>
+            <Form.Item label = "Last Name" name = "lastName" rules={[{ required: true, message: 'Please input your last name!' }]}>
+                <Input 
+                    required
+                    placeholder="Last Name" 
+                    onChange={handleLastNameChange} 
+                    value={lastName}/>
+            </Form.Item>
+            <Form.Item>
+                <Button block type="primary" htmlType="submit">
+                    Create
+                </Button>
+            </Form.Item>
+        </Form>     
+    )   
 }
 
 export default NewUserForm;

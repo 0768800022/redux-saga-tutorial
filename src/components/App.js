@@ -1,61 +1,50 @@
-import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getUserRequest, createUserRequest, updateUserRequest, deleteUserRequest, usersSuccess, usersError } from '../actions/users';
 import UsersList from './UsersList';
 import NewUserForm from './NewUserForm';
 import { Alert } from 'antd';
+import { useEffect } from 'react';
 
-class App extends Component {
 
-  constructor(props) {
-    super(props);
-    
-    this.props.getUserRequest();
-  }
+function App({users, getUserRequest, createUserRequest, updateUserRequest, deleteUserRequest, usersSuccess, usersError}) {
 
-  handleSubmit = ({firstName, lastName}) => {
-    this.props.createUserRequest({
-      firstName,
-      lastName
-    });
+  useEffect(() => {
+    getUserRequest();
+  }, [getUserRequest])
+
+  const handleSubmit = ({firstName, lastName}) => {
+    createUserRequest({ firstName, lastName});
   };
 
-  handleUpdateUser = (updatedUser) => {
-    this.props.updateUserRequest(updatedUser);
+  const handleUpdateUser = (updatedUser) => {
+    updateUserRequest(updatedUser);
   }
 
 
-  handleDeleteUserClick = (userId) => {
-    this.props.deleteUserRequest(userId)
+  const handleDeleteUserClick = (userId) => {
+    deleteUserRequest(userId)
   };
 
-  handleCloseAlert = () => {
-    this.props.usersSuccess({
-      success: ''
-    });
+  const handleCloseAlert = () => {
+    usersSuccess({ success: ''});
   };
 
-
-  render() {
-    const { users } = this.props;
-    
     return (
       <div style={{ margin: '0 auto', padding: '20px', maxWidth: '600px' }}>
-        {this.props.users.success && (
+        {users.success && (
           <Alert
             message="Success"
-            description={this.props.users.success}
+            description={users.success}
             type="success"
             showIcon
             closable
-            onClose={this.handleCloseAlert}
+            onClose={handleCloseAlert}
           />
         )}
-        <NewUserForm onSubmit={this.handleSubmit}/>
-        <UsersList onEditUser={this.handleUpdateUser} onDeleteUser={this.handleDeleteUserClick} users={users.items}/>
+        <NewUserForm onSubmit={handleSubmit}/>
+        <UsersList onEditUser={handleUpdateUser} onDeleteUser={handleDeleteUserClick} users={users.items}/>
       </div>
     );
-  }
 }
 
 export default connect(({ users }) => ({ users }), {
