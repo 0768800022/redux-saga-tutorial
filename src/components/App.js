@@ -8,26 +8,26 @@ import { useEffect } from 'react';
 
 function App({users, getUserRequest, createUserRequest, updateUserRequest, deleteUserRequest, usersSuccess, usersError}) {
 
-  useEffect(() => {
-    getUserRequest();
-  }, [getUserRequest])
+    useEffect(() => {
+      getUserRequest();
+    }, [getUserRequest])
 
-  const handleSubmit = ({firstName, lastName}) => {
-    createUserRequest({ firstName, lastName});
-  };
+    const handleSubmit = ({firstName, lastName}) => {
+      createUserRequest({ firstName, lastName});
+    };
 
-  const handleUpdateUser = (updatedUser) => {
-    updateUserRequest(updatedUser);
-  }
+    const handleUpdateUser = (updatedUser) => {
+      updateUserRequest(updatedUser);
+    }
 
 
-  const handleDeleteUserClick = (userId) => {
-    deleteUserRequest(userId)
-  };
+    const handleDeleteUserClick = (userId) => {
+      deleteUserRequest(userId)
+    };
 
-  const handleCloseAlert = () => {
-    usersSuccess({ success: ''});
-  };
+    const handleCloseAlert = () => {
+      usersSuccess({ success: ''});
+    };
 
     return (
       <div style={{ margin: '0 auto', padding: '20px', maxWidth: '600px' }}>

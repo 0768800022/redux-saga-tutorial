@@ -17,7 +17,6 @@ function NewUserForm({onSubmit}) {
     //xử lý dữ liệu form
     const handleSubmit = e => {
         // e.preventDefault();
-
         onSubmit({
             firstName,
             lastName
