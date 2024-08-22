@@ -17,7 +17,6 @@ function* getUsers(){
 
 function* createUser(action){
     try {
-        console.log(action);
         
         // yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
         // yield call(getUsers);
