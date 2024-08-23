@@ -2,20 +2,31 @@ import { Button, List, Modal, Input, Form } from "antd";
 import { useState } from "react";
 
 const UsersList = ({ users, onDeleteUser, onEditUser }) => {
-    const [open, setOpen] = useState(false);
+
+    const useModal = (initial = false) => {
+        const[open, setOpen] = useState(initial);
+        const handle = {
+            open: () => setOpen(true),
+            close: () => setOpen(false)
+        }
+        return [open, handle];
+    }
+
+
+    const [open, handleShow] = useModal(false);
+    const [openEdit, handleEditModal] = useModal(false);
     const [deleteInModal, setDeleteInModal] = useState(null);
-    const [openEditModal, setOpenEditModal] = useState(false);
     const [editInModal, setEditInModal] = useState(null);
     const [editForm] = Form.useForm();
 
     const showModal = (userId) => {
         setDeleteInModal(userId);
-        setOpen(true);
+        handleShow.open();
     };
 
     const hideModal = () => {
         setDeleteInModal(null);
-        setOpen(false);
+        handleShow.close();
     };
 
     const handleDelete = () => {
@@ -27,19 +38,17 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
 
     const showEditModal = (user) => {
         setEditInModal(user);
-        setOpenEditModal(true);
+        handleEditModal.open();
         editForm.setFieldsValue(user);
     };
 
     const hideEditModal = () => {
         setEditInModal(null);
-        setOpenEditModal(false);
+        handleEditModal.close();
     };
 
     const handleEdit = (values) => {
-        console.log('Edit Values:', values);
         if (editInModal) {
-            console.log('Editing User:', editInModal);
             onEditUser({
                 ...editInModal,
                 firstName: values.firstName,
@@ -98,7 +107,7 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                 </Button>
                                 <Modal
                                     title="Chỉnh sửa thông tin người dùng"
-                                    open={openEditModal && editInModal?.id === user.id}
+                                    open={openEdit && editInModal?.id === user.id}
                                     onOk={() => {
                                         editForm.submit(); // Nộp dữ liệu từ form chỉnh sửa
                                     }}
