@@ -1,32 +1,34 @@
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUserRequest, createUserRequest, updateUserRequest, deleteUserRequest, usersSuccess, usersError } from '../actions/users';
 import UsersList from './UsersList';
 import NewUserForm from './NewUserForm';
 import { Alert } from 'antd';
 import { useEffect } from 'react';
 
+function App() {
 
-function App({users, getUserRequest, createUserRequest, updateUserRequest, deleteUserRequest, usersSuccess, usersError}) {
+  const dispatch = useDispatch();
+  const users = useSelector(state => state.users); //lấy state users từ redux store
 
     useEffect(() => {
-      getUserRequest();
-    }, [getUserRequest])
+      dispatch(getUserRequest());
+    }, [dispatch])
 
     const handleSubmit = ({firstName, lastName}) => {
-      createUserRequest({ firstName, lastName});
+      dispatch(createUserRequest({ firstName, lastName}));
     };
 
     const handleUpdateUser = (updatedUser) => {
-      updateUserRequest(updatedUser);
+      dispatch(updateUserRequest(updatedUser));
     }
 
 
     const handleDeleteUserClick = (userId) => {
-      deleteUserRequest(userId)
+      dispatch(deleteUserRequest(userId));
     };
 
     const handleCloseAlert = () => {
-      usersSuccess({ success: ''});
+      dispatch(usersSuccess({ success: ''}));
     };
 
     return (
@@ -47,11 +49,4 @@ function App({users, getUserRequest, createUserRequest, updateUserRequest, delet
     );
 }
 
-export default connect(({ users }) => ({ users }), {
-  getUserRequest,
-  createUserRequest,
-  updateUserRequest,
-  deleteUserRequest,
-  usersSuccess,
-  usersError
-})(App);
+export default App;

@@ -6,14 +6,6 @@ function NewUserForm({onSubmit}) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
  
-    const handleFirstNameChange = e => {
-        setFirstName(e.target.value);
-    }
-
-    const handleLastNameChange = e => {
-        setLastName(e.target.value);
-    }
-
     //xử lý dữ liệu form
     const handleSubmit = e => {
         // e.preventDefault();
@@ -32,14 +24,19 @@ function NewUserForm({onSubmit}) {
                 <Input 
                     required
                     placeholder="First Name" 
-                    onChange={handleFirstNameChange}
+                    onChange={e => {
+                        setFirstName(e.target.value);
+                    }}
                     value={firstName}/>
             </Form.Item>
             <Form.Item label = "Last Name" name = "lastName" rules={[{ required: true, message: 'Please input your last name!' }]}>
                 <Input 
                     required
                     placeholder="Last Name" 
-                    onChange={handleLastNameChange} 
+                    onChange={e => {
+                        setLastName(e.target.value);
+                    }
+                } 
                     value={lastName}/>
             </Form.Item>
             <Form.Item>
