@@ -1,5 +1,5 @@
-import { Button, List, Modal, Input, Form } from "antd";
-import { useId, useState } from "react";
+import { Button, Popconfirm, List, Modal, Input, Form } from "antd";
+import { useState } from "react";
 
 const UsersList = ({ users, onDeleteUser, onEditUser }) => {
 
@@ -88,10 +88,22 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                     <span style={{ marginLeft: '5px' }}>{user.lastName}</span>
                                 </div>
                                 <div style={{ marginRight: '5px' }}>
-                                    <Button type="primary" onClick={() => showModal(user.id)} danger>
-                                        Delete
-                                    </Button>
-                                    
+                                    <Popconfirm
+                                        title="Xóa người dùng"
+                                        description="Bạn có chắc chắn muốn xóa người dùng này không?"
+                                        onConfirm={() => {
+                                            handleDelete();
+                                            onDeleteUser();
+                                            hideModal();
+                                        }}
+                                        onCancel={hideModal}
+                                        okText="Delete"
+                                        cancelText="Cancel"
+                                    >
+                                        <Button type="primary" onClick={() => showModal(user.id)} danger>
+                                            Delete
+                                        </Button>
+                                    </Popconfirm>
                                 </div>
 
                                 <div style={{ marginRight: '5px' }}>
@@ -107,7 +119,7 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
             </List>
 
 
-             <Modal
+             {/* <Modal
                 title="Bạn có chắc chắn muốn xóa không?"
                 open={open}
                 onOk={() => {
@@ -120,7 +132,9 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                 cancelText="Cancel"
             >
                 <p>Bạn có chắc chắn muốn xóa người dùng này?</p>
-            </Modal>
+            </Modal> */}
+
+            
 
             <Modal
                 title="Chỉnh sửa thông tin người dùng"
