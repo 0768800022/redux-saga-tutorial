@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import * as api from './users';
 import axios from 'axios';
 
-const useUserListPage = (apiConfig) => {
+const useListPage = (apiConfig) => {
     const [data, setData] = useState([]);
     const [success, setSuccess] = useState('');
 
@@ -13,13 +13,14 @@ const useUserListPage = (apiConfig) => {
         } catch (e) {
         }
     };
-
+    //create update useSavePage khi nhấn create update thì chuyển về useListPage
+    //delete edit chuyển trang là của useListPage
     useEffect(() => {
         fetchData();
     }, [apiConfig]);
     
     const handleSubmit = ({ firstName, lastName }) => {
-        axios.post(apiConfig.Api, { firstName, lastName })
+        axios.post(apiConfig.create.url, { firstName, lastName })
             .then(() => {
                 fetchData(); 
             })
@@ -27,8 +28,9 @@ const useUserListPage = (apiConfig) => {
             });
     };
     
+    
     const handleUpdateUser = (updatedUser) => {
-        axios.put(`${apiConfig.Api}/users/${updatedUser.id}`, updatedUser)
+        axios.put(apiConfig.update(updatedUser.id).url, updatedUser)
             .then(() => {
                 fetchData(); 
             })
@@ -37,7 +39,7 @@ const useUserListPage = (apiConfig) => {
     };
     
     const handleDeleteUserClick = (userId) => {
-        axios.delete(`${apiConfig.Api}/users/${userId}`)
+        axios.delete(apiConfig.delete(userId).url)
             .then(() => {
                 fetchData(); 
             })
@@ -58,4 +60,4 @@ const useUserListPage = (apiConfig) => {
     };
 };
 
-export default useUserListPage;
+export default useListPage;

@@ -1,12 +1,12 @@
 import { Button, Popconfirm, List, Modal, Input, Form } from "antd";
 import { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
-import useUserListPage from "../api/useUserListPage";
+import useListPage from "../api/useListPage";
 import apiConfig from '../api/apiConfig';
 
 const UsersList = ({ users, onDeleteUser, onEditUser }) => {
     
-    const {data} = useUserListPage(apiConfig.Api); 
+    const {data} = useListPage(apiConfig.Api); 
     console.log("Check data", data);
 
 

@@ -5,9 +5,9 @@ import { Api } from './apiConfig';
 export const getUsers = async () => {
   try {
     const response = await axios({
-      url: Api.getList.url,
-      method: Api.getList.method,
-      headers: Api.getList.headers,
+      url: Api.user.getList.url,
+      method: Api.user.getList.method,
+      headers: Api.user.getList.headers,
     });
     return response;
   } catch (e) {
@@ -18,9 +18,9 @@ export const getUsers = async () => {
 export const createUser = async ({ firstName, lastName }) => {
   try {
     const response = await axios({
-      url: Api.create.url,
-      method: Api.create.method,
-      headers: Api.create.headers,
+      url: Api.user.create.url,
+      method: Api.user.create.method,
+      headers: Api.user.create.headers,
       data: { firstName, lastName },
     });
     return response;
@@ -32,9 +32,9 @@ export const createUser = async ({ firstName, lastName }) => {
 export const updateUser = async (userId, { firstName, lastName }) => {
   try {
     const response = await axios({
-      url: Api.update(userId).url,
-      method: Api.update(userId).method,
-      headers: Api.update(userId).headers,
+      url: Api.user.update(userId).url,
+      method: Api.user.update(userId).method,
+      headers: Api.user.update(userId).headers,
       data: { firstName, lastName },
     });
     return response;
@@ -46,9 +46,9 @@ export const updateUser = async (userId, { firstName, lastName }) => {
 export const deleteUser = async (userId) => {
   try {
     const response = await axios({
-      url: Api.delete(userId).url,
-      method: Api.delete(userId).method,
-      headers: Api.delete(userId).headers,
+      url: Api.user.delete(userId).url,
+      method: Api.user.delete(userId).method,
+      headers: Api.user.delete(userId).headers,
     });
     return response;
   } catch (e) {

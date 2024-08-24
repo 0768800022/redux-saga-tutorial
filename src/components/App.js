@@ -1,23 +1,38 @@
-// import { useDispatch, useSelector } from 'react-redux';
-// import { getUserRequest, createUserRequest, updateUserRequest, deleteUserRequest, usersSuccess, usersError } from '../actions/users';
-import userListPage from "../api/useUserListPage";
-import apiConfig from '../api/apiConfig';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import User from './User';
+import News from './News'; 
 
 function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/users" element={<User />} />
+        <Route path="/news" element={<News />} /> 
+      </Routes>
+    </Router>
+  );
+}
 
-    // const dispatch = useDispatch();
+export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const dispatch = useDispatch();
     // const users = useSelector(state => state.users); //lấy state users từ redux store
     // const [listUsers, setListUsers] = useState([]); //biến res -> data của axios -> data của api trả về
     
-    const {data,
-          handleSubmit,
-          handleUpdateUser,
-          handleDeleteUserClick,
-          handleCloseAlert,
-          success
-    } = userListPage(apiConfig.Api);
-
     // const handleSubmit = ({firstName, lastName}) => {
     //   dispatch(createUserRequest({ firstName, lastName}));
     // };
@@ -36,16 +51,3 @@ function App() {
     // const handleCloseAlert = () => {
     //   dispatch(usersSuccess({ success: ''}));
     // };
-    
-    return (
-      <User 
-        data={data}
-        handleSubmit={handleSubmit}
-        handleUpdateUser={handleUpdateUser}
-        handleDeleteUserClick={handleDeleteUserClick}
-        handleCloseAlert={handleCloseAlert}
-      />
-    );
-}
-
-export default App;
