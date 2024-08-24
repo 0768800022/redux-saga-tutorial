@@ -1,12 +1,14 @@
 import { Button, Popconfirm, List, Modal, Input, Form } from "antd";
 import { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
-import * as api from '../api/users';
-
-import { getUserRequest, createUserRequest, updateUserRequest, deleteUserRequest, usersSuccess, usersError } from '../actions/users';
-
+import useUserListPage from "../api/useUserListPage";
+import apiConfig from '../api/apiConfig';
 
 const UsersList = ({ users, onDeleteUser, onEditUser }) => {
+    
+    const {data} = useUserListPage(apiConfig.Api); 
+    console.log("Check data", data);
+
 
     const useModal = (initial = false) => {
         const[open, setOpen] = useState(initial);
@@ -16,22 +18,6 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
         }
         return [open, handle];
     }
-
-    const [listUsers, setListUsers] = useState([]); //biến res -> data của axios -> data của api trả về
-
-    const fetchUsers = async () => {
-      try {
-        const res = await api.getUsers();
-        setListUsers(res.data.data);
-      } catch (e) {
-        
-      }
-    };
-  
-    useEffect(() => {
-
-      fetchUsers(); // Gọi hàm để get List
-    }, []);
 
 
     const [open, handleShow] = useModal(false);
@@ -54,12 +40,7 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
         if (deleteInModal) {
             try {
                 onDeleteUser({
-                    // await api.deleteUser(deleteInModal);
-                    // ...deleteInModal,
-                    // // user: user.id,
-                    // firstName: user.firstName,
-                    // lastName: user.lastName,
-                    // setListUsers(res.data.data);
+                    ...deleteInModal,
                 });
                 hideModal();
             } catch (e) {
@@ -84,28 +65,18 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
         if (editInModal) {
             onEditUser({
                 ...editInModal,
-                getUser: getUserRequest(values),
-                update: updateUserRequest(values),
                 firstName: values.firstName,
                 lastName: values.lastName,
+                
             });
             hideEditModal();
         }
     };
 
-    const sortedUsers = [...listUsers].sort((a, b) => {
-        if (a.firstName < b.firstName) return -1;
-        if (a.firstName > b.firstName) return 1;
-        if (a.lastName < b.lastName) return -1;
-        if (a.lastName > b.lastName) return 1;
-        return 0;
-      });
-      
-
     return (
         <>
             <List>
-                {listUsers.sort((a, b) => {
+                {data.sort((a, b) => {
                     if (a.firstName > b.firstName) {
                         return 1;
                     } else if (a.firstName < b.firstName) {
@@ -145,7 +116,7 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                                     description="Bạn có chắc chắn muốn xóa người dùng này không?"
                                                     onConfirm={() => {
                                                         handleDelete();
-                                                        onDeleteUser(listUser.id);
+                                                        onDeleteUser();
                                                         hideModal();
                                                     }}
                                                     onCancel={hideModal}
@@ -174,23 +145,6 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                 })}
             </List>
         
-
-             {/* <Modal
-                title="Bạn có chắc chắn muốn xóa không?"
-                open={open}
-                onOk={() => {
-                    handleDelete();
-                    onDeleteUser();
-                    hideModal();
-                }}
-                onCancel={hideModal}
-                okText="Delete"
-                cancelText="Cancel"
-            >
-                <p>Bạn có chắc chắn muốn xóa người dùng này?</p>
-            </Modal> */}
-
-
             <Modal
                 title="Chỉnh sửa thông tin người dùng"
                 open={openEdit}

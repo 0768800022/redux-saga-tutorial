@@ -18,7 +18,7 @@ const stores = createStore(
 
 
 axios.defaults.withCredentials = true;
-axios.defaults.baseURL = 'http://mithril-rem.fly.dev/api';
+axios.defaults.baseURL = 'https://mithril-rem.fly.dev/api';
 
 const sagaMiddleware = createSagaMiddleware();
 const store = createStore(reducers, applyMiddleware(sagaMiddleware));
