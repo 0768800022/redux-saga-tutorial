@@ -1,5 +1,10 @@
 import { Button, Popconfirm, List, Modal, Input, Form } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Table } from "react-bootstrap";
+import * as api from '../api/users';
+
+import { getUserRequest, createUserRequest, updateUserRequest, deleteUserRequest, usersSuccess, usersError } from '../actions/users';
+
 
 const UsersList = ({ users, onDeleteUser, onEditUser }) => {
 
@@ -11,6 +16,22 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
         }
         return [open, handle];
     }
+
+    const [listUsers, setListUsers] = useState([]); //biến res -> data của axios -> data của api trả về
+
+    const fetchUsers = async () => {
+      try {
+        const res = await api.getUsers();
+        setListUsers(res.data.data);
+      } catch (e) {
+        
+      }
+    };
+  
+    useEffect(() => {
+
+      fetchUsers(); // Gọi hàm để get List
+    }, []);
 
 
     const [open, handleShow] = useModal(false);
@@ -29,15 +50,21 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
         handleShow.close();
     };
 
-    const handleDelete = (user) => {
+    const handleDelete = async () => {
         if (deleteInModal) {
-            onDeleteUser({
-                ...deleteInModal,
-                // // user: user.id,
-                // firstName: user.firstName,
-                // lastName: user.lastName,
-            });
-            hideModal();
+            try {
+                onDeleteUser({
+                    // await api.deleteUser(deleteInModal);
+                    // ...deleteInModal,
+                    // // user: user.id,
+                    // firstName: user.firstName,
+                    // lastName: user.lastName,
+                    // setListUsers(res.data.data);
+                });
+                hideModal();
+            } catch (e) {
+                
+            }
         }
     };
 
@@ -53,21 +80,32 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
     };
 
     const handleEdit = (values) => {
+        console.log("Get User", values)
         if (editInModal) {
             onEditUser({
                 ...editInModal,
+                getUser: getUserRequest(values),
+                update: updateUserRequest(values),
                 firstName: values.firstName,
                 lastName: values.lastName,
             });
             hideEditModal();
         }
     };
-    
+
+    const sortedUsers = [...listUsers].sort((a, b) => {
+        if (a.firstName < b.firstName) return -1;
+        if (a.firstName > b.firstName) return 1;
+        if (a.lastName < b.lastName) return -1;
+        if (a.lastName > b.lastName) return 1;
+        return 0;
+      });
+      
 
     return (
         <>
             <List>
-                {users.sort((a, b) => {
+                {listUsers.sort((a, b) => {
                     if (a.firstName > b.firstName) {
                         return 1;
                     } else if (a.firstName < b.firstName) {
@@ -79,45 +117,63 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                     } else {
                         return 0;
                     }
-                }).map((user) => {
+                }).map((listUser) => {
                     return (
-                        <List.Item key={user.id} style={{ border: '1px solid #333', borderRadius: '20px' }}>
+                        <List.Item key={listUser.id} >
                             <section style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                                <div style={{ flex: 1 }}>
+                                {/* <div style={{ flex: 1 }}>
                                     <span style={{ marginLeft: '5px' }}>{user.firstName}</span>
                                     <span style={{ marginLeft: '5px' }}>{user.lastName}</span>
-                                </div>
-                                <div style={{ marginRight: '5px' }}>
-                                    <Popconfirm
-                                        title="Xóa người dùng"
-                                        description="Bạn có chắc chắn muốn xóa người dùng này không?"
-                                        onConfirm={() => {
-                                            handleDelete();
-                                            onDeleteUser();
-                                            hideModal();
-                                        }}
-                                        onCancel={hideModal}
-                                        okText="Delete"
-                                        cancelText="Cancel"
-                                    >
-                                        <Button type="primary" onClick={() => showModal(user.id)} danger>
-                                            Delete
-                                        </Button>
-                                    </Popconfirm>
-                                </div>
-
-                                <div style={{ marginRight: '5px' }}>
-                                    <Button type="primary" onClick={() => showEditModal(user)}>
-                                        Edit
-                                    </Button>
-                                    
-                                </div>
+                                </div> */}
+                                <Table striped bordered hover size="sm">
+                                    <thead>
+                                        <tr>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th></th>
+                                        <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                        <td>{listUser.firstName}</td>
+                                        <td>{listUser.lastName}</td>
+                                        <td>
+                                            <div style={{  }}>
+                                                <Popconfirm
+                                                    title="Xóa người dùng"
+                                                    description="Bạn có chắc chắn muốn xóa người dùng này không?"
+                                                    onConfirm={() => {
+                                                        handleDelete();
+                                                        onDeleteUser(listUser.id);
+                                                        hideModal();
+                                                    }}
+                                                    onCancel={hideModal}
+                                                    okText="Delete"
+                                                    cancelText="Cancel"
+                                                >
+                                                    <Button type="primary" onClick={() => showModal(listUser.id)} danger>
+                                                        Delete
+                                                    </Button>
+                                                </Popconfirm>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style={{ marginRight: '5px' }}>
+                                                <Button type="primary" onClick={() => showEditModal(listUser)}>
+                                                    Edit
+                                                </Button>
+                                            </div>
+                                        </td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
                             </section>
                         </List.Item>
                     );
                 })}
             </List>
-
+        
 
              {/* <Modal
                 title="Bạn có chắc chắn muốn xóa không?"
@@ -134,7 +190,6 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                 <p>Bạn có chắc chắn muốn xóa người dùng này?</p>
             </Modal> */}
 
-            
 
             <Modal
                 title="Chỉnh sửa thông tin người dùng"

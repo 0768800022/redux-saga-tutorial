@@ -2,23 +2,49 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUserRequest, createUserRequest, updateUserRequest, deleteUserRequest, usersSuccess, usersError } from '../actions/users';
 import UsersList from './UsersList';
 import NewUserForm from './NewUserForm';
+import * as api from '../api/users';
 import { Alert } from 'antd';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 function App() {
 
-  const dispatch = useDispatch();
-  const users = useSelector(state => state.users); //lấy state users từ redux store
+    const dispatch = useDispatch();
+    // const users = useSelector(state => state.users); //lấy state users từ redux store
+    const [listUsers, setListUsers] = useState([]); //biến res -> data của axios -> data của api trả về
 
+    const fetchUsers = async () => {
+      try {
+        const res = await api.getUsers();
+        setListUsers(res.data.data);
+      } catch (e) {
+        
+      }
+    };
+  
     useEffect(() => {
       dispatch(getUserRequest());
-    }, [dispatch])
+
+      fetchUsers(); // Gọi hàm để get List
+    }, [dispatch]);
+
+
+    // const getUser = async () => {
+    //     let res = await getUsers();
+    //     console.log("check", res);  
+    // }
+
+    // useEffect(() => {
+    //   dispatch(getUserRequest());
+    //   // getUser();
+    // }, [dispatch])
 
     const handleSubmit = ({firstName, lastName}) => {
       dispatch(createUserRequest({ firstName, lastName}));
     };
 
     const handleUpdateUser = (updatedUser) => {
+      console.log("Update check", updatedUser);
+      
       dispatch(updateUserRequest(updatedUser));
     }
 
@@ -30,13 +56,14 @@ function App() {
     const handleCloseAlert = () => {
       dispatch(usersSuccess({ success: ''}));
     };
-
+    
+    
     return (
       <div style={{ margin: '0 auto', padding: '20px', maxWidth: '600px' }}>
-        {users.success && (
+        {listUsers.success && (
           <Alert
             message="Success"
-            description={users.success}
+            description={listUsers.success}
             type="success"
             showIcon
             closable
@@ -44,7 +71,7 @@ function App() {
           />
         )}
         <NewUserForm onSubmit={handleSubmit}/>
-        <UsersList onEditUser={handleUpdateUser} onDeleteUser={handleDeleteUserClick} users={users.items}/>
+        <UsersList onEditUser={handleUpdateUser} onDeleteUser={handleDeleteUserClick} listUsers={listUsers.items}/>
       </div>
     );
 }

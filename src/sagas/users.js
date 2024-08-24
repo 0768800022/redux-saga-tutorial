@@ -17,7 +17,6 @@ function* getUsers(){
 
 function* createUser(action){
     try {
-        
         // yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
         // yield call(getUsers);
     } catch (e) {
@@ -43,10 +42,8 @@ function* updateUser(action) {
         //     lastName: action.payload.lastName
         // });
         // const updatedUser = yield call(api.getUsers, action.payload.userId);
-        // yield put(actions.usersSuccess({ success: 'User updated successfully' }));
-        // yield put(actions.updateUserRequest({ userId: updatedUser.id, firstName: updatedUser.firstName, lastName: updatedUser.lastName })); 
     } catch (e) {
-        // Handle error...
+        
     }
 }
 
@@ -55,15 +52,22 @@ function* watchUpdateUserRequest(){
     yield takeLatest(actions.Types.UPDATE_USER_REQUEST, updateUser)
 }
 
-function* deleteUser({userId}){
+function* deleteUser({userId}, action){
+    // try {
+    //     // yield call(api.deleteUser, userId)
+    //     // yield call(getUsers);
+    // } catch (e) {
+    //     yield put(actions.usersSuccess({
+    //         success: 'You have successfully deleted the user'
+    //     }));
+    // }
+
     try {
-        // yield call(api.deleteUser, userId)
-        // yield call(getUsers);
-    } catch (e) {
-        yield put(actions.usersSuccess({
-            success: 'You have successfully deleted the user'
-        }));
-    }
+        yield call(api.deleteUser, action.payload);
+        yield put(getUsers()); // Gọi hành động để lấy danh sách người dùng mới
+      } catch (e) {
+
+      }
 }
 
 function* watchDeleteUserRequest(){
