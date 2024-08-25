@@ -2,12 +2,20 @@ import { useState, useEffect } from 'react';
 import * as api from './users';
 import axios from 'axios';
 import { Api } from './apiConfig';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 
-const useListPage = (apiConfig, onDeleteUser) => {
+const useListPage = (apiConfig) => {
     const [data, setData] = useState([]);
     const [success, setSuccess] = useState('');
+    const {pathname} = useLocation(); //lấy đường dẫn hiện tại
+    const navigate = useNavigate();
+
+    const handleConvert = (listUser) => {
+        const baseRoute = pathname.includes('/news') ? '/news' : '/users'; // Kiểm tra đường dẫn hiện tại
+        const state = pathname.includes('/news') ? { news: listUser } : { user: listUser }; // Truyền dữ liệu tương ứng
+        navigate(`${baseRoute}/edit/${listUser.id}`, { state });
+    };
 
     const useModal = (initial = false) => {
         const[open, setOpen] = useState(initial);
@@ -36,10 +44,6 @@ const useListPage = (apiConfig, onDeleteUser) => {
         fetchData();
     }, [apiConfig]);
     
-    const navigate = useNavigate();
-    const handleConvert = (listUser) => {
-        navigate(`/users/edit/${listUser.id}`, {state: {user: listUser}});
-    }
 
     const handleSubmit = ({ firstName, lastName }) => {
         return axios.post(User.create.url, { firstName, lastName })
@@ -63,9 +67,7 @@ const useListPage = (apiConfig, onDeleteUser) => {
     const handleDeleteModal = async () => {
         if (deleteInModal) {
             try {
-                onDeleteUser({
-                    ...deleteInModal,
-                });
+                await handleDelete(deleteInModal);
                 hideModal();
             } catch (e) {
                 
@@ -86,7 +88,6 @@ const useListPage = (apiConfig, onDeleteUser) => {
     //     }
     // };
 
-    
     
     const showModal = (userId) => {
         setDeleteInModal(userId);

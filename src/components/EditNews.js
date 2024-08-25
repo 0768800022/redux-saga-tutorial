@@ -4,12 +4,12 @@ import { Form, Input, Button, notification } from 'antd';
 import useSavePage from "../api/useSavePage";
 import apiConfig from '../api/apiConfig';
 
-function EditUser() {
+function EditNews() {
 
     const { state } = useLocation();
-    const isEditMode = !!state?.user;
+    const isEditMode = !!state?.news;
     const { handleCreate, onUpdate } = useSavePage(apiConfig.Api);
-    const initialValues = isEditMode ? state.user : { firstName: '', lastName: '' };
+    const initialValues = isEditMode ? state.news : { firstName: '', lastName: '' };
     
     return (
         <div >
@@ -42,4 +42,4 @@ function EditUser() {
     );
 }
 
-export default EditUser;
+export default EditNews;
