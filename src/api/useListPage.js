@@ -11,7 +11,7 @@ const useListPage = (apiConfig) => {
     const {pathname} = useLocation(); //lấy đường dẫn hiện tại
     const navigate = useNavigate();
 
-    const handleConvert = (listUser) => {
+    const handlePageChange = (listUser) => {
         const baseRoute = pathname.includes('/news') ? '/news' : '/users'; // Kiểm tra đường dẫn hiện tại
         const state = pathname.includes('/news') ? { news: listUser } : { user: listUser }; // Truyền dữ liệu tương ứng
         navigate(`${baseRoute}/edit/${listUser.id}`, { state });
@@ -108,7 +108,7 @@ const useListPage = (apiConfig) => {
         handleDelete,
         handleDeleteModal,
         handleCloseAlert,
-        handleConvert,
+        handlePageChange,
         showModal,
         hideModal,
         success,

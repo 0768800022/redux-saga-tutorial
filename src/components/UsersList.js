@@ -4,9 +4,9 @@ import useListPage from "../api/useListPage";
 import apiConfig from '../api/apiConfig';
 
 const UsersList = () => {
-    
-    const {data, handleConvert, handleDeleteModal, hideModal, showModal} = useListPage(apiConfig.Api); 
-    console.log("Check data", data);
+
+
+    const { data, handlePageChange, handleDeleteModal, hideModal, showModal } = useListPage(apiConfig.Api);
 
     return (
         <>
@@ -65,7 +65,7 @@ const UsersList = () => {
                                         </td>
                                         <td>
                                             <div style={{ marginRight: '5px' }}>
-                                                <Button type="primary" onClick={() => {handleConvert(listUser)}}>
+                                                <Button type="primary" onClick={() => handlePageChange(listUser)}>
                                                     Edit
                                                 </Button>
                                             </div>
