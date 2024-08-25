@@ -1,82 +1,12 @@
 import { Button, Popconfirm, List, Modal, Input, Form } from "antd";
-import { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
-import { useNavigate } from 'react-router-dom';
 import useListPage from "../api/useListPage";
 import apiConfig from '../api/apiConfig';
 
-const UsersList = ({ users, onDeleteUser, onEditUser }) => {
+const UsersList = () => {
     
-    const {data} = useListPage(apiConfig.Api); 
+    const {data, handleConvert, handleDeleteModal, hideModal, showModal} = useListPage(apiConfig.Api); 
     console.log("Check data", data);
-    //////////////
-    const navigate = useNavigate();
-    const handleConvert = (listUser) => {
-        navigate(`/users/edit/${listUser.id}`, {state: {user: listUser}});
-    }
-
-    const useModal = (initial = false) => {
-        const[open, setOpen] = useState(initial);
-        const handle = {
-            open: () => setOpen(true),
-            close: () => setOpen(false)
-        }
-        return [open, handle];
-    }
-
-
-    const [open, handleShow] = useModal(false);
-    const [openEdit, handleEditModal] = useModal(false);
-    const [deleteInModal, setDeleteInModal] = useState(null);
-    const [editInModal, setEditInModal] = useState(null);
-    const [editForm] = Form.useForm();
-
-    const showModal = (userId) => {
-        setDeleteInModal(userId);
-        handleShow.open();
-    };
-
-    const hideModal = () => {
-        setDeleteInModal(null);
-        handleShow.close();
-    };
-
-    const handleDelete = async () => {
-        if (deleteInModal) {
-            try {
-                onDeleteUser({
-                    ...deleteInModal,
-                });
-                hideModal();
-            } catch (e) {
-                
-            }
-        }
-    };
-
-    const showEditModal = (user) => {
-        setEditInModal(user);
-        handleEditModal.open();
-        editForm.setFieldsValue(user);
-    };
-
-    const hideEditModal = () => {
-        setEditInModal(null);
-        handleEditModal.close();
-    };
-
-    const handleEdit = (values) => {
-        console.log("Get User", values)
-        if (editInModal) {
-            onEditUser({
-                ...editInModal,
-                firstName: values.firstName,
-                lastName: values.lastName,
-                
-            });
-            hideEditModal();
-        }
-    };
 
     return (
         <>
@@ -120,8 +50,7 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                                     title="Xóa người dùng"
                                                     description="Bạn có chắc chắn muốn xóa người dùng này không?"
                                                     onConfirm={() => {
-                                                        handleDelete();
-                                                        onDeleteUser();
+                                                        handleDeleteModal();
                                                         hideModal();
                                                     }}
                                                     onCancel={hideModal}
@@ -149,8 +78,34 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                     );
                 })}
             </List>
-        
-            <Modal
+        </> 
+    );
+};
+
+export default UsersList;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* <Modal
                 title="Chỉnh sửa thông tin người dùng"
                 open={openEdit}
                 onOk={() => editForm.submit()}
@@ -174,11 +129,9 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                         <Input />
                     </Form.Item>
                 </Form>
-            </Modal>
-        </>
-        
-    );
-};
-
-export default UsersList;
-
+            </Modal> 
+            
+            // const [openEdit, handleEditModal] = useModal(false);
+            // const [editForm] = Form.useForm();
+                
+            */}
