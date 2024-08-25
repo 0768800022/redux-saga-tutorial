@@ -8,8 +8,8 @@ import useListPage from "../api/useListPage";
 function News() {
   const { data,
       handleSubmit,
-      handleUpdateUser,
-      handleDeleteUserClick,
+      handleUpdate,
+      handleDelete,
       handleCloseAlert,
         success 
   } = useListPage(Api.news);
@@ -27,7 +27,7 @@ function News() {
         />
       )}
       <NewUserForm onSubmit={handleSubmit} />
-      <UsersList onEditUser={handleUpdateUser} onDeleteUser={handleDeleteUserClick} listUsers={data.items} />
+      <UsersList onEditUser={handleUpdate} onDeleteUser={handleDelete} listUsers={data.items} />
     </div>
   );
 }

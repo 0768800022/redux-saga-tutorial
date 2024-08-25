@@ -1,6 +1,7 @@
 import { Button, Popconfirm, List, Modal, Input, Form } from "antd";
 import { useState, useEffect } from "react";
 import { Table } from "react-bootstrap";
+import { useNavigate } from 'react-router-dom';
 import useListPage from "../api/useListPage";
 import apiConfig from '../api/apiConfig';
 
@@ -8,7 +9,11 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
     
     const {data} = useListPage(apiConfig.Api); 
     console.log("Check data", data);
-
+    //////////////
+    const navigate = useNavigate();
+    const handleConvert = (listUser) => {
+        navigate(`/users/edit/${listUser.id}`, {state: {user: listUser}});
+    }
 
     const useModal = (initial = false) => {
         const[open, setOpen] = useState(initial);
@@ -131,7 +136,7 @@ const UsersList = ({ users, onDeleteUser, onEditUser }) => {
                                         </td>
                                         <td>
                                             <div style={{ marginRight: '5px' }}>
-                                                <Button type="primary" onClick={() => showEditModal(listUser)}>
+                                                <Button type="primary" onClick={() => {handleConvert(listUser)}}>
                                                     Edit
                                                 </Button>
                                             </div>

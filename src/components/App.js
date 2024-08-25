@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import User from './User';
 import News from './News'; 
+import EditUser from './EditUser';
 
 function App() {
   return (
@@ -9,13 +10,13 @@ function App() {
       <Routes>
         <Route path="/users" element={<User />} />
         <Route path="/news" element={<News />} /> 
+        <Route path="/users/edit/:id" element={<EditUser />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
-
 
 
 

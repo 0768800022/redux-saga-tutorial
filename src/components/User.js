@@ -9,8 +9,8 @@ function User() {
     
     const {data,
         handleSubmit,
-        handleUpdateUser,
-        handleDeleteUserClick,
+        handleUpdate,
+        handleDelete,
         handleCloseAlert,
         success
      } = useListPage(Api.user);
@@ -28,7 +28,7 @@ function User() {
           />
         )}
         <NewUserForm onSubmit={handleSubmit}/>
-        <UsersList onEditUser={handleUpdateUser} onDeleteUser={handleDeleteUserClick} listUsers={data.items}/>
+        <UsersList onEditUser={handleUpdate} onDeleteUser={handleDelete} listUsers={data.items}/>
       </div>
      );
 }

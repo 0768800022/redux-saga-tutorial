@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import * as api from './users';
 import axios from 'axios';
+import { Api } from './apiConfig';
+
 
 const useListPage = (apiConfig) => {
     const [data, setData] = useState([]);
@@ -20,7 +22,7 @@ const useListPage = (apiConfig) => {
     }, [apiConfig]);
     
     const handleSubmit = ({ firstName, lastName }) => {
-        axios.post(apiConfig.create.url, { firstName, lastName })
+        return axios.post(Api.user.create.url, { firstName, lastName })
             .then(() => {
                 fetchData(); 
             })
@@ -29,17 +31,8 @@ const useListPage = (apiConfig) => {
     };
     
     
-    const handleUpdateUser = (updatedUser) => {
-        axios.put(apiConfig.update(updatedUser.id).url, updatedUser)
-            .then(() => {
-                fetchData(); 
-            })
-            .catch((e) => {
-            });
-    };
-    
-    const handleDeleteUserClick = (userId) => {
-        axios.delete(apiConfig.delete(userId).url)
+    const handleDelete = (userId) => {
+        return axios.delete(Api.user.delete(userId).url)
             .then(() => {
                 fetchData(); 
             })
@@ -53,11 +46,13 @@ const useListPage = (apiConfig) => {
     return {
         data,
         handleSubmit,
-        handleUpdateUser,
-        handleDeleteUserClick,
+        handleDelete,
         handleCloseAlert,
         success,
     };
 };
 
 export default useListPage;
+
+
+
