@@ -103,9 +103,7 @@ const LectureListPage = () => {
             dataIndex: ['lectureName'],
             width: '50%',
         },
-        // {
-        //     dataIndex: 'lectureKind',
-        // },
+        
     ];
 
     const actionColumn = mixinFuncs.renderActionColumn(
