@@ -7,15 +7,13 @@ import { accountActions } from '@store/actions';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import ProfileForm from './ProfileForm';
-import LeaderForm from './LeaderForm';
-import StudentForm from './StudentForm';
-import CompanyForm from './CompanyForm';
+
 import useAuth from '@hooks/useAuth';
 import { UserTypes, storageKeys } from '@constants';
 import { defineMessages } from 'react-intl';
 import useTranslate from '@hooks/useTranslate';
 import { getData } from '@utils/localStorage';
-import DeveloperForm from './DeveloperForm';
+
 
 const messages = defineMessages({
     profile: 'Profile',
@@ -25,6 +23,8 @@ const userProfileType = {
     [UserTypes.MANAGER]: 'organize',
     [UserTypes.DEVELOPER]: 'developer',
     [UserTypes.STUDENT]: 'student',
+    [UserTypes.COURSE]: 'course',
+    [UserTypes.SUBJECT]: 'subject',
     [UserTypes.COMPANY]: 'company',
 };
 
@@ -69,37 +69,7 @@ const ProfilePage = () => {
                     // isAdmin={isAdmin}
                 />
             )}
-            {useKind === UserTypes.DEVELOPER && (
-                <DeveloperForm
-                    setIsChangedFormValues={setIsChangedFormValues}
-                    dataDetail={data ? data : {}}
-                    formId={mixinFuncs.getFormId()}
-                    isEditing={isEditing}
-                    actions={mixinFuncs.renderActions()}
-                    onSubmit={onSave}
-                    // isAdmin={isAdmin}
-                />
-            )}
-            {useKind === UserTypes.STUDENT && (
-                <StudentForm
-                    setIsChangedFormValues={setIsChangedFormValues}
-                    dataDetail={data ? data : {}}
-                    formId={mixinFuncs.getFormId()}
-                    isEditing={isEditing}
-                    actions={mixinFuncs.renderActions()}
-                    onSubmit={onSave}
-                />
-            )}
-            {useKind === UserTypes.COMPANY && (
-                <CompanyForm
-                    setIsChangedFormValues={setIsChangedFormValues}
-                    dataDetail={data ? data : {}}
-                    formId={mixinFuncs.getFormId()}
-                    isEditing={isEditing}
-                    actions={mixinFuncs.renderActions()}
-                    onSubmit={onSave}
-                />
-            )}
+            
         </PageWrapper>
     );
 };

@@ -408,6 +408,17 @@ const DeveloperForm = (props) => {
                             />
                         </Col>
                         <Col span={12}>
+                            <AutoCompleteField
+                                label={<FormattedMessage defaultMessage="Khóa học" />}
+                                name={['courseId']}
+                                apiConfig={apiConfig.course.autocomplete}
+                                mappingOptions={(item) => ({ value: item.id, label: item.account.courseName })}
+                                // initialSearchParams={{ kind: categoryKinds.CATEGORY_KIND_ROLE }}
+                                searchParams={(text) => ({ courseName: text })}
+                                onChange={(value) => console.log(value)}
+                            />
+                        </Col>
+                        <Col span={12}>
                             <TextField
                                 label={translate.formatMessage(commonMessage.password)}
                                 rules={[

@@ -4,35 +4,16 @@ import categoryRoutesGen from '@modules/category/categoryGen/routes';
 import categoryRoutesMajor from '@modules/category/categoryMajor/routes';
 // import categoryRoutesKnowledge from '@modules/knowledgeManage/categoryKnowledge/routes';
 
-import studentRoutes from '@modules/account/student/routes';
+
 import Dashboard from '@modules/entry';
 import LoginPage from '@modules/login/index';
 import ProfilePage from '@modules/profile/index';
 import PageNotAllowed from '@components/common/page/PageNotAllowed';
-import subjectRoutes from '@modules/courseManage/subject/routes';
-import courseRoutes from '@modules/courseManage/course/routes';
-import registrationRoutes from '@modules/courseManage/course/registration/routes';
-import leaderRoutes from '@modules/account/leader/routes';
-import taskRoutes from '@modules/task/routes';
-import projectRoutes from '@modules/projectManage/project/routes';
-import projectRoleRoutes from '@modules/projectManage/projectRole/routes';
+
 import developerRoutes from '@modules/account/developer/routes';
-import projectTaskRoutes from '@modules/projectManage/project/projectTask/routes';
-import companyRoutes from '@modules/companyManage/company/routes';
-import companySubscriptionRoutes from '@modules/companyManage/companySubscription/routes';
-import settingsRoutes from '@modules/settings/routes';
-import courseRequestRoutes from '@modules/courseManage/courseRequest/routes';
-import CompanyRequestRoutes from '@modules/companyManage/company/companyRequest/routes';
-import MyCompanySubscriptionRoutes from '@modules/companyManage/myCompanySubscription/routes';
-import FinanceRoutes from '@modules/courseManage/finance/routes';
-import SalaryPeriodRoutes from '@modules/projectManage/salaryPeriod/routes';
-import StoryTaskRoutes from '@modules/projectManage/project/storyTask/routes';
-import categoryRoutesRole from '@modules/category/categoryRole/routes';
-import registerSalaryPeriod from "@modules/projectManage/registerSalaryPeriod/routes";
-import TrainingResultRouter from '@modules/TrainingResult/routes';
-import knowledgeManageRoutes from '@modules/knowledgeManage/routes';
-import CourseReviewHistoryRouter from '@modules/courseManage/courseReviewHistory/routes';
-import DeveloperKnowledgeRouter from '@modules/courseManage/course/developer/routes';
+import studentRoutes from '@modules/account/student/routes';
+import courseRoutes from '@modules/account/course/routes';
+import subjectRoutes from '@modules/account/subject/routes';
 
 /*
     auth
@@ -66,35 +47,17 @@ const routes = {
         title: 'Profile page',
     },
 
-    ...subjectRoutes,
-    ...courseRoutes,
+   
     ...categoryRoutesEdu,
     ...categoryRoutesGen,
     ...categoryRoutesMajor,
     // ...categoryRoutesKnowledge,
-    ...registrationRoutes,
-    ...studentRoutes,
-    ...leaderRoutes,
-    ...taskRoutes,
-    ...projectRoutes,
-    ...projectRoleRoutes,
     ...developerRoutes,
-    ...projectTaskRoutes,
-    ...companyRoutes,
-    ...companySubscriptionRoutes,
-    ...settingsRoutes,
-    ...courseRequestRoutes,
-    ...CompanyRequestRoutes,
-    ...MyCompanySubscriptionRoutes,
-    ...FinanceRoutes,
-    ...SalaryPeriodRoutes,
-    ...StoryTaskRoutes,
-    ...categoryRoutesRole,
-    ...registerSalaryPeriod,
-    ...TrainingResultRouter,
-    ...knowledgeManageRoutes,
-    ...CourseReviewHistoryRouter,
-    ...DeveloperKnowledgeRouter,
+    ...studentRoutes,
+    ...courseRoutes,
+    ...subjectRoutes,
+  
+   
     // keep this at last
     //
     notFound: {

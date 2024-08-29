@@ -371,6 +371,28 @@ const useListBase = ({
                 </BaseTooltip>
             );
         },
+        // showLecture: ({ buttonProps, ...dataRow }) => {
+        //     if (!isProjectToken && !mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]))
+        //         return null;
+
+        //     return (
+        //         <BaseTooltip type="showLecture" lectureName={options.lectureName}>
+        //             <Button
+        //                 {...buttonProps}
+        //                 onClick={(e) => {
+        //                     e.stopPropagation();
+        //                     navigate(mixinFuncs.getItemDetailLink(dataRow), {
+        //                         state: { action: 'showLecture', prevPath: location.pathname },
+        //                     });
+        //                 }}
+        //                 type="link"
+        //                 style={{ padding: 0 }}
+        //             >
+        //                 <ShowLectureOutlined color="red" />
+        //             </Button>
+        //         </BaseTooltip>
+        //     );
+        // },
         ...additionalButtons,
     });
 
@@ -414,6 +436,16 @@ const useListBase = ({
                                     }
 
                                     break;
+
+                                    // case 'showLecture':
+                                    //     if (isProjectToken) {
+                                    //         isShow = true;
+                                    //     } else mixinFuncs.hasPermission([apiConfig.update?.baseURL, apiConfig.getById?.baseURL]);
+                                    //     {
+                                    //         isShow = true;
+                                    //     }
+    
+                                //     break;
                                 default:
                                     // if (mixinFuncs.hasPermission(value?.permissions)) isShow = true;
                                     isShow = true;

@@ -28,6 +28,10 @@ const Dashboard = () => {
             navigate(routes.projectLeaderListPage.path);
         } else if (userKind == UserTypes.COMPANY) {
             navigate(routes.companyRequestListPage.path);
+        } else if (userKind == UserTypes.COURSE) {
+            navigate(routes.courseStudentListPage.path);
+        } else if (userKind == UserTypes.SUBJECT) {
+            navigate(routes.subjectListPage.path);
         } else {
             navigate(routes.studentListPage.path);
         }
@@ -37,3 +41,5 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
+

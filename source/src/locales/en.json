@@ -6,6 +6,7 @@
     "components.common.form.FileUploadField.wrongFileType": "Định dạng tệp không đúng",
     "components.common.form.SearchForm.clear": "Xóa",
     "components.common.form.SearchForm.search": "Tìm kiếm",
+    
     "constants.intl.commonButton.login": "Đăng nhập",
     "constants.intl.commonLabel.articles": "Bài viết",
     "constants.intl.commonLabel.games": "Trò chơi",
@@ -112,6 +113,7 @@
     "modules.profile.ProfileForm.currentPassword": "Mật khẩu hiện tại",
     "modules.profile.ProfileForm.email": "Email",
     "modules.profile.ProfileForm.fullName": "Họ và tên",
+    "modules.profile.ProfileForm.subjectName": "Tên môn học",
     "modules.profile.ProfileForm.logo": "Logo",
     "modules.profile.ProfileForm.newPassword": "Mật khẩu mới",
     "modules.profile.ProfileForm.passwordLengthError": "Mật khẩu phải có ít nhất 6 ký tự",

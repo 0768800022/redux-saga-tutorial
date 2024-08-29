@@ -16,13 +16,14 @@ const getProfileSaga = (payload) => {
         api = apiConfig.developer.getProfile;
     } else if (useKind === UserTypes.STUDENT) {
         api = apiConfig.student.getProfile;
+    } else if (useKind === UserTypes.COURSE) {
+        api = apiConfig.course.getProfile;
     } else if (useKind === UserTypes.COMPANY) {
         api = apiConfig.company.getProfile;
     }
-  
-
     return processAction(api, payload);
 };
+
 
 const sagas = [
     takeLatest(accountActions.login.type, loginSaga),

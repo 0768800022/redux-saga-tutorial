@@ -164,19 +164,23 @@ export const UserTypes = {
     ADMIN: 1,
     MANAGER: 2,
     STUDENT: 3,
-    LEADER: 4,
-    COMPANY: 5,
-    DEVELOPER : 4,
+    COURSE: 4,
+    SUBJECT: 5,
+    LEADER: 6,
+    COMPANY: 7,
+    DEVELOPER : 8,
 };
 
 export const LEADER_LOGIN_TYPE = 'leader';
 export const ADMIN_LOGIN_TYPE = 'password';
 export const STUDENT_LOGIN_TYPE = 'student';
+// export const COURSE_LOGIN_TYPE = 'course';
 export const COMPANY_LOGIN_TYPE = 'company';
 export const DEVELOPER_LOGIN_TYPE = 'developer';
 export const loginOptions = [
     { label: 'Admin', value: ADMIN_LOGIN_TYPE },
     { label: 'Sinh viên', value: STUDENT_LOGIN_TYPE },
+    // { label: 'Khóa học', value: COURSE_LOGIN_TYPE },
     { label: 'Lập trình viên', value: DEVELOPER_LOGIN_TYPE },
     // { label: 'Leader', value: LEADER_LOGIN_TYPE },
     // { label: 'Công ty', value: COMPANY_LOGIN_TYPE },

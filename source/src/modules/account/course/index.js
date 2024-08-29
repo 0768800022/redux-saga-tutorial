@@ -9,7 +9,7 @@ import useTranslate from '@hooks/useTranslate';
 import { DATE_FORMAT_VALUE, DEFAULT_FORMAT, DEFAULT_TABLE_ITEM_SIZE } from '@constants/index';
 import { convertUtcToLocalTime } from '@utils/index';
 import { UserOutlined, BookOutlined } from '@ant-design/icons';
-import route from '@modules/account/student/routes';
+import route from '@modules/account/course/routes';
 import { useNavigate } from 'react-router-dom';
 import { Button, Tag, Avatar } from 'antd';
 import { statusOptions } from '@constants/masterData';
@@ -22,15 +22,15 @@ import { commonMessage } from '@locales/intl';
 import routes from '@routes';
 
 const message = defineMessages({
-    objectName: 'Sinh viên',
+    objectName: 'Khóa học',
 });
 
-const StudentListPage = () => {
+const CourseListPage = () => {
     const translate = useTranslate();
     const navigate = useNavigate();
     const statusValues = translate.formatKeys(statusOptions, ['label']);
     const { data, mixinFuncs, loading, pagination, queryFilter } = useListBase({
-        apiConfig: apiConfig.student,
+        apiConfig: apiConfig.course,
         options: {
             pageSize: DEFAULT_TABLE_ITEM_SIZE,
             objectName: translate.formatMessage(message.objectName),
@@ -51,7 +51,15 @@ const StudentListPage = () => {
     const columns = [
         {
             title: '#',
-            dataIndex: ['account', 'avatar'],
+            dataIndex: 'index',
+            align: 'center',
+            width: 80,
+            render: (_, __, index) => index + 1, 
+        },
+        
+        {
+            title: '#',
+            dataIndex: ['avatar'],
             align: 'center',
             width: 80,
             render: (avatar) => (
@@ -63,32 +71,30 @@ const StudentListPage = () => {
             ),
         },
         {
-            title: <FormattedMessage defaultMessage="Họ và tên" />,
-            dataIndex: ['account', 'fullName'],
+            title: <FormattedMessage defaultMessage="Tên khóa học" />,
+            dataIndex: ['name'],
         },
         {
-            title: <FormattedMessage defaultMessage="Ngày sinh" />,
-            dataIndex: ['account', 'birthday'],
-            render: (birthday) => {
-                const result = convertUtcToLocalTime(birthday, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
+            title: <FormattedMessage defaultMessage="Tên môn học" />,
+            render: (text, record) => (
+                <>
+                    <div>{record.subject.subjectName}</div>
+                    <div>Leader: {record.leader?.account?.fullName || 'No Leader Name'}</div>
+                </>
+            ),
+            // dataIndex: ['leader', 'account', 'fullName'],
+        },
+        {
+            title: <FormattedMessage defaultMessage="Học phí" />,
+            dataIndex: ['fee'],
+        },
+        {
+            title: <FormattedMessage defaultMessage="Ngày kết thúc" />,
+            dataIndex: ['dateEnd'],
+            render: (dateEnd) => {
+                const result = convertUtcToLocalTime(dateEnd, DEFAULT_FORMAT, DATE_FORMAT_VALUE);
                 return <div>{result}</div>;
             },
-        },
-        {
-            title: <FormattedMessage defaultMessage="Số điện thoại" />,
-            dataIndex: ['account', 'phone'],
-        },
-        {
-            title: <FormattedMessage defaultMessage="Email" />,
-            dataIndex: ['account', 'email'],
-        },
-        {
-            title: <FormattedMessage defaultMessage="Trường" />,
-            dataIndex: ['university', 'categoryName'],
-        },
-        {
-            title: <FormattedMessage defaultMessage="Hệ" />,
-            dataIndex: ['studyClass', 'categoryName'],
         },
         mixinFuncs.renderStatusColumn({ width: '120px' }),
         mixinFuncs.renderActionColumn(
@@ -99,8 +105,8 @@ const StudentListPage = () => {
 
     const searchFields = [
         {
-            key: 'fullName',
-            placeholder: translate.formatMessage(commonMessage.name),
+            key: 'name',
+            placeholder: translate.formatMessage(commonMessage.courseName),
         },
         {
             key: 'status',
@@ -111,7 +117,7 @@ const StudentListPage = () => {
         },
     ];
     return (
-        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.student) }]}>
+        <PageWrapper routes={[{ breadcrumbName: translate.formatMessage(commonMessage.course) }]}>
             <ListPage
                 searchForm={mixinFuncs.renderSearchForm({ fields: searchFields, initialValues: queryFilter })}
                 actionBar={mixinFuncs.renderActionBar()}
@@ -128,4 +134,4 @@ const StudentListPage = () => {
         </PageWrapper>
     );
 };
-export default StudentListPage;
+export default CourseListPage;
