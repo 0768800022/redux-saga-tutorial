@@ -17,12 +17,12 @@ function* getUsers(){
 
 function* createUser(action){
     try {
-        console.log(action);
-        yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
-        yield call(getUsers);
+        // yield call(api.createUser, {firstName: action.payload, lastName: action.payload})
+        // yield call(getUsers);
     } catch (e) {
-        yield put(actions.usersError({
-            error: 'An error occurred when trying to create the user'
+        yield put(actions.usersSuccess({
+            // error: 'An error occurred when trying to create the user'
+            success: 'You have successfully created'
         }));
     }
 }
@@ -35,15 +35,39 @@ function* watchCreateUserRequest(){
     yield takeLatest(actions.Types.CREATE_USER_REQUEST, createUser);
 }
 
-function* deleteUser({userId}){
+function* updateUser(action) {
     try {
-        yield call(api.deleteUser, userId)
-        yield call(getUsers);
+        //     yield call(api.updateUser, action.payload.userId, {
+        //     firstName: action.payload.firstName,
+        //     lastName: action.payload.lastName
+        // });
+        // const updatedUser = yield call(api.getUsers, action.payload.userId);
     } catch (e) {
-        yield put(actions.usersError({
-            error: 'An error when trying delete user'
-        }));
+        
     }
+}
+
+
+function* watchUpdateUserRequest(){
+    yield takeLatest(actions.Types.UPDATE_USER_REQUEST, updateUser)
+}
+
+function* deleteUser({userId}, action){
+    // try {
+    //     // yield call(api.deleteUser, userId)
+    //     // yield call(getUsers);
+    // } catch (e) {
+    //     yield put(actions.usersSuccess({
+    //         success: 'You have successfully deleted the user'
+    //     }));
+    // }
+
+    try {
+        yield call(api.deleteUser, action.payload);
+        yield put(getUsers()); // Gọi hành động để lấy danh sách người dùng mới
+      } catch (e) {
+
+      }
 }
 
 function* watchDeleteUserRequest(){
@@ -58,7 +82,8 @@ function* watchDeleteUserRequest(){
 const usersSagas = [
     fork(watchGetUsersRequest),
     fork(watchCreateUserRequest),
-    fork(watchDeleteUserRequest)
+    fork(watchUpdateUserRequest),
+    fork(watchDeleteUserRequest),
 ];
 
 

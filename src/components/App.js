@@ -1,52 +1,56 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { getUserRequest, createUserRequest, deleteUserRequest, usersError } from '../actions/users';
-import UsersList from './UsersList';
-import NewUserForm from './NewUserForm';
-import { Alert } from 'reactstrap';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import User from './User';
+import News from './News'; 
+import EditUser from './EditUser';
+import EditNews from './EditNews';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    
-    this.props.getUserRequest();
-  }
-
-  handleSubmit = ({firstName, lastName}) => {
-    this.props.createUserRequest({
-      firstName,
-      lastName
-    });
-  };
-
-  handleDeleteUserClick = (userId) => {
-    this.props.deleteUserRequest(userId)
-  };
-
-  handleCloseAlert = () => {
-    this.props.usersError({
-      error: ''
-    });
-  };
-
-  render() {
-    const users = this.props.users;
-    return (
-      <div style={{margin: '0 auto', padding: '20px', maxWidth: '600px'}}>
-        <Alert color="danger" isOpen={!!this.props.users.error} toggle={this.handleCloseAlert}>
-            {this.props.users.error}
-        </Alert>
-        <NewUserForm onSubmit={this.handleSubmit}/>
-        <UsersList onDeleteUser={this.handleDeleteUserClick} users={users.items}/>
-      </div>
-    );
-  }
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/users" element={<User />} />
+        <Route path="/news" element={<News />} /> 
+        <Route path="/users/edit/:id" element={<EditUser />} />
+        <Route path="/news/edit/:id" element={<EditNews />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default connect(({users}) => ({users}), {
-  getUserRequest,
-  createUserRequest,
-  deleteUserRequest,
-  usersError
-})(App);
+export default App;
 
+
+
+
+
+
+
+
+
+
+
+
+
+// const dispatch = useDispatch();
+    // const users = useSelector(state => state.users); //lấy state users từ redux store
+    // const [listUsers, setListUsers] = useState([]); //biến res -> data của axios -> data của api trả về
+    
+    // const handleSubmit = ({firstName, lastName}) => {
+    //   dispatch(createUserRequest({ firstName, lastName}));
+    // };
+
+    // const handleUpdateUser = (updatedUser) => {
+    //   console.log("Update check", updatedUser);
+      
+    //   dispatch(updateUserRequest(updatedUser));
+    // }
+
+
+    // const handleDeleteUserClick = (userId) => {
+    //   dispatch(deleteUserRequest(userId));
+    // };
+
+    // const handleCloseAlert = () => {
+    //   dispatch(usersSuccess({ success: ''}));
+    // };

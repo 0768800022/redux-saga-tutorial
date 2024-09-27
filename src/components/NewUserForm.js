@@ -1,71 +1,53 @@
-import React, {Component} from "react";
-import { Button, Form, FormGroup, Input, Label } from "reactstrap";
+import { Form, Button, Input} from 'antd';
+import { useState } from 'react';
 
-class NewUserForm extends Component {
+function NewUserForm({onSubmit}) {
 
-    state = {
-        firstName: '',
-        lastName: '',
-    }
-
-    handleFirstNameChange = e => {
-        this.setState({
-            firstName: e.target.value
-        });
-    }
-
-    handleLastNameChange = e => {
-        this.setState({
-            lastName: e.target.value
-        })
-    }
-
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+ 
     //xử lý dữ liệu form
-    handleSubmit = e => {
-        e.preventDefault();
-
-        this.props.onSubmit({
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
+    const handleSubmit = e => {
+        // e.preventDefault();
+        onSubmit({
+            firstName,
+            lastName
         })
 
-        this.setState({
-            firstName: '',
-            lastName: '',
-        })
+        setFirstName('');
+        setLastName('');
     }
 
-    render() {
-        return (
-            <Form onSubmit={this.handleSubmit}>
-                <FormGroup>
-                    <Label>
-                        FirstName
-                    </Label>
-                    <Input 
-                        required
-                        placeholder="First Name" 
-                        onChange={this.handleFirstNameChange}
-                        value={this.state.firstName}/>
-                </FormGroup>
-                <FormGroup>
-                    <Label>
-                        LastName
-                    </Label>
-                    <Input 
-                        required
-                        placeholder="Last Name" 
-                        onChange={this.handleLastNameChange} 
-                        value={this.state.lastName}/>
-                </FormGroup>
-                <FormGroup>
-                    <Button block outline type="submit" color="primary">
-                        Create
-                    </Button>
-                </FormGroup>
-            </Form>        
-        )
-    }
+    return (
+        <Form onFinish={handleSubmit}>
+            <Form.Item label = "First Name" name = "firstName" rules={[{ required: true, message: 'Please input your first name!' }]}>
+                <Input 
+                    required
+                    placeholder="First Name" 
+                    onChange={e => {
+                        setFirstName(e.target.value);
+                    }}
+                    value={firstName}/>
+            </Form.Item>
+            <Form.Item label = "Last Name" name = "lastName" rules={[{ required: true, message: 'Please input your last name!' }]}>
+                <Input 
+                    required
+                    placeholder="Last Name" 
+                    onChange={e => {
+                        setLastName(e.target.value);
+                    }
+                } 
+                    value={lastName}/>
+            </Form.Item>
+            <Form.Item>
+                <Button block type="primary" htmlType="submit">
+                    Create
+                </Button>
+            </Form.Item>
+        </Form>     
+    )   
 }
 
 export default NewUserForm;
+
+

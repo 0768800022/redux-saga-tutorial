@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
 
-
 import axios from 'axios';
 import reducers from './reducers';
 import {Provider} from 'react-redux';
@@ -11,6 +10,11 @@ import {createStore, applyMiddleware} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from './sagas';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+const stores = createStore(
+  reducers,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+);
 
 
 axios.defaults.withCredentials = true;
